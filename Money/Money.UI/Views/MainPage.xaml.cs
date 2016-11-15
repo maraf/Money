@@ -24,7 +24,18 @@ namespace Money.Views
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+
+            DataContext = new List<Outcome>()
+            {
+                new Outcome()
+                {
+                    Id = Guid.NewGuid(),
+                    Description = "New PC",
+                    Amount = 2500,
+                    When = new DateTime(2016,11,15, 22, 30, 05)
+                }
+            };
         }
     }
 }

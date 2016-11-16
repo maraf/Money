@@ -2,7 +2,10 @@
     x:Class="Money.UI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dd="using:Money.Views.DesignData"
     xmlns:local="using:Money.UI"
     RequestedTheme="Light">
-
+    <Application.Resources>
+        <dd:ViewModelLocator x:Key="ViewModelLocator" />
+    </Application.Resources>
 </Application>

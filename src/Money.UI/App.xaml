@@ -7,5 +7,9 @@
     RequestedTheme="Light">
     <Application.Resources>
         <dd:ViewModelLocator x:Key="ViewModelLocator" />
+
+        <Style x:Key="NoteTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
     </Application.Resources>
 </Application>

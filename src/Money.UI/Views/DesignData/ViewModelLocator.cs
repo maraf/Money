@@ -10,7 +10,6 @@ namespace Money.Views.DesignData
     internal class ViewModelLocator
     {
         private SummaryViewModel summary;
-
         public SummaryViewModel Summary
         {
             get
@@ -36,6 +35,34 @@ namespace Money.Views.DesignData
                 }
 
                 return summary;
+            }
+        }
+
+        private ListViewModel list;
+        public ListViewModel List
+        {
+            get
+            {
+                if (list == null)
+                {
+                    list = new ListViewModel();
+                    list.GroupId = Guid.NewGuid();
+                    list.Name = "Eating";
+                    list.Items.Add(new ListItemViewModel()
+                    {
+                        Description = "Saturday's buy on market",
+                        Amount = 75.43M,
+                        When = new DateTime(2016, 11, 12, 10, 30, 15)
+                    });
+                    list.Items.Add(new ListItemViewModel()
+                    {
+                        Description = "Cheese",
+                        Amount = 12.55M,
+                        When = new DateTime(2016, 11, 13, 20, 0, 0)
+                    });
+                }
+
+                return list;
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using Neptuo.Observables;
+﻿using Neptuo.Observables.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 
 namespace Money.ViewModels
 {
-    /// <summary>
-    /// A view model for an item of summary.
-    /// </summary>
-    public class SummaryItemViewModel : ObservableObject
+    public class ListViewModel : ViewModel
     {
         private Guid groupId;
         public Guid GroupId
@@ -40,18 +37,11 @@ namespace Money.ViewModels
             }
         }
 
-        private decimal amount;
-        public decimal Amount
+        public ObservableCollection<ListItemViewModel> Items { get; private set; }
+
+        public ListViewModel()
         {
-            get { return amount; }
-            set
-            {
-                if (amount != value)
-                {
-                    amount = value;
-                    RaisePropertyChanged();
-                }
-            }
+            Items = new ObservableCollection<ListItemViewModel>();
         }
     }
 }

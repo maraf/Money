@@ -7,17 +7,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Money.ViewModels"
-    mc:Ignorable="d" d:DataContext="{Binding Summary, Source={StaticResource ViewModelLocator}}">
+    mc:Ignorable="d" d:DataContext="{Binding Summary, Source={StaticResource ViewModelLocator}}"
+    NavigationCacheMode="Enabled"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
-        <Style x:Key="ListCaptionAltTextblockStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-        </Style>
-
-        <Style x:Key="ListBodyTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-        </Style>
-
         <DataTemplate x:Key="MasterListViewItemTemplate" x:DataType="vm:SummaryItemViewModel">
             <Grid Margin="0,11,0,13">
                 <Grid.RowDefinitions>
@@ -31,29 +24,25 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{x:Bind Name}" Style="{ThemeResource BaseTextBlockStyle}" />
-
-                <TextBlock
-                    Text="{x:Bind Amount}"
-                    Grid.Row="1"
-                    MaxLines="1"
-                    Style="{ThemeResource ListBodyTextBlockStyle}" />
+                <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" Grid.Row="1" />
 
                 <!--<TextBlock
                     Text="{x:Bind When}"
                     Grid.Column="1"
                     Margin="12,1,0,0"
-                    Style="{ThemeResource ListCaptionAltTextblockStyle}" />-->
+                    Style="{ThemeResource CaptionTextStyle}" />-->
             </Grid>
         </DataTemplate>
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <ListView
-            x:Name="MasterListView"
+            x:Name="lvwItems"
             Grid.Row="1"
             ItemContainerTransitions="{x:Null}"
             ItemsSource="{Binding Items}"
             ItemTemplate="{StaticResource MasterListViewItemTemplate}"
+            ItemClick="lvwItems_ItemClick"
             IsItemClickEnabled="True">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">

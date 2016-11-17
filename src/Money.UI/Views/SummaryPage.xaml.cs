@@ -14,11 +14,30 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using System.ComponentModel;
 
 namespace Money.Views
 {
     public sealed partial class SummaryPage : Page
     {
+        public SummaryViewModel ViewModel
+        {
+            get { return (SummaryViewModel)DataContext; }
+        }
+
+        public decimal TotalAmount
+        {
+            get { return (decimal)GetValue(TotalAmountProperty); }
+            set { SetValue(TotalAmountProperty, value); }
+        }
+
+        public static readonly DependencyProperty TotalAmountProperty = DependencyProperty.Register(
+            "TotalAmount", 
+            typeof(decimal), 
+            typeof(SummaryPage), 
+            new PropertyMetadata(0M)
+        );
+
         public SummaryPage()
         {
             InitializeComponent();
@@ -27,9 +46,20 @@ namespace Money.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            DataContext = new DesignData.ViewModelLocator().Summary;
+
+            SummaryViewModel viewModel = new DesignData.ViewModelLocator().Summary;
+            DataContext = viewModel;
+            TotalAmount = viewModel.TotalAmount;
+
+            viewModel.PropertyChanged += OnViewModelPropertyChanged;
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(lvwItems, true);
+        }
+
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SummaryViewModel.TotalAmount))
+                TotalAmount = ViewModel.TotalAmount;
         }
 
         private void lvwItems_ItemClick(object sender, ItemClickEventArgs e)

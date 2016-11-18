@@ -11,6 +11,16 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.BottomAppBar>
         <CommandBar>
+            <AppBarButton Icon="Sort">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="By date" />
+                        <MenuFlyoutItem Text="By amount" />
+                        <MenuFlyoutItem Text="By description" />
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarSeparator />
             <AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
         </CommandBar>

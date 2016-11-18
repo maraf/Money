@@ -46,7 +46,7 @@ namespace Money
 
         public override string ToString()
         {
-            return $"{Value} {Currency}";
+            return $"{Value:N} {Currency}";
         }
 
         public static Price operator +(Price price1, Price price2)

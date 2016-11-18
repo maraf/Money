@@ -9,13 +9,18 @@
     mc:Ignorable="d" d:DataContext="{Binding List, Source={StaticResource ViewModelLocator}}"
     NavigationCacheMode="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />
+            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
+        </CommandBar>
+    </Page.BottomAppBar>
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,6" />
         <ListView ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="vm:ListItemViewModel">
-                    <Grid>
+                    <Grid Margin="0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -26,7 +31,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="{x:Bind Description}" Style="{ThemeResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{x:Bind When}" Style="{ThemeResource NoteTextStyle}" Grid.Row="1" />
+                        <TextBlock Text="{x:Bind When, Converter={StaticResource DateToStringConverter}}" Style="{ThemeResource NoteTextStyle}" Grid.Row="1" />
                         <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" VerticalAlignment="Center" Grid.RowSpan="2" Grid.Column="1"/>
                     </Grid>
                 </DataTemplate>

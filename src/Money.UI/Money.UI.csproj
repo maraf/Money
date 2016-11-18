@@ -96,18 +96,26 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
+    <Compile Include="ViewModels\Commands\NavigateCommand.cs" />
+    <Compile Include="ViewModels\Commands\SaveOutcomeCommand.cs" />
     <Compile Include="ViewModels\ListItemViewModel.cs" />
     <Compile Include="ViewModels\ListViewModel.cs" />
+    <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\Parameters\OutcomeDefaultsModel.cs" />
     <Compile Include="ViewModels\SummaryItemViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\Controls\Bar.xaml.cs">
       <DependentUpon>Bar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Converters\BarGraphConverter.cs" />
+    <Compile Include="Views\Converters\DateToStringConverter.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\ListPage.xaml.cs">
       <DependentUpon>ListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OutcomePage.xaml.cs">
+      <DependentUpon>OutcomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SummaryPage.xaml.cs">
       <DependentUpon>SummaryPage.xaml</DependentUpon>
@@ -140,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OutcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -9,6 +9,20 @@ namespace Money.ViewModels
 {
     public class ListItemViewModel : ObservableObject
     {
+        private Guid id;
+        public Guid Id
+        {
+            get { return id; }
+            set
+            {
+                if (id != value)
+                {
+                    id = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         private string description;
         public string Description
         {
@@ -23,8 +37,8 @@ namespace Money.ViewModels
             }
         }
 
-        private decimal amount;
-        public decimal Amount
+        private Price amount;
+        public Price Amount
         {
             get { return amount; }
             set

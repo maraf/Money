@@ -1,4 +1,5 @@
-﻿using Neptuo.Observables;
+﻿using Money.ViewModels.Commands;
+using Neptuo.Observables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace Money.ViewModels
         public ICommand CreateIncome { get; private set; }
         public ICommand CreateOutcome { get; private set; }
 
-
+        public ViewModel()
+        {
+            CreateOutcome = new CreateOutcomeCommand();
+        }
     }
 }

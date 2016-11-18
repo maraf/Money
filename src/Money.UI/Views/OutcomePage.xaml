@@ -1,0 +1,37 @@
+﻿<Page
+    x:Class="Money.Views.OutcomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Money.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DataContext="{Binding CreateOutcome, Source={StaticResource ViewModelLocator}}">
+    <Page.Resources>
+        <Style x:Key="EditorStackPanelStyle" TargetType="StackPanel">
+            <Setter Property="Margin" Value="10,5" />
+        </Style>
+    </Page.Resources>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Save" Label="Save" Command="{Binding Save}" />
+        </CommandBar>
+    </Page.BottomAppBar>
+    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel Style="{StaticResource EditorStackPanelStyle}">
+            <TextBlock Text="Amount" />
+            <TextBox Text="{Binding Amount}" FontSize="40" TextAlignment="Right" />
+        </StackPanel>
+        <StackPanel Style="{StaticResource EditorStackPanelStyle}">
+            <TextBlock Text="Description" />
+            <TextBox Text="{Binding Description}" />
+        </StackPanel>
+        <StackPanel Style="{StaticResource EditorStackPanelStyle}">
+            <TextBlock Text="When" />
+            <DatePicker Date="{Binding When}" HorizontalAlignment="Stretch" />
+        </StackPanel>
+        <StackPanel Style="{StaticResource EditorStackPanelStyle}">
+            <TextBlock Text="Category" />
+            <TextBlock Text="..." />
+        </StackPanel>
+    </StackPanel>
+</Page>

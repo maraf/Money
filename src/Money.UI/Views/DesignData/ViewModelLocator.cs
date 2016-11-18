@@ -56,18 +56,34 @@ namespace Money.Views.DesignData
                     list.Items.Add(new ListItemViewModel()
                     {
                         Description = "Saturday's buy on market",
-                        Amount = 75.43M,
+                        Amount = new Price(1250, "CZK"),
                         When = new DateTime(2016, 11, 12, 10, 30, 15)
                     });
                     list.Items.Add(new ListItemViewModel()
                     {
                         Description = "Cheese",
-                        Amount = 12.55M,
+                        Amount = new Price(345, "CZK"),
                         When = new DateTime(2016, 11, 13, 20, 0, 0)
                     });
                 }
 
                 return list;
+            }
+        }
+
+        private OutcomeViewModel createOutcome;
+        public OutcomeViewModel CreateOutcome
+        {
+            get
+            {
+                if (createOutcome != null)
+                {
+                    createOutcome = new OutcomeViewModel();
+                    createOutcome.Amount = 5400;
+                    createOutcome.Description = "New home PC motherboard";
+                }
+
+                return createOutcome;
             }
         }
     }

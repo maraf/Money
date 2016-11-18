@@ -121,6 +121,8 @@
     <Compile Include="Observables\Collections\ObservableCollection.cs" />
     <Compile Include="Observables\Collections\ObservableDictionary.cs" />
     <Compile Include="Observables\Collections\SortableObservableCollection.cs" />
+    <Compile Include="Observables\Commands\Command.cs" />
+    <Compile Include="Observables\Commands\DelegateCommand.cs" />
     <Compile Include="Observables\ObservableObject.cs" />
     <Compile Include="Observables\PropertyChangedObserver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

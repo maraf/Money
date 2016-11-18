@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Money.Views.DesignData
 {
@@ -20,17 +21,20 @@ namespace Money.Views.DesignData
                     summary.Items.Add(new SummaryItemViewModel()
                     {
                         Amount = 2500,
-                        Name = "Food"
+                        Name = "Food",
+                        Color = Colors.CadetBlue
                     });
                     summary.Items.Add(new SummaryItemViewModel()
                     {
                         Amount = 900,
-                        Name = "Eating out"
+                        Name = "Eating out",
+                        Color = Colors.Brown
                     });
                     summary.Items.Add(new SummaryItemViewModel()
                     {
                         Amount = 4400,
-                        Name = "Home"
+                        Name = "Home",
+                        Color = Colors.Gold
                     });
                 }
 

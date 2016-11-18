@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Money.ViewModels
 {
@@ -49,6 +50,20 @@ namespace Money.ViewModels
                 if (amount != value)
                 {
                     amount = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        private Color color;
+        public Color Color
+        {
+            get { return color; }
+            set
+            {
+                if (color != value)
+                {
+                    color = value;
                     RaisePropertyChanged();
                 }
             }

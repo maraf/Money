@@ -45,7 +45,6 @@
             Grid.Row="1"
             ItemContainerTransitions="{x:Null}"
             ItemsSource="{Binding Items}"
-            ItemTemplate="{StaticResource MasterListViewItemTemplate}"
             ItemClick="lvwItems_ItemClick"
             IsItemClickEnabled="True">
             <ListView.ItemContainerStyle>
@@ -53,6 +52,35 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>
             </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:SummaryItemViewModel">
+                    <Grid Margin="0,11,0,13">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock x:Name="tblName" Text="{x:Bind Name}" Style="{ThemeResource BaseTextBlockStyle}" />
+                        <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" Grid.Column="1" />
+
+                        <controls:Bar Value="{x:Bind Amount}" Max="{Binding TotalAmount, ElementName=page}" Grid.ColumnSpan="2" Grid.Row="1">
+                            <controls:Bar.Fill>
+                                <SolidColorBrush Color="{x:Bind Color}" />
+                            </controls:Bar.Fill>
+                        </controls:Bar>
+                        <!--<TextBlock
+                    Text="{x:Bind When}"
+                    Grid.Column="1"
+                    Margin="12,1,0,0"
+                    Style="{ThemeResource CaptionTextStyle}" />-->
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
     </StackPanel>

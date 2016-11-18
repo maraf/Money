@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,7 +30,7 @@ namespace Money.Views.Controls
             "Value", 
             typeof(decimal), 
             typeof(Bar), 
-            new PropertyMetadata(0M)
+            new PropertyMetadata(0M, OnPropertyChanged)
         );
 
         public decimal Max
@@ -42,8 +43,32 @@ namespace Money.Views.Controls
             "Max", 
             typeof(decimal), 
             typeof(Bar), 
-            new PropertyMetadata(0M)
+            new PropertyMetadata(0M, OnPropertyChanged)
         );
+
+        public Brush Fill
+        {
+            get { return (Brush)GetValue(FillProperty); }
+            set { SetValue(FillProperty, value); }
+        }
+
+        public static readonly DependencyProperty FillProperty = DependencyProperty.Register(
+            "Fill", 
+            typeof(Brush), 
+            typeof(Bar), 
+            new PropertyMetadata(new SolidColorBrush(Colors.Black))
+        );
+        
+        private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Bar bar = (Bar)d;
+
+            if (bar.Value > 0)
+            {
+                double ratio = (double)bar.Value / (double)bar.Max;
+                bar.rctContent.Width = ratio * bar.ActualWidth;
+            }
+        }
 
         public Bar()
         {
@@ -52,7 +77,7 @@ namespace Money.Views.Controls
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            tblWidth.Text = e.NewSize.Width.ToString();
+            //tblWidth.Text = e.NewSize.Width.ToString();
         }
     }
 }

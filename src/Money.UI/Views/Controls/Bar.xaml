@@ -8,10 +8,6 @@
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400" 
     SizeChanged="OnSizeChanged" HorizontalAlignment="Stretch" Background="Red">
     <StackPanel Orientation="Horizontal">
-        <TextBlock Text="{x:Bind Value}" />
-        <TextBlock Text=" / " />
-        <TextBlock Text="{x:Bind Max}" />
-        <TextBlock Text=" -- " />
-        <TextBlock x:Name="tblWidth" />
+        <Rectangle x:Name="rctContent" VerticalAlignment="Stretch" Fill="{x:Bind Fill, Mode=OneWay}" />
     </StackPanel>
 </UserControl>

@@ -47,8 +47,13 @@ namespace Money.Views
                 {
                     viewModel = new OutcomeViewModel(defaults);
                 }
+                else
+                {
+                    viewModel = new OutcomeViewModel();
+                }
             }
 
+            viewModel.Categories.AddRange(new DesignData.ViewModelLocator().CreateOutcome.Categories);
             DataContext = viewModel;
         }
     }

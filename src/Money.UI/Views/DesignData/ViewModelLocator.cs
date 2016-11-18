@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Xaml.Controls;
 
 namespace Money.Views.DesignData
 {
@@ -76,11 +77,26 @@ namespace Money.Views.DesignData
         {
             get
             {
-                if (createOutcome != null)
+                if (createOutcome == null)
                 {
                     createOutcome = new OutcomeViewModel();
                     createOutcome.Amount = 5400;
                     createOutcome.Description = "New home PC motherboard";
+                    createOutcome.Categories.Add(new CategoryViewModel()
+                    {
+                        Name = "Food",
+                        Color = Colors.CadetBlue
+                    });
+                    createOutcome.Categories.Add(new CategoryViewModel()
+                    {
+                        Name = "Eating out",
+                        Color = Colors.Brown
+                    });
+                    createOutcome.Categories.Add(new CategoryViewModel()
+                    {
+                        Name = "Home",
+                        Color = Colors.Gold
+                    });
                 }
 
                 return createOutcome;

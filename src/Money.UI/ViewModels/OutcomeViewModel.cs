@@ -2,6 +2,7 @@
 using Money.ViewModels.Parameters;
 using Neptuo;
 using Neptuo.Observables;
+using Neptuo.Observables.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,12 +58,14 @@ namespace Money.ViewModels
             }
         }
 
+        public ObservableCollection<CategoryViewModel> Categories { get; private set; }
         public SaveOutcomeCommand Save { get; private set; }
 
         public OutcomeViewModel()
         {
             When = DateTime.Now;
             Save = new SaveOutcomeCommand(this);
+            Categories = new ObservableCollection<CategoryViewModel>();
         }
 
         public OutcomeViewModel(Guid id)

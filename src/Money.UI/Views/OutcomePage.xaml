@@ -31,7 +31,32 @@
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Category" />
-            <TextBlock Text="..." />
+            <GridView ItemsSource="{Binding Categories}" SelectionMode="Multiple">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Grid>
+                                <Rectangle Height="50">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="{Binding Color}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0" />
+                            </Grid>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </GridView.ItemContainerStyle>
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
         </StackPanel>
     </StackPanel>
 </Page>

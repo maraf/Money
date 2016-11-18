@@ -96,6 +96,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />
     <Compile Include="ViewModels\Commands\SaveOutcomeCommand.cs" />

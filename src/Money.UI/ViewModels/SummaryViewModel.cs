@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using Neptuo.Activators;
 
 namespace Money.ViewModels
 {
@@ -14,6 +15,8 @@ namespace Money.ViewModels
     /// </summary>
     public class SummaryViewModel : ViewModel
     {
+        private readonly IFactory<Price, decimal> priceFactory;
+
         private string title;
         public string Title
         {
@@ -44,8 +47,10 @@ namespace Money.ViewModels
         
         public ObservableCollection<SummaryItemViewModel> Items { get; private set; }
 
-        public SummaryViewModel()
+        public SummaryViewModel(IFactory<Price, decimal> priceFactory)
         {
+            this.priceFactory = priceFactory;
+
             Items = new ObservableCollection<SummaryItemViewModel>();
             Items.CollectionChanged += OnItemsChanged;
         }
@@ -75,7 +80,7 @@ namespace Money.ViewModels
 
         private void UpdateTotalAmount()
         {
-            TotalAmount = Price.Zero("CZK");
+            TotalAmount = priceFactory.Create(0);
             foreach (SummaryItemViewModel item in Items)
                 TotalAmount += item.Amount;
         }

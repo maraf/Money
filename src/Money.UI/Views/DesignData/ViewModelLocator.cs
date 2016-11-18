@@ -18,7 +18,7 @@ namespace Money.Views.DesignData
             {
                 if (summary == null)
                 {
-                    summary = new SummaryViewModel();
+                    summary = new SummaryViewModel(new PriceFactory("CZK"));
                     summary.Title = "September 2016";
                     summary.Items.Add(new SummaryItemViewModel()
                     {

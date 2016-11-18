@@ -16,8 +16,8 @@ namespace Money.ViewModels
     {
         public Guid? Id { get; private set; }
 
-        private decimal amount;
-        public decimal Amount
+        private float amount;
+        public float Amount
         {
             get { return amount; }
             set
@@ -59,13 +59,16 @@ namespace Money.ViewModels
         }
 
         public ObservableCollection<CategoryViewModel> Categories { get; private set; }
+        public ObservableCollection<Guid> SelectedCategories { get; private set; }
         public SaveOutcomeCommand Save { get; private set; }
 
         public OutcomeViewModel()
         {
+            SelectedCategories = new ObservableCollection<Guid>();
+            Categories = new ObservableCollection<CategoryViewModel>();
+
             When = DateTime.Now;
             Save = new SaveOutcomeCommand(this);
-            Categories = new ObservableCollection<CategoryViewModel>();
         }
 
         public OutcomeViewModel(Guid id)
@@ -81,7 +84,7 @@ namespace Money.ViewModels
             Ensure.NotNull(defaults, "defaults");
 
             if (defaults.Amount != null)
-                Amount = defaults.Amount.Value;
+                Amount = (float)defaults.Amount.Value;
 
             if (defaults.Description != null)
                 Description = defaults.Description;

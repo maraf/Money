@@ -12,6 +12,21 @@
     mc:Ignorable="d" d:DataContext="{Binding Summary, Source={StaticResource ViewModelLocator}}"
     NavigationCacheMode="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Sort">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="By category" />
+                        <MenuFlyoutItem Text="By amount" />
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />
+            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
+        </CommandBar>
+    </Page.BottomAppBar>
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBlock Text="{Binding Title}" Style="{ThemeResource TitleTextBlockStyle}" Margin="15,6" />
 

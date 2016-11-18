@@ -10,6 +10,20 @@ namespace Money.ViewModels
 {
     public class CategoryViewModel : ObservableObject
     {
+        private Guid id;
+        public Guid Id
+        {
+            get { return id; }
+            set
+            {
+                if (id != value)
+                {
+                    id = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         private string name;
         public string Name
         {

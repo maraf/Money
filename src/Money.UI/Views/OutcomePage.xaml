@@ -19,7 +19,7 @@
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Amount" />
-            <TextBox Text="{Binding Amount}" FontSize="40" TextAlignment="Right" />
+            <TextBox Text="{Binding Amount, Mode=TwoWay}" FontSize="40" TextAlignment="Right" />
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Description" />
@@ -31,7 +31,7 @@
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Category" />
-            <GridView ItemsSource="{Binding Categories}" SelectionMode="Multiple">
+            <GridView x:Name="gvwCategories" ItemsSource="{Binding Categories}" SelectionMode="Multiple" SelectionChanged="gvwCategories_SelectionChanged">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>

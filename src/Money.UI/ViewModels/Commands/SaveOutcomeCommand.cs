@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Collections.Specialized;
 
 namespace Money.ViewModels.Commands
 {
@@ -18,6 +19,7 @@ namespace Money.ViewModels.Commands
             Ensure.NotNull(viewModel, "viewModel");
             this.viewModel = viewModel;
             this.viewModel.PropertyChanged += OnViewModelPropertyChanged;
+            this.viewModel.SelectedCategories.CollectionChanged += OnViewModelSelectedCategoriesChanged;
         }
 
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -26,9 +28,14 @@ namespace Money.ViewModels.Commands
                 RaiseCanExecuteChanged();
         }
 
+        private void OnViewModelSelectedCategoriesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RaiseCanExecuteChanged();
+        }
+
         public override bool CanExecute()
         {
-            return viewModel.Amount > 0;
+            return viewModel.Amount > 0 && viewModel.SelectedCategories.Count > 0;
         }
 
         public override void Execute()

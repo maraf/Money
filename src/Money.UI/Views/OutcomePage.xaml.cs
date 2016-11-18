@@ -24,6 +24,11 @@ namespace Money.Views
     /// </summary>
     public sealed partial class OutcomePage : Page
     {
+        public OutcomeViewModel ViewModel
+        {
+            get { return (OutcomeViewModel)DataContext; }
+        }
+
         public OutcomePage()
         {
             this.InitializeComponent();
@@ -55,6 +60,15 @@ namespace Money.Views
 
             viewModel.Categories.AddRange(new DesignData.ViewModelLocator().CreateOutcome.Categories);
             DataContext = viewModel;
+        }
+
+        private void gvwCategories_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (CategoryViewModel item in e.RemovedItems)
+                ViewModel.SelectedCategories.Remove(item.Id);
+
+            foreach (CategoryViewModel item in e.AddedItems)
+                ViewModel.SelectedCategories.Add(item.Id);
         }
     }
 }

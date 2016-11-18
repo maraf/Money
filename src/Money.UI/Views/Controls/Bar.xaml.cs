@@ -62,17 +62,26 @@ namespace Money.Views.Controls
         private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Bar bar = (Bar)d;
-
-            if (bar.Value > 0)
-            {
-                double ratio = (double)bar.Value / (double)bar.Max;
-                bar.rctContent.Width = ratio * bar.ActualWidth;
-            }
+            bar.UpdateSize();
         }
 
         public Bar()
         {
             this.InitializeComponent();
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateSize();
+        }
+
+        private void UpdateSize()
+        {
+            if (Max > 0)
+            {
+                double ratio = (double)Value / (double)Max;
+                rctContent.Width = ratio * ActualWidth;
+            }
         }
     }
 }

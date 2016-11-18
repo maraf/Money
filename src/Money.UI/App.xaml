@@ -9,13 +9,6 @@
     <Application.Resources>
         <dd:ViewModelLocator x:Key="ViewModelLocator" />
 
-        <DataTemplate x:Key="PriceTemplate">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Value, Mode=OneTime}" />
-                <TextBlock Text="{Binding Currency, Mode=OneTime}" />
-            </StackPanel>
-        </DataTemplate>
-
         <Style x:Key="NoteTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </Style>

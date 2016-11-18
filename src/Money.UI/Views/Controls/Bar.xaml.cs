@@ -74,10 +74,5 @@ namespace Money.Views.Controls
         {
             this.InitializeComponent();
         }
-
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //tblWidth.Text = e.NewSize.Width.ToString();
-        }
     }
 }

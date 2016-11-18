@@ -1,4 +1,5 @@
-﻿using Neptuo.Observables;
+﻿using Money.UI;
+using Neptuo.Observables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,8 +42,8 @@ namespace Money.ViewModels
             }
         }
 
-        private decimal amount;
-        public decimal Amount
+        private Price amount;
+        public Price Amount
         {
             get { return amount; }
             set

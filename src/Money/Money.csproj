@@ -109,8 +109,15 @@
   <ItemGroup>
     <Compile Include="Data\IOutcomeRepository.cs" />
     <Compile Include="Outcome.cs" />
+    <Compile Include="Price.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Money.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Neptuo\Neptuo.csproj">
+      <Project>{C63023BF-64F8-4C85-8DDD-521D4D2A0F7F}</Project>
+      <Name>Neptuo</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

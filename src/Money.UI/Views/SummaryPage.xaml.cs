@@ -25,9 +25,9 @@ namespace Money.Views
             get { return (SummaryViewModel)DataContext; }
         }
 
-        public decimal TotalAmount
+        public Price TotalAmount
         {
-            get { return (decimal)GetValue(TotalAmountProperty); }
+            get { return (Price)GetValue(TotalAmountProperty); }
             set { SetValue(TotalAmountProperty, value); }
         }
 
@@ -35,7 +35,7 @@ namespace Money.Views
             "TotalAmount", 
             typeof(decimal), 
             typeof(SummaryPage), 
-            new PropertyMetadata(0M)
+            new PropertyMetadata(Price.Zero("CZK"))
         );
 
         public SummaryPage()

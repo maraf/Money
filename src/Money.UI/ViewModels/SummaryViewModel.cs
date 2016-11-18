@@ -14,8 +14,22 @@ namespace Money.ViewModels
     /// </summary>
     public class SummaryViewModel : ViewModel
     {
-        private decimal totalAmount;
-        public decimal TotalAmount
+        private string title;
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                if (title != value)
+                {
+                    title = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        private Price totalAmount;
+        public Price TotalAmount
         {
             get { return totalAmount; }
             set
@@ -61,7 +75,9 @@ namespace Money.ViewModels
 
         private void UpdateTotalAmount()
         {
-            TotalAmount = Items.Sum(i => i.Amount);
+            TotalAmount = Price.Zero("CZK");
+            foreach (SummaryItemViewModel item in Items)
+                TotalAmount += item.Amount;
         }
     }
 }

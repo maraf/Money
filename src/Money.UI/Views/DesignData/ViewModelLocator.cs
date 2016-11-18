@@ -18,21 +18,22 @@ namespace Money.Views.DesignData
                 if (summary == null)
                 {
                     summary = new SummaryViewModel();
+                    summary.Title = "September 2016";
                     summary.Items.Add(new SummaryItemViewModel()
                     {
-                        Amount = 2500,
+                        Amount = new Price(2500, "CZK"),
                         Name = "Food",
                         Color = Colors.CadetBlue
                     });
                     summary.Items.Add(new SummaryItemViewModel()
                     {
-                        Amount = 900,
+                        Amount = new Price(900, "CZK"),
                         Name = "Eating out",
                         Color = Colors.Brown
                     });
                     summary.Items.Add(new SummaryItemViewModel()
                     {
-                        Amount = 4400,
+                        Amount = new Price(4400, "CZK"),
                         Name = "Home",
                         Color = Colors.Gold
                     });

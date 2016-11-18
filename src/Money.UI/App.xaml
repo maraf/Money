@@ -3,10 +3,18 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dd="using:Money.Views.DesignData"
+    xmlns:domain="using:Money"
     xmlns:local="using:Money.UI"
     RequestedTheme="Light">
     <Application.Resources>
         <dd:ViewModelLocator x:Key="ViewModelLocator" />
+
+        <DataTemplate x:Key="PriceTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Value, Mode=OneTime}" />
+                <TextBlock Text="{Binding Currency, Mode=OneTime}" />
+            </StackPanel>
+        </DataTemplate>
 
         <Style x:Key="NoteTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>

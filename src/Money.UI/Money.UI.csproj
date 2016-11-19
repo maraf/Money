@@ -97,6 +97,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bootstrap\BootstrapTask.cs" />
+    <Compile Include="Bootstrap\DefaultDomainFacade.cs" />
+    <Compile Include="Services\IDomainFacade.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />
@@ -112,6 +114,7 @@
       <DependentUpon>Bar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Converters\DateToStringConverter.cs" />
+    <Compile Include="Views\DesignData\DomainFacade.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\ListPage.xaml.cs">
       <DependentUpon>ListPage.xaml</DependentUpon>

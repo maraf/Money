@@ -1,4 +1,5 @@
 ﻿using Money.Data;
+using Money.Services;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Data;
@@ -23,6 +24,7 @@ namespace Money.Bootstrap
     {
         public IFactory<Price, decimal> PriceFactory { get; private set; }
         public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
+        public IDomainFacade DomainFacade { get; private set; }
 
         public void Initialize()
         {
@@ -60,6 +62,7 @@ namespace Money.Bootstrap
             );
 
             PriceFactory = new PriceFactory("CZK");
+            DomainFacade = new DefaultDomainFacade(OutcomeRepository, PriceFactory);
         }
     }
 }

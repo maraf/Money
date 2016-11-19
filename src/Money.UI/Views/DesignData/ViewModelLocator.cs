@@ -79,7 +79,7 @@ namespace Money.Views.DesignData
             {
                 if (createOutcome == null)
                 {
-                    createOutcome = new OutcomeViewModel();
+                    createOutcome = new OutcomeViewModel(new DomainFacade());
                     createOutcome.Amount = 5400;
                     createOutcome.Description = "New home PC motherboard";
                     createOutcome.Categories.Add(new CategoryViewModel()

@@ -1,4 +1,5 @@
 ﻿using Money.Bootstrap;
+using Money.Services;
 using Money.Views;
 using Neptuo.Models.Keys;
 using System;
@@ -26,6 +27,13 @@ namespace Money.UI
     /// </summary>
     sealed partial class App : Application
     {
+        public IDomainFacade DomainFacade { get; private set; }
+
+        public static new App Current
+        {
+            get { return (App)Application.Current; }
+        }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -96,6 +104,7 @@ namespace Money.UI
 
             //outcome = task.OutcomeRepository.Find(outcomeKey);
             //Debug.WriteLine($"Outcome of '{outcome.Amount}' with description '{outcome.Description}' from '{outcome.When}'.");
+            DomainFacade = task.DomainFacade;
         }
 
         /// <summary>

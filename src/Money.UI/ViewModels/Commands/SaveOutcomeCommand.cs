@@ -7,19 +7,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.Specialized;
+using Money.Services;
 
 namespace Money.ViewModels.Commands
 {
     public class SaveOutcomeCommand : Command
     {
         private readonly OutcomeViewModel viewModel;
+        private readonly IDomainFacade domainFacade;
 
-        public SaveOutcomeCommand(OutcomeViewModel viewModel)
+        public SaveOutcomeCommand(OutcomeViewModel viewModel, IDomainFacade domainFacade)
         {
             Ensure.NotNull(viewModel, "viewModel");
+            Ensure.NotNull(domainFacade, "domainFacade");
             this.viewModel = viewModel;
             this.viewModel.PropertyChanged += OnViewModelPropertyChanged;
             this.viewModel.SelectedCategories.CollectionChanged += OnViewModelSelectedCategoriesChanged;
+            this.domainFacade = domainFacade;
         }
 
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -38,9 +42,17 @@ namespace Money.ViewModels.Commands
             return viewModel.Amount > 0 && viewModel.SelectedCategories.Count > 0;
         }
 
-        public override void Execute()
+        public override async void Execute()
         {
-            throw new NotImplementedException();
+            await domainFacade.CreateOutcomeAsync(
+                domainFacade.PriceFactory.Create((decimal)viewModel.Amount), 
+                viewModel.Description, 
+                viewModel.When
+            );
+
+            viewModel.Amount = 0;
+            viewModel.Description = null;
+            viewModel.When = DateTime.Now;
         }
     }
 }

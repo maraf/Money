@@ -1,4 +1,5 @@
-﻿using Money.ViewModels.Commands;
+﻿using Money.Services;
+using Money.ViewModels.Commands;
 using Money.ViewModels.Parameters;
 using Neptuo;
 using Neptuo.Observables;
@@ -62,32 +63,20 @@ namespace Money.ViewModels
         public ObservableCollection<Guid> SelectedCategories { get; private set; }
         public SaveOutcomeCommand Save { get; private set; }
 
-        public OutcomeViewModel()
+        public OutcomeViewModel(IDomainFacade domainFacade)
         {
             SelectedCategories = new ObservableCollection<Guid>();
             Categories = new ObservableCollection<CategoryViewModel>();
 
             When = DateTime.Now;
-            Save = new SaveOutcomeCommand(this);
+            Save = new SaveOutcomeCommand(this, domainFacade);
         }
 
-        public OutcomeViewModel(Guid id)
-            : this()
+        public OutcomeViewModel(IDomainFacade domainFacade, Guid id)
+            : this(domainFacade)
         {
             // TODO: Existing outcome.
             Id = id;
-        }
-
-        public OutcomeViewModel(OutcomeDefaultsModel defaults)
-            : this()
-        {
-            Ensure.NotNull(defaults, "defaults");
-
-            if (defaults.Amount != null)
-                Amount = (float)defaults.Amount.Value;
-
-            if (defaults.Description != null)
-                Description = defaults.Description;
         }
     }
 }

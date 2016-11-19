@@ -1,4 +1,5 @@
-﻿using Money.ViewModels;
+﻿using Money.UI;
+using Money.ViewModels;
 using Money.ViewModels.Parameters;
 using System;
 using System.Collections.Generic;
@@ -43,18 +44,19 @@ namespace Money.Views
             if (id != null)
             {
                 // TODO: Load existing.
-                viewModel = new OutcomeViewModel(id.Value);
+                viewModel = new OutcomeViewModel(App.Current.DomainFacade, id.Value);
             }
             else
             {
+                viewModel = new OutcomeViewModel(App.Current.DomainFacade);
                 OutcomeDefaultsModel defaults = e.Parameter as OutcomeDefaultsModel;
                 if (defaults != null)
                 {
-                    viewModel = new OutcomeViewModel(defaults);
-                }
-                else
-                {
-                    viewModel = new OutcomeViewModel();
+                    if (defaults.Amount != null)
+                        viewModel.Amount = (float)defaults.Amount.Value;
+
+                    if (defaults.Description != null)
+                        viewModel.Description = defaults.Description;
                 }
             }
 

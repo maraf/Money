@@ -10,6 +10,7 @@ using Neptuo.Formatters.Metadata;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
 using Neptuo.Models.Snapshots;
+using Neptuo.ReadModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,17 @@ namespace Money.Bootstrap
         public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
         public IDomainFacade DomainFacade { get; private set; }
 
+        public ContainerEventStore EventStore { get; private set; }
+        public IEventDispatcher EventDispatcher { get; private set; }
+        public IFormatter EventFormatter { get; private set; }
+
         public void Initialize()
+        {
+            Domain();
+            Migrate();
+        }
+
+        private void Domain()
         {
             Converts.Repository
                 .AddJsonEnumSearchHandler()
@@ -39,7 +50,8 @@ namespace Money.Bootstrap
             ApplicationDataContainer eventStoreContainer = root
                 .CreateContainer("EventStore", ApplicationDataCreateDisposition.Always);
 
-            ContainerEventStore eventStore = new ContainerEventStore(eventStoreContainer);
+            EventStore = new ContainerEventStore(eventStoreContainer);
+            EventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
 
             IFactory<ICompositeStorage> compositeStorageFactory = Factory.Default<JsonCompositeStorage>();
 
@@ -48,15 +60,13 @@ namespace Money.Bootstrap
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
             );
 
-            IEventDispatcher eventDispatcher = new PersistentEventDispatcher(
-                new EmptyEventStore()
-            );
+            EventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
 
             OutcomeRepository = new AggregateRootRepository<Outcome>(
-                eventStore,
-                new CompositeEventFormatter(typeProvider, compositeStorageFactory),
+                EventStore,
+                EventFormatter,
                 new ReflectionAggregateRootFactory<Outcome>(),
-                eventDispatcher,
+                EventDispatcher,
                 new NoSnapshotProvider(),
                 new EmptySnapshotStore()
             );
@@ -64,5 +74,50 @@ namespace Money.Bootstrap
             PriceFactory = new PriceFactory("CZK");
             DomainFacade = new DefaultDomainFacade(OutcomeRepository, PriceFactory);
         }
+
+        public const int Version = 1;
+
+        private void Migrate()
+        {
+            int currentVersion = 0;
+            ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+
+            ApplicationDataContainer migrationContainer;
+            if (root.Containers.TryGetValue("Migration", out migrationContainer))
+                currentVersion = (int?)migrationContainer.Values["Version"] ?? currentVersion;
+            else
+                migrationContainer = root.CreateContainer("Migration", ApplicationDataCreateDisposition.Always);
+
+            if (currentVersion < 1)
+                MigrateVersion1();
+
+            // Version >= 2
+            //if(currentVersion < 2)
+            //    MigrateVersion2();
+
+            migrationContainer.Values["Version"] = Version;
+        }
+
+        private void MigrateVersion1()
+        {
+            ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+
+            ApplicationDataContainer eventStoreContainer;
+            if (root.Containers.TryGetValue("EventStore", out eventStoreContainer))
+            {
+                List<EventModel> result = new List<EventModel>();
+                foreach (ApplicationDataContainer aggregateContainer in eventStoreContainer.Containers.Values)
+                {
+                    foreach (ApplicationDataContainer eventContainer in aggregateContainer.Containers.Values)
+                        eventContainer.Values["AggregateType"] = typeof(Outcome).AssemblyQualifiedName;
+                }
+            }
+        }
+
+        //private void MigrateVersion2()
+        //{
+        //    Rebuilder rebuilder = new Rebuilder(EventStore, EventFormatter);
+        //    rebuilder.AddAll();
+        //}
     }
 }

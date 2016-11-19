@@ -112,6 +112,10 @@
     <EmbeddedResource Include="Properties\Money.Data.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Money\Money.csproj">
+      <Project>{4D6A47F1-249C-4B95-B08A-B6DBBC95C3A0}</Project>
+      <Name>Money</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Neptuo\Neptuo.csproj">
       <Project>{c63023bf-64f8-4c85-8ddd-521d4d2a0f7f}</Project>
       <Name>Neptuo</Name>

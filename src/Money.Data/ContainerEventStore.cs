@@ -5,11 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Neptuo.Models.Keys;
+using Neptuo;
+using Windows.Storage;
 
 namespace Money.Data
 {
     public class ContainerEventStore : IEventStore
     {
+        private readonly ApplicationDataContainer container;
+
+        public ContainerEventStore(ApplicationDataContainer container)
+        {
+            Ensure.NotNull(container, "container");
+            this.container = container;
+        }
+
         public IEnumerable<EventModel> Get(IKey aggregateKey)
         {
             throw new NotImplementedException();

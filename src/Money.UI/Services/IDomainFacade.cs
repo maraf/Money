@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Money.Services.Models;
+using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
@@ -21,6 +22,13 @@ namespace Money.Services
         IFactory<Price, decimal> PriceFactory { get; }
 
         /// <summary>
+        /// Creates an category.
+        /// </summary>
+        /// <param name="name">A name of the category.</param>
+        /// <returns>Continuation task.</returns>
+        Task CreateCategoryAsync(string name);
+
+        /// <summary>
         /// Creates an outcome.
         /// </summary>
         /// <param name="amount">An amount of the outcome.</param>
@@ -28,5 +36,12 @@ namespace Money.Services
         /// <param name="when">A date and time when the outcome occured.</param>
         /// <returns>Continuation task.</returns>
         Task CreateOutcomeAsync(Price amount, string description, DateTime when);
+
+        /// <summary>
+        /// Gets a list of outcomes from a category.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category to filter.</param>
+        /// <returns>A list of outcomes from a category.</returns>
+        IEnumerable<OutcomeModel> ListOutcomeByCategory(IKey categoryKey);
     }
 }

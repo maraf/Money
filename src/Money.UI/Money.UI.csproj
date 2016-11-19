@@ -99,6 +99,7 @@
     <Compile Include="Bootstrap\BootstrapTask.cs" />
     <Compile Include="Bootstrap\DefaultDomainFacade.cs" />
     <Compile Include="Services\IDomainFacade.cs" />
+    <Compile Include="Services\Models\OutcomeModel.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />

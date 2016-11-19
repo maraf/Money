@@ -25,6 +25,7 @@ namespace Money.Bootstrap
     {
         public IFactory<Price, decimal> PriceFactory { get; private set; }
         public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
+        public IRepository<Category, IKey> CategoryRepository { get; private set; }
         public IDomainFacade DomainFacade { get; private set; }
 
         public ContainerEventStore EventStore { get; private set; }
@@ -71,11 +72,25 @@ namespace Money.Bootstrap
                 new EmptySnapshotStore()
             );
 
+            CategoryRepository = new AggregateRootRepository<Category>(
+                EventStore,
+                EventFormatter,
+                new ReflectionAggregateRootFactory<Category>(),
+                EventDispatcher,
+                new NoSnapshotProvider(),
+                new EmptySnapshotStore()
+            );
+
             PriceFactory = new PriceFactory("CZK");
-            DomainFacade = new DefaultDomainFacade(OutcomeRepository, PriceFactory);
+
+            DomainFacade = new DefaultDomainFacade(
+                OutcomeRepository, 
+                CategoryRepository, 
+                PriceFactory
+            );
         }
 
-        public const int Version = 1;
+        public const int Version = 2;
 
         private void Migrate()
         {
@@ -91,9 +106,8 @@ namespace Money.Bootstrap
             if (currentVersion < 1)
                 MigrateVersion1();
 
-            // Version >= 2
-            //if(currentVersion < 2)
-            //    MigrateVersion2();
+            if (currentVersion < 2)
+                MigrateVersion2().Wait();
 
             migrationContainer.Values["Version"] = Version;
         }
@@ -114,7 +128,18 @@ namespace Money.Bootstrap
             }
         }
 
-        //private void MigrateVersion2()
+        private async Task MigrateVersion2()
+        {
+            throw Ensure.Exception.NotImplemented();
+
+            await DomainFacade.CreateCategoryAsync("Home");
+            await DomainFacade.CreateCategoryAsync("Food");
+            await DomainFacade.CreateCategoryAsync("Eating Out");
+
+            // TODO: Build read models.
+        }
+
+        //private void MigrateVersion3()
         //{
         //    Rebuilder rebuilder = new Rebuilder(EventStore, EventFormatter);
         //    rebuilder.AddAll();

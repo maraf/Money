@@ -1,5 +1,6 @@
 ﻿using Money.Bootstrap;
 using Money.Views;
+using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -88,6 +89,13 @@ namespace Money.UI
         {
             BootstrapTask task = new BootstrapTask();
             task.Initialize();
+
+            //Outcome outcome = new Outcome(task.PriceFactory.Create(2500), "This is my first outcome", DateTime.Now);
+            //IKey outcomeKey = outcome.Key;
+            //task.OutcomeRepository.Save(outcome);
+
+            //outcome = task.OutcomeRepository.Find(outcomeKey);
+            //Debug.WriteLine($"Outcome of '{outcome.Amount}' with description '{outcome.Description}' from '{outcome.When}'.");
         }
 
         /// <summary>

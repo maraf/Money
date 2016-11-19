@@ -1,8 +1,10 @@
 ﻿using Money.Data;
+using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Data;
 using Neptuo.Events;
 using Neptuo.Formatters;
+using Neptuo.Formatters.Converters;
 using Neptuo.Formatters.Metadata;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
@@ -19,8 +21,18 @@ namespace Money.Bootstrap
 {
     public class BootstrapTask
     {
+        public IFactory<Price, decimal> PriceFactory { get; private set; }
+        public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
+
         public void Initialize()
         {
+            Converts.Repository
+                .AddJsonEnumSearchHandler()
+                .AddJsonPrimitivesSearchHandler()
+                .AddJsonObjectSearchHandler()
+                .AddJsonKey()
+                .AddJsonTimeSpan();
+
             ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
             ApplicationDataContainer eventStoreContainer = root
                 .CreateContainer("EventStore", ApplicationDataCreateDisposition.Always);
@@ -38,7 +50,7 @@ namespace Money.Bootstrap
                 new EmptyEventStore()
             );
 
-            IRepository<Outcome, IKey> outcomRepository = new AggregateRootRepository<Outcome>(
+            OutcomeRepository = new AggregateRootRepository<Outcome>(
                 eventStore,
                 new CompositeEventFormatter(typeProvider, compositeStorageFactory),
                 new ReflectionAggregateRootFactory<Outcome>(),
@@ -46,6 +58,8 @@ namespace Money.Bootstrap
                 new NoSnapshotProvider(),
                 new EmptySnapshotStore()
             );
+
+            PriceFactory = new PriceFactory("CZK");
         }
     }
 }

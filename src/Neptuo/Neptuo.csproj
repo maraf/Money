@@ -250,6 +250,7 @@
     <Compile Include="Formatters\Converters\StringKeyToJTokenConverter.cs" />
     <Compile Include="Formatters\Converters\TimeSpanToJsonConverter.cs" />
     <Compile Include="Formatters\Converters\_ConverterRepositoryExtensions.cs" />
+    <Compile Include="Formatters\Converters\_ConverterRepositoryExtensions2.cs" />
     <Compile Include="Formatters\DefaultDeserializerContext.cs" />
     <Compile Include="Formatters\DefaultSerializerContext.cs" />
     <Compile Include="Formatters\DeserializationFailedException.cs" />

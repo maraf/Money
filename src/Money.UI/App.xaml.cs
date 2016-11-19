@@ -1,4 +1,5 @@
-﻿using Money.Views;
+﻿using Money.Bootstrap;
+using Money.Views;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,6 +48,8 @@ namespace Money.UI
             //    this.DebugSettings.EnableFrameRateCounter = true;
             //}
 #endif
+            Bootstrap();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -81,12 +84,18 @@ namespace Money.UI
             }
         }
 
+        private void Bootstrap()
+        {
+            BootstrapTask task = new BootstrapTask();
+            task.Initialize();
+        }
+
         /// <summary>
         /// Invoked when Navigation to a certain page fails
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }

@@ -96,6 +96,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bootstrap\BootstrapTask.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />
@@ -162,6 +163,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Money.Data\Money.Data.csproj">
+      <Project>{1D7FEA2C-D518-4D1F-8A1F-A27BE04F3B49}</Project>
+      <Name>Money.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Money\Money.csproj">
       <Project>{4d6a47f1-249c-4b95-b08a-b6dbbc95c3a0}</Project>
       <Name>Money</Name>

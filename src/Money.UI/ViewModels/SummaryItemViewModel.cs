@@ -1,4 +1,5 @@
 ﻿using Money.UI;
+using Neptuo.Models.Keys;
 using Neptuo.Observables;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,15 @@ namespace Money.ViewModels
     /// </summary>
     public class SummaryItemViewModel : ObservableObject
     {
-        private Guid groupId;
-        public Guid GroupId
+        private IKey categoryKey;
+        public IKey CategoryKey
         {
-            get { return groupId; }
+            get { return categoryKey; }
             set
             {
-                if (groupId != value)
+                if (categoryKey != value)
                 {
-                    groupId = value;
+                    categoryKey = value;
                     RaisePropertyChanged();
                 }
             }

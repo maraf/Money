@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Money.Services.Models;
+using Neptuo.Queries;
+using Windows.UI;
+using Neptuo.Threading.Tasks;
 
 namespace Money.Bootstrap
 {
@@ -21,25 +24,29 @@ namespace Money.Bootstrap
         private readonly IRepository<Category, IKey> categoryRepository;
 
         public IFactory<Price, decimal> PriceFactory { get; private set; }
+        public IQueryDispatcher QueryDispatcher { get; private set; }
 
         public DefaultDomainFacade(
             IRepository<Outcome, IKey> outcomeRepository, 
             IRepository<Category, IKey> categoryRepository, 
-            IFactory<Price, decimal> priceFactory)
+            IFactory<Price, decimal> priceFactory,
+            IQueryDispatcher queryDispatcher)
         {
             Ensure.NotNull(outcomeRepository, "outcomeRepository");
             Ensure.NotNull(categoryRepository, "categoryRepository");
             Ensure.NotNull(priceFactory, "priceFactory");
+            Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.outcomeRepository = outcomeRepository;
             this.categoryRepository = categoryRepository;
             PriceFactory = priceFactory;
+            QueryDispatcher = queryDispatcher;
         }
 
-        public Task CreateCategoryAsync(string name)
+        public Task CreateCategoryAsync(string name, Color color)
         {
             return Task.Factory.StartNew(() =>
             {
-                Category model = new Category(name);
+                Category model = new Category(name, color);
                 categoryRepository.Save(model);
             });
         }

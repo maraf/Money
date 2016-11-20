@@ -15,6 +15,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using System.ComponentModel;
+using Money.UI;
+using Money.Services.Models.Queries;
+using Money.Services.Models;
 
 namespace Money.Views
 {
@@ -43,15 +46,26 @@ namespace Money.Views
             InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            SummaryViewModel viewModel = new DesignData.ViewModelLocator().Summary;
+            //SummaryViewModel viewModel = new DesignData.ViewModelLocator().Summary;
+            SummaryViewModel viewModel = new SummaryViewModel(App.Current.DomainFacade.PriceFactory);
             DataContext = viewModel;
-            TotalAmount = viewModel.TotalAmount;
+            TotalAmount = ViewModel.TotalAmount;
+            ViewModel.PropertyChanged += OnViewModelPropertyChanged;
 
-            viewModel.PropertyChanged += OnViewModelPropertyChanged;
+            IEnumerable<CategoryModel> categories = await App.Current.DomainFacade.QueryDispatcher.QueryAsync(new ListAllCategory());
+            foreach (CategoryModel category in categories)
+            {
+                ViewModel.Items.Add(new SummaryItemViewModel()
+                {
+                    CategoryKey = category.Key,
+                    Name = category.Name,
+                    Color = category.Color
+                });
+            }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(lvwItems, true);
         }
@@ -65,7 +79,7 @@ namespace Money.Views
         private void lvwItems_ItemClick(object sender, ItemClickEventArgs e)
         {
             SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
-            Frame.Navigate(typeof(ListPage), item.GroupId, new DrillInNavigationTransitionInfo());
+            Frame.Navigate(typeof(ListPage), item.CategoryKey, new DrillInNavigationTransitionInfo());
         }
     }
 }

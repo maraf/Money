@@ -3,11 +3,13 @@ using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Money.Services
 {
@@ -22,11 +24,17 @@ namespace Money.Services
         IFactory<Price, decimal> PriceFactory { get; }
 
         /// <summary>
+        /// Gets a dispatcher for querying read-models.
+        /// </summary>
+        IQueryDispatcher QueryDispatcher { get; }
+
+        /// <summary>
         /// Creates an category.
         /// </summary>
         /// <param name="name">A name of the category.</param>
+        /// <param name="color">A color of the category.</param>
         /// <returns>Continuation task.</returns>
-        Task CreateCategoryAsync(string name);
+        Task CreateCategoryAsync(string name, Color color);
 
         /// <summary>
         /// Creates an outcome.

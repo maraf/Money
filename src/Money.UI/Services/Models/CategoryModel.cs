@@ -1,4 +1,5 @@
-﻿using Neptuo.Events;
+﻿using Neptuo;
+using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
 
-namespace Money.Events
+namespace Money.Services.Models
 {
     /// <summary>
-    /// An event raised when a new category is created.
+    /// A model of a outcome or income category.
     /// </summary>
-    public class CategoryCreated : Event
+    public class CategoryModel
     {
+        /// <summary>
+        /// Gets a key of the category.
+        /// </summary>
+        public IKey Key { get; private set; }
+
         /// <summary>
         /// Gets a name of the category.
         /// </summary>
@@ -23,8 +29,10 @@ namespace Money.Events
         /// </summary>
         public Color Color { get; private set; }
 
-        internal CategoryCreated(string name, Color color)
+        public CategoryModel(IKey key, string name, Color color)
         {
+            Ensure.Condition.NotEmptyKey(key);
+            Key = key;
             Name = name;
             Color = color;
         }

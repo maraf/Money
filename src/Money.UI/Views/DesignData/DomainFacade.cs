@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Neptuo.Activators;
 using Money.Services.Models;
 using Neptuo.Models.Keys;
+using Neptuo.Queries;
+using Windows.UI;
 
 namespace Money.Views.DesignData
 {
@@ -17,7 +19,15 @@ namespace Money.Views.DesignData
             get { throw new NotImplementedException(); }
         }
 
-        public Task CreateCategoryAsync(string name)
+        public IQueryDispatcher QueryDispatcher
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Task CreateCategoryAsync(string name, Color color)
         {
             throw new NotImplementedException();
         }

@@ -53,7 +53,7 @@ namespace Neptuo.Internals
             string handlerIdentifier = FindIdentifier(handlerType);
             
             MethodInfo method = handlerType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .FirstOrDefault(m => m.Name.EndsWith(methodName));
+                .FirstOrDefault(m => m.Name.EndsWith(methodName) && m.GetParameters()[0].ParameterType == argumentType);
 
             Func<object, object, Action<Exception>, Task> handlerAction = (h, p, additionalExceptionDecorator) =>
             {

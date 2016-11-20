@@ -372,6 +372,15 @@
     <Compile Include="OutFunc.cs" />
     <Compile Include="OutFuncCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\DefaultQueryDispatcher.cs" />
+    <Compile Include="Queries\DependencyQueryDispatcher.cs" />
+    <Compile Include="Queries\Handlers\IQueryHandler.cs" />
+    <Compile Include="Queries\Internals\Constant.cs" />
+    <Compile Include="Queries\Internals\DefaultQueryHandlerDefinition.cs" />
+    <Compile Include="Queries\IQuery.cs" />
+    <Compile Include="Queries\IQueryDispatcher.cs" />
+    <Compile Include="Queries\IQueryHandlerCollection.cs" />
+    <Compile Include="Queries\_QueryHandlerCollectionExtensions.cs" />
     <Compile Include="ReadModels\Rebuilder.cs" />
     <Compile Include="Threading\DisposableLock.cs" />
     <Compile Include="Threading\LockProvider.cs" />

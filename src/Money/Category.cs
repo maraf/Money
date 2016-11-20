@@ -9,6 +9,7 @@ using Neptuo.Models.Keys;
 using Neptuo;
 using Money.Events;
 using Neptuo.Events.Handlers;
+using Windows.UI;
 
 namespace Money
 {
@@ -23,19 +24,28 @@ namespace Money
         /// </summary>
         public string Name { get; private set; }
 
-        public Category(string name)
+        /// <summary>
+        /// Gets a color of the category.
+        /// </summary>
+        public Color Color { get; private set; }
+
+        public Category(string name, Color color)
         {
             Ensure.NotNullOrEmpty(name, "name");
-            Publish(new CategoryCreated(name));
+            Publish(new CategoryCreated(name, color));
         }
 
-        public Category(IKey key, IEnumerable<IEvent> events) 
+        public Category(IKey key, IEnumerable<IEvent> events)
             : base(key, events)
         { }
 
         Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload)
         {
-            return UpdateState(() => Name = payload.Name);
+            return UpdateState(() =>
+            {
+                Name = payload.Name;
+                Color = payload.Color;
+            });
         }
     }
 }

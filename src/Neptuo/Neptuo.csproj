@@ -139,9 +139,6 @@
     <Compile Include="Collections\Specialized\IKeyValueCollection.cs" />
     <Compile Include="Collections\Specialized\IReadOnlyKeyValueCollection.cs" />
     <Compile Include="Collections\Specialized\KeyValueCollection.cs" />
-    <Compile Include="Collections\Specialized\NameValueDictionary.cs" />
-    <Compile Include="Collections\Specialized\NameValueEnumerator.cs" />
-    <Compile Include="Collections\Specialized\NameValueReadOnlyDictionary.cs" />
     <Compile Include="Collections\Specialized\ProviderKeyValueCollection.cs" />
     <Compile Include="Collections\Specialized\_ReadOnlyKeyValueCollectionExtensions.cs" />
     <Compile Include="Commands\Command.cs" />

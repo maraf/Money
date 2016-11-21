@@ -120,7 +120,7 @@ namespace Money.Bootstrap
             eventDispatcher.Handlers.Add(categoryBuilder);
         }
 
-        public const int Version = 4;
+        public const int Version = 1;
 
         private void Migrate()
         {
@@ -136,8 +136,8 @@ namespace Money.Bootstrap
             if (currentVersion < 1)
                 MigrateVersion1();
 
-            if (currentVersion < 4)
-                MigrateVersion4();
+            if (currentVersion < 2)
+                MigrateVersion2();
 
             migrationContainer.Values["Version"] = Version;
         }
@@ -158,7 +158,7 @@ namespace Money.Bootstrap
             }
         }
 
-        private void MigrateVersion4()
+        private void MigrateVersion2()
         {
             ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
             ApplicationDataContainer readModelsContainer;
@@ -168,9 +168,9 @@ namespace Money.Bootstrap
                     readModelsContainer.DeleteContainer(name);
             }
 
-            DomainFacade.CreateCategoryAsync("Home", Colors.SandyBrown);
-            DomainFacade.CreateCategoryAsync("Food", Colors.OrangeRed);
-            DomainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed);
+            DomainFacade.CreateCategoryAsync("Home", Colors.SandyBrown).Wait();
+            DomainFacade.CreateCategoryAsync("Food", Colors.OrangeRed).Wait();
+            DomainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed).Wait();
         }
 
         //private void MigrateVersion3()

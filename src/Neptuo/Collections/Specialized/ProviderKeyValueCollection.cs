@@ -48,15 +48,7 @@ namespace Neptuo.Collections.Specialized
         public ProviderKeyValueCollection(IDictionary<string, object> source)
             : base(source)
         { }
-
-        public ProviderKeyValueCollection(NameValueCollection collection)
-        {
-            Ensure.NotNull(collection, "collection");
-            
-            foreach (string key in collection.AllKeys)
-                Add(key, collection[key]);
-        }
-
+        
         /// <summary>
         /// Adds <paramref name="provider"/> for any key.
         /// This provider will be called after providers registered for specific key.

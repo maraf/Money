@@ -44,15 +44,7 @@ namespace Neptuo.Collections.Specialized
             Ensure.NotNull(parentCollection, "parentCollection");
             this.parentCollection = parentCollection;
         }
-
-        public KeyValueCollection(NameValueCollection collection)
-        {
-            Ensure.NotNull(collection, "collection");
-            
-            foreach (string key in collection.AllKeys)
-                Add(key, collection[key]);
-        }
-
+        
         public virtual IKeyValueCollection Add(string key, object value)
         {
             if (IsReadOnly)

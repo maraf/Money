@@ -180,6 +180,16 @@
     <Compile Include="Data\EmptyCommandStore.cs" />
     <Compile Include="Data\EmptyEventStore.cs" />
     <Compile Include="Data\EmptySnapshotStore.cs" />
+    <Compile Include="Data\EntityCommandStore.cs" />
+    <Compile Include="Data\EntityEventStore.cs" />
+    <Compile Include="Data\Entity\CommandEntity.cs" />
+    <Compile Include="Data\Entity\EventEntity.cs" />
+    <Compile Include="Data\Entity\EventPublishedToHandlerEntity.cs" />
+    <Compile Include="Data\Entity\EventSourcingContext.cs" />
+    <Compile Include="Data\Entity\ICommandContext.cs" />
+    <Compile Include="Data\Entity\IEventContext.cs" />
+    <Compile Include="Data\Entity\UnPublishedCommandEntity.cs" />
+    <Compile Include="Data\Entity\UnPublishedEventEntity.cs" />
     <Compile Include="Data\EventModel.cs" />
     <Compile Include="Data\EventPublishingModel.cs" />
     <Compile Include="Data\ICommandPublishingStore.cs" />
@@ -387,6 +397,7 @@
     <Compile Include="TimerSchedulingProvider.DateTimeNowProvider.cs" />
     <Compile Include="TimerSchedulingProvider.DateTimeUtcNowProvider.cs" />
     <Compile Include="TimerSchedulingProvider.IDateTimeProvider.cs" />
+    <Compile Include="_EnsureExceptionExtensions.cs" />
     <Compile Include="_EnvelopeExecutionExtensions.cs" />
     <Compile Include="_EnvelopeExtensions.cs" />
     <Compile Include="_OutFuncCollectionExtensions.cs" />

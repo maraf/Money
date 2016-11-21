@@ -18,6 +18,9 @@ using System.ComponentModel;
 using Money.UI;
 using Money.Services.Models.Queries;
 using Money.Services.Models;
+using Neptuo;
+using System.Threading.Tasks;
+using Money.Services;
 
 namespace Money.Views
 {
@@ -28,59 +31,63 @@ namespace Money.Views
             get { return (SummaryViewModel)DataContext; }
         }
 
-        public Price TotalAmount
-        {
-            get { return (Price)GetValue(TotalAmountProperty); }
-            set { SetValue(TotalAmountProperty, value); }
-        }
-
-        public static readonly DependencyProperty TotalAmountProperty = DependencyProperty.Register(
-            "TotalAmount", 
-            typeof(decimal), 
-            typeof(SummaryPage), 
-            new PropertyMetadata(Price.Zero("CZK"))
-        );
-
         public SummaryPage()
         {
             InitializeComponent();
         }
 
+        private IDomainFacade domainFacade;
+
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            //SummaryViewModel viewModel = new DesignData.ViewModelLocator().Summary;
-            SummaryViewModel viewModel = new SummaryViewModel(App.Current.DomainFacade.PriceFactory);
-            DataContext = viewModel;
-            TotalAmount = ViewModel.TotalAmount;
-            ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+            domainFacade = App.Current.DomainFacade;
 
-            IEnumerable<CategoryModel> categories = await App.Current.DomainFacade.QueryDispatcher.QueryAsync(new ListAllCategory());
-            foreach (CategoryModel category in categories)
-            {
-                ViewModel.Items.Add(new SummaryItemViewModel()
-                {
-                    CategoryKey = category.Key,
-                    Name = category.Name,
-                    Color = category.Color,
-                    Amount = App.Current.DomainFacade.PriceFactory.Create(0)
-                });
-            }
+            SummaryType summaryType = e.Parameter as SummaryType? ?? SummaryType.Month;
+            if (summaryType == SummaryType.Month)
+                await LoadMonthViewAsync();
+            else if (summaryType == SummaryType.Year)
+                await LoadYearViewAsync();
+            else
+                throw Ensure.Exception.NotSupported(summaryType.ToString());
 
-            EntranceNavigationTransitionInfo.SetIsTargetElement(lvwItems, true);
+            //EntranceNavigationTransitionInfo.SetIsTargetElement(lvwItems, true);
         }
 
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async Task LoadMonthViewAsync()
         {
-            if (e.PropertyName == nameof(SummaryViewModel.TotalAmount))
-                TotalAmount = ViewModel.TotalAmount;
+            SummaryViewModel viewModel = new SummaryViewModel();
+            DataContext = viewModel;
+
+            IEnumerable<MonthModel> months = await domainFacade.QueryAsync(new ListMonthWithOutcome());
+            foreach (MonthModel month in months)
+            {
+                SummaryGroupViewModel monthViewModel = new SummaryGroupViewModel(
+                    month.ToString(), 
+                    domainFacade.PriceFactory,
+                    new NotEmptyMonthCategoryGroupProvider(domainFacade, domainFacade.PriceFactory, month)
+                );
+                ViewModel.Groups.Add(monthViewModel);
+            }
+
+            pvtGroups.SelectedIndex = ViewModel.Groups.Count - 1;
+        }
+
+        private async Task LoadYearViewAsync()
+        {
+            throw new NotImplementedException();
         }
 
         private void lvwItems_ItemClick(object sender, ItemClickEventArgs e)
         {
             SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
             Frame.Navigate(typeof(ListPage), item.CategoryKey, new DrillInNavigationTransitionInfo());
+        }
+
+        private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.SelectedGroup = (SummaryGroupViewModel)pvtGroups.SelectedItem;
         }
     }
 }

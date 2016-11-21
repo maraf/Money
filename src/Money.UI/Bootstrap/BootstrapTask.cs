@@ -110,6 +110,10 @@ namespace Money.Bootstrap
             CategoryBuilder categoryBuilder = new CategoryBuilder();
             queryDispatcher.AddAll(categoryBuilder);
             eventDispatcher.Handlers.Add(categoryBuilder);
+
+            OutcomeBuilder outcomeBuilder = new OutcomeBuilder();
+            queryDispatcher.AddAll(outcomeBuilder);
+            eventDispatcher.Handlers.AddAll(outcomeBuilder);
         }
 
         public const int Version = 1;

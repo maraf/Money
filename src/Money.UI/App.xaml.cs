@@ -1,5 +1,6 @@
 ﻿using Money.Bootstrap;
 using Money.Services;
+using Money.ViewModels;
 using Money.Views;
 using Neptuo.Models.Keys;
 using System;
@@ -86,7 +87,7 @@ namespace Money.UI
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(SummaryPage), e.Arguments);
+                    rootFrame.Navigate(typeof(SummaryPage), SummaryType.Month);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();

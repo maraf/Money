@@ -62,7 +62,7 @@ namespace Money.Views
                 }
             }
 
-            IEnumerable<CategoryModel> categories = await App.Current.DomainFacade.QueryDispatcher
+            IEnumerable<CategoryModel> categories = await App.Current.DomainFacade
                 .QueryAsync(new ListAllCategory());
 
             viewModel.Categories.AddRange(categories);

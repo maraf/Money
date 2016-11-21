@@ -71,5 +71,10 @@ namespace Money.Bootstrap
                 outcomeRepository.Save(model);
             });
         }
+
+        public Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
+        {
+            return QueryDispatcher.QueryAsync(query);
+        }
     }
 }

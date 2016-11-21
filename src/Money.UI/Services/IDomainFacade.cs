@@ -16,17 +16,12 @@ namespace Money.Services
     /// <summary>
     /// A command facade for Money domain.
     /// </summary>
-    public interface IDomainFacade
+    public interface IDomainFacade : IQueryDispatcher
     {
         /// <summary>
         /// Gets a factory for creating prices.
         /// </summary>
         IFactory<Price, decimal> PriceFactory { get; }
-
-        /// <summary>
-        /// Gets a dispatcher for querying read-models.
-        /// </summary>
-        IQueryDispatcher QueryDispatcher { get; }
 
         /// <summary>
         /// Creates an category.

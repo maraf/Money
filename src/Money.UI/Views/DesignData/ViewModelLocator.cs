@@ -20,26 +20,12 @@ namespace Money.Views.DesignData
             {
                 if (summary == null)
                 {
-                    summary = new SummaryViewModel(new PriceFactory("CZK"));
-                    summary.Title = "September 2016";
-                    summary.Items.Add(new SummaryItemViewModel()
-                    {
-                        Amount = new Price(2500, "CZK"),
-                        Name = "Food",
-                        Color = Colors.CadetBlue
-                    });
-                    summary.Items.Add(new SummaryItemViewModel()
-                    {
-                        Amount = new Price(900, "CZK"),
-                        Name = "Eating out",
-                        Color = Colors.Brown
-                    });
-                    summary.Items.Add(new SummaryItemViewModel()
-                    {
-                        Amount = new Price(4400, "CZK"),
-                        Name = "Home",
-                        Color = Colors.Gold
-                    });
+                    summary = new SummaryViewModel();
+                    summary.Groups.Add(new SummaryGroupViewModel("August", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
+                    summary.Groups.Add(new SummaryGroupViewModel("September", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
+                    summary.Groups.Last().EnsureLoadedAsync().Wait();
+                    summary.Groups.Add(new SummaryGroupViewModel("October", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
+                    summary.Groups.Add(new SummaryGroupViewModel("November", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
                 }
 
                 return summary;

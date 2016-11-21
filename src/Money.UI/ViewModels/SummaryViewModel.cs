@@ -11,78 +11,32 @@ using Neptuo.Activators;
 namespace Money.ViewModels
 {
     /// <summary>
-    /// A view model for month or other over view.
+    /// A view model for month or year view.
     /// </summary>
     public class SummaryViewModel : ViewModel
     {
-        private readonly IFactory<Price, decimal> priceFactory;
+        public ObservableCollection<SummaryGroupViewModel> Groups { get; private set; }
 
-        private string title;
-        public string Title
+        private SummaryGroupViewModel selectedGroup;
+        public SummaryGroupViewModel SelectedGroup
         {
-            get { return title; }
+            get { return selectedGroup; }
             set
             {
-                if (title != value)
+                if (selectedGroup != value)
                 {
-                    title = value;
+                    selectedGroup = value;
                     RaisePropertyChanged();
+
+                    if (selectedGroup != null)
+                        selectedGroup.EnsureLoadedAsync();
                 }
             }
         }
 
-        private Price totalAmount;
-        public Price TotalAmount
+        public SummaryViewModel()
         {
-            get { return totalAmount; }
-            set
-            {
-                if (totalAmount != value)
-                {
-                    totalAmount = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-        
-        public ObservableCollection<SummaryItemViewModel> Items { get; private set; }
-
-        public SummaryViewModel(IFactory<Price, decimal> priceFactory)
-        {
-            this.priceFactory = priceFactory;
-
-            Items = new ObservableCollection<SummaryItemViewModel>();
-            Items.CollectionChanged += OnItemsChanged;
-        }
-
-        private void OnItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-            {
-                foreach (SummaryItemViewModel item in e.NewItems)
-                    item.PropertyChanged += OnItemPropertyChanged;
-            }
-
-            if (e.OldItems != null)
-            {
-                foreach (SummaryItemViewModel item in e.OldItems)
-                    item.PropertyChanged -= OnItemPropertyChanged;
-            }
-
-            UpdateTotalAmount();
-        }
-
-        private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(SummaryItemViewModel.Amount))
-                UpdateTotalAmount();
-        }
-
-        private void UpdateTotalAmount()
-        {
-            TotalAmount = priceFactory.Create(0);
-            foreach (SummaryItemViewModel item in Items)
-                TotalAmount += item.Amount;
+            Groups = new ObservableCollection<SummaryGroupViewModel>();
         }
     }
 }

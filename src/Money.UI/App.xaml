@@ -10,6 +10,7 @@
     <Application.Resources>
         <dd:ViewModelLocator x:Key="ViewModelLocator" />
 
+        <converters:BoolConverter x:Key="TrueToVisibleConverter" />
         <converters:DateToStringConverter x:Key="DateToStringConverter" />
 
         <Style x:Key="NoteTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">

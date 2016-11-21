@@ -19,14 +19,6 @@ namespace Money.Views.DesignData
             get { throw new NotImplementedException(); }
         }
 
-        public IQueryDispatcher QueryDispatcher
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public Task AddOutcomeCategoryAsync(IKey outcomeKey, IKey categoryKey)
         {
             throw new NotImplementedException();
@@ -38,6 +30,11 @@ namespace Money.Views.DesignData
         }
 
         public Task<IKey> CreateOutcomeAsync(Price amount, string description, DateTime when, IKey categoryKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
         {
             throw new NotImplementedException();
         }

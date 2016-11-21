@@ -1,4 +1,6 @@
-﻿using Money.UI;
+﻿using Money.Services.Models;
+using Money.Services.Models.Queries;
+using Money.UI;
 using Money.ViewModels;
 using Money.ViewModels.Parameters;
 using System;
@@ -35,7 +37,7 @@ namespace Money.Views
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             OutcomeViewModel viewModel = null;
@@ -60,17 +62,20 @@ namespace Money.Views
                 }
             }
 
-            viewModel.Categories.AddRange(new DesignData.ViewModelLocator().CreateOutcome.Categories);
+            IEnumerable<CategoryModel> categories = await App.Current.DomainFacade.QueryDispatcher
+                .QueryAsync(new ListAllCategory());
+
+            viewModel.Categories.AddRange(categories);
             DataContext = viewModel;
         }
 
         private void gvwCategories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (CategoryViewModel item in e.RemovedItems)
-                ViewModel.SelectedCategories.Remove(item.Id);
+            foreach (CategoryModel item in e.RemovedItems)
+                ViewModel.SelectedCategories.Remove(item.Key);
 
-            foreach (CategoryViewModel item in e.AddedItems)
-                ViewModel.SelectedCategories.Add(item.Id);
+            foreach (CategoryModel item in e.AddedItems)
+                ViewModel.SelectedCategories.Add(item.Key);
         }
     }
 }

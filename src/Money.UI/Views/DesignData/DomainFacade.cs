@@ -27,17 +27,17 @@ namespace Money.Views.DesignData
             }
         }
 
-        public Task CreateCategoryAsync(string name, Color color)
+        public Task AddOutcomeCategoryAsync(IKey outcomeKey, IKey categoryKey)
         {
             throw new NotImplementedException();
         }
 
-        public Task CreateOutcomeAsync(Price amount, string description, DateTime when)
+        public Task<IKey> CreateCategoryAsync(string name, Color color)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<OutcomeModel> ListOutcomeByCategory(IKey categoryKey)
+        public Task<IKey> CreateOutcomeAsync(Price amount, string description, DateTime when, IKey categoryKey)
         {
             throw new NotImplementedException();
         }

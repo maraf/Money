@@ -1,7 +1,9 @@
 ﻿using Money.Services;
+using Money.Services.Models;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Parameters;
 using Neptuo;
+using Neptuo.Models.Keys;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
 using System;
@@ -59,14 +61,14 @@ namespace Money.ViewModels
             }
         }
 
-        public ObservableCollection<CategoryViewModel> Categories { get; private set; }
-        public ObservableCollection<Guid> SelectedCategories { get; private set; }
+        public ObservableCollection<CategoryModel> Categories { get; private set; }
+        public ObservableCollection<IKey> SelectedCategories { get; private set; }
         public SaveOutcomeCommand Save { get; private set; }
 
         public OutcomeViewModel(IDomainFacade domainFacade)
         {
-            SelectedCategories = new ObservableCollection<Guid>();
-            Categories = new ObservableCollection<CategoryViewModel>();
+            SelectedCategories = new ObservableCollection<IKey>();
+            Categories = new ObservableCollection<CategoryModel>();
 
             When = DateTime.Now;
             Save = new SaveOutcomeCommand(this, domainFacade);

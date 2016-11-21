@@ -1,4 +1,6 @@
-﻿using Money.Events;
+﻿using Microsoft.EntityFrameworkCore;
+using Money.Data;
+using Money.Events;
 using Money.Services.Models.Queries;
 using Neptuo;
 using Neptuo.Events.Handlers;
@@ -18,47 +20,31 @@ namespace Money.Services.Models.Builders
     /// <summary>
     /// A builder for querying categories.
     /// </summary>
-    public class CategoryBuilder : IEventHandler<CategoryCreated>, IQueryHandler<ListAllCategory, IEnumerable<CategoryModel>>
+    public class CategoryBuilder : IEventHandler<CategoryCreated>, IQueryHandler<ListAllCategory, List<CategoryModel>>
     {
-        private readonly ApplicationDataContainer container;
-
-        public CategoryBuilder(ApplicationDataContainer container)
-        {
-            Ensure.NotNull(container, "container");
-            this.container = container.CreateContainer("Categories", ApplicationDataCreateDisposition.Always);
-        }
-
-        public Task<IEnumerable<CategoryModel>> HandleAsync(ListAllCategory query)
+        public Task<List<CategoryModel>> HandleAsync(ListAllCategory query)
         {
             List<CategoryModel> result = new List<CategoryModel>();
-            foreach (ApplicationDataContainer categoryContainer in container.Containers.Values)
+            using (ReadModelContext db = new ReadModelContext())
             {
-                IKey categoryKey = GuidKey.Create(
-                    Guid.Parse(categoryContainer.Name),
-                    KeyFactory.Empty(typeof(Category)).Type
-                );
-
-                string rawColor = (string)categoryContainer.Values["Color"];
-                byte[] colorBytes = rawColor.Split(';').Select(c => Byte.Parse(c)).ToArray();
-
-                result.Add(new CategoryModel(
-                    categoryKey, 
-                    (string)categoryContainer.Values["Name"],
-                    Color.FromArgb(colorBytes[0], colorBytes[1], colorBytes[2], colorBytes[3])
-                ));
+                return db.Categories
+                    .Select(e => e.ToModel())
+                    .ToListAsync();
             }
-
-            return Task.FromResult<IEnumerable<CategoryModel>>(result);
         }
 
         public Task HandleAsync(CategoryCreated payload)
         {
-            ApplicationDataContainer categoryContainer = container
-                .CreateContainer(payload.AggregateKey.AsGuidKey().Guid.ToString(), ApplicationDataCreateDisposition.Always);
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                db.Categories.Add(new CategoryEntity(new CategoryModel(
+                    payload.AggregateKey,
+                    payload.Name,
+                    payload.Color
+                )));
 
-            categoryContainer.Values["Name"] = payload.Name;
-            categoryContainer.Values["Color"] = String.Concat(payload.Color.A, ";", payload.Color.R, ";", payload.Color.G, ";", payload.Color.B);
-            return Async.CompletedTask;
+                return db.SaveChangesAsync();
+            }
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿using Money.Services;
+using Money.Services.Models;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
+using Neptuo.Queries;
+using Neptuo.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Money.Services.Models;
-using Neptuo.Queries;
 using Windows.UI;
-using Neptuo.Threading.Tasks;
 
 namespace Money.Bootstrap
 {
@@ -42,27 +42,34 @@ namespace Money.Bootstrap
             QueryDispatcher = queryDispatcher;
         }
 
-        public Task CreateCategoryAsync(string name, Color color)
+        public Task<IKey> CreateCategoryAsync(string name, Color color)
         {
             return Task.Factory.StartNew(() =>
             {
                 Category model = new Category(name, color);
                 categoryRepository.Save(model);
+                return model.Key;
             });
         }
 
-        public Task CreateOutcomeAsync(Price amount, string description, DateTime when)
+        public Task<IKey> CreateOutcomeAsync(Price amount, string description, DateTime when, IKey categoryKey)
         {
             return Task.Factory.StartNew(() =>
             {
-                Outcome model = new Outcome(amount, description, when);
+                Outcome model = new Outcome(amount, description, when, categoryKey);
                 outcomeRepository.Save(model);
+                return model.Key;
             });
         }
 
-        public IEnumerable<OutcomeModel> ListOutcomeByCategory(IKey categoryKey)
+        public Task AddOutcomeCategoryAsync(IKey outcomeKey, IKey categoryKey)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+            {
+                Outcome model = outcomeRepository.Find(outcomeKey);
+                model.AddCategory(categoryKey);
+                outcomeRepository.Save(model);
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Neptuo.Events;
+using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +28,17 @@ namespace Money.Events
         /// </summary>
         public DateTime When { get; private set; }
 
-        internal OutcomeCreated(Price amount, string description, DateTime when)
+        /// <summary>
+        /// Gets a category where the outcome is created.
+        /// </summary>
+        public IKey CategoryKey { get; private set; }
+
+        internal OutcomeCreated(Price amount, string description, DateTime when, IKey categoryKey)
         {
             Amount = amount;
             Description = description;
             When = when;
+            CategoryKey = categoryKey;
         }
     }
 }

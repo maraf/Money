@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.Specialized;
 using Money.Services;
+using Neptuo.Models.Keys;
 
 namespace Money.ViewModels.Commands
 {
@@ -44,11 +45,21 @@ namespace Money.ViewModels.Commands
 
         public override async void Execute()
         {
-            await domainFacade.CreateOutcomeAsync(
+            IKey outcomeKey = await domainFacade.CreateOutcomeAsync(
                 domainFacade.PriceFactory.Create((decimal)viewModel.Amount), 
                 viewModel.Description, 
-                viewModel.When
+                viewModel.When,
+                viewModel.SelectedCategories.First()
             );
+
+            if(viewModel.SelectedCategories.Count > 1)
+            {
+                for (int i = 2; i < viewModel.SelectedCategories.Count; i++)
+                {
+                    IKey categoryKey = viewModel.SelectedCategories[i];
+                    await domainFacade.AddOutcomeCategoryAsync(outcomeKey, categoryKey);
+                }
+            }
 
             viewModel.Amount = 0;
             viewModel.Description = null;

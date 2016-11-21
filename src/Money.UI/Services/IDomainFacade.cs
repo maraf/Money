@@ -33,8 +33,8 @@ namespace Money.Services
         /// </summary>
         /// <param name="name">A name of the category.</param>
         /// <param name="color">A color of the category.</param>
-        /// <returns>Continuation task.</returns>
-        Task CreateCategoryAsync(string name, Color color);
+        /// <returns>Continuation task. The result contains a key of the new category.</returns>
+        Task<IKey> CreateCategoryAsync(string name, Color color);
 
         /// <summary>
         /// Creates an outcome.
@@ -42,14 +42,15 @@ namespace Money.Services
         /// <param name="amount">An amount of the outcome.</param>
         /// <param name="description">A description of the outcome.</param>
         /// <param name="when">A date and time when the outcome occured.</param>
-        /// <returns>Continuation task.</returns>
-        Task CreateOutcomeAsync(Price amount, string description, DateTime when);
+        /// <returns>Continuation task. The result contains a key of the new outcome.</returns>
+        Task<IKey> CreateOutcomeAsync(Price amount, string description, DateTime when, IKey categoryKey);
 
         /// <summary>
-        /// Gets a list of outcomes from a category.
+        /// Adds <paramref name="categoryKey"/> to the <paramref name="outcomeKey"/>.
         /// </summary>
-        /// <param name="categoryKey">A key of the category to filter.</param>
-        /// <returns>A list of outcomes from a category.</returns>
-        IEnumerable<OutcomeModel> ListOutcomeByCategory(IKey categoryKey);
+        /// <param name="outcomeKey">A key of the outcome to add category to.</param>
+        /// <param name="categoryKey">A key of the category to add outcome to.</param>
+        /// <returns>Continuation task.</returns>
+        Task AddOutcomeCategoryAsync(IKey outcomeKey, IKey categoryKey);
     }
 }

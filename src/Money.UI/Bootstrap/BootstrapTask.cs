@@ -1,4 +1,5 @@
-﻿using Money.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Money.Data;
 using Money.Services;
 using Money.Services.Models.Builders;
 using Neptuo;
@@ -33,7 +34,7 @@ namespace Money.Bootstrap
         public IRepository<Category, IKey> CategoryRepository { get; private set; }
         public IDomainFacade DomainFacade { get; private set; }
 
-        public ContainerEventStore EventStore { get; private set; }
+        public EntityEventStore EventStore { get; private set; }
 
         public IEventDispatcher EventDispatcher
         {
@@ -67,12 +68,8 @@ namespace Money.Bootstrap
                 .AddJsonObjectSearchHandler()
                 .AddJsonKey()
                 .AddJsonTimeSpan();
-
-            ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
-            ApplicationDataContainer eventStoreContainer = root
-                .CreateContainer("EventStore", ApplicationDataCreateDisposition.Always);
-
-            EventStore = new ContainerEventStore(eventStoreContainer);
+            
+            EventStore = new EntityEventStore(Factory.Default<EventSourcingContext>());
             eventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
 
             IFactory<ICompositeStorage> compositeStorageFactory = Factory.Default<JsonCompositeStorage>();
@@ -107,15 +104,10 @@ namespace Money.Bootstrap
 
         private void ReadModels()
         {
-            ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
-            ApplicationDataContainer readModelsContainer;
-            if (!root.Containers.TryGetValue("ReadModels", out readModelsContainer))
-                readModelsContainer = root.CreateContainer("ReadModels", ApplicationDataCreateDisposition.Always);
-
             DefaultQueryDispatcher queryDispatcher = new DefaultQueryDispatcher();
             QueryDispatcher = queryDispatcher;
 
-            CategoryBuilder categoryBuilder = new CategoryBuilder(readModelsContainer);
+            CategoryBuilder categoryBuilder = new CategoryBuilder();
             queryDispatcher.AddAll(categoryBuilder);
             eventDispatcher.Handlers.Add(categoryBuilder);
         }
@@ -134,46 +126,32 @@ namespace Money.Bootstrap
                 migrationContainer = root.CreateContainer("Migration", ApplicationDataCreateDisposition.Always);
 
             if (currentVersion < 1)
-                MigrateVersion1();
-
-            if (currentVersion < 2)
-                MigrateVersion2();
-
+                MigrateVersion1().Wait();
+            
             migrationContainer.Values["Version"] = Version;
         }
-
-        private void MigrateVersion1()
+        
+        private async Task MigrateVersion1()
         {
-            ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
-
-            ApplicationDataContainer eventStoreContainer;
-            if (root.Containers.TryGetValue("EventStore", out eventStoreContainer))
+            using (var eventSourcing = new EventSourcingContext())
             {
-                List<EventModel> result = new List<EventModel>();
-                foreach (ApplicationDataContainer aggregateContainer in eventStoreContainer.Containers.Values)
-                {
-                    foreach (ApplicationDataContainer eventContainer in aggregateContainer.Containers.Values)
-                        eventContainer.Values["AggregateType"] = typeof(Outcome).AssemblyQualifiedName;
-                }
-            }
-        }
-
-        private void MigrateVersion2()
-        {
-            ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
-            ApplicationDataContainer readModelsContainer;
-            if (root.Containers.TryGetValue("ReadModels", out readModelsContainer))
-            {
-                foreach (string name in readModelsContainer.Containers.Keys.ToList())
-                    readModelsContainer.DeleteContainer(name);
+                eventSourcing.Database.EnsureDeleted();
+                eventSourcing.Database.EnsureCreated();
+                eventSourcing.Database.Migrate();
             }
 
-            DomainFacade.CreateCategoryAsync("Home", Colors.SandyBrown).Wait();
-            DomainFacade.CreateCategoryAsync("Food", Colors.OrangeRed).Wait();
-            DomainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed).Wait();
+            using (var readModels = new ReadModelContext())
+            {
+                readModels.Database.EnsureDeleted();
+                readModels.Database.EnsureCreated();
+            }
+            
+            await DomainFacade.CreateCategoryAsync("Home", Colors.SandyBrown);
+            await DomainFacade.CreateCategoryAsync("Food", Colors.OrangeRed);
+            await DomainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed);
         }
 
-        //private void MigrateVersion3()
+        //private void MigrateVersion2()
         //{
         //    Rebuilder rebuilder = new Rebuilder(EventStore, EventFormatter);
         //    rebuilder.AddAll();

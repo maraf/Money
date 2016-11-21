@@ -98,12 +98,14 @@
     </Compile>
     <Compile Include="Bootstrap\BootstrapTask.cs" />
     <Compile Include="Bootstrap\DefaultDomainFacade.cs" />
+    <Compile Include="Data\CategoryEntity.cs" />
+    <Compile Include="Data\EventSourcingContext.cs" />
+    <Compile Include="Data\ReadModelContext.cs" />
     <Compile Include="Services\IDomainFacade.cs" />
     <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />
     <Compile Include="Services\Models\CategoryModel.cs" />
     <Compile Include="Services\Models\OutcomeModel.cs" />
     <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
-    <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />
     <Compile Include="ViewModels\Commands\SaveOutcomeCommand.cs" />
@@ -170,10 +172,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Money.Data\Money.Data.csproj">
-      <Project>{1D7FEA2C-D518-4D1F-8A1F-A27BE04F3B49}</Project>
-      <Name>Money.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Money\Money.csproj">
       <Project>{4d6a47f1-249c-4b95-b08a-b6dbbc95c3a0}</Project>
       <Name>Money</Name>
@@ -183,9 +181,7 @@
       <Name>Neptuo</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

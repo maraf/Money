@@ -44,9 +44,10 @@ namespace Money
         /// <param name="amount">An amount of the outcome.</param>
         /// <param name="description">A description of the outcome.</param>
         /// <param name="when">A date when the outcome occured.</param>
-        public Outcome(Price amount, string description, DateTime when)
+        /// <param name="categoryKey">A category where the outcome is created.</param>
+        public Outcome(Price amount, string description, DateTime when, IKey categoryKey)
         {
-            Publish(new OutcomeCreated(amount, description, when));
+            Publish(new OutcomeCreated(amount, description, when, categoryKey));
         }
 
         public Outcome(IKey key, IEnumerable<IEvent> events)
@@ -60,6 +61,7 @@ namespace Money
                 Amount = payload.Amount;
                 Description = payload.Description;
                 When = payload.When;
+                CategoryKeys.Add(payload.CategoryKey);
             });
         }
 

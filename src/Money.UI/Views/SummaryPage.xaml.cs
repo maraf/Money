@@ -63,7 +63,8 @@ namespace Money.Views
                 {
                     CategoryKey = category.Key,
                     Name = category.Name,
-                    Color = category.Color
+                    Color = category.Color,
+                    Amount = App.Current.DomainFacade.PriceFactory.Create(0)
                 });
             }
 

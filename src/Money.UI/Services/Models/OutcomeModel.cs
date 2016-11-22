@@ -14,7 +14,17 @@ namespace Money.Services.Models
     {
         public IKey Key { get; private set; }
         public Price Amount { get; private set; }
+        public DateTime When { get; set; }
         public string Description { get; private set; }
         public IEnumerable<IKey> CategoryKeys { get; private set; }
+
+        public OutcomeModel(IKey key, Price amount, DateTime when, string description, IEnumerable<IKey> categoryKeys)
+        {
+            Key = key;
+            Amount = amount;
+            Description = description;
+            When = when;
+            CategoryKeys = categoryKeys;
+        }
     }
 }

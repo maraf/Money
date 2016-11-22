@@ -23,7 +23,7 @@
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Description" />
-            <TextBox Text="{Binding Description}" />
+            <TextBox Text="{Binding Description, Mode=TwoWay}" />
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="When" />

@@ -29,15 +29,15 @@ namespace Money.ViewModels
 
         public async Task ReplaceAsync(IList<SummaryItemViewModel> collection)
         {
-            IEnumerable<CategoryModel> categories = await queryDispatcher.QueryAsync(new ListAllCategory());
-            foreach (CategoryModel category in categories)
+            IEnumerable<CategoryWithAmountModel> categories = await queryDispatcher.QueryAsync(new ListMonthCategoryWithOutcome(month));
+            foreach (CategoryWithAmountModel category in categories)
             {
                 collection.Add(new SummaryItemViewModel()
                 {
                     CategoryKey = category.Key,
                     Name = category.Name,
                     Color = category.Color,
-                    Amount = priceFactory.Create(0)
+                    Amount = category.TotalAmount
                 });
             }
         }

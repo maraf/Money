@@ -12,7 +12,7 @@ using Neptuo.Models.Keys;
 
 namespace Money.ViewModels.Commands
 {
-    public class SaveOutcomeCommand : Command
+    public class SaveOutcomeCommand : NavigateBackCommand
     {
         private readonly OutcomeViewModel viewModel;
         private readonly IDomainFacade domainFacade;
@@ -46,13 +46,13 @@ namespace Money.ViewModels.Commands
         public override async void Execute()
         {
             IKey outcomeKey = await domainFacade.CreateOutcomeAsync(
-                domainFacade.PriceFactory.Create((decimal)viewModel.Amount), 
-                viewModel.Description, 
+                domainFacade.PriceFactory.Create((decimal)viewModel.Amount),
+                viewModel.Description,
                 viewModel.When,
                 viewModel.SelectedCategories.First()
             );
 
-            if(viewModel.SelectedCategories.Count > 1)
+            if (viewModel.SelectedCategories.Count > 1)
             {
                 for (int i = 2; i < viewModel.SelectedCategories.Count; i++)
                 {
@@ -64,6 +64,8 @@ namespace Money.ViewModels.Commands
             viewModel.Amount = 0;
             viewModel.Description = null;
             viewModel.When = DateTime.Now;
+
+            base.Execute();
         }
     }
 }

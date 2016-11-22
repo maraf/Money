@@ -65,6 +65,11 @@ namespace Neptuo.Converters
             return this;
         }
 
+        private bool IsConverterContextType(Type type)
+        {
+            return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(IConverterContext<>);
+        }
+
         public bool TryConvert<TSource, TTarget>(TSource sourceValue, out TTarget targetValue)
         {
             Type sourceType = typeof(TSource);
@@ -91,7 +96,7 @@ namespace Neptuo.Converters
                 onSearchConverter.TryExecute(new ConverterSearchContext(sourceType, targetType), out converter);
 
             // If no converter was found, try context converters.
-            if (converter == null)
+            if (converter == null && !IsConverterContextType(sourceType))
                 return TryConvert<IConverterContext<TSource>, TTarget>(new DefaultConverterContext<TSource>(sourceValue, this), out targetValue);
 
             // If no converter was found, conversion is not possible.
@@ -149,7 +154,7 @@ namespace Neptuo.Converters
                 onSearchConverter.TryExecute(new ConverterSearchContext(sourceType, targetType), out converter);
 
             // If no converter was found, try context converters.
-            if (converter == null)
+            if (converter == null && !IsConverterContextType(sourceType))
             {
                 Type sourceContextType = typeof(IConverterContext<>).MakeGenericType(sourceType);
 
@@ -207,7 +212,7 @@ namespace Neptuo.Converters
             }
 
             // If no converter was found, conversion is not possible.
-            if (converter == null)
+            if (converter == null && !IsConverterContextType(sourceType))
             {
                 return sourceValue =>
                 {
@@ -267,7 +272,7 @@ namespace Neptuo.Converters
                 onSearchConverter.TryExecute(new ConverterSearchContext(sourceType, targetType), out converter);
 
             // If no converter was found, try context converters.
-            if (converter == null)
+            if (converter == null && !IsConverterContextType(sourceType))
             {
                 OutFunc<IConverterContext<TSource>, TTarget, bool> result = GetTryConverter<IConverterContext<TSource>, TTarget>();
                 return (TSource sourceValue, out TTarget targetValue) => result(new DefaultConverterContext<TSource>(sourceValue, this), out targetValue);

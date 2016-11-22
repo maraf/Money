@@ -19,6 +19,8 @@ namespace Money.Data
         public byte ColorG { get; set; }
         public byte ColorB { get; set; }
 
+        public IList<OutcomeCategoryEntity> Outcomes { get; set; }
+
         public CategoryEntity()
         { }
 

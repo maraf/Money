@@ -4,6 +4,7 @@ using Money.Services;
 using Money.Services.Models.Builders;
 using Neptuo;
 using Neptuo.Activators;
+using Neptuo.Converters;
 using Neptuo.Data;
 using Neptuo.Events;
 using Neptuo.Formatters;
@@ -67,7 +68,8 @@ namespace Money.Bootstrap
                 .AddJsonPrimitivesSearchHandler()
                 .AddJsonObjectSearchHandler()
                 .AddJsonKey()
-                .AddJsonTimeSpan();
+                .AddJsonTimeSpan()
+                .Add(new ColorConverter());
             
             EventStore = new EntityEventStore(Factory.Default<EventSourcingContext>());
             eventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
@@ -104,6 +106,7 @@ namespace Money.Bootstrap
 
         private void ReadModels()
         {
+            // Should match with RecreateReadModelContext.
             DefaultQueryDispatcher queryDispatcher = new DefaultQueryDispatcher();
             QueryDispatcher = queryDispatcher;
 
@@ -114,6 +117,31 @@ namespace Money.Bootstrap
             OutcomeBuilder outcomeBuilder = new OutcomeBuilder();
             queryDispatcher.AddAll(outcomeBuilder);
             eventDispatcher.Handlers.AddAll(outcomeBuilder);
+        }
+
+        private void EventSourcingContext()
+        {
+            using (var eventSourcing = new EventSourcingContext())
+            {
+                eventSourcing.Database.EnsureDeleted();
+                eventSourcing.Database.EnsureCreated();
+                eventSourcing.Database.Migrate();
+            }
+        }
+
+        private void RecreateReadModelContext()
+        {
+            using (var readModels = new ReadModelContext())
+            {
+                readModels.Database.EnsureDeleted();
+                readModels.Database.EnsureCreated();
+            }
+
+            // Should match with ReadModels.
+            Rebuilder rebuilder = new Rebuilder(EventStore, EventFormatter);
+            rebuilder.AddAll(new CategoryBuilder());
+            rebuilder.AddAll(new OutcomeBuilder());
+            rebuilder.RunAsync().Wait();
         }
 
         public const int Version = 1;
@@ -128,37 +156,21 @@ namespace Money.Bootstrap
                 currentVersion = (int?)migrationContainer.Values["Version"] ?? currentVersion;
             else
                 migrationContainer = root.CreateContainer("Migration", ApplicationDataCreateDisposition.Always);
-
-            if (currentVersion < 1)
-                MigrateVersion1().Wait();
             
+            if (currentVersion < 1)
+                MigrateVersion1();
+
             migrationContainer.Values["Version"] = Version;
         }
         
-        private async Task MigrateVersion1()
+        private void MigrateVersion1()
         {
-            using (var eventSourcing = new EventSourcingContext())
-            {
-                eventSourcing.Database.EnsureDeleted();
-                eventSourcing.Database.EnsureCreated();
-                eventSourcing.Database.Migrate();
-            }
+            EventSourcingContext();
+            RecreateReadModelContext();
 
-            using (var readModels = new ReadModelContext())
-            {
-                readModels.Database.EnsureDeleted();
-                readModels.Database.EnsureCreated();
-            }
-            
-            await DomainFacade.CreateCategoryAsync("Home", Colors.SandyBrown);
-            await DomainFacade.CreateCategoryAsync("Food", Colors.OrangeRed);
-            await DomainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed);
+            DomainFacade.CreateCategoryAsync("Home", Colors.SandyBrown).Wait();
+            DomainFacade.CreateCategoryAsync("Food", Colors.OrangeRed).Wait();
+            DomainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed).Wait();
         }
-
-        //private void MigrateVersion2()
-        //{
-        //    Rebuilder rebuilder = new Rebuilder(EventStore, EventFormatter);
-        //    rebuilder.AddAll();
-        //}
     }
 }

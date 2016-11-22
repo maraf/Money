@@ -19,6 +19,18 @@
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar>
+            <CommandBar.Content>
+                <AppBarButton Icon="Home">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Manage categories" IsEnabled="False" />
+                            <MenuFlyoutItem Text="Manage currencies" IsEnabled="False" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem Text="Settings" IsEnabled="False" />
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+            </CommandBar.Content>
             <AppBarButton Icon="Sort">
                 <AppBarButton.Flyout>
                     <MenuFlyout>

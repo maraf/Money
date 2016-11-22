@@ -10,8 +10,9 @@
     <Application.Resources>
         <dd:ViewModelLocator x:Key="ViewModelLocator" />
 
-        <converters:BoolConverter x:Key="TrueToVisibleConverter" />
+        <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
         <converters:DateToStringConverter x:Key="DateToStringConverter" />
+        <converters:CuttingConverter x:Key="ZeroToVisibleConverter" EdgeValue="0" GreaterValue="Collapsed" LowerValue="Visible" />
 
         <Style x:Key="NoteTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>

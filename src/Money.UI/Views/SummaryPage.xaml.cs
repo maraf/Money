@@ -21,6 +21,7 @@ using Money.Services.Models;
 using Neptuo;
 using System.Threading.Tasks;
 using Money.Services;
+using Money.ViewModels.Parameters;
 
 namespace Money.Views
 {
@@ -36,15 +37,15 @@ namespace Money.Views
             InitializeComponent();
         }
 
-        private IDomainFacade domainFacade;
+        private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
+        private SummaryType summaryType;
+        private Dictionary<SummaryGroupViewModel, MonthModel> groupToMonth;
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            domainFacade = App.Current.DomainFacade;
-
-            SummaryType summaryType = e.Parameter as SummaryType? ?? SummaryType.Month;
+            summaryType = e.Parameter as SummaryType? ?? SummaryType.Month;
             if (summaryType == SummaryType.Month)
                 await LoadMonthViewAsync();
             else if (summaryType == SummaryType.Year)
@@ -57,6 +58,8 @@ namespace Money.Views
 
         private async Task LoadMonthViewAsync()
         {
+            groupToMonth = new Dictionary<SummaryGroupViewModel, MonthModel>();
+
             SummaryViewModel viewModel = new SummaryViewModel();
             DataContext = viewModel;
 
@@ -68,6 +71,7 @@ namespace Money.Views
                     domainFacade.PriceFactory,
                     new NotEmptyMonthCategoryGroupProvider(domainFacade, domainFacade.PriceFactory, month)
                 );
+                groupToMonth[monthViewModel] = month;
                 ViewModel.Groups.Add(monthViewModel);
             }
 
@@ -82,7 +86,11 @@ namespace Money.Views
         private void lvwItems_ItemClick(object sender, ItemClickEventArgs e)
         {
             SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
-            Frame.Navigate(typeof(ListPage), item.CategoryKey, new DrillInNavigationTransitionInfo());
+            Frame.Navigate(
+                typeof(CategoryListPage), 
+                new CategoryListParameter(item.CategoryKey, groupToMonth[(SummaryGroupViewModel)pvtGroups.SelectedItem]), 
+                new DrillInNavigationTransitionInfo()
+            );
         }
 
         private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)

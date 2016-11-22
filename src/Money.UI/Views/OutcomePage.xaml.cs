@@ -35,6 +35,8 @@ namespace Money.Views
         public OutcomePage()
         {
             this.InitializeComponent();
+
+            dprWhen.MaxWidth = Double.PositiveInfinity;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

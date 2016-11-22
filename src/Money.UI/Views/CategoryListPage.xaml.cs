@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Money.Services;
+using Money.UI;
+using Money.ViewModels.Parameters;
+using Neptuo.Models.Keys;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,19 +26,23 @@ namespace Money.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ListPage : Page
+    public sealed partial class CategoryListPage : Page
     {
-        public ListPage()
+        public CategoryListPage()
         {
             this.InitializeComponent();
         }
 
+        private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            DataContext = new DesignData.ViewModelLocator().List;
+            DataContext = new DesignData.ViewModelLocator().CategoryList;
 
-            Guid groupId = (Guid)e.Parameter;
+            CategoryListParameter parameter = (CategoryListParameter)e.Parameter;
+
+
 
             IList<PageStackEntry> backStack = Frame.BackStack;
             int backStackCount = backStack.Count;
@@ -48,7 +56,7 @@ namespace Money.Views
                 // will show the correct item in the side-by-side view.
                 PageStackEntry modifiedEntry = new PageStackEntry(
                     masterPageEntry.SourcePageType,
-                    groupId,
+                    parameter,
                     masterPageEntry.NavigationTransitionInfo
                 );
                 backStack.Add(modifiedEntry);

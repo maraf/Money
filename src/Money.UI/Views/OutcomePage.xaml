@@ -27,7 +27,7 @@
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="When" />
-            <DatePicker Date="{Binding When}" HorizontalAlignment="Stretch" />
+            <DatePicker x:Name="dprWhen" Date="{Binding When}" HorizontalAlignment="Stretch" />
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Category" />

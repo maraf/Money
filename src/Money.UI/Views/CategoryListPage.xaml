@@ -1,12 +1,12 @@
 ﻿<Page
-    x:Class="Money.Views.ListPage"
+    x:Class="Money.Views.CategoryListPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Money.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Money.ViewModels"
-    mc:Ignorable="d" d:DataContext="{Binding List, Source={StaticResource ViewModelLocator}}"
+    mc:Ignorable="d" d:DataContext="{Binding CategoryList, Source={StaticResource ViewModelLocator}}"
     NavigationCacheMode="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.BottomAppBar>
@@ -29,7 +29,7 @@
         <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,6" />
         <ListView ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="vm:ListItemViewModel">
+                <DataTemplate x:DataType="vm:CategoryListItemViewModel">
                     <Grid Margin="0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Money.ViewModels
 {
-    public class ListItemViewModel : ObservableObject
+    public class CategoryListItemViewModel : ObservableObject
     {
         private Guid id;
         public Guid Id

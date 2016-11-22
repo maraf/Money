@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Money.ViewModels
 {
-    public class ListViewModel : ViewModel
+    public class CategoryListViewModel : ViewModel
     {
         private Guid groupId;
         public Guid GroupId
@@ -37,11 +37,11 @@ namespace Money.ViewModels
             }
         }
 
-        public ObservableCollection<ListItemViewModel> Items { get; private set; }
+        public ObservableCollection<CategoryListItemViewModel> Items { get; private set; }
 
-        public ListViewModel()
+        public CategoryListViewModel()
         {
-            Items = new ObservableCollection<ListItemViewModel>();
+            Items = new ObservableCollection<CategoryListItemViewModel>();
         }
     }
 }

@@ -32,23 +32,23 @@ namespace Money.Views.DesignData
             }
         }
 
-        private ListViewModel list;
-        public ListViewModel List
+        private CategoryListViewModel categoryList;
+        public CategoryListViewModel CategoryList
         {
             get
             {
-                if (list == null)
+                if (categoryList == null)
                 {
-                    list = new ListViewModel();
-                    list.GroupId = Guid.NewGuid();
-                    list.Name = "Eating";
-                    list.Items.Add(new ListItemViewModel()
+                    categoryList = new CategoryListViewModel();
+                    categoryList.GroupId = Guid.NewGuid();
+                    categoryList.Name = "Eating";
+                    categoryList.Items.Add(new CategoryListItemViewModel()
                     {
                         Description = "Saturday's buy on market",
                         Amount = new Price(1250, "CZK"),
                         When = new DateTime(2016, 11, 12, 10, 30, 15)
                     });
-                    list.Items.Add(new ListItemViewModel()
+                    categoryList.Items.Add(new CategoryListItemViewModel()
                     {
                         Description = "Cheese",
                         Amount = new Price(345, "CZK"),
@@ -56,7 +56,7 @@ namespace Money.Views.DesignData
                     });
                 }
 
-                return list;
+                return categoryList;
             }
         }
 

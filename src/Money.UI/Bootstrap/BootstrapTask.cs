@@ -114,7 +114,7 @@ namespace Money.Bootstrap
             queryDispatcher.AddAll(categoryBuilder);
             eventDispatcher.Handlers.Add(categoryBuilder);
 
-            OutcomeBuilder outcomeBuilder = new OutcomeBuilder();
+            OutcomeBuilder outcomeBuilder = new OutcomeBuilder(PriceFactory);
             queryDispatcher.AddAll(outcomeBuilder);
             eventDispatcher.Handlers.AddAll(outcomeBuilder);
         }
@@ -140,7 +140,7 @@ namespace Money.Bootstrap
             // Should match with ReadModels.
             Rebuilder rebuilder = new Rebuilder(EventStore, EventFormatter);
             rebuilder.AddAll(new CategoryBuilder());
-            rebuilder.AddAll(new OutcomeBuilder());
+            rebuilder.AddAll(new OutcomeBuilder(PriceFactory));
             rebuilder.RunAsync().Wait();
         }
 

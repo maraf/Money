@@ -114,6 +114,7 @@
     <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
     <Compile Include="Services\Models\Queries\ListMonthCategoryWithOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListMonthWithOutcome.cs" />
+    <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateBackCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />

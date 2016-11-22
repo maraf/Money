@@ -15,6 +15,7 @@ namespace Money.ViewModels
     {
         private readonly IFactory<Price, decimal> priceFactory;
         private readonly IProvider provider;
+        private readonly ObservableCollection<SummaryItemViewModel> items;
         private bool isLoaded;
         
         public string Title { get; private set; }
@@ -47,16 +48,18 @@ namespace Money.ViewModels
             }
         }
 
-        public ObservableCollection<SummaryItemViewModel> Items { get; private set; }
+        public IEnumerable<SummaryItemViewModel> Items
+        {
+            get { return items; }
+        }
 
         public SummaryGroupViewModel(string title, IFactory<Price, decimal> priceFactory, IProvider provider)
         {
             this.priceFactory = priceFactory;
             this.provider = provider;
+            this.items = new ObservableCollection<SummaryItemViewModel>();
 
             Title = title;
-            Items = new ObservableCollection<SummaryItemViewModel>();
-            Items.CollectionChanged += OnItemsChanged;
         }
 
         public async Task EnsureLoadedAsync()
@@ -65,40 +68,12 @@ namespace Money.ViewModels
                 return;
 
             IsLoading = true;
-            Items.Clear();
-            await provider.ReplaceAsync(Items);
+            items.Clear();
+            await provider.ReplaceAsync(items);
+            TotalAmount = await provider.GetTotalAmount();
+
             isLoaded = true;
             IsLoading = false;
-        }
-
-        private void OnItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-            {
-                foreach (SummaryItemViewModel item in e.NewItems)
-                    item.PropertyChanged += OnItemPropertyChanged;
-            }
-
-            if (e.OldItems != null)
-            {
-                foreach (SummaryItemViewModel item in e.OldItems)
-                    item.PropertyChanged -= OnItemPropertyChanged;
-            }
-
-            UpdateTotalAmount();
-        }
-
-        private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(SummaryItemViewModel.Amount))
-                UpdateTotalAmount();
-        }
-
-        private void UpdateTotalAmount()
-        {
-            TotalAmount = priceFactory.Create(0);
-            foreach (SummaryItemViewModel item in Items)
-                TotalAmount += item.Amount;
         }
     }
 }

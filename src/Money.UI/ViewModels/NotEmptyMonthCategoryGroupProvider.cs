@@ -41,5 +41,10 @@ namespace Money.ViewModels
                 });
             }
         }
+
+        public Task<Price> GetTotalAmount()
+        {
+            return queryDispatcher.QueryAsync(new GetTotalMonthOutcome(month));
+        }
     }
 }

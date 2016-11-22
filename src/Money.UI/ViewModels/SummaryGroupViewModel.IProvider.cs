@@ -11,6 +11,8 @@ namespace Money.ViewModels
         public interface IProvider
         {
             Task ReplaceAsync(IList<SummaryItemViewModel> collection);
+
+            Task<Price> GetTotalAmount();
         }
     }
 }

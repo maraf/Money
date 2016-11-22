@@ -2,6 +2,8 @@
 using Money.Data;
 using Money.Events;
 using Money.Services.Models.Queries;
+using Neptuo;
+using Neptuo.Activators;
 using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries.Handlers;
@@ -16,8 +18,17 @@ namespace Money.Services.Models.Builders
     public class OutcomeBuilder : IEventHandler<OutcomeCreated>, 
         IEventHandler<OutcomeCategoryAdded>, 
         IQueryHandler<ListMonthWithOutcome, IEnumerable<MonthModel>>,
-        IQueryHandler<ListMonthCategoryWithOutcome, IEnumerable<CategoryWithAmountModel>>
+        IQueryHandler<ListMonthCategoryWithOutcome, IEnumerable<CategoryWithAmountModel>>,
+        IQueryHandler<GetTotalMonthOutcome, Price>
     {
+        private readonly IFactory<Price, decimal> priceFactory;
+
+        public OutcomeBuilder(IFactory<Price, decimal> priceFactory)
+        {
+            Ensure.NotNull(priceFactory, "priceFactory");
+            this.priceFactory = priceFactory;
+        }
+
         public Task<IEnumerable<MonthModel>> HandleAsync(ListMonthWithOutcome query)
         {
             return Task.FromResult<IEnumerable<MonthModel>>(new List<MonthModel>()
@@ -61,6 +72,23 @@ namespace Money.Services.Models.Builders
                 }
 
                 return result;
+            }
+        }
+
+        public async Task<Price> HandleAsync(GetTotalMonthOutcome query)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                List<Price> outcomes = await db.Outcomes
+                    .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
+                    .Select(o => new Price(o.Amount, o.Currency))
+                    .ToListAsync();
+
+                Price price = priceFactory.Create(0);
+                foreach (Price outcome in outcomes)
+                    price += outcome;
+
+                return price;
             }
         }
 

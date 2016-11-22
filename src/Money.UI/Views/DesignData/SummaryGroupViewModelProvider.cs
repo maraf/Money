@@ -11,6 +11,11 @@ namespace Money.Views.DesignData
 {
     internal class SummaryGroupViewModelProvider : SummaryGroupViewModel.IProvider
     {
+        public Task<Price> GetTotalAmount()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task ReplaceAsync(IList<SummaryItemViewModel> collection)
         {
             collection.Add(new SummaryItemViewModel()

@@ -13,7 +13,7 @@ namespace Money.Views.DesignData
     {
         public Task<Price> GetTotalAmount()
         {
-            throw new NotImplementedException();
+            return Task.FromResult(new Price(7800, "CZK"));
         }
 
         public Task ReplaceAsync(IList<SummaryItemViewModel> collection)

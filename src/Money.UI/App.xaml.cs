@@ -183,7 +183,14 @@ namespace Money.UI
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            NavigateBack((Frame)sender);
+            Frame frame = sender as Frame;
+            if (frame == null)
+                frame = Window.Current.Content as Frame;
+
+            if (frame == null)
+                return;
+
+            NavigateBack(frame);
             e.Handled = true;
         }
 

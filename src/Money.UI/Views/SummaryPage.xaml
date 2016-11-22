@@ -20,13 +20,16 @@
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.Content>
-                <AppBarButton Icon="Home">
+                <AppBarButton>
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xE700;" />
+                    </AppBarButton.Icon>
                     <AppBarButton.Flyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem Text="Manage categories" IsEnabled="False" />
-                            <MenuFlyoutItem Text="Manage currencies" IsEnabled="False" />
+                        <MenuFlyout LightDismissOverlayMode="On">
+                            <MenuFlyoutItem Text="Manage categories" />
+                            <MenuFlyoutItem Text="Manage currencies" />
                             <MenuFlyoutSeparator />
-                            <MenuFlyoutItem Text="Settings" IsEnabled="False" />
+                            <MenuFlyoutItem Text="Settings" />
                         </MenuFlyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>

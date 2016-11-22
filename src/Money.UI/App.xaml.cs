@@ -11,14 +11,18 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 namespace Money.UI
@@ -80,6 +84,12 @@ namespace Money.UI
                 Window.Current.Content = rootFrame;
             }
 
+            SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
+            systemNavigationManager.BackRequested += OnBackRequested;
+
+            rootFrame.Navigating += OnRootFrameNavigating;
+            rootFrame.Navigated += OnRootFrameNavigated;
+
             if (e.PrelaunchActivated == false)
             {
                 if (rootFrame.Content == null)
@@ -89,6 +99,7 @@ namespace Money.UI
                     // parameter
                     rootFrame.Navigate(typeof(SummaryPage), SummaryType.Month);
                 }
+
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
@@ -130,6 +141,62 @@ namespace Money.UI
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private void OnRootFrameNavigated(object sender, NavigationEventArgs e)
+        {
+            Frame frame = (Frame)sender;
+            EnsureBackButtonVisibility((Frame)sender);
+
+            Page page = frame.Content as Page;
+            if (page != null)
+                page.PointerPressed += OnPagePointerPressed;
+        }
+
+        private void OnRootFrameNavigating(object sender, NavigatingCancelEventArgs e)
+        {
+            Frame frame = (Frame)sender;
+
+            Page page = frame.Content as Page;
+            if (page != null)
+                page.PointerPressed -= OnPagePointerPressed;
+        }
+
+        private void OnPagePointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            if (e.Pointer.PointerDeviceType == PointerDeviceType.Mouse)
+            {
+                Page page = (Page)sender;
+                PointerPoint point = e.GetCurrentPoint(page);
+                if (point.Properties.IsXButton1Pressed)
+                    NavigateBack(page.Frame);
+                else if (point.Properties.IsXButton2Pressed)
+                    NavigateForward(page.Frame);
+            }
+        }
+
+        private void EnsureBackButtonVisibility(Frame rootFrame)
+        {
+            SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
+            systemNavigationManager.AppViewBackButtonVisibility = rootFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+        }
+
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            NavigateBack((Frame)sender);
+            e.Handled = true;
+        }
+
+        private void NavigateBack(Frame rootFrame)
+        {
+            if (rootFrame.CanGoBack)
+                rootFrame.GoBack(new DrillInNavigationTransitionInfo());
+        }
+
+        private void NavigateForward(Frame rootFrame)
+        {
+            if (rootFrame.CanGoForward)
+                rootFrame.GoForward();
         }
     }
 }

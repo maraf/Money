@@ -190,20 +190,30 @@ namespace Money.UI
             if (frame == null)
                 return;
 
-            NavigateBack(frame);
-            e.Handled = true;
+            if (NavigateBack(frame))
+                e.Handled = true;
         }
 
-        private void NavigateBack(Frame rootFrame)
+        private bool NavigateBack(Frame rootFrame)
         {
             if (rootFrame.CanGoBack)
+            {
                 rootFrame.GoBack(new DrillInNavigationTransitionInfo());
+                return true;
+            }
+
+            return false;
         }
 
-        private void NavigateForward(Frame rootFrame)
+        private bool NavigateForward(Frame rootFrame)
         {
             if (rootFrame.CanGoForward)
+            {
                 rootFrame.GoForward();
+                return true;
+            }
+
+            return false;
         }
     }
 }

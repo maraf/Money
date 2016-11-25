@@ -4,33 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
-namespace PieChartTest
+namespace Money.Views.Controls
 {
     /// <summary>
-    /// Interaction logic for PieChart.xaml
+    /// A single item of <see cref="PieChart"/>.
     /// </summary>
     public partial class PieChartItem : UserControl
     {
+        /// <summary>
+        /// Gets or sets a thickness of drawed lines.
+        /// Default value is inherited from <see cref="PieChart"/>.
+        /// </summary>
         public double Thickness
         {
             get { return (double)GetValue(ThicknessProperty); }
             set { SetValue(ThicknessProperty, value); }
         }
 
+        /// <summary>
+        /// A dependency property for getting or setting a thickenss of drawer lines.
+        /// </summary>
         public static readonly DependencyProperty ThicknessProperty = DependencyProperty.Register(
             "Thickness",
             typeof(double),
             typeof(PieChartItem),
-            new PropertyMetadata(OnThicknessChanged)
+            new PropertyMetadata(0d, OnThicknessChanged)
         );
 
         private static void OnThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -45,12 +47,18 @@ namespace PieChartTest
             pc.NotifyUpdate();
         }
         
+        /// <summary>
+        /// Gets or sets a value for this item.
+        /// </summary>
         public int Value
         {
             get { return (int)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
+        /// <summary>
+        /// A dependency property for getting or setting a value for this item.
+        /// </summary>
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
             "Value",
             typeof(int),
@@ -64,8 +72,8 @@ namespace PieChartTest
             pc.NotifyUpdate();
         }
 
-        public double StartAngle { get; set; }
-        public double Angle { get; set; }
+        private double StartAngle { get; set; }
+        private double Angle { get; set; }
 
         public PieChartItem()
         {

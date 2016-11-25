@@ -6,33 +6,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
-namespace PieChartTest
+namespace Money.Views.Controls
 {
     /// <summary>
-    /// Interaction logic for PieChart.xaml
+    /// A PieChart-like items control.
     /// </summary>
     public partial class PieChart : ItemsControl
     {
+        /// <summary>
+        /// Gets or sets a thickness of drawed lines.
+        /// Default value is <c>10</c>.
+        /// </summary>
         public double Thickness
         {
             get { return (double)GetValue(ThicknessProperty); }
             set { SetValue(ThicknessProperty, value); }
         }
 
+        /// <summary>
+        /// A dependency property for getting or setting a thickenss of drawer lines.
+        /// </summary>
         public static readonly DependencyProperty ThicknessProperty = DependencyProperty.Register(
-            "Thickness", 
-            typeof(double), 
-            typeof(PieChart), 
+            "Thickness",
+            typeof(double),
+            typeof(PieChart),
             new PropertyMetadata(10d, OnThicknessChanged)
         );
 
@@ -47,7 +47,7 @@ namespace PieChartTest
             InitializeComponent();
         }
 
-        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+        protected override void OnItemsChanged(object e)
         {
             base.OnItemsChanged(e);
             Update();
@@ -56,20 +56,27 @@ namespace PieChartTest
         internal void Update()
         {
             double sum = 0;
-            foreach (PieChartItem item in Items.SourceCollection)
+            for (int i = 0; i < Items.Count; i++)
             {
-                double percentage = GetPercentage(item);
-                item.Update(sum, percentage, this);
-                sum += percentage;
+                PieChartItem item = (PieChartItem)ContainerFromIndex(i);
+                if (item != null)
+                {
+                    double percentage = GetPercentage(item);
+                    item.Update(sum, percentage, this);
+                    sum += percentage;
+                }
             }
         }
 
         private double GetPercentage(PieChartItem item)
         {
-            double sum = Items.SourceCollection
-                .OfType<PieChartItem>()
-                .ToList()
-                .Sum(i => i.Value);
+            double sum = 0;
+            for (int i = 0; i < Items.Count; i++)
+            {
+                PieChartItem currentItem = (PieChartItem)ContainerFromIndex(i);
+                if (currentItem != null)
+                    sum += currentItem.Value;
+            }
 
             double value = item.Value;
             return (value / sum) * 100;

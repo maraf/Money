@@ -104,6 +104,11 @@
                                 <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
                                 <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
                             </Grid>
+
+                            <!--<controls:PieChart ItemsSource="{Binding Items}" Height="200">
+                                <controls:PieChartItem Value="100" />
+                                <controls:PieChartItem Value="100" />
+                            </controls:PieChart>-->
                         </StackPanel>
                         <Grid Visibility="{Binding Items.Count, Converter={StaticResource ZeroToVisibleConverter}}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">

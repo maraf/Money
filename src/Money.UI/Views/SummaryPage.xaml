@@ -26,8 +26,10 @@
                     </AppBarButton.Icon>
                     <AppBarButton.Flyout>
                         <MenuFlyout LightDismissOverlayMode="On">
-                            <MenuFlyoutItem Text="Manage categories" />
-                            <MenuFlyoutItem Text="Manage currencies" />
+                            <MenuFlyoutItem Text="Pie chart" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem Text="Categories" />
+                            <MenuFlyoutItem Text="Currencies" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem Text="Settings" />
                         </MenuFlyout>

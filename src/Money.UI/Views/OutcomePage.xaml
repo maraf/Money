@@ -13,7 +13,7 @@
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar DefaultLabelPosition="Right">
-            <AppBarButton Icon="Save" Label="Save" Command="{Binding Save}" />
+            <AppBarButton Icon="Save" Label="Save new outcome" Command="{Binding Save}" />
         </CommandBar>
     </Page.BottomAppBar>
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

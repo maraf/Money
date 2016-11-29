@@ -26,6 +26,7 @@ namespace Money.Views.DesignData
                     summary.Groups.Add(new SummaryGroupViewModel("October", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
                     summary.Groups.Add(new SummaryGroupViewModel("November", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
                     summary.Groups.First().EnsureLoadedAsync().Wait();
+                    summary.Groups.First().IsLoading = true;
                 }
 
                 return summary;

@@ -119,7 +119,8 @@
                             </StackPanel>
                         </Grid>
                         <Grid Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}">
-                            <ProgressRing />
+                            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+                            <ProgressRing IsActive="{Binding IsLoading}" Width="100" Height="100" />
                         </Grid>
                     </Grid>
                 </DataTemplate>

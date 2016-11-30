@@ -128,11 +128,10 @@
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
     <Compile Include="ViewModels\Parameters\OutcomeDefaultsModel.cs" />
-    <Compile Include="ViewModels\SummaryGroupViewModel.cs" />
-    <Compile Include="ViewModels\SummaryGroupViewModel.IProvider.cs" />
-    <Compile Include="ViewModels\SummaryItemViewModel.cs" />
-    <Compile Include="ViewModels\SummaryType.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
+    <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
+    <Compile Include="ViewModels\SummaryItemViewModel.cs" />
+    <Compile Include="ViewModels\GroupType.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\Controls\Bar.xaml.cs">
       <DependentUpon>Bar.xaml</DependentUpon>

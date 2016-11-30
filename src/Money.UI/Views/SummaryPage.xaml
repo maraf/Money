@@ -33,69 +33,50 @@
         </controls:MainCommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot x:Name="pvtGroups" ItemsSource="{Binding Groups}" SelectionChanged="pvtGroups_SelectionChanged">
-            <Pivot.ItemContainerStyle>
-                <Style TargetType="PivotItem">
-                    <Setter Property="Margin" Value="0" />
-                </Style>
-            </Pivot.ItemContainerStyle>
-            <Pivot.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Title}" />
-                </DataTemplate>
-            </Pivot.HeaderTemplate>
-            <Pivot.ItemTemplate>
-                <DataTemplate x:DataType="vm:SummaryGroupViewModel">
-                    <Grid x:Name="grdGroupContent">
-                        <StackPanel>
-                            <ListView x:Name="lvwItems" ItemsSource="{Binding Items}" ItemClick="lvwItems_ItemClick" IsItemClickEnabled="True" ItemContainerTransitions="{x:Null}">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                        <Setter Property="Padding" Value="0" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate x:DataType="vm:SummaryItemViewModel">
-                                        <Grid Style="{StaticResource BarLineGridStyle}">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="10" />
-                                            </Grid.RowDefinitions>
+    <Grid x:Name="grdGroupContent" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel>
+            <ListView x:Name="lvwItems" ItemsSource="{Binding Items}" ItemClick="lvwItems_ItemClick" IsItemClickEnabled="True" ItemContainerTransitions="{x:Null}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Padding" Value="0" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:SummaryItemViewModel">
+                        <Grid Style="{StaticResource BarLineGridStyle}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="10" />
+                            </Grid.RowDefinitions>
 
-                                            <TextBlock x:Name="tblName" Text="{x:Bind Name}" Style="{ThemeResource BaseTextBlockStyle}" />
-                                            <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" Grid.Column="1" />
+                            <TextBlock x:Name="tblName" Text="{x:Bind Name}" Style="{ThemeResource BaseTextBlockStyle}" />
+                            <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" Grid.Column="1" />
 
-                                            <controls:Bar Value="{x:Bind Amount.Value}" Max="{Binding DataContext.TotalAmount.Value, ElementName=grdGroupContent}" Grid.ColumnSpan="2" Grid.Row="1">
-                                                <controls:Bar.Fill>
-                                                    <SolidColorBrush Color="{x:Bind Color}" />
-                                                </controls:Bar.Fill>
-                                            </controls:Bar>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                            <controls:Bar Value="{x:Bind Amount.Value}" Max="{Binding DataContext.TotalAmount.Value, ElementName=grdGroupContent}" Grid.ColumnSpan="2" Grid.Row="1">
+                                <controls:Bar.Fill>
+                                    <SolidColorBrush Color="{x:Bind Color}" />
+                                </controls:Bar.Fill>
+                            </controls:Bar>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-                            <Grid Style="{StaticResource BarLineGridStyle}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
-                                <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
-                            </Grid>
-                        </StackPanel>
-                        <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" />
-                        <controls:Loading IsActive="{Binding IsLoading}" />
-                    </Grid>
-                </DataTemplate>
-            </Pivot.ItemTemplate>
-        </Pivot>
-        <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Groups.Count}" />
+            <Grid Style="{StaticResource BarLineGridStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
+            </Grid>
+        </StackPanel>
+        <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" />
+        <controls:Loading IsActive="{Binding IsLoading}" />
     </Grid>
 </Page>

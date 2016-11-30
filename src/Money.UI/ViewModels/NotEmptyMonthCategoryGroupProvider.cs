@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Money.ViewModels
 {
-    public class NotEmptyMonthCategoryGroupProvider : SummaryGroupViewModel.IProvider
+    public class NotEmptyMonthCategoryGroupProvider : SummaryViewModel.IProvider
     {
         private readonly IQueryDispatcher queryDispatcher;
         private readonly IFactory<Price, decimal> priceFactory;

@@ -17,6 +17,24 @@ namespace Money.ViewModels
         /// </summary>
         public ObservableCollection<GroupItemViewModel> Items { get; private set; }
 
+        private bool isLoading;
+
+        /// <summary>
+        /// Gets or sets whether data is currenly loading.
+        /// </summary>
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set
+            {
+                if (isLoading != value)
+                {
+                    isLoading = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         /// <summary>
         /// Creates a new instance.
         /// </summary>

@@ -9,7 +9,7 @@ namespace Money.ViewModels
     /// <summary>
     /// A enumeration of supported summary views.
     /// </summary>
-    public enum SummaryType
+    public enum GroupType
     {
         /// <summary>
         /// A month view of summaries.

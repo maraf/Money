@@ -9,7 +9,7 @@ using Windows.UI;
 
 namespace Money.Views.DesignData
 {
-    internal class SummaryGroupViewModelProvider : SummaryGroupViewModel.IProvider
+    internal class SummaryGroupViewModelProvider : SummaryViewModel.IProvider
     {
         public Task<Price> GetTotalAmount()
         {

@@ -38,12 +38,8 @@ namespace Money.Views.DesignData
             {
                 if (summary == null)
                 {
-                    summary = new SummaryViewModel();
-                    summary.Groups.Add(new SummaryGroupViewModel("August", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
-                    summary.Groups.Add(new SummaryGroupViewModel("September", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
-                    summary.Groups.Add(new SummaryGroupViewModel("October", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
-                    summary.Groups.Add(new SummaryGroupViewModel("November", new PriceFactory("CZK"), new SummaryGroupViewModelProvider()));
-                    summary.Groups.First().EnsureLoadedAsync().Wait();
+                    summary = new SummaryViewModel("August", new PriceFactory("CZK"), new SummaryGroupViewModelProvider());
+                    summary.EnsureLoadedAsync();
                 }
 
                 return summary;

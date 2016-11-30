@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Money.ViewModels
 {
-    partial class SummaryGroupViewModel
+    partial class SummaryViewModel
     {
         public interface IProvider
         {

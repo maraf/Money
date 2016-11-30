@@ -38,64 +38,36 @@ namespace Money.Views
         }
 
         private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
-        private SummaryType summaryType;
-        private Dictionary<SummaryGroupViewModel, MonthModel> groupToMonth;
+        private MonthModel month;
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            summaryType = e.Parameter as SummaryType? ?? SummaryType.Month;
-            if (summaryType == SummaryType.Month)
-                await LoadMonthViewAsync();
-            else if (summaryType == SummaryType.Year)
-                await LoadYearViewAsync();
-            else
-                throw Ensure.Exception.NotSupported(summaryType.ToString());
-
-            //EntranceNavigationTransitionInfo.SetIsTargetElement(lvwItems, true);
-        }
-
-        private async Task LoadMonthViewAsync()
-        {
-            groupToMonth = new Dictionary<SummaryGroupViewModel, MonthModel>();
-
-            SummaryViewModel viewModel = new SummaryViewModel();
-            DataContext = viewModel;
-
-            IEnumerable<MonthModel> months = await domainFacade.QueryAsync(new ListMonthWithOutcome());
-            foreach (MonthModel month in months)
+            month = e.Parameter as MonthModel;
+            if (month != null)
             {
-                SummaryGroupViewModel monthViewModel = new SummaryGroupViewModel(
-                    month.ToString(), 
+                SummaryViewModel viewModel = new SummaryViewModel(
+                    month.ToString(),
                     domainFacade.PriceFactory,
                     new NotEmptyMonthCategoryGroupProvider(domainFacade, domainFacade.PriceFactory, month)
                 );
-                groupToMonth[monthViewModel] = month;
-                ViewModel.Groups.Add(monthViewModel);
+                DataContext = viewModel;
+                await viewModel.EnsureLoadedAsync();
+                return;
             }
 
-            pvtGroups.SelectedIndex = ViewModel.Groups.Count - 1;
-        }
-
-        private async Task LoadYearViewAsync()
-        {
-            throw new NotImplementedException();
+            throw Ensure.Exception.NotSupported("Unknown parameter in SummaryPage.");
         }
 
         private void lvwItems_ItemClick(object sender, ItemClickEventArgs e)
         {
             SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
             Frame.Navigate(
-                typeof(CategoryListPage), 
-                new CategoryListParameter(item.CategoryKey, groupToMonth[(SummaryGroupViewModel)pvtGroups.SelectedItem]), 
+                typeof(CategoryListPage),
+                new CategoryListParameter(item.CategoryKey, month),
                 new DrillInNavigationTransitionInfo()
             );
-        }
-
-        private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ViewModel.SelectedGroup = (SummaryGroupViewModel)pvtGroups.SelectedItem;
         }
     }
 }

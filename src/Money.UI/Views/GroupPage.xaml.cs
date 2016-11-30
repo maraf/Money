@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Money.Views.DesignData;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,13 @@ namespace Money.Views
         public GroupPage()
         {
             InitializeComponent();
+
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            DataContext = new ViewModelLocator().Group;
         }
 
         private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)

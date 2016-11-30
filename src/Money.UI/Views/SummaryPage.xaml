@@ -91,10 +91,7 @@
                             </Grid>
                         </StackPanel>
                         <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" />
-                        <Grid Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}">
-                            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
-                            <ProgressRing IsActive="{Binding IsLoading}" Width="100" Height="100" />
-                        </Grid>
+                        <controls:Loading IsActive="{Binding IsLoading}" />
                     </Grid>
                 </DataTemplate>
             </Pivot.ItemTemplate>

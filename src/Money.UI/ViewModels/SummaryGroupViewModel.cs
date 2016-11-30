@@ -68,12 +68,16 @@ namespace Money.ViewModels
                 return;
 
             IsLoading = true;
+
             items.Clear();
+
             await provider.ReplaceAsync(items);
             TotalAmount = await provider.GetTotalAmount();
 
-            isLoaded = true;
+
+            await Task.Delay(100);
             IsLoading = false;
+            isLoaded = true;
         }
     }
 }

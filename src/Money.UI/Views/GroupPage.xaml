@@ -5,6 +5,7 @@
     xmlns:controls="using:Money.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:Money.Views"
     mc:Ignorable="d" d:DataContext="{Binding Group, Source={StaticResource ViewModelLocator}}">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Pivot x:Name="pvtGroups" ItemsSource="{Binding Items}" SelectionChanged="pvtGroups_SelectionChanged">
@@ -18,6 +19,15 @@
                     <TextBlock Text="{Binding Title}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
+            <Pivot.ItemTemplate>
+                <DataTemplate>
+                    <ContentPresenter>
+                        <ContentPresenter.Content>
+                            <views:OutcomePage />
+                        </ContentPresenter.Content>
+                    </ContentPresenter>
+                </DataTemplate>
+            </Pivot.ItemTemplate>
         </Pivot>
         <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" />
     </Grid>

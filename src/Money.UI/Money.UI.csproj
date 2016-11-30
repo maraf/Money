@@ -140,6 +140,9 @@
     <Compile Include="Views\Controls\EmptyMessage.xaml.cs">
       <DependentUpon>EmptyMessage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\Loading.xaml.cs">
+      <DependentUpon>Loading.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\MainCommandBar.xaml.cs">
       <DependentUpon>MainCommandBar.xaml</DependentUpon>
     </Compile>
@@ -199,6 +202,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\EmptyMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\Loading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

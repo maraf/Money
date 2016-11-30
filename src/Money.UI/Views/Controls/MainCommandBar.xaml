@@ -14,7 +14,7 @@
             </AppBarButton.Icon>
             <AppBarButton.Flyout>
                 <MenuFlyout LightDismissOverlayMode="On">
-                    <MenuFlyoutItem Text="Pie chart" />
+                    <MenuFlyoutItem Text="Pie chart" Click="OnPieChartClicked" />
                     <MenuFlyoutItem Text="Summary" />
                     <MenuFlyoutSeparator />
                     <MenuFlyoutItem Text="Categories" />

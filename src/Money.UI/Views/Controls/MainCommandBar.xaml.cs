@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
@@ -24,6 +25,12 @@ namespace Money.Views.Controls
         public MainCommandBar()
         {
             this.InitializeComponent();
+        }
+
+        private void OnPieChartClicked(object sender, RoutedEventArgs e)
+        {
+            ((Frame)Window.Current.Content).Navigate(typeof(GroupPage), 1, new Windows.UI.Xaml.Media.Animation.SlideNavigationTransitionInfo());
+            //((Frame)Window.Current.Content).BackStack.Add(new PageStackEntry(typeof(GroupPage), 1, new DrillInNavigationTransitionInfo()));
         }
     }
 }

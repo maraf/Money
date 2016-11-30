@@ -24,7 +24,7 @@ namespace Money.ViewModels
         public bool IsLoading
         {
             get { return isLoading; }
-            private set
+            internal set
             {
                 if (isLoading != value)
                 {

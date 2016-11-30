@@ -18,24 +18,7 @@
         </Style>
     </Page.Resources>
     <Page.BottomAppBar>
-        <CommandBar>
-            <CommandBar.Content>
-                <AppBarButton>
-                    <AppBarButton.Icon>
-                        <FontIcon Glyph="&#xE700;" />
-                    </AppBarButton.Icon>
-                    <AppBarButton.Flyout>
-                        <MenuFlyout LightDismissOverlayMode="On">
-                            <MenuFlyoutItem Text="Pie chart" />
-                            <MenuFlyoutSeparator />
-                            <MenuFlyoutItem Text="Categories" />
-                            <MenuFlyoutItem Text="Currencies" />
-                            <MenuFlyoutSeparator />
-                            <MenuFlyoutItem Text="Settings" />
-                        </MenuFlyout>
-                    </AppBarButton.Flyout>
-                </AppBarButton>
-            </CommandBar.Content>
+        <controls:MainCommandBar>
             <AppBarButton Icon="Sort">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
@@ -47,7 +30,7 @@
             <AppBarSeparator />
             <AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
-        </CommandBar>
+        </controls:MainCommandBar>
     </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

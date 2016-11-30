@@ -37,6 +37,13 @@ namespace Money.Views
 
         private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            PivotItem item = (PivotItem)pvtGroups.ContainerFromIndex(pvtGroups.SelectedIndex);
+            if (item != null)
+            {
+                ContentPresenter presenter = (ContentPresenter)item.FindName("copContent");
+                if (presenter != null)
+                    presenter.Content = new OutcomePage();
+            }
         }
     }
 }

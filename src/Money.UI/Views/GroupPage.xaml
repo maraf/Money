@@ -21,11 +21,7 @@
             </Pivot.HeaderTemplate>
             <Pivot.ItemTemplate>
                 <DataTemplate>
-                    <ContentPresenter>
-                        <ContentPresenter.Content>
-                            <views:OutcomePage />
-                        </ContentPresenter.Content>
-                    </ContentPresenter>
+                    <ContentPresenter x:Name="copContent" />
                 </DataTemplate>
             </Pivot.ItemTemplate>
         </Pivot>

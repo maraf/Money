@@ -13,6 +13,24 @@ namespace Money.Views.DesignData
 {
     internal class ViewModelLocator
     {
+        private GroupViewModel group;
+        public GroupViewModel Group
+        {
+            get
+            {
+                if (group == null)
+                {
+                    group = new GroupViewModel();
+                    group.Items.Add(new GroupItemViewModel("August", null));
+                    group.Items.Add(new GroupItemViewModel("September", null));
+                    group.Items.Add(new GroupItemViewModel("October", null));
+                    group.Items.Add(new GroupItemViewModel("December", null));
+                }
+
+                return group;
+            }
+        }
+
         private SummaryViewModel summary;
         public SummaryViewModel Summary
         {

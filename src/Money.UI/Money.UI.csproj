@@ -122,6 +122,8 @@
     <Compile Include="ViewModels\Commands\SaveOutcomeCommand.cs" />
     <Compile Include="ViewModels\CategoryListItemViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
+    <Compile Include="ViewModels\GroupItemViewModel.cs" />
+    <Compile Include="ViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
@@ -155,6 +157,9 @@
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\CategoryListPage.xaml.cs">
       <DependentUpon>CategoryListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GroupPage.xaml.cs">
+      <DependentUpon>GroupPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OutcomePage.xaml.cs">
       <DependentUpon>OutcomePage.xaml</DependentUpon>
@@ -208,6 +213,10 @@
     <Page Include="Views\Controls\PieChartItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\GroupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OutcomePage.xaml">
       <SubType>Designer</SubType>

@@ -45,7 +45,12 @@ namespace Money.Views
             //        presenter.Content = new OutcomePage();
             //}
 
-            frmContent.Navigate(typeof(OutcomePage));
+            if (pvtGroups.SelectedIndex == 0)
+                frmContent.Navigate(typeof(CategoryListPage));
+            else 
+                frmContent.Navigate(typeof(SummaryPage));
+
+            //((Frame)Window.Current.Content).BackStack.Add(frmContent.BackStack.Last());
         }
     }
 }

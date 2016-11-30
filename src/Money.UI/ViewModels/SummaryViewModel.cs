@@ -13,7 +13,7 @@ namespace Money.ViewModels
     /// <summary>
     /// A view model for month or year view.
     /// </summary>
-    public class SummaryViewModel : ViewModel
+    public partial class SummaryViewModel : ViewModel
     {
         public ObservableCollection<SummaryGroupViewModel> Groups { get; private set; }
 

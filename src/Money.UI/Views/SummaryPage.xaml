@@ -89,18 +89,8 @@
                                 <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
                                 <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
                             </Grid>
-
-                            <!--<controls:PieChart ItemsSource="{Binding Items}" Height="200">
-                                <controls:PieChartItem Value="100" />
-                                <controls:PieChartItem Value="100" />
-                            </controls:PieChart>-->
                         </StackPanel>
-                        <Grid Visibility="{Binding Items.Count, Converter={StaticResource ZeroToVisibleConverter}}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="Nothing here" Style="{ThemeResource HeaderTextBlockStyle}" HorizontalAlignment="Center" />
-                                <TextBlock Text="Start by adding items with date falling here" Style="{StaticResource NoteTextStyle}" />
-                            </StackPanel>
-                        </Grid>
+                        <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" />
                         <Grid Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}">
                             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
                             <ProgressRing IsActive="{Binding IsLoading}" Width="100" Height="100" />
@@ -109,11 +99,6 @@
                 </DataTemplate>
             </Pivot.ItemTemplate>
         </Pivot>
-        <Grid Visibility="{Binding Groups.Count, Converter={StaticResource ZeroToVisibleConverter}}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Nothing here" Style="{ThemeResource HeaderTextBlockStyle}" HorizontalAlignment="Center" />
-                <TextBlock Text="Start by adding items with date falling here" Style="{StaticResource NoteTextStyle}" />
-            </StackPanel>
-        </Grid>
+        <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Groups.Count}" />
     </Grid>
 </Page>

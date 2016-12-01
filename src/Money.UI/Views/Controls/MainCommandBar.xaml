@@ -1,14 +1,18 @@
 ﻿<CommandBar
     x:Class="Money.Views.Controls.MainCommandBar"
+    x:Name="root"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Money.Views.Controls"
+    xmlns:converters="using:Money.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignWidth="400">
+    <CommandBar.Resources>
+        <converters:BoolConverter x:Key="TrueToFalseConverter" TrueValue="False" FalseValue="True" />
+    </CommandBar.Resources>
     <CommandBar.Content>
-        <AppBarButton>
+        <AppBarButton Label="Main menu" IsCompact="{Binding IsOpen, ElementName=root, Converter={StaticResource TrueToFalseConverter}}">
             <AppBarButton.Icon>
                 <FontIcon Glyph="&#xE700;" />
             </AppBarButton.Icon>

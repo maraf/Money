@@ -35,7 +35,8 @@ namespace Money.Services.Models.Builders
             {
                 new MonthModel(2016, 9),
                 new MonthModel(2016, 10),
-                new MonthModel(2016, 11)
+                new MonthModel(2016, 11),
+                new MonthModel(2016, 12)
             });
         }
 

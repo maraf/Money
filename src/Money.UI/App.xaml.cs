@@ -97,7 +97,8 @@ namespace Money.UI
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(GroupPage), GroupType.Month);
+                    //rootFrame.Navigate(typeof(GroupPage), GroupType.Month);
+                    rootFrame.Navigate(typeof(Template));
                 }
 
                 // Ensure the current window is active

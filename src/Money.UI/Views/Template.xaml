@@ -1,0 +1,119 @@
+﻿<Page
+    x:Class="Money.Views.Template"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Money.Views.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.BottomAppBar>
+        <CommandBar x:Name="cbrBottom">
+            <CommandBar.Resources>
+                <converters:BoolConverter x:Key="TrueToFalseConverter" TrueValue="False" FalseValue="True" />
+            </CommandBar.Resources>
+            <CommandBar.Content>
+                <AppBarToggleButton x:Name="atbMainMenu" Label="Main menu" Checked="atbMainMenu_Checked" Unchecked="atbMainMenu_Unchecked"
+                 IsCompact="{Binding IsOpen, ElementName=cbrBottom, Converter={StaticResource TrueToFalseConverter}}">
+                    <AppBarToggleButton.Icon>
+                        <FontIcon Glyph="&#xE700;" />
+                    </AppBarToggleButton.Icon>
+                </AppBarToggleButton>
+            </CommandBar.Content>
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <!-- Adaptive triggers -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource LargeSize}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="spvContent.DisplayMode" Value="CompactInline"/>
+                        <Setter Target="spvContent.IsPaneOpen" Value="True"/>
+                        <Setter Target="atbMainMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="tbtMainMenu.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MediumSize}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="spvContent.DisplayMode" Value="CompactOverlay"/>
+                        <Setter Target="spvContent.IsPaneOpen" Value="False"/>
+                        <Setter Target="atbMainMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="tbtMainMenu.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="spvContent.DisplayMode" Value="Overlay"/>
+                        <Setter Target="spvContent.IsPaneOpen" Value="False"/>
+                        <Setter Target="atbMainMenu.Visibility" Value="Visible" />
+                        <Setter Target="tbtMainMenu.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!-- Declared first for screen reader navigation order, ZIndex specified to have it rendered above everything else. -->
+        <ToggleButton x:Name="tbtMainMenu"
+                      Canvas.ZIndex="100"
+                      TabIndex="1"
+                      IsChecked="{Binding IsPaneOpen, ElementName=spvContent, Mode=TwoWay}"
+                      AutomationProperties.Name="Navigation"
+                      ToolTipService.ToolTip="Navigation"
+                      VerticalAlignment="Top">
+            <FontIcon Glyph="&#xE700;" />
+        </ToggleButton>
+
+        <!-- Top-level navigation menu + app content -->
+        <SplitView x:Name="spvContent"
+                   DisplayMode="Inline"
+                   OpenPaneLength="320"
+                   PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                   LightDismissOverlayMode="On"
+                   IsTabStop="False">
+
+            <SplitView.Pane>
+                <Grid Margin="0,50,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0">
+                        <Button Content="Categories" />
+                        <Button Content="Currencies" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2">
+                        <Button Content="Settings" />
+                    </StackPanel>
+                </Grid>
+            </SplitView.Pane>
+
+            <SplitView.Content>
+                <!-- OnNavigatingToPage we synchronize the selected item in the nav menu with the current page.-->
+                <Frame x:Name="frmContent"
+                   Margin="0,4,0,0">
+                    <Frame.ContentTransitions>
+                        <TransitionCollection>
+                            <NavigationThemeTransition>
+                                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                                    <EntranceNavigationTransitionInfo/>
+                                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                            </NavigationThemeTransition>
+                        </TransitionCollection>
+                    </Frame.ContentTransitions>
+                </Frame>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
+</Page>

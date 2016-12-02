@@ -9,6 +9,10 @@
     RequestedTheme="Light">
     <Application.Resources>
         <dd:ViewModelLocator x:Key="ViewModelLocator" />
+        
+        <x:Double x:Key="SmallSize">0</x:Double>
+        <x:Double x:Key="MediumSize">641</x:Double>
+        <x:Double x:Key="LargeSize">1008</x:Double>
 
         <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
         <converters:DateToStringConverter x:Key="DateToStringConverter" />

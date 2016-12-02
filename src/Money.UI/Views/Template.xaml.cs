@@ -1,4 +1,5 @@
 ﻿using Money.ViewModels;
+using Money.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,23 +27,17 @@ namespace Money.Views
         public Template()
         {
             InitializeComponent();
-
-            mmnMain.ItemsSource = new List<MenuItemViewModel>()
+            
+            List<MenuItemViewModel> menuItems = new List<MenuItemViewModel>()
             {
-                new MenuItemViewModel("Pie Chart", "\uEB05", typeof(Empty), null),
-                new MenuItemViewModel("Summary", "\uE94C", typeof(Empty), null),
+                new MenuItemViewModel("Pie Chart", "\uEB05", typeof(Empty)) { Group = "Main" },
+                new MenuItemViewModel("Summary", "\uE94C", typeof(GroupPage), GroupType.Month) { Group = "Main" },
+                new MenuItemViewModel("Categories", "\uE8FD", typeof(Empty)) { Group = "Additional" },
+                new MenuItemViewModel("Currencies", "\uE1D0", typeof(Empty)) { Group = "Additional" },
+                new MenuItemViewModel("Settings", "\uE713", typeof(Empty)) { Group = "Bottom" },
             };
 
-            mmnAdditional.ItemsSource = new List<MenuItemViewModel>()
-            {
-                new MenuItemViewModel("Categories", "\uE8FD", typeof(Empty), null),
-                new MenuItemViewModel("Currencies", "\uE1D0", typeof(Empty), null),
-            };
-
-            mmnBottom.ItemsSource = new List<MenuItemViewModel>()
-            {
-                new MenuItemViewModel("Settings", "\uE713", typeof(Empty), null),
-            };
+            MenuItemsSource.Source = menuItems.GroupBy(i => i.Group);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -60,6 +55,12 @@ namespace Money.Views
         private void atbMainMenu_Unchecked(object sender, RoutedEventArgs e)
         {
             spvContent.IsPaneOpen = false;
+        }
+
+        private void OnMainMenuItemInvoked(object sender, ListViewItem e)
+        {
+            MenuItemViewModel item = (MenuItemViewModel)((MainMenu)sender).ItemFromContainer(e);
+            frmContent.Navigate(item.Page, item.Parameter);
         }
     }
 }

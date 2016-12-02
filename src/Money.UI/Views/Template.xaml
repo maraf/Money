@@ -40,12 +40,12 @@
             <Setter Property="FontSize" Value="16" />
             <Setter Property="FontFamily" Value="{StaticResource SymbolThemeFontFamily}" />
             <Setter Property="MinHeight" Value="48" />
-            <Setter Property="MinWidth" Value="48" />
-            <Setter Property="Margin" Value="0,4,0,0" />
+            <Setter Property="MinWidth" Value="160" />
+            <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
@@ -146,6 +146,7 @@
             <Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemContainerStyle}" />
         </Style>
 
+        <CollectionViewSource x:Key="MenuItemsSource" x:Name="MenuItemsSource" IsSourceGrouped="True" />
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar x:Name="cbrBottom">
@@ -202,15 +203,10 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <ToggleButton x:Name="tbtMainMenu" Style="{StaticResource MainMenuToggleButtonStyle}" Canvas.ZIndex="100" TabIndex="1"
-         IsChecked="{Binding IsPaneOpen, ElementName=spvContent, Mode=TwoWay}">
-            <FontIcon Glyph="&#xE700;" />
-        </ToggleButton>
-
         <SplitView x:Name="spvContent" DisplayMode="Inline" OpenPaneLength="160" LightDismissOverlayMode="On" IsTabStop="False"
          PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
             <SplitView.Pane>
-                <Grid Margin="0,50,0,0">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
@@ -218,12 +214,49 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0">
-                        <controls:MainMenu x:Name="mmnMain" />
-                        <AppBarSeparator />
-                        <controls:MainMenu x:Name="mmnAdditional" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="2">
-                        <controls:MainMenu x:Name="mmnBottom" />
+                        <ToggleButton x:Name="tbtMainMenu" Style="{StaticResource MainMenuToggleButtonStyle}" Canvas.ZIndex="100" TabIndex="1"
+                         IsChecked="{Binding IsPaneOpen, ElementName=spvContent, Mode=TwoWay}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="48" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <FontIcon FontSize="16" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="Money"/>
+                                <TextBlock Text="Money" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
+                            </Grid>
+                        </ToggleButton>
+
+                        <!--<Grid MinHeight="48">
+                            <TextBlock Text="Money" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Margin="48,0,0,0" />
+                        </Grid>-->
+                        
+                        <controls:MainMenu ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="OnMainMenuItemInvoked">
+                            <!--<controls:MainMenu.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                </ItemsPanelTemplate>
+                            </controls:MainMenu.ItemsPanel>-->
+                            <controls:MainMenu.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderContainerStyle>
+                                        <Style TargetType="ListViewHeaderItem">
+                                            <Setter Property="MinHeight" Value="1" />
+                                            <Setter Property="Padding" Value="0" />
+                                        </Style>
+                                    </GroupStyle.HeaderContainerStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </controls:MainMenu.GroupStyle>
+                        </controls:MainMenu>
                     </StackPanel>
                 </Grid>
             </SplitView.Pane>

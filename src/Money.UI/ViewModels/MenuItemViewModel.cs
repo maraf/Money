@@ -39,6 +39,20 @@ namespace Money.ViewModels
             }
         }
 
+        private string group;
+        public string Group
+        {
+            get { return group; }
+            set
+            {
+                if (group != value)
+                {
+                    group = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         public Type Page { get; private set; }
         public object Parameter { get; private set; }
 

@@ -128,6 +128,7 @@
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
+    <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\OutcomeDefaultsModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
@@ -168,6 +169,10 @@
     <Compile Include="Views\GroupPage.xaml.cs">
       <DependentUpon>GroupPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Navigation\DefaultNavigator.cs" />
+    <Compile Include="Views\Navigation\INavigator.cs" />
+    <Compile Include="Views\Navigation\INavigatorForm.cs" />
+    <Compile Include="Views\Navigation\NavigationParameterAttribute.cs" />
     <Compile Include="Views\OutcomePage.xaml.cs">
       <DependentUpon>OutcomePage.xaml</DependentUpon>
     </Compile>

@@ -3,7 +3,9 @@ using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.UI;
 using Money.ViewModels;
+using Money.ViewModels.Parameters;
 using Money.Views.DesignData;
+using Money.Views.Navigation;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -28,6 +30,7 @@ namespace Money.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    [NavigationParameter(typeof(GroupParameter))]
     public sealed partial class GroupPage : Page
     {
         private readonly IDomainFacade domainFacade = App.Current.DomainFacade;

@@ -25,7 +25,24 @@ namespace Money.Views
     {
         public Template()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+
+            mmnMain.ItemsSource = new List<MenuItemViewModel>()
+            {
+                new MenuItemViewModel("Pie Chart", "\uEB05", typeof(Empty), null),
+                new MenuItemViewModel("Summary", "\uE94C", typeof(Empty), null),
+            };
+
+            mmnAdditional.ItemsSource = new List<MenuItemViewModel>()
+            {
+                new MenuItemViewModel("Categories", "\uE8FD", typeof(Empty), null),
+                new MenuItemViewModel("Currencies", "\uE1D0", typeof(Empty), null),
+            };
+
+            mmnBottom.ItemsSource = new List<MenuItemViewModel>()
+            {
+                new MenuItemViewModel("Settings", "\uE713", typeof(Empty), null),
+            };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

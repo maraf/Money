@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\GroupItemViewModel.cs" />
     <Compile Include="ViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Views\Controls\MainCommandBar.xaml.cs">
       <DependentUpon>MainCommandBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\MainMenu.cs" />
     <Compile Include="Views\Controls\PieChart.xaml.cs">
       <DependentUpon>PieChart.xaml</DependentUpon>
     </Compile>
@@ -159,6 +161,9 @@
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\CategoryListPage.xaml.cs">
       <DependentUpon>CategoryListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Empty.xaml.cs">
+      <DependentUpon>Empty.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GroupPage.xaml.cs">
       <DependentUpon>GroupPage.xaml</DependentUpon>
@@ -222,6 +227,10 @@
     <Page Include="Views\Controls\PieChartItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Empty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GroupPage.xaml">
       <SubType>Designer</SubType>

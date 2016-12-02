@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Money.ViewModels.Parameters;
+using Money.Views.Navigation;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +22,7 @@ namespace Money.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    [NavigationParameter(typeof(EmptyParameter))]
     public sealed partial class Empty : Page
     {
         public Empty()

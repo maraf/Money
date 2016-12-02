@@ -53,24 +53,20 @@ namespace Money.ViewModels
             }
         }
 
-        public Type Page { get; private set; }
         public object Parameter { get; private set; }
 
-        public MenuItemViewModel(string label, Type page, object parameter = null)
+        public MenuItemViewModel(string label, object parameter)
         {
-            Ensure.NotNull(page, "page");
+            Ensure.NotNull(parameter, "parameter");
             Label = label;
-            Page = page;
+            Parameter = parameter;
             Parameter = parameter;
         }
 
-        public MenuItemViewModel(string label, string icon, Type page, object parameter = null)
+        public MenuItemViewModel(string label, string icon, object parameter)
+            : this(label, parameter)
         {
-            Ensure.NotNull(page, "page");
-            Label = label;
             Icon = icon;
-            Page = page;
-            Parameter = parameter;
         }
     }
 }

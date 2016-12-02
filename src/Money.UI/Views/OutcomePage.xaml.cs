@@ -53,7 +53,7 @@ namespace Money.Views
             else
             {
                 viewModel = new OutcomeViewModel(App.Current.DomainFacade);
-                OutcomeDefaultsModel defaults = e.Parameter as OutcomeDefaultsModel;
+                OutcomeParameter defaults = e.Parameter as OutcomeParameter;
                 if (defaults != null)
                 {
                     if (defaults.Amount != null)

@@ -1,0 +1,15 @@
+﻿using Money.Services.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Money.ViewModels.Parameters
+{
+    public interface IGroupParameter
+    {
+        MonthModel Month { get; set; }
+        YearModel Year { get; set; }
+    }
+}

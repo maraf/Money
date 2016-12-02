@@ -128,8 +128,12 @@
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
+    <Compile Include="ViewModels\Parameters\EmptyParameter.cs" />
     <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
-    <Compile Include="ViewModels\Parameters\OutcomeDefaultsModel.cs" />
+    <Compile Include="ViewModels\Parameters\IGroupParameter.cs" />
+    <Compile Include="ViewModels\Parameters\OutcomeParameter.cs" />
+    <Compile Include="ViewModels\Parameters\PieChartParameter.cs" />
+    <Compile Include="ViewModels\Parameters\SummaryParameter.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
     <Compile Include="ViewModels\SummaryItemViewModel.cs" />
@@ -169,10 +173,14 @@
     <Compile Include="Views\GroupPage.xaml.cs">
       <DependentUpon>GroupPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Navigation\DefaultNavigator.cs" />
+    <Compile Include="Views\Navigation\AttributeNavigator.cs" />
+    <Compile Include="Views\Navigation\GroupNavigator.cs" />
+    <Compile Include="Views\Navigation\IParameterDecorator.cs" />
+    <Compile Include="Views\Navigation\PageNavigator.cs" />
     <Compile Include="Views\Navigation\INavigator.cs" />
     <Compile Include="Views\Navigation\INavigatorForm.cs" />
     <Compile Include="Views\Navigation\NavigationParameterAttribute.cs" />
+    <Compile Include="Views\Navigation\PageNavigatorForm.cs" />
     <Compile Include="Views\OutcomePage.xaml.cs">
       <DependentUpon>OutcomePage.xaml</DependentUpon>
     </Compile>

@@ -1,7 +1,9 @@
 ﻿using Money.Bootstrap;
 using Money.Services;
 using Money.ViewModels;
+using Money.ViewModels.Parameters;
 using Money.Views;
+using Money.Views.Navigation;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -33,6 +35,7 @@ namespace Money.UI
     sealed partial class App : Application
     {
         public IDomainFacade DomainFacade { get; private set; }
+        public INavigator RootNavigator { get; set; }
 
         public static new App Current
         {
@@ -84,6 +87,8 @@ namespace Money.UI
                 Window.Current.Content = rootFrame;
             }
 
+            RootNavigator = new PageNavigator(rootFrame, typeof(Template));
+
             SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested += OnBackRequested;
 
@@ -98,7 +103,9 @@ namespace Money.UI
                     // configuring the new page by passing required information as a navigation
                     // parameter
                     //rootFrame.Navigate(typeof(GroupPage), GroupType.Month);
-                    rootFrame.Navigate(typeof(Template));
+                    RootNavigator
+                        .Open(new SummaryParameter() { Month = DateTime.Now })
+                        .Show();
                 }
 
                 // Ensure the current window is active

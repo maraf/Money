@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Neptuo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,21 @@ namespace Money.ViewModels.Parameters
         /// </summary>
         public GroupType Type { get; private set; }
 
+        /// <summary>
+        /// Gets a parameter for inner page.
+        /// </summary>
+        public object Inner { get; private set; }
 
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="type">A type of the grouping.</param>
+        /// <param name="inner">A parameter for inner page.</param>
+        public GroupParameter(GroupType type, object inner)
+        {
+            Ensure.NotNull(inner, "inner");
+            Type = type;
+            Inner = inner;
+        }
     }
 }

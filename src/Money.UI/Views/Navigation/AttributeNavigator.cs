@@ -12,12 +12,12 @@ namespace Money.Views.Navigation
     /// <summary>
     /// A default implementation of <see cref="INavigator"/>.
     /// </summary>
-    internal class DefaultNavigator : INavigator
+    internal class AttributeNavigator : INavigator
     {
         private readonly Dictionary<Type, Type> storage = new Dictionary<Type, Type>();
         private readonly Frame frame;
 
-        public DefaultNavigator(Frame frame)
+        public AttributeNavigator(Frame frame)
         {
             Ensure.NotNull(frame, "frame");
             this.frame = frame;

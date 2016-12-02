@@ -31,10 +31,10 @@ namespace Money.Views
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     [NavigationParameter(typeof(GroupParameter))]
-    public sealed partial class GroupPage : Page
+    public sealed partial class GroupPage : Page, IParameterDecorator
     {
         private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
-        private GroupType summaryType;
+        private GroupParameter parameter;
         private Dictionary<GroupItemViewModel, MonthModel> groupToMonth;
 
         public GroupPage()
@@ -50,13 +50,13 @@ namespace Money.Views
             DataContext = viewModel;
             viewModel.IsLoading = true;
 
-            summaryType = e.Parameter as GroupType? ?? GroupType.Month;
-            if (summaryType == GroupType.Month)
+            parameter = (GroupParameter)e.Parameter;
+            if (parameter.Type == GroupType.Month)
                 await LoadMonthViewAsync(viewModel);
-            else if (summaryType == GroupType.Year)
+            else if (parameter.Type == GroupType.Year)
                 await LoadYearViewAsync(viewModel);
             else
-                throw Ensure.Exception.NotSupported(summaryType.ToString());
+                throw Ensure.Exception.NotSupported(parameter.Type.ToString());
         }
 
         private async Task LoadMonthViewAsync(GroupViewModel viewModel)
@@ -93,10 +93,27 @@ namespace Money.Views
 
             if (pvtGroups.SelectedIndex == 0)
                 frmContent.Navigate(typeof(CategoryListPage));
-            else 
+            else
                 frmContent.Navigate(typeof(SummaryPage), viewModel.Parameter);
 
             //((Frame)Window.Current.Content).BackStack.Add(frmContent.BackStack.Last());
+        }
+
+        public object Decorate(object parameter)
+        {
+            IGroupParameter groupParameter = parameter as IGroupParameter;
+            if (groupParameter != null)
+            {
+                GroupItemViewModel viewModel = (GroupItemViewModel)pvtGroups.SelectedItem;
+                if (this.parameter.Type == GroupType.Month)
+                    groupParameter.Month = (MonthModel)viewModel.Parameter;
+                else if (this.parameter.Type == GroupType.Year)
+                    groupParameter.Year = (YearModel)viewModel.Parameter;
+                else
+                    throw Ensure.Exception.NotSupported(this.parameter.Type.ToString());
+            }
+
+            return parameter;
         }
     }
 }

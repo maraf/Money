@@ -1,5 +1,8 @@
-﻿using Money.ViewModels;
+﻿using Money.UI;
+using Money.ViewModels;
+using Money.ViewModels.Parameters;
 using Money.Views.Controls;
+using Money.Views.Navigation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,17 +27,19 @@ namespace Money.Views
     /// </summary>
     public sealed partial class Template : Page
     {
+        private GroupNavigator navigator;
+
         public Template()
         {
             InitializeComponent();
             
             List<MenuItemViewModel> menuItems = new List<MenuItemViewModel>()
             {
-                new MenuItemViewModel("Pie Chart", "\uEB05", typeof(Empty)) { Group = "Main" },
-                new MenuItemViewModel("Summary", "\uE94C", typeof(GroupPage), GroupType.Month) { Group = "Main" },
-                new MenuItemViewModel("Categories", "\uE8FD", typeof(Empty)) { Group = "Additional" },
-                new MenuItemViewModel("Currencies", "\uE1D0", typeof(Empty)) { Group = "Additional" },
-                new MenuItemViewModel("Settings", "\uE713", typeof(Empty)) { Group = "Bottom" },
+                new MenuItemViewModel("Pie Chart", "\uEB05", new EmptyParameter()) { Group = "Main" },
+                new MenuItemViewModel("Summary", "\uE94C", new SummaryParameter()) { Group = "Main" },
+                new MenuItemViewModel("Categories", "\uE8FD", new EmptyParameter()) { Group = "Additional" },
+                new MenuItemViewModel("Currencies", "\uE1D0", new EmptyParameter()) { Group = "Additional" },
+                new MenuItemViewModel("Settings", "\uE713", new EmptyParameter()) { Group = "Bottom" },
             };
 
             MenuItemsSource.Source = menuItems.GroupBy(i => i.Group);
@@ -44,7 +49,12 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            frmContent.Navigate(typeof(GroupPage), GroupType.Month);
+            // TODO: Not here.
+            navigator = new GroupNavigator(App.Current.RootNavigator, frmContent);
+
+            navigator
+                .Open(e.Parameter)
+                .Show();
         }
 
         private void atbMainMenu_Checked(object sender, RoutedEventArgs e)
@@ -60,7 +70,14 @@ namespace Money.Views
         private void OnMainMenuItemInvoked(object sender, ListViewItem e)
         {
             MenuItemViewModel item = (MenuItemViewModel)((MainMenu)sender).ItemFromContainer(e);
-            frmContent.Navigate(item.Page, item.Parameter);
+            object paramerer = item.Parameter;
+            IParameterDecorator decorator = frmContent.Content as IParameterDecorator;
+            if (decorator != null)
+                paramerer = decorator.Decorate(paramerer);
+
+            navigator
+                .Open(paramerer)
+                .Show();
         }
     }
 }

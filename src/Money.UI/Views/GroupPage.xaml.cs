@@ -37,6 +37,11 @@ namespace Money.Views
         private GroupParameter parameter;
         private Dictionary<GroupItemViewModel, MonthModel> groupToMonth;
 
+        public GroupViewModel ViewModel
+        {
+            get { return (GroupViewModel)DataContext; }
+        }
+
         public GroupPage()
         {
             InitializeComponent();
@@ -51,12 +56,17 @@ namespace Money.Views
             viewModel.IsLoading = true;
 
             parameter = (GroupParameter)e.Parameter;
+            Navigate(parameter);
+        }
+
+        public async void Navigate(GroupParameter parameter)
+        {
             IGroupParameter groupParameter = parameter.Inner as IGroupParameter;
 
             if (parameter.Type == GroupType.Month)
-                await LoadMonthViewAsync(viewModel, groupParameter?.Month);
+                await LoadMonthViewAsync(ViewModel, groupParameter?.Month);
             else if (parameter.Type == GroupType.Year)
-                await LoadYearViewAsync(viewModel, groupParameter?.Year);
+                await LoadYearViewAsync(ViewModel, groupParameter?.Year);
             else
                 throw Ensure.Exception.NotSupported(parameter.Type.ToString());
         }

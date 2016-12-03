@@ -35,7 +35,7 @@ namespace Money.UI
     sealed partial class App : Application
     {
         public IDomainFacade DomainFacade { get; private set; }
-        public INavigator RootNavigator { get; set; }
+        public INavigator Navigator { get; set; }
 
         public static new App Current
         {
@@ -87,7 +87,7 @@ namespace Money.UI
                 Window.Current.Content = rootFrame;
             }
 
-            RootNavigator = new PageNavigator(rootFrame, typeof(Template));
+            Navigator = new ApplicationNavigator(new NavigatorParameterCollection(), rootFrame);
 
             SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested += OnBackRequested;
@@ -103,7 +103,7 @@ namespace Money.UI
                     // configuring the new page by passing required information as a navigation
                     // parameter
                     //rootFrame.Navigate(typeof(GroupPage), GroupType.Month);
-                    RootNavigator
+                    Navigator
                         .Open(new SummaryParameter() { Month = DateTime.Now })
                         .Show();
                 }

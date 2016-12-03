@@ -27,7 +27,10 @@ namespace Money.Views
     /// </summary>
     public sealed partial class Template : Page
     {
-        private GroupNavigator navigator;
+        public Frame ContentFrame
+        {
+            get { return frmContent; }
+        }
 
         public Template()
         {
@@ -49,10 +52,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            // TODO: Not here.
-            navigator = new GroupNavigator(App.Current.RootNavigator, frmContent);
-
-            navigator
+            App.Current.Navigator
                 .Open(e.Parameter)
                 .Show();
         }

@@ -11,6 +11,21 @@ namespace Money.Views.Navigation
     /// </summary>
     public interface INavigator
     {
+        /// <summary>
+        /// Starts a navigation using <paramref name="parameter"/>.
+        /// </summary>
+        /// <param name="parameter">The parameter to determine target page and pass it in.</param>
+        /// <returns>An open navigation.</returns>
         INavigatorForm Open(object parameter);
+
+        /// <summary>
+        /// Navigates back, if it is possible.
+        /// </summary>
+        void GoBack();
+
+        /// <summary>
+        /// Navigates forward, if it is possible.
+        /// </summary>
+        void GoForward();
     }
 }

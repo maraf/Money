@@ -40,6 +40,15 @@ namespace Money.Services.Models
             Month = month;
         }
 
+        public override bool Equals(object obj)
+        {
+            MonthModel other = obj as MonthModel;
+            if (other == null)
+                return false;
+
+            return Year == other.Year && Month == other.Month;
+        }
+
         public override string ToString()
         {
             string monthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[Month - 1];
@@ -56,6 +65,22 @@ namespace Money.Services.Models
         public static implicit operator MonthModel(DateTime dateTime)
         {
             return new MonthModel(dateTime.Year, dateTime.Month);
+        }
+
+        public static bool operator ==(MonthModel a, MonthModel b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if ((object)a == null || (object)b == null)
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(MonthModel a, MonthModel b)
+        {
+            return !(a == b);
         }
     }
 }

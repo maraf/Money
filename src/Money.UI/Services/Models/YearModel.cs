@@ -26,5 +26,35 @@ namespace Money.Services.Models
             Ensure.Positive(year, "year");
             Year = year;
         }
+
+        public override bool Equals(object obj)
+        {
+            YearModel other = obj as YearModel;
+            if (other == null)
+                return false;
+
+            return Year == other.Year;
+        }
+
+        public override string ToString()
+        {
+            return Year.ToString();
+        }
+
+        public static bool operator ==(YearModel a, YearModel b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if ((object)a == null || (object)b == null)
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(YearModel a, YearModel b)
+        {
+            return !(a == b);
+        }
     }
 }

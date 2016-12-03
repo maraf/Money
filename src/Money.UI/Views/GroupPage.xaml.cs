@@ -51,36 +51,50 @@ namespace Money.Views
             viewModel.IsLoading = true;
 
             parameter = (GroupParameter)e.Parameter;
+            IGroupParameter groupParameter = parameter.Inner as IGroupParameter;
+
             if (parameter.Type == GroupType.Month)
-                await LoadMonthViewAsync(viewModel);
+                await LoadMonthViewAsync(viewModel, groupParameter?.Month);
             else if (parameter.Type == GroupType.Year)
-                await LoadYearViewAsync(viewModel);
+                await LoadYearViewAsync(viewModel, groupParameter?.Year);
             else
                 throw Ensure.Exception.NotSupported(parameter.Type.ToString());
         }
 
-        private async Task LoadMonthViewAsync(GroupViewModel viewModel)
+        private async Task LoadMonthViewAsync(GroupViewModel viewModel, MonthModel prefered)
         {
             groupToMonth = new Dictionary<GroupItemViewModel, MonthModel>();
 
             IEnumerable<MonthModel> months = await domainFacade.QueryAsync(new ListMonthWithOutcome());
+            int? preferedIndex = null;
+            int index = 0;
             foreach (MonthModel month in months)
             {
                 GroupItemViewModel monthViewModel = new GroupItemViewModel(month.ToString(), month);
                 groupToMonth[monthViewModel] = month;
+
+                if (prefered == month)
+                    preferedIndex = index;
+
                 viewModel.Items.Add(monthViewModel);
+                index++;
             }
 
-            pvtGroups.SelectedIndex = viewModel.Items.Count - 1;
+            if (preferedIndex == null)
+                preferedIndex = viewModel.Items.Count - 1;
+
+            pvtGroups.SelectedIndex = preferedIndex.Value;
         }
 
-        private async Task LoadYearViewAsync(GroupViewModel viewModel)
+        private async Task LoadYearViewAsync(GroupViewModel viewModel, YearModel prefered)
         {
             throw new NotImplementedException();
         }
 
         private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // TODO: Select page based on parameter.
+
             //PivotItem item = (PivotItem)pvtGroups.ContainerFromIndex(pvtGroups.SelectedIndex);
             //if (item != null)
             //{

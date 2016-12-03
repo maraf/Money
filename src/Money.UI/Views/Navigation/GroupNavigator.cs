@@ -33,12 +33,10 @@ namespace Money.Views.Navigation
             IGroupParameter groupParameter = parameter as IGroupParameter;
             if (groupParameter != null)
             {
-                if (groupParameter.Month != null)
-                    return new PageNavigatorForm(frame, typeof(GroupPage), new GroupParameter(GroupType.Month, parameter));
-                else if (groupParameter.Year != null)
+                if (groupParameter.Year != null)
                     return new PageNavigatorForm(frame, typeof(GroupPage), new GroupParameter(GroupType.Year, parameter));
-                else
-                    throw Ensure.Exception.InvalidOperation("Missing year or month.");
+
+                return new PageNavigatorForm(frame, typeof(GroupPage), new GroupParameter(GroupType.Month, parameter));
             }
 
             return inner.Open(parameter);

@@ -27,6 +27,8 @@ namespace Money.Views
     /// </summary>
     public sealed partial class Template : Page
     {
+        private readonly INavigator navigator = App.Current.Navigator;
+
         public Frame ContentFrame
         {
             get { return frmContent; }
@@ -52,7 +54,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            App.Current.Navigator
+            navigator
                 .Open(e.Parameter)
                 .Show();
         }

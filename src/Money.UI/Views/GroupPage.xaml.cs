@@ -51,16 +51,16 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            GroupViewModel viewModel = new GroupViewModel();
-            DataContext = viewModel;
-            viewModel.IsLoading = true;
-
             parameter = (GroupParameter)e.Parameter;
             Navigate(parameter);
         }
 
         public async void Navigate(GroupParameter parameter)
         {
+            GroupViewModel viewModel = new GroupViewModel();
+            DataContext = viewModel;
+            viewModel.IsLoading = true;
+
             IGroupParameter groupParameter = parameter.Inner as IGroupParameter;
 
             if (parameter.Type == GroupType.Month)

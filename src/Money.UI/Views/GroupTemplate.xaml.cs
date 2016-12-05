@@ -118,9 +118,9 @@ namespace Money.Views
             if (pvtGroups.SelectedIndex == 0)
                 frmContent.Navigate(typeof(CategoryListPage));
             else if(pvtGroups.SelectedIndex == 2)
-                frmContent.Navigate(typeof(PieChart), viewModel.Parameter);
+                frmContent.Navigate(typeof(PieSummary), viewModel.Parameter);
             else
-                frmContent.Navigate(typeof(Summary), viewModel.Parameter);
+                frmContent.Navigate(typeof(BarSummary), viewModel.Parameter);
 
             //((Frame)Window.Current.Content).BackStack.Add(frmContent.BackStack.Last());
         }

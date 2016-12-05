@@ -104,7 +104,7 @@ namespace Money.UI
                     // parameter
                     //rootFrame.Navigate(typeof(GroupPage), GroupType.Month);
                     Navigator
-                        .Open(new SummaryParameter() { Month = DateTime.Now })
+                        .Open(new BarSummaryParameter() { Month = DateTime.Now })
                         .Show();
                 }
 

@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Money.Views.Summary"
+    x:Class="Money.Views.BarSummary"
     x:Name="page"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

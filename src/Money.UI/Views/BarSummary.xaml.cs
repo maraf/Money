@@ -1,11 +1,4 @@
-﻿using Money.Services;
-using Money.Services.Models;
-using Money.UI;
-using Money.ViewModels;
-using Money.ViewModels.Parameters;
-using Money.Views.Navigation;
-using Neptuo;
-using Neptuo.Queries;
+﻿using Money.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,27 +12,35 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+using System.ComponentModel;
+using Money.UI;
+using Money.Services.Models.Queries;
+using Money.Services.Models;
+using Neptuo;
+using System.Threading.Tasks;
+using Money.Services;
+using Money.ViewModels.Parameters;
 
 namespace Money.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    [NavigationParameter(typeof(PieChartParameter))]
-    public sealed partial class PieChart : Page
+    public sealed partial class BarSummary : Page
     {
-        private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
-        private MonthModel month;
+        public SummaryViewModel ViewModel
+        {
+            get { return (SummaryViewModel)DataContext; }
+        }
 
-        public PieChart()
+        public BarSummary()
         {
             InitializeComponent();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
+        private MonthModel month;
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
@@ -57,6 +58,16 @@ namespace Money.Views
             }
 
             throw Ensure.Exception.NotSupported("Unknown parameter in SummaryPage.");
+        }
+
+        private void lvwItems_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
+            Frame.Navigate(
+                typeof(CategoryListPage),
+                new CategoryListParameter(item.CategoryKey, month),
+                new DrillInNavigationTransitionInfo()
+            );
         }
     }
 }

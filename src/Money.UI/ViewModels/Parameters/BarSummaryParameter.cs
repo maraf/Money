@@ -1,4 +1,5 @@
 ﻿using Money.Services.Models;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 namespace Money.ViewModels.Parameters
 {
     /// <summary>
-    /// A navigation class for pie chart summary page.
+    /// A parameter class for <see cref="SummaryViewModel"/>.
     /// </summary>
-    public class PieChartParameter : IGroupParameter
+    public class BarSummaryParameter : IGroupParameter
     {
         public MonthModel Month { get; set; }
         public YearModel Year { get; set; }

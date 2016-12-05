@@ -132,8 +132,8 @@
     <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\IGroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\OutcomeParameter.cs" />
-    <Compile Include="ViewModels\Parameters\PieChartParameter.cs" />
-    <Compile Include="ViewModels\Parameters\SummaryParameter.cs" />
+    <Compile Include="ViewModels\Parameters\PieSummaryParameter.cs" />
+    <Compile Include="ViewModels\Parameters\BarSummaryParameter.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
     <Compile Include="ViewModels\SummaryItemViewModel.cs" />
@@ -184,11 +184,11 @@
     <Compile Include="Views\OutcomeCreate.xaml.cs">
       <DependentUpon>OutcomeCreate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PieChart.xaml.cs">
-      <DependentUpon>PieChart.xaml</DependentUpon>
+    <Compile Include="Views\PieSummary.xaml.cs">
+      <DependentUpon>PieSummary.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Summary.xaml.cs">
-      <DependentUpon>Summary.xaml</DependentUpon>
+    <Compile Include="Views\BarSummary.xaml.cs">
+      <DependentUpon>BarSummary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Template.xaml.cs">
@@ -256,11 +256,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PieChart.xaml">
+    <Page Include="Views\PieSummary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Summary.xaml">
+    <Page Include="Views\BarSummary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

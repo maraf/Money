@@ -9,6 +9,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" d:DataContext="{Binding Summary, Source={StaticResource ViewModelLocator}}">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <controls:PieChart ItemsSource="{Binding Items}" ValuePath="Amount.Value" ForegroundPath="ColorBrush"  Thickness="30" />
+        <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Thickness="50" Margin="30" />
     </Grid>
 </Page>

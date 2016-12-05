@@ -54,6 +54,21 @@ namespace Money.ViewModels
                 {
                     amount = value;
                     RaisePropertyChanged();
+                    AmountValue = (double)value.Value;
+                }
+            }
+        }
+
+        private double amountValue;
+        public double AmountValue
+        {
+            get { return amountValue; }
+            set
+            {
+                if (amountValue != value)
+                {
+                    amountValue = value;
+                    RaisePropertyChanged();
                 }
             }
         }

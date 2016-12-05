@@ -10,6 +10,7 @@ using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
 
 namespace Money.Views.Controls
 {
@@ -133,19 +134,12 @@ namespace Money.Views.Controls
         {
             return item is PieChartItem;
         }
-
-        protected override Size ArrangeOverride(Size arrangeBounds)
+        
+        protected override void PrepareContainerForItemOverride(DependencyObject element, object dataItem)
         {
-            Size result = base.ArrangeOverride(arrangeBounds);
-            //Update();
-            return result;
-        }
-
-        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
-        {
-            PieChartItem chartItem = element as PieChartItem;
-            if (chartItem != null)
-                chartItem.LabelTemplate = ItemTemplate;
+            PieChartItem item = element as PieChartItem;
+            if (item != null)
+                item.LabelTemplate = ItemTemplate;
         }
 
         internal void Update()
@@ -183,6 +177,13 @@ namespace Money.Views.Controls
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             Update();
+        }
+
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            base.ArrangeOverride(finalSize);
+            Update();
+            return finalSize;
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Windows;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Money.Views.Controls
 {
@@ -41,29 +42,17 @@ namespace Money.Views.Controls
             pc.NotifyUpdate();
         }
 
-        private static void OnPercentageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            PieChartItem pc = (PieChartItem)d;
-            pc.NotifyUpdate();
-        }
-        
-        /// <summary>
-        /// Gets or sets a value for this item.
-        /// </summary>
         public int Value
         {
             get { return (int)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
-        /// <summary>
-        /// A dependency property for getting or setting a value for this item.
-        /// </summary>
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
             "Value",
             typeof(int),
             typeof(PieChartItem),
-            new PropertyMetadata(10, OnValueChanged)
+            new PropertyMetadata(0, OnValueChanged)
         );
 
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -72,18 +61,111 @@ namespace Money.Views.Controls
             pc.NotifyUpdate();
         }
 
-        private double StartAngle { get; set; }
-        private double Angle { get; set; }
+        public object Label
+        {
+            get { return GetValue(LabelProperty); }
+            set { SetValue(LabelProperty, value); }
+        }
+
+        public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
+            "Label",
+            typeof(object),
+            typeof(PieChartItem),
+            new PropertyMetadata(null, OnLabelChanged)
+        );
+
+        public DataTemplate LabelTemplate
+        {
+            get { return (DataTemplate)GetValue(LabelTemplateProperty); }
+            set { SetValue(LabelTemplateProperty, value); }
+        }
+
+        public static readonly DependencyProperty LabelTemplateProperty = DependencyProperty.Register(
+            "LabelTemplate",
+            typeof(DataTemplate),
+            typeof(PieChartItem),
+            new PropertyMetadata(null, OnLabelChanged)
+        );
+
+        public double LabelOffset
+        {
+            get { return (double)GetValue(LabelOffsetProperty); }
+            set { SetValue(LabelOffsetProperty, value); }
+        }
+
+        public static readonly DependencyProperty LabelOffsetProperty = DependencyProperty.Register(
+            "LabelOffset",
+            typeof(double),
+            typeof(PieChartItem),
+            new PropertyMetadata(10d)
+        );
+
+        private static void OnLabelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            PieChartItem item = (PieChartItem)d;
+            if (item.Label != null && item.LabelTemplate != null)
+                throw new NotSupportedException("PieChartItem, set Label or LabelTemplate, not both.");
+
+            if (item.Label != null || item.LabelTemplate != null)
+                item.labelPanel.Visibility = Visibility.Visible;
+            else
+                item.labelPanel.Visibility = Visibility.Collapsed;
+
+            if (item.Label != null)
+                item.label.Content = item.Label;
+        }
 
         public PieChartItem()
         {
             InitializeComponent();
+            BindEvents();
             NotifyUpdate();
+        }
+
+        private void BindEvents()
+        {
+            label.SizeChanged += OnLabelSizeChanged;
+        }
+
+        private void OnLabelSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            label.Margin = new Thickness(-(label.ActualWidth / 2), -(label.ActualHeight / 2), 0, 0);
+        }
+
+        private PieChart FindParent()
+        {
+            FrameworkElement parent = FindParent(this);
+            if (parent == null)
+                return null;
+
+            PieChart chart = parent as PieChart;
+            if (chart != null)
+                return chart;
+
+            for (int i = 0; i < 20; i++)
+            {
+                parent = FindParent(parent);
+                chart = parent as PieChart;
+                if (chart != null)
+                    return chart;
+            }
+
+            return null;
+        }
+
+        private FrameworkElement FindParent(FrameworkElement element)
+        {
+            FrameworkElement parent = element.Parent as FrameworkElement;
+
+            if (parent == null)
+                parent = VisualTreeHelper.GetParent(element) as FrameworkElement;
+
+            return parent;
         }
 
         private void NotifyUpdate()
         {
-            PieChart pieChart = (PieChart)Parent;
+            PieChart pieChart = FindParent();
             if (pieChart != null)
                 pieChart.Update();
         }
@@ -94,7 +176,10 @@ namespace Money.Views.Controls
             if (thickness == 0)
                 thickness = pieChart.Thickness;
 
-            double radius = Math.Min(grdMain.ActualWidth, grdMain.ActualHeight) / 2 - thickness / 2;
+            double minHalfSize = Math.Min(ActualWidth, ActualHeight) / 2;
+            thickness = Math.Min(minHalfSize, thickness);
+
+            double radius = minHalfSize - thickness / 2;
             if (radius > 0)
             {
                 if (offset < 0)
@@ -107,56 +192,87 @@ namespace Money.Views.Controls
                 if (percentage >= 100)
                     percentage = 99.9999d;
 
-                StartAngle = (offset * 360) / 100;
-                Angle = (percentage * 360) / 100;
+                double angleOffset = (offset * 360) / 100;
+                double angle = (percentage * 360) / 100;
 
-                RenderArc(radius, thickness);
+                RenderArc(radius, thickness, angleOffset, angle);
+
+                double labelOffset = GetLabelOffset(pieChart);
+                RenderLabel(radius, labelOffset, thickness, angleOffset, angle);
             }
         }
 
-        public void RenderArc(double radius, double thickness)
+        private void RenderArc(double radius, double thickness, double angleOffset, double angle)
         {
-            pathRoot.StrokeThickness = thickness;
+            path.StrokeThickness = thickness;
 
-            Point startPoint;
-            if (StartAngle == 0)
+            Point start = GetStartPoint(radius, angleOffset);
+            ApplyThickness(ref start, thickness);
+
+            Point end = GetEndPoint(radius, angleOffset, angle);
+            ApplyThickness(ref end, thickness);
+            NormalizePoint(ref start, ref end);
+
+            path.Width = radius * 2 + thickness;
+            path.Height = radius * 2 + thickness;
+
+            figure.StartPoint = start;
+
+            segment.Point = end;
+            segment.Size = new Size(radius, radius);
+            segment.IsLargeArc = angle > 180.0;
+        }
+
+        private void RenderLabel(double radius, double labelOffset, double thickness, double angleOffset, double angle)
+        {
+            radius += thickness / 2;
+            Point point = CartesianCoordinate(angleOffset + angle / 2, radius + labelOffset);
+            point.X += radius;
+            point.Y += radius;
+
+            label.SetValue(Canvas.LeftProperty, point.X);
+            label.SetValue(Canvas.TopProperty, point.Y);
+        }
+
+        private Point GetStartPoint(double radius, double angleOffset)
+        {
+            Point start;
+            if (angleOffset == 0)
             {
-                startPoint = new Point(radius, 0);
+                start = new Point(radius, 0);
             }
             else
             {
-                startPoint = ComputeCartesianCoordinate(StartAngle, radius);
-                startPoint.X += radius;
-                startPoint.Y += radius;
+                start = CartesianCoordinate(angleOffset, radius);
+                start.X += radius;
+                start.Y += radius;
             }
 
-            Point endPoint = ComputeCartesianCoordinate(StartAngle + Angle, radius);
-            endPoint.X += radius;
-            endPoint.Y += radius;
-
-            startPoint.X += thickness / 2;
-            startPoint.Y += thickness / 2;
-            endPoint.X += thickness / 2;
-            endPoint.Y += thickness / 2;
-
-            pathRoot.Width = radius * 2 + thickness;
-            pathRoot.Height = radius * 2 + thickness;
-
-            bool largeArc = Angle > 180.0;
-
-            Size outerArcSize = new Size(radius, radius);
-
-            pathFigure.StartPoint = startPoint;
-
-            if (startPoint.X == Math.Round(endPoint.X) && startPoint.Y == Math.Round(endPoint.Y))
-                endPoint.X -= 0.01;
-
-            arcSegment.Point = endPoint;
-            arcSegment.Size = outerArcSize;
-            arcSegment.IsLargeArc = largeArc;
+            return start;
         }
 
-        private Point ComputeCartesianCoordinate(double angle, double radius)
+        private Point GetEndPoint(double radius, double angleOffset, double angle)
+        {
+            Point end = CartesianCoordinate(angleOffset + angle, radius);
+            end.X += radius;
+            end.Y += radius;
+
+            return end;
+        }
+
+        private void ApplyThickness(ref Point point, double thickness)
+        {
+            point.X += thickness / 2;
+            point.Y += thickness / 2;
+        }
+
+        private void NormalizePoint(ref Point start, ref Point end)
+        {
+            if (start.X == Math.Round(end.X) && start.Y == Math.Round(end.Y))
+                end.X -= 0.01;
+        }
+
+        private Point CartesianCoordinate(double angle, double radius)
         {
             double angleRad = (Math.PI / 180.0) * (angle - 90);
 
@@ -164,6 +280,18 @@ namespace Money.Views.Controls
             double y = radius * Math.Sin(angleRad);
 
             return new Point(x, y);
+        }
+
+        private double GetLabelOffset(PieChart pieChart)
+        {
+            double labelOffset = 0;
+            object rawLabelOffset = ReadLocalValue(LabelOffsetProperty);
+            if (rawLabelOffset == DependencyProperty.UnsetValue)
+                labelOffset = pieChart.LabelOffset;
+            else
+                labelOffset = (double)rawLabelOffset;
+
+            return labelOffset;
         }
     }
 }

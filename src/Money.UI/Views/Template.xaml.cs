@@ -40,7 +40,7 @@ namespace Money.Views
             
             List<MenuItemViewModel> menuItems = new List<MenuItemViewModel>()
             {
-                new MenuItemViewModel("Pie Chart", "\uEB05", new EmptyParameter()) { Group = "Main" },
+                new MenuItemViewModel("Pie Chart", "\uEB05", new PieChartParameter()) { Group = "Main" },
                 new MenuItemViewModel("Summary", "\uE94C", new SummaryParameter()) { Group = "Main" },
                 new MenuItemViewModel("Categories", "\uE8FD", new EmptyParameter()) { Group = "Additional" },
                 new MenuItemViewModel("Currencies", "\uE1D0", new EmptyParameter()) { Group = "Additional" },

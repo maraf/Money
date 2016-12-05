@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Money.ViewModels
 {
@@ -67,8 +68,14 @@ namespace Money.ViewModels
                 {
                     color = value;
                     RaisePropertyChanged();
+                    RaisePropertyChanged(nameof(ColorBrush));
                 }
             }
+        }
+
+        public Brush ColorBrush
+        {
+            get { return new SolidColorBrush(Color); }
         }
     }
 }

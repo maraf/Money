@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Money.ViewModels.Commands
 {
-    public class CreateOutcomeCommand : NavigateCommand<OutcomePage>
+    public class CreateOutcomeCommand : NavigateCommand<OutcomeCreate>
     {
         public CreateOutcomeCommand()
         { }

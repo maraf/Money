@@ -29,7 +29,7 @@ namespace Money.Views.Controls
 
         private void OnPieChartClicked(object sender, RoutedEventArgs e)
         {
-            ((Frame)Window.Current.Content).Navigate(typeof(GroupPage), 1, new Windows.UI.Xaml.Media.Animation.SlideNavigationTransitionInfo());
+            ((Frame)Window.Current.Content).Navigate(typeof(GroupTemplate), 1, new Windows.UI.Xaml.Media.Animation.SlideNavigationTransitionInfo());
             //((Frame)Window.Current.Content).BackStack.Add(new PageStackEntry(typeof(GroupPage), 1, new DrillInNavigationTransitionInfo()));
         }
     }

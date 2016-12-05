@@ -25,14 +25,14 @@ namespace Money.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class OutcomePage : Page
+    public sealed partial class OutcomeCreate : Page
     {
         public OutcomeViewModel ViewModel
         {
             get { return (OutcomeViewModel)DataContext; }
         }
 
-        public OutcomePage()
+        public OutcomeCreate()
         {
             this.InitializeComponent();
 

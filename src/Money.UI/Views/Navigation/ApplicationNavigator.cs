@@ -59,9 +59,9 @@ namespace Money.Views.Navigation
                 else
                     targetParameter = new GroupParameter(GroupType.Month, parameter);
 
-                GroupPage group = template.ContentFrame.Content as GroupPage;
+                GroupTemplate group = template.ContentFrame.Content as GroupTemplate;
                 if (group == null)
-                    return new PageNavigatorForm(template.ContentFrame, typeof(GroupPage), targetParameter);
+                    return new PageNavigatorForm(template.ContentFrame, typeof(GroupTemplate), targetParameter);
 
                 return new GroupNavigatorForm(group, targetParameter);
             }
@@ -76,10 +76,10 @@ namespace Money.Views.Navigation
 
         private class GroupNavigatorForm : INavigatorForm
         {
-            private readonly GroupPage page;
+            private readonly GroupTemplate page;
             private readonly GroupParameter parameter;
 
-            public GroupNavigatorForm(GroupPage page, GroupParameter parameter)
+            public GroupNavigatorForm(GroupTemplate page, GroupParameter parameter)
             {
                 Ensure.NotNull(page, "page");
                 Ensure.NotNull(parameter, "parameter");

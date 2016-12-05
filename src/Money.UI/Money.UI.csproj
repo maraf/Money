@@ -170,8 +170,8 @@
     <Compile Include="Views\Empty.xaml.cs">
       <DependentUpon>Empty.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GroupPage.xaml.cs">
-      <DependentUpon>GroupPage.xaml</DependentUpon>
+    <Compile Include="Views\GroupTemplate.xaml.cs">
+      <DependentUpon>GroupTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Navigation\ApplicationNavigator.cs" />
     <Compile Include="Views\Navigation\FrameBackStack.cs" />
@@ -181,14 +181,14 @@
     <Compile Include="Views\Navigation\INavigatorForm.cs" />
     <Compile Include="Views\Navigation\NavigationParameterAttribute.cs" />
     <Compile Include="Views\Navigation\PageNavigatorForm.cs" />
-    <Compile Include="Views\OutcomePage.xaml.cs">
-      <DependentUpon>OutcomePage.xaml</DependentUpon>
+    <Compile Include="Views\OutcomeCreate.xaml.cs">
+      <DependentUpon>OutcomeCreate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PieChart.xaml.cs">
       <DependentUpon>PieChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SummaryPage.xaml.cs">
-      <DependentUpon>SummaryPage.xaml</DependentUpon>
+    <Compile Include="Views\Summary.xaml.cs">
+      <DependentUpon>Summary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Template.xaml.cs">
@@ -248,11 +248,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GroupPage.xaml">
+    <Page Include="Views\GroupTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\OutcomePage.xaml">
+    <Page Include="Views\OutcomeCreate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -260,7 +260,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SummaryPage.xaml">
+    <Page Include="Views\Summary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

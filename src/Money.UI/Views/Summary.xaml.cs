@@ -25,14 +25,14 @@ using Money.ViewModels.Parameters;
 
 namespace Money.Views
 {
-    public sealed partial class SummaryPage : Page
+    public sealed partial class Summary : Page
     {
         public SummaryViewModel ViewModel
         {
             get { return (SummaryViewModel)DataContext; }
         }
 
-        public SummaryPage()
+        public Summary()
         {
             InitializeComponent();
         }

@@ -31,7 +31,7 @@ namespace Money.Views
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     [NavigationParameter(typeof(GroupParameter))]
-    public sealed partial class GroupPage : Page, IParameterDecorator
+    public sealed partial class GroupTemplate : Page, IParameterDecorator
     {
         private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
         private GroupParameter parameter;
@@ -42,7 +42,7 @@ namespace Money.Views
             get { return (GroupViewModel)DataContext; }
         }
 
-        public GroupPage()
+        public GroupTemplate()
         {
             InitializeComponent();
         }
@@ -120,7 +120,7 @@ namespace Money.Views
             else if(pvtGroups.SelectedIndex == 2)
                 frmContent.Navigate(typeof(PieChart), viewModel.Parameter);
             else
-                frmContent.Navigate(typeof(SummaryPage), viewModel.Parameter);
+                frmContent.Navigate(typeof(Summary), viewModel.Parameter);
 
             //((Frame)Window.Current.Content).BackStack.Add(frmContent.BackStack.Last());
         }

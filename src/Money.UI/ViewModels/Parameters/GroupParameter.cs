@@ -15,7 +15,7 @@ namespace Money.ViewModels.Parameters
         /// <summary>
         /// Gets a type of the grouping.
         /// </summary>
-        public GroupType Type { get; private set; }
+        public SummaryPeriodType Type { get; private set; }
 
         /// <summary>
         /// Gets a parameter for inner page.
@@ -27,7 +27,7 @@ namespace Money.ViewModels.Parameters
         /// </summary>
         /// <param name="type">A type of the grouping.</param>
         /// <param name="inner">A parameter for inner page.</param>
-        public GroupParameter(GroupType type, object inner)
+        public GroupParameter(SummaryPeriodType type, object inner)
         {
             Ensure.NotNull(inner, "inner");
             Type = type;

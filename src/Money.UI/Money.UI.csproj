@@ -134,10 +134,12 @@
     <Compile Include="ViewModels\Parameters\OutcomeParameter.cs" />
     <Compile Include="ViewModels\Parameters\PieSummaryParameter.cs" />
     <Compile Include="ViewModels\Parameters\BarSummaryParameter.cs" />
+    <Compile Include="ViewModels\Parameters\SummaryParameter.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
     <Compile Include="ViewModels\SummaryItemViewModel.cs" />
-    <Compile Include="ViewModels\GroupType.cs" />
+    <Compile Include="ViewModels\SummaryPeriodType.cs" />
+    <Compile Include="ViewModels\SummaryViewType.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\Controls\Bar.xaml.cs">
       <DependentUpon>Bar.xaml</DependentUpon>

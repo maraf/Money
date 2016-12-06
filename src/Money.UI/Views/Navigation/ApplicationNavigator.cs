@@ -55,9 +55,9 @@ namespace Money.Views.Navigation
             {
                 GroupParameter targetParameter;
                 if (groupParameter.Year != null)
-                    targetParameter = new GroupParameter(GroupType.Year, parameter);
+                    targetParameter = new GroupParameter(SummaryPeriodType.Year, parameter);
                 else
-                    targetParameter = new GroupParameter(GroupType.Month, parameter);
+                    targetParameter = new GroupParameter(SummaryPeriodType.Month, parameter);
 
                 GroupTemplate group = template.ContentFrame.Content as GroupTemplate;
                 if (group == null)

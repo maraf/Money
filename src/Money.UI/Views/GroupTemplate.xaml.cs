@@ -63,9 +63,9 @@ namespace Money.Views
 
             IGroupParameter groupParameter = parameter.Inner as IGroupParameter;
 
-            if (parameter.Type == GroupType.Month)
+            if (parameter.Type == SummaryPeriodType.Month)
                 await LoadMonthViewAsync(ViewModel, groupParameter?.Month);
-            else if (parameter.Type == GroupType.Year)
+            else if (parameter.Type == SummaryPeriodType.Year)
                 await LoadYearViewAsync(ViewModel, groupParameter?.Year);
             else
                 throw Ensure.Exception.NotSupported(parameter.Type.ToString());
@@ -131,9 +131,9 @@ namespace Money.Views
             if (groupParameter != null)
             {
                 GroupItemViewModel viewModel = (GroupItemViewModel)pvtGroups.SelectedItem;
-                if (this.parameter.Type == GroupType.Month)
+                if (this.parameter.Type == SummaryPeriodType.Month)
                     groupParameter.Month = (MonthModel)viewModel.Parameter;
-                else if (this.parameter.Type == GroupType.Year)
+                else if (this.parameter.Type == SummaryPeriodType.Year)
                     groupParameter.Year = (YearModel)viewModel.Parameter;
                 else
                     throw Ensure.Exception.NotSupported(this.parameter.Type.ToString());

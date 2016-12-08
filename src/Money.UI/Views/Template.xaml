@@ -56,8 +56,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
-                        <Grid x:Name="LayoutRoot"
-                          Background="{TemplateBinding Background}">
+                        <Grid x:Name="LayoutRoot" Background="{TemplateBinding Background}">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />
@@ -118,12 +117,9 @@
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter x:Name="ContentPresenter"
-                                          Content="{TemplateBinding Content}"
-                                          Margin="{TemplateBinding Padding}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          AutomationProperties.AccessibilityView="Raw" />
+                            <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" Margin="{TemplateBinding Padding}"
+                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                             AutomationProperties.AccessibilityView="Raw" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -149,12 +145,12 @@
         <CollectionViewSource x:Key="MenuItemsSource" x:Name="MenuItemsSource" IsSourceGrouped="True" />
     </Page.Resources>
     <Page.BottomAppBar>
-        <CommandBar x:Name="cbrBottom">
+        <CommandBar x:Name="cbrBottom" Canvas.ZIndex="1000">
             <CommandBar.Resources>
                 <converters:BoolConverter x:Key="TrueToFalseConverter" TrueValue="False" FalseValue="True" />
             </CommandBar.Resources>
             <CommandBar.Content>
-                <AppBarToggleButton x:Name="atbMainMenu" Label="Menu" Checked="atbMainMenu_Checked" Unchecked="atbMainMenu_Unchecked"
+                <AppBarToggleButton x:Name="atbMainMenu" Label="Menu" IsChecked="{x:Bind IsMainMenuOpened, Mode=TwoWay}"
                  IsCompact="{Binding IsOpen, ElementName=cbrBottom, Converter={StaticResource TrueToFalseConverter}}">
                     <AppBarToggleButton.Icon>
                         <FontIcon Glyph="&#xE700;" />
@@ -175,7 +171,7 @@
                         <Setter Target="spvContent.DisplayMode" Value="CompactInline"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="True"/>
                         <Setter Target="atbMainMenu.Visibility" Value="Collapsed" />
-                        <Setter Target="tbtMainMenu.Visibility" Value="Visible" />
+                        <Setter Target="ficMainMenu.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -186,7 +182,7 @@
                         <Setter Target="spvContent.DisplayMode" Value="CompactOverlay"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="False"/>
                         <Setter Target="atbMainMenu.Visibility" Value="Collapsed" />
-                        <Setter Target="tbtMainMenu.Visibility" Value="Visible" />
+                        <Setter Target="ficMainMenu.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -197,13 +193,13 @@
                         <Setter Target="spvContent.DisplayMode" Value="Overlay"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="False"/>
                         <Setter Target="atbMainMenu.Visibility" Value="Visible" />
-                        <Setter Target="tbtMainMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="ficMainMenu.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <SplitView x:Name="spvContent" DisplayMode="Inline" OpenPaneLength="160" LightDismissOverlayMode="On" IsTabStop="False"
+        <SplitView x:Name="spvContent" DisplayMode="Inline" OpenPaneLength="160" LightDismissOverlayMode="On" IsTabStop="False" IsPaneOpen="{x:Bind IsMainMenuOpened, Mode=TwoWay}"
          PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
             <SplitView.Pane>
                 <Grid>
@@ -215,13 +211,13 @@
 
                     <StackPanel Grid.Row="0">
                         <ToggleButton x:Name="tbtMainMenu" Style="{StaticResource MainMenuToggleButtonStyle}" Canvas.ZIndex="100" TabIndex="1"
-                         IsChecked="{Binding IsPaneOpen, ElementName=spvContent, Mode=TwoWay}">
+                         IsChecked="{x:Bind IsMainMenuOpened, Mode=TwoWay}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="48" />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <FontIcon FontSize="16" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="Money"/>
+                                <FontIcon x:Name="ficMainMenu" FontSize="16" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="Money"/>
                                 <TextBlock Text="Money" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
                             </Grid>
                         </ToggleButton>

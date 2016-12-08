@@ -33,6 +33,20 @@ namespace Money.Views
             get { return frmContent; }
         }
 
+
+        public bool IsMainMenuOpened
+        {
+            get { return (bool)GetValue(IsMainMenuOpenedProperty); }
+            set { SetValue(IsMainMenuOpenedProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsMainMenuOpenedProperty = DependencyProperty.Register(
+            "IsMainMenuOpened", 
+            typeof(bool), 
+            typeof(Template),
+            new PropertyMetadata(false, (d, e) => Console.WriteLine("xx"))
+        );
+
         public Template()
         {
             InitializeComponent();
@@ -58,15 +72,15 @@ namespace Money.Views
                 .Show();
         }
 
-        private void atbMainMenu_Checked(object sender, RoutedEventArgs e)
-        {
-            spvContent.IsPaneOpen = true;
-        }
+        //private void atbMainMenu_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    spvContent.IsPaneOpen = true;
+        //}
 
-        private void atbMainMenu_Unchecked(object sender, RoutedEventArgs e)
-        {
-            spvContent.IsPaneOpen = false;
-        }
+        //private void atbMainMenu_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    spvContent.IsPaneOpen = false;
+        //}
 
         private void OnMainMenuItemInvoked(object sender, ListViewItem e)
         {

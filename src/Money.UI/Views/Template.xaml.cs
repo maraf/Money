@@ -71,17 +71,7 @@ namespace Money.Views
                 .Open(e.Parameter)
                 .Show();
         }
-
-        //private void atbMainMenu_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    spvContent.IsPaneOpen = true;
-        //}
-
-        //private void atbMainMenu_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    spvContent.IsPaneOpen = false;
-        //}
-
+        
         private void OnMainMenuItemInvoked(object sender, ListViewItem e)
         {
             MenuItemViewModel item = (MenuItemViewModel)((MainMenu)sender).ItemFromContainer(e);

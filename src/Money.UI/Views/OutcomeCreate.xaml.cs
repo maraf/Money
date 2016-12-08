@@ -1,6 +1,5 @@
 ﻿using Money.Services.Models;
 using Money.Services.Models.Queries;
-using Money.UI;
 using Money.ViewModels;
 using Money.ViewModels.Parameters;
 using System;

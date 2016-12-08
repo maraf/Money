@@ -1,7 +1,6 @@
 ﻿using Money.Services;
 using Money.Services.Models;
 using Money.Services.Models.Queries;
-using Money.UI;
 using Money.ViewModels;
 using Neptuo;
 using System;

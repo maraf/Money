@@ -1,5 +1,4 @@
-﻿using Money.UI;
-using Money.ViewModels;
+﻿using Money.ViewModels;
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
 using Money.Views.Navigation;

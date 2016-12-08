@@ -1,5 +1,4 @@
-﻿using Money.UI;
-using Neptuo.Models.Keys;
+﻿using Neptuo.Models.Keys;
 using Neptuo.Observables;
 using System;
 using System.Collections.Generic;

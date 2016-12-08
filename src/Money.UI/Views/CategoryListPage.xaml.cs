@@ -1,5 +1,4 @@
 ﻿using Money.Services;
-using Money.UI;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using Neptuo.Models.Keys;

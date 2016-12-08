@@ -22,7 +22,7 @@ namespace Money.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    [NavigationParameter(SummaryParameter)]
+    [NavigationParameter(typeof(SummaryParameter))]
     public sealed partial class Summary : Page
     {
         public Summary()

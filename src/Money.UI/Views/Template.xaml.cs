@@ -40,11 +40,11 @@ namespace Money.Views
             
             List<MenuItemViewModel> menuItems = new List<MenuItemViewModel>()
             {
-                new MenuItemViewModel("Pie Chart", "\uEB05", new PieSummaryParameter()) { Group = "Main" },
-                new MenuItemViewModel("Summary", "\uE94C", new BarSummaryParameter()) { Group = "Main" },
-                new MenuItemViewModel("Categories", "\uE8FD", new EmptyParameter()) { Group = "Additional" },
-                new MenuItemViewModel("Currencies", "\uE1D0", new EmptyParameter()) { Group = "Additional" },
-                new MenuItemViewModel("Settings", "\uE713", new EmptyParameter()) { Group = "Bottom" },
+                new MenuItemViewModel("Pie Chart", "\uEB05", new SummaryParameter(SummaryViewType.PieChart)) { Group = "Summary" },
+                new MenuItemViewModel("Bar Graph", "\uE94C", new SummaryParameter(SummaryViewType.BarGraph)) { Group = "Summary" },
+                new MenuItemViewModel("Categories", "\uE8FD", new EmptyParameter()) { Group = "Manage" },
+                new MenuItemViewModel("Currencies", "\uE1D0", new EmptyParameter()) { Group = "Manage" },
+                new MenuItemViewModel("Settings", "\uE713", new EmptyParameter()) { Group = "Settings" },
             };
 
             MenuItemsSource.Source = menuItems.GroupBy(i => i.Group);

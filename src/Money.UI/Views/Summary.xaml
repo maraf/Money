@@ -1,5 +1,6 @@
 ﻿<Page
     x:Class="Money.Views.Summary"
+    x:Name="root"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Money.Views"
@@ -19,7 +20,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <controls:Group PeriodType="Month" SelectedItem="{x:Bind SelectedPeriod, Mode=TwoWay}" Grid.Row="0" />
+        <controls:Group PeriodType="Month" SelectedItem="{Binding SelectedPeriod, ElementName=root, Mode=TwoWay}" Grid.Row="0" />
 
         <Grid x:Name="grdGroupContent" Grid.Row="1">
             <StackPanel>

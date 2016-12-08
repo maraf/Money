@@ -54,6 +54,32 @@ namespace Money.Views
             page.OnSelectedPeriodChanged(e);
         }
 
+        public bool IsPieChartPrefered
+        {
+            get { return (bool)GetValue(IsPieChartPreferedProperty); }
+            set { SetValue(IsPieChartPreferedProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsPieChartPreferedProperty = DependencyProperty.Register(
+            "IsPieChartPrefered", 
+            typeof(bool), 
+            typeof(Summary), 
+            new PropertyMetadata(false)
+        );
+
+        public bool IsBarGraphPrefered
+        {
+            get { return (bool)GetValue(IsBarGraphPreferedProperty); }
+            set { SetValue(IsBarGraphPreferedProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsBarGraphPreferedProperty = DependencyProperty.Register(
+            "IsBarGraphPrefered", 
+            typeof(bool), 
+            typeof(Summary), 
+            new PropertyMetadata(false)
+        );
+
         public Summary()
         {
             InitializeComponent();
@@ -65,42 +91,19 @@ namespace Money.Views
             base.OnNavigatedTo(e);
 
             SummaryParameter parameter = (SummaryParameter)e.Parameter;
-            //switch (parameter.ViewType)
-            //{
-
-            //    case SummaryViewType.PieChart:
-            //        FillGridSetters(codLeft);
-            //        break;
-            //    case SummaryViewType.BarGraph:
-            //        FillGridSetters(codRight);
-            //        break;
-            //    default:
-            //        break;
-            //}
-        }
-
-        private void FillGridSetters(ColumnDefinition column)
-        {
-            visMedium.Setters.Add(new Setter()
+            switch (parameter.ViewType)
             {
-                Target = new TargetPropertyPath()
-                {
-                    Target = column,
-                    Path = new PropertyPath(nameof(ColumnDefinition.Width))
-                },
-                Value = new GridLength(1, GridUnitType.Star)
-            });
-            visSmall.Setters.Add(new Setter()
-            {
-                Target = new TargetPropertyPath()
-                {
-                    Target = column,
-                    Path = new PropertyPath(nameof(ColumnDefinition.Width))
-                },
-                Value = new GridLength(0, GridUnitType.Star)
-            }); 
+                case SummaryViewType.PieChart:
+                    IsPieChartPrefered = true;
+                    IsBarGraphPrefered = false;
+                    break;
+                case SummaryViewType.BarGraph:
+                    IsPieChartPrefered = false;
+                    IsBarGraphPrefered = true;
+                    break;
+            }
         }
-
+        
         private void OnSelectedPeriodChanged(DependencyPropertyChangedEventArgs e)
         {
             MonthModel month = SelectedPeriod as MonthModel;

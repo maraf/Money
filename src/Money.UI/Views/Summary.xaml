@@ -7,6 +7,7 @@
     xmlns:controls="using:Money.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:triggers="using:WindowsStateTriggers"
     xmlns:vm="using:Money.ViewModels"
     mc:Ignorable="d" d:DataContext="{Binding Summary, Source={StaticResource ViewModelLocator}}">
     <Page.Resources>
@@ -30,17 +31,45 @@
         </Grid.ColumnDefinitions>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="vsgStates">
-                <VisualState x:Name="visMedium">
+                <VisualState>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource MediumSize}" />
+                        <triggers:CompositeStateTrigger>
+                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource MediumSize}" />
+                            <StateTrigger IsActive="{x:Bind IsBarGraphPrefered}" />
+                        </triggers:CompositeStateTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="codRight.Width" Value="*" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:CompositeStateTrigger>
+                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
+                            <StateTrigger IsActive="{x:Bind IsBarGraphPrefered}" />
+                        </triggers:CompositeStateTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="codRight.Width" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:CompositeStateTrigger>
+                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource MediumSize}" />
+                            <StateTrigger IsActive="{x:Bind IsPieChartPrefered}" />
+                        </triggers:CompositeStateTrigger>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="codLeft.Width" Value="*" />
                     </VisualState.Setters>
                 </VisualState>
-                <VisualState x:Name="visSmall">
+                <VisualState>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
+                        <triggers:CompositeStateTrigger>
+                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
+                            <StateTrigger IsActive="{x:Bind IsPieChartPrefered}" />
+                        </triggers:CompositeStateTrigger>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="codLeft.Width" Value="0" />

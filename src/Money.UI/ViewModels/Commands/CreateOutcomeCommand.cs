@@ -1,4 +1,6 @@
-﻿using Money.Views;
+﻿using Money.ViewModels.Parameters;
+using Money.Views;
+using Money.Views.Navigation;
 using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
@@ -11,13 +13,10 @@ using Windows.UI.Xaml.Controls;
 
 namespace Money.ViewModels.Commands
 {
-    public class CreateOutcomeCommand : NavigateCommand<OutcomeCreate>
+    public class CreateOutcomeCommand : NavigateCommand
     {
-        public CreateOutcomeCommand()
-        { }
-
-        public CreateOutcomeCommand(Guid id)
-            : base(id)
+        public CreateOutcomeCommand(INavigator navigator, OutcomeParameter parameter)
+            : base(navigator, parameter)
         { }
     }
 }

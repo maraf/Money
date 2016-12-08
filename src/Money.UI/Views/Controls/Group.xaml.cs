@@ -2,6 +2,7 @@
 using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels;
+using Money.Views.Navigation;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace Money.Views.Controls
 {
     public sealed partial class Group : UserControl
     {
+        private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private Dictionary<GroupItemViewModel, MonthModel> groupToMonth;
 
@@ -87,7 +89,7 @@ namespace Money.Views.Controls
             using (change.Lock())
             {
                 if (ViewModel == null)
-                    ViewModel = new GroupViewModel();
+                    ViewModel = new GroupViewModel(navigator);
 
                 ViewModel.IsLoading = true;
                 if (PeriodType == SummaryPeriodType.Month)

@@ -2,6 +2,7 @@
 using Money.Services.Models;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Parameters;
+using Money.Views.Navigation;
 using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;
@@ -17,8 +18,6 @@ namespace Money.ViewModels
 {
     public class OutcomeViewModel : ObservableObject
     {
-        public Guid? Id { get; private set; }
-
         private float amount;
         public float Amount
         {
@@ -65,20 +64,13 @@ namespace Money.ViewModels
         public ObservableCollection<IKey> SelectedCategories { get; private set; }
         public SaveOutcomeCommand Save { get; private set; }
 
-        public OutcomeViewModel(IDomainFacade domainFacade)
+        public OutcomeViewModel(INavigator navigator, IDomainFacade domainFacade)
         {
             SelectedCategories = new ObservableCollection<IKey>();
             Categories = new ObservableCollection<CategoryModel>();
 
             When = DateTime.Now;
-            Save = new SaveOutcomeCommand(this, domainFacade);
-        }
-
-        public OutcomeViewModel(IDomainFacade domainFacade, Guid id)
-            : this(domainFacade)
-        {
-            // TODO: Existing outcome.
-            Id = id;
+            Save = new SaveOutcomeCommand(navigator, this, domainFacade);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Money.Views.DesignData
             {
                 if (group == null)
                 {
-                    group = new GroupViewModel();
+                    group = new GroupViewModel(Navigator);
                     group.Items.Add(new GroupItemViewModel("August", null));
                     group.Items.Add(new GroupItemViewModel("September", null));
                     group.Items.Add(new GroupItemViewModel("October", null));
@@ -111,7 +111,7 @@ namespace Money.Views.DesignData
             {
                 if (categoryList == null)
                 {
-                    categoryList = new CategoryListViewModel();
+                    categoryList = new CategoryListViewModel(Navigator);
                     categoryList.GroupId = Guid.NewGuid();
                     categoryList.Name = "Eating";
                     categoryList.Items.Add(new CategoryListItemViewModel()
@@ -139,7 +139,7 @@ namespace Money.Views.DesignData
             {
                 if (createOutcome == null)
                 {
-                    createOutcome = new OutcomeViewModel(DomainFacade);
+                    createOutcome = new OutcomeViewModel(Navigator, DomainFacade);
                     createOutcome.Amount = 5400;
                     createOutcome.Description = "New home PC motherboard";
                     createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Food", Colors.CadetBlue));

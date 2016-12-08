@@ -1,4 +1,6 @@
-﻿using Neptuo.Observables.Commands;
+﻿using Money.Views.Navigation;
+using Neptuo;
+using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +13,22 @@ namespace Money.ViewModels.Commands
 {
     public class NavigateBackCommand : Command
     {
+        private readonly INavigator navigator;
+
+        public NavigateBackCommand(INavigator navigator)
+        {
+            Ensure.NotNull(navigator, "navigator");
+            this.navigator = navigator;
+        }
+
         public override bool CanExecute()
         {
-            Frame rootFrame = (Frame)Window.Current.Content;
-            return rootFrame.CanGoBack;
+            return true;
         }
 
         public override void Execute()
         {
-            Frame rootFrame = (Frame)Window.Current.Content;
-            rootFrame.GoBack();
+            navigator.GoBack();
         }
     }
 }

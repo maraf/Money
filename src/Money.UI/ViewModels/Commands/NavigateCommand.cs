@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Money.Views.Navigation;
+using Neptuo;
 using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,18 @@ using Windows.UI.Xaml.Controls;
 
 namespace Money.ViewModels.Commands
 {
-    public class NavigateCommand<T> : Command
+    public class NavigateCommand : Command
     {
+        private readonly INavigator navigator;
         private readonly object parameter;
 
-        public NavigateCommand(object parameter)
+        public NavigateCommand(INavigator navigator, object parameter)
         {
+            Ensure.NotNull(navigator, "navigator");
+            Ensure.NotNull(parameter, "parameter");
+            this.navigator = navigator;
             this.parameter = parameter;
         }
-
-        public NavigateCommand()
-        { }
 
         public override bool CanExecute()
         {
@@ -29,8 +31,9 @@ namespace Money.ViewModels.Commands
 
         public override void Execute()
         {
-            Frame rootFrame = (Frame)Window.Current.Content;
-            rootFrame.Navigate(typeof(T), parameter);
+            navigator
+                .Open(parameter)
+                .Show();
         }
     }
 }

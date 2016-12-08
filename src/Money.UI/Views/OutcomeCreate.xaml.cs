@@ -41,26 +41,16 @@ namespace Money.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            OutcomeViewModel viewModel = null;
 
-            Guid? id = e.Parameter as Guid?;
-            if (id != null)
+            OutcomeViewModel viewModel = new OutcomeViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade);
+            OutcomeParameter parameter = e.Parameter as OutcomeParameter;
+            if (parameter != null)
             {
-                // TODO: Load existing.
-                viewModel = new OutcomeViewModel(ServiceProvider.DomainFacade, id.Value);
-            }
-            else
-            {
-                viewModel = new OutcomeViewModel(ServiceProvider.DomainFacade);
-                OutcomeParameter defaults = e.Parameter as OutcomeParameter;
-                if (defaults != null)
-                {
-                    if (defaults.Amount != null)
-                        viewModel.Amount = (float)defaults.Amount.Value;
+                if (parameter.Amount != null)
+                    viewModel.Amount = (float)parameter.Amount.Value;
 
-                    if (defaults.Description != null)
-                        viewModel.Description = defaults.Description;
-                }
+                if (parameter.Description != null)
+                    viewModel.Description = parameter.Description;
             }
 
             IEnumerable<CategoryModel> categories = await ServiceProvider.QueryDispatcher

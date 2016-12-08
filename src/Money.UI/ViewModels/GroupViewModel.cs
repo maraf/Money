@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Money.Views.Navigation;
+using Neptuo;
 using Neptuo.Observables.Collections;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,8 @@ namespace Money.ViewModels
         /// <summary>
         /// Creates a new instance.
         /// </summary>
-        public GroupViewModel()
+        public GroupViewModel(INavigator navigator)
+            : base(navigator)
         {
             Items = new ObservableCollection<GroupItemViewModel>();
         }

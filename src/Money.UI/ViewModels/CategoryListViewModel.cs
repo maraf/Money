@@ -1,4 +1,5 @@
-﻿using Neptuo.Observables.Collections;
+﻿using Money.Views.Navigation;
+using Neptuo.Observables.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,8 @@ namespace Money.ViewModels
 
         public ObservableCollection<CategoryListItemViewModel> Items { get; private set; }
 
-        public CategoryListViewModel()
+        public CategoryListViewModel(INavigator navigator)
+            : base(navigator)
         {
             Items = new ObservableCollection<CategoryListItemViewModel>();
         }

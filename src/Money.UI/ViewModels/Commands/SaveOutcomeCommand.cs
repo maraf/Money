@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using Money.Services;
 using Neptuo.Models.Keys;
+using Money.Views.Navigation;
 
 namespace Money.ViewModels.Commands
 {
@@ -17,7 +18,8 @@ namespace Money.ViewModels.Commands
         private readonly OutcomeViewModel viewModel;
         private readonly IDomainFacade domainFacade;
 
-        public SaveOutcomeCommand(OutcomeViewModel viewModel, IDomainFacade domainFacade)
+        public SaveOutcomeCommand(INavigator navigator, OutcomeViewModel viewModel, IDomainFacade domainFacade)
+            : base(navigator)
         {
             Ensure.NotNull(viewModel, "viewModel");
             Ensure.NotNull(domainFacade, "domainFacade");

@@ -136,11 +136,7 @@ namespace Money.Views.Controls
             }
 
             if (preferedIndex == null)
-            {
                 preferedIndex = viewModel.Items.Count - 1;
-                prefered = groupToMonth[viewModel.Items[preferedIndex.Value]];
-                SelectedItem = prefered;
-            }
 
             pvtGroups.SelectedIndex = preferedIndex.Value;
         }

@@ -1,4 +1,7 @@
-﻿using Money.ViewModels.Parameters;
+﻿using Money.Services.Models;
+using Money.UI;
+using Money.ViewModels;
+using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using System;
 using System.Collections.Generic;
@@ -25,9 +28,52 @@ namespace Money.Views
     [NavigationParameter(typeof(SummaryParameter))]
     public sealed partial class Summary : Page
     {
+        public SummaryViewModel ViewModel
+        {
+            get { return (SummaryViewModel)DataContext; }
+        }
+
+        public object SelectedPeriod
+        {
+            get { return GetValue(SelectedPeriodProperty); }
+            set { SetValue(SelectedPeriodProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedPeriodProperty = DependencyProperty.Register(
+            "SelectedPeriod",
+            typeof(object),
+            typeof(Summary),
+            new PropertyMetadata(null, OnSelectedPeriodChanged)
+        );
+
+        private static void OnSelectedPeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Summary page = (Summary)d;
+            page.OnSelectedPeriodChanged(e);
+        }
+
         public Summary()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            DataContext = new SummaryViewModel(App.Current.DomainFacade);
+        }
+
+        private void OnSelectedPeriodChanged(DependencyPropertyChangedEventArgs e)
+        {
+            MonthModel month = SelectedPeriod as MonthModel;
+            if (month != null)
+            {
+                ViewModel.Month = month;
+                return;
+            }
+
+            YearModel year = SelectedPeriod as YearModel;
+            if(year != null)
+            {
+                throw new NotImplementedException();
+            }
+
+            throw new NotImplementedException();
         }
     }
 }

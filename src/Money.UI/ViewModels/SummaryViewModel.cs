@@ -1,6 +1,10 @@
-﻿using Neptuo.Activators;
+﻿using Money.Services.Models;
+using Money.Services.Models.Queries;
+using Neptuo;
+using Neptuo.Activators;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,13 +17,8 @@ namespace Money.ViewModels
 {
     public partial class SummaryViewModel : ObservableObject
     {
-        private readonly IFactory<Price, decimal> priceFactory;
-        private readonly IProvider provider;
-        private readonly ObservableCollection<SummaryItemViewModel> items;
-        private bool isLoaded;
+        private readonly IQueryDispatcher queryDispatcher;
         
-        public string Title { get; private set; }
-
         private bool isLoading;
         public bool IsLoading
         {
@@ -48,36 +47,79 @@ namespace Money.ViewModels
             }
         }
 
-        public IEnumerable<SummaryItemViewModel> Items
+        private MonthModel month;
+        public MonthModel Month
         {
-            get { return items; }
+            get { return month; }
+            set
+            {
+                if (month != value)
+                {
+                    month = value;
+                    RaisePropertyChanged();
+
+                    Year = null;
+                    ReloadMonth();
+                }
+            }
         }
 
-        public SummaryViewModel(string title, IFactory<Price, decimal> priceFactory, IProvider provider)
+        private YearModel year;
+        public YearModel Year
         {
-            this.priceFactory = priceFactory;
-            this.provider = provider;
-            this.items = new ObservableCollection<SummaryItemViewModel>();
+            get { return year; }
+            set
+            {
+                if (year != value)
+                {
+                    year = value;
+                    RaisePropertyChanged();
 
-            Title = title;
+                    Month = null;
+                    ReloadYear();
+                }
+            }
         }
 
-        public async Task EnsureLoadedAsync()
+        public ObservableCollection<SummaryItemViewModel> Items { get; private set; }
+
+        public SummaryViewModel(IQueryDispatcher queryDispatcher)
         {
-            if (isLoaded)
-                return;
+            Ensure.NotNull(queryDispatcher, "queryDispatcher");
+            this.queryDispatcher = queryDispatcher;
+            Items = new ObservableCollection<SummaryItemViewModel>();
+        }
+        
+        private async Task ReloadMonth()
+        {
+            if (Month != null)
+            {
+                IsLoading = true;
+                Items.Clear();
 
-            IsLoading = true;
+                IEnumerable<CategoryWithAmountModel> categories = await queryDispatcher.QueryAsync(new ListMonthCategoryWithOutcome(Month));
+                foreach (CategoryWithAmountModel category in categories)
+                {
+                    Items.Add(new SummaryItemViewModel()
+                    {
+                        CategoryKey = category.Key,
+                        Name = category.Name,
+                        Color = category.Color,
+                        Amount = category.TotalAmount
+                    });
+                }
 
-            items.Clear();
+                TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
+                IsLoading = false;
+            }
+        }
 
-            await provider.ReplaceAsync(items);
-            TotalAmount = await provider.GetTotalAmount();
-
-
-            await Task.Delay(100);
-            IsLoading = false;
-            isLoaded = true;
+        private async Task ReloadYear()
+        {
+            if (Year != null)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

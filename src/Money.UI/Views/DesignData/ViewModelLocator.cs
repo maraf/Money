@@ -38,8 +38,8 @@ namespace Money.Views.DesignData
             {
                 if (summary == null)
                 {
-                    summary = new SummaryViewModel("August", new PriceFactory("CZK"), new SummaryGroupViewModelProvider());
-                    summary.EnsureLoadedAsync();
+                    //summary = new SummaryViewModel(new SummaryGroupViewModelProvider());
+                    //summary.EnsureLoadedAsync();
                 }
 
                 return summary;

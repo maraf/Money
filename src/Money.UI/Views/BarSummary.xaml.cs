@@ -44,20 +44,18 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            month = e.Parameter as MonthModel;
-            if (month != null)
-            {
-                SummaryViewModel viewModel = new SummaryViewModel(
-                    month.ToString(),
-                    domainFacade.PriceFactory,
-                    new NotEmptyMonthCategoryGroupProvider(domainFacade, domainFacade.PriceFactory, month)
-                );
-                DataContext = viewModel;
-                await viewModel.EnsureLoadedAsync();
-                return;
-            }
+            //month = e.Parameter as MonthModel;
+            //if (month != null)
+            //{
+            //    SummaryViewModel viewModel = new SummaryViewModel(
+            //        new NotEmptyMonthCategoryGroupProvider(domainFacade, domainFacade.PriceFactory, month)
+            //    );
+            //    DataContext = viewModel;
+            //    await viewModel.EnsureLoadedAsync();
+            //    return;
+            //}
 
-            throw Ensure.Exception.NotSupported("Unknown parameter in SummaryPage.");
+            //throw Ensure.Exception.NotSupported("Unknown parameter in SummaryPage.");
         }
 
         private void lvwItems_ItemClick(object sender, ItemClickEventArgs e)

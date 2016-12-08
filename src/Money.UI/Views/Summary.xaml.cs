@@ -60,6 +60,47 @@ namespace Money.Views
             DataContext = new SummaryViewModel(ServiceProvider.QueryDispatcher);
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            SummaryParameter parameter = (SummaryParameter)e.Parameter;
+            //switch (parameter.ViewType)
+            //{
+
+            //    case SummaryViewType.PieChart:
+            //        FillGridSetters(codLeft);
+            //        break;
+            //    case SummaryViewType.BarGraph:
+            //        FillGridSetters(codRight);
+            //        break;
+            //    default:
+            //        break;
+            //}
+        }
+
+        private void FillGridSetters(ColumnDefinition column)
+        {
+            visMedium.Setters.Add(new Setter()
+            {
+                Target = new TargetPropertyPath()
+                {
+                    Target = column,
+                    Path = new PropertyPath(nameof(ColumnDefinition.Width))
+                },
+                Value = new GridLength(1, GridUnitType.Star)
+            });
+            visSmall.Setters.Add(new Setter()
+            {
+                Target = new TargetPropertyPath()
+                {
+                    Target = column,
+                    Path = new PropertyPath(nameof(ColumnDefinition.Width))
+                },
+                Value = new GridLength(0, GridUnitType.Star)
+            }); 
+        }
+
         private void OnSelectedPeriodChanged(DependencyPropertyChangedEventArgs e)
         {
             MonthModel month = SelectedPeriod as MonthModel;

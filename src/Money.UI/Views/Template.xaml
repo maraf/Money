@@ -154,7 +154,7 @@
                 <converters:BoolConverter x:Key="TrueToFalseConverter" TrueValue="False" FalseValue="True" />
             </CommandBar.Resources>
             <CommandBar.Content>
-                <AppBarToggleButton x:Name="atbMainMenu" Label="Main menu" Checked="atbMainMenu_Checked" Unchecked="atbMainMenu_Unchecked"
+                <AppBarToggleButton x:Name="atbMainMenu" Label="Menu" Checked="atbMainMenu_Checked" Unchecked="atbMainMenu_Unchecked"
                  IsCompact="{Binding IsOpen, ElementName=cbrBottom, Converter={StaticResource TrueToFalseConverter}}">
                     <AppBarToggleButton.Icon>
                         <FontIcon Glyph="&#xE700;" />

@@ -13,6 +13,11 @@
         <Style x:Key="BarLineGridStyle" TargetType="Grid">
             <Setter Property="Margin" Value="12,10" />
         </Style>
+
+        <Setter x:Key="setBarVisible" Target="codLeft.Width" Value="*" />
+        <Setter x:Key="setBarCollapsed" Target="codLeft.Width" Value="0" />
+        <Setter x:Key="setPieVisible" Target="codRight.Width" Value="*" />
+        <Setter x:Key="setPieCollapsed" Target="codRight.Width" Value="0" />
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -20,9 +25,29 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition x:Name="codLeft"  Width="*" />
+            <ColumnDefinition x:Name="codRight" Width="*" />
         </Grid.ColumnDefinitions>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="vsgStates">
+                <VisualState x:Name="visMedium">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MediumSize}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="codLeft.Width" Value="*" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="visSmall">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="codLeft.Width" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
         <controls:Group PeriodType="Month" SelectedItem="{Binding SelectedPeriod, ElementName=root, Mode=TwoWay}" Grid.Row="0" Grid.ColumnSpan="2" />
 

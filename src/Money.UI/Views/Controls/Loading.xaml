@@ -5,9 +5,8 @@
     xmlns:local="using:Money.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
+    Visibility="Collapsed">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ProgressRing IsActive="{x:Bind IsActive}" Width="100" Height="100" />
     </Grid>

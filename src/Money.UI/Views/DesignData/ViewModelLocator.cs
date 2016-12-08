@@ -1,6 +1,7 @@
 ﻿using Money.Services.Models;
 using Money.ViewModels;
 using Neptuo;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,18 @@ namespace Money.Views.DesignData
 {
     internal class ViewModelLocator
     {
+        private IQueryDispatcher queryDispatcher;
+        public IQueryDispatcher QueryDispatcher
+        {
+            get
+            {
+                if (queryDispatcher == null)
+                    queryDispatcher = new DefaultQueryDispatcher();
+
+                return queryDispatcher;
+            }
+        }
+
         private GroupViewModel group;
         public GroupViewModel Group
         {
@@ -38,8 +51,27 @@ namespace Money.Views.DesignData
             {
                 if (summary == null)
                 {
-                    //summary = new SummaryViewModel(new SummaryGroupViewModelProvider());
-                    //summary.EnsureLoadedAsync();
+                    summary = new SummaryViewModel(QueryDispatcher);
+                    summary.Items.Add(new SummaryItemViewModel()
+                    {
+                        Name = "Food",
+                        Color = Colors.Olive,
+                        Amount = new Price(9540, "CZK"),
+                    });
+                    summary.Items.Add(new SummaryItemViewModel()
+                    {
+                        Name = "Eating Out",
+                        Color = Colors.DarkRed,
+                        Amount = new Price(3430, "CZK"),
+                    });
+                    summary.Items.Add(new SummaryItemViewModel()
+                    {
+                        Name = "Home",
+                        Color = Colors.RosyBrown,
+                        Amount = new Price(950, "CZK"),
+                    });
+                    summary.TotalAmount = new Price(13520, "CZK");
+                    summary.IsLoading = false;
                 }
 
                 return summary;

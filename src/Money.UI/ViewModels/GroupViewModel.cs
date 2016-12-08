@@ -1,4 +1,5 @@
-﻿using Neptuo.Observables.Collections;
+﻿using Neptuo;
+using Neptuo.Observables.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,6 @@ namespace Money.ViewModels
     /// </summary>
     public class GroupViewModel : ViewModel
     {
-        /// <summary>
-        /// Gets a collection of items.
-        /// </summary>
-        public ObservableCollection<GroupItemViewModel> Items { get; private set; }
-
         private bool isLoading;
 
         /// <summary>
@@ -34,6 +30,11 @@ namespace Money.ViewModels
                 }
             }
         }
+        
+        /// <summary>
+        /// Gets a collection of items.
+        /// </summary>
+        public ObservableCollection<GroupItemViewModel> Items { get; private set; }
 
         /// <summary>
         /// Creates a new instance.

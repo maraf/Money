@@ -19,12 +19,16 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <controls:Group PeriodType="Month" SelectedItem="{Binding SelectedPeriod, ElementName=root, Mode=TwoWay}" Grid.Row="0" />
+        <controls:Group PeriodType="Month" SelectedItem="{Binding SelectedPeriod, ElementName=root, Mode=TwoWay}" Grid.Row="0" Grid.ColumnSpan="2" />
 
-        <Grid x:Name="grdGroupContent" Grid.Row="1">
+        <Grid x:Name="grdBarGraph" Grid.Row="1">
             <StackPanel>
-                <ListView x:Name="lvwItems" ItemsSource="{Binding Items}" IsItemClickEnabled="True" ItemContainerTransitions="{x:Null}">
+                <ListView x:Name="lvwBarGraph" ItemsSource="{Binding Items}" IsItemClickEnabled="True" ItemContainerTransitions="{x:Null}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -46,7 +50,7 @@
                                 <TextBlock x:Name="tblName" Text="{x:Bind Name}" Style="{ThemeResource BaseTextBlockStyle}" />
                                 <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" Grid.Column="1" />
 
-                                <controls:Bar Value="{x:Bind Amount.Value}" Max="{Binding DataContext.TotalAmount.Value, ElementName=grdGroupContent}" Grid.ColumnSpan="2" Grid.Row="1">
+                                <controls:Bar Value="{x:Bind Amount.Value}" Max="{Binding DataContext.TotalAmount.Value, ElementName=grdBarGraph}" Grid.ColumnSpan="2" Grid.Row="1">
                                     <controls:Bar.Fill>
                                         <SolidColorBrush Color="{x:Bind Color}" />
                                     </controls:Bar.Fill>
@@ -65,8 +69,11 @@
                     <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
                 </Grid>
             </StackPanel>
-            <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" />
-            <controls:Loading IsActive="{Binding IsLoading}" />
         </Grid>
+        <Grid x:Name="grdPieChart" Grid.Row="1" Grid.Column="1">
+            <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Thickness="50" Margin="30" />
+        </Grid>
+        <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" Grid.Row="1" Grid.ColumnSpan="2" />
+        <controls:Loading IsActive="{Binding IsLoading}" Grid.Row="1" Grid.ColumnSpan="2" />
     </Grid>
 </Page>

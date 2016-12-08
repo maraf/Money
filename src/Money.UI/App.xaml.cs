@@ -34,14 +34,6 @@ namespace Money.UI
     /// </summary>
     sealed partial class App : Application
     {
-        public IDomainFacade DomainFacade { get; private set; }
-        public INavigator Navigator { get; set; }
-
-        public static new App Current
-        {
-            get { return (App)Application.Current; }
-        }
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -87,7 +79,7 @@ namespace Money.UI
                 Window.Current.Content = rootFrame;
             }
 
-            Navigator = new ApplicationNavigator(new NavigatorParameterCollection(), rootFrame);
+            ServiceProvider.Navigator = new ApplicationNavigator(new NavigatorParameterCollection(), rootFrame);
 
             SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested += OnBackRequested;
@@ -103,7 +95,7 @@ namespace Money.UI
                     // configuring the new page by passing required information as a navigation
                     // parameter
                     //rootFrame.Navigate(typeof(GroupPage), GroupType.Month);
-                    Navigator
+                    ServiceProvider.Navigator
                         .Open(new SummaryParameter(SummaryViewType.BarGraph))
                         .Show();
                 }
@@ -124,7 +116,8 @@ namespace Money.UI
 
             //outcome = task.OutcomeRepository.Find(outcomeKey);
             //Debug.WriteLine($"Outcome of '{outcome.Amount}' with description '{outcome.Description}' from '{outcome.When}'.");
-            DomainFacade = task.DomainFacade;
+            ServiceProvider.DomainFacade = task.DomainFacade;
+            ServiceProvider.QueryDispatcher = task.QueryDispatcher;
         }
 
         /// <summary>

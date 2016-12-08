@@ -28,7 +28,7 @@
 
         <Grid x:Name="grdBarGraph" Grid.Row="1">
             <StackPanel>
-                <ListView x:Name="lvwBarGraph" ItemsSource="{Binding Items}" IsItemClickEnabled="True" ItemContainerTransitions="{x:Null}">
+                <ListView x:Name="lvwBarGraph" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True" ItemContainerTransitions="{x:Null}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />

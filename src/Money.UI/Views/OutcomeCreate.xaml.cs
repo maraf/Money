@@ -48,11 +48,11 @@ namespace Money.Views
             if (id != null)
             {
                 // TODO: Load existing.
-                viewModel = new OutcomeViewModel(App.Current.DomainFacade, id.Value);
+                viewModel = new OutcomeViewModel(ServiceProvider.DomainFacade, id.Value);
             }
             else
             {
-                viewModel = new OutcomeViewModel(App.Current.DomainFacade);
+                viewModel = new OutcomeViewModel(ServiceProvider.DomainFacade);
                 OutcomeParameter defaults = e.Parameter as OutcomeParameter;
                 if (defaults != null)
                 {
@@ -64,7 +64,7 @@ namespace Money.Views
                 }
             }
 
-            IEnumerable<CategoryModel> categories = await App.Current.DomainFacade
+            IEnumerable<CategoryModel> categories = await ServiceProvider.QueryDispatcher
                 .QueryAsync(new ListAllCategory());
 
             viewModel.Categories.AddRange(categories);

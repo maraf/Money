@@ -1,6 +1,7 @@
 ﻿using Money.Services;
 using Money.UI;
 using Money.ViewModels.Parameters;
+using Money.Views.Navigation;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,15 @@ namespace Money.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    [NavigationParameter(typeof(CategoryListParameter))]
     public sealed partial class CategoryListPage : Page
     {
+        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+
         public CategoryListPage()
         {
             this.InitializeComponent();
         }
-
-        private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

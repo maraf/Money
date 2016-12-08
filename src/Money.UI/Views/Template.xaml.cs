@@ -27,7 +27,7 @@ namespace Money.Views
     /// </summary>
     public sealed partial class Template : Page
     {
-        private readonly INavigator navigator = App.Current.Navigator;
+        private readonly INavigator navigator = ServiceProvider.Navigator;
 
         public Frame ContentFrame
         {

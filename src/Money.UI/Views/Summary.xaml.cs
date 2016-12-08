@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -28,6 +29,8 @@ namespace Money.Views
     [NavigationParameter(typeof(SummaryParameter))]
     public sealed partial class Summary : Page
     {
+        private readonly INavigator navigator = ServiceProvider.Navigator;
+
         public SummaryViewModel ViewModel
         {
             get { return (SummaryViewModel)DataContext; }
@@ -55,7 +58,7 @@ namespace Money.Views
         public Summary()
         {
             InitializeComponent();
-            DataContext = new SummaryViewModel(App.Current.DomainFacade);
+            DataContext = new SummaryViewModel(ServiceProvider.QueryDispatcher);
         }
 
         private void OnSelectedPeriodChanged(DependencyPropertyChangedEventArgs e)
@@ -68,12 +71,30 @@ namespace Money.Views
             }
 
             YearModel year = SelectedPeriod as YearModel;
-            if(year != null)
+            if (year != null)
             {
                 throw new NotImplementedException();
             }
 
             throw new NotImplementedException();
+        }
+
+        private void lvwBarGraph_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
+            CategoryListParameter parameter = null;
+
+            MonthModel month = SelectedPeriod as MonthModel;
+            if (month != null)
+                parameter = new CategoryListParameter(item.CategoryKey, month);
+
+            YearModel year = SelectedPeriod as YearModel;
+            if (year != null)
+                parameter = new CategoryListParameter(item.CategoryKey, year);
+
+            navigator
+                .Open(parameter)
+                .Show();
         }
     }
 }

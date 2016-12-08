@@ -49,48 +49,13 @@ namespace Money.Views.Navigation
             Template template = rootFrame.Content as Template;
             if (template == null)
                 return new PageNavigatorForm(rootFrame, typeof(Template), parameter);
-
-            IGroupParameter groupParameter = parameter as IGroupParameter;
-            if (groupParameter != null)
-            {
-                GroupParameter targetParameter;
-                if (groupParameter.Year != null)
-                    targetParameter = new GroupParameter(SummaryPeriodType.Year, parameter);
-                else
-                    targetParameter = new GroupParameter(SummaryPeriodType.Month, parameter);
-
-                GroupTemplate group = template.ContentFrame.Content as GroupTemplate;
-                if (group == null)
-                    return new PageNavigatorForm(template.ContentFrame, typeof(GroupTemplate), targetParameter);
-
-                return new GroupNavigatorForm(group, targetParameter);
-            }
-
+            
             Type pageType;
             Type parameterType = parameter.GetType();
             if (rules.TryGetPageType(parameterType, out pageType))
                 return new PageNavigatorForm(template.ContentFrame, pageType, parameter);
 
             throw Ensure.Exception.InvalidOperation("Missing navigation page for parameter of type '{0}'.", parameterType.FullName);
-        }
-
-        private class GroupNavigatorForm : INavigatorForm
-        {
-            private readonly GroupTemplate page;
-            private readonly GroupParameter parameter;
-
-            public GroupNavigatorForm(GroupTemplate page, GroupParameter parameter)
-            {
-                Ensure.NotNull(page, "page");
-                Ensure.NotNull(parameter, "parameter");
-                this.page = page;
-                this.parameter = parameter;
-            }
-
-            public void Show()
-            {
-                page.Navigate(parameter);
-            }
         }
     }
 }

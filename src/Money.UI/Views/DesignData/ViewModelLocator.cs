@@ -1,5 +1,7 @@
-﻿using Money.Services.Models;
+﻿using Money.Services;
+using Money.Services.Models;
 using Money.ViewModels;
+using Money.Views.Navigation;
 using Neptuo;
 using Neptuo.Queries;
 using System;
@@ -23,6 +25,30 @@ namespace Money.Views.DesignData
                     queryDispatcher = new DefaultQueryDispatcher();
 
                 return queryDispatcher;
+            }
+        }
+
+        private IDomainFacade domainFacade;
+        public IDomainFacade DomainFacade
+        {
+            get
+            {
+                if (domainFacade == null)
+                    domainFacade = new DomainFacade();
+
+                return domainFacade;
+            }
+        }
+
+        private INavigator navigator;
+        public INavigator Navigator
+        {
+            get
+            {
+                if (navigator == null)
+                    navigator = new Navigator();
+
+                return navigator;
             }
         }
 
@@ -113,7 +139,7 @@ namespace Money.Views.DesignData
             {
                 if (createOutcome == null)
                 {
-                    createOutcome = new OutcomeViewModel(new DomainFacade());
+                    createOutcome = new OutcomeViewModel(DomainFacade);
                     createOutcome.Amount = 5400;
                     createOutcome.Description = "New home PC motherboard";
                     createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Food", Colors.CadetBlue));
@@ -123,6 +149,13 @@ namespace Money.Views.DesignData
 
                 return createOutcome;
             }
+        }
+
+        public ViewModelLocator()
+        {
+            ServiceProvider.QueryDispatcher = QueryDispatcher;
+            ServiceProvider.DomainFacade = DomainFacade;
+            ServiceProvider.Navigator = Navigator;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Money.Views.Controls
 {
     public sealed partial class Group : UserControl
     {
-        private readonly IDomainFacade domainFacade = App.Current.DomainFacade;
+        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private Dictionary<GroupItemViewModel, MonthModel> groupToMonth;
 
         public GroupViewModel ViewModel

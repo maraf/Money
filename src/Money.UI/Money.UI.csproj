@@ -104,6 +104,7 @@
     <Compile Include="Data\OutcomeCategoryEntity.cs" />
     <Compile Include="Data\OutcomeEntity.cs" />
     <Compile Include="Data\ReadModelContext.cs" />
+    <Compile Include="ServiceProvider.cs" />
     <Compile Include="Services\IDomainFacade.cs" />
     <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />
     <Compile Include="Services\Models\Builders\OutcomeBuilder.cs" />
@@ -132,8 +133,6 @@
     <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\IGroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\OutcomeParameter.cs" />
-    <Compile Include="ViewModels\Parameters\PieSummaryParameter.cs" />
-    <Compile Include="ViewModels\Parameters\BarSummaryParameter.cs" />
     <Compile Include="ViewModels\Parameters\SummaryParameter.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
@@ -153,9 +152,6 @@
     <Compile Include="Views\Controls\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\MainCommandBar.xaml.cs">
-      <DependentUpon>MainCommandBar.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\MainMenu.cs" />
     <Compile Include="Views\Controls\PieChart.xaml.cs">
       <DependentUpon>PieChart.xaml</DependentUpon>
@@ -168,6 +164,7 @@
     <Compile Include="Views\Converters\CuttingConverter.cs" />
     <Compile Include="Views\Converters\DateToStringConverter.cs" />
     <Compile Include="Views\DesignData\DomainFacade.cs" />
+    <Compile Include="Views\DesignData\Navigator.cs" />
     <Compile Include="Views\DesignData\SummaryGroupViewModelProvider.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\CategoryListPage.xaml.cs">
@@ -175,9 +172,6 @@
     </Compile>
     <Compile Include="Views\Empty.xaml.cs">
       <DependentUpon>Empty.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\GroupTemplate.xaml.cs">
-      <DependentUpon>GroupTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Navigation\ApplicationNavigator.cs" />
     <Compile Include="Views\Navigation\FrameBackStack.cs" />
@@ -189,12 +183,6 @@
     <Compile Include="Views\Navigation\PageNavigatorForm.cs" />
     <Compile Include="Views\OutcomeCreate.xaml.cs">
       <DependentUpon>OutcomeCreate.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PieSummary.xaml.cs">
-      <DependentUpon>PieSummary.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BarSummary.xaml.cs">
-      <DependentUpon>BarSummary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Summary.xaml.cs">
@@ -245,10 +233,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\MainCommandBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Controls\PieChart.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -261,21 +245,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GroupTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\OutcomeCreate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PieSummary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\BarSummary.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Summary.xaml">
       <SubType>Designer</SubType>

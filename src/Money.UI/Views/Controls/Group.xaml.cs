@@ -32,6 +32,7 @@ namespace Money.Views.Controls
         public GroupViewModel ViewModel
         {
             get { return (GroupViewModel)DataContext; }
+            private set { DataContext = value; }
         }
 
         public SummaryPeriodType PeriodType
@@ -41,9 +42,9 @@ namespace Money.Views.Controls
         }
 
         public static readonly DependencyProperty PeriodTypeProperty = DependencyProperty.Register(
-            "PeriodType", 
-            typeof(SummaryPeriodType), 
-            typeof(Group), 
+            "PeriodType",
+            typeof(SummaryPeriodType),
+            typeof(Group),
             new PropertyMetadata(SummaryPeriodType.Month, OnPeriodChanged)
         );
 
@@ -60,29 +61,59 @@ namespace Money.Views.Controls
         }
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            "SelectedItem", 
-            typeof(object), 
-            typeof(Group), 
-            new PropertyMetadata(null)
+            "SelectedItem",
+            typeof(object),
+            typeof(Group),
+            new PropertyMetadata(null, OnSelectedItemChanged)
         );
+
+        private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Group control = (Group)d;
+            control.OnSelectedItemChanged(e);
+        }
 
         public Group()
         {
             InitializeComponent();
         }
 
+        private ValueChangedLock change = new ValueChangedLock();
+
         private async void OnPeriodChanged(DependencyPropertyChangedEventArgs e)
         {
-            GroupViewModel viewModel = new GroupViewModel();
-            DataContext = viewModel;
-            viewModel.IsLoading = true;
+            if (change.IsLocked)
+                return;
 
-            if (PeriodType == SummaryPeriodType.Month)
-                await LoadMonthViewAsync(ViewModel, null);
-            else if (PeriodType == SummaryPeriodType.Year)
-                await LoadYearViewAsync(ViewModel, null);
-            else
-                throw Ensure.Exception.NotSupported(PeriodType.ToString());
+            using (change.Lock())
+            {
+                if (ViewModel == null)
+                    ViewModel = new GroupViewModel();
+
+                ViewModel.IsLoading = true;
+                if (PeriodType == SummaryPeriodType.Month)
+                    await LoadMonthViewAsync(ViewModel, SelectedItem as MonthModel);
+                else if (PeriodType == SummaryPeriodType.Year)
+                    await LoadYearViewAsync(ViewModel, SelectedItem as YearModel);
+                else
+                    throw Ensure.Exception.NotSupported(PeriodType.ToString());
+
+                ViewModel.IsLoading = false;
+            }
+        }
+
+        private void OnSelectedItemChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (change.IsLocked)
+                return;
+
+            MonthModel month = SelectedItem as MonthModel;
+            if (month != null)
+            {
+                GroupItemViewModel viewModel = ViewModel.Items.FirstOrDefault(i => (i.Parameter as MonthModel) == month);
+                if (viewModel != null)
+                    pvtGroups.SelectedItem = viewModel;
+            }
         }
 
         private async Task LoadMonthViewAsync(GroupViewModel viewModel, MonthModel prefered)
@@ -105,7 +136,11 @@ namespace Money.Views.Controls
             }
 
             if (preferedIndex == null)
+            {
                 preferedIndex = viewModel.Items.Count - 1;
+                prefered = groupToMonth[viewModel.Items[preferedIndex.Value]];
+                SelectedItem = prefered;
+            }
 
             pvtGroups.SelectedIndex = preferedIndex.Value;
         }

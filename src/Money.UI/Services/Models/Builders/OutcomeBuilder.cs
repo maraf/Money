@@ -19,7 +19,10 @@ namespace Money.Services.Models.Builders
         IEventHandler<OutcomeCategoryAdded>, 
         IQueryHandler<ListMonthWithOutcome, IEnumerable<MonthModel>>,
         IQueryHandler<ListMonthCategoryWithOutcome, IEnumerable<CategoryWithAmountModel>>,
-        IQueryHandler<GetTotalMonthOutcome, Price>
+        IQueryHandler<GetTotalMonthOutcome, Price>,
+        IQueryHandler<GetCategoryName, string>,
+        IQueryHandler<ListMonthOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>,
+        IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>
     {
         private readonly IFactory<Price, decimal> priceFactory;
 
@@ -76,6 +79,18 @@ namespace Money.Services.Models.Builders
             }
         }
 
+        public async Task<string> HandleAsync(GetCategoryName query)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                CategoryEntity category = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
+                if (category == null)
+                    throw Ensure.Exception.ArgumentOutOfRange("categoryKey", "No such category with key '{0}'.", query.CategoryKey);
+
+                return category.Name;
+            }
+        }
+
         public async Task<Price> HandleAsync(GetTotalMonthOutcome query)
         {
             using (ReadModelContext db = new ReadModelContext())
@@ -90,6 +105,34 @@ namespace Money.Services.Models.Builders
                     price += outcome;
 
                 return price;
+            }
+        }
+
+        public async Task<IEnumerable<OutcomeOverviewModel>> HandleAsync(ListYearOutcomeFromCategory query)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                List<OutcomeOverviewModel> outcomes = await db.Outcomes
+                    .Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid))
+                    .Where(o => o.When.Year == query.Year.Year)
+                    .Select(o => o.ToOverviewModel())
+                    .ToListAsync();
+
+                return outcomes;
+            }
+        }
+
+        public async Task<IEnumerable<OutcomeOverviewModel>> HandleAsync(ListMonthOutcomeFromCategory query)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                List<OutcomeOverviewModel> outcomes = await db.Outcomes
+                    .Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid))
+                    .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
+                    .Select(o => o.ToOverviewModel())
+                    .ToListAsync();
+
+                return outcomes;
             }
         }
 

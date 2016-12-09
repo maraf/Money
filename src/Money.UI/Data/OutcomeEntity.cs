@@ -51,5 +51,15 @@ namespace Money.Data
                 Categories.Select(c => GuidKey.Create(c.CategoryId, categoryKeyType)).ToList()
             );
         }
+
+        public OutcomeOverviewModel ToOverviewModel()
+        {
+            return new OutcomeOverviewModel(
+                GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type),
+                new Price(Amount, Currency),
+                When,
+                Description
+            );
+        }
     }
 }

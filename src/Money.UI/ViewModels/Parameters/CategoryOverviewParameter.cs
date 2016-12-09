@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace Money.ViewModels.Parameters
 {
     /// <summary>
-    /// A navigation parameters for <see cref="CategoryListViewModel"/>.
+    /// A navigation parameters for <see cref="CategoryOverviewViewModel"/>.
     /// </summary>
-    public class CategoryListParameter
+    public class CategoryOverviewParameter
     {
         /// <summary>
         /// Gets a category key or empty key.
@@ -33,7 +33,7 @@ namespace Money.ViewModels.Parameters
         /// Creates a new instance for diplaying a month.
         /// </summary>
         /// <param name="categoryKey">A category key or empty key.</param>
-        public CategoryListParameter(IKey categoryKey, MonthModel month)
+        public CategoryOverviewParameter(IKey categoryKey, MonthModel month)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
             Ensure.NotNull(month, "month");
@@ -46,7 +46,7 @@ namespace Money.ViewModels.Parameters
         /// </summary>
         /// <param name="categoryKey">A category key or empty key.</param>
         /// <param name="year">A year to display.</param>
-        public CategoryListParameter(IKey categoryKey, YearModel year)
+        public CategoryOverviewParameter(IKey categoryKey, YearModel year)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
             Ensure.NotNull(year, "year");

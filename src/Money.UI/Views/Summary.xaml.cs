@@ -125,15 +125,15 @@ namespace Money.Views
         private void lvwBarGraph_ItemClick(object sender, ItemClickEventArgs e)
         {
             SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
-            CategoryListParameter parameter = null;
+            CategoryOverviewParameter parameter = null;
 
             MonthModel month = SelectedPeriod as MonthModel;
             if (month != null)
-                parameter = new CategoryListParameter(item.CategoryKey, month);
+                parameter = new CategoryOverviewParameter(item.CategoryKey, month);
 
             YearModel year = SelectedPeriod as YearModel;
             if (year != null)
-                parameter = new CategoryListParameter(item.CategoryKey, year);
+                parameter = new CategoryOverviewParameter(item.CategoryKey, year);
 
             navigator
                 .Open(parameter)

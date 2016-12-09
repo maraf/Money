@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Money.Services.Models
 {
     /// <summary>
-    /// A model of single outcome.
+    /// A model of a single outcome.
     /// </summary>
     public class OutcomeModel
     {

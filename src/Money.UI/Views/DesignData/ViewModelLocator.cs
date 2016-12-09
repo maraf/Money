@@ -3,6 +3,7 @@ using Money.Services.Models;
 using Money.ViewModels;
 using Money.Views.Navigation;
 using Neptuo;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -105,31 +106,21 @@ namespace Money.Views.DesignData
             }
         }
 
-        private CategoryListViewModel categoryList;
-        public CategoryListViewModel CategoryList
+        private CategoryOverviewViewModel categoryOverview;
+        public CategoryOverviewViewModel CategoryOverview
         {
             get
             {
-                if (categoryList == null)
+                if (categoryOverview == null)
                 {
-                    categoryList = new CategoryListViewModel(ServiceProvider.Navigator);
-                    categoryList.GroupId = Guid.NewGuid();
-                    categoryList.Name = "Eating";
-                    categoryList.Items.Add(new CategoryListItemViewModel()
-                    {
-                        Description = "Saturday's buy on market",
-                        Amount = new Price(1250, "CZK"),
-                        When = new DateTime(2016, 11, 12, 10, 30, 15)
-                    });
-                    categoryList.Items.Add(new CategoryListItemViewModel()
-                    {
-                        Description = "Cheese",
-                        Amount = new Price(345, "CZK"),
-                        When = new DateTime(2016, 11, 13, 20, 0, 0)
-                    });
+                    categoryOverview = new CategoryOverviewViewModel(ServiceProvider.Navigator, "Food", new MonthModel(2016, 11));
+                    categoryOverview.Items.Add(new OutcomeOverviewModel(GuidKey.Empty("Outcome"), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market"));
+                    categoryOverview.Items.Add(new OutcomeOverviewModel(GuidKey.Empty("Outcome"), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese"));
+                    categoryOverview.Items.Add(new OutcomeOverviewModel(GuidKey.Empty("Outcome"), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine"));
+                    categoryOverview.Items.Add(new OutcomeOverviewModel(GuidKey.Empty("Outcome"), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta"));
                 }
 
-                return categoryList;
+                return categoryOverview;
             }
         }
 

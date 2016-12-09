@@ -49,7 +49,7 @@
                 <VisualState>
                     <VisualState.StateTriggers>
                         <triggers:CompositeStateTrigger>
-                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource MediumSize}" />
+                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource LargeSize}" />
                             <StateTrigger IsActive="{x:Bind IsBarGraphPrefered}" />
                         </triggers:CompositeStateTrigger>
                     </VisualState.StateTriggers>
@@ -71,7 +71,7 @@
                 <VisualState>
                     <VisualState.StateTriggers>
                         <triggers:CompositeStateTrigger>
-                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource MediumSize}" />
+                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource LargeSize}" />
                             <StateTrigger IsActive="{x:Bind IsPieChartPrefered}" />
                         </triggers:CompositeStateTrigger>
                     </VisualState.StateTriggers>

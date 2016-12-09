@@ -33,7 +33,6 @@ namespace Money.Views
             get { return frmContent; }
         }
 
-
         public bool IsMainMenuOpened
         {
             get { return (bool)GetValue(IsMainMenuOpenedProperty); }

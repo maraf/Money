@@ -174,7 +174,6 @@
       <DependentUpon>Empty.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Navigation\ApplicationNavigator.cs" />
-    <Compile Include="Views\Navigation\FrameBackStack.cs" />
     <Compile Include="Views\Navigation\IParameterDecorator.cs" />
     <Compile Include="Views\Navigation\NavigatorParameterCollection.cs" />
     <Compile Include="Views\Navigation\INavigator.cs" />

@@ -83,7 +83,7 @@ namespace Money.Views
         public Summary()
         {
             InitializeComponent();
-            DataContext = new SummaryViewModel(ServiceProvider.QueryDispatcher);
+            DataContext = new SummaryViewModel(ServiceProvider.Navigator, ServiceProvider.QueryDispatcher);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

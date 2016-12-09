@@ -78,7 +78,7 @@ namespace Money.Views.DesignData
             {
                 if (summary == null)
                 {
-                    summary = new SummaryViewModel(ServiceProvider.QueryDispatcher);
+                    summary = new SummaryViewModel(ServiceProvider.Navigator, ServiceProvider.QueryDispatcher);
                     summary.Items.Add(new SummaryItemViewModel()
                     {
                         Name = "Food",

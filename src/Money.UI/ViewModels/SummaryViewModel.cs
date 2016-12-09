@@ -1,5 +1,6 @@
 ﻿using Money.Services.Models;
 using Money.Services.Models.Queries;
+using Money.Views.Navigation;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Observables;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Money.ViewModels
 {
-    public partial class SummaryViewModel : ObservableObject
+    public partial class SummaryViewModel : ViewModel
     {
         private readonly IQueryDispatcher queryDispatcher;
         
@@ -83,7 +84,8 @@ namespace Money.ViewModels
 
         public ObservableCollection<SummaryItemViewModel> Items { get; private set; }
 
-        public SummaryViewModel(IQueryDispatcher queryDispatcher)
+        public SummaryViewModel(INavigator navigator, IQueryDispatcher queryDispatcher)
+            : base(navigator)
         {
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.queryDispatcher = queryDispatcher;

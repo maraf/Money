@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.UI;
 using Windows.UI.Xaml.Controls;
 
@@ -153,9 +154,12 @@ namespace Money.Views.DesignData
 
         public ViewModelLocator()
         {
-            ServiceProvider.QueryDispatcher = QueryDispatcher;
-            ServiceProvider.DomainFacade = DomainFacade;
-            ServiceProvider.Navigator = Navigator;
+            if (DesignMode.DesignModeEnabled)
+            {
+                ServiceProvider.QueryDispatcher = QueryDispatcher;
+                ServiceProvider.DomainFacade = DomainFacade;
+                ServiceProvider.Navigator = Navigator;
+            }
         }
     }
 }

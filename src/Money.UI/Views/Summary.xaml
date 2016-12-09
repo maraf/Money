@@ -26,12 +26,12 @@
                 <AppBarButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="By amount" />
-                        <MenuFlyoutItem Text="By description" />
+                        <MenuFlyoutItem Text="By category name" />
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarSeparator />
-            <AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />
+            <!--<AppBarSeparator />-->
+            <!--<AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />-->
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" Background="RosyBrown" />
         </CommandBar>
     </Page.BottomAppBar>
@@ -93,7 +93,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <controls:Group PeriodType="Month" SelectedItem="{Binding SelectedPeriod, ElementName=root, Mode=TwoWay}" Grid.Row="0" Grid.ColumnSpan="2" />
+        <controls:Group x:Name="grpGroups" PeriodType="Month" SelectedItemChanged="OnGroupSelectedItemChanged" Grid.Row="0" Grid.ColumnSpan="2" />
 
         <Grid x:Name="grdBarGraph" Grid.Row="1">
             <StackPanel>

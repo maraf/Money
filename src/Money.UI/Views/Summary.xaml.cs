@@ -1,6 +1,7 @@
 ﻿using Money.Services.Models;
 using Money.ViewModels;
 using Money.ViewModels.Parameters;
+using Money.Views.Controls;
 using Money.Views.Navigation;
 using System;
 using System.Collections.Generic;
@@ -29,31 +30,14 @@ namespace Money.Views
     public sealed partial class Summary : Page
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
+        private object preSelectedPeriod;
 
         public SummaryViewModel ViewModel
         {
             get { return (SummaryViewModel)DataContext; }
+            set { DataContext = value; }
         }
-
-        public object SelectedPeriod
-        {
-            get { return GetValue(SelectedPeriodProperty); }
-            set { SetValue(SelectedPeriodProperty, value); }
-        }
-
-        public static readonly DependencyProperty SelectedPeriodProperty = DependencyProperty.Register(
-            "SelectedPeriod",
-            typeof(object),
-            typeof(Summary),
-            new PropertyMetadata(null, OnSelectedPeriodChanged)
-        );
-
-        private static void OnSelectedPeriodChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Summary page = (Summary)d;
-            page.OnSelectedPeriodChanged(e);
-        }
-
+        
         public bool IsPieChartPrefered
         {
             get { return (bool)GetValue(IsPieChartPreferedProperty); }
@@ -83,7 +67,7 @@ namespace Money.Views
         public Summary()
         {
             InitializeComponent();
-            DataContext = new SummaryViewModel(ServiceProvider.Navigator, ServiceProvider.QueryDispatcher);
+            ViewModel = new SummaryViewModel(ServiceProvider.Navigator, ServiceProvider.QueryDispatcher);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -102,18 +86,27 @@ namespace Money.Views
                     IsBarGraphPrefered = true;
                     break;
             }
+
+            if (grpGroups.SelectedItem != null)
+                OnPeriodChanged();
         }
         
-        private void OnSelectedPeriodChanged(DependencyPropertyChangedEventArgs e)
+        private void OnGroupSelectedItemChanged(object sender, SelectedItemEventArgs e)
         {
-            MonthModel month = SelectedPeriod as MonthModel;
+            if (ViewModel != null)
+                OnPeriodChanged();
+        }
+
+        private void OnPeriodChanged()
+        {
+            MonthModel month = grpGroups.SelectedItem as MonthModel;
             if (month != null)
             {
                 ViewModel.Month = month;
                 return;
             }
 
-            YearModel year = SelectedPeriod as YearModel;
+            YearModel year = grpGroups.SelectedItem as YearModel;
             if (year != null)
             {
                 throw new NotImplementedException();
@@ -127,11 +120,11 @@ namespace Money.Views
             SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
             CategoryOverviewParameter parameter = null;
 
-            MonthModel month = SelectedPeriod as MonthModel;
+            MonthModel month = grpGroups.SelectedItem as MonthModel;
             if (month != null)
                 parameter = new CategoryOverviewParameter(item.CategoryKey, month);
 
-            YearModel year = SelectedPeriod as YearModel;
+            YearModel year = grpGroups.SelectedItem as YearModel;
             if (year != null)
                 parameter = new CategoryOverviewParameter(item.CategoryKey, year);
 

@@ -206,7 +206,7 @@
                             </Grid>
                         </ToggleButton>
 
-                        <controls:MainMenu ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="OnMainMenuItemInvoked">
+                        <controls:MainMenu x:Name="mnuMain" ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="OnMainMenuItemInvoked">
                             <!--<controls:MainMenu.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <Grid>

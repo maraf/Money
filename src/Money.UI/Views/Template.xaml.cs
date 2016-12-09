@@ -33,6 +33,11 @@ namespace Money.Views
             get { return frmContent; }
         }
 
+        public MainMenu MainMenu
+        {
+            get { return mnuMain; }
+        }
+
         public bool IsMainMenuOpened
         {
             get { return (bool)GetValue(IsMainMenuOpenedProperty); }
@@ -60,6 +65,9 @@ namespace Money.Views
             };
 
             MenuItemsSource.Source = menuItems.GroupBy(i => i.Group);
+
+            // TODO: Remove after making the synchronization of selected item.
+            mnuMain.SelectedIndex = 1;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -74,13 +82,9 @@ namespace Money.Views
         private void OnMainMenuItemInvoked(object sender, ListViewItem e)
         {
             MenuItemViewModel item = (MenuItemViewModel)((MainMenu)sender).ItemFromContainer(e);
-            object paramerer = item.Parameter;
-            IParameterDecorator decorator = frmContent.Content as IParameterDecorator;
-            if (decorator != null)
-                paramerer = decorator.Decorate(paramerer);
 
             navigator
-                .Open(paramerer)
+                .Open(item.Parameter)
                 .Show();
         }
     }

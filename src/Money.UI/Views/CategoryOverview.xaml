@@ -20,8 +20,8 @@
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarSeparator />
-            <AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />
+            <!--<AppBarSeparator />-->
+            <!--<AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />-->
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" Background="RosyBrown" />
         </CommandBar>
     </Page.BottomAppBar>

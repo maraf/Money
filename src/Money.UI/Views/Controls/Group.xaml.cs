@@ -68,6 +68,8 @@ namespace Money.Views.Controls
             new PropertyMetadata(null, OnSelectedItemChanged)
         );
 
+        public event EventHandler<SelectedItemEventArgs> SelectedItemChanged;
+
         private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Group control = (Group)d;
@@ -137,7 +139,7 @@ namespace Money.Views.Controls
             }
 
             if (preferedIndex == null)
-                preferedIndex = viewModel.Items.Count - 1;
+                preferedIndex = 0;
 
             pvtGroups.SelectedIndex = preferedIndex.Value;
         }
@@ -151,6 +153,9 @@ namespace Money.Views.Controls
         {
             GroupItemViewModel viewModel = (GroupItemViewModel)pvtGroups.SelectedItem;
             SelectedItem = viewModel.Parameter;
+
+            if (SelectedItemChanged != null)
+                SelectedItemChanged(this, new SelectedItemEventArgs(SelectedItem));
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Money.ViewModels
                 }
             }
         }
-
+        
         public object Parameter { get; private set; }
 
         public MenuItemViewModel(string label, object parameter)

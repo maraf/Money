@@ -25,6 +25,7 @@
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
         </CommandBar>
     </Page.BottomAppBar>
+    
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,6" />
         <ListView ItemsSource="{Binding Items}">

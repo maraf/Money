@@ -1,0 +1,10 @@
+﻿<AppBarToggleButton
+    x:Class="Money.Views.Controls.MainMenuAppBarToggleButton"
+    x:Name="root"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Label="Menu">
+    <AppBarToggleButton.Icon>
+        <FontIcon Glyph="&#xE700;" />
+    </AppBarToggleButton.Icon>
+</AppBarToggleButton>

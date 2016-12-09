@@ -20,6 +20,21 @@
         <Setter x:Key="setPieVisible" Target="codRight.Width" Value="*" />
         <Setter x:Key="setPieCollapsed" Target="codRight.Width" Value="0" />
     </Page.Resources>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Sort">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="By amount" />
+                        <MenuFlyoutItem Text="By description" />
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />
+            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
+        </CommandBar>
+    </Page.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

@@ -43,7 +43,7 @@ namespace Money.Views
             "IsMainMenuOpened", 
             typeof(bool), 
             typeof(Template),
-            new PropertyMetadata(false, (d, e) => Console.WriteLine("xx"))
+            new PropertyMetadata(false)
         );
 
         public Template()

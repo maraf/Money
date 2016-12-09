@@ -1,5 +1,6 @@
 ﻿using Money.ViewModels;
 using Money.ViewModels.Parameters;
+using Money.Views.Controls;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,9 @@ using System.Threading.Tasks;
 using Windows.Devices.Input;
 using Windows.UI.Core;
 using Windows.UI.Input;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -56,7 +59,7 @@ namespace Money.Views.Navigation
             Template template = rootFrame.Content as Template;
             if (template == null)
                 return new PageNavigatorForm(rootFrame, typeof(Template), parameter);
-            
+
             Type pageType;
             Type parameterType = parameter.GetType();
             if (rules.TryGetPageType(parameterType, out pageType))
@@ -85,6 +88,18 @@ namespace Money.Views.Navigation
             }
         }
 
+        private void OnTemplateContentFrameNavigating(object sender, NavigatingCancelEventArgs e)
+        {
+            Frame frame = (Frame)sender;
+
+            Page page = frame.Content as Page;
+            if (page != null)
+            {
+                page.PointerPressed -= OnPagePointerPressed;
+                RemoveMainMenuButton(page);
+            }
+        }
+
         private void OnTemplateContentFrameNavigated(object sender, NavigationEventArgs e)
         {
             Frame frame = (Frame)sender;
@@ -92,16 +107,53 @@ namespace Money.Views.Navigation
 
             Page page = frame.Content as Page;
             if (page != null)
+            {
                 page.PointerPressed += OnPagePointerPressed;
+                AddMainMenuButton(page);
+            }
         }
 
-        private void OnTemplateContentFrameNavigating(object sender, NavigatingCancelEventArgs e)
+        private void RemoveMainMenuButton(Page page)
         {
-            Frame frame = (Frame)sender;
+            if (page.BottomAppBar != null)
+            {
+                MainMenuAppBarToggleButton button = page.BottomAppBar.Content as MainMenuAppBarToggleButton;
+                if (button != null)
+                {
+                    button.Dispose();
+                    page.BottomAppBar.Content = null;
+                }
+            }
+        }
 
-            Page page = frame.Content as Page;
-            if (page != null)
-                page.PointerPressed -= OnPagePointerPressed;
+        private void AddMainMenuButton(Page page)
+        {
+            if (page.BottomAppBar != null)
+            {
+                Template template = (Template)rootFrame.Content;
+
+                MainMenuAppBarToggleButton button = new MainMenuAppBarToggleButton();
+                button.SetBinding(
+                    AppBarToggleButton.IsCheckedProperty,
+                    new Binding()
+                    {
+                        Path = new PropertyPath(nameof(Template.IsMainMenuOpened)),
+                        Source = template,
+                        Mode = BindingMode.TwoWay
+                    }
+                );
+                button.SetBinding(
+                    AppBarToggleButton.IsCompactProperty,
+                    new Binding()
+                    {
+                        Path = new PropertyPath(nameof(CommandBar.IsOpen)),
+                        Source = page.BottomAppBar,
+                        Converter = (IValueConverter)template.Resources["TrueToFalseConverter"],
+                        Mode = BindingMode.OneWay
+                    }
+                );
+                page.BottomAppBar.Content = button;
+            }
         }
 
         private void OnPagePointerPressed(object sender, PointerRoutedEventArgs e)

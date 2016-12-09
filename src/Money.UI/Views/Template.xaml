@@ -9,6 +9,8 @@
     xmlns:vm="using:Money.ViewModels"
     mc:Ignorable="d">
     <Page.Resources>
+        <converters:BoolConverter x:Key="TrueToFalseConverter" TrueValue="False" FalseValue="True" />
+
         <Style x:Key="MenuItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="MinWidth" Value="{StaticResource SplitViewCompactPaneThemeLength}"/>
             <Setter Property="Height" Value="48"/>
@@ -144,22 +146,7 @@
 
         <CollectionViewSource x:Key="MenuItemsSource" x:Name="MenuItemsSource" IsSourceGrouped="True" />
     </Page.Resources>
-    <Page.BottomAppBar>
-        <CommandBar x:Name="cbrBottom">
-            <CommandBar.Resources>
-                <converters:BoolConverter x:Key="TrueToFalseConverter" TrueValue="False" FalseValue="True" />
-            </CommandBar.Resources>
-            <CommandBar.Content>
-                <AppBarToggleButton x:Name="atbMainMenu" Label="Menu" IsChecked="{x:Bind IsMainMenuOpened, Mode=TwoWay}"
-                 IsCompact="{Binding IsOpen, ElementName=cbrBottom, Converter={StaticResource TrueToFalseConverter}}">
-                    <AppBarToggleButton.Icon>
-                        <FontIcon Glyph="&#xE700;" />
-                    </AppBarToggleButton.Icon>
-                </AppBarToggleButton>
-            </CommandBar.Content>
-        </CommandBar>
-    </Page.BottomAppBar>
-
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -170,8 +157,7 @@
                     <VisualState.Setters>
                         <Setter Target="spvContent.DisplayMode" Value="CompactInline"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="True"/>
-                        <Setter Target="atbMainMenu.Visibility" Value="Collapsed" />
-                        <Setter Target="ficMainMenu.Visibility" Value="Visible" />
+                        <Setter Target="ficTopMenu.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -181,8 +167,7 @@
                     <VisualState.Setters>
                         <Setter Target="spvContent.DisplayMode" Value="CompactOverlay"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="False"/>
-                        <Setter Target="atbMainMenu.Visibility" Value="Collapsed" />
-                        <Setter Target="ficMainMenu.Visibility" Value="Visible" />
+                        <Setter Target="ficTopMenu.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -192,8 +177,7 @@
                     <VisualState.Setters>
                         <Setter Target="spvContent.DisplayMode" Value="Overlay"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="False"/>
-                        <Setter Target="atbMainMenu.Visibility" Value="Visible" />
-                        <Setter Target="ficMainMenu.Visibility" Value="Collapsed" />
+                        <Setter Target="ficTopMenu.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -210,22 +194,18 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0">
-                        <ToggleButton x:Name="tbtMainMenu" Style="{StaticResource MainMenuToggleButtonStyle}" Canvas.ZIndex="100" TabIndex="1"
+                        <ToggleButton x:Name="tbtTopMenu" Style="{StaticResource MainMenuToggleButtonStyle}" Canvas.ZIndex="100" TabIndex="1"
                          IsChecked="{x:Bind IsMainMenuOpened, Mode=TwoWay}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="48" />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <FontIcon x:Name="ficMainMenu" FontSize="16" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="Money"/>
+                                <FontIcon x:Name="ficTopMenu" FontSize="16" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="Money"/>
                                 <TextBlock Text="Money" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
                             </Grid>
                         </ToggleButton>
 
-                        <!--<Grid MinHeight="48">
-                            <TextBlock Text="Money" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Margin="48,0,0,0" />
-                        </Grid>-->
-                        
                         <controls:MainMenu ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="OnMainMenuItemInvoked">
                             <!--<controls:MainMenu.ItemsPanel>
                                 <ItemsPanelTemplate>

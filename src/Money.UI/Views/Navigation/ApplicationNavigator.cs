@@ -88,7 +88,7 @@ namespace Money.Views.Navigation
         private void OnTemplateContentFrameNavigated(object sender, NavigationEventArgs e)
         {
             Frame frame = (Frame)sender;
-            EnsureBackButtonVisibility((Frame)sender);
+            EnsureBackButtonVisibility(frame);
 
             Page page = frame.Content as Page;
             if (page != null)

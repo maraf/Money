@@ -60,7 +60,7 @@ namespace Money.Views.DesignData
             {
                 if (group == null)
                 {
-                    group = new GroupViewModel(Navigator);
+                    group = new GroupViewModel(ServiceProvider.Navigator);
                     group.Items.Add(new GroupItemViewModel("August", null));
                     group.Items.Add(new GroupItemViewModel("September", null));
                     group.Items.Add(new GroupItemViewModel("October", null));
@@ -78,7 +78,7 @@ namespace Money.Views.DesignData
             {
                 if (summary == null)
                 {
-                    summary = new SummaryViewModel(QueryDispatcher);
+                    summary = new SummaryViewModel(ServiceProvider.QueryDispatcher);
                     summary.Items.Add(new SummaryItemViewModel()
                     {
                         Name = "Food",
@@ -112,7 +112,7 @@ namespace Money.Views.DesignData
             {
                 if (categoryList == null)
                 {
-                    categoryList = new CategoryListViewModel(Navigator);
+                    categoryList = new CategoryListViewModel(ServiceProvider.Navigator);
                     categoryList.GroupId = Guid.NewGuid();
                     categoryList.Name = "Eating";
                     categoryList.Items.Add(new CategoryListItemViewModel()
@@ -140,7 +140,7 @@ namespace Money.Views.DesignData
             {
                 if (createOutcome == null)
                 {
-                    createOutcome = new OutcomeViewModel(Navigator, DomainFacade);
+                    createOutcome = new OutcomeViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade);
                     createOutcome.Amount = 5400;
                     createOutcome.Description = "New home PC motherboard";
                     createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Food", Colors.CadetBlue));

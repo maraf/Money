@@ -23,7 +23,7 @@ namespace Money.Views.Navigation
             this.parameter = parameter;
         }
 
-        public void Show()
+        public virtual void Show()
         {
             frame.Navigate(pageType, parameter);
         }

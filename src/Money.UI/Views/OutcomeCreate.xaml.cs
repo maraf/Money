@@ -2,6 +2,7 @@
 using Money.Services.Models.Queries;
 using Money.ViewModels;
 using Money.ViewModels.Parameters;
+using Money.Views.Navigation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,7 @@ namespace Money.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    [NavigationParameter(typeof(OutcomeParameter))]
     public sealed partial class OutcomeCreate : Page
     {
         public OutcomeViewModel ViewModel

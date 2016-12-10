@@ -16,8 +16,10 @@ using Windows.ApplicationModel.Activation;
 using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Foundation.Metadata;
 using Windows.UI.Core;
 using Windows.UI.Input;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -58,6 +60,12 @@ namespace Money.UI
             //}
 #endif
             Bootstrap();
+
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.HideAsync();
+            }
 
             Frame rootFrame = Window.Current.Content as Frame;
 

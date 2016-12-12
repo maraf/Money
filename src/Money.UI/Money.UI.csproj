@@ -121,7 +121,10 @@
     <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListMonthOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\YearModel.cs" />
+    <Compile Include="ViewModels\CategoryListItemViewModel.cs" />
+    <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\CategoryOverviewViewModel.cs" />
+    <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateBackCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />
@@ -131,6 +134,7 @@
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryOverviewParameter.cs" />
     <Compile Include="ViewModels\Parameters\EmptyParameter.cs" />
     <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
@@ -143,6 +147,9 @@
     <Compile Include="ViewModels\SummaryPeriodType.cs" />
     <Compile Include="ViewModels\SummaryViewType.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="Views\CategoryList.xaml.cs">
+      <DependentUpon>CategoryList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\Bar.xaml.cs">
       <DependentUpon>Bar.xaml</DependentUpon>
     </Compile>
@@ -219,6 +226,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\CategoryList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\Bar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

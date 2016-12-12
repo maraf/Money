@@ -11,6 +11,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.BottomAppBar>
         <CommandBar>
+            <AppBarButton Icon="Edit" Label="Edit category" Command="{Binding EditCategory}" />
             <AppBarButton Icon="Sort">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
@@ -28,7 +29,7 @@
     
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid>
-            <TextBlock Text="{Binding CategoryName}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,6" HorizontalAlignment="Left" />
+            <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,6" HorizontalAlignment="Left" />
             <TextBlock Text="{Binding Period}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,6" HorizontalAlignment="Right" />
         </Grid>
         <ListView ItemsSource="{Binding Items}">

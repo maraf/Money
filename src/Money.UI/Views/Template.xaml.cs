@@ -59,7 +59,7 @@ namespace Money.Views
             {
                 new MenuItemViewModel("Pie Chart", "\uEB05", new SummaryParameter(SummaryViewType.PieChart)) { Group = "Summary" },
                 new MenuItemViewModel("Bar Graph", "\uE94C", new SummaryParameter(SummaryViewType.BarGraph)) { Group = "Summary" },
-                new MenuItemViewModel("Categories", "\uE8FD", new EmptyParameter()) { Group = "Manage" },
+                new MenuItemViewModel("Categories", "\uE8FD", new CategoryListParameter()) { Group = "Manage" },
                 new MenuItemViewModel("Currencies", "\uE1D0", new EmptyParameter()) { Group = "Manage" },
                 new MenuItemViewModel("Settings", "\uE713", new EmptyParameter()) { Group = "Settings" },
             };

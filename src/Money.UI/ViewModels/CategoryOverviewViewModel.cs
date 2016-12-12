@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Money.Views.Navigation;
 using Neptuo.Observables.Collections;
 using Money.Services.Models;
+using Neptuo.Models.Keys;
+using Money.ViewModels.Commands;
+using Money.ViewModels.Parameters;
+using System.Windows.Input;
 
 namespace Money.ViewModels
 {
@@ -15,9 +19,14 @@ namespace Money.ViewModels
     public class CategoryOverviewViewModel : ViewModel
     {
         /// <summary>
+        /// Gets a key of the category.
+        /// </summary>
+        public IKey Key { get; private set; }
+
+        /// <summary>
         /// Gets a name of the category.
         /// </summary>
-        public string CategoryName { get; private set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets a period displayed (year or month).
@@ -30,17 +39,25 @@ namespace Money.ViewModels
         public ObservableCollection<OutcomeOverviewModel> Items { get; private set; }
 
         /// <summary>
+        /// Gets a command for editing current category.
+        /// </summary>
+        public ICommand EditCategory { get; private set; }
+
+        /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="navigator">An instance of the navigator.</param>
-        /// <param name="categoryName">A name of the category.</param>
+        /// <param name="key">A key of the category</param>
+        /// <param name="name">A name of the category.</param>
         /// <param name="period">A period displayed (year or month).</param>
-        public CategoryOverviewViewModel(INavigator navigator, string categoryName, object period)
+        public CategoryOverviewViewModel(INavigator navigator, IKey key, string name, object period)
             : base(navigator)
         {
-            CategoryName = categoryName;
+            Key = key;
+            Name = name;
             Period = period;
             Items = new ObservableCollection<OutcomeOverviewModel>();
+            EditCategory = new NavigateCommand(navigator, new CategoryListParameter(key));
         }
     }
 }

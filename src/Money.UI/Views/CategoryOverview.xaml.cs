@@ -62,7 +62,7 @@ namespace Money.Views
                 models = await queryDispatcher.QueryAsync(new ListYearOutcomeFromCategory(parameter.CategoryKey, parameter.Year));
             }
 
-            ViewModel = new CategoryOverviewViewModel(navigator, categoryName, period);
+            ViewModel = new CategoryOverviewViewModel(navigator, parameter.CategoryKey, categoryName, period);
             if (models != null)
             {
                 foreach (OutcomeOverviewModel model in models)

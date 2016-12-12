@@ -113,11 +113,11 @@ namespace Money.Views.DesignData
             {
                 if (categoryOverview == null)
                 {
-                    categoryOverview = new CategoryOverviewViewModel(ServiceProvider.Navigator, "Food", new MonthModel(2016, 11));
-                    categoryOverview.Items.Add(new OutcomeOverviewModel(GuidKey.Empty("Outcome"), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market"));
-                    categoryOverview.Items.Add(new OutcomeOverviewModel(GuidKey.Empty("Outcome"), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese"));
-                    categoryOverview.Items.Add(new OutcomeOverviewModel(GuidKey.Empty("Outcome"), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine"));
-                    categoryOverview.Items.Add(new OutcomeOverviewModel(GuidKey.Empty("Outcome"), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta"));
+                    categoryOverview = new CategoryOverviewViewModel(ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Food", new MonthModel(2016, 11));
+                    categoryOverview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market"));
+                    categoryOverview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese"));
+                    categoryOverview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine"));
+                    categoryOverview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta"));
                 }
 
                 return categoryOverview;
@@ -140,6 +140,23 @@ namespace Money.Views.DesignData
                 }
 
                 return createOutcome;
+            }
+        }
+
+        private CategoryListViewModel categoryList;
+        public CategoryListViewModel CategoryList
+        {
+            get
+            {
+                if (categoryList == null)
+                {
+                    categoryList = new CategoryListViewModel();
+                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Food", Colors.CadetBlue));
+                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Eating out", Colors.Brown) { IsSelected = true });
+                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Home", Colors.Gold));
+                }
+
+                return categoryList;
             }
         }
 

@@ -139,6 +139,7 @@
     <Compile Include="ViewModels\Parameters\EmptyParameter.cs" />
     <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\IGroupParameter.cs" />
+    <Compile Include="ViewModels\Parameters\MigrateParameter.cs" />
     <Compile Include="ViewModels\Parameters\OutcomeParameter.cs" />
     <Compile Include="ViewModels\Parameters\SummaryParameter.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
@@ -186,6 +187,9 @@
     </Compile>
     <Compile Include="Views\Empty.xaml.cs">
       <DependentUpon>Empty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Migrate.xaml.cs">
+      <DependentUpon>Migrate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Navigation\ApplicationNavigator.cs" />
     <Compile Include="Views\Navigation\IParameterDecorator.cs" />
@@ -263,6 +267,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Empty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Migrate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

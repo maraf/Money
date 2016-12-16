@@ -93,13 +93,18 @@ namespace Money.UI
             {
                 if (rootFrame.Content == null)
                 {
-                    // When the navigation stack isn't restored navigate to the first page,
-                    // configuring the new page by passing required information as a navigation
-                    // parameter
-                    //rootFrame.Navigate(typeof(GroupPage), GroupType.Month);
-                    ServiceProvider.Navigator
-                        .Open(new SummaryParameter(SummaryViewType.BarGraph))
-                        .Show();
+                    if (BootstrapTask.IsMigrationRequired())
+                    {
+                        ServiceProvider.Navigator
+                            .Open(new SummaryParameter(SummaryViewType.BarGraph))
+                            .Show();
+                    }
+                    else
+                    {
+                        ServiceProvider.Navigator
+                            .Open(new MigrateParameter())
+                            .Show();
+                    }
                 }
 
                 // Ensure the current window is active
@@ -107,10 +112,12 @@ namespace Money.UI
             }
         }
 
+        public BootstrapTask BootstrapTask { get; private set; }
+
         private void Bootstrap()
         {
-            BootstrapTask task = new BootstrapTask();
-            task.Initialize();
+            BootstrapTask = new BootstrapTask();
+            BootstrapTask.Initialize();
 
             //Outcome outcome = new Outcome(task.PriceFactory.Create(2500), "This is my first outcome", DateTime.Now);
             //IKey outcomeKey = outcome.Key;
@@ -118,8 +125,8 @@ namespace Money.UI
 
             //outcome = task.OutcomeRepository.Find(outcomeKey);
             //Debug.WriteLine($"Outcome of '{outcome.Amount}' with description '{outcome.Description}' from '{outcome.When}'.");
-            ServiceProvider.DomainFacade = task.DomainFacade;
-            ServiceProvider.QueryDispatcher = task.QueryDispatcher;
+            ServiceProvider.DomainFacade = BootstrapTask.DomainFacade;
+            ServiceProvider.QueryDispatcher = BootstrapTask.QueryDispatcher;
         }
 
         /// <summary>

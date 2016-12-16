@@ -7,6 +7,7 @@ using Neptuo.Activators;
 using Neptuo.Converters;
 using Neptuo.Data;
 using Neptuo.Events;
+using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Neptuo.Formatters.Converters;
 using Neptuo.Formatters.Metadata;
@@ -26,7 +27,7 @@ using Windows.UI;
 
 namespace Money.Bootstrap
 {
-    public class BootstrapTask
+    public class BootstrapTask : IExceptionHandler
     {
         private PersistentEventDispatcher eventDispatcher;
 
@@ -56,8 +57,18 @@ namespace Money.Bootstrap
                 CategoryRepository,
                 PriceFactory
             );
+        }
 
-            Migrate();
+        public bool IsMigrationRequired()
+        {
+            int currentVersion = 0;
+            ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+
+            ApplicationDataContainer migrationContainer;
+            if (root.Containers.TryGetValue("Migration", out migrationContainer))
+                currentVersion = (int?)migrationContainer.Values["Version"] ?? currentVersion;
+
+            return currentVersion == Version;
         }
 
         private void Domain()
@@ -72,6 +83,8 @@ namespace Money.Bootstrap
             
             EventStore = new EntityEventStore(Factory.Default<EventSourcingContext>());
             eventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
+            eventDispatcher.DispatcherExceptionHandlers.Add(this);
+            eventDispatcher.EventExceptionHandlers.Add(this);
 
             IFactory<ICompositeStorage> compositeStorageFactory = Factory.Default<JsonCompositeStorage>();
 
@@ -128,7 +141,7 @@ namespace Money.Bootstrap
             }
         }
 
-        private void RecreateReadModelContext()
+        private Task RecreateReadModelContext()
         {
             using (var readModels = new ReadModelContext())
             {
@@ -140,12 +153,12 @@ namespace Money.Bootstrap
             Rebuilder rebuilder = new Rebuilder(EventStore, EventFormatter);
             rebuilder.AddAll(new CategoryBuilder());
             rebuilder.AddAll(new OutcomeBuilder(PriceFactory));
-            rebuilder.RunAsync().Wait();
+            return rebuilder.RunAsync();
         }
 
-        public const int Version = 1;
-
-        private void Migrate()
+        public const int Version = 2;
+        
+        public async Task MigrateAsync()
         {
             int currentVersion = 0;
             ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
@@ -155,21 +168,34 @@ namespace Money.Bootstrap
                 currentVersion = (int?)migrationContainer.Values["Version"] ?? currentVersion;
             else
                 migrationContainer = root.CreateContainer("Migration", ApplicationDataCreateDisposition.Always);
-            
+
             if (currentVersion < 1)
-                MigrateVersion1();
+                await MigrateVersion1();
+
+            if (currentVersion < 3)
+                await MigrateVersion2();
 
             migrationContainer.Values["Version"] = Version;
         }
         
-        private void MigrateVersion1()
+        private async Task MigrateVersion1()
         {
             EventSourcingContext();
-            RecreateReadModelContext();
+            await RecreateReadModelContext();
 
-            DomainFacade.CreateCategoryAsync("Home", Colors.SandyBrown).Wait();
-            DomainFacade.CreateCategoryAsync("Food", Colors.OrangeRed).Wait();
-            DomainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed).Wait();
+            await DomainFacade.CreateCategoryAsync("Home", Colors.SandyBrown);
+            await DomainFacade.CreateCategoryAsync("Food", Colors.OrangeRed);
+            await DomainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed);
+        }
+
+        private Task MigrateVersion2()
+        {
+            return RecreateReadModelContext();
+        }
+
+        public void Handle(Exception exception)
+        {
+            throw new NotImplementedException();
         }
     }
 }

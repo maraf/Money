@@ -24,6 +24,11 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task ChangeCategoryDescription(IKey categoryKey, string description)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IKey> CreateCategoryAsync(string name, Color color)
         {
             throw new NotImplementedException();
@@ -35,6 +40,11 @@ namespace Money.Views.DesignData
         }
 
         public Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RenameCategory(IKey categoryKey, string newName)
         {
             throw new NotImplementedException();
         }

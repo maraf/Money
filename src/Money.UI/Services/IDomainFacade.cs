@@ -16,7 +16,7 @@ namespace Money.Services
     /// <summary>
     /// A command facade for Money domain.
     /// </summary>
-    public interface IDomainFacade : IQueryDispatcher
+    public interface IDomainFacade
     {
         /// <summary>
         /// Gets a factory for creating prices.
@@ -47,5 +47,21 @@ namespace Money.Services
         /// <param name="categoryKey">A key of the category to add outcome to.</param>
         /// <returns>Continuation task.</returns>
         Task AddOutcomeCategoryAsync(IKey outcomeKey, IKey categoryKey);
+
+        /// <summary>
+        /// Renames a category with a key <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category to rename.</param>
+        /// <param name="newName">A new name of the category.</param>
+        /// <returns>Continuation task.</returns>
+        Task RenameCategory(IKey categoryKey, string newName);
+
+        /// <summary>
+        /// Changes a description of a category with a key <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <param name="description">A new description of the category.</param>
+        /// <returns>Continuation task.</returns>
+        Task ChangeCategoryDescription(IKey categoryKey, string description);
     }
 }

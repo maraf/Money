@@ -4,6 +4,7 @@ using Money.Services.Models.Queries;
 using Money.ViewModels;
 using Money.Views.Navigation;
 using Neptuo;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,7 @@ namespace Money.Views.Controls
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private Dictionary<GroupItemViewModel, MonthModel> groupToMonth;
 
         public GroupViewModel ViewModel
@@ -123,7 +125,7 @@ namespace Money.Views.Controls
         {
             groupToMonth = new Dictionary<GroupItemViewModel, MonthModel>();
 
-            IEnumerable<MonthModel> months = await domainFacade.QueryAsync(new ListMonthWithOutcome());
+            IEnumerable<MonthModel> months = await queryDispatcher.QueryAsync(new ListMonthWithOutcome());
             int? preferedIndex = null;
             int index = 0;
             foreach (MonthModel month in months)

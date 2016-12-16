@@ -14,6 +14,7 @@ namespace Money.Data
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Description { get;  set; }
         public byte ColorA { get; set; }
         public byte ColorR { get; set; }
         public byte ColorG { get; set; }
@@ -28,6 +29,7 @@ namespace Money.Data
         {
             Id = model.Key.AsGuidKey().Guid;
             Name = model.Name;
+            Description = model.Description;
             ColorA = model.Color.A;
             ColorR = model.Color.R;
             ColorG = model.Color.G;
@@ -39,6 +41,7 @@ namespace Money.Data
             return new CategoryModel(
                 GuidKey.Create(Id, KeyFactory.Empty(typeof(Category)).Type),
                 Name,
+                Description,
                 Color.FromArgb(ColorA, ColorR, ColorG, ColorB)
             );
         }

@@ -110,6 +110,8 @@
     <Compile Include="Category.cs" />
     <Compile Include="Data\IOutcomeRepository.cs" />
     <Compile Include="Events\CategoryCreated.cs" />
+    <Compile Include="Events\CategoryDescriptionChanged.cs" />
+    <Compile Include="Events\CategoryRenamed.cs" />
     <Compile Include="Events\OutcomeCategoryAdded.cs" />
     <Compile Include="Events\OutcomeCreated.cs" />
     <Compile Include="Outcome.cs" />

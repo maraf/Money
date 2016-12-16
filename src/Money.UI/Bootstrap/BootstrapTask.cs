@@ -54,8 +54,7 @@ namespace Money.Bootstrap
             DomainFacade = new DefaultDomainFacade(
                 OutcomeRepository,
                 CategoryRepository,
-                PriceFactory,
-                QueryDispatcher
+                PriceFactory
             );
 
             Migrate();
@@ -112,7 +111,7 @@ namespace Money.Bootstrap
 
             CategoryBuilder categoryBuilder = new CategoryBuilder();
             queryDispatcher.AddAll(categoryBuilder);
-            eventDispatcher.Handlers.Add(categoryBuilder);
+            eventDispatcher.Handlers.AddAll(categoryBuilder);
 
             OutcomeBuilder outcomeBuilder = new OutcomeBuilder(PriceFactory);
             queryDispatcher.AddAll(outcomeBuilder);

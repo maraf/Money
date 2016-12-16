@@ -29,6 +29,20 @@ namespace Money.ViewModels
             }
         }
 
+        private string description;
+        public string Description
+        {
+            get { return description; }
+            set
+            {
+                if (description != value)
+                {
+                    description = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         private Color color;
         public Color Color
         {
@@ -63,11 +77,12 @@ namespace Money.ViewModels
             }
         }
 
-        public CategoryListItemViewModel(IKey key, string name, Color color)
+        public CategoryListItemViewModel(IKey key, string name, string description, Color color)
         {
             Ensure.Condition.NotEmptyKey(key);
             Key = key;
             Name = name;
+            Description = description;
             Color = color;
         }
     }

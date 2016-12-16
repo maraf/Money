@@ -24,22 +24,18 @@ namespace Money.Bootstrap
         private readonly IRepository<Category, IKey> categoryRepository;
 
         public IFactory<Price, decimal> PriceFactory { get; private set; }
-        public IQueryDispatcher QueryDispatcher { get; private set; }
 
         public DefaultDomainFacade(
             IRepository<Outcome, IKey> outcomeRepository, 
             IRepository<Category, IKey> categoryRepository, 
-            IFactory<Price, decimal> priceFactory,
-            IQueryDispatcher queryDispatcher)
+            IFactory<Price, decimal> priceFactory)
         {
             Ensure.NotNull(outcomeRepository, "outcomeRepository");
             Ensure.NotNull(categoryRepository, "categoryRepository");
             Ensure.NotNull(priceFactory, "priceFactory");
-            Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.outcomeRepository = outcomeRepository;
             this.categoryRepository = categoryRepository;
             PriceFactory = priceFactory;
-            QueryDispatcher = queryDispatcher;
         }
 
         public Task<IKey> CreateCategoryAsync(string name, Color color)
@@ -71,10 +67,25 @@ namespace Money.Bootstrap
                 outcomeRepository.Save(model);
             });
         }
-
-        public Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
+        
+        public Task RenameCategory(IKey categoryKey, string newName)
         {
-            return QueryDispatcher.QueryAsync(query);
+            return Task.Factory.StartNew(() =>
+            {
+                Category category = categoryRepository.Get(categoryKey);
+                category.Rename(newName);
+                categoryRepository.Save(category);
+            });
+        }
+
+        public Task ChangeCategoryDescription(IKey categoryKey, string description)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                Category category = categoryRepository.Get(categoryKey);
+                category.ChangeDescription(description);
+                categoryRepository.Save(category);
+            });
         }
     }
 }

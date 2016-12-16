@@ -72,7 +72,13 @@ namespace Money.Services.Models.Builders
                 foreach (var item in totals)
                 {
                     CategoryModel model = (await db.Categories.FindAsync(item.Key)).ToModel();
-                    result.Add(new CategoryWithAmountModel(model.Key, model.Name, model.Color, item.Value));
+                    result.Add(new CategoryWithAmountModel(
+                        model.Key, 
+                        model.Name, 
+                        model.Description, 
+                        model.Color, 
+                        item.Value
+                    ));
                 }
 
                 return result;

@@ -25,15 +25,21 @@ namespace Money.Services.Models
         public string Name { get; private set; }
 
         /// <summary>
+        /// Gets a description of the category.
+        /// </summary>
+        public string Description { get; private set; }
+
+        /// <summary>
         /// Gets a color of the category.
         /// </summary>
         public Color Color { get; private set; }
 
-        public CategoryModel(IKey key, string name, Color color)
+        public CategoryModel(IKey key, string name, string description, Color color)
         {
             Ensure.Condition.NotEmptyKey(key);
             Key = key;
             Name = name;
+            Description = description;
             Color = color;
         }
     }

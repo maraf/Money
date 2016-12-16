@@ -54,7 +54,7 @@ namespace Money.Views
             IEnumerable<CategoryModel> models = await queryDispatcher.QueryAsync(new ListAllCategory());
             foreach (CategoryModel model in models)
             {
-                CategoryListItemViewModel viewModel = new CategoryListItemViewModel(model.Key, model.Name, model.Color);
+                CategoryListItemViewModel viewModel = new CategoryListItemViewModel(model.Key, model.Name, model.Description, model.Color);
                 viewModel.PropertyChanged += OnItemViewModelPropertyChanged;
                 if (parameter.Key.Equals(model.Key))
                     viewModel.IsSelected = true;

@@ -10,6 +10,7 @@ using Neptuo;
 using Money.Events;
 using Neptuo.Events.Handlers;
 using Windows.UI;
+using Neptuo.Threading.Tasks;
 
 namespace Money
 {
@@ -17,7 +18,9 @@ namespace Money
     /// A category of outcomes or incomes.
     /// </summary>
     public class Category : AggregateRoot,
-        IEventHandler<CategoryCreated>
+        IEventHandler<CategoryCreated>,
+        IEventHandler<CategoryRenamed>,
+        IEventHandler<CategoryDescriptionChanged>
     {
         /// <summary>
         /// Gets a name of the category.
@@ -46,6 +49,27 @@ namespace Money
                 Name = payload.Name;
                 Color = payload.Color;
             });
+        }
+
+        public void Rename(string newName)
+        {
+            Ensure.NotNull(newName, "newName");
+            Publish(new CategoryRenamed(newName, Name));
+        }
+
+        Task IEventHandler<CategoryRenamed>.HandleAsync(CategoryRenamed payload)
+        {
+            return UpdateState(() => Name = payload.NewName);
+        }
+
+        public void ChangeDescription(string description)
+        {
+            Publish(new CategoryDescriptionChanged(description));
+        }
+
+        Task IEventHandler<CategoryDescriptionChanged>.HandleAsync(CategoryDescriptionChanged payload)
+        {
+            return Async.CompletedTask;
         }
     }
 }

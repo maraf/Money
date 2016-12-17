@@ -160,6 +160,18 @@ namespace Money.Views.DesignData
             }
         }
 
+        private CategoryListItemViewModel categoryEdit;
+        public CategoryListItemViewModel CategoryEdit
+        {
+            get
+            {
+                if (categoryEdit == null)
+                    categoryEdit = new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Eating out", "When we are lay and let others to feed us", Colors.Brown) { IsSelected = true };
+
+                return categoryEdit;
+            }
+        }
+
         private MigrateViewModel migrate;
         public MigrateViewModel Migrate
         {

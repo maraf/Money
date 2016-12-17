@@ -92,18 +92,5 @@ namespace Money.Views
             foreach (CategoryListItemViewModel viewModel in ViewModel.Items)
                 viewModel.IsSelected = lvwItems.SelectedItem == viewModel;
         }
-
-        private void grvColors_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //GridView control = (GridView)sender;
-
-            //CategoryListItemViewModel viewModel = (CategoryListItemViewModel)control.DataContext;
-            //if (control.Parent != null)
-            //{
-            //    Popup popup = (Popup)((FlyoutPresenter)control.Parent).Parent;
-            //    if (popup.IsOpen)
-            //        popup.IsOpen = false;
-            //}
-        }
     }
 }

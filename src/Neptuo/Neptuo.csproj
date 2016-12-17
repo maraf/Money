@@ -333,6 +333,9 @@
     <Compile Include="Logging\Serialization\TextLogSerializerBase.cs" />
     <Compile Include="Logging\Serialization\TextWriterSerializer.cs" />
     <Compile Include="Logging\_LogExtensions.cs" />
+    <Compile Include="Migrations\IDowngradeService.cs" />
+    <Compile Include="Migrations\IUpgradeContext.cs" />
+    <Compile Include="Migrations\IUpgradeService.cs" />
     <Compile Include="Models\AggregateRootException.cs" />
     <Compile Include="Models\Domains\AggregateRoot.cs" />
     <Compile Include="Models\Domains\AggregateRootHandlerCollection.cs" />

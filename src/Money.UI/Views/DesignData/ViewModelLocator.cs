@@ -134,9 +134,9 @@ namespace Money.Views.DesignData
                     createOutcome = new OutcomeViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade);
                     createOutcome.Amount = 5400;
                     createOutcome.Description = "New home PC motherboard";
-                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Food", null, Colors.CadetBlue));
-                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Eating out", null, Colors.Brown));
-                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Home", null, Colors.Gold));
+                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue));
+                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Eating out", "When we are lay and let others to feed us", Colors.Brown));
+                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold));
                 }
 
                 return createOutcome;
@@ -151,9 +151,9 @@ namespace Money.Views.DesignData
                 if (categoryList == null)
                 {
                     categoryList = new CategoryListViewModel();
-                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Food", null, Colors.CadetBlue));
-                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Eating out", null, Colors.Brown) { IsSelected = true });
-                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Home", null, Colors.Gold));
+                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue));
+                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Eating out", "When we are lay and let others to feed us", Colors.Brown) { IsSelected = true });
+                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold));
                 }
 
                 return categoryList;

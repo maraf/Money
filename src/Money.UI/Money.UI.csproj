@@ -99,6 +99,7 @@
     <Compile Include="Bootstrap\BootstrapTask.cs" />
     <Compile Include="Bootstrap\ColorConverter.cs" />
     <Compile Include="Bootstrap\DefaultDomainFacade.cs" />
+    <Compile Include="Bootstrap\UpgradeService.cs" />
     <Compile Include="Data\CategoryEntity.cs" />
     <Compile Include="Data\EventSourcingContext.cs" />
     <Compile Include="Data\OutcomeCategoryEntity.cs" />

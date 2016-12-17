@@ -93,16 +93,16 @@ namespace Money.UI
             {
                 if (rootFrame.Content == null)
                 {
-                    if (BootstrapTask.IsMigrationRequired())
+                    if (ServiceProvider.UpgradeService.IsRequired())
                     {
                         ServiceProvider.Navigator
-                            .Open(new SummaryParameter(SummaryViewType.BarGraph))
+                            .Open(new MigrateParameter())
                             .Show();
                     }
                     else
                     {
                         ServiceProvider.Navigator
-                            .Open(new MigrateParameter())
+                            .Open(new SummaryParameter(SummaryViewType.BarGraph))
                             .Show();
                     }
                 }
@@ -118,15 +118,6 @@ namespace Money.UI
         {
             BootstrapTask = new BootstrapTask();
             BootstrapTask.Initialize();
-
-            //Outcome outcome = new Outcome(task.PriceFactory.Create(2500), "This is my first outcome", DateTime.Now);
-            //IKey outcomeKey = outcome.Key;
-            //task.OutcomeRepository.Save(outcome);
-
-            //outcome = task.OutcomeRepository.Find(outcomeKey);
-            //Debug.WriteLine($"Outcome of '{outcome.Amount}' with description '{outcome.Description}' from '{outcome.When}'.");
-            ServiceProvider.DomainFacade = BootstrapTask.DomainFacade;
-            ServiceProvider.QueryDispatcher = BootstrapTask.QueryDispatcher;
         }
 
         /// <summary>

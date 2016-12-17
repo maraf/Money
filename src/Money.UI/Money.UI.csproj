@@ -132,6 +132,7 @@
     <Compile Include="ViewModels\GroupItemViewModel.cs" />
     <Compile Include="ViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
+    <Compile Include="ViewModels\MigrateViewModel.cs" />
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Views\DesignData\DomainFacade.cs" />
     <Compile Include="Views\DesignData\Navigator.cs" />
     <Compile Include="Views\DesignData\SummaryGroupViewModelProvider.cs" />
+    <Compile Include="Views\DesignData\UpgradeService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\CategoryOverview.xaml.cs">
       <DependentUpon>CategoryOverview.xaml</DependentUpon>

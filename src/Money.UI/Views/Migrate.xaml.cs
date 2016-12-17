@@ -2,6 +2,7 @@
 using Money.ViewModels;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
+using Neptuo.Migrations;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,14 @@ namespace Money.Views
     [NavigationParameter(typeof(MigrateParameter))]
     public sealed partial class Migrate : Page
     {
+        private readonly IUpgradeService upgradeService = ServiceProvider.UpgradeService;
+
+        public MigrateViewModel ViewModel
+        {
+            get { return (MigrateViewModel)DataContext; }
+            set { DataContext = value; }
+        }
+
         public Migrate()
         {
             InitializeComponent();
@@ -36,15 +45,16 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            loaLoading.IsActive = true;
+            if (upgradeService.IsRequired())
+            {
+                ViewModel = new MigrateViewModel(upgradeService);
 
-            await ((App)App.Current).BootstrapTask.MigrateAsync();
+                await ViewModel.StartAsync();
 
-            loaLoading.IsActive = false;
-
-            ServiceProvider.Navigator
-                .Open(new SummaryParameter(SummaryViewType.BarGraph))
-                .Show();
+                ServiceProvider.Navigator
+                    .Open(new SummaryParameter(SummaryViewType.BarGraph))
+                    .Show();
+            }
         }
     }
 }

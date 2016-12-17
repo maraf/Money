@@ -160,6 +160,21 @@ namespace Money.Views.DesignData
             }
         }
 
+        private MigrateViewModel migrate;
+        public MigrateViewModel Migrate
+        {
+            get
+            {
+                if (migrate == null)
+                {
+                    migrate = new MigrateViewModel(new UpgradeService());
+                    migrate.StartAsync();
+                }
+
+                return migrate;
+            }
+        }
+
         public ViewModelLocator()
         {
             if (DesignMode.DesignModeEnabled)

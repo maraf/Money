@@ -6,9 +6,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Money.Views.Controls"
-    mc:Ignorable="d">
-
+    mc:Ignorable="d" d:DataContext="{Binding Migrate, Source={StaticResource ViewModelLocator}}">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <controls:Loading x:Name="loaLoading" />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <controls:Loading IsActive="{Binding IsRunning}" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="{Binding Current}" Style="{StaticResource HeaderTextBlockStyle}" />
+                <TextBlock Text="/" Margin="5,0" Style="{StaticResource HeaderTextBlockStyle}" />
+                <TextBlock Text="{Binding Total}" Style="{StaticResource HeaderTextBlockStyle}" />
+            </StackPanel>
+            <TextBlock Text="{Binding Caption}" />
+        </StackPanel>
     </Grid>
 </Page>

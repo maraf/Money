@@ -1,5 +1,6 @@
 ﻿using Money.Services;
 using Money.Views.Navigation;
+using Neptuo.Migrations;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace Money
         public static IQueryDispatcher QueryDispatcher { get; set; }
         public static IDomainFacade DomainFacade { get; set; }
         public static INavigator Navigator { get; set; }
+        public static IUpgradeService UpgradeService { get; set; }
     }
 }

@@ -19,15 +19,15 @@
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Amount" />
-            <TextBox Text="{Binding Amount, Mode=TwoWay}" FontSize="40" TextAlignment="Right" />
+            <TextBox Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" FontSize="40" TextAlignment="Right" />
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Description" />
-            <TextBox Text="{Binding Description, Mode=TwoWay}" />
+            <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="When" />
-            <DatePicker x:Name="dprWhen" Date="{Binding When}" HorizontalAlignment="Stretch" />
+            <DatePicker x:Name="dprWhen" Date="{Binding When, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" />
         </StackPanel>
         <StackPanel Style="{StaticResource EditorStackPanelStyle}">
             <TextBlock Text="Category" />

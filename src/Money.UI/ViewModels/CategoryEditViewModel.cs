@@ -88,17 +88,24 @@ namespace Money.ViewModels
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(key, "key");
             Key = key;
-
-            Rename = new CategoryRenameCommand(domainFacade, this);
-            ChangeColor = new CategoryChangeColorCommand(domainFacade, this);
+            CreateCommands(domainFacade);
         }
 
         public CategoryEditViewModel(IDomainFacade domainFacade, IKey key, string name, string description, Color color)
-            : this(domainFacade, key)
         {
+            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.Condition.NotEmptyKey(key);
+            Key = key;
             Name = name;
             Description = description;
             Color = color;
+            CreateCommands(domainFacade);
+        }
+
+        private void CreateCommands(IDomainFacade domainFacade)
+        {
+            Rename = new CategoryRenameCommand(domainFacade, this);
+            ChangeColor = new CategoryChangeColorCommand(domainFacade, this);
         }
     }
 }

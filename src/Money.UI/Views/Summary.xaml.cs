@@ -132,5 +132,15 @@ namespace Money.Views
                 .Open(parameter)
                 .Show();
         }
+
+        private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Items.Sort(i => i.AmountValue);
+        }
+
+        private void mfiSortCategory_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Items.Sort(i => i.Name);
+        }
     }
 }

@@ -82,14 +82,14 @@ namespace Money.ViewModels
             }
         }
 
-        public ObservableCollection<SummaryItemViewModel> Items { get; private set; }
+        public SortableObservableCollection<SummaryItemViewModel> Items { get; private set; }
 
         public SummaryViewModel(INavigator navigator, IQueryDispatcher queryDispatcher)
             : base(navigator)
         {
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.queryDispatcher = queryDispatcher;
-            Items = new ObservableCollection<SummaryItemViewModel>();
+            Items = new SortableObservableCollection<SummaryItemViewModel>();
         }
         
         private async Task ReloadMonth()

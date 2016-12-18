@@ -81,6 +81,7 @@ namespace Money.ViewModels
         }
 
         public ICommand Rename { get; private set; }
+        public ICommand ChangeColor { get; private set; }
 
         public CategoryEditViewModel(IDomainFacade domainFacade, IKey key, string name, string description, Color color)
         {
@@ -91,6 +92,7 @@ namespace Money.ViewModels
             Color = color;
 
             Rename = new CategoryRenameCommand(domainFacade, this);
+            ChangeColor = new CategoryChangeColorCommand(domainFacade, this);
         }
     }
 }

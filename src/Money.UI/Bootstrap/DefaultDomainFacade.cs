@@ -87,5 +87,15 @@ namespace Money.Bootstrap
                 categoryRepository.Save(category);
             });
         }
+
+        public Task ChangeCategoryColor(IKey categoryKey, Color color)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                Category category = categoryRepository.Get(categoryKey);
+                category.ChangeColor(color);
+                categoryRepository.Save(category);
+            });
+        }
     }
 }

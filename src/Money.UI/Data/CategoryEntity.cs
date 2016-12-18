@@ -30,10 +30,15 @@ namespace Money.Data
             Id = model.Key.AsGuidKey().Guid;
             Name = model.Name;
             Description = model.Description;
-            ColorA = model.Color.A;
-            ColorR = model.Color.R;
-            ColorG = model.Color.G;
-            ColorB = model.Color.B;
+            SetColor(model.Color);
+        }
+
+        public void SetColor(Color color)
+        {
+            ColorA = color.A;
+            ColorR = color.R;
+            ColorG = color.G;
+            ColorB = color.B;
         }
 
         public CategoryModel ToModel()

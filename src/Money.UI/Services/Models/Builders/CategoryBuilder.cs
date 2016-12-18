@@ -24,6 +24,7 @@ namespace Money.Services.Models.Builders
         IEventHandler<CategoryCreated>, 
         IEventHandler<CategoryRenamed>,
         IEventHandler<CategoryDescriptionChanged>,
+        IEventHandler<CategoryColorChanged>,
         IQueryHandler<ListAllCategory, List<CategoryModel>>
     {
         public Task<List<CategoryModel>> HandleAsync(ListAllCategory query)
@@ -68,6 +69,16 @@ namespace Money.Services.Models.Builders
             {
                 CategoryEntity entity = db.Categories.Find(payload.AggregateKey.AsGuidKey().Guid);
                 entity.Description = payload.Description;
+                return db.SaveChangesAsync();
+            }
+        }
+
+        public Task HandleAsync(CategoryColorChanged payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                CategoryEntity entity = db.Categories.Find(payload.AggregateKey.AsGuidKey().Guid);
+                entity.SetColor(payload.Color);
                 return db.SaveChangesAsync();
             }
         }

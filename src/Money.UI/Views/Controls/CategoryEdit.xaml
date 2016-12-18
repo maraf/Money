@@ -48,22 +48,27 @@
             <Button Name="btnColor" Content="Color">
                 <Button.Flyout>
                     <Flyout x:Name="flyColor" LightDismissOverlayMode="On" Placement="Full">
-                        <GridView x:Name="grvColors" ItemsSource="{Binding Source={StaticResource ColorCollection}}" SelectedItem="{Binding Color, Mode=TwoWay}" SelectionChanged="grvColors_SelectionChanged" SelectionMode="Single">
-                            <GridView.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <ItemsWrapGrid MaximumRowsOrColumns="8" Orientation="Horizontal" GroupPadding="0" />
-                                </ItemsPanelTemplate>
-                            </GridView.ItemsPanel>
-                            <GridView.ItemTemplate>
-                                <DataTemplate>
-                                    <Rectangle Width="48" Height="48">
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="{Binding}" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                </DataTemplate>
-                            </GridView.ItemTemplate>
-                        </GridView>
+                        <StackPanel>
+                            <GridView x:Name="grvColors" ItemsSource="{Binding Source={StaticResource ColorCollection}}" SelectedItem="{Binding ChangeColor.Color, Mode=TwoWay}" SelectionChanged="grvColors_SelectionChanged" SelectionMode="Single">
+                                <GridView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <ItemsWrapGrid MaximumRowsOrColumns="8" Orientation="Horizontal" GroupPadding="0" />
+                                    </ItemsPanelTemplate>
+                                </GridView.ItemsPanel>
+                                <GridView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Width="48" Height="48">
+                                            <Rectangle.Fill>
+                                                <SolidColorBrush Color="{Binding}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                            </GridView>
+                            <StackPanel Style="{StaticResource EditorStackPanelStype}" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Save" Command="{Binding ChangeColor}" />
+                            </StackPanel>
+                        </StackPanel>
                     </Flyout>
                 </Button.Flyout>
             </Button>

@@ -24,6 +24,11 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task ChangeCategoryColor(IKey categoryKey, Color color)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task ChangeCategoryDescription(IKey categoryKey, string description)
         {
             throw new NotImplementedException();

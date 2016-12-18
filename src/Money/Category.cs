@@ -20,7 +20,8 @@ namespace Money
     public class Category : AggregateRoot,
         IEventHandler<CategoryCreated>,
         IEventHandler<CategoryRenamed>,
-        IEventHandler<CategoryDescriptionChanged>
+        IEventHandler<CategoryDescriptionChanged>,
+        IEventHandler<CategoryColorChanged>
     {
         /// <summary>
         /// Gets a name of the category.
@@ -54,7 +55,9 @@ namespace Money
         public void Rename(string newName)
         {
             Ensure.NotNull(newName, "newName");
-            Publish(new CategoryRenamed(newName, Name));
+
+            if (newName != Name)
+                Publish(new CategoryRenamed(newName, Name));
         }
 
         Task IEventHandler<CategoryRenamed>.HandleAsync(CategoryRenamed payload)
@@ -70,6 +73,17 @@ namespace Money
         Task IEventHandler<CategoryDescriptionChanged>.HandleAsync(CategoryDescriptionChanged payload)
         {
             return Async.CompletedTask;
+        }
+
+        public void ChangeColor(Color color)
+        {
+            if (color != Color)
+                Publish(new CategoryColorChanged(color));
+        }
+
+        Task IEventHandler<CategoryColorChanged>.HandleAsync(CategoryColorChanged payload)
+        {
+            return UpdateState(() => Color = payload.Color);
         }
     }
 }

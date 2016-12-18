@@ -126,6 +126,7 @@
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\CategoryOverviewViewModel.cs" />
     <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />
+    <Compile Include="ViewModels\Commands\CategoryChangeColorCommand.cs" />
     <Compile Include="ViewModels\Commands\CategoryRenameCommand.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateBackCommand.cs" />

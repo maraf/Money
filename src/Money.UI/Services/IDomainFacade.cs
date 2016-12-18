@@ -63,5 +63,13 @@ namespace Money.Services
         /// <param name="description">A new description of the category.</param>
         /// <returns>Continuation task.</returns>
         Task ChangeCategoryDescription(IKey categoryKey, string description);
+
+        /// <summary>
+        /// Changes a color of a category with a key <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <param name="color">A new color of the category.</param>
+        /// <returns>Continuation task.</returns>
+        Task ChangeCategoryColor(IKey categoryKey, Color color);
     }
 }

@@ -72,8 +72,8 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <Button Content="Icon" />
-            <Button Content="Hide" />
+            <Button Content="Icon" IsEnabled="False" />
+            <Button Content="Hide" IsEnabled="False" />
         </StackPanel>
     </StackPanel>
 </UserControl>

@@ -15,9 +15,9 @@
             <AppBarButton Icon="Sort">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="By date" />
-                        <MenuFlyoutItem Text="By amount" />
-                        <MenuFlyoutItem Text="By description" />
+                        <MenuFlyoutItem x:Name="mfiSortDate" Text="By date" Click="mfiSortDate_Click" />
+                        <MenuFlyoutItem x:Name="mfiSortAmount" Text="By amount" Click="mfiSortAmount_Click" />
+                        <MenuFlyoutItem x:Name="mfiSortDescription" Text="By description" Click="mfiSortDescription_Click" />
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>

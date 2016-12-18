@@ -30,14 +30,15 @@ namespace Money.Views
     public sealed partial class Summary : Page
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
-        private object preSelectedPeriod;
+        private bool isAmountSorted;
+        private bool isCategorySorted;
 
         public SummaryViewModel ViewModel
         {
             get { return (SummaryViewModel)DataContext; }
             set { DataContext = value; }
         }
-        
+
         public bool IsPieChartPrefered
         {
             get { return (bool)GetValue(IsPieChartPreferedProperty); }
@@ -45,9 +46,9 @@ namespace Money.Views
         }
 
         public static readonly DependencyProperty IsPieChartPreferedProperty = DependencyProperty.Register(
-            "IsPieChartPrefered", 
-            typeof(bool), 
-            typeof(Summary), 
+            "IsPieChartPrefered",
+            typeof(bool),
+            typeof(Summary),
             new PropertyMetadata(false)
         );
 
@@ -58,9 +59,9 @@ namespace Money.Views
         }
 
         public static readonly DependencyProperty IsBarGraphPreferedProperty = DependencyProperty.Register(
-            "IsBarGraphPrefered", 
-            typeof(bool), 
-            typeof(Summary), 
+            "IsBarGraphPrefered",
+            typeof(bool),
+            typeof(Summary),
             new PropertyMetadata(false)
         );
 
@@ -90,7 +91,7 @@ namespace Money.Views
             if (grpGroups.SelectedItem != null)
                 OnPeriodChanged();
         }
-        
+
         private void OnGroupSelectedItemChanged(object sender, SelectedItemEventArgs e)
         {
             if (ViewModel != null)
@@ -135,12 +136,34 @@ namespace Money.Views
 
         private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.Items.Sort(i => i.AmountValue);
+            if (isAmountSorted)
+            {
+                ViewModel.Items.SortDescending(i => i.AmountValue);
+                isAmountSorted = false;
+            }
+            else
+            {
+                ViewModel.Items.Sort(i => i.AmountValue);
+                isAmountSorted = true;
+            }
+
+            isCategorySorted = false;
         }
 
         private void mfiSortCategory_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.Items.Sort(i => i.Name);
+            if (isCategorySorted)
+            {
+                ViewModel.Items.SortDescending(i => i.Name);
+                isCategorySorted = false;
+            }
+            else
+            {
+                ViewModel.Items.Sort(i => i.Name);
+                isCategorySorted = true;
+            }
+
+            isAmountSorted = false;
         }
     }
 }

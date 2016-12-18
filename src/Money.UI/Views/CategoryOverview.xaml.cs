@@ -29,6 +29,9 @@ namespace Money.Views
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private bool isDateSorted;
+        private bool isAmountSorted;
+        private bool isDescriptionSorted;
 
         public CategoryOverviewViewModel ViewModel
         {
@@ -68,6 +71,57 @@ namespace Money.Views
                 foreach (OutcomeOverviewModel model in models)
                     ViewModel.Items.Add(model);
             }
+        }
+
+        private void mfiSortDate_Click(object sender, RoutedEventArgs e)
+        {
+            if (isDateSorted)
+            {
+                ViewModel.Items.SortDescending(i => i.When);
+                isDateSorted = false;
+            }
+            else
+            {
+                ViewModel.Items.Sort(i => i.When);
+                isDateSorted = true;
+            }
+
+            isAmountSorted = false;
+            isDescriptionSorted = false;
+        }
+
+        private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
+        {
+            if (isAmountSorted)
+            {
+                ViewModel.Items.SortDescending(i => i.Amount.Value);
+                isAmountSorted = false;
+            }
+            else
+            {
+                ViewModel.Items.Sort(i => i.Amount.Value);
+                isAmountSorted = true;
+            }
+
+            isDateSorted = false;
+            isDescriptionSorted = false;
+        }
+
+        private void mfiSortDescription_Click(object sender, RoutedEventArgs e)
+        {
+            if (isDescriptionSorted)
+            {
+                ViewModel.Items.SortDescending(i => i.Description);
+                isDescriptionSorted = false;
+            }
+            else
+            {
+                ViewModel.Items.Sort(i => i.Description);
+                isDescriptionSorted = true;
+            }
+
+            isAmountSorted = false;
+            isDateSorted = false;
         }
     }
 }

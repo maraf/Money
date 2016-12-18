@@ -32,14 +32,14 @@
                         <StackPanel>
                             <StackPanel Style="{StaticResource EditorStackPanelStype}">
                                 <TextBlock Text="Name" />
-                                <TextBox Text="{Binding Name}" />
+                                <TextBox Text="{Binding Rename.Name, Mode=TwoWay}" />
                             </StackPanel>
                             <StackPanel Style="{StaticResource EditorStackPanelStype}">
                                 <TextBlock Text="Description" />
-                                <TextBox Text="{Binding Description}" />
+                                <TextBox Text="{Binding Rename.Description, Mode=TwoWay}" />
                             </StackPanel>
                             <StackPanel Style="{StaticResource EditorStackPanelStype}" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Save" />
+                                <Button Content="Save" Command="{Binding Rename}" />
                             </StackPanel>
                         </StackPanel>
                     </Flyout>

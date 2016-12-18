@@ -151,22 +151,22 @@ namespace Money.Views.DesignData
                 if (categoryList == null)
                 {
                     categoryList = new CategoryListViewModel();
-                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue));
-                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Eating out", "When we are lay and let others to feed us", Colors.Brown) { IsSelected = true });
-                    categoryList.Items.Add(new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold));
+                    categoryList.Items.Add(new CategoryEditViewModel(DomainFacade, KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue));
+                    categoryList.Items.Add(new CategoryEditViewModel(DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown) { IsSelected = true });
+                    categoryList.Items.Add(new CategoryEditViewModel(DomainFacade, KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold));
                 }
 
                 return categoryList;
             }
         }
 
-        private CategoryListItemViewModel categoryEdit;
-        public CategoryListItemViewModel CategoryEdit
+        private CategoryEditViewModel categoryEdit;
+        public CategoryEditViewModel CategoryEdit
         {
             get
             {
                 if (categoryEdit == null)
-                    categoryEdit = new CategoryListItemViewModel(KeyFactory.Create(typeof(Category)), "Eating out", "When we are lay and let others to feed us", Colors.Brown) { IsSelected = true };
+                    categoryEdit = new CategoryEditViewModel(DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown);
 
                 return categoryEdit;
             }

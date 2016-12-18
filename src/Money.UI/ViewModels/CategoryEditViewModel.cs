@@ -1,4 +1,6 @@
-﻿using Neptuo;
+﻿using Money.Services;
+using Money.ViewModels.Commands;
+using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;
 using System;
@@ -6,12 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 namespace Money.ViewModels
 {
-    public class CategoryListItemViewModel : ObservableObject
+    public class CategoryEditViewModel : ObservableObject
     {
         public IKey Key { get; private set; }
 
@@ -77,13 +80,17 @@ namespace Money.ViewModels
             }
         }
 
-        public CategoryListItemViewModel(IKey key, string name, string description, Color color)
+        public ICommand Rename { get; private set; }
+
+        public CategoryEditViewModel(IDomainFacade domainFacade, IKey key, string name, string description, Color color)
         {
             Ensure.Condition.NotEmptyKey(key);
             Key = key;
             Name = name;
             Description = description;
             Color = color;
+
+            Rename = new CategoryRenameCommand(domainFacade, this);
         }
     }
 }

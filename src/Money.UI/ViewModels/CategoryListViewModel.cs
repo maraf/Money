@@ -14,12 +14,12 @@ namespace Money.ViewModels
 {
     public class CategoryListViewModel : ObservableObject
     {
-        public ObservableCollection<CategoryListItemViewModel> Items { get; private set; }
+        public ObservableCollection<CategoryEditViewModel> Items { get; private set; }
         public ICommand New { get; private set; }
         
         public CategoryListViewModel()
         {
-            Items = new ObservableCollection<CategoryListItemViewModel>();
+            Items = new ObservableCollection<CategoryEditViewModel>();
             New = new DelegateCommand(NewExecuted);
         }
 

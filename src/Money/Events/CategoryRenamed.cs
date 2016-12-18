@@ -24,7 +24,7 @@ namespace Money.Events
 
         internal CategoryRenamed(string newName, string oldName)
         {
-            NewName = NewName;
+            NewName = newName;
             OldName = oldName;
         }
     }

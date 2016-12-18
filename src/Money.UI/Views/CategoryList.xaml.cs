@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.ComponentModel;
+using Money.Services;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -30,6 +31,7 @@ namespace Money.Views
     [NavigationParameter(typeof(CategoryListParameter))]
     public sealed partial class CategoryList : Page
     {
+        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
 
         public CategoryListViewModel ViewModel
@@ -54,7 +56,7 @@ namespace Money.Views
             IEnumerable<CategoryModel> models = await queryDispatcher.QueryAsync(new ListAllCategory());
             foreach (CategoryModel model in models)
             {
-                CategoryListItemViewModel viewModel = new CategoryListItemViewModel(model.Key, model.Name, model.Description, model.Color);
+                CategoryEditViewModel viewModel = new CategoryEditViewModel(domainFacade, model.Key, model.Name, model.Description, model.Color);
                 viewModel.PropertyChanged += OnItemViewModelPropertyChanged;
                 if (parameter.Key.Equals(model.Key))
                     viewModel.IsSelected = true;
@@ -67,7 +69,7 @@ namespace Money.Views
 
         private void OnItemViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(CategoryListItemViewModel.Color))
+            if (e.PropertyName == nameof(CategoryEditViewModel.Color))
             {
                 //ListViewItem item = (ListViewItem)lvwItems.ContainerFromItem(sender);
                 //FrameworkElement fe = (FrameworkElement)item.FindName("s1");
@@ -78,7 +80,7 @@ namespace Money.Views
 
         private void lvwItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (CategoryListItemViewModel viewModel in ViewModel.Items)
+            foreach (CategoryEditViewModel viewModel in ViewModel.Items)
                 viewModel.IsSelected = e.AddedItems.FirstOrDefault() == viewModel;
         }
 
@@ -89,7 +91,7 @@ namespace Money.Views
 
         private void UpdateSelectedItemViewModel()
         {
-            foreach (CategoryListItemViewModel viewModel in ViewModel.Items)
+            foreach (CategoryEditViewModel viewModel in ViewModel.Items)
                 viewModel.IsSelected = lvwItems.SelectedItem == viewModel;
         }
     }

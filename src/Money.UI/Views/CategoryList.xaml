@@ -21,7 +21,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="vm:CategoryListItemViewModel">
+                <DataTemplate x:DataType="vm:CategoryEditViewModel">
                     <controls:CategoryEdit />
                 </DataTemplate>
             </ListView.ItemTemplate>

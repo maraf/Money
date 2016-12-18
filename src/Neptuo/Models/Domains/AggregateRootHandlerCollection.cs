@@ -31,7 +31,7 @@ namespace Neptuo.Models.Domains
                     //MethodInfo eventMethod = type.GetMethod(eventHandlerMethodName, new Type[] { eventType });
                     // EndsWith is here because explicitly implemented methods have very complicated name.
                     MethodInfo eventMethod = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                        .FirstOrDefault(m => m.Name.EndsWith(eventHandlerMethodName));
+                        .FirstOrDefault(m => m.Name.EndsWith(eventHandlerMethodName) && m.GetParameters()[0].ParameterType == eventType);
 
                     Dictionary<Type, Action<object, object>> typeHandlers;
                     if (!storage.TryGetValue(type, out typeHandlers))

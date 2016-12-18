@@ -23,7 +23,7 @@ namespace Money.Views.Controls
     {
         public CategoryEdit()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void grvColors_SelectionChanged(object sender, SelectionChangedEventArgs e)

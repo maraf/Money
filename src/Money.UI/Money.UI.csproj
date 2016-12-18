@@ -122,10 +122,11 @@
     <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListMonthOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\YearModel.cs" />
-    <Compile Include="ViewModels\CategoryListItemViewModel.cs" />
+    <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\CategoryOverviewViewModel.cs" />
     <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />
+    <Compile Include="ViewModels\Commands\CategoryRenameCommand.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateBackCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />

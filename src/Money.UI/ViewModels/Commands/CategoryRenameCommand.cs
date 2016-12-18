@@ -1,11 +1,13 @@
 ﻿using Money.Services;
 using Neptuo;
+using Neptuo.Models.Keys;
 using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Money.ViewModels.Commands
 {
@@ -38,7 +40,14 @@ namespace Money.ViewModels.Commands
             if (String.IsNullOrEmpty(Name))
                 return;
 
-            if (viewModel.Name != Name)
+            if (viewModel.Key.IsEmpty)
+            {
+                Color color = Colors.Black;
+                viewModel.Key = await domainFacade.CreateCategoryAsync(Name, color);
+                viewModel.Name = Name;
+                viewModel.Color = color;
+            }
+            else if (viewModel.Name != Name)
             {
                 await domainFacade.RenameCategory(viewModel.Key, Name);
                 viewModel.Name = Name;

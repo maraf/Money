@@ -51,7 +51,7 @@ namespace Money.Views
 
             CategoryListParameter parameter = (CategoryListParameter)e.Parameter;
 
-            ViewModel = new CategoryListViewModel();
+            ViewModel = new CategoryListViewModel(domainFacade);
 
             IEnumerable<CategoryModel> models = await queryDispatcher.QueryAsync(new ListAllCategory());
             foreach (CategoryModel model in models)

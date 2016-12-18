@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:collections="using:Money.ViewModels.Collections"
-    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{Binding CategoryEdit, Source={StaticResource ViewModelLocator}}">
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{Binding CategoryEdit, Source={StaticResource ViewModelLocator}}"
+    DataContextChanged="OnDataContextChanged">
     <UserControl.Resources>
         <collections:ColorObservableCollection x:Key="ColorCollection" />
 
@@ -26,9 +27,9 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Name="s2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">
-            <Button Content="Rename">
+            <Button x:Name="btnRename" Content="Rename">
                 <Button.Flyout>
-                    <Flyout LightDismissOverlayMode="On" Placement="Full">
+                    <Flyout x:Name="flyRename" LightDismissOverlayMode="On" Placement="Full">
                         <StackPanel>
                             <StackPanel Style="{StaticResource EditorStackPanelStype}">
                                 <TextBlock Text="Name" />

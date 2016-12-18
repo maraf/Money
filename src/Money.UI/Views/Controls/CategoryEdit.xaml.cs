@@ -31,5 +31,15 @@ namespace Money.Views.Controls
             //if ((Color)grvColors.SelectedItem != ((CategoryListItemViewModel)DataContext).Color)
             //    flyColor.Hide();
         }
+
+        private void OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs e)
+        {
+            CategoryEditViewModel viewModel = e.NewValue as CategoryEditViewModel;
+            if (viewModel != null)
+            {
+                if (viewModel.Key.IsEmpty)
+                    flyRename.ShowAt(btnRename);
+            }
+        }
     }
 }

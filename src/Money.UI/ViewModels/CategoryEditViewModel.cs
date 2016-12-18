@@ -16,7 +16,7 @@ namespace Money.ViewModels
 {
     public class CategoryEditViewModel : ObservableObject
     {
-        public IKey Key { get; private set; }
+        public IKey Key { get; internal set; }
 
         private string name;
         public string Name
@@ -83,16 +83,22 @@ namespace Money.ViewModels
         public ICommand Rename { get; private set; }
         public ICommand ChangeColor { get; private set; }
 
-        public CategoryEditViewModel(IDomainFacade domainFacade, IKey key, string name, string description, Color color)
+        public CategoryEditViewModel(IDomainFacade domainFacade, IKey key)
         {
-            Ensure.Condition.NotEmptyKey(key);
+            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(key, "key");
             Key = key;
-            Name = name;
-            Description = description;
-            Color = color;
 
             Rename = new CategoryRenameCommand(domainFacade, this);
             ChangeColor = new CategoryChangeColorCommand(domainFacade, this);
+        }
+
+        public CategoryEditViewModel(IDomainFacade domainFacade, IKey key, string name, string description, Color color)
+            : this(domainFacade, key)
+        {
+            Name = name;
+            Description = description;
+            Color = color;
         }
     }
 }

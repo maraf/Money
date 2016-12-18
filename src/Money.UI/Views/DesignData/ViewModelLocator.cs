@@ -150,10 +150,10 @@ namespace Money.Views.DesignData
             {
                 if (categoryList == null)
                 {
-                    categoryList = new CategoryListViewModel();
-                    categoryList.Items.Add(new CategoryEditViewModel(DomainFacade, KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue));
-                    categoryList.Items.Add(new CategoryEditViewModel(DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown) { IsSelected = true });
-                    categoryList.Items.Add(new CategoryEditViewModel(DomainFacade, KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold));
+                    categoryList = new CategoryListViewModel(ServiceProvider.DomainFacade);
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue));
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown) { IsSelected = true });
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold));
                 }
 
                 return categoryList;
@@ -166,7 +166,7 @@ namespace Money.Views.DesignData
             get
             {
                 if (categoryEdit == null)
-                    categoryEdit = new CategoryEditViewModel(DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown);
+                    categoryEdit = new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown);
 
                 return categoryEdit;
             }

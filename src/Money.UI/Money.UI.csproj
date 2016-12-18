@@ -200,7 +200,6 @@
       <DependentUpon>Migrate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Navigation\ApplicationNavigator.cs" />
-    <Compile Include="Views\Navigation\IParameterDecorator.cs" />
     <Compile Include="Views\Navigation\NavigatorParameterCollection.cs" />
     <Compile Include="Views\Navigation\INavigator.cs" />
     <Compile Include="Views\Navigation\INavigatorForm.cs" />

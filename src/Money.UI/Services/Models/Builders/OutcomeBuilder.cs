@@ -32,15 +32,19 @@ namespace Money.Services.Models.Builders
             this.priceFactory = priceFactory;
         }
 
-        public Task<IEnumerable<MonthModel>> HandleAsync(ListMonthWithOutcome query)
+        public async Task<IEnumerable<MonthModel>> HandleAsync(ListMonthWithOutcome query)
         {
-            return Task.FromResult<IEnumerable<MonthModel>>(new List<MonthModel>()
+            using (ReadModelContext db = new ReadModelContext())
             {
-                new MonthModel(2016, 12),
-                new MonthModel(2016, 11),
-                new MonthModel(2016, 10),
-                new MonthModel(2016, 9)
-            });
+                var entities = await db.Outcomes
+                    .OrderByDescending(o => o.When)
+                    .Select(o => new { Year = o.When.Year, Month = o.When.Month })
+                    .Distinct()
+                    .ToListAsync();
+
+                return entities
+                    .Select(o => new MonthModel(o.Year, o.Month));
+            }
         }
 
         public async Task<IEnumerable<CategoryWithAmountModel>> HandleAsync(ListMonthCategoryWithOutcome query)

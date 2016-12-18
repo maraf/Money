@@ -10,6 +10,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -35,7 +37,8 @@ namespace Money.Views
 
         public OutcomeCreate()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            Loaded += OnPageLoaded;
 
             dprWhen.MaxWidth = Double.PositiveInfinity;
         }
@@ -62,6 +65,55 @@ namespace Money.Views
             DataContext = viewModel;
         }
 
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
+            tbxAmount.Focus(FocusState.Keyboard);
+        }
+
+        private void OnPageKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.S)
+            {
+                CoreVirtualKeyStates controlState = Window.Current.CoreWindow.GetKeyState(VirtualKey.Control);
+                if (controlState.HasFlag(CoreVirtualKeyStates.Down) && ViewModel.Save.CanExecute())
+                {
+                    ViewModel.Save.Execute();
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void OnInputKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                if (sender == tbxAmount)
+                    tbxDescription.Focus(FocusState.Keyboard);
+                else if (sender == tbxDescription)
+                    dprWhen.Focus(FocusState.Keyboard);
+                else if (sender == dprWhen)
+                    gvwCategories.Focus(FocusState.Keyboard);
+                else if (sender == gvwCategories && ViewModel.Save.CanExecute())
+                    ViewModel.Save.Execute();
+
+                e.Handled = true;
+            }
+            else if(e.Key == VirtualKey.Escape)
+            {
+                if (sender == tbxAmount)
+                {
+                    tbxAmount.Text = "0";
+                    tbxAmount.SelectAll();
+                    e.Handled = true;
+                }
+                else if (sender == tbxDescription)
+                {
+                    tbxDescription.Text = String.Empty;
+                    e.Handled = true;
+                }
+            }
+        }
+
         private void gvwCategories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (CategoryModel item in e.RemovedItems)
@@ -69,6 +121,11 @@ namespace Money.Views
 
             foreach (CategoryModel item in e.AddedItems)
                 ViewModel.SelectedCategories.Add(item.Key);
+        }
+
+        private void tbxAmount_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbxAmount.SelectAll();
         }
     }
 }

@@ -124,7 +124,7 @@
     <Compile Include="Services\Models\YearModel.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
-    <Compile Include="ViewModels\CategoryOverviewViewModel.cs" />
+    <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />
     <Compile Include="ViewModels\Commands\CategoryChangeColorCommand.cs" />
     <Compile Include="ViewModels\Commands\CategoryRenameCommand.cs" />
@@ -139,7 +139,7 @@
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
-    <Compile Include="ViewModels\Parameters\CategoryOverviewParameter.cs" />
+    <Compile Include="ViewModels\Parameters\OverviewParameter.cs" />
     <Compile Include="ViewModels\Parameters\EmptyParameter.cs" />
     <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\IGroupParameter.cs" />
@@ -192,8 +192,8 @@
     <Compile Include="Views\DesignData\SummaryGroupViewModelProvider.cs" />
     <Compile Include="Views\DesignData\UpgradeService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
-    <Compile Include="Views\CategoryOverview.xaml.cs">
-      <DependentUpon>CategoryOverview.xaml</DependentUpon>
+    <Compile Include="Views\Overview.xaml.cs">
+      <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Empty.xaml.cs">
       <DependentUpon>Empty.xaml</DependentUpon>
@@ -247,7 +247,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\CategoryOverview.xaml">
+    <Page Include="Views\Overview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

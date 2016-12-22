@@ -107,21 +107,21 @@ namespace Money.Views.DesignData
             }
         }
 
-        private CategoryOverviewViewModel categoryOverview;
-        public CategoryOverviewViewModel CategoryOverview
+        private OverviewViewModel overview;
+        public OverviewViewModel Overview
         {
             get
             {
-                if (categoryOverview == null)
+                if (overview == null)
                 {
-                    categoryOverview = new CategoryOverviewViewModel(ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Food", new MonthModel(2016, 11));
-                    categoryOverview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market"));
-                    categoryOverview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese"));
-                    categoryOverview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine"));
-                    categoryOverview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta"));
+                    overview = new OverviewViewModel(ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Food", new MonthModel(2016, 11));
+                    overview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market"));
+                    overview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese"));
+                    overview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine"));
+                    overview.Items.Add(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta"));
                 }
 
-                return categoryOverview;
+                return overview;
             }
         }
 

@@ -24,8 +24,8 @@ namespace Money.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    [NavigationParameter(typeof(CategoryOverviewParameter))]
-    public sealed partial class CategoryOverview : Page
+    [NavigationParameter(typeof(OverviewParameter))]
+    public sealed partial class Overview : Page
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
@@ -33,13 +33,13 @@ namespace Money.Views
         private bool isAmountSorted;
         private bool isDescriptionSorted;
 
-        public CategoryOverviewViewModel ViewModel
+        public OverviewViewModel ViewModel
         {
-            get { return (CategoryOverviewViewModel)DataContext; }
+            get { return (OverviewViewModel)DataContext; }
             set { DataContext = value; }
         }
 
-        public CategoryOverview()
+        public Overview()
         {
             InitializeComponent();
         }
@@ -48,7 +48,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            CategoryOverviewParameter parameter = (CategoryOverviewParameter)e.Parameter;
+            OverviewParameter parameter = (OverviewParameter)e.Parameter;
 
             string categoryName = parameter.CategoryKey.IsEmpty 
                 ? "All"
@@ -68,7 +68,7 @@ namespace Money.Views
                 models = await queryDispatcher.QueryAsync(new ListYearOutcomeFromCategory(parameter.CategoryKey, parameter.Year));
             }
 
-            ViewModel = new CategoryOverviewViewModel(navigator, parameter.CategoryKey, categoryName, period);
+            ViewModel = new OverviewViewModel(navigator, parameter.CategoryKey, categoryName, period);
             if (models != null)
             {
                 foreach (OutcomeOverviewModel model in models)

@@ -131,15 +131,15 @@ namespace Money.Views
 
         private void OpenOverview(IKey categoryKey)
         {
-            CategoryOverviewParameter parameter = null;
+            OverviewParameter parameter = null;
 
             MonthModel month = grpGroups.SelectedItem as MonthModel;
             if (month != null)
-                parameter = new CategoryOverviewParameter(categoryKey, month);
+                parameter = new OverviewParameter(categoryKey, month);
 
             YearModel year = grpGroups.SelectedItem as YearModel;
             if (year != null)
-                parameter = new CategoryOverviewParameter(categoryKey, year);
+                parameter = new OverviewParameter(categoryKey, year);
 
             navigator
                 .Open(parameter)

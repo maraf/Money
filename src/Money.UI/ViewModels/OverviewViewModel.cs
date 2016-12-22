@@ -17,7 +17,7 @@ namespace Money.ViewModels
     /// <summary>
     /// A view model for category outcome overview.
     /// </summary>
-    public class CategoryOverviewViewModel : ViewModel
+    public class OverviewViewModel : ViewModel
     {
         /// <summary>
         /// Gets a key of the category.
@@ -51,7 +51,7 @@ namespace Money.ViewModels
         /// <param name="key">A key of the category</param>
         /// <param name="name">A name of the category.</param>
         /// <param name="period">A period displayed (year or month).</param>
-        public CategoryOverviewViewModel(INavigator navigator, IKey key, string name, object period)
+        public OverviewViewModel(INavigator navigator, IKey key, string name, object period)
             : base(navigator)
         {
             Ensure.NotNull(key, "key");

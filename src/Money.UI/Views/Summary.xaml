@@ -138,18 +138,10 @@
                         <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
                     </Grid>
                 </ListViewItem>
-                <!--<Grid Style="{StaticResource BarLineGridStyle}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
-                </Grid>-->
             </StackPanel>
         </Grid>
         <Grid x:Name="grdPieChart" Grid.Row="1" Grid.Column="1">
-            <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Thickness="50" Margin="30" />
+            <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Margin="30" />
         </Grid>
         <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" Grid.Row="1" Grid.ColumnSpan="2" />
         <controls:Loading IsActive="{Binding IsLoading}" Grid.Row="1" Grid.ColumnSpan="2" />

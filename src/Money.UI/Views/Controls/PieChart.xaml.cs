@@ -36,7 +36,7 @@ namespace Money.Views.Controls
             "Thickness",
             typeof(double),
             typeof(PieChart),
-            new PropertyMetadata(10d, OnThicknessChanged)
+            new PropertyMetadata(Double.PositiveInfinity, OnThicknessChanged)
         );
 
         private static void OnThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

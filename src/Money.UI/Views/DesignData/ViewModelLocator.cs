@@ -1,7 +1,6 @@
 ﻿using Money.Services;
 using Money.Services.Models;
 using Money.ViewModels;
-using Money.Views.DesignData.Handlers;
 using Money.Views.Navigation;
 using Neptuo;
 using Neptuo.Models.Keys;
@@ -25,12 +24,7 @@ namespace Money.Views.DesignData
             get
             {
                 if (queryDispatcher == null)
-                {
-                    var queryDispatcher = new DefaultQueryDispatcher();
-                    queryDispatcher.AddAll(new ListMonthWithOutcomeHandler());
-
-                    this.queryDispatcher = queryDispatcher;
-                }
+                    queryDispatcher = new QueryDispatcher();
 
                 return queryDispatcher;
             }
@@ -106,6 +100,7 @@ namespace Money.Views.DesignData
                     });
                     summary.TotalAmount = new Price(13520, "CZK");
                     summary.IsLoading = false;
+                    summary.IsInitialLoading = false;
                 }
 
                 return summary;

@@ -13,7 +13,7 @@
         </Style>
     </Page.Resources>
     <Page.BottomAppBar>
-        <CommandBar DefaultLabelPosition="Right">
+        <CommandBar>
             <AppBarButton Icon="Save" Label="Save new outcome" Command="{Binding Save}" />
         </CommandBar>
     </Page.BottomAppBar>

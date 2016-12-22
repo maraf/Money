@@ -185,8 +185,8 @@
     <Compile Include="Views\Converters\BoolConverter.cs" />
     <Compile Include="Views\Converters\CuttingConverter.cs" />
     <Compile Include="Views\Converters\DateToStringConverter.cs" />
+    <Compile Include="Views\DesignData\QueryDispatcher.cs" />
     <Compile Include="Views\DesignData\DomainFacade.cs" />
-    <Compile Include="Views\DesignData\Handlers\ListMonthWithOutcomeHandler.cs" />
     <Compile Include="Views\DesignData\Navigator.cs" />
     <Compile Include="Views\DesignData\SummaryGroupViewModelProvider.cs" />
     <Compile Include="Views\DesignData\UpgradeService.cs" />

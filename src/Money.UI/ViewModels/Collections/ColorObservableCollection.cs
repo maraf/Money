@@ -32,7 +32,7 @@ namespace Money.ViewModels.Collections
 
         private void Load()
         {
-            foreach (PropertyInfo propertyInfo in typeof(Colors).GetProperties())
+            foreach (PropertyInfo propertyInfo in typeof(Colors).GetRuntimeProperties())
             {
                 if (propertyInfo.PropertyType == typeof(Color))
                     Add((Color)propertyInfo.GetValue(null));

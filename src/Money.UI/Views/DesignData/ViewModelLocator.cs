@@ -1,6 +1,7 @@
 ﻿using Money.Services;
 using Money.Services.Models;
 using Money.ViewModels;
+using Money.Views.DesignData.Handlers;
 using Money.Views.Navigation;
 using Neptuo;
 using Neptuo.Models.Keys;
@@ -24,7 +25,12 @@ namespace Money.Views.DesignData
             get
             {
                 if (queryDispatcher == null)
-                    queryDispatcher = new DefaultQueryDispatcher();
+                {
+                    var queryDispatcher = new DefaultQueryDispatcher();
+                    queryDispatcher.AddAll(new ListMonthWithOutcomeHandler());
+
+                    this.queryDispatcher = queryDispatcher;
+                }
 
                 return queryDispatcher;
             }

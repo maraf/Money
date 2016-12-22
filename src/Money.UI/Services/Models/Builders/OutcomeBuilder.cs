@@ -85,7 +85,7 @@ namespace Money.Services.Models.Builders
                     ));
                 }
 
-                return result;
+                return result.OrderBy(m => m.Name);
             }
         }
 
@@ -128,6 +128,7 @@ namespace Money.Services.Models.Builders
 
                 List<OutcomeOverviewModel> outcomes = await entities
                     .Where(o => o.When.Year == query.Year.Year)
+                    .OrderBy(o => o.When)
                     .Select(o => o.ToOverviewModel())
                     .ToListAsync();
 
@@ -145,6 +146,7 @@ namespace Money.Services.Models.Builders
 
                 List<OutcomeOverviewModel> outcomes = await entities
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
+                    .OrderBy(o => o.When)
                     .Select(o => o.ToOverviewModel())
                     .ToListAsync();
 

@@ -33,7 +33,7 @@ namespace Money.Views
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private bool isAmountSorted;
-        private bool isCategorySorted;
+        private bool isCategorySorted = true;
 
         public SummaryViewModel ViewModel
         {

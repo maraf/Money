@@ -29,7 +29,7 @@ namespace Money.Views
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
-        private bool isDateSorted;
+        private bool isDateSorted = true;
         private bool isAmountSorted;
         private bool isDescriptionSorted;
 

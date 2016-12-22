@@ -7,10 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{Binding Group, Source={StaticResource ViewModelLocator}}">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
         <Pivot x:Name="pvtGroups" ItemsSource="{Binding Items}" SelectionChanged="pvtGroups_SelectionChanged">
             <Pivot.ItemContainerStyle>
                 <Style TargetType="PivotItem">
@@ -26,6 +22,5 @@
                 <DataTemplate></DataTemplate>
             </Pivot.ItemTemplate>
         </Pivot>
-        <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" Grid.RowSpan="2" />
     </Grid>
 </UserControl>

@@ -102,7 +102,7 @@
 
         <Grid x:Name="grdBarGraph" Grid.Row="1">
             <StackPanel>
-                <ListView x:Name="lvwBarGraph" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True" ItemContainerTransitions="{x:Null}">
+                <ListView x:Name="lvwBarGraph" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="vm:SummaryItemViewModel">
                             <Grid Style="{StaticResource BarLineGridStyle}">
@@ -141,7 +141,34 @@
             </StackPanel>
         </Grid>
         <Grid x:Name="grdPieChart" Grid.Row="1" Grid.Column="1">
-            <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Margin="30" />
+            <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Margin="30" Thickness="15" />
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ListView ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SummaryItemViewModel">
+                            <Grid Padding="10,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}" Style="{ThemeResource BaseTextBlockStyle}" Padding="0,0,15,0" />
+                                <TextBlock Text="{Binding Amount}" Foreground="{Binding ColorBrush}" HorizontalAlignment="Right" Grid.Column="1" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListViewItem Tapped="lviSummary_Tapped">
+                    <Grid Style="{StaticResource BarLineGridStyle}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
+                    </Grid>
+                </ListViewItem>
+            </StackPanel>
         </Grid>
         <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" Grid.Row="1" Grid.ColumnSpan="2" />
         <controls:Loading IsActive="{Binding IsLoading}" Grid.Row="1" Grid.ColumnSpan="2" />

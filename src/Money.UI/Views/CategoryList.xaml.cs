@@ -21,13 +21,8 @@ using Windows.UI.Xaml.Navigation;
 using System.ComponentModel;
 using Money.Services;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace Money.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     [NavigationParameter(typeof(CategoryListParameter))]
     public sealed partial class CategoryList : Page
     {
@@ -57,7 +52,6 @@ namespace Money.Views
             foreach (CategoryModel model in models)
             {
                 CategoryEditViewModel viewModel = new CategoryEditViewModel(domainFacade, model.Key, model.Name, model.Description, model.Color);
-                viewModel.PropertyChanged += OnItemViewModelPropertyChanged;
                 if (parameter.Key.Equals(model.Key))
                     viewModel.IsSelected = true;
 
@@ -65,17 +59,6 @@ namespace Money.Views
             }
 
             UpdateSelectedItemView();
-        }
-
-        private void OnItemViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(CategoryEditViewModel.Color))
-            {
-                //ListViewItem item = (ListViewItem)lvwItems.ContainerFromItem(sender);
-                //FrameworkElement fe = (FrameworkElement)item.FindName("s1");
-                //Button button = (Button)(StackPanel)(item.Content).Find("btnColor");
-                //button.Flyout.Hide();
-            }
         }
 
         private void lvwItems_SelectionChanged(object sender, SelectionChangedEventArgs e)

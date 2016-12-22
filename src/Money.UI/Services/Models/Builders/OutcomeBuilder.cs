@@ -122,8 +122,11 @@ namespace Money.Services.Models.Builders
         {
             using (ReadModelContext db = new ReadModelContext())
             {
-                List<OutcomeOverviewModel> outcomes = await db.Outcomes
-                    .Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid))
+                IQueryable<OutcomeEntity> entities = db.Outcomes;
+                if (!query.CategoryKey.IsEmpty)
+                    entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
+
+                List<OutcomeOverviewModel> outcomes = await entities
                     .Where(o => o.When.Year == query.Year.Year)
                     .Select(o => o.ToOverviewModel())
                     .ToListAsync();
@@ -136,8 +139,11 @@ namespace Money.Services.Models.Builders
         {
             using (ReadModelContext db = new ReadModelContext())
             {
-                List<OutcomeOverviewModel> outcomes = await db.Outcomes
-                    .Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid))
+                IQueryable<OutcomeEntity> entities = db.Outcomes;
+                if (!query.CategoryKey.IsEmpty)
+                    entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
+
+                List<OutcomeOverviewModel> outcomes = await entities
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
                     .Select(o => o.ToOverviewModel())
                     .ToListAsync();

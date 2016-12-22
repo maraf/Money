@@ -31,7 +31,7 @@ namespace Money.Services.Models.Queries
         /// <param name="month">A month to find outcomes from.</param>
         public ListMonthOutcomeFromCategory(IKey categoryKey, MonthModel month)
         {
-            Ensure.Condition.NotEmptyKey(categoryKey);
+            Ensure.NotNull(categoryKey, "categoryKey");
             Ensure.NotNull(month, "month");
             CategoryKey = categoryKey;
             Month = month;

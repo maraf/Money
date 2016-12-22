@@ -31,7 +31,7 @@ namespace Money.Services.Models.Queries
         /// <param name="year">A year to find outcomes from.</param>
         public ListYearOutcomeFromCategory(IKey categoryKey, YearModel year)
         {
-            Ensure.Condition.NotEmptyKey(categoryKey);
+            Ensure.NotNull(categoryKey, "categoryKey");
             Ensure.NotNull(year, "year");
             CategoryKey = categoryKey;
             Year = year;

@@ -10,6 +10,7 @@ using Neptuo.Models.Keys;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Parameters;
 using System.Windows.Input;
+using Neptuo;
 
 namespace Money.ViewModels
 {
@@ -53,11 +54,14 @@ namespace Money.ViewModels
         public CategoryOverviewViewModel(INavigator navigator, IKey key, string name, object period)
             : base(navigator)
         {
+            Ensure.NotNull(key, "key");
             Key = key;
             Name = name;
             Period = period;
             Items = new SortableObservableCollection<OutcomeOverviewModel>();
-            EditCategory = new NavigateCommand(navigator, new CategoryListParameter(key));
+
+            if (!key.IsEmpty)
+                EditCategory = new NavigateCommand(navigator, new CategoryListParameter(key));
         }
     }
 }

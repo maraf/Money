@@ -3,6 +3,8 @@ using Money.ViewModels;
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
 using Money.Views.Navigation;
+using Neptuo;
+using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -119,15 +121,25 @@ namespace Money.Views
         private void lvwBarGraph_ItemClick(object sender, ItemClickEventArgs e)
         {
             SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
+            OpenOverview(item.CategoryKey);
+        }
+
+        private void lviSummary_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            OpenOverview(KeyFactory.Empty(typeof(Category)));
+        }
+
+        private void OpenOverview(IKey categoryKey)
+        {
             CategoryOverviewParameter parameter = null;
 
             MonthModel month = grpGroups.SelectedItem as MonthModel;
             if (month != null)
-                parameter = new CategoryOverviewParameter(item.CategoryKey, month);
+                parameter = new CategoryOverviewParameter(categoryKey, month);
 
             YearModel year = grpGroups.SelectedItem as YearModel;
             if (year != null)
-                parameter = new CategoryOverviewParameter(item.CategoryKey, year);
+                parameter = new CategoryOverviewParameter(categoryKey, year);
 
             navigator
                 .Open(parameter)

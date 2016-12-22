@@ -50,7 +50,10 @@ namespace Money.Views
 
             CategoryOverviewParameter parameter = (CategoryOverviewParameter)e.Parameter;
 
-            string categoryName = await queryDispatcher.QueryAsync(new GetCategoryName(parameter.CategoryKey));
+            string categoryName = parameter.CategoryKey.IsEmpty 
+                ? "All"
+                : await queryDispatcher.QueryAsync(new GetCategoryName(parameter.CategoryKey));
+
             object period = null;
             IEnumerable<OutcomeOverviewModel> models = null;
             if (parameter.Month != null)

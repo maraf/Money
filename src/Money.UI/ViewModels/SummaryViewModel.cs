@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Money.ViewModels
 {
@@ -125,7 +126,7 @@ namespace Money.ViewModels
                         Amount = category.TotalAmount
                     });
                 }
-
+                
                 TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
                 IsInitialLoading = false;
                 IsLoading = false;

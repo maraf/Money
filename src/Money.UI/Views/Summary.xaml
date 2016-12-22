@@ -19,6 +19,11 @@
         <Setter x:Key="setBarCollapsed" Target="codLeft.Width" Value="0" />
         <Setter x:Key="setPieVisible" Target="codRight.Width" Value="*" />
         <Setter x:Key="setPieCollapsed" Target="codRight.Width" Value="0" />
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar>
@@ -98,12 +103,6 @@
         <Grid x:Name="grdBarGraph" Grid.Row="1">
             <StackPanel>
                 <ListView x:Name="lvwBarGraph" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True" ItemContainerTransitions="{x:Null}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            <Setter Property="Padding" Value="0" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="vm:SummaryItemViewModel">
                             <Grid Style="{StaticResource BarLineGridStyle}">
@@ -129,14 +128,24 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Grid Style="{StaticResource BarLineGridStyle}">
+                <ListViewItem x:Name="lviSummary" Tapped="lviSummary_Tapped">
+                    <Grid Style="{StaticResource BarLineGridStyle}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
+                    </Grid>
+                </ListViewItem>
+                <!--<Grid Style="{StaticResource BarLineGridStyle}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
                     <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
-                </Grid>
+                </Grid>-->
             </StackPanel>
         </Grid>
         <Grid x:Name="grdPieChart" Grid.Row="1" Grid.Column="1">

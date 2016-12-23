@@ -1,8 +1,11 @@
-﻿using Money.Services.Models;
+﻿using Money.Services;
+using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
+using Neptuo.Models.Keys;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +28,10 @@ namespace Money.Views
     [NavigationParameter(typeof(OutcomeParameter))]
     public sealed partial class OutcomeCreate : Page
     {
+        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly INavigator navigator = ServiceProvider.Navigator;
+        private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+
         public OutcomeViewModel ViewModel
         {
             get { return (OutcomeViewModel)DataContext; }
@@ -42,7 +49,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            OutcomeViewModel viewModel = new OutcomeViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade);
+            OutcomeViewModel viewModel = new OutcomeViewModel(navigator, domainFacade);
             OutcomeParameter parameter = e.Parameter as OutcomeParameter;
             if (parameter != null)
             {
@@ -51,13 +58,17 @@ namespace Money.Views
 
                 if (parameter.Description != null)
                     viewModel.Description = parameter.Description;
+
+                if (!parameter.CategoryKey.IsEmpty)
+                    viewModel.SelectedCategories.Add(parameter.CategoryKey);
             }
 
-            IEnumerable<CategoryModel> categories = await ServiceProvider.QueryDispatcher
-                .QueryAsync(new ListAllCategory());
+            IEnumerable<CategoryModel> categories = await queryDispatcher.QueryAsync(new ListAllCategory());
 
             viewModel.Categories.AddRange(categories);
             DataContext = viewModel;
+
+            UpdateSelectedCategoriesView();
         }
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
@@ -93,7 +104,7 @@ namespace Money.Views
 
                 e.Handled = true;
             }
-            else if(e.Key == VirtualKey.Escape)
+            else if (e.Key == VirtualKey.Escape)
             {
                 if (sender == tbxAmount)
                 {
@@ -109,13 +120,32 @@ namespace Money.Views
             }
         }
 
+        private bool isCategoriesViewChangedAttached = true;
+
         private void gvwCategories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!isCategoriesViewChangedAttached)
+                return;
+
             foreach (CategoryModel item in e.RemovedItems)
                 ViewModel.SelectedCategories.Remove(item.Key);
 
             foreach (CategoryModel item in e.AddedItems)
                 ViewModel.SelectedCategories.Add(item.Key);
+        }
+
+        private void UpdateSelectedCategoriesView()
+        {
+            isCategoriesViewChangedAttached = false;
+            gvwCategories.SelectedItems.Clear();
+
+            if (ViewModel.SelectedCategories.Count > 0)
+            {
+                foreach (IKey categoryKey in ViewModel.SelectedCategories)
+                    gvwCategories.SelectedItems.Add(gvwCategories.Items.OfType<CategoryModel>().First(c => c.Key.Equals(categoryKey)));
+            }
+
+            isCategoriesViewChangedAttached = true;
         }
 
         private void tbxAmount_GotFocus(object sender, RoutedEventArgs e)

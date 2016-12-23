@@ -52,7 +52,7 @@ namespace Money.ViewModels
         /// <param name="name">A name of the category.</param>
         /// <param name="period">A period displayed (year or month).</param>
         public OverviewViewModel(INavigator navigator, IKey key, string name, object period)
-            : base(navigator)
+            : base(navigator, key)
         {
             Ensure.NotNull(key, "key");
             Key = key;

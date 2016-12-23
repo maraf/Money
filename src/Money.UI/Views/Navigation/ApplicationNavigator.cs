@@ -92,6 +92,10 @@ namespace Money.Views.Navigation
         {
             Frame frame = (Frame)sender;
 
+            Template template = rootFrame.Content as Template;
+            if (template != null && e.Parameter != null)
+                template.UpdateActiveMenuItem(e.Parameter);
+
             Page page = frame.Content as Page;
             if (page != null)
             {

@@ -2,6 +2,7 @@
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
 using Money.Views.Navigation;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +23,7 @@ namespace Money.Views
     public sealed partial class Template : Page
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
+        private readonly List<MenuItemViewModel> menuItems;
 
         public Frame ContentFrame
         {
@@ -40,8 +42,8 @@ namespace Money.Views
         }
 
         public static readonly DependencyProperty IsMainMenuOpenedProperty = DependencyProperty.Register(
-            "IsMainMenuOpened", 
-            typeof(bool), 
+            "IsMainMenuOpened",
+            typeof(bool),
             typeof(Template),
             new PropertyMetadata(false)
         );
@@ -49,8 +51,8 @@ namespace Money.Views
         public Template()
         {
             InitializeComponent();
-            
-            List<MenuItemViewModel> menuItems = new List<MenuItemViewModel>()
+
+            menuItems = new List<MenuItemViewModel>()
             {
                 new MenuItemViewModel("Pie Chart", "\uEB05", new SummaryParameter(SummaryViewType.PieChart)) { Group = "Summary" },
                 new MenuItemViewModel("Bar Graph", "\uE94C", new SummaryParameter(SummaryViewType.BarGraph)) { Group = "Summary" },
@@ -73,7 +75,7 @@ namespace Money.Views
                 .Open(e.Parameter)
                 .Show();
         }
-        
+
         private void OnMainMenuItemInvoked(object sender, ListViewItem e)
         {
             MenuItemViewModel item = (MenuItemViewModel)((MainMenu)sender).ItemFromContainer(e);
@@ -81,6 +83,35 @@ namespace Money.Views
             navigator
                 .Open(item.Parameter)
                 .Show();
+        }
+
+        /// <summary>
+        /// Updates currently active/selected menu item to match <paramref name="parameter"/>.
+        /// </summary>
+        /// <param name="parameter">A parameter to by selected.</param>
+        public void UpdateActiveMenuItem(object parameter)
+        {
+            Ensure.NotNull(parameter, "parameter");
+            foreach (MenuItemViewModel item in menuItems)
+            {
+                if (item.Parameter.Equals(parameter))
+                {
+                    mnuMain.SelectedItem = item;
+                    return;
+                }
+            }
+
+            Type parameterType = parameter.GetType();
+            foreach (MenuItemViewModel item in menuItems)
+            {
+                if (item.Parameter.GetType() == parameterType)
+                {
+                    mnuMain.SelectedItem = item;
+                    return;
+                }
+            }
+
+            mnuMain.SelectedItem = null;
         }
     }
 }

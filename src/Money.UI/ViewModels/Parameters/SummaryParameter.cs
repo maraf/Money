@@ -104,5 +104,33 @@ namespace Money.ViewModels.Parameters
             Ensure.NotNull(month, "month");
             this.month = month;
         }
+
+        public override bool Equals(object obj)
+        {
+            SummaryParameter other = obj as SummaryParameter;
+            if (other == null)
+                return false;
+
+            if (!ViewType.Equals(other.ViewType))
+                return false;
+
+            if (!PeriodType.Equals(other.PeriodType))
+                return false;
+
+            if (Year != null && Year.Equals(other.Year))
+                return true;
+            else if (Year == null && other.Year != null)
+                return false;
+            else if (Year == null && other.Year == null)
+                return true;
+            else if (Month != null && Month.Equals(other.Month))
+                return true;
+            else if (Month == null && other.Month != null)
+                return false;
+            else if (Month == null && other.Month == null)
+                return true;
+
+            return false;
+        }
     }
 }

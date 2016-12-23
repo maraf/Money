@@ -63,7 +63,14 @@ namespace Money.Views.Navigation
             Type pageType;
             Type parameterType = parameter.GetType();
             if (rules.TryGetPageType(parameterType, out pageType))
+            {
+                Summary summary = template.ContentFrame.Content as Summary;
+                SummaryParameter summaryParameter = parameter as SummaryParameter;
+                if (summary != null && summaryParameter != null)
+                    summary.DecorateParameter(summaryParameter);
+
                 return new PageNavigatorForm(template.ContentFrame, pageType, parameter);
+            }
 
             throw Ensure.Exception.InvalidOperation("Missing navigation page for parameter of type '{0}'.", parameterType.FullName);
         }

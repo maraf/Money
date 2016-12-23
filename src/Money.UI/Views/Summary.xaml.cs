@@ -89,6 +89,17 @@ namespace Money.Views
                 OnPeriodChanged();
         }
 
+        public void DecorateParameter(SummaryParameter parameter)
+        {
+            if (parameter.Month == null && parameter.Year == null)
+            {
+                if (ViewModel.Month != null)
+                    parameter.Month = ViewModel.Month;
+                else if (ViewModel.Year != null)
+                    parameter.Year = ViewModel.Year;
+            }
+        }
+
         private void OnGroupSelectedItemChanged(object sender, SelectedItemEventArgs e)
         {
             if (ViewModel != null)

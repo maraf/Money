@@ -17,48 +17,56 @@
             <AppBarButton Icon="Save" Label="Save new outcome" Command="{Binding Save}" />
         </CommandBar>
     </Page.BottomAppBar>
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel Style="{StaticResource EditorStackPanelStyle}">
-            <TextBlock Text="Amount" />
-            <TextBox x:Name="tbxAmount" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" FontSize="40" TextAlignment="Right" 
-             GotFocus="tbxAmount_GotFocus" KeyDown="OnInputKeyDown" />
-        </StackPanel>
-        <StackPanel Style="{StaticResource EditorStackPanelStyle}">
-            <TextBlock Text="Description" />
-            <TextBox x:Name="tbxDescription" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyDown="OnInputKeyDown" />
-        </StackPanel>
-        <StackPanel Style="{StaticResource EditorStackPanelStyle}">
-            <TextBlock Text="When" />
-            <DatePicker x:Name="dprWhen" Date="{Binding When, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" KeyDown="OnInputKeyDown" />
-        </StackPanel>
-        <StackPanel Style="{StaticResource EditorStackPanelStyle}">
-            <TextBlock Text="Category" />
-            <GridView x:Name="gvwCategories" ItemsSource="{Binding Categories}" SelectionMode="Multiple" SelectionChanged="gvwCategories_SelectionChanged" KeyDown="OnInputKeyDown">
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <Grid>
-                                <Rectangle Height="50">
-                                    <Rectangle.Fill>
-                                        <SolidColorBrush Color="{Binding Color}" />
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0" />
-                            </Grid>
-                        </StackPanel>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-                <GridView.ItemContainerStyle>
-                    <Style TargetType="GridViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    </Style>
-                </GridView.ItemContainerStyle>
-                <GridView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel />
-                    </ItemsPanelTemplate>
-                </GridView.ItemsPanel>
-            </GridView>
-        </StackPanel>
-    </StackPanel>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Style="{StaticResource EditorStackPanelStyle}" Grid.Row="0">
+                <TextBlock Text="Amount" />
+                <TextBox x:Name="tbxAmount" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" FontSize="40" TextAlignment="Right" 
+                 GotFocus="tbxAmount_GotFocus" KeyDown="OnInputKeyDown" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource EditorStackPanelStyle}" Grid.Row="1">
+                <TextBlock Text="Description" />
+                <TextBox x:Name="tbxDescription" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyDown="OnInputKeyDown" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource EditorStackPanelStyle}" Grid.Row="2">
+                <TextBlock Text="When" />
+                <DatePicker x:Name="dprWhen" Date="{Binding When, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" KeyDown="OnInputKeyDown" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource EditorStackPanelStyle}" Grid.Row="3">
+                <TextBlock Text="Category" />
+                <GridView x:Name="gvwCategories" ItemsSource="{Binding Categories}" SelectionMode="Multiple" SelectionChanged="gvwCategories_SelectionChanged" KeyDown="OnInputKeyDown">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Grid>
+                                    <Rectangle Height="50">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding Color}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0" />
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </GridView.ItemContainerStyle>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </Page>

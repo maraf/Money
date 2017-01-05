@@ -1,9 +1,11 @@
 ﻿using Money.Services;
 using Money.Services.Models;
 using Money.Services.Models.Queries;
+using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
+using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -15,6 +17,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
 using Windows.UI.Core;
+using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -31,6 +34,7 @@ namespace Money.Views
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private readonly TileService tileService = ServiceProvider.TileService;
 
         public OutcomeViewModel ViewModel
         {
@@ -151,6 +155,13 @@ namespace Money.Views
         private void tbxAmount_GotFocus(object sender, RoutedEventArgs e)
         {
             tbxAmount.SelectAll();
+        }
+
+        private async void abbPin_Click(object sender, RoutedEventArgs e)
+        {
+            await tileService.PinOutcomeCreate(
+                ViewModel.SelectedCategories.FirstOrDefault() ?? KeyFactory.Empty(typeof(Category))
+            );
         }
     }
 }

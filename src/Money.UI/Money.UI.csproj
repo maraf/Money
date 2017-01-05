@@ -122,6 +122,7 @@
     <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListMonthOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\YearModel.cs" />
+    <Compile Include="Services\Tiles\TileService.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />

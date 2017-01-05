@@ -1,5 +1,6 @@
 ﻿using Money.Services;
 using Money.Services.Models;
+using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.Views.Navigation;
 using Neptuo;
@@ -195,6 +196,7 @@ namespace Money.Views.DesignData
                 ServiceProvider.QueryDispatcher = QueryDispatcher;
                 ServiceProvider.DomainFacade = DomainFacade;
                 ServiceProvider.Navigator = Navigator;
+                ServiceProvider.TileService = new TileService();
             }
         }
     }

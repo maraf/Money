@@ -91,7 +91,14 @@ namespace Money.UI
 
             if (e.PrelaunchActivated == false)
             {
-                if (rootFrame.Content == null)
+                object parameter;
+                if (ServiceProvider.TileService.TryParseNavigation(e, out parameter))
+                {
+                    ServiceProvider.Navigator
+                        .Open(parameter)
+                        .Show();
+                }
+                else if (rootFrame.Content == null)
                 {
                     if (ServiceProvider.UpgradeService.IsRequired())
                     {

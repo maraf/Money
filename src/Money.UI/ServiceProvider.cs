@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Money.Services.Tiles;
 
 namespace Money
 {
@@ -16,5 +17,6 @@ namespace Money
         public static IDomainFacade DomainFacade { get; set; }
         public static INavigator Navigator { get; set; }
         public static IUpgradeService UpgradeService { get; set; }
+        public static TileService TileService { get; set; }
     }
 }

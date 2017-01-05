@@ -17,6 +17,9 @@
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton Icon="Save" Label="Save new outcome" Command="{Binding Save}" />
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="abbPin" Label="Pin to start" Click="abbPin_Click" />
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">

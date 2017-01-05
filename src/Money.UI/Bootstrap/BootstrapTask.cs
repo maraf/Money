@@ -2,6 +2,7 @@
 using Money.Data;
 using Money.Services;
 using Money.Services.Models.Builders;
+using Money.Services.Tiles;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Converters;
@@ -50,6 +51,7 @@ namespace Money.Bootstrap
             ServiceProvider.QueryDispatcher = QueryDispatcher;
             ServiceProvider.DomainFacade = DomainFacade;
             ServiceProvider.UpgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter);
+            ServiceProvider.TileService = new TileService();
         }
         
         private void Domain()

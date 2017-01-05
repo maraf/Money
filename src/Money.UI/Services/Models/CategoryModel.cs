@@ -33,7 +33,7 @@ namespace Money.Services.Models
         /// Gets a color of the category.
         /// </summary>
         public Color Color { get; private set; }
-
+        
         public CategoryModel(IKey key, string name, string description, Color color)
         {
             Ensure.Condition.NotEmptyKey(key);

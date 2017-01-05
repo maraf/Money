@@ -2,12 +2,14 @@
     x:Class="Money.Views.OutcomeCreate"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Money.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Money.Views.Converters"
     mc:Ignorable="d" d:DataContext="{Binding CreateOutcome, Source={StaticResource ViewModelLocator}}"
     KeyDown="OnPageKeyDown">
     <Page.Resources>
+        <converters:InverseColorConverter x:Key="InverseColorConverter" />
+
         <Style x:Key="EditorStackPanelStyle" TargetType="StackPanel">
             <Setter Property="Margin" Value="10,5" />
         </Style>
@@ -50,7 +52,11 @@
                                             <SolidColorBrush Color="{Binding Color}" />
                                         </Rectangle.Fill>
                                     </Rectangle>
-                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0" />
+                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0">
+                                        <TextBlock.Foreground>
+                                            <SolidColorBrush Color="{Binding Color, Converter={StaticResource InverseColorConverter}}" />
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
                                 </Grid>
                             </StackPanel>
                         </DataTemplate>

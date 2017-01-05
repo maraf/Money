@@ -58,7 +58,6 @@ namespace Money.Services.Tiles
                 TileSize.Default
             );
             tile.VisualElements.ShowNameOnSquare150x150Logo = true;
-            tile.VisualElements.ForegroundText = ForegroundText.Dark;
             tile.RoamingEnabled = false;
 
             bool isPinned = await tile.RequestCreateAsync();

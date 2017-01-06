@@ -19,6 +19,16 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public INavigatorMessageForm Message(string content)
+        {
+            throw new NotImplementedException();
+        }
+
+        public INavigatorMessageForm Message(string content, string title)
+        {
+            throw new NotImplementedException();
+        }
+
         public INavigatorForm Open(object parameter)
         {
             throw new NotImplementedException();

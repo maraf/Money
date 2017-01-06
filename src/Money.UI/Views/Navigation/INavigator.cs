@@ -27,5 +27,18 @@ namespace Money.Views.Navigation
         /// Navigates forward, if it is possible.
         /// </summary>
         void GoForward();
+
+        /// <summary>
+        /// Shows a notification to user.
+        /// </summary>
+        /// <param name="content">A text of the notification.</param>
+        INavigatorMessageForm Message(string content);
+
+        /// <summary>
+        /// Shows a notification to user.
+        /// </summary>
+        /// <param name="content">A text of the notification.</param>
+        /// <param name="title">A title of the notification.</param>
+        INavigatorMessageForm Message(string content, string title);
     }
 }

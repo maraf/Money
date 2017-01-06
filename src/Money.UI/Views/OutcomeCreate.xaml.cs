@@ -71,13 +71,12 @@ namespace Money.Views
 
             viewModel.Categories.AddRange(categories);
             DataContext = viewModel;
-
-            UpdateSelectedCategoriesView();
         }
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
             tbxAmount.Focus(FocusState.Keyboard);
+            UpdateSelectedCategoriesView();
         }
 
         private void OnPageKeyDown(object sender, KeyRoutedEventArgs e)
@@ -146,7 +145,7 @@ namespace Money.Views
             if (ViewModel.SelectedCategories.Count > 0)
             {
                 foreach (IKey categoryKey in ViewModel.SelectedCategories)
-                    gvwCategories.SelectedItems.Add(gvwCategories.Items.OfType<CategoryModel>().First(c => c.Key.Equals(categoryKey)));
+                    gvwCategories.SelectedItems.Add(ViewModel.Categories.First(c => c.Key.Equals(categoryKey)));
             }
 
             isCategoriesViewChangedAttached = true;
@@ -159,9 +158,25 @@ namespace Money.Views
 
         private async void abbPin_Click(object sender, RoutedEventArgs e)
         {
-            await tileService.PinOutcomeCreate(
-                ViewModel.SelectedCategories.FirstOrDefault() ?? KeyFactory.Empty(typeof(Category))
-            );
+            IKey categoryKey = ViewModel.SelectedCategories.FirstOrDefault() ?? KeyFactory.Empty(typeof(Category));
+
+            string categoryName = null;
+            if (!categoryKey.IsEmpty)
+            {
+                CategoryModel category = ViewModel.Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
+                if (category != null)
+                    categoryName = category.Name;
+            }
+
+            await tileService.PinOutcomeCreate(categoryKey, categoryName);
+
+            string message = "Tile created";
+            if (categoryName != null)
+                message += $" for category '{categoryName}'";
+
+            navigator
+                .Message(message)
+                .Show();
         }
     }
 }

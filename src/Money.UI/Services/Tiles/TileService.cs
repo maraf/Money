@@ -13,11 +13,12 @@ namespace Money.Services.Tiles
 {
     public class TileService
     {
-        public const string OutcomeCreate = "OutcomeCreate";
+        public const string OutcomeCreatePrefix = "OutcomeCreate-";
+        public const string OutcomeCreateFormat = "OutcomeCreate-{0}";
 
         public bool TryParseNavigation(LaunchActivatedEventArgs e, out object parameter)
         {
-            if (e.TileId == OutcomeCreate)
+            if (e.TileId.StartsWith(OutcomeCreatePrefix))
             {
                 if (e.Arguments.Contains("CategoryKey="))
                 {
@@ -45,22 +46,32 @@ namespace Money.Services.Tiles
             return false;
         }
 
-        public async Task PinOutcomeCreate(IKey categoryKey)
+        public async Task PinOutcomeCreate(IKey categoryKey, string categoryName)
         {
-            if (SecondaryTile.Exists(OutcomeCreate))
+            if (SecondaryTile.Exists(OutcomeCreateFormat))
                 return;
 
+            string guid = null;
+            if (!categoryKey.IsEmpty)
+                guid = categoryKey.AsGuidKey().Guid.ToString();
+
+            string tileId = String.Format(OutcomeCreateFormat, guid ?? "Empty");
+
+            string displayName = "Create Outcome";
+            if (!categoryKey.IsEmpty)
+                displayName += $" in '{categoryName}'";
+
             SecondaryTile tile = new SecondaryTile(
-                "OutcomeCreate",
-                "Create Outcome",
-                "OutcomeCreate" + (!categoryKey.IsEmpty ? "&CategoryKey=" + categoryKey.AsGuidKey().Guid : String.Empty),
+                tileId,
+                displayName,
+                "OutcomeCreate" + (!categoryKey.IsEmpty ? "&CategoryKey=" + guid : String.Empty),
                 new Uri("ms-appx:///Assets/Square150x150Logo.scale-200.png"),
                 TileSize.Default
             );
             tile.VisualElements.ShowNameOnSquare150x150Logo = true;
             tile.RoamingEnabled = false;
 
-            bool isPinned = await tile.RequestCreateAsync();
+            await tile.RequestCreateAsync();
         }
     }
 }

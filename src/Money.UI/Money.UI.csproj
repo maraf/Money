@@ -194,6 +194,8 @@
     <Compile Include="Views\DesignData\SummaryGroupViewModelProvider.cs" />
     <Compile Include="Views\DesignData\UpgradeService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
+    <Compile Include="Views\Navigation\ContentDialogMessageForm.cs" />
+    <Compile Include="Views\Navigation\INavigatorMessageForm.cs" />
     <Compile Include="Views\Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>

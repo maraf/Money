@@ -94,6 +94,12 @@ namespace Money.UI
                 object parameter;
                 if (ServiceProvider.TileService.TryParseNavigation(e, out parameter))
                 {
+                    //rootFrame.BackStack.Add(new PageStackEntry(
+                    //    typeof(Summary),
+                    //    new SummaryParameter(SummaryViewType.BarGraph),
+                    //    null
+                    //));
+
                     ServiceProvider.Navigator
                         .Open(parameter)
                         .Show();

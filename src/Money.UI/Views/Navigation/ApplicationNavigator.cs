@@ -217,5 +217,15 @@ namespace Money.Views.Navigation
 
             return false;
         }
+
+        public INavigatorMessageForm Message(string content, string title)
+        {
+            return new ContentDialogMessageForm(content, title);
+        }
+
+        public INavigatorMessageForm Message(string content)
+        {
+            return Message(content, null);
+        }
     }
 }

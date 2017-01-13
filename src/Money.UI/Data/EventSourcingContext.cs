@@ -10,7 +10,6 @@ namespace Money.Data
     {
         public EventSourcingContext() 
             : base("Filename=EventSourcing.db")
-        {
-        }
+        { }
     }
 }

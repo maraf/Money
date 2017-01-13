@@ -15,7 +15,7 @@
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Edit" Label="Edit category" Command="{Binding EditCategory}" Visibility="{Binding EditCategory, Converter={StaticResource NullToCollapsedConverter}}" />
+            <AppBarButton Icon="Edit" Label="Category" Command="{Binding EditCategory}" Visibility="{Binding EditCategory, Converter={StaticResource NullToCollapsedConverter}}" />
             <AppBarSeparator />
             <AppBarButton Icon="Sort" Label="Sort">
                 <AppBarButton.Flyout>

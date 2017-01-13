@@ -27,7 +27,10 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Name="s2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">
-            <Button x:Name="btnRename" Content="Rename">
+            <Button x:Name="btnRename">
+                <Button.Content>
+                    <SymbolIcon Symbol="Rename" />
+                </Button.Content>
                 <Button.Flyout>
                     <Flyout x:Name="flyRename" LightDismissOverlayMode="On" Placement="Full" Opened="flyRename_Opened">
                         <StackPanel>
@@ -57,7 +60,10 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <Button Name="btnColor" Content="Color">
+            <Button Name="btnColor">
+                <Button.Content>
+                    <Rectangle Width="24" Height="24" Fill="{Binding ColorBrush}" Opacity=".5" />
+                </Button.Content>
                 <Button.Flyout>
                     <Flyout x:Name="flyColor" LightDismissOverlayMode="On" Placement="Full">
                         <Grid>
@@ -86,8 +92,16 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <Button Content="Icon" IsEnabled="False" />
-            <Button Content="Hide" IsEnabled="False" />
+            <Button IsEnabled="False">
+                <Button.Content>
+                    <SymbolIcon Symbol="Emoji2" />
+                </Button.Content>
+            </Button>
+            <Button IsEnabled="False">
+                <Button.Content>
+                    <SymbolIcon Symbol="Delete" />
+                </Button.Content>
+            </Button>
         </StackPanel>
     </StackPanel>
 </UserControl>

@@ -168,7 +168,10 @@ namespace Money.Views.DesignData
             get
             {
                 if (categoryEdit == null)
+                {
                     categoryEdit = new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown);
+                    categoryEdit.IsSelected = true;
+                }
 
                 return categoryEdit;
             }

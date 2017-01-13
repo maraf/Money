@@ -79,7 +79,7 @@ namespace Money.Views
                 ContentLoaded?.Invoke(this, EventArgs.Empty);
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 

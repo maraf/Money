@@ -101,7 +101,6 @@ namespace Money.Views.DesignData
                     });
                     summary.TotalAmount = new Price(13520, "CZK");
                     summary.IsLoading = false;
-                    summary.IsInitialLoading = false;
                 }
 
                 return summary;

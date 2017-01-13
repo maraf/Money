@@ -21,20 +21,6 @@ namespace Money.ViewModels
     {
         private readonly IQueryDispatcher queryDispatcher;
 
-        private bool isInitialLoading;
-        public bool IsInitialLoading
-        {
-            get { return isInitialLoading; }
-            set
-            {
-                if (isInitialLoading != value)
-                {
-                    isInitialLoading = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
         private bool isLoading;
         public bool IsLoading
         {
@@ -105,7 +91,6 @@ namespace Money.ViewModels
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.queryDispatcher = queryDispatcher;
             Items = new SortableObservableCollection<SummaryItemViewModel>();
-            IsInitialLoading = true;
         }
         
         private async Task ReloadMonth()
@@ -128,7 +113,6 @@ namespace Money.ViewModels
                 }
                 
                 TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
-                IsInitialLoading = false;
                 IsLoading = false;
             }
         }

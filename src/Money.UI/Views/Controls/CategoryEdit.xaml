@@ -62,7 +62,7 @@
             </Button>
             <Button Name="btnColor">
                 <Button.Content>
-                    <Rectangle Width="24" Height="24" Fill="{Binding ColorBrush}" Opacity=".5" />
+                    <Rectangle Width="20" Height="20" Fill="{Binding ColorBrush}" Opacity=".5" />
                 </Button.Content>
                 <Button.Flyout>
                     <Flyout x:Name="flyColor" LightDismissOverlayMode="On" Placement="Full">

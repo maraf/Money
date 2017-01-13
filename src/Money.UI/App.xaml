@@ -5,8 +5,7 @@
     xmlns:converters="using:Money.Views.Converters"
     xmlns:dd="using:Money.Views.DesignData"
     xmlns:domain="using:Money"
-    xmlns:local="using:Money.UI"
-    RequestedTheme="Light">
+    xmlns:local="using:Money.UI">
     <Application.Resources>
         <dd:ViewModelLocator x:Key="ViewModelLocator" />
         

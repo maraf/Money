@@ -44,6 +44,7 @@ namespace Money.UI
         {
             InitializeComponent();
             Suspending += OnSuspending;
+            UnhandledException += OnUnhandledException;
         }
 
         /// <summary>
@@ -155,6 +156,23 @@ namespace Money.UI
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+#if DEBUG
+            if (Debugger.IsAttached)
+                Debugger.Break();
+
+            if (ServiceProvider.Navigator != null)
+            {
+                ServiceProvider.Navigator
+                    .Message(e.Exception.ToString(), "Exception")
+                    .Show();
+
+                e.Handled = true;
+            }
+#endif
         }
     }
 }

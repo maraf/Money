@@ -164,7 +164,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
+                        <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" Padding="0,0,15,0" VerticalAlignment="Center" />
                         <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
                     </Grid>
                 </ListViewItem>

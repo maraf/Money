@@ -14,8 +14,17 @@ namespace Money.ViewModels.Commands
     {
         private readonly IDomainFacade domainFacade;
         private readonly CategoryEditViewModel viewModel;
+        private Color color;
 
-        public Color Color { get; set; }
+        public Color Color
+        {
+            get { return color; }
+            set
+            {
+                color = value;
+                Execute();
+            }
+        }
 
         public CategoryChangeColorCommand(IDomainFacade domainFacade, CategoryEditViewModel viewModel)
         {
@@ -24,7 +33,7 @@ namespace Money.ViewModels.Commands
             this.domainFacade = domainFacade;
             this.viewModel = viewModel;
 
-            Color = viewModel.Color;
+            color = viewModel.Color;
         }
 
         public override bool CanExecute()

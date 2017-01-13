@@ -14,7 +14,7 @@
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5,0,0,0" />
         </Style>
-        <Style x:Key="EditorStackPanelStype" TargetType="StackPanel">
+        <Style x:Key="EditorStackPanelStyle" TargetType="StackPanel">
             <Setter Property="Padding" Value="4,2" />
         </Style>
     </UserControl.Resources>
@@ -29,18 +29,29 @@
         <StackPanel Name="s2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">
             <Button x:Name="btnRename" Content="Rename">
                 <Button.Flyout>
-                    <Flyout x:Name="flyRename" LightDismissOverlayMode="On" Placement="Full">
+                    <Flyout x:Name="flyRename" LightDismissOverlayMode="On" Placement="Full" Opened="flyRename_Opened">
                         <StackPanel>
-                            <StackPanel Style="{StaticResource EditorStackPanelStype}">
+                            <StackPanel Style="{StaticResource EditorStackPanelStyle}">
                                 <TextBlock Text="Name" />
-                                <TextBox Text="{Binding Rename.Name, Mode=TwoWay}" />
+                                <TextBox x:Name="tbxName" Text="{Binding Rename.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyDown="tbxName_KeyDown" />
                             </StackPanel>
-                            <StackPanel Style="{StaticResource EditorStackPanelStype}">
+                            <StackPanel Style="{StaticResource EditorStackPanelStyle}">
                                 <TextBlock Text="Description" />
-                                <TextBox Text="{Binding Rename.Description, Mode=TwoWay}" />
+                                <TextBox x:Name="tbxDescription" Text="{Binding Rename.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyDown="tbxDescription_KeyDown" />
                             </StackPanel>
-                            <StackPanel Style="{StaticResource EditorStackPanelStype}" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Save" Command="{Binding Rename}" />
+                            <StackPanel Style="{StaticResource EditorStackPanelStyle}" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                                <Button x:Name="btnSave" Command="{Binding Rename}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <SymbolIcon Symbol="Save" />
+                                        <TextBlock Text="Save" Padding="8,0,0,0" />
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="btnBack" Click="btnBack_Click" Margin="16,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <SymbolIcon Symbol="Cancel" />
+                                        <TextBlock Text="Close" Padding="8,0,0,0" />
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </StackPanel>
                     </Flyout>
@@ -49,11 +60,16 @@
             <Button Name="btnColor" Content="Color">
                 <Button.Flyout>
                     <Flyout x:Name="flyColor" LightDismissOverlayMode="On" Placement="Full">
-                        <StackPanel>
-                            <GridView x:Name="grvColors" ItemsSource="{Binding Source={StaticResource ColorCollection}}" SelectedItem="{Binding ChangeColor.Color, Mode=TwoWay}" SelectionChanged="grvColors_SelectionChanged" SelectionMode="Single">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <!--<TextBox x:Name="tbxColorFilter" TextChanged="tbxColorFilter_TextChanged" Margin="0,0,0,20" Grid.Row="0" />-->
+                            <GridView x:Name="grvColors" ItemsSource="{Binding Source={StaticResource ColorCollection}}" SelectedItem="{Binding ChangeColor.Color, Mode=TwoWay}" SelectionMode="Single" Grid.Row="1">
                                 <GridView.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <ItemsWrapGrid MaximumRowsOrColumns="8" Orientation="Horizontal" GroupPadding="0" />
+                                        <ItemsWrapGrid MaximumRowsOrColumns="7" Orientation="Horizontal" GroupPadding="0" />
                                     </ItemsPanelTemplate>
                                 </GridView.ItemsPanel>
                                 <GridView.ItemTemplate>
@@ -66,10 +82,7 @@
                                     </DataTemplate>
                                 </GridView.ItemTemplate>
                             </GridView>
-                            <StackPanel Style="{StaticResource EditorStackPanelStype}" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Save" Command="{Binding ChangeColor}" />
-                            </StackPanel>
-                        </StackPanel>
+                        </Grid>
                     </Flyout>
                 </Button.Flyout>
             </Button>

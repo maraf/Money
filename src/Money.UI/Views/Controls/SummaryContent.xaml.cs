@@ -20,27 +20,38 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace Money.Views.Controls
 {
+    /// <summary>
+    /// User control containing month or year summary of outcomes.
+    /// </summary>
     public sealed partial class SummaryContent : UserControl
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
 
+        /// <summary>
+        /// [Internal]
+        /// Gets or sets a view model.
+        /// </summary>
         public SummaryViewModel ViewModel
         {
             get { return (SummaryViewModel)grdMain.DataContext; }
-            set { grdMain.DataContext = value; }
+            private set { grdMain.DataContext = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a prefered view type.
+        /// </summary>
         public SummaryViewType PreferedViewType
         {
             get { return (SummaryViewType)GetValue(PreferedViewTypeProperty); }
             set { SetValue(PreferedViewTypeProperty, value); }
         }
 
+        /// <summary>
+        /// A dependency property for prefered view type.
+        /// </summary>
         public static readonly DependencyProperty PreferedViewTypeProperty = DependencyProperty.Register(
             "PreferedViewType",
             typeof(SummaryViewType),

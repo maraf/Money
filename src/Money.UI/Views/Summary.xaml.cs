@@ -96,8 +96,9 @@ namespace Money.Views
                     break;
             }
 
-            if (grpGroups.SelectedItem != null)
-                OnPeriodChanged();
+            OnPeriodChanged();
+            //if (grpGroups.SelectedItem != null)
+            //    OnPeriodChanged();
         }
 
         public void DecorateParameter(SummaryParameter parameter)
@@ -119,20 +120,21 @@ namespace Money.Views
 
         private void OnPeriodChanged()
         {
-            MonthModel month = grpGroups.SelectedItem as MonthModel;
-            if (month != null)
-            {
-                ViewModel.Month = month;
-                return;
-            }
+            ViewModel.Month = new MonthModel(2016, 12);
+            //MonthModel month = grpGroups.SelectedItem as MonthModel;
+            //if (month != null)
+            //{
+            //    ViewModel.Month = month;
+            //    return;
+            //}
 
-            YearModel year = grpGroups.SelectedItem as YearModel;
-            if (year != null)
-            {
-                throw new NotImplementedException();
-            }
+            //YearModel year = grpGroups.SelectedItem as YearModel;
+            //if (year != null)
+            //{
+            //    throw new NotImplementedException();
+            //}
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void lvwBarGraph_ItemClick(object sender, ItemClickEventArgs e)
@@ -148,19 +150,19 @@ namespace Money.Views
 
         private void OpenOverview(IKey categoryKey)
         {
-            OverviewParameter parameter = null;
+            //OverviewParameter parameter = null;
 
-            MonthModel month = grpGroups.SelectedItem as MonthModel;
-            if (month != null)
-                parameter = new OverviewParameter(categoryKey, month);
+            //MonthModel month = grpGroups.SelectedItem as MonthModel;
+            //if (month != null)
+            //    parameter = new OverviewParameter(categoryKey, month);
 
-            YearModel year = grpGroups.SelectedItem as YearModel;
-            if (year != null)
-                parameter = new OverviewParameter(categoryKey, year);
+            //YearModel year = grpGroups.SelectedItem as YearModel;
+            //if (year != null)
+            //    parameter = new OverviewParameter(categoryKey, year);
 
-            navigator
-                .Open(parameter)
-                .Show();
+            //navigator
+            //    .Open(parameter)
+            //    .Show();
         }
 
         private void mfiSortAmount_Click(object sender, RoutedEventArgs e)

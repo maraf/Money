@@ -19,8 +19,11 @@ namespace Money
         IEventHandler<OutcomeCategoryAdded>,
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeDescriptionChanged>,
-        IEventHandler<OutcomeWhenChanged>
+        IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<OutcomeDeleted>
     {
+        public bool IsDeleted { get; private set; }
+
         /// <summary>
         /// Gets an amount of the outcome.
         /// </summary>
@@ -57,6 +60,12 @@ namespace Money
             : base(key, events)
         { }
 
+        private void EnsureNotDeleted()
+        {
+            if (IsDeleted)
+                throw new OutcomeAlreadyDeletedException();
+        }
+
         Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
         {
             return UpdateState(() =>
@@ -75,6 +84,8 @@ namespace Money
         /// <exception cref="OutcomeAlreadyHasCategoryException">When the outcome already has category <paramref name="categoryKey"/> assigned.</exception>
         public void AddCategory(IKey categoryKey)
         {
+            EnsureNotDeleted();
+
             if (CategoryKeys.Contains(categoryKey))
                 throw new OutcomeAlreadyHasCategoryException(categoryKey);
 
@@ -88,6 +99,8 @@ namespace Money
 
         public void ChangeAmount(Price amount)
         {
+            EnsureNotDeleted();
+
             if (Amount != amount)
                 Publish(new OutcomeAmountChanged(Amount, amount));
         }
@@ -99,6 +112,8 @@ namespace Money
 
         public void ChangeDescription(string description)
         {
+            EnsureNotDeleted();
+
             if (Description != description)
                 Publish(new OutcomeDescriptionChanged(description));
         }
@@ -110,6 +125,8 @@ namespace Money
 
         public void ChangeWhen(DateTime when)
         {
+            EnsureNotDeleted();
+
             if (When != when)
                 Publish(new OutcomeWhenChanged(when));
         }
@@ -117,6 +134,18 @@ namespace Money
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
         {
             return UpdateState(() => When = payload.When);
+        }
+
+        public void Delete()
+        {
+            EnsureNotDeleted();
+
+            Publish(new OutcomeDeleted());
+        }
+
+        Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
+        {
+            return UpdateState(() => IsDeleted = true);
         }
     }
 }

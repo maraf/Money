@@ -10,5 +10,6 @@ namespace Money.Views.Navigation
     public interface INavigatorMessageForm : INavigatorForm
     {
         INavigatorMessageForm Button(string text, ICommand action);
+        INavigatorMessageForm ButtonClose(string text);
     }
 }

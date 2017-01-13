@@ -34,6 +34,13 @@ namespace Money.Views.Navigation
             return this;
         }
 
+        public INavigatorMessageForm ButtonClose(string text)
+        {
+            Ensure.NotNullOrEmpty(text, "text");
+            buttons.Add(new Tuple<string, ICommand>(text, null));
+            return this;
+        }
+
         public void Show()
         {
             ContentDialog dialog = new ContentDialog();
@@ -42,7 +49,11 @@ namespace Money.Views.Navigation
             if (buttons.Count > 0)
             {
                 dialog.PrimaryButtonText = buttons[0].Item1;
-                dialog.PrimaryButtonCommand = buttons[0].Item2;
+
+                if (buttons[0].Item2 == null)
+                    dialog.PrimaryButtonClick += (sender, e) => dialog.Hide();
+                else
+                    dialog.PrimaryButtonCommand = buttons[0].Item2;
             }
             else
             {
@@ -52,8 +63,11 @@ namespace Money.Views.Navigation
 
             if (buttons.Count > 1)
             {
-                dialog.PrimaryButtonText = buttons[0].Item1;
-                dialog.PrimaryButtonCommand = buttons[0].Item2;
+                dialog.SecondaryButtonText = buttons[1].Item1;
+                if (buttons[1].Item2 == null)
+                    dialog.SecondaryButtonClick += (sender, e) => dialog.Hide();
+                else
+                    dialog.SecondaryButtonCommand = buttons[1].Item2;
             }
 
             dialog.ShowAsync();

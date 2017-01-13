@@ -125,6 +125,7 @@
     <Compile Include="Services\Tiles\TileService.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
+    <Compile Include="ViewModels\Commands\DeleteOutcomeCommand.cs" />
     <Compile Include="ViewModels\OutcomeOverviewViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />

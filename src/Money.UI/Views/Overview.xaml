@@ -35,7 +35,7 @@
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" Background="RosyBrown" />
         </CommandBar>
     </Page.BottomAppBar>
-    
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -65,13 +65,21 @@
                         </Grid>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button x:Name="btnAmount" Content="Amount" Click="btnAmount_Click" />
-                            <Button x:Name="btnDescription" Content="Description" Click="btnDescription_Click" />
+                            <Button x:Name="btnDescription" Click="btnDescription_Click">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Message" />
+                                </Button.Content>
+                            </Button>
                             <Button x:Name="btnWhen" Click="btnWhen_Click">
                                 <Button.Content>
                                     <SymbolIcon Symbol="Calendar" />
                                 </Button.Content>
                             </Button>
-                            <Button Content="Category" IsEnabled="False" />
+                            <Button x:Name="btnDelete" Click="btnDelete_Click">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Delete" />
+                                </Button.Content>
+                            </Button>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

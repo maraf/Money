@@ -2,6 +2,7 @@
 using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels;
+using Money.ViewModels.Commands;
 using Money.ViewModels.Parameters;
 using Money.Views.Dialogs;
 using Money.Views.Navigation;
@@ -188,6 +189,17 @@ namespace Money.Views
                 if (year != null && (dialog.Value.Year != year.Year))
                     ViewModel.Items.Remove(viewModel);
             }
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            OutcomeOverviewViewModel viewModel = (OutcomeOverviewViewModel)((Button)sender).DataContext;
+
+            navigator
+                .Message(String.Format("Do you realy want to delete an outcome for '{0}' from '{1}'?", viewModel.Amount, viewModel.When))
+                .Button("Yes", new DeleteOutcomeCommand(domainFacade, viewModel.Key).AddExecuted(() => ViewModel.Items.Remove(viewModel)))
+                .ButtonClose("No")
+                .Show();
         }
     }
 }

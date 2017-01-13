@@ -20,6 +20,7 @@ namespace Money.Services.Models.Builders
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<OutcomeDeleted>,
         IQueryHandler<ListMonthWithOutcome, IEnumerable<MonthModel>>,
         IQueryHandler<ListMonthCategoryWithOutcome, IEnumerable<CategoryWithAmountModel>>,
         IQueryHandler<GetTotalMonthOutcome, Price>,
@@ -224,6 +225,19 @@ namespace Money.Services.Models.Builders
                 if (entity != null)
                 {
                     entity.When = payload.When;
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task HandleAsync(OutcomeDeleted payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
+                if (entity != null)
+                {
+                    db.Outcomes.Remove(entity);
                     await db.SaveChangesAsync();
                 }
             }

@@ -116,9 +116,11 @@
     <Compile Include="Events\OutcomeAmountChanged.cs" />
     <Compile Include="Events\OutcomeCategoryAdded.cs" />
     <Compile Include="Events\OutcomeCreated.cs" />
+    <Compile Include="Events\OutcomeDeleted.cs" />
     <Compile Include="Events\OutcomeDescriptionChanged.cs" />
     <Compile Include="Events\OutcomeWhenChanged.cs" />
     <Compile Include="Outcome.cs" />
+    <Compile Include="OutcomeAlreadyDeletedException.cs" />
     <Compile Include="OutcomeAlreadyHasCategoryException.cs" />
     <Compile Include="Price.cs" />
     <Compile Include="PriceFactory.cs" />

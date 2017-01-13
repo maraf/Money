@@ -59,6 +59,11 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task DeleteOutcome(IKey outcomeKey)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
         {
             throw new NotImplementedException();

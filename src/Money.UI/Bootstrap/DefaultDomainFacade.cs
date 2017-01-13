@@ -127,5 +127,15 @@ namespace Money.Bootstrap
                 outcomeRepository.Save(outcome);
             });
         }
+
+        public Task DeleteOutcome(IKey outcomeKey)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                Outcome outcome = outcomeRepository.Get(outcomeKey);
+                outcome.Delete();
+                outcomeRepository.Save(outcome);
+            });
+        }
     }
 }

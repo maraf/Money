@@ -73,6 +73,13 @@ namespace Money.Services
         Task ChangeOutcomeWhen(IKey outcomeKey, DateTime when);
 
         /// <summary>
+        /// Deletes an outcome with <paramref name="outcomeKey"/>.
+        /// </summary>
+        /// <param name="outcomeKey">A key of the outcome to delete.</param>
+        /// <returns>Continuation task.</returns>
+        Task DeleteOutcome(IKey outcomeKey);
+
+        /// <summary>
         /// Renames a category with a key <paramref name="categoryKey"/>.
         /// </summary>
         /// <param name="categoryKey">A key of the category to rename.</param>

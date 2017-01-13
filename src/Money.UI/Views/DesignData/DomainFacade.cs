@@ -34,6 +34,16 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task ChangeOutcomeAmount(IKey outcomeKey, Price amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ChangeOutcomeDescription(IKey outcomeKey, string description)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IKey> CreateCategoryAsync(string name, Color color)
         {
             throw new NotImplementedException();

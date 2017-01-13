@@ -113,8 +113,10 @@
     <Compile Include="Events\CategoryCreated.cs" />
     <Compile Include="Events\CategoryDescriptionChanged.cs" />
     <Compile Include="Events\CategoryRenamed.cs" />
+    <Compile Include="Events\OutcomeAmountChanged.cs" />
     <Compile Include="Events\OutcomeCategoryAdded.cs" />
     <Compile Include="Events\OutcomeCreated.cs" />
+    <Compile Include="Events\OutcomeDescriptionChanged.cs" />
     <Compile Include="Outcome.cs" />
     <Compile Include="OutcomeAlreadyHasCategoryException.cs" />
     <Compile Include="Price.cs" />

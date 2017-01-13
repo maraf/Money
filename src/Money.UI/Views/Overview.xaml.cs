@@ -25,6 +25,7 @@ namespace Money.Views
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private bool isDateSorted = true;
         private bool isAmountSorted;
         private bool isDescriptionSorted;
@@ -46,7 +47,7 @@ namespace Money.Views
 
             OverviewParameter parameter = (OverviewParameter)e.Parameter;
 
-            string categoryName = parameter.CategoryKey.IsEmpty 
+            string categoryName = parameter.CategoryKey.IsEmpty
                 ? "All"
                 : await queryDispatcher.QueryAsync(new GetCategoryName(parameter.CategoryKey));
 
@@ -136,11 +137,15 @@ namespace Money.Views
 
             OutcomeAmount dialog = new OutcomeAmount();
             dialog.Value = (double)viewModel.Amount.Value;
-            ContentDialogResult result = await dialog.ShowAsync();
 
-            navigator
-                .Message(dialog.Value.ToString())
-                .Show();
+            ContentDialogResult result = await dialog.ShowAsync();
+            decimal newValue = (decimal)dialog.Value;
+            if (result == ContentDialogResult.Primary && newValue != viewModel.Amount.Value)
+            {
+                Price newAmount = new Price(newValue, viewModel.Amount.Currency);
+                await domainFacade.ChangeOutcomeAmount(viewModel.Key, newAmount);
+                viewModel.Amount = newAmount;
+            }
         }
 
         private async void btnDescription_Click(object sender, RoutedEventArgs e)
@@ -149,11 +154,13 @@ namespace Money.Views
 
             OutcomeDescription dialog = new OutcomeDescription();
             dialog.Value = viewModel.Description;
-            ContentDialogResult result = await dialog.ShowAsync();
 
-            navigator
-                .Message(dialog.Value)
-                .Show();
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary && dialog.Value != viewModel.Description)
+            {
+                await domainFacade.ChangeOutcomeDescription(viewModel.Key, dialog.Value);
+                viewModel.Description = dialog.Value;
+            }
         }
     }
 }

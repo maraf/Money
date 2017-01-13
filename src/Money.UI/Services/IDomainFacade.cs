@@ -49,6 +49,22 @@ namespace Money.Services
         Task AddOutcomeCategoryAsync(IKey outcomeKey, IKey categoryKey);
 
         /// <summary>
+        /// Changes an <paramref name="amount"/> of the outcome with <paramref name="key"/>.
+        /// </summary>
+        /// <param name="outcomeKey">A key of the outcome to modify.</param>
+        /// <param name="amount">A new outcome value.</param>
+        /// <returns>Continuation task.</returns>
+        Task ChangeOutcomeAmount(IKey outcomeKey, Price amount);
+
+        /// <summary>
+        /// Changes a <paramref name="description"/> of the outcome with <paramref name="key"/>.
+        /// </summary>
+        /// <param name="outcomeKey">A key of the outcome to modify.</param>
+        /// <param name="description">A new description of the outcome.</param>
+        /// <returns>Continuation task.</returns>
+        Task ChangeOutcomeDescription(IKey outcomeKey, string description);
+
+        /// <summary>
         /// Renames a category with a key <paramref name="categoryKey"/>.
         /// </summary>
         /// <param name="categoryKey">A key of the category to rename.</param>

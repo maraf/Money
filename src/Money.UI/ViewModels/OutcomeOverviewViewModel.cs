@@ -17,20 +17,46 @@ namespace Money.ViewModels
         /// </summary>
         public IKey Key { get; private set; }
 
+        private Price amount;
+
         /// <summary>
         /// Gets an amount of the outcome.
         /// </summary>
-        public Price Amount { get; private set; }
+        public Price Amount
+        {
+            get { return amount; }
+            set
+            {
+                if (amount != value)
+                {
+                    amount = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a date when the outcome ocured.
         /// </summary>
         public DateTime When { get; set; }
 
+        private string description;
+
         /// <summary>
         /// Gets a description of the outcome.
         /// </summary>
-        public string Description { get; private set; }
+        public string Description
+        {
+            get { return description; }
+            set
+            {
+                if (description != value)
+                {
+                    description = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         private bool isSelected;
 

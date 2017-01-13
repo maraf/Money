@@ -16,7 +16,9 @@ namespace Money
     /// </summary>
     public class Outcome : AggregateRoot,
         IEventHandler<OutcomeCreated>,
-        IEventHandler<OutcomeCategoryAdded>
+        IEventHandler<OutcomeCategoryAdded>,
+        IEventHandler<OutcomeAmountChanged>,
+        IEventHandler<OutcomeDescriptionChanged>
     {
         /// <summary>
         /// Gets an amount of the outcome.
@@ -81,6 +83,26 @@ namespace Money
         Task IEventHandler<OutcomeCategoryAdded>.HandleAsync(OutcomeCategoryAdded payload)
         {
             return UpdateState(() => CategoryKeys.Add(payload.CategoryKey));
+        }
+
+        public void ChangeAmount(Price amount)
+        {
+            Publish(new OutcomeAmountChanged(Amount, amount));
+        }
+
+        Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
+        {
+            return UpdateState(() => Amount = payload.NewValue);
+        }
+
+        public void ChangeDescription(string description)
+        {
+            Publish(new OutcomeDescriptionChanged(description));
+        }
+
+        Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
+        {
+            return UpdateState(() => Description = payload.Description);
         }
     }
 }

@@ -97,5 +97,25 @@ namespace Money.Bootstrap
                 categoryRepository.Save(category);
             });
         }
+
+        public Task ChangeOutcomeAmount(IKey outcomeKey, Price amount)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                Outcome outcome = outcomeRepository.Get(outcomeKey);
+                outcome.ChangeAmount(amount);
+                outcomeRepository.Save(outcome);
+            });
+        }
+
+        public Task ChangeOutcomeDescription(IKey outcomeKey, string description)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                Outcome outcome = outcomeRepository.Get(outcomeKey);
+                outcome.ChangeDescription(description);
+                outcomeRepository.Save(outcome);
+            });
+        }
     }
 }

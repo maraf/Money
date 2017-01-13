@@ -15,8 +15,10 @@ using System.Threading.Tasks;
 
 namespace Money.Services.Models.Builders
 {
-    public class OutcomeBuilder : IEventHandler<OutcomeCreated>, 
-        IEventHandler<OutcomeCategoryAdded>, 
+    public class OutcomeBuilder : IEventHandler<OutcomeCreated>,
+        IEventHandler<OutcomeCategoryAdded>,
+        IEventHandler<OutcomeAmountChanged>,
+        IEventHandler<OutcomeDescriptionChanged>,
         IQueryHandler<ListMonthWithOutcome, IEnumerable<MonthModel>>,
         IQueryHandler<ListMonthCategoryWithOutcome, IEnumerable<CategoryWithAmountModel>>,
         IQueryHandler<GetTotalMonthOutcome, Price>,
@@ -77,10 +79,10 @@ namespace Money.Services.Models.Builders
                 {
                     CategoryModel model = (await db.Categories.FindAsync(item.Key)).ToModel();
                     result.Add(new CategoryWithAmountModel(
-                        model.Key, 
-                        model.Name, 
-                        model.Description, 
-                        model.Color, 
+                        model.Key,
+                        model.Name,
+                        model.Description,
+                        model.Color,
                         item.Value
                     ));
                 }
@@ -154,6 +156,21 @@ namespace Money.Services.Models.Builders
             }
         }
 
+        public Task HandleAsync(OutcomeCreated payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                db.Outcomes.Add(new OutcomeEntity(new OutcomeModel(
+                    payload.AggregateKey,
+                    payload.Amount,
+                    payload.When,
+                    payload.Description,
+                    new List<IKey>() { payload.CategoryKey }
+                )));
+                return db.SaveChangesAsync();
+            }
+        }
+
         public async Task HandleAsync(OutcomeCategoryAdded payload)
         {
             using (ReadModelContext db = new ReadModelContext())
@@ -171,18 +188,30 @@ namespace Money.Services.Models.Builders
             }
         }
 
-        public Task HandleAsync(OutcomeCreated payload)
+        public async Task HandleAsync(OutcomeAmountChanged payload)
         {
             using (ReadModelContext db = new ReadModelContext())
             {
-                db.Outcomes.Add(new OutcomeEntity(new OutcomeModel(
-                    payload.AggregateKey,
-                    payload.Amount,
-                    payload.When,
-                    payload.Description,
-                    new List<IKey>() { payload.CategoryKey }
-                )));
-                return db.SaveChangesAsync();
+                OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
+                if (entity != null)
+                {
+                    entity.Amount = payload.NewValue.Value;
+                    entity.Currency = payload.NewValue.Currency;
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task HandleAsync(OutcomeDescriptionChanged payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
+                if (entity != null)
+                {
+                    entity.Description = payload.Description;
+                    await db.SaveChangesAsync();
+                }
             }
         }
     }

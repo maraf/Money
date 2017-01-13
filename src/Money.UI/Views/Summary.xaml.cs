@@ -22,6 +22,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using System.ComponentModel;
+using Neptuo.Queries;
+using Money.Services.Models.Queries;
 
 namespace Money.Views
 {
@@ -29,172 +31,148 @@ namespace Money.Views
     public sealed partial class Summary : Page, INavigatorPage
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
+        private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private Dictionary<GroupItemViewModel, MonthModel> groupToMonth;
+
         private bool isAmountSorted;
         private bool isCategorySorted = true;
 
         public event EventHandler ContentLoaded;
 
-        public SummaryViewModel ViewModel
+        public GroupViewModel ViewModel
         {
-            get { return (SummaryViewModel)DataContext; }
-            set { DataContext = value; }
+            get { return (GroupViewModel)DataContext; }
+            private set { DataContext = value; }
         }
 
-        public bool IsPieChartPrefered
+        public SummaryViewType PreferedViewType
         {
-            get { return (bool)GetValue(IsPieChartPreferedProperty); }
-            set { SetValue(IsPieChartPreferedProperty, value); }
+            get { return (SummaryViewType)GetValue(PreferedViewTypeProperty); }
+            set { SetValue(PreferedViewTypeProperty, value); }
         }
 
-        public static readonly DependencyProperty IsPieChartPreferedProperty = DependencyProperty.Register(
-            "IsPieChartPrefered",
-            typeof(bool),
+        public static readonly DependencyProperty PreferedViewTypeProperty = DependencyProperty.Register(
+            "PreferedViewType",
+            typeof(SummaryViewType),
             typeof(Summary),
-            new PropertyMetadata(false)
-        );
-
-        public bool IsBarGraphPrefered
-        {
-            get { return (bool)GetValue(IsBarGraphPreferedProperty); }
-            set { SetValue(IsBarGraphPreferedProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsBarGraphPreferedProperty = DependencyProperty.Register(
-            "IsBarGraphPrefered",
-            typeof(bool),
-            typeof(Summary),
-            new PropertyMetadata(false)
+            new PropertyMetadata(SummaryViewType.BarGraph)
         );
 
         public Summary()
         {
             InitializeComponent();
-            ViewModel = new SummaryViewModel(ServiceProvider.Navigator, ServiceProvider.QueryDispatcher);
-            ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+            ViewModel = new GroupViewModel(navigator);
         }
 
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(SummaryViewModel.IsInitialLoading) && !ViewModel.IsInitialLoading)
-                ContentLoaded?.Invoke(this, EventArgs.Empty);
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
             SummaryParameter parameter = (SummaryParameter)e.Parameter;
-            switch (parameter.ViewType)
+            PreferedViewType = parameter.ViewType;
+
+            switch (parameter.PeriodType)
             {
-                case SummaryViewType.PieChart:
-                    IsPieChartPrefered = true;
-                    IsBarGraphPrefered = false;
+                case SummaryPeriodType.Month:
+                    await LoadMonthViewAsync(ViewModel, parameter.Month);
                     break;
-                case SummaryViewType.BarGraph:
-                    IsPieChartPrefered = false;
-                    IsBarGraphPrefered = true;
+                case SummaryPeriodType.Year:
+                    await LoadYearViewAsync(ViewModel, parameter.Year);
                     break;
+                default:
+                    throw Ensure.Exception.NotSupported(parameter.PeriodType.ToString());
             }
 
-            OnPeriodChanged();
-            //if (grpGroups.SelectedItem != null)
-            //    OnPeriodChanged();
+            ContentLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        private async Task LoadMonthViewAsync(GroupViewModel viewModel, MonthModel prefered)
+        {
+            ViewModel.IsLoading = true;
+            groupToMonth = new Dictionary<GroupItemViewModel, MonthModel>();
+
+            IEnumerable<MonthModel> months = await queryDispatcher.QueryAsync(new ListMonthWithOutcome());
+            int? preferedIndex = null;
+            int index = 0;
+            foreach (MonthModel month in months)
+            {
+                GroupItemViewModel monthViewModel = new GroupItemViewModel(month.ToString(), month, PreferedViewType);
+                groupToMonth[monthViewModel] = month;
+
+                if (prefered == month)
+                    preferedIndex = index;
+
+                viewModel.Items.Add(monthViewModel);
+                index++;
+            }
+
+            if (preferedIndex != null)
+                pvtGroups.SelectedIndex = preferedIndex.Value;
+
+            ViewModel.IsLoading = false;
+        }
+
+        private async Task LoadYearViewAsync(GroupViewModel viewModel, YearModel prefered)
+        {
+            throw new NotImplementedException();
         }
 
         public void DecorateParameter(SummaryParameter parameter)
         {
             if (parameter.Month == null && parameter.Year == null)
             {
-                if (ViewModel.Month != null)
-                    parameter.Month = ViewModel.Month;
-                else if (ViewModel.Year != null)
-                    parameter.Year = ViewModel.Year;
+                GroupItemViewModel viewModel = pvtGroups.SelectedItem as GroupItemViewModel;
+                if (viewModel != null)
+                {
+                    MonthModel month = viewModel.Parameter as MonthModel;
+                    if (month != null)
+                    {
+                        parameter.Month = month;
+                        return;
+                    }
+
+                    YearModel year = viewModel.Parameter as YearModel;
+                    if (year != null)
+                    {
+                        parameter.Year = year;
+                        return;
+                    }
+                }
             }
-        }
-
-        private void OnGroupSelectedItemChanged(object sender, SelectedItemEventArgs e)
-        {
-            if (ViewModel != null)
-                OnPeriodChanged();
-        }
-
-        private void OnPeriodChanged()
-        {
-            ViewModel.Month = new MonthModel(2016, 12);
-            //MonthModel month = grpGroups.SelectedItem as MonthModel;
-            //if (month != null)
-            //{
-            //    ViewModel.Month = month;
-            //    return;
-            //}
-
-            //YearModel year = grpGroups.SelectedItem as YearModel;
-            //if (year != null)
-            //{
-            //    throw new NotImplementedException();
-            //}
-
-            //throw new NotImplementedException();
-        }
-
-        private void lvwBarGraph_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
-            OpenOverview(item.CategoryKey);
-        }
-
-        private void lviSummary_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            OpenOverview(KeyFactory.Empty(typeof(Category)));
-        }
-
-        private void OpenOverview(IKey categoryKey)
-        {
-            //OverviewParameter parameter = null;
-
-            //MonthModel month = grpGroups.SelectedItem as MonthModel;
-            //if (month != null)
-            //    parameter = new OverviewParameter(categoryKey, month);
-
-            //YearModel year = grpGroups.SelectedItem as YearModel;
-            //if (year != null)
-            //    parameter = new OverviewParameter(categoryKey, year);
-
-            //navigator
-            //    .Open(parameter)
-            //    .Show();
         }
 
         private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
         {
-            if (isAmountSorted)
-            {
-                ViewModel.Items.SortDescending(i => i.AmountValue);
-                isAmountSorted = false;
-            }
-            else
-            {
-                ViewModel.Items.Sort(i => i.AmountValue);
-                isAmountSorted = true;
-            }
+            // TODO: Implement.
+            //if (isAmountSorted)
+            //{
+            //    ViewModel.Items.SortDescending(i => i.AmountValue);
+            //    isAmountSorted = false;
+            //}
+            //else
+            //{
+            //    ViewModel.Items.Sort(i => i.AmountValue);
+            //    isAmountSorted = true;
+            //}
 
-            isCategorySorted = false;
+            //isCategorySorted = false;
         }
 
         private void mfiSortCategory_Click(object sender, RoutedEventArgs e)
         {
-            if (isCategorySorted)
-            {
-                ViewModel.Items.SortDescending(i => i.Name);
-                isCategorySorted = false;
-            }
-            else
-            {
-                ViewModel.Items.Sort(i => i.Name);
-                isCategorySorted = true;
-            }
+            // TODO: Implement.
+            //if (isCategorySorted)
+            //{
+            //    ViewModel.Items.SortDescending(i => i.Name);
+            //    isCategorySorted = false;
+            //}
+            //else
+            //{
+            //    ViewModel.Items.Sort(i => i.Name);
+            //    isCategorySorted = true;
+            //}
 
-            isAmountSorted = false;
+            //isAmountSorted = false;
         }
     }
 }

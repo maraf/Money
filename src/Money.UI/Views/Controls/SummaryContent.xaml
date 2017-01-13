@@ -24,7 +24,7 @@
             <Setter Property="Padding" Value="0" />
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid x:Name="grdMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />

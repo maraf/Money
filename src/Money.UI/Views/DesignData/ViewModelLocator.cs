@@ -63,10 +63,10 @@ namespace Money.Views.DesignData
                 if (group == null)
                 {
                     group = new GroupViewModel(ServiceProvider.Navigator);
-                    group.Items.Add(new GroupItemViewModel("August", null));
-                    group.Items.Add(new GroupItemViewModel("September", null));
-                    group.Items.Add(new GroupItemViewModel("October", null));
-                    group.Items.Add(new GroupItemViewModel("December", null));
+                    group.Items.Add(new GroupItemViewModel("August", null, SummaryViewType.BarGraph));
+                    group.Items.Add(new GroupItemViewModel("September", null, SummaryViewType.BarGraph));
+                    group.Items.Add(new GroupItemViewModel("October", null, SummaryViewType.BarGraph));
+                    group.Items.Add(new GroupItemViewModel("December", null, SummaryViewType.BarGraph));
                 }
 
                 return group;

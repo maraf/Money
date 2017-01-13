@@ -23,14 +23,21 @@ namespace Money.ViewModels
         public object Parameter { get; private set; }
 
         /// <summary>
+        /// Gets a prefered view type.
+        /// </summary>
+        public SummaryViewType ViewType { get; private set; }
+
+        /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="title">A title of the group.</param>
         /// <param name="parameter">A navigation parameter of the group.</param>
-        public GroupItemViewModel(string title, object parameter)
+        /// <param name="viewType">A prefered view type.</param>
+        public GroupItemViewModel(string title, object parameter, SummaryViewType viewType)
         {
             Title = title;
             Parameter = parameter;
+            ViewType = viewType;
         }
     }
 }

@@ -27,7 +27,7 @@
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Sort">
+            <AppBarButton Icon="Sort" Label="Sort">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="mfiSortAmount" Text="By amount" Click="mfiSortAmount_Click" />

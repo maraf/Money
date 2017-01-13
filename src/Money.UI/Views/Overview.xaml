@@ -16,7 +16,8 @@
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton Icon="Edit" Label="Edit category" Command="{Binding EditCategory}" Visibility="{Binding EditCategory, Converter={StaticResource NullToCollapsedConverter}}" />
-            <AppBarButton Icon="Sort">
+            <AppBarSeparator />
+            <AppBarButton Icon="Sort" Label="Sort">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="mfiSortDate" Text="By date" Click="mfiSortDate_Click" />

@@ -202,6 +202,9 @@
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">
       <DependentUpon>OutcomeAmount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\OutcomeDescription.xaml.cs">
+      <DependentUpon>OutcomeDescription.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Navigation\ApplicationNavigatorForm.cs" />
     <Compile Include="Views\Navigation\ContentDialogMessageForm.cs" />
     <Compile Include="Views\Navigation\INavigatorMessageForm.cs" />
@@ -267,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\OutcomeAmount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\OutcomeDescription.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

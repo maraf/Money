@@ -3,6 +3,7 @@ using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels;
 using Money.ViewModels.Parameters;
+using Money.Views.Dialogs;
 using Money.Views.Navigation;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
@@ -127,6 +128,32 @@ namespace Money.Views
             OutcomeOverviewViewModel selected = (OutcomeOverviewViewModel)e.AddedItems.FirstOrDefault();
             foreach (OutcomeOverviewViewModel viewModel in ViewModel.Items)
                 viewModel.IsSelected = selected == viewModel;
+        }
+
+        private async void btnAmount_Click(object sender, RoutedEventArgs e)
+        {
+            OutcomeOverviewViewModel viewModel = (OutcomeOverviewViewModel)((Button)sender).DataContext;
+
+            OutcomeAmount dialog = new OutcomeAmount();
+            dialog.Value = (double)viewModel.Amount.Value;
+            ContentDialogResult result = await dialog.ShowAsync();
+
+            navigator
+                .Message(dialog.Value.ToString())
+                .Show();
+        }
+
+        private async void btnDescription_Click(object sender, RoutedEventArgs e)
+        {
+            OutcomeOverviewViewModel viewModel = (OutcomeOverviewViewModel)((Button)sender).DataContext;
+
+            OutcomeDescription dialog = new OutcomeDescription();
+            dialog.Value = viewModel.Description;
+            ContentDialogResult result = await dialog.ShowAsync();
+
+            navigator
+                .Message(dialog.Value)
+                .Show();
         }
     }
 }

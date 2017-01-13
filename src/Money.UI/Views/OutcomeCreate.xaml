@@ -12,7 +12,7 @@
         <converters:DateTimeOffsetToDateTimeConverter x:Key="DateTimeOffsetToDateTimeConverter" />
 
         <Style x:Key="EditorStackPanelStyle" TargetType="StackPanel">
-            <Setter Property="Margin" Value="10,5" />
+            <Setter Property="Margin" Value="8,4" />
         </Style>
     </Page.Resources>
     <Page.BottomAppBar>

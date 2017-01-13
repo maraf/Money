@@ -16,27 +16,27 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views.Dialogs
 {
-    public sealed partial class OutcomeAmount : ContentDialog
+    public sealed partial class OutcomeDescription : ContentDialog
     {
-        public double Value
+        public string Value
         {
-            get { return (double)GetValue(ValueProperty); }
+            get { return (string)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
-            "Value", 
-            typeof(double), 
-            typeof(OutcomeAmount), 
+            "Value",
+            typeof(string),
+            typeof(OutcomeAmount),
             new PropertyMetadata(0)
         );
 
-        public OutcomeAmount()
+        public OutcomeDescription()
         {
             InitializeComponent();
         }
 
-        private void tbxAmount_KeyDown(object sender, KeyRoutedEventArgs e)
+        private void tbxDescription_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)
             {
@@ -44,18 +44,17 @@ namespace Money.Views.Dialogs
             }
             else if (e.Key == VirtualKey.Escape)
             {
-                if (sender == tbxAmount)
+                if (sender == tbxDescription)
                 {
-                    tbxAmount.Text = "0";
-                    tbxAmount.SelectAll();
+                    tbxDescription.Text = string.Empty;
                     e.Handled = true;
                 }
             }
         }
 
-        private void tbxAmount_GotFocus(object sender, RoutedEventArgs e)
+        private void tbxDescription_GotFocus(object sender, RoutedEventArgs e)
         {
-            tbxAmount.SelectAll();
+            tbxDescription.SelectAll();
         }
     }
 }

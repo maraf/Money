@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Money.Views.Converters"
-    xmlns:models="using:Money.Services.Models"
+    xmlns:vm="using:Money.ViewModels"
     mc:Ignorable="d" d:DataContext="{Binding Overview, Source={StaticResource ViewModelLocator}}"
     NavigationCacheMode="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -47,7 +47,7 @@
         </Grid>
         <ListView x:Name="lvwItems" ItemsSource="{Binding Items}" SelectionChanged="lvwItems_SelectionChanged" Grid.Row="1">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:OutcomeOverviewModel">
+                <DataTemplate x:DataType="vm:OutcomeOverviewViewModel">
                     <StackPanel>
                         <Grid Margin="0,10">
                             <Grid.ColumnDefinitions>
@@ -64,8 +64,8 @@
                             <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" FontSize="24" VerticalAlignment="Center" Grid.RowSpan="2" Grid.Column="1"/>
                         </Grid>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button Content="Amount" />
-                            <Button Content="Description" />
+                            <Button x:Name="btnAmount" Content="Amount" Click="btnAmount_Click" />
+                            <Button x:Name="btnDescription" Content="Description" Click="btnDescription_Click" />
                             <Button Content="Category" IsEnabled="False" />
                         </StackPanel>
                     </StackPanel>

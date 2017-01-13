@@ -172,6 +172,5 @@
         </Grid>
         <controls:EmptyMessage Additional="Start by adding items with date falling here" ItemCount="{Binding Items.Count}" Grid.Row="1" Grid.ColumnSpan="2" />
         <controls:Loading IsActive="{Binding IsLoading}" Grid.Row="1" Grid.ColumnSpan="2" />
-        <controls:Loading IsActive="{Binding IsInitialLoading}" Grid.RowSpan="2" Grid.ColumnSpan="2" />
     </Grid>
 </Page>

@@ -100,8 +100,11 @@ namespace Money.Views.Navigation
             Frame frame = (Frame)sender;
 
             Template template = rootFrame.Content as Template;
-            if (template != null && e.Parameter != null)
-                template.UpdateActiveMenuItem(e.Parameter);
+            if (template != null)
+            {
+                if (e.Parameter != null)
+                    template.UpdateActiveMenuItem(e.Parameter);
+            }
 
             Page page = frame.Content as Page;
             if (page != null)
@@ -122,6 +125,25 @@ namespace Money.Views.Navigation
                 page.PointerPressed += OnPagePointerPressed;
                 AddMainMenuButton(page);
             }
+
+            Template template = rootFrame.Content as Template;
+            INavigatorPage navigatorPage = frame.Content as INavigatorPage;
+            if (navigatorPage != null && template != null)
+            {
+                template.ShowLoading();
+                navigatorPage.ContentLoaded += OnTemplateContentPageLoaded;
+            }
+        }
+
+        private void OnTemplateContentPageLoaded(object sender, EventArgs e)
+        {
+            INavigatorPage navigatorPage = sender as INavigatorPage;
+            if (navigatorPage != null)
+                navigatorPage.ContentLoaded -= OnTemplateContentPageLoaded;
+
+            Template template = rootFrame.Content as Template;
+            if (template != null)
+                template.HideLoading();
         }
 
         private void RemoveMainMenuButton(Page page)

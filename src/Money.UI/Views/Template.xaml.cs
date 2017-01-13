@@ -113,5 +113,15 @@ namespace Money.Views
 
             mnuMain.SelectedItem = null;
         }
+
+        public void ShowLoading()
+        {
+            loaContent.IsActive = true;
+        }
+
+        public void HideLoading()
+        {
+            loaContent.IsActive = false;
+        }
     }
 }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -20,15 +21,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using System.ComponentModel;
 
 namespace Money.Views
 {
     [NavigationParameter(typeof(SummaryParameter))]
-    public sealed partial class Summary : Page
+    public sealed partial class Summary : Page, INavigatorPage
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private bool isAmountSorted;
         private bool isCategorySorted = true;
+
+        public event EventHandler ContentLoaded;
 
         public SummaryViewModel ViewModel
         {
@@ -66,9 +70,16 @@ namespace Money.Views
         {
             InitializeComponent();
             ViewModel = new SummaryViewModel(ServiceProvider.Navigator, ServiceProvider.QueryDispatcher);
+            ViewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SummaryViewModel.IsInitialLoading) && !ViewModel.IsInitialLoading)
+                ContentLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 

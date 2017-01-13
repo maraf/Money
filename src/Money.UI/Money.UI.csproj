@@ -198,6 +198,7 @@
     <Compile Include="Views\DesignData\DomainFacade.cs" />
     <Compile Include="Views\DesignData\Navigator.cs" />
     <Compile Include="Views\DesignData\SummaryGroupViewModelProvider.cs" />
+    <Compile Include="Views\DesignData\TestUpgradeService.cs" />
     <Compile Include="Views\DesignData\UpgradeService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">

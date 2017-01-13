@@ -44,12 +44,23 @@ namespace Money.Bootstrap
         public async Task UpgradeAsync(IUpgradeContext context)
         {
             int currentVersion = GetCurrentVersion();
+            if (CurrentVersion <= currentVersion)
+                return;
+
+            context.TotalSteps(CurrentVersion - currentVersion);
+            await Task.Delay(500);
 
             if (currentVersion < 1)
+            {
+                context.StartingStep(currentVersion - 0, "Creating default categories.");
                 await UpgradeVersion1();
+            }
 
-            if (currentVersion < 3)
+            if (currentVersion < 2)
+            {
+                context.StartingStep(currentVersion - 1, "Rebuilding internal database.");
                 await UpgradeVersion2();
+            }
 
             ApplicationDataContainer migrationContainer = GetMigrationContainer();
             migrationContainer.Values["Version"] = CurrentVersion;

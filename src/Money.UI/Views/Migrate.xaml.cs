@@ -45,11 +45,11 @@ namespace Money.Views
                 ViewModel = new MigrateViewModel(upgradeService);
 
                 await ViewModel.StartAsync();
-
-                ServiceProvider.Navigator
-                    .Open(new SummaryParameter(SummaryViewType.BarGraph))
-                    .Show();
             }
+
+            ServiceProvider.Navigator
+                .Open(new SummaryParameter(SummaryViewType.BarGraph))
+                .Show();
         }
     }
 }

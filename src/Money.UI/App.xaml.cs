@@ -90,6 +90,9 @@ namespace Money.UI
 
             ServiceProvider.Navigator = new ApplicationNavigator(new NavigatorParameterCollection(), rootFrame);
 
+            // This one is for migration designing.
+            //ServiceProvider.UpgradeService = new Views.DesignData.TestUpgradeService();
+
             if (e.PrelaunchActivated == false)
             {
                 object parameter;

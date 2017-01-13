@@ -57,12 +57,18 @@ namespace Money.Views.Navigation
         {
             Ensure.NotNull(parameter, "parameter");
 
-            Template template = rootFrame.Content as Template;
-            if (template == null)
-                return new PageNavigatorForm(rootFrame, typeof(Template), parameter);
-
             Type pageType;
             Type parameterType = parameter.GetType();
+
+            Template template = rootFrame.Content as Template;
+            if (template == null)
+            {
+                if (parameterType == typeof(MigrateParameter) && rules.TryGetPageType(parameterType, out pageType))
+                    return new PageNavigatorForm(rootFrame, pageType, parameter);
+
+                return new PageNavigatorForm(rootFrame, typeof(Template), parameter);
+            }
+
             if (rules.TryGetPageType(parameterType, out pageType))
             {
                 Summary summary = template.ContentFrame.Content as Summary;

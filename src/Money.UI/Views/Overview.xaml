@@ -32,7 +32,7 @@
             </AppBarButton>
             <!--<AppBarSeparator />-->
             <!--<AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />-->
-            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" Background="RosyBrown" />
+            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
         </CommandBar>
     </Page.BottomAppBar>
 

@@ -67,7 +67,7 @@ namespace Money.Views
             if (models != null)
             {
                 foreach (OutcomeOverviewModel model in models)
-                    ViewModel.Items.Add(model);
+                    ViewModel.Items.Add(new OutcomeOverviewViewModel(model));
             }
         }
 
@@ -120,6 +120,13 @@ namespace Money.Views
 
             isAmountSorted = false;
             isDateSorted = false;
+        }
+
+        private void lvwItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            OutcomeOverviewViewModel selected = (OutcomeOverviewViewModel)e.AddedItems.FirstOrDefault();
+            foreach (OutcomeOverviewViewModel viewModel in ViewModel.Items)
+                viewModel.IsSelected = selected == viewModel;
         }
     }
 }

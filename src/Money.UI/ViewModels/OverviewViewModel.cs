@@ -37,7 +37,7 @@ namespace Money.ViewModels
         /// <summary>
         /// Gets a collection of outcome models.
         /// </summary>
-        public SortableObservableCollection<OutcomeOverviewModel> Items { get; private set; }
+        public SortableObservableCollection<OutcomeOverviewViewModel> Items { get; private set; }
 
         /// <summary>
         /// Gets a command for editing current category.
@@ -58,7 +58,7 @@ namespace Money.ViewModels
             Key = key;
             Name = name;
             Period = period;
-            Items = new SortableObservableCollection<OutcomeOverviewModel>();
+            Items = new SortableObservableCollection<OutcomeOverviewViewModel>();
 
             if (!key.IsEmpty)
                 EditCategory = new NavigateCommand(navigator, new CategoryListParameter(key));

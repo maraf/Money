@@ -12,6 +12,10 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <converters:NullConverter x:Name="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
     </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar>
@@ -41,28 +45,36 @@
             <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,6" HorizontalAlignment="Left" />
             <TextBlock Text="{Binding Period}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,6" HorizontalAlignment="Right" />
         </Grid>
-        <ListView ItemsSource="{Binding Items}" Grid.Row="1">
+        <ListView x:Name="lvwItems" ItemsSource="{Binding Items}" SelectionChanged="lvwItems_SelectionChanged" Grid.Row="1">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:OutcomeOverviewModel">
-                    <Grid Margin="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
+                    <StackPanel>
+                        <Grid Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
 
-                        <TextBlock Text="{x:Bind Description}" Style="{ThemeResource BaseTextBlockStyle}" />
-                        <TextBlock Text="{x:Bind When, Converter={StaticResource DateToStringConverter}}" Style="{ThemeResource NoteTextStyle}" Grid.Row="1" />
-                        <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" FontSize="24" VerticalAlignment="Center" Grid.RowSpan="2" Grid.Column="1"/>
-                    </Grid>
+                            <TextBlock Text="{x:Bind Description}" Style="{ThemeResource BaseTextBlockStyle}" />
+                            <TextBlock Text="{x:Bind When, Converter={StaticResource DateToStringConverter}}" Style="{ThemeResource NoteTextStyle}" Grid.Row="1" />
+                            <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" FontSize="24" VerticalAlignment="Center" Grid.RowSpan="2" Grid.Column="1"/>
+                        </Grid>
+                        <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Amount" />
+                            <Button Content="Description" />
+                            <Button Content="Category" IsEnabled="False" />
+                        </StackPanel>
+                    </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Padding" Value="8,4" />
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>

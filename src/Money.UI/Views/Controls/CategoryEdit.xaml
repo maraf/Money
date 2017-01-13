@@ -12,7 +12,7 @@
         <collections:ColorObservableCollection x:Key="ColorCollection" />
 
         <Style TargetType="Button">
-            <Setter Property="Margin" Value="5,0,0,0" />
+            <Setter Property="Margin" Value="8,0,0,0" />
         </Style>
         <Style x:Key="EditorStackPanelStyle" TargetType="StackPanel">
             <Setter Property="Padding" Value="4,2" />

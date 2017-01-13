@@ -182,6 +182,9 @@
       <DependentUpon>PieChartItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\SelectedItemEventArgs.cs" />
+    <Compile Include="Views\Controls\SummaryContent.xaml.cs">
+      <DependentUpon>SummaryContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\ValueChangedLock.cs" />
     <Compile Include="Views\Converters\BoolConverter.cs" />
     <Compile Include="Views\Converters\CuttingConverter.cs" />
@@ -252,6 +255,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\Bar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\SummaryContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

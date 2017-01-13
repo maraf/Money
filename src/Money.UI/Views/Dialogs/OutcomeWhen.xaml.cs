@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Money.Views.Controls;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace Money.Views.Dialogs
 {
     public sealed partial class OutcomeWhen : ContentDialog
     {
+        private readonly ValueChangedLock valueLock = new ValueChangedLock();
+
         public DateTime Value
         {
             get { return (DateTime)GetValue(ValueProperty); }
@@ -29,12 +32,46 @@ namespace Money.Views.Dialogs
             "Value", 
             typeof(DateTime), 
             typeof(OutcomeWhen), 
-            new PropertyMetadata(DateTime.Now)
+            new PropertyMetadata(DateTime.Now, OnValueChanged)
         );
+
+        private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            OutcomeWhen control = (OutcomeWhen)d;
+            control.OnValueChanged();
+        }
 
         public OutcomeWhen()
         {
             InitializeComponent();
+
+            cavContent.MaxDate = DateTime.Today;
+        }
+
+        private void OnValueChanged()
+        {
+            if (valueLock.IsLocked)
+                return;
+
+            using (valueLock.Lock())
+            {
+                cavContent.SelectedDates.Clear();
+                cavContent.SelectedDates.Add(Value);
+            }
+        }
+
+        private void cavContent_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs e)
+        {
+            if (valueLock.IsLocked)
+                return;
+
+            using (valueLock.Lock())
+            {
+                if (e.AddedDates.Count > 0)
+                    Value = e.AddedDates.First().Date;
+                else
+                    Value = DateTime.Today;
+            }
         }
     }
 }

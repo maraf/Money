@@ -60,7 +60,7 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Text="{x:Bind Description, Mode=OneWay}" Style="{ThemeResource BaseTextBlockStyle}" />
-                            <TextBlock Text="{x:Bind When, Converter={StaticResource DateToStringConverter}}" Style="{ThemeResource NoteTextStyle}" Grid.Row="1" />
+                            <TextBlock Text="{x:Bind When, Mode=OneWay, Converter={StaticResource DateToStringConverter}}" Style="{ThemeResource NoteTextStyle}" Grid.Row="1" />
                             <TextBlock Text="{x:Bind Amount, Mode=OneWay}" Style="{ThemeResource NoteTextStyle}" FontSize="24" VerticalAlignment="Center" Grid.RowSpan="2" Grid.Column="1"/>
                         </Grid>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">

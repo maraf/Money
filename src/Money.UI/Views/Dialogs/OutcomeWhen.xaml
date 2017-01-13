@@ -10,7 +10,5 @@
     <ContentDialog.Resources>
         <converters:DateTimeOffsetToDateTimeConverter x:Key="DateTimeOffsetToDateTimeConverter" />
     </ContentDialog.Resources>
-    <StackPanel>
-        <DatePicker Date="{x:Bind Value, Converter={StaticResource DateTimeOffsetToDateTimeConverter}, Mode=TwoWay}" HorizontalAlignment="Stretch" />
-    </StackPanel>
+    <CalendarView x:Name="cavContent" SelectionMode="Single" SelectedDatesChanged="cavContent_SelectedDatesChanged" />
 </ContentDialog>

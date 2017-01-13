@@ -65,7 +65,7 @@ namespace Money.Services.Tiles
                 tileId,
                 displayName,
                 "OutcomeCreate" + (!categoryKey.IsEmpty ? "&CategoryKey=" + guid : String.Empty),
-                new Uri("ms-appx:///Assets/Square150x150Logo.scale-200.png"),
+                new Uri("ms-appx:///Assets/Square71x71Logo.scale-200.png"),
                 TileSize.Default
             );
             tile.VisualElements.ShowNameOnSquare150x150Logo = true;

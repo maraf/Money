@@ -27,7 +27,12 @@ namespace Money.ViewModels
 
         public ViewModel(INavigator navigator, IKey categoryKey)
         {
-            CreateOutcome = new CreateOutcomeCommand(navigator, new OutcomeParameter(categoryKey));
+            CreateOutcome = new CreateOutcomeCommand(
+                navigator,
+                categoryKey.IsEmpty
+                    ? new OutcomeParameter()
+                    : new OutcomeParameter(categoryKey)
+            );
         }
     }
 }

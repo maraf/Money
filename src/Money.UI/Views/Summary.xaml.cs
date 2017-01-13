@@ -32,7 +32,6 @@ namespace Money.Views
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
-        private Dictionary<GroupItemViewModel, MonthModel> groupToMonth;
 
         private bool isAmountSorted;
         private bool isCategorySorted = true;
@@ -45,19 +44,6 @@ namespace Money.Views
             private set { DataContext = value; }
         }
 
-        public SummaryViewType PreferedViewType
-        {
-            get { return (SummaryViewType)GetValue(PreferedViewTypeProperty); }
-            set { SetValue(PreferedViewTypeProperty, value); }
-        }
-
-        public static readonly DependencyProperty PreferedViewTypeProperty = DependencyProperty.Register(
-            "PreferedViewType",
-            typeof(SummaryViewType),
-            typeof(Summary),
-            new PropertyMetadata(SummaryViewType.BarGraph)
-        );
-
         public Summary()
         {
             InitializeComponent();
@@ -69,7 +55,7 @@ namespace Money.Views
             base.OnNavigatedTo(e);
 
             SummaryParameter parameter = (SummaryParameter)e.Parameter;
-            PreferedViewType = parameter.ViewType;
+            ViewModel.ViewType = parameter.ViewType;
 
             switch (parameter.PeriodType)
             {
@@ -89,20 +75,17 @@ namespace Money.Views
         private async Task LoadMonthViewAsync(GroupViewModel viewModel, MonthModel prefered)
         {
             ViewModel.IsLoading = true;
-            groupToMonth = new Dictionary<GroupItemViewModel, MonthModel>();
 
             IEnumerable<MonthModel> months = await queryDispatcher.QueryAsync(new ListMonthWithOutcome());
             int? preferedIndex = null;
             int index = 0;
             foreach (MonthModel month in months)
             {
-                GroupItemViewModel monthViewModel = new GroupItemViewModel(month.ToString(), month, PreferedViewType);
-                groupToMonth[monthViewModel] = month;
+                viewModel.Add(month.ToString(), month);
 
                 if (prefered == month)
                     preferedIndex = index;
 
-                viewModel.Items.Add(monthViewModel);
                 index++;
             }
 
@@ -143,36 +126,16 @@ namespace Money.Views
 
         private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement.
-            //if (isAmountSorted)
-            //{
-            //    ViewModel.Items.SortDescending(i => i.AmountValue);
-            //    isAmountSorted = false;
-            //}
-            //else
-            //{
-            //    ViewModel.Items.Sort(i => i.AmountValue);
-            //    isAmountSorted = true;
-            //}
-
-            //isCategorySorted = false;
+            ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByAmount);
+            isAmountSorted = !isAmountSorted;
+            isCategorySorted = false;
         }
 
         private void mfiSortCategory_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement.
-            //if (isCategorySorted)
-            //{
-            //    ViewModel.Items.SortDescending(i => i.Name);
-            //    isCategorySorted = false;
-            //}
-            //else
-            //{
-            //    ViewModel.Items.Sort(i => i.Name);
-            //    isCategorySorted = true;
-            //}
-
-            //isAmountSorted = false;
+            ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByCategory);
+            isCategorySorted = !isCategorySorted;
+            isAmountSorted = false;
         }
     }
 }

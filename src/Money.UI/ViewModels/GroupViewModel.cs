@@ -31,11 +31,52 @@ namespace Money.ViewModels
                 }
             }
         }
-        
+
+        private SummaryViewType viewType;
+
+        /// <summary>
+        /// Gets or sets a prefered view type.
+        /// </summary>
+        public SummaryViewType ViewType
+        {
+            get { return viewType; }
+            set
+            {
+                if (viewType != value)
+                {
+                    viewType = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        private SortDescriptor<SummarySortType> sortDescriptor;
+
+        /// <summary>
+        /// Gets or sets a sort descriptor.
+        /// </summary>
+        public SortDescriptor<SummarySortType> SortDescriptor
+        {
+            get { return sortDescriptor; }
+            set
+            {
+                if (sortDescriptor != value)
+                {
+                    sortDescriptor = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        private ObservableCollection<GroupItemViewModel> items;
+
         /// <summary>
         /// Gets a collection of items.
         /// </summary>
-        public ObservableCollection<GroupItemViewModel> Items { get; private set; }
+        public IEnumerable<GroupItemViewModel> Items
+        {
+            get { return items; }
+        }
 
         /// <summary>
         /// Creates a new instance.
@@ -43,7 +84,20 @@ namespace Money.ViewModels
         public GroupViewModel(INavigator navigator)
             : base(navigator)
         {
-            Items = new ObservableCollection<GroupItemViewModel>();
+            items = new ObservableCollection<GroupItemViewModel>();
+        }
+
+        /// <summary>
+        /// Adds an item to <see cref="Items"/>.
+        /// </summary>
+        /// <param name="title">A title of the group.</param>
+        /// <param name="parameter">A navigation parameter of the group.</param>
+        /// <returns>A newly created view model.</returns>
+        public GroupItemViewModel Add(string title, object parameter)
+        {
+            GroupItemViewModel item = new GroupItemViewModel(this, title, parameter);
+            items.Add(item);
+            return item;
         }
     }
 }

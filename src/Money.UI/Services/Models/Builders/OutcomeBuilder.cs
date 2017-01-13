@@ -36,8 +36,6 @@ namespace Money.Services.Models.Builders
         {
             using (ReadModelContext db = new ReadModelContext())
             {
-                await Task.Delay(3000);
-
                 var entities = await db.Outcomes
                     .OrderByDescending(o => o.When)
                     .Select(o => new { Year = o.When.Year, Month = o.When.Month })

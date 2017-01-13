@@ -30,7 +30,7 @@
         </Pivot.HeaderTemplate>
         <Pivot.ItemTemplate>
             <DataTemplate>
-                <controls:SummaryContent SelectedItem="{Binding Parameter}" PreferedViewType="{Binding ViewType}" />
+                <controls:SummaryContent x:Name="sumContent" SelectedItem="{Binding Parameter}" PreferedViewType="{Binding Parent.ViewType}" SortDescriptor="{Binding Parent.SortDescriptor}" />
             </DataTemplate>
         </Pivot.ItemTemplate>
     </Pivot>

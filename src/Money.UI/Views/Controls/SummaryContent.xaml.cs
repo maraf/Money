@@ -42,9 +42,9 @@ namespace Money.Views.Controls
         }
 
         public static readonly DependencyProperty PreferedViewTypeProperty = DependencyProperty.Register(
-            "PreferedViewType", 
-            typeof(SummaryViewType), 
-            typeof(SummaryContent), 
+            "PreferedViewType",
+            typeof(SummaryViewType),
+            typeof(SummaryContent),
             new PropertyMetadata(SummaryViewType.BarGraph, OnPreferedViewTypeChanged)
         );
 
@@ -99,9 +99,9 @@ namespace Money.Views.Controls
         }
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            "SelectedItem", 
-            typeof(object), 
-            typeof(SummaryContent), 
+            "SelectedItem",
+            typeof(object),
+            typeof(SummaryContent),
             new PropertyMetadata(null, OnSelectedItemChanged)
         );
 
@@ -109,6 +109,46 @@ namespace Money.Views.Controls
         {
             SummaryContent control = (SummaryContent)d;
             control.OnSelectedItemChanged(e);
+        }
+
+        public SortDescriptor<SummarySortType> SortDescriptor
+        {
+            get { return (SortDescriptor<SummarySortType>)GetValue(SortDescriptorProperty); }
+            set { SetValue(SortDescriptorProperty, value); }
+        }
+
+        public static readonly DependencyProperty SortDescriptorProperty = DependencyProperty.Register(
+            "SortDescriptor",
+            typeof(SortDescriptor<SummarySortType>),
+            typeof(SummaryContent),
+            new PropertyMetadata(null, OnSortDescriptorChanged)
+        );
+
+        private static void OnSortDescriptorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            SummaryContent control = (SummaryContent)d;
+            if (control.SortDescriptor != null)
+            {
+                switch (control.SortDescriptor.Type)
+                {
+                    case SummarySortType.ByAmount:
+                        if (control.SortDescriptor.Direction == SortDirection.Ascending)
+                            control.ViewModel.Items.Sort(i => i.AmountValue);
+                        else
+                            control.ViewModel.Items.SortDescending(i => i.AmountValue);
+
+                        break;
+                    case SummarySortType.ByCategory:
+                        if (control.SortDescriptor.Direction == SortDirection.Ascending)
+                            control.ViewModel.Items.Sort(i => i.Name);
+                        else
+                            control.ViewModel.Items.SortDescending(i => i.Name);
+
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         public SummaryContent()

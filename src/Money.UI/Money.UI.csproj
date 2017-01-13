@@ -147,6 +147,9 @@
     <Compile Include="ViewModels\Parameters\MigrateParameter.cs" />
     <Compile Include="ViewModels\Parameters\OutcomeParameter.cs" />
     <Compile Include="ViewModels\Parameters\SummaryParameter.cs" />
+    <Compile Include="ViewModels\SortDescriptor.cs" />
+    <Compile Include="ViewModels\SortDirection.cs" />
+    <Compile Include="ViewModels\SummarySortType.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
     <Compile Include="ViewModels\SummaryItemViewModel.cs" />

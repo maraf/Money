@@ -3,6 +3,7 @@ using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels;
 using Money.ViewModels.Commands;
+using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Dialogs;
 using Money.Views.Navigation;

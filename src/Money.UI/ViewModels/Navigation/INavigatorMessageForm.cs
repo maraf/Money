@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Money.Views.Navigation
+namespace Money.ViewModels.Navigation
 {
     public interface INavigatorMessageForm : INavigatorForm
     {

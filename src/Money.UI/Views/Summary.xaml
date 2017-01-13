@@ -34,6 +34,11 @@
                     <controls:SummaryContent x:Name="sumContent" SelectedItem="{Binding Parameter}" PreferedViewType="{Binding Parent.ViewType}" SortDescriptor="{Binding Parent.SortDescriptor}" />
                 </DataTemplate>
             </Pivot.ItemTemplate>
+            <Pivot.ItemContainerStyle>
+                <Style TargetType="PivotItem">
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </Pivot.ItemContainerStyle>
         </Pivot>
         <controls:EmptyMessage ItemCount="{Binding Items.Count}" Additional="Start by adding items with date falling here" />
     </Grid>

@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Money.ViewModels.Navigation;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.Linq;

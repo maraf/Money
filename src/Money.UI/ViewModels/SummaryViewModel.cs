@@ -1,6 +1,6 @@
 ﻿using Money.Services.Models;
 using Money.Services.Models.Queries;
-using Money.Views.Navigation;
+using Money.ViewModels.Navigation;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Observables;

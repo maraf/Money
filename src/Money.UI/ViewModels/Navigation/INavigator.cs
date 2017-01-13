@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Views.Navigation
+namespace Money.ViewModels.Navigation
 {
     /// <summary>
     /// A contract for navigating between pages using parameters and associated pages.

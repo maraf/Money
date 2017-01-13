@@ -1,12 +1,16 @@
 ﻿using Money.Services.Models;
+using Money.Services.Models.Queries;
 using Money.ViewModels;
+using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
 using Money.Views.Navigation;
 using Neptuo;
 using Neptuo.Models.Keys;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -21,9 +25,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using System.ComponentModel;
-using Neptuo.Queries;
-using Money.Services.Models.Queries;
 
 namespace Money.Views
 {

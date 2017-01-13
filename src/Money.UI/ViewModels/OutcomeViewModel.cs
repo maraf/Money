@@ -1,8 +1,7 @@
 ﻿using Money.Services;
 using Money.Services.Models;
 using Money.ViewModels.Commands;
-using Money.ViewModels.Parameters;
-using Money.Views.Navigation;
+using Money.ViewModels.Navigation;
 using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;

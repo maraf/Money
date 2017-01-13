@@ -1,6 +1,6 @@
 ﻿using Money.ViewModels.Commands;
+using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
-using Money.Views.Navigation;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;
 using System;

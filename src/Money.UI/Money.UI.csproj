@@ -211,7 +211,7 @@
     </Compile>
     <Compile Include="Views\Navigation\ApplicationNavigatorForm.cs" />
     <Compile Include="Views\Navigation\ContentDialogMessageForm.cs" />
-    <Compile Include="Views\Navigation\INavigatorMessageForm.cs" />
+    <Compile Include="ViewModels\Navigation\INavigatorMessageForm.cs" />
     <Compile Include="Views\Navigation\INavigatorPage.cs" />
     <Compile Include="Views\Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
@@ -224,8 +224,8 @@
     </Compile>
     <Compile Include="Views\Navigation\ApplicationNavigator.cs" />
     <Compile Include="Views\Navigation\NavigatorParameterCollection.cs" />
-    <Compile Include="Views\Navigation\INavigator.cs" />
-    <Compile Include="Views\Navigation\INavigatorForm.cs" />
+    <Compile Include="ViewModels\Navigation\INavigator.cs" />
+    <Compile Include="ViewModels\Navigation\INavigatorForm.cs" />
     <Compile Include="Views\Navigation\NavigationParameterAttribute.cs" />
     <Compile Include="Views\Navigation\PageNavigatorForm.cs" />
     <Compile Include="Views\OutcomeCreate.xaml.cs">

@@ -1,7 +1,6 @@
-﻿using Money.ViewModels.Parameters;
+﻿using Money.ViewModels.Navigation;
+using Money.ViewModels.Parameters;
 using Money.Views;
-using Money.Views.Navigation;
-using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;

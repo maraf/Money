@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Money.ViewModels.Commands;
+using Money.ViewModels.Navigation;
+using Money.ViewModels.Parameters;
+using Neptuo;
+using Neptuo.Models.Keys;
+using Neptuo.Observables.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Money.Views.Navigation;
-using Neptuo.Observables.Collections;
-using Money.Services.Models;
-using Neptuo.Models.Keys;
-using Money.ViewModels.Commands;
-using Money.ViewModels.Parameters;
 using System.Windows.Input;
-using Neptuo;
 
 namespace Money.ViewModels
 {

@@ -1,5 +1,6 @@
 ﻿using Money.Services;
-using Money.Views.Navigation;
+using Money.Services.Tiles;
+using Money.ViewModels.Navigation;
 using Neptuo.Migrations;
 using Neptuo.Queries;
 using System;
@@ -7,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Money.Services.Tiles;
 
 namespace Money
 {

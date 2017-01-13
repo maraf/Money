@@ -1,4 +1,4 @@
-﻿using Money.Views.Navigation;
+﻿using Money.ViewModels.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;

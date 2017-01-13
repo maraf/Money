@@ -1,15 +1,15 @@
-﻿using Neptuo;
+﻿using Money.Services;
+using Money.ViewModels.Navigation;
+using Neptuo;
+using Neptuo.Models.Keys;
 using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Collections.Specialized;
-using Money.Services;
-using Neptuo.Models.Keys;
-using Money.Views.Navigation;
 
 namespace Money.ViewModels.Commands
 {

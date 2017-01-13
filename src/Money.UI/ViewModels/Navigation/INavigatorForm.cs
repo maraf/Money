@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Views.Navigation
+namespace Money.ViewModels.Navigation
 {
     /// <summary>
     /// An opened navigation.

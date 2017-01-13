@@ -1,4 +1,4 @@
-﻿using Money.Views.Navigation;
+﻿using Money.ViewModels.Navigation;
 using Neptuo;
 using Neptuo.Observables.Commands;
 using System;

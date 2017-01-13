@@ -66,6 +66,11 @@
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button x:Name="btnAmount" Content="Amount" Click="btnAmount_Click" />
                             <Button x:Name="btnDescription" Content="Description" Click="btnDescription_Click" />
+                            <Button x:Name="btnWhen" Click="btnWhen_Click">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Calendar" />
+                                </Button.Content>
+                            </Button>
                             <Button Content="Category" IsEnabled="False" />
                         </StackPanel>
                     </StackPanel>

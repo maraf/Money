@@ -18,7 +18,8 @@ namespace Money
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeCategoryAdded>,
         IEventHandler<OutcomeAmountChanged>,
-        IEventHandler<OutcomeDescriptionChanged>
+        IEventHandler<OutcomeDescriptionChanged>,
+        IEventHandler<OutcomeWhenChanged>
     {
         /// <summary>
         /// Gets an amount of the outcome.
@@ -87,7 +88,8 @@ namespace Money
 
         public void ChangeAmount(Price amount)
         {
-            Publish(new OutcomeAmountChanged(Amount, amount));
+            if (Amount != amount)
+                Publish(new OutcomeAmountChanged(Amount, amount));
         }
 
         Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
@@ -97,12 +99,24 @@ namespace Money
 
         public void ChangeDescription(string description)
         {
-            Publish(new OutcomeDescriptionChanged(description));
+            if (Description != description)
+                Publish(new OutcomeDescriptionChanged(description));
         }
 
         Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
         {
             return UpdateState(() => Description = payload.Description);
+        }
+
+        public void ChangeWhen(DateTime when)
+        {
+            if (When != when)
+                Publish(new OutcomeWhenChanged(when));
+        }
+
+        Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
+        {
+            return UpdateState(() => When = payload.When);
         }
     }
 }

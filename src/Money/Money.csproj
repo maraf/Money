@@ -117,6 +117,7 @@
     <Compile Include="Events\OutcomeCategoryAdded.cs" />
     <Compile Include="Events\OutcomeCreated.cs" />
     <Compile Include="Events\OutcomeDescriptionChanged.cs" />
+    <Compile Include="Events\OutcomeWhenChanged.cs" />
     <Compile Include="Outcome.cs" />
     <Compile Include="OutcomeAlreadyHasCategoryException.cs" />
     <Compile Include="Price.cs" />

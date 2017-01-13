@@ -35,10 +35,23 @@ namespace Money.ViewModels
             }
         }
 
+        private DateTime when;
+
         /// <summary>
         /// Gets a date when the outcome ocured.
         /// </summary>
-        public DateTime When { get; set; }
+        public DateTime When
+        {
+            get { return when; }
+            set
+            {
+                if (when != value)
+                {
+                    when = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         private string description;
 

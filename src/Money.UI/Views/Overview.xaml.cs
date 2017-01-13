@@ -26,6 +26,10 @@ namespace Money.Views
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+
+        private MonthModel month;
+        private YearModel year;
+
         private bool isDateSorted = true;
         private bool isAmountSorted;
         private bool isDescriptionSorted;
@@ -55,12 +59,14 @@ namespace Money.Views
             IEnumerable<OutcomeOverviewModel> models = null;
             if (parameter.Month != null)
             {
+                month = parameter.Month;
                 period = parameter.Month;
                 models = await queryDispatcher.QueryAsync(new ListMonthOutcomeFromCategory(parameter.CategoryKey, parameter.Month));
             }
 
             if (parameter.Year != null)
             {
+                year = parameter.Year;
                 period = parameter.Year;
                 models = await queryDispatcher.QueryAsync(new ListYearOutcomeFromCategory(parameter.CategoryKey, parameter.Year));
             }
@@ -160,6 +166,27 @@ namespace Money.Views
             {
                 await domainFacade.ChangeOutcomeDescription(viewModel.Key, dialog.Value);
                 viewModel.Description = dialog.Value;
+            }
+        }
+
+        private async void btnWhen_Click(object sender, RoutedEventArgs e)
+        {
+            OutcomeOverviewViewModel viewModel = (OutcomeOverviewViewModel)((Button)sender).DataContext;
+
+            OutcomeWhen dialog = new OutcomeWhen();
+            dialog.Value = viewModel.When;
+
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary && dialog.Value != viewModel.When)
+            {
+                await domainFacade.ChangeOutcomeWhen(viewModel.Key, dialog.Value);
+                viewModel.When = dialog.Value;
+
+                if (month != null && (dialog.Value.Year != month.Year || dialog.Value.Month != month.Month))
+                    ViewModel.Items.Remove(viewModel);
+
+                if (year != null && (dialog.Value.Year != year.Year))
+                    ViewModel.Items.Remove(viewModel);
             }
         }
     }

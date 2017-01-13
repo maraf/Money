@@ -68,6 +68,7 @@ namespace Money.Services.Tiles
                 new Uri("ms-appx:///Assets/Square71x71Logo.scale-200.png"),
                 TileSize.Default
             );
+            tile.VisualElements.Square150x150Logo = new Uri("ms-appx:///Assets/Square150x150Logo.scale-200.png");
             tile.VisualElements.ShowNameOnSquare150x150Logo = true;
             tile.RoamingEnabled = false;
 

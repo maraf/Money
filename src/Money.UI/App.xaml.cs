@@ -17,6 +17,7 @@ using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
+using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Input;
 using Windows.UI.ViewManagement;
@@ -163,6 +164,13 @@ namespace Money.UI
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            ApplicationDataContainer container = ApplicationData.Current.LocalSettings
+                .CreateContainer("Exception", ApplicationDataCreateDisposition.Always);
+
+            container.Values["Type"] = e.Exception.GetType().FullName;
+            container.Values["Message"] = e.Exception.Message;
+            container.Values["Callstack"] = e.Exception.StackTrace;
+
 #if DEBUG
             if (Debugger.IsAttached)
                 Debugger.Break();

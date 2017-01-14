@@ -175,6 +175,10 @@ namespace Money.UI
             if (Debugger.IsAttached)
                 Debugger.Break();
 
+            Template template = Window.Current.Content as Template;
+            if (template != null)
+                template.HideLoading();
+
             if (ServiceProvider.Navigator != null)
             {
                 ServiceProvider.Navigator

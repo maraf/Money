@@ -8,7 +8,6 @@
     xmlns:converters="using:Money.Views.Converters"
     xmlns:vm="using:Money.ViewModels"
     mc:Ignorable="d" d:DataContext="{Binding Overview, Source={StaticResource ViewModelLocator}}"
-    NavigationCacheMode="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <converters:NullConverter x:Name="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />

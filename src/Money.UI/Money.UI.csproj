@@ -126,6 +126,7 @@
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\Commands\DeleteOutcomeCommand.cs" />
+    <Compile Include="ViewModels\ISummaryItemViewModel.cs" />
     <Compile Include="ViewModels\OutcomeOverviewViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />
@@ -152,9 +153,10 @@
     <Compile Include="ViewModels\SortDescriptor.cs" />
     <Compile Include="ViewModels\SortDirection.cs" />
     <Compile Include="ViewModels\SummarySortType.cs" />
+    <Compile Include="ViewModels\SummaryTotalViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
-    <Compile Include="ViewModels\SummaryItemViewModel.cs" />
+    <Compile Include="ViewModels\SummaryCategoryViewModel.cs" />
     <Compile Include="ViewModels\SummaryPeriodType.cs" />
     <Compile Include="ViewModels\SummaryViewType.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="Views\Controls\SummaryContent.xaml.cs">
       <DependentUpon>SummaryContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\SummaryItemTemplateSelector.cs" />
     <Compile Include="Views\Controls\ValueChangedLock.cs" />
     <Compile Include="Views\Converters\BoolConverter.cs" />
     <Compile Include="Views\Converters\CuttingConverter.cs" />

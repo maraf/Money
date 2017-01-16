@@ -13,7 +13,7 @@ namespace Money.ViewModels
     /// <summary>
     /// A view model for an item of summary.
     /// </summary>
-    public class SummaryItemViewModel : ObservableObject
+    public class SummaryCategoryViewModel : ObservableObject, ISummaryItemViewModel
     {
         private IKey categoryKey;
         public IKey CategoryKey

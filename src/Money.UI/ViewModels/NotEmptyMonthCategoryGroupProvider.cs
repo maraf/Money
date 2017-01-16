@@ -27,12 +27,12 @@ namespace Money.ViewModels
             this.month = month;
         }
 
-        public async Task ReplaceAsync(IList<SummaryItemViewModel> collection)
+        public async Task ReplaceAsync(IList<SummaryCategoryViewModel> collection)
         {
             IEnumerable<CategoryWithAmountModel> categories = await queryDispatcher.QueryAsync(new ListMonthCategoryWithOutcome(month));
             foreach (CategoryWithAmountModel category in categories)
             {
-                collection.Add(new SummaryItemViewModel()
+                collection.Add(new SummaryCategoryViewModel()
                 {
                     CategoryKey = category.Key,
                     Name = category.Name,

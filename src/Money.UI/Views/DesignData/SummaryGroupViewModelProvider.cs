@@ -16,21 +16,21 @@ namespace Money.Views.DesignData
             return Task.FromResult(new Price(7800, "CZK"));
         }
 
-        public Task ReplaceAsync(IList<SummaryItemViewModel> collection)
+        public Task ReplaceAsync(IList<SummaryCategoryViewModel> collection)
         {
-            collection.Add(new SummaryItemViewModel()
+            collection.Add(new SummaryCategoryViewModel()
             {
                 Amount = new Price(2500, "CZK"),
                 Name = "Food",
                 Color = Colors.CadetBlue
             });
-            collection.Add(new SummaryItemViewModel()
+            collection.Add(new SummaryCategoryViewModel()
             {
                 Amount = new Price(900, "CZK"),
                 Name = "Eating out",
                 Color = Colors.Brown
             });
-            collection.Add(new SummaryItemViewModel()
+            collection.Add(new SummaryCategoryViewModel()
             {
                 Amount = new Price(4400, "CZK"),
                 Name = "Home",

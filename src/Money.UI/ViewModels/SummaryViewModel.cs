@@ -35,20 +35,6 @@ namespace Money.ViewModels
             }
         }
 
-        private Price totalAmount;
-        public Price TotalAmount
-        {
-            get { return totalAmount; }
-            set
-            {
-                if (totalAmount != value)
-                {
-                    totalAmount = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
         private MonthModel month;
         public MonthModel Month
         {
@@ -83,14 +69,14 @@ namespace Money.ViewModels
             }
         }
 
-        public SortableObservableCollection<SummaryItemViewModel> Items { get; private set; }
+        public SortableObservableCollection<ISummaryItemViewModel> Items { get; private set; }
 
         public SummaryViewModel(INavigator navigator, IQueryDispatcher queryDispatcher)
             : base(navigator)
         {
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.queryDispatcher = queryDispatcher;
-            Items = new SortableObservableCollection<SummaryItemViewModel>();
+            Items = new SortableObservableCollection<ISummaryItemViewModel>();
         }
         
         private async Task ReloadMonth()
@@ -103,7 +89,7 @@ namespace Money.ViewModels
                 IEnumerable<CategoryWithAmountModel> categories = await queryDispatcher.QueryAsync(new ListMonthCategoryWithOutcome(Month));
                 foreach (CategoryWithAmountModel category in categories)
                 {
-                    Items.Add(new SummaryItemViewModel()
+                    Items.Add(new SummaryCategoryViewModel()
                     {
                         CategoryKey = category.Key,
                         Name = category.Name,
@@ -111,8 +97,9 @@ namespace Money.ViewModels
                         Amount = category.TotalAmount
                     });
                 }
-                
-                TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
+
+                Items.Add(new SummaryTotalViewModel(await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month))));
+
                 IsLoading = false;
             }
         }

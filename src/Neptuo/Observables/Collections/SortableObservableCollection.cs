@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Neptuo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,12 @@ namespace Neptuo.Observables.Collections
 {
     public class SortableObservableCollection<T> : ObservableCollection<T>
     {
+        public virtual void Sort(Func<IEnumerable<T>, IEnumerable<T>> sorter)
+        {
+            Ensure.NotNull(sorter, "sorter");
+            InternalSort(sorter(Items));
+        }
+
         /// <summary>
         /// Sorts the items of the collection in ascending order according to a key.
         /// </summary>

@@ -85,41 +85,46 @@
         <Grid x:Name="grdBarGraph" Grid.Row="1">
             <StackPanel>
                 <ListView x:Name="lvwBarGraph" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:SummaryItemViewModel">
-                            <Grid Style="{StaticResource BarLineGridStyle}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="10" />
-                                </Grid.RowDefinitions>
+                    <ListView.ItemTemplateSelector>
+                        <controls:SummaryItemTemplateSelector>
+                            <controls:SummaryItemTemplateSelector.Category>
+                                <DataTemplate x:DataType="vm:SummaryCategoryViewModel">
+                                    <Grid Style="{StaticResource BarLineGridStyle}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="10" />
+                                        </Grid.RowDefinitions>
 
-                                <TextBlock x:Name="tblName" Text="{x:Bind Name}" Style="{ThemeResource BaseTextBlockStyle}" />
-                                <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" Grid.Column="1" />
+                                        <TextBlock x:Name="tblName" Text="{x:Bind Name}" Style="{ThemeResource BaseTextBlockStyle}" />
+                                        <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" Grid.Column="1" />
 
-                                <controls:Bar Value="{x:Bind Amount.Value}" Max="{Binding DataContext.TotalAmount.Value, ElementName=grdBarGraph}" Grid.ColumnSpan="2" Grid.Row="1">
-                                    <controls:Bar.Fill>
-                                        <SolidColorBrush Color="{x:Bind Color}" />
-                                    </controls:Bar.Fill>
-                                </controls:Bar>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                                        <controls:Bar Value="{x:Bind Amount.Value}" Max="{Binding DataContext.TotalAmount.Value, ElementName=grdBarGraph}" Grid.ColumnSpan="2" Grid.Row="1">
+                                            <controls:Bar.Fill>
+                                                <SolidColorBrush Color="{x:Bind Color}" />
+                                            </controls:Bar.Fill>
+                                        </controls:Bar>
+                                    </Grid>
+                                </DataTemplate>
+                            </controls:SummaryItemTemplateSelector.Category>
+                            <controls:SummaryItemTemplateSelector.Total>
+                                <DataTemplate x:DataType="vm:SummaryTotalViewModel">
+                                    <Grid Style="{StaticResource BarLineGridStyle}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Amount}" Grid.Column="1" />
+                                    </Grid>
+                                </DataTemplate>
+                            </controls:SummaryItemTemplateSelector.Total>
+                        </controls:SummaryItemTemplateSelector>
+                    </ListView.ItemTemplateSelector>
                 </ListView>
-
-                <ListViewItem x:Name="lviSummary" Tapped="lviSummary_Tapped">
-                    <Grid Style="{StaticResource BarLineGridStyle}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
-                    </Grid>
-                </ListViewItem>
             </StackPanel>
         </Grid>
         <Grid x:Name="grdPieChart" Grid.Row="1" Grid.Column="1">
@@ -127,29 +132,35 @@
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ListView ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:SummaryItemViewModel">
-                            <Grid Padding="10,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Name}" Style="{ThemeResource BaseTextBlockStyle}" Padding="0,0,15,0" />
-                                <TextBlock Text="{Binding Amount}" Foreground="{Binding ColorBrush}" HorizontalAlignment="Right" Grid.Column="1" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                    <ListView.ItemTemplateSelector>
+                        <controls:SummaryItemTemplateSelector>
+                            <controls:SummaryItemTemplateSelector.Category>
+                                <DataTemplate x:DataType="vm:SummaryCategoryViewModel">
+                                    <Grid Padding="10,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Name}" Style="{ThemeResource BaseTextBlockStyle}" Padding="0,0,15,0" />
+                                        <TextBlock Text="{Binding Amount}" Foreground="{Binding ColorBrush}" HorizontalAlignment="Right" Grid.Column="1" />
+                                    </Grid>
+                                </DataTemplate>
+                            </controls:SummaryItemTemplateSelector.Category>
+                            <controls:SummaryItemTemplateSelector.Total>
+                                <DataTemplate x:DataType="vm:SummaryTotalViewModel">
+                                    <Grid Style="{StaticResource BarLineGridStyle}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" Padding="0,0,15,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Amount}" Grid.Column="1" />
+                                    </Grid>
+                                </DataTemplate>
+                            </controls:SummaryItemTemplateSelector.Total>
+                        </controls:SummaryItemTemplateSelector>
+                    </ListView.ItemTemplateSelector>
                 </ListView>
-                <ListViewItem Tapped="lviSummary_Tapped">
-                    <Grid Style="{StaticResource BarLineGridStyle}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Summary" Style="{ThemeResource BaseTextBlockStyle}" Padding="0,0,15,0" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" />
-                    </Grid>
-                </ListViewItem>
             </StackPanel>
         </Grid>
         <controls:Loading IsActive="{Binding IsLoading}" Grid.Row="1" Grid.ColumnSpan="2" />

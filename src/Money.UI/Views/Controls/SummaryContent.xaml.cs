@@ -144,19 +144,17 @@ namespace Money.Views.Controls
                 {
                     case SummarySortType.ByAmount:
                         if (control.SortDescriptor.Direction == SortDirection.Ascending)
-                            control.ViewModel.Items.Sort(i => i.AmountValue);
+                            control.ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderBy(i => i.AmountValue));
                         else
-                            control.ViewModel.Items.SortDescending(i => i.AmountValue);
+                            control.ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderByDescending(i => i.AmountValue));
 
                         break;
                     case SummarySortType.ByCategory:
                         if (control.SortDescriptor.Direction == SortDirection.Ascending)
-                            control.ViewModel.Items.Sort(i => i.Name);
+                            control.ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderBy(i => i.Name));
                         else
-                            control.ViewModel.Items.SortDescending(i => i.Name);
+                            control.ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderByDescending(i => i.Name));
 
-                        break;
-                    default:
                         break;
                 }
             }
@@ -188,15 +186,10 @@ namespace Money.Views.Controls
 
         private void lvwBarGraph_ItemClick(object sender, ItemClickEventArgs e)
         {
-            SummaryItemViewModel item = (SummaryItemViewModel)e.ClickedItem;
+            ISummaryItemViewModel item = (ISummaryItemViewModel)e.ClickedItem;
             OpenOverview(item.CategoryKey);
         }
-
-        private void lviSummary_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            OpenOverview(KeyFactory.Empty(typeof(Category)));
-        }
-
+        
         private void OpenOverview(IKey categoryKey)
         {
             OverviewParameter parameter = null;

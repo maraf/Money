@@ -9,6 +9,7 @@
     mc:Ignorable="d" d:DataContext="{Binding Group, Source={StaticResource ViewModelLocator}}">
     <Page.BottomAppBar>
         <CommandBar>
+            <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
             <AppBarButton Icon="Sort" Label="Sort">
                 <AppBarButton.Flyout>
                     <MenuFlyout>

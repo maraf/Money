@@ -35,6 +35,20 @@ namespace Money.ViewModels
             }
         }
 
+        private Price totalAmount;
+        public Price TotalAmount
+        {
+            get { return totalAmount; }
+            set
+            {
+                if (totalAmount != value)
+                {
+                    totalAmount = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         private MonthModel month;
         public MonthModel Month
         {
@@ -98,7 +112,8 @@ namespace Money.ViewModels
                     });
                 }
 
-                Items.Add(new SummaryTotalViewModel(await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month))));
+                TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
+                Items.Add(new SummaryTotalViewModel(TotalAmount));
 
                 IsLoading = false;
             }

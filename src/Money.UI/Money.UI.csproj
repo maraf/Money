@@ -185,7 +185,6 @@
     <Compile Include="Views\Controls\PieChartItem.xaml.cs">
       <DependentUpon>PieChartItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\SelectedItemEventArgs.cs" />
     <Compile Include="Views\Controls\SummaryContent.xaml.cs">
       <DependentUpon>SummaryContent.xaml</DependentUpon>
     </Compile>

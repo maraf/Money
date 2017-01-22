@@ -206,6 +206,9 @@
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">
       <DependentUpon>OutcomeAmount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\OutcomeDescription.xaml.cs">
       <DependentUpon>OutcomeDescription.xaml</DependentUpon>
     </Compile>
@@ -280,6 +283,10 @@
     <Page Include="Views\Dialogs\OutcomeAmount.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\ColorPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\OutcomeDescription.xaml">
       <SubType>Designer</SubType>

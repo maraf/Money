@@ -5,6 +5,7 @@ using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
+using Money.Views.Dialogs;
 using Money.Views.Navigation;
 using Neptuo;
 using Neptuo.Models.Keys;
@@ -17,6 +18,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
@@ -161,23 +163,38 @@ namespace Money.Views
         {
             IKey categoryKey = ViewModel.SelectedCategories.FirstOrDefault() ?? KeyFactory.Empty(typeof(Category));
 
+            Color? background = null;
             string categoryName = null;
             if (!categoryKey.IsEmpty)
             {
                 CategoryModel category = ViewModel.Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
                 if (category != null)
+                {
                     categoryName = category.Name;
+                    background = category.Color;
+                }
             }
 
-            await tileService.PinOutcomeCreate(categoryKey, categoryName);
+            ColorPicker backgroundPicker = new ColorPicker();
+            backgroundPicker.Title = "Pick a tile background color";
+            backgroundPicker.PrimaryButtonText = "Create";
 
-            string message = "Tile created";
-            if (categoryName != null)
-                message += $" for category '{categoryName}'";
+            if (background != null)
+                backgroundPicker.Value = background.Value;
 
-            navigator
-                .Message(message)
-                .Show();
+            ContentDialogResult backgroundResult = await backgroundPicker.ShowAsync();
+            if (backgroundResult == ContentDialogResult.Primary)
+            {
+                await tileService.PinOutcomeCreate(categoryKey, categoryName, backgroundPicker.Value);
+
+                string message = "Tile created";
+                if (categoryName != null)
+                    message += $" for category '{categoryName}'";
+
+                navigator
+                    .Message(message)
+                    .Show();
+            }
         }
     }
 }

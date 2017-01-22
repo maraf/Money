@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.UI;
 using Windows.UI.StartScreen;
 
 namespace Money.Services.Tiles
@@ -46,7 +47,7 @@ namespace Money.Services.Tiles
             return false;
         }
 
-        public async Task PinOutcomeCreate(IKey categoryKey, string categoryName)
+        public async Task PinOutcomeCreate(IKey categoryKey, string categoryName, Color? backgroundColor)
         {
             if (SecondaryTile.Exists(OutcomeCreateFormat))
                 return;
@@ -72,6 +73,9 @@ namespace Money.Services.Tiles
             tile.VisualElements.Square150x150Logo = new Uri("ms-appx:///Assets/Square150x150Logo.scale-200.png");
             tile.VisualElements.ShowNameOnSquare150x150Logo = true;
             tile.RoamingEnabled = false;
+
+            if (backgroundColor != null)
+                tile.VisualElements.BackgroundColor = backgroundColor.Value;
 
             await tile.RequestCreateAsync();
         }

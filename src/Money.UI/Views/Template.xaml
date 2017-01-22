@@ -157,6 +157,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="spvContent.DisplayMode" Value="CompactInline"/>
+                        <Setter Target="spvContent.PaneBackground" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="True"/>
                         <Setter Target="ficTopMenu.Visibility" Value="Visible" />
                         <Setter Target="imgTopMenu.Visibility" Value="Collapsed" />
@@ -168,6 +169,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="spvContent.DisplayMode" Value="CompactOverlay"/>
+                        <Setter Target="spvContent.PaneBackground" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="False"/>
                         <Setter Target="ficTopMenu.Visibility" Value="Visible" />
                         <Setter Target="imgTopMenu.Visibility" Value="Collapsed" />
@@ -179,6 +181,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="spvContent.DisplayMode" Value="Overlay"/>
+                        <Setter Target="spvContent.PaneBackground" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
                         <Setter Target="spvContent.IsPaneOpen" Value="False"/>
                         <Setter Target="ficTopMenu.Visibility" Value="Collapsed" />
                         <Setter Target="imgTopMenu.Visibility" Value="Visible" />
@@ -190,6 +193,9 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="spvContent.DisplayMode" Value="Overlay"/>
+                        <Setter Target="spvContent.PaneBackground" Value="Transparent"/>
+                        <Setter Target="stpMainMenu.Background" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
+                        <!-- Ideal would be PaneRoot.VerticalAlignment=Bottom -->
                         <Setter Target="spvContent.IsPaneOpen" Value="False"/>
                         <Setter Target="ficTopMenu.Visibility" Value="Collapsed" />
                         <Setter Target="imgTopMenu.Visibility" Value="Visible" />
@@ -199,8 +205,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <SplitView x:Name="spvContent" DisplayMode="Inline" OpenPaneLength="160" LightDismissOverlayMode="On" IsTabStop="False" IsPaneOpen="{x:Bind IsMainMenuOpened, Mode=TwoWay}"
-         PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+        <SplitView x:Name="spvContent" DisplayMode="Inline" OpenPaneLength="160" LightDismissOverlayMode="On" IsTabStop="False" IsPaneOpen="{x:Bind IsMainMenuOpened, Mode=TwoWay}">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>

@@ -13,7 +13,8 @@ namespace Money.Views.StateTriggers
         public MobileStateTrigger()
         {
             string deviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
-            SetActive(deviceFamily == "Windows.Mobile");
+            bool isActive = deviceFamily == "Windows.Mobile";
+            SetActive(isActive);
         }
     }
 }

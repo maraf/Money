@@ -65,9 +65,10 @@ namespace Money.Services.Tiles
                 tileId,
                 displayName,
                 "OutcomeCreate" + (!categoryKey.IsEmpty ? "&CategoryKey=" + guid : String.Empty),
-                new Uri("ms-appx:///Assets/Square71x71Logo.scale-200.png"),
-                TileSize.Default
+                new Uri("ms-appx:///Assets/Square150x150Logo.scale-200.png"),
+                TileSize.Square150x150
             );
+            tile.VisualElements.Square71x71Logo = new Uri("ms-appx:///Assets/Square71x71Logo.scale-200.png");
             tile.VisualElements.Square150x150Logo = new Uri("ms-appx:///Assets/Square150x150Logo.scale-200.png");
             tile.VisualElements.ShowNameOnSquare150x150Logo = true;
             tile.RoamingEnabled = false;

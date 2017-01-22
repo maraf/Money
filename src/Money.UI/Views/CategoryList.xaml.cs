@@ -24,10 +24,12 @@ using Money.Services;
 namespace Money.Views
 {
     [NavigationParameter(typeof(CategoryListParameter))]
-    public sealed partial class CategoryList : Page
+    public sealed partial class CategoryList : Page, INavigatorPage
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+
+        public event EventHandler ContentLoaded;
 
         public CategoryListViewModel ViewModel
         {
@@ -59,6 +61,7 @@ namespace Money.Views
             }
 
             UpdateSelectedItemView();
+            ContentLoaded?.Invoke(this, EventArgs.Empty);
         }
 
         private void lvwItems_SelectionChanged(object sender, SelectionChangedEventArgs e)

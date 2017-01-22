@@ -175,6 +175,12 @@ namespace Money.Views
                 }
             }
 
+            //CategoryPicker categoryPicker = new CategoryPicker();
+            //categoryPicker.SelectedKey = categoryKey;
+            //ContentDialogResult categoryResult = await categoryPicker.ShowAsync();
+            //if (categoryResult == ContentDialogResult.Primary)
+            //    categoryKey = categoryPicker.SelectedKey;
+
             ColorPicker backgroundPicker = new ColorPicker();
             backgroundPicker.Title = "Pick a tile background color";
             backgroundPicker.PrimaryButtonText = "Create";

@@ -203,6 +203,9 @@
     <Compile Include="Views\DesignData\TestUpgradeService.cs" />
     <Compile Include="Views\DesignData\UpgradeService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
+    <Compile Include="Views\Dialogs\CategoryPicker.xaml.cs">
+      <DependentUpon>CategoryPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">
       <DependentUpon>OutcomeAmount.xaml</DependentUpon>
     </Compile>
@@ -279,6 +282,10 @@
     <Page Include="Views\Controls\SummaryContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\CategoryPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\OutcomeAmount.xaml">
       <SubType>Designer</SubType>

@@ -33,6 +33,7 @@ namespace Money.Services.Models.Builders
             using (ReadModelContext db = new ReadModelContext())
             {
                 return db.Categories
+                    .OrderBy(c => c.Name)
                     .Select(e => e.ToModel())
                     .ToListAsync();
             }

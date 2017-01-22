@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.ComponentModel;
 using Money.Services;
+using System.Threading.Tasks;
 
 namespace Money.Views
 {
@@ -49,6 +50,9 @@ namespace Money.Views
             CategoryListParameter parameter = (CategoryListParameter)e.Parameter;
 
             ViewModel = new CategoryListViewModel(domainFacade);
+
+            // Just to show the loading wheel.
+            await Task.Delay(100);
 
             IEnumerable<CategoryModel> models = await queryDispatcher.QueryAsync(new ListAllCategory());
             foreach (CategoryModel model in models)

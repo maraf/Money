@@ -43,7 +43,7 @@ namespace Money.Views.Dialogs
         private static void OnSelectedKeyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             CategoryPicker control = (CategoryPicker)d;
-            control.OnSelectedKeyChanged(e);
+            control.OnSelectedKeyChanged();
         }
 
         public CategoryPicker()
@@ -52,7 +52,7 @@ namespace Money.Views.Dialogs
             Loaded += OnLoaded;
         }
 
-        private void OnSelectedKeyChanged(DependencyPropertyChangedEventArgs e)
+        private void OnSelectedKeyChanged()
         {
             isCategoriesViewChangedAttached = false;
 
@@ -60,12 +60,17 @@ namespace Money.Views.Dialogs
                 gvwCategories.SelectedItem = null;
             else
                 gvwCategories.SelectedItem = gvwCategories.Items.OfType<CategoryModel>().FirstOrDefault(c => c.Key.Equals(SelectedKey));
+
+            isCategoriesViewChangedAttached = true;
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             models = (await queryDispatcher.QueryAsync(new ListAllCategory())).ToList();
             gvwCategories.ItemsSource = models;
+
+            if (!SelectedKey.IsEmpty)
+                OnSelectedKeyChanged();
         }
 
         private void tbxSearch_KeyDown(object sender, KeyRoutedEventArgs e)

@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Money.Views.Converters"
-    mc:Ignorable="d" Title="Select a category" PrimaryButtonText="Select">
+    mc:Ignorable="d" Title="Select a category" PrimaryButtonText="Select" SecondaryButtonText="Without category">
     <ContentDialog.Resources>
         <converters:InverseColorConverter x:Key="InverseColorConverter" />
 

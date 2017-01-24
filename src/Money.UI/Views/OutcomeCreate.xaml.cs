@@ -162,9 +162,22 @@ namespace Money.Views
         private async void abbPin_Click(object sender, RoutedEventArgs e)
         {
             IKey categoryKey = ViewModel.SelectedCategories.FirstOrDefault() ?? KeyFactory.Empty(typeof(Category));
-
             Color? background = null;
             string categoryName = null;
+
+            // Select a category.
+            CategoryPicker categoryPicker = new CategoryPicker();
+            categoryPicker.SelectedKey = categoryKey;
+
+            ContentDialogResult categoryResult = await categoryPicker.ShowAsync();
+            if (categoryResult == ContentDialogResult.None)
+                return;
+
+            if (categoryResult == ContentDialogResult.Primary)
+                categoryKey = categoryPicker.SelectedKey;
+            else if (categoryResult == ContentDialogResult.Secondary)
+                categoryKey = KeyFactory.Empty(typeof(Category));
+
             if (!categoryKey.IsEmpty)
             {
                 CategoryModel category = ViewModel.Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
@@ -175,12 +188,7 @@ namespace Money.Views
                 }
             }
 
-            //CategoryPicker categoryPicker = new CategoryPicker();
-            //categoryPicker.SelectedKey = categoryKey;
-            //ContentDialogResult categoryResult = await categoryPicker.ShowAsync();
-            //if (categoryResult == ContentDialogResult.Primary)
-            //    categoryKey = categoryPicker.SelectedKey;
-
+            // Select a background color.
             ColorPicker backgroundPicker = new ColorPicker();
             backgroundPicker.Title = "Pick a tile background color";
             backgroundPicker.PrimaryButtonText = "Create";
@@ -189,18 +197,19 @@ namespace Money.Views
                 backgroundPicker.Value = background.Value;
 
             ContentDialogResult backgroundResult = await backgroundPicker.ShowAsync();
-            if (backgroundResult == ContentDialogResult.Primary)
-            {
-                await tileService.PinOutcomeCreate(categoryKey, categoryName, backgroundPicker.Value);
+            if (backgroundResult == ContentDialogResult.None)
+                return;
 
-                string message = "Tile created";
-                if (categoryName != null)
-                    message += $" for category '{categoryName}'";
+            // Create a tile.
+            await tileService.PinOutcomeCreate(categoryKey, categoryName, backgroundPicker.Value);
 
-                navigator
-                    .Message(message)
-                    .Show();
-            }
+            string message = "Tile created";
+            if (categoryName != null)
+                message += $" for category '{categoryName}'";
+
+            navigator
+                .Message(message)
+                .Show();
         }
     }
 }

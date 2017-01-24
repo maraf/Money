@@ -222,6 +222,7 @@
     <Compile Include="Views\Navigation\ContentDialogMessageForm.cs" />
     <Compile Include="ViewModels\Navigation\INavigatorMessageForm.cs" />
     <Compile Include="Views\Navigation\INavigatorPage.cs" />
+    <Compile Include="Views\Navigation\INavigatorParameterPage.cs" />
     <Compile Include="Views\Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>

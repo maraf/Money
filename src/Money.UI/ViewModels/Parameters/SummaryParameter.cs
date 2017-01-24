@@ -63,6 +63,11 @@ namespace Money.ViewModels.Parameters
         }
 
         /// <summary>
+        /// Gets or sets a default sorting.
+        /// </summary>
+        public SortDescriptor<SummarySortType> SortDescriptor { get; set; }
+
+        /// <summary>
         /// Creates new instance with prefered <paramref name="viewType"/> and sets period to month.
         /// </summary>
         /// <param name="viewType">A prefered view type.</param>

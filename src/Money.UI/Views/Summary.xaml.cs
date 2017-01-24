@@ -29,15 +29,21 @@ using Windows.UI.Xaml.Navigation;
 namespace Money.Views
 {
     [NavigationParameter(typeof(SummaryParameter))]
-    public sealed partial class Summary : Page, INavigatorPage
+    public sealed partial class Summary : Page, INavigatorPage, INavigatorParameterPage
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private SummaryParameter parameter;
 
         private bool isAmountSorted;
         private bool isCategorySorted = true;
 
         public event EventHandler ContentLoaded;
+
+        public object Parameter
+        {
+            get { return parameter; }
+        }
 
         public GroupViewModel ViewModel
         {
@@ -55,7 +61,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            SummaryParameter parameter = (SummaryParameter)e.Parameter;
+            parameter = (SummaryParameter)e.Parameter;
             ViewModel.ViewType = parameter.ViewType;
 
             switch (parameter.PeriodType)
@@ -69,6 +75,9 @@ namespace Money.Views
                 default:
                     throw Ensure.Exception.NotSupported(parameter.PeriodType.ToString());
             }
+
+            if (parameter.SortDescriptor != null)
+                ViewModel.SortDescriptor = parameter.SortDescriptor;
 
             ContentLoaded?.Invoke(this, EventArgs.Empty);
         }
@@ -128,6 +137,7 @@ namespace Money.Views
         private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByAmount);
+            parameter.SortDescriptor = ViewModel.SortDescriptor;
             isAmountSorted = !isAmountSorted;
             isCategorySorted = false;
         }
@@ -135,8 +145,22 @@ namespace Money.Views
         private void mfiSortCategory_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByCategory);
+            parameter.SortDescriptor = ViewModel.SortDescriptor;
             isCategorySorted = !isCategorySorted;
             isAmountSorted = false;
+        }
+
+        private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GroupItemViewModel viewModel = (GroupItemViewModel)e.AddedItems.FirstOrDefault();
+
+            MonthModel month = viewModel.Parameter as MonthModel;
+            if (month != null)
+                this.parameter.Month = month;
+
+            YearModel year = viewModel.Parameter as YearModel;
+            if (year != null)
+                this.parameter.Year = year;
         }
     }
 }

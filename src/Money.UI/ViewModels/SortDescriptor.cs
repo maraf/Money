@@ -43,7 +43,10 @@ namespace Money.ViewModels
             if (source == null)
                 return new SortDescriptor<T>(type, SortDirection.Ascending);
 
-            if (source.Type.Equals(type))
+            if (!source.Type.Equals(type))
+                return new SortDescriptor<T>(type, SortDirection.Ascending);
+
+            if (source.Direction == SortDirection.Ascending)
                 return new SortDescriptor<T>(type, SortDirection.Descending);
 
             return new SortDescriptor<T>(type, SortDirection.Ascending);

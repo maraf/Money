@@ -24,7 +24,7 @@
         </CommandBar>
     </Page.BottomAppBar>
     <Grid>
-        <Pivot x:Name="pvtGroups" ItemsSource="{Binding Items}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Pivot x:Name="pvtGroups" ItemsSource="{Binding Items}" SelectionChanged="pvtGroups_SelectionChanged" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Title}" />

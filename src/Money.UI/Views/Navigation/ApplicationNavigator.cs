@@ -102,6 +102,8 @@ namespace Money.Views.Navigation
             }
         }
 
+        private object lastParameter;
+
         private void OnTemplateContentFrameNavigating(object sender, NavigatingCancelEventArgs e)
         {
             Frame frame = (Frame)sender;
@@ -119,6 +121,12 @@ namespace Money.Views.Navigation
                 page.PointerPressed -= OnPagePointerPressed;
                 RemoveMainMenuButton(page);
             }
+
+            INavigatorParameterPage parameterPage = frame.Content as INavigatorParameterPage;
+            if (parameterPage == null)
+                lastParameter = null;
+            else
+                lastParameter = parameterPage.Parameter;
         }
 
         private void OnTemplateContentFrameNavigated(object sender, NavigationEventArgs e)
@@ -139,6 +147,21 @@ namespace Money.Views.Navigation
             {
                 template.ShowLoading();
                 navigatorPage.ContentLoaded += OnTemplateContentPageLoaded;
+            }
+
+            if (lastParameter != null)
+            {
+                PageStackEntry lastEntry = template.ContentFrame.BackStack.LastOrDefault();
+                if (lastEntry != null)
+                {
+                    template.ContentFrame.BackStack.Remove(lastEntry);
+                    lastEntry = new PageStackEntry(
+                        lastEntry.SourcePageType,
+                        lastParameter,
+                        lastEntry.NavigationTransitionInfo
+                    );
+                    template.ContentFrame.BackStack.Add(lastEntry);
+                }
             }
         }
 

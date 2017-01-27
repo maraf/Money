@@ -1,0 +1,22 @@
+﻿<ContentDialog
+    x:Class="Money.Views.Dialogs.OutcomeCreateGuidePost"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Money.Views.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    VerticalAlignment="Center"
+    Title="Outcome created. What now?">
+    <ContentDialog.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="0,20,0,0" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+    </ContentDialog.Resources>
+    <StackPanel>
+        <Button x:Name="btnNew" Content="New outcome" Click="btnNew_Click" />
+        <Button x:Name="btnSummary" Content="Go to month summary" Click="btnSummary_Click" />
+        <Button x:Name="btnExit" Content="Exit" Click="btnExit_Click" />
+    </StackPanel>
+</ContentDialog>

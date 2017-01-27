@@ -2,6 +2,7 @@
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
+using Money.Views.Dialogs;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -41,9 +42,26 @@ namespace Money.Views.Navigation
 
         public void GoBack()
         {
+            bool isOutcome;
+
             Template template = rootFrame.Content as Template;
             if (template != null)
-                NavigateBack(template.ContentFrame);
+            {
+                if (NavigateBack(template.ContentFrame))
+                    return;
+
+                isOutcome = template.ContentFrame.Content is OutcomeCreate;
+            }
+            else
+            {
+                isOutcome = rootFrame.Content is OutcomeCreate;
+            }
+
+            if (isOutcome)
+            {
+                OutcomeCreateGuidePost dialog = new OutcomeCreateGuidePost();
+                dialog.ShowAsync();
+            }
         }
 
         public void GoForward()
@@ -224,11 +242,19 @@ namespace Money.Views.Navigation
             if (e.Pointer.PointerDeviceType == PointerDeviceType.Mouse)
             {
                 Page page = (Page)sender;
+
+                Frame frame = null;
+                Template template = rootFrame.Content as Template;
+                if (template == null)
+                    frame = page.Frame;
+                else
+                    frame = template.ContentFrame;
+
                 PointerPoint point = e.GetCurrentPoint(page);
                 if (point.Properties.IsXButton1Pressed)
-                    NavigateBack(page.Frame);
+                    NavigateBack(frame);
                 else if (point.Properties.IsXButton2Pressed)
-                    NavigateForward(page.Frame);
+                    NavigateForward(frame);
             }
         }
 

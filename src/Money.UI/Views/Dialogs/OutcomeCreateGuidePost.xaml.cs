@@ -32,6 +32,8 @@ namespace Money.Views.Dialogs
             navigator
                 .Open(new OutcomeParameter())
                 .Show();
+
+            Hide();
         }
 
         private void btnSummary_Click(object sender, RoutedEventArgs e)
@@ -39,6 +41,8 @@ namespace Money.Views.Dialogs
             navigator
                 .Open(new SummaryParameter(SummaryViewType.BarGraph))
                 .Show();
+
+            Hide();
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)

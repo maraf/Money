@@ -11,9 +11,11 @@ namespace Money.Views.Navigation
     {
         private readonly Template template;
 
-        public ApplicationNavigatorForm(Template template, Type pageType, object parameter) 
+        public ApplicationNavigatorForm(Template template, Type pageType, object parameter)
             : base(template.ContentFrame, pageType, parameter)
-        { }
+        {
+            this.template = template;
+        }
 
         public override void Show()
         {

@@ -18,11 +18,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views.Dialogs
 {
-    public sealed partial class OutcomeCreateGuidePost : ContentDialog
+    public sealed partial class OutcomeCreatedGuidePost : ContentDialog
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
 
-        public OutcomeCreateGuidePost()
+        public OutcomeCreatedGuidePost()
         {
             InitializeComponent();
         }

@@ -59,7 +59,7 @@ namespace Money.Views.Navigation
 
             if (isOutcome)
             {
-                OutcomeCreateGuidePost dialog = new OutcomeCreateGuidePost();
+                OutcomeCreatedGuidePost dialog = new OutcomeCreatedGuidePost();
                 dialog.ShowAsync();
             }
         }

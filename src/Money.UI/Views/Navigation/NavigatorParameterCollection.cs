@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Money.Views.Dialogs;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace Money.Views.Navigation
 {
     public class NavigatorParameterCollection
     {
-        private readonly Dictionary<Type, Type> storage = new Dictionary<Type, Type>();
+        private readonly Dictionary<Type, Type> pages = new Dictionary<Type, Type>();
+        private readonly Dictionary<Type, Type> wizards = new Dictionary<Type, Type>();
 
         public NavigatorParameterCollection()
         {
@@ -18,14 +20,25 @@ namespace Money.Views.Navigation
             {
                 NavigationParameterAttribute attribute = type.GetTypeInfo().GetCustomAttribute<NavigationParameterAttribute>();
                 if (attribute != null)
-                    storage[attribute.ParameterType] = type;
+                {
+                    if (typeof(IWizard).IsAssignableFrom(type))
+                        wizards[attribute.ParameterType] = type;
+                    else
+                        pages[attribute.ParameterType] = type;
+                }
             }
         }
 
         public bool TryGetPageType(Type parameterType, out Type pageType)
         {
             Ensure.NotNull(parameterType, "parameterType");
-            return storage.TryGetValue(parameterType, out pageType);
+            return pages.TryGetValue(parameterType, out pageType);
+        }
+
+        public bool TryGetWizardType(Type parameterType, out Type pageType)
+        {
+            Ensure.NotNull(parameterType, "parameterType");
+            return wizards.TryGetValue(parameterType, out pageType);
         }
     }
 }

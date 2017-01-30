@@ -206,12 +206,14 @@
     <Compile Include="Views\Dialogs\CategoryPicker.xaml.cs">
       <DependentUpon>CategoryPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\IWizard.cs" />
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">
       <DependentUpon>OutcomeAmount.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\OutcomeCreate.cs" />
     <Compile Include="Views\Dialogs\OutcomeCreatedGuidePost.xaml.cs">
       <DependentUpon>OutcomeCreatedGuidePost.xaml</DependentUpon>
     </Compile>
@@ -226,6 +228,7 @@
     <Compile Include="ViewModels\Navigation\INavigatorMessageForm.cs" />
     <Compile Include="Views\Navigation\INavigatorPage.cs" />
     <Compile Include="Views\Navigation\INavigatorParameterPage.cs" />
+    <Compile Include="Views\Navigation\WizardNavigatorForm.cs" />
     <Compile Include="Views\Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>

@@ -28,7 +28,7 @@ namespace Money.Views.Dialogs
             "Value", 
             typeof(double), 
             typeof(OutcomeAmount), 
-            new PropertyMetadata(0)
+            new PropertyMetadata(0d)
         );
 
         public OutcomeAmount()

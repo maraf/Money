@@ -31,7 +31,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views
 {
-    [NavigationParameter(typeof(OutcomeParameter))]
+    //[NavigationParameter(typeof(OutcomeParameter))]
     public sealed partial class OutcomeCreate : Page
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;

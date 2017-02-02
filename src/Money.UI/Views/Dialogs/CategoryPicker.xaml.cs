@@ -72,27 +72,7 @@ namespace Money.Views.Dialogs
             if (!SelectedKey.IsEmpty)
                 OnSelectedKeyChanged();
         }
-
-        private void tbxSearch_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Enter)
-            {
-                e.Handled = true;
-            }
-            else if (e.Key == VirtualKey.Escape)
-            {
-                if (sender == tbxSearch)
-                {
-                    if (tbxSearch.Text == String.Empty)
-                        Hide();
-                    else
-                        tbxSearch.Text = String.Empty;
-
-                    e.Handled = true;
-                }
-            }
-        }
-
+        
         private bool isCategoriesViewChangedAttached = true;
 
         private void gvwCategories_SelectionChanged(object sender, SelectionChangedEventArgs e)

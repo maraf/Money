@@ -14,13 +14,7 @@
         </Style>
     </ContentDialog.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TextBox x:Name="tbxSearch" KeyDown="tbxSearch_KeyDown" />
-
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Row="1">
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
             <GridView x:Name="gvwCategories" SelectionMode="Single" SelectionChanged="gvwCategories_SelectionChanged">
                 <GridView.ItemTemplate>
                     <DataTemplate>

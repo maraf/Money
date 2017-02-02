@@ -2,6 +2,7 @@
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using Neptuo.Activators;
+using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,39 +21,76 @@ namespace Money.Views.Dialogs
         {
             OutcomeParameter parameter = (OutcomeParameter)context;
 
+            decimal amount = 0;
+            string description = String.Empty;
+            DateTime when = DateTime.Now;
+            IKey categoryKey = parameter.CategoryKey;
+
             OutcomeAmount amountDialog = new OutcomeAmount();
+            amountDialog.PrimaryButtonText = "Next";
+
+            if (parameter.CategoryKey.IsEmpty)
+                amountDialog.SecondaryButtonText = String.Empty;
+            else
+                amountDialog.SecondaryButtonText = "Create today";
+
             if (parameter.Amount != null)
                 amountDialog.Value = (double)parameter.Amount.Value;
 
             ContentDialogResult result = await amountDialog.ShowAsync();
-            if (result != ContentDialogResult.Primary)
+            if (result == ContentDialogResult.None)
                 return;
 
-            OutcomeDescription descriptionDialog = new OutcomeDescription();
+            amount = (decimal)amountDialog.Value;
+            if (result == ContentDialogResult.Primary)
+            {
+                OutcomeDescription descriptionDialog = new OutcomeDescription();
+                descriptionDialog.PrimaryButtonText = "Next";
 
-            result = await descriptionDialog.ShowAsync();
-            if (result != ContentDialogResult.Primary)
-                return;
+                if (parameter.CategoryKey.IsEmpty)
+                    descriptionDialog.SecondaryButtonText = String.Empty;
+                else
+                    descriptionDialog.SecondaryButtonText = "Create today";
 
-            OutcomeWhen whenDialog = new OutcomeWhen();
+                result = await descriptionDialog.ShowAsync();
+                if (result == ContentDialogResult.None && !descriptionDialog.IsEnterPressed)
+                    return;
 
-            result = await whenDialog.ShowAsync();
-            if (result != ContentDialogResult.Primary)
-                return;
+                description = descriptionDialog.Value;
+                if (result == ContentDialogResult.Primary || descriptionDialog.IsEnterPressed)
+                {
+                    CategoryPicker categoryDialog = new CategoryPicker();
+                    categoryDialog.PrimaryButtonText = "Next";
+                    categoryDialog.SecondaryButtonText = "Create today";
+                    if (!parameter.CategoryKey.IsEmpty)
+                        categoryDialog.SelectedKey = parameter.CategoryKey;
 
-            CategoryPicker categoryDialog = new CategoryPicker();
-            if (!parameter.CategoryKey.IsEmpty)
-                categoryDialog.SelectedKey = parameter.CategoryKey;
+                    result = await categoryDialog.ShowAsync();
+                    if (result == ContentDialogResult.None)
+                        return;
 
-            result = await categoryDialog.ShowAsync();
-            if (result != ContentDialogResult.Primary)
-                return;
+                    categoryKey = categoryDialog.SelectedKey;
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        OutcomeWhen whenDialog = new OutcomeWhen();
+                        whenDialog.PrimaryButtonText = "Create";
+                        whenDialog.SecondaryButtonText = "Cancel";
+                        whenDialog.Value = when;
+
+                        result = await whenDialog.ShowAsync();
+                        if (result != ContentDialogResult.Primary)
+                            return;
+
+                        when = whenDialog.Value;
+                    }
+                }
+            }
 
             await domainFacade.CreateOutcomeAsync(
-                domainFacade.PriceFactory.Create((decimal)amountDialog.Value),
-                descriptionDialog.Value,
-                whenDialog.Value,
-                categoryDialog.SelectedKey
+                domainFacade.PriceFactory.Create(amount),
+                description,
+                when,
+                categoryKey
             );
 
             //OutcomeCreatedGuidePost nextDialog = new OutcomeCreatedGuidePost();

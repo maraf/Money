@@ -31,6 +31,8 @@ namespace Money.Views.Dialogs
             new PropertyMetadata(null)
         );
 
+        public bool IsEnterPressed { get; private set; }
+
         public OutcomeDescription()
         {
             InitializeComponent();
@@ -41,6 +43,8 @@ namespace Money.Views.Dialogs
             if (e.Key == VirtualKey.Enter)
             {
                 e.Handled = true;
+                IsEnterPressed = true;
+                Hide();
             }
             else if (e.Key == VirtualKey.Escape)
             {

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Money.Services.Models.Builders
 {
@@ -25,6 +26,7 @@ namespace Money.Services.Models.Builders
         IQueryHandler<ListMonthCategoryWithOutcome, IEnumerable<CategoryWithAmountModel>>,
         IQueryHandler<GetTotalMonthOutcome, Price>,
         IQueryHandler<GetCategoryName, string>,
+        IQueryHandler<GetCategoryColor, Color>,
         IQueryHandler<ListMonthOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>,
         IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>
     {
@@ -102,6 +104,18 @@ namespace Money.Services.Models.Builders
                     throw Ensure.Exception.ArgumentOutOfRange("categoryKey", "No such category with key '{0}'.", query.CategoryKey);
 
                 return category.Name;
+            }
+        }
+
+        public async Task<Color> HandleAsync(GetCategoryColor query)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                CategoryEntity category = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
+                if (category == null)
+                    throw Ensure.Exception.ArgumentOutOfRange("categoryKey", "No such category with key '{0}'.", query.CategoryKey);
+
+                return category.ToColor();
             }
         }
 

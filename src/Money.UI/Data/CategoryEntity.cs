@@ -47,8 +47,13 @@ namespace Money.Data
                 GuidKey.Create(Id, KeyFactory.Empty(typeof(Category)).Type),
                 Name,
                 Description,
-                Color.FromArgb(ColorA, ColorR, ColorG, ColorB)
+                ToColor()
             );
+        }
+
+        public Color ToColor()
+        {
+            return Color.FromArgb(ColorA, ColorR, ColorG, ColorB);
         }
     }
 }

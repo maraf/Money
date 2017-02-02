@@ -9,6 +9,9 @@
     mc:Ignorable="d" d:DataContext="{Binding Group, Source={StaticResource ViewModelLocator}}">
     <Page.BottomAppBar>
         <CommandBar>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="btnPinOutcomeCreate" Label="Pin outcome create to start" Click="btnPinOutcomeCreate_Click" />
+            </CommandBar.SecondaryCommands>
             <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
             <AppBarButton Icon="Sort" Label="Sort">
                 <AppBarButton.Flyout>

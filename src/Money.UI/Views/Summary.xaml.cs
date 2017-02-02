@@ -1,9 +1,11 @@
 ﻿using Money.Services.Models;
 using Money.Services.Models.Queries;
+using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
+using Money.Views.Dialogs;
 using Money.Views.Navigation;
 using Neptuo;
 using Neptuo.Models.Keys;
@@ -17,6 +19,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,6 +36,7 @@ namespace Money.Views
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private readonly TileService tileService = ServiceProvider.TileService;
         private SummaryParameter parameter;
 
         private bool isAmountSorted;
@@ -161,6 +165,55 @@ namespace Money.Views
             YearModel year = viewModel.Parameter as YearModel;
             if (year != null)
                 this.parameter.Year = year;
+        }
+
+        private async void btnPinOutcomeCreate_Click(object sender, RoutedEventArgs e)
+        {
+            IKey categoryKey = KeyFactory.Empty(typeof(Category));
+            Color? background = null;
+            string categoryName = null;
+
+            // Select a category.
+            CategoryPicker categoryPicker = new CategoryPicker();
+            categoryPicker.SelectedKey = categoryKey;
+
+            ContentDialogResult categoryResult = await categoryPicker.ShowAsync();
+            if (categoryResult == ContentDialogResult.None)
+                return;
+
+            if (categoryResult == ContentDialogResult.Primary)
+                categoryKey = categoryPicker.SelectedKey;
+            else if (categoryResult == ContentDialogResult.Secondary)
+                categoryKey = KeyFactory.Empty(typeof(Category));
+
+            if (!categoryKey.IsEmpty)
+            {
+                categoryName = await queryDispatcher.QueryAsync(new GetCategoryName(categoryKey));
+                background = await queryDispatcher.QueryAsync(new GetCategoryColor(categoryKey));
+            }
+
+            // Select a background color.
+            ColorPicker backgroundPicker = new ColorPicker();
+            backgroundPicker.Title = "Pick a tile background color";
+            backgroundPicker.PrimaryButtonText = "Create";
+
+            if (background != null)
+                backgroundPicker.Value = background.Value;
+
+            ContentDialogResult backgroundResult = await backgroundPicker.ShowAsync();
+            if (backgroundResult == ContentDialogResult.None)
+                return;
+
+            // Create a tile.
+            await tileService.PinOutcomeCreate(categoryKey, categoryName, backgroundPicker.Value);
+
+            string message = "Tile created";
+            if (categoryName != null)
+                message += $" for category '{categoryName}'";
+
+            navigator
+                .Message(message)
+                .Show();
         }
     }
 }

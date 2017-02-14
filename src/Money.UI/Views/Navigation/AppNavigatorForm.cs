@@ -7,11 +7,11 @@ using Windows.UI.Xaml.Controls;
 
 namespace Money.Views.Navigation
 {
-    internal class ApplicationNavigatorForm : PageNavigatorForm
+    internal class AppNavigatorForm : PageNavigatorForm
     {
         private readonly Template template;
 
-        public ApplicationNavigatorForm(Template template, Type pageType, object parameter)
+        public AppNavigatorForm(Template template, Type pageType, object parameter)
             : base(template.ContentFrame, pageType, parameter)
         {
             this.template = template;

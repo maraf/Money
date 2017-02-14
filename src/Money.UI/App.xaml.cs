@@ -89,7 +89,7 @@ namespace Money.UI
                 Window.Current.Content = rootFrame;
             }
 
-            ServiceProvider.Navigator = new ApplicationNavigator(new NavigatorParameterCollection(), rootFrame);
+            ServiceProvider.Navigator = new AppNavigator(new NavigatorParameterCollection(), rootFrame);
 
             // This one is for migration designing.
             //ServiceProvider.UpgradeService = new Views.DesignData.TestUpgradeService();

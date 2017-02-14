@@ -21,12 +21,12 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views.Navigation
 {
-    internal class ApplicationNavigator : INavigator
+    internal class AppNavigator : INavigator
     {
         private readonly NavigatorParameterCollection rules;
         private readonly Frame rootFrame;
 
-        public ApplicationNavigator(NavigatorParameterCollection rules, Frame rootFrame)
+        public AppNavigator(NavigatorParameterCollection rules, Frame rootFrame)
         {
             Ensure.NotNull(rules, "rules");
             Ensure.NotNull(rootFrame, "rootFrame");

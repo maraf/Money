@@ -224,7 +224,7 @@
     <Compile Include="Views\Dialogs\OutcomeWhen.xaml.cs">
       <DependentUpon>OutcomeWhen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Navigation\ApplicationNavigatorForm.cs" />
+    <Compile Include="Views\Navigation\AppNavigatorForm.cs" />
     <Compile Include="Views\Navigation\ContentDialogMessageForm.cs" />
     <Compile Include="ViewModels\Navigation\INavigatorMessageForm.cs" />
     <Compile Include="Views\Navigation\INavigatorPage.cs" />
@@ -239,7 +239,7 @@
     <Compile Include="Views\Migrate.xaml.cs">
       <DependentUpon>Migrate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Navigation\ApplicationNavigator.cs" />
+    <Compile Include="Views\Navigation\AppNavigator.cs" />
     <Compile Include="Views\Navigation\NavigatorParameterCollection.cs" />
     <Compile Include="ViewModels\Navigation\INavigator.cs" />
     <Compile Include="ViewModels\Navigation\INavigatorForm.cs" />

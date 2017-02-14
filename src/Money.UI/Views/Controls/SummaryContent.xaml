@@ -44,6 +44,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="codRight.Width" Value="*" />
+                        <Setter Target="lvwPieChart.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -55,6 +56,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="codRight.Width" Value="0" />
+                        <Setter Target="lvwPieChart.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -66,6 +68,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="codLeft.Width" Value="*" />
+                        <Setter Target="lvwPieChart.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -77,6 +80,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="codLeft.Width" Value="0" />
+                        <Setter Target="lvwPieChart.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -128,7 +132,7 @@
         <Grid x:Name="grdPieChart" Grid.Row="1" Grid.Column="1">
             <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Margin="30" Thickness="15" />
 
-            <ListView ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ListView x:Name="lvwPieChart" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ListView.ItemTemplateSelector>
                     <controls:SummaryItemTemplateSelector>
                         <controls:SummaryItemTemplateSelector.Category>

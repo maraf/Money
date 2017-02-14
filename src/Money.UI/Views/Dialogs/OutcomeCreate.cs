@@ -59,6 +59,9 @@ namespace Money.Views.Dialogs
                 description = descriptionDialog.Value;
                 if (result == ContentDialogResult.Primary || descriptionDialog.IsEnterPressed)
                 {
+                    if (descriptionDialog.IsEnterPressed)
+                        await Task.Delay(50);
+
                     CategoryPicker categoryDialog = new CategoryPicker();
                     categoryDialog.PrimaryButtonText = "Next";
                     categoryDialog.SecondaryButtonText = "Create today";

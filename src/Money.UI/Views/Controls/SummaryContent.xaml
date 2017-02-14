@@ -130,6 +130,7 @@
             </ListView>
         </Grid>
         <Grid x:Name="grdPieChart" Grid.Row="1" Grid.Column="1">
+            <!-- We should bind here a collection without the summary item -->
             <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Margin="30" Thickness="15" />
 
             <ListView x:Name="lvwPieChart" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True" HorizontalAlignment="Center" VerticalAlignment="Center">

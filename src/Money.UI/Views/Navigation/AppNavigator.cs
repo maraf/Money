@@ -98,7 +98,7 @@ namespace Money.Views.Navigation
             }
 
             if (rules.TryGetWizardType(parameterType, out pageType))
-                return new WizardNavigatorForm(pageType, parameter);
+                return new WizardNavigatorForm(pageType, parameter, rootFrame);
 
             throw Ensure.Exception.InvalidOperation("Missing navigation page for parameter of type '{0}'.", parameterType.FullName);
         }

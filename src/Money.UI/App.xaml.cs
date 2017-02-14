@@ -120,8 +120,12 @@ namespace Money.UI
                     else
                     {
                         ServiceProvider.Navigator
-                            .Open(new SummaryParameter(SummaryViewType.BarGraph))
+                            .Open(new OutcomeParameter())
                             .Show();
+
+                        //ServiceProvider.Navigator
+                        //    .Open(new SummaryParameter(SummaryViewType.BarGraph))
+                        //    .Show();
                     }
                 }
 

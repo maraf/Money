@@ -25,9 +25,9 @@ namespace Money.Views.Dialogs
         }
 
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
-            "Value",
-            typeof(double),
-            typeof(OutcomeAmount),
+            "Value", 
+            typeof(double), 
+            typeof(OutcomeAmount), 
             new PropertyMetadata(0d)
         );
 
@@ -36,22 +36,26 @@ namespace Money.Views.Dialogs
             InitializeComponent();
         }
 
-        private void OnNumberButtonClick(object sender, RoutedEventArgs e)
+        private void tbxAmount_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            string value = ((Button)sender).Content as string;
-            if (value != null)
-                Value = Double.Parse(tbxAmount.Text + value);
-
-            //if (tbxAmount.Text.StartsWith("0") && tbxAmount.Text.Length > 1)
-            //tbxAmount.Text = tbxAmount.Text.Substring(1);
+            if (e.Key == VirtualKey.Enter)
+            {
+                e.Handled = true;
+            }
+            else if (e.Key == VirtualKey.Escape)
+            {
+                if (sender == tbxAmount)
+                {
+                    tbxAmount.Text = "0";
+                    tbxAmount.SelectAll();
+                    e.Handled = true;
+                }
+            }
         }
 
-        private void OnUndoClick(object sender, RoutedEventArgs e)
+        private void tbxAmount_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (tbxAmount.Text.Length > 1)
-                Value = Double.Parse(tbxAmount.Text.Substring(0, tbxAmount.Text.Length - 1));
-            else
-                Value = 0;
+            tbxAmount.SelectAll();
         }
     }
 }

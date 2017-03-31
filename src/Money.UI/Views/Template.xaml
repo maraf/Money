@@ -244,6 +244,12 @@
                             </controls:MainMenu.GroupStyle>
                         </controls:MainMenu>
                     </StackPanel>
+
+                    <StackPanel x:Name="stpDevelopment" VerticalAlignment="Bottom" Visibility="Collapsed">
+                        <Button x:Name="btnClearStorage" Click="btnClearStorage_Click" ToolTipService.ToolTip="Delete everything">
+                            <SymbolIcon Symbol="Delete" />
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </SplitView.Pane>
 

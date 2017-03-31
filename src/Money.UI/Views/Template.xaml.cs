@@ -1,4 +1,6 @@
-﻿using Money.ViewModels;
+﻿using Microsoft.EntityFrameworkCore;
+using Money.Data;
+using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
@@ -10,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -51,6 +54,10 @@ namespace Money.Views
         public Template()
         {
             InitializeComponent();
+
+#if DEBUG
+            stpDevelopment.Visibility = Visibility.Visible;
+#endif
 
             menuItems = new List<MenuItemViewModel>()
             {
@@ -122,6 +129,29 @@ namespace Money.Views
         public void HideLoading()
         {
             loaContent.IsActive = false;
+        }
+
+        private void btnClearStorage_Click(object sender, RoutedEventArgs e)
+        {
+#if DEBUG
+            using (var readModels = new ReadModelContext())
+            {
+                readModels.Database.EnsureDeleted();
+                readModels.Database.EnsureCreated();
+            }
+
+            using (var eventSourcing = new EventSourcingContext())
+            {
+                eventSourcing.Database.EnsureDeleted();
+                eventSourcing.Database.EnsureCreated();
+                eventSourcing.Database.Migrate();
+            }
+
+            foreach (string containerName in ApplicationData.Current.LocalSettings.Containers.Select(c => c.Key))
+                ApplicationData.Current.LocalSettings.DeleteContainer(containerName);
+
+            Application.Current.Exit();
+#endif
         }
     }
 }

@@ -52,19 +52,19 @@ namespace Money.Bootstrap
 
             if (currentVersion < 1)
             {
-                context.StartingStep(currentVersion - 0, "Creating default categories.");
+                context.StartingStep(0 - currentVersion, "Creating default categories.");
                 await UpgradeVersion1();
             }
 
             if (currentVersion < 2)
             {
-                context.StartingStep(currentVersion - 1, "Rebuilding internal database.");
+                context.StartingStep(1 - currentVersion, "Rebuilding internal database.");
                 await UpgradeVersion2();
             }
 
             if (currentVersion < 3)
             {
-                context.StartingStep(currentVersion - 2, "Creating default currencies.");
+                context.StartingStep(2 - currentVersion, "Creating default currencies.");
                 await UpgradeVersion3();
             }
 

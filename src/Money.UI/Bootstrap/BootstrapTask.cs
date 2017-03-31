@@ -133,7 +133,7 @@ namespace Money.Bootstrap
             queryDispatcher.AddAll(currencyBuilder);
             eventDispatcher.Handlers.AddAll(currencyBuilder);
         }
-
+        
         public void Handle(Exception exception)
         {
             throw new NotImplementedException();

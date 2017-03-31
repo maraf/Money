@@ -98,5 +98,12 @@ namespace Money
         /// <param name="color">A new color of the category.</param>
         /// <returns>Continuation task.</returns>
         Task ChangeCategoryColor(IKey categoryKey, Color color);
+
+        /// <summary>
+        /// Creates a new currency with <paramref name="name"/> as a unique identifier.
+        /// </summary>
+        /// <param name="name">A name of the new currency.</param>
+        /// <returns>Continuation task.</returns>
+        Task CreateCurrencyAsync(string name);
     }
 }

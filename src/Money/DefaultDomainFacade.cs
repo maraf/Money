@@ -20,19 +20,28 @@ namespace Money
     {
         private readonly IRepository<Outcome, IKey> outcomeRepository;
         private readonly IRepository<Category, IKey> categoryRepository;
+        private readonly IRepository<CurrencyList, IKey> currencyListRepository;
+
+        private readonly IKey currencyListKey = GuidKey.Create(
+            Guid.Parse("AF215C3D-B228-4004-806B-AC31398660A8"), 
+            KeyFactory.Empty(typeof(CurrencyList)).Type
+        );
 
         public IFactory<Price, decimal> PriceFactory { get; private set; }
 
         public DefaultDomainFacade(
             IRepository<Outcome, IKey> outcomeRepository, 
-            IRepository<Category, IKey> categoryRepository, 
+            IRepository<Category, IKey> categoryRepository,
+            IRepository<CurrencyList, IKey> currencyListRepository,
             IFactory<Price, decimal> priceFactory)
         {
             Ensure.NotNull(outcomeRepository, "outcomeRepository");
             Ensure.NotNull(categoryRepository, "categoryRepository");
+            Ensure.NotNull(currencyListRepository, "currencyListRepository");
             Ensure.NotNull(priceFactory, "priceFactory");
             this.outcomeRepository = outcomeRepository;
             this.categoryRepository = categoryRepository;
+            this.currencyListRepository = currencyListRepository;
             PriceFactory = priceFactory;
         }
 
@@ -133,6 +142,19 @@ namespace Money
                 Outcome outcome = outcomeRepository.Get(outcomeKey);
                 outcome.Delete();
                 outcomeRepository.Save(outcome);
+            });
+        }
+
+        public Task CreateCurrencyAsync(string name)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                CurrencyList currencies = currencyListRepository.Find(currencyListKey);
+                if (currencies == null)
+                    currencies = new CurrencyList();
+
+                currencies.Add(name);
+                currencyListRepository.Save(currencies);
             });
         }
     }

@@ -108,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
-    <Compile Include="Data\IOutcomeRepository.cs" />
+    <Compile Include="Currency.cs" />
     <Compile Include="DefaultDomainFacade.cs" />
     <Compile Include="Events\CategoryColorChanged.cs" />
     <Compile Include="Events\CategoryCreated.cs" />

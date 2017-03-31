@@ -105,5 +105,12 @@ namespace Money
         /// <param name="name">A name of the new currency.</param>
         /// <returns>Continuation task.</returns>
         Task CreateCurrencyAsync(string name);
+
+        /// <summary>
+        /// Sets a <paramref name="name"/> as a default currency.
+        /// </summary>
+        /// <param name="name">A name of the currency.</param>
+        /// <returns>Continuation task.</returns>
+        Task SetCurrencyAsDefault(string name);
     }
 }

@@ -78,5 +78,10 @@ namespace Money.Views.DesignData
         {
             throw new NotImplementedException();
         }
+
+        public Task SetCurrencyAsDefault(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

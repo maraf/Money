@@ -16,9 +16,11 @@ namespace Money
     /// All currencies.
     /// </summary>
     public class CurrencyList : AggregateRoot,
-        IEventHandler<CurrencyCreated>
+        IEventHandler<CurrencyCreated>,
+        IEventHandler<CurrencyDefaultChanged>
     {
         private readonly HashSet<string> names = new HashSet<string>();
+        private string defaultName = null;
 
         public CurrencyList()
         { }
@@ -34,11 +36,28 @@ namespace Money
                 throw new CurrencyAlreadyExistsException();
 
             Publish(new CurrencyCreated(name));
+
+            if (defaultName == null)
+                Publish(new CurrencyDefaultChanged(name));
         }
 
         Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
             return UpdateState(() => names.Add(payload.Name.ToLowerInvariant()));
+        }
+
+        public void SetAsDefault(string name)
+        {
+            Ensure.NotNullOrEmpty(name, "name");
+            if (!names.Contains(name.ToLowerInvariant()))
+                throw new CurrencyDoesNotExistException();
+
+            Publish(new CurrencyDefaultChanged(name));
+        }
+
+        Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
+        {
+            return UpdateState(() => defaultName = payload.Name.ToLowerInvariant());
         }
     }
 }

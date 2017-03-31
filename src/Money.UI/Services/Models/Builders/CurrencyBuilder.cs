@@ -17,7 +17,9 @@ namespace Money.Services.Models.Builders
     /// </summary>
     public class CurrencyBuilder : 
         IEventHandler<CurrencyCreated>,
-        IQueryHandler<ListAllCurrency, List<string>>
+        IEventHandler<CurrencyDefaultChanged>,
+        IQueryHandler<ListAllCurrency, List<string>>,
+        IQueryHandler<GetDefaultCurrency, string>
     {
         public async Task HandleAsync(CurrencyCreated payload)
         {
@@ -32,6 +34,22 @@ namespace Money.Services.Models.Builders
             }
         }
 
+        public async Task HandleAsync(CurrencyDefaultChanged payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                CurrencyEntity entity = db.Currencies.FirstOrDefault(c => c.IsDefault);
+                if (entity != null)
+                    entity.IsDefault = false;
+
+                entity = db.Currencies.FirstOrDefault(c => c.Name == payload.Name);
+                if (entity != null)
+                    entity.IsDefault = true;
+
+                await db.SaveChangesAsync();
+            }
+        }
+
         public Task<List<string>> HandleAsync(ListAllCurrency query)
         {
             using (ReadModelContext db = new ReadModelContext())
@@ -39,6 +57,17 @@ namespace Money.Services.Models.Builders
                 return db.Currencies
                     .Select(c => c.Name)
                     .ToListAsync();
+            }
+        }
+
+        public async Task<string> HandleAsync(GetDefaultCurrency query)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                CurrencyEntity entity = await db.Currencies
+                    .FirstAsync(c => c.IsDefault);
+
+                return entity.Name;
             }
         }
     }

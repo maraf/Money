@@ -131,6 +131,7 @@
     <Compile Include="Services\Models\OutcomeOverviewModel.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryColor.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryName.cs" />
+    <Compile Include="Services\Models\Queries\GetDefaultCurrency.cs" />
     <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
     <Compile Include="Services\Models\Queries\ListAllCurrency.cs" />
     <Compile Include="Services\Models\Queries\ListMonthCategoryWithOutcome.cs" />

@@ -9,5 +9,6 @@ namespace Money.Data
     internal class CurrencyEntity
     {
         public string Name { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

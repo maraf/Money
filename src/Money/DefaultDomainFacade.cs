@@ -157,5 +157,15 @@ namespace Money
                 currencyListRepository.Save(currencies);
             });
         }
+
+        public Task SetCurrencyAsDefault(string name)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+                currencies.SetAsDefault(name);
+                currencyListRepository.Save(currencies);
+            });
+        }
     }
 }

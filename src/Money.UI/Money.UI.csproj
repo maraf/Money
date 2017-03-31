@@ -115,12 +115,14 @@
     <Compile Include="Bootstrap\ColorConverter.cs" />
     <Compile Include="Bootstrap\UpgradeService.cs" />
     <Compile Include="Data\CategoryEntity.cs" />
+    <Compile Include="Data\CurrencyEntity.cs" />
     <Compile Include="Data\EventSourcingContext.cs" />
     <Compile Include="Data\OutcomeCategoryEntity.cs" />
     <Compile Include="Data\OutcomeEntity.cs" />
     <Compile Include="Data\ReadModelContext.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />
+    <Compile Include="Services\Models\Builders\CurrencyBuilder.cs" />
     <Compile Include="Services\Models\Builders\OutcomeBuilder.cs" />
     <Compile Include="Services\Models\CategoryModel.cs" />
     <Compile Include="Services\Models\CategoryWithAmountModel.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Services\Models\Queries\GetCategoryColor.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryName.cs" />
     <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
+    <Compile Include="Services\Models\Queries\ListAllCurrency.cs" />
     <Compile Include="Services\Models\Queries\ListMonthCategoryWithOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListYearOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\Queries\ListMonthWithOutcome.cs" />
@@ -157,6 +160,7 @@
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
+    <Compile Include="ViewModels\Parameters\CurrencyParameter.cs" />
     <Compile Include="ViewModels\Parameters\OverviewParameter.cs" />
     <Compile Include="ViewModels\Parameters\EmptyParameter.cs" />
     <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
@@ -220,6 +224,7 @@
     <Compile Include="Views\Dialogs\CategoryPicker.xaml.cs">
       <DependentUpon>CategoryPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\CurrencyCreate.cs" />
     <Compile Include="Views\Dialogs\IWizard.cs" />
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">
       <DependentUpon>OutcomeAmount.xaml</DependentUpon>
@@ -230,6 +235,9 @@
     <Compile Include="Views\Dialogs\OutcomeCreate.cs" />
     <Compile Include="Views\Dialogs\OutcomeCreatedGuidePost.xaml.cs">
       <DependentUpon>OutcomeCreatedGuidePost.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\CurrencyName.xaml.cs">
+      <DependentUpon>CurrencyName.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\OutcomeDescription.xaml.cs">
       <DependentUpon>OutcomeDescription.xaml</DependentUpon>
@@ -319,6 +327,10 @@
     <Page Include="Views\Dialogs\OutcomeCreatedGuidePost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\CurrencyName.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\OutcomeDescription.xaml">
       <SubType>Designer</SubType>

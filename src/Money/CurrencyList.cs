@@ -23,7 +23,7 @@ namespace Money
         public CurrencyList()
         { }
 
-        internal CurrencyList(IKey key, IEnumerable<IEvent> events) 
+        public CurrencyList(IKey key, IEnumerable<IEvent> events) 
             : base(key, events)
         { }
 

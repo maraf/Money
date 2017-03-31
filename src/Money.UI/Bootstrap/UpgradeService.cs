@@ -62,7 +62,7 @@ namespace Money.Bootstrap
                 await UpgradeVersion2();
             }
 
-            if(currentVersion < 3)
+            if (currentVersion < 3)
             {
                 context.StartingStep(currentVersion - 2, "Creating default currencies.");
                 await UpgradeVersion3();
@@ -107,8 +107,8 @@ namespace Money.Bootstrap
 
         private async Task UpgradeVersion3()
         {
-            await domainFacade.CreateCurrencyAsync("CZK");
             await RecreateReadModelContext();
+            await domainFacade.CreateCurrencyAsync("CZK");
         }
 
         private void EventSourcingContext()

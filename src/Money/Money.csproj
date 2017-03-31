@@ -108,12 +108,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
-    <Compile Include="Currency.cs" />
+    <Compile Include="CurrencyList.cs" />
+    <Compile Include="CurrencyAlreadyExistsException.cs" />
     <Compile Include="DefaultDomainFacade.cs" />
     <Compile Include="Events\CategoryColorChanged.cs" />
     <Compile Include="Events\CategoryCreated.cs" />
     <Compile Include="Events\CategoryDescriptionChanged.cs" />
     <Compile Include="Events\CategoryRenamed.cs" />
+    <Compile Include="Events\CurrencyCreated.cs" />
     <Compile Include="Events\OutcomeAmountChanged.cs" />
     <Compile Include="Events\OutcomeCategoryAdded.cs" />
     <Compile Include="Events\OutcomeCreated.cs" />

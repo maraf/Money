@@ -35,6 +35,7 @@ namespace Money.Bootstrap
         public IFactory<Price, decimal> PriceFactory { get; private set; }
         public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
         public IRepository<Category, IKey> CategoryRepository { get; private set; }
+        public IRepository<CurrencyList, IKey> CurrencyListRepository { get; private set; }
         public IDomainFacade DomainFacade { get; private set; }
 
         public EntityEventStore EventStore { get; private set; }
@@ -96,10 +97,20 @@ namespace Money.Bootstrap
                 new EmptySnapshotStore()
             );
 
+            CurrencyListRepository = new AggregateRootRepository<CurrencyList>(
+                EventStore,
+                EventFormatter,
+                new ReflectionAggregateRootFactory<CurrencyList>(),
+                eventDispatcher,
+                new NoSnapshotProvider(),
+                new EmptySnapshotStore()
+            );
+
             PriceFactory = new PriceFactory("CZK");
             DomainFacade = new DefaultDomainFacade(
                 OutcomeRepository,
                 CategoryRepository,
+                CurrencyListRepository,
                 PriceFactory
             );
         }

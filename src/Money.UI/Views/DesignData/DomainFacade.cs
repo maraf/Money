@@ -54,6 +54,11 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task CreateCurrencyAsync(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IKey> CreateOutcomeAsync(Price amount, string description, DateTime when, IKey categoryKey)
         {
             throw new NotImplementedException();

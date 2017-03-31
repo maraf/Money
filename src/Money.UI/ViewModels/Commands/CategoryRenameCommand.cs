@@ -49,13 +49,13 @@ namespace Money.ViewModels.Commands
             }
             else if (viewModel.Name != Name)
             {
-                await domainFacade.RenameCategory(viewModel.Key, Name);
+                await domainFacade.RenameCategoryAsync(viewModel.Key, Name);
                 viewModel.Name = Name;
             }
 
             if (viewModel.Description != Description)
             {
-                await domainFacade.ChangeCategoryDescription(viewModel.Key, Description);
+                await domainFacade.ChangeCategoryDescriptionAsync(viewModel.Key, Description);
                 viewModel.Description = Description;
             }
         }

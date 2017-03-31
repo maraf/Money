@@ -152,7 +152,7 @@ namespace Money.Views
             if (result == ContentDialogResult.Primary && newValue != viewModel.Amount.Value)
             {
                 Price newAmount = new Price(newValue, dialog.Currency);
-                await domainFacade.ChangeOutcomeAmount(viewModel.Key, newAmount);
+                await domainFacade.ChangeOutcomeAmountAsync(viewModel.Key, newAmount);
                 viewModel.Amount = newAmount;
             }
         }
@@ -167,7 +167,7 @@ namespace Money.Views
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary && dialog.Value != viewModel.Description)
             {
-                await domainFacade.ChangeOutcomeDescription(viewModel.Key, dialog.Value);
+                await domainFacade.ChangeOutcomeDescriptionAsync(viewModel.Key, dialog.Value);
                 viewModel.Description = dialog.Value;
             }
         }
@@ -182,7 +182,7 @@ namespace Money.Views
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary && dialog.Value != viewModel.When)
             {
-                await domainFacade.ChangeOutcomeWhen(viewModel.Key, dialog.Value);
+                await domainFacade.ChangeOutcomeWhenAsync(viewModel.Key, dialog.Value);
                 viewModel.When = dialog.Value;
 
                 if (month != null && (dialog.Value.Year != month.Year || dialog.Value.Month != month.Month))

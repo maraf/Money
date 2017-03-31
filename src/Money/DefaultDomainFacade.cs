@@ -75,7 +75,7 @@ namespace Money
             });
         }
         
-        public Task RenameCategory(IKey categoryKey, string newName)
+        public Task RenameCategoryAsync(IKey categoryKey, string newName)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -85,7 +85,7 @@ namespace Money
             });
         }
 
-        public Task ChangeCategoryDescription(IKey categoryKey, string description)
+        public Task ChangeCategoryDescriptionAsync(IKey categoryKey, string description)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -95,7 +95,7 @@ namespace Money
             });
         }
 
-        public Task ChangeCategoryColor(IKey categoryKey, Color color)
+        public Task ChangeCategoryColorAsync(IKey categoryKey, Color color)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -105,7 +105,7 @@ namespace Money
             });
         }
 
-        public Task ChangeOutcomeAmount(IKey outcomeKey, Price amount)
+        public Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -115,7 +115,7 @@ namespace Money
             });
         }
 
-        public Task ChangeOutcomeDescription(IKey outcomeKey, string description)
+        public Task ChangeOutcomeDescriptionAsync(IKey outcomeKey, string description)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -125,7 +125,7 @@ namespace Money
             });
         }
 
-        public Task ChangeOutcomeWhen(IKey outcomeKey, DateTime when)
+        public Task ChangeOutcomeWhenAsync(IKey outcomeKey, DateTime when)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -135,7 +135,7 @@ namespace Money
             });
         }
 
-        public Task DeleteOutcome(IKey outcomeKey)
+        public Task DeleteOutcomeAsync(IKey outcomeKey)
         {
             return Task.Factory.StartNew(() =>
             {

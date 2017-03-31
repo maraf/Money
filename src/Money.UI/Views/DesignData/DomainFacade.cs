@@ -24,27 +24,27 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
-        public Task ChangeCategoryColor(IKey categoryKey, Color color)
+        public Task ChangeCategoryColorAsync(IKey categoryKey, Color color)
         {
             throw new NotImplementedException();
         }
 
-        public Task ChangeCategoryDescription(IKey categoryKey, string description)
+        public Task ChangeCategoryDescriptionAsync(IKey categoryKey, string description)
         {
             throw new NotImplementedException();
         }
 
-        public Task ChangeOutcomeAmount(IKey outcomeKey, Price amount)
+        public Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount)
         {
             throw new NotImplementedException();
         }
 
-        public Task ChangeOutcomeDescription(IKey outcomeKey, string description)
+        public Task ChangeOutcomeDescriptionAsync(IKey outcomeKey, string description)
         {
             throw new NotImplementedException();
         }
 
-        public Task ChangeOutcomeWhen(IKey outcomeKey, DateTime when)
+        public Task ChangeOutcomeWhenAsync(IKey outcomeKey, DateTime when)
         {
             throw new NotImplementedException();
         }
@@ -64,7 +64,7 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
-        public Task DeleteOutcome(IKey outcomeKey)
+        public Task DeleteOutcomeAsync(IKey outcomeKey)
         {
             throw new NotImplementedException();
         }
@@ -74,7 +74,7 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
-        public Task RenameCategory(IKey categoryKey, string newName)
+        public Task RenameCategoryAsync(IKey categoryKey, string newName)
         {
             throw new NotImplementedException();
         }

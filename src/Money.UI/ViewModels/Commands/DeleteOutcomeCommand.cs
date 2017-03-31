@@ -47,7 +47,7 @@ namespace Money.ViewModels.Commands
                 isExecuting = true;
                 RaiseCanExecuteChanged();
 
-                await domainFacade.DeleteOutcome(outcomeKey);
+                await domainFacade.DeleteOutcomeAsync(outcomeKey);
 
                 isExecuting = false;
                 isExecuted = true;

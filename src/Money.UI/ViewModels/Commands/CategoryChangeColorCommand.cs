@@ -45,7 +45,7 @@ namespace Money.ViewModels.Commands
         {
             if (Color != viewModel.Color)
             {
-                await domainFacade.ChangeCategoryColor(viewModel.Key, Color);
+                await domainFacade.ChangeCategoryColorAsync(viewModel.Key, Color);
                 viewModel.Color = Color;
             }
         }

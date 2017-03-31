@@ -50,7 +50,7 @@ namespace Money
         /// <param name="outcomeKey">A key of the outcome to modify.</param>
         /// <param name="amount">A new outcome value.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeOutcomeAmount(IKey outcomeKey, Price amount);
+        Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount);
 
         /// <summary>
         /// Changes a <paramref name="description"/> of the outcome with <paramref name="key"/>.
@@ -58,7 +58,7 @@ namespace Money
         /// <param name="outcomeKey">A key of the outcome to modify.</param>
         /// <param name="description">A new description of the outcome.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeOutcomeDescription(IKey outcomeKey, string description);
+        Task ChangeOutcomeDescriptionAsync(IKey outcomeKey, string description);
 
         /// <summary>
         /// Changes a <paramref name="when"/> of the outcome with <paramref name="key"/>.
@@ -66,14 +66,14 @@ namespace Money
         /// <param name="outcomeKey">A key of the outcome to modify.</param>
         /// <param name="when">A date when the outcome occured.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeOutcomeWhen(IKey outcomeKey, DateTime when);
+        Task ChangeOutcomeWhenAsync(IKey outcomeKey, DateTime when);
 
         /// <summary>
         /// Deletes an outcome with <paramref name="outcomeKey"/>.
         /// </summary>
         /// <param name="outcomeKey">A key of the outcome to delete.</param>
         /// <returns>Continuation task.</returns>
-        Task DeleteOutcome(IKey outcomeKey);
+        Task DeleteOutcomeAsync(IKey outcomeKey);
 
         /// <summary>
         /// Renames a category with a key <paramref name="categoryKey"/>.
@@ -81,7 +81,7 @@ namespace Money
         /// <param name="categoryKey">A key of the category to rename.</param>
         /// <param name="newName">A new name of the category.</param>
         /// <returns>Continuation task.</returns>
-        Task RenameCategory(IKey categoryKey, string newName);
+        Task RenameCategoryAsync(IKey categoryKey, string newName);
 
         /// <summary>
         /// Changes a description of a category with a key <paramref name="categoryKey"/>.
@@ -89,7 +89,7 @@ namespace Money
         /// <param name="categoryKey">A key of the category.</param>
         /// <param name="description">A new description of the category.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeCategoryDescription(IKey categoryKey, string description);
+        Task ChangeCategoryDescriptionAsync(IKey categoryKey, string description);
 
         /// <summary>
         /// Changes a color of a category with a key <paramref name="categoryKey"/>.
@@ -97,7 +97,7 @@ namespace Money
         /// <param name="categoryKey">A key of the category.</param>
         /// <param name="color">A new color of the category.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeCategoryColor(IKey categoryKey, Color color);
+        Task ChangeCategoryColorAsync(IKey categoryKey, Color color);
 
         /// <summary>
         /// Creates a new currency with <paramref name="name"/> as a unique identifier.

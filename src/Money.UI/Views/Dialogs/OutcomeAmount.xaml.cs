@@ -67,7 +67,9 @@ namespace Money.Views.Dialogs
         {
             Currencies.AddRange(await queryDispatcher.QueryAsync(new ListAllCurrency()));
             cbxCurrency.ItemsSource = Currencies;
-            Currency = Currencies.FirstOrDefault();
+
+            if (Currency == null)
+                Currency = await queryDispatcher.QueryAsync(new GetDefaultCurrency());
         }
 
         private void tbxAmount_KeyDown(object sender, KeyRoutedEventArgs e)

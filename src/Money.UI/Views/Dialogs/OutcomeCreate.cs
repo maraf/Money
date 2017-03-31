@@ -24,7 +24,7 @@ namespace Money.Views.Dialogs
             OutcomeParameter parameter = (OutcomeParameter)context;
 
             decimal amount = 0;
-            string currency = domainFacade.PriceFactory.Create(0).Currency;
+            string currency = null;
             string description = String.Empty;
             DateTime when = DateTime.Now;
             IKey categoryKey = parameter.CategoryKey;
@@ -38,7 +38,10 @@ namespace Money.Views.Dialogs
                 amountDialog.SecondaryButtonText = "Create today";
 
             if (parameter.Amount != null)
+            {
                 amountDialog.Value = (double)parameter.Amount.Value;
+                amountDialog.Currency = parameter.Amount.Currency;
+            }
 
             ContentDialogResult result = await amountDialog.ShowAsync();
             if (result == ContentDialogResult.None)

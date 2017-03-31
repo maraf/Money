@@ -18,6 +18,21 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Money.UI_TemporaryKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>04AFEF6890DFBB1405685712E00A5205CD476D56</PackageCertificateThumbprint>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -98,7 +113,6 @@
     </Compile>
     <Compile Include="Bootstrap\BootstrapTask.cs" />
     <Compile Include="Bootstrap\ColorConverter.cs" />
-    <Compile Include="Bootstrap\DefaultDomainFacade.cs" />
     <Compile Include="Bootstrap\UpgradeService.cs" />
     <Compile Include="Data\CategoryEntity.cs" />
     <Compile Include="Data\EventSourcingContext.cs" />
@@ -106,7 +120,6 @@
     <Compile Include="Data\OutcomeEntity.cs" />
     <Compile Include="Data\ReadModelContext.cs" />
     <Compile Include="ServiceProvider.cs" />
-    <Compile Include="Services\IDomainFacade.cs" />
     <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />
     <Compile Include="Services\Models\Builders\OutcomeBuilder.cs" />
     <Compile Include="Services\Models\CategoryModel.cs" />
@@ -378,6 +391,13 @@
     <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

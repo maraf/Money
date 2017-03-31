@@ -1,6 +1,4 @@
-﻿using Money.Services;
-using Money.Services.Models;
-using Neptuo;
+﻿using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
@@ -13,12 +11,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
 
-namespace Money.Bootstrap
+namespace Money
 {
     /// <summary>
     /// A default implementation of <see cref="IDomainFacade"/>.
     /// </summary>
-    internal class DefaultDomainFacade : IDomainFacade
+    public class DefaultDomainFacade : IDomainFacade
     {
         private readonly IRepository<Outcome, IKey> outcomeRepository;
         private readonly IRepository<Category, IKey> categoryRepository;

@@ -64,7 +64,7 @@ namespace Money.Bootstrap
 
             if(currentVersion < 3)
             {
-                context.StartingStep(currentVersion - 2, "Default currencies.");
+                context.StartingStep(currentVersion - 2, "Creating default currencies.");
                 await UpgradeVersion3();
             }
 
@@ -108,6 +108,7 @@ namespace Money.Bootstrap
         private async Task UpgradeVersion3()
         {
             await domainFacade.CreateCurrencyAsync("CZK");
+            await RecreateReadModelContext();
         }
 
         private void EventSourcingContext()
@@ -132,6 +133,7 @@ namespace Money.Bootstrap
             Rebuilder rebuilder = new Rebuilder(eventStore, eventFormatter);
             rebuilder.AddAll(new CategoryBuilder());
             rebuilder.AddAll(new OutcomeBuilder(domainFacade.PriceFactory));
+            rebuilder.AddAll(new CurrencyBuilder());
             return rebuilder.RunAsync();
         }
     }

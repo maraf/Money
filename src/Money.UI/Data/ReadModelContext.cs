@@ -12,6 +12,7 @@ namespace Money.Data
     {
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<OutcomeEntity> Outcomes { get; set; }
+        public DbSet<CurrencyEntity> Currencies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,6 +35,9 @@ namespace Money.Data
                 .HasOne(pt => pt.Category)
                 .WithMany(t => t.Outcomes)
                 .HasForeignKey(pt => pt.CategoryId);
+
+            modelBuilder.Entity<CurrencyEntity>()
+                .HasKey(c => c.Name);
         }
     }
 }

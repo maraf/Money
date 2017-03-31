@@ -128,6 +128,10 @@ namespace Money.Bootstrap
             OutcomeBuilder outcomeBuilder = new OutcomeBuilder(PriceFactory);
             queryDispatcher.AddAll(outcomeBuilder);
             eventDispatcher.Handlers.AddAll(outcomeBuilder);
+
+            CurrencyBuilder currencyBuilder = new CurrencyBuilder();
+            queryDispatcher.AddAll(currencyBuilder);
+            eventDispatcher.Handlers.AddAll(currencyBuilder);
         }
 
         public void Handle(Exception exception)

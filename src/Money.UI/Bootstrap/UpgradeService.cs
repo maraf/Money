@@ -24,7 +24,7 @@ namespace Money.Bootstrap
         private readonly IEventRebuilderStore eventStore;
         private readonly IFormatter eventFormatter;
 
-        public const int CurrentVersion = 2;
+        public const int CurrentVersion = 3;
 
         public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter)
         {
@@ -62,6 +62,12 @@ namespace Money.Bootstrap
                 await UpgradeVersion2();
             }
 
+            if(currentVersion < 3)
+            {
+                context.StartingStep(currentVersion - 2, "Default currencies.");
+                await UpgradeVersion3();
+            }
+
             ApplicationDataContainer migrationContainer = GetMigrationContainer();
             migrationContainer.Values["Version"] = CurrentVersion;
         }
@@ -97,6 +103,11 @@ namespace Money.Bootstrap
         private Task UpgradeVersion2()
         {
             return RecreateReadModelContext();
+        }
+
+        private async Task UpgradeVersion3()
+        {
+            await domainFacade.CreateCurrencyAsync("CZK");
         }
 
         private void EventSourcingContext()

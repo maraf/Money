@@ -32,7 +32,7 @@ namespace Money.Views.Dialogs
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
             "Value",
             typeof(Color),
-            typeof(OutcomeAmount),
+            typeof(ColorPicker),
             new PropertyMetadata(Colors.Transparent)
         );
 

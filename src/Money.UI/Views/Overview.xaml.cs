@@ -143,14 +143,15 @@ namespace Money.Views
         {
             OutcomeOverviewViewModel viewModel = (OutcomeOverviewViewModel)((Button)sender).DataContext;
 
-            OutcomeAmount dialog = new OutcomeAmount();
+            OutcomeAmount dialog = new OutcomeAmount(queryDispatcher);
             dialog.Value = (double)viewModel.Amount.Value;
+            dialog.Currency = viewModel.Amount.Currency;
 
             ContentDialogResult result = await dialog.ShowAsync();
             decimal newValue = (decimal)dialog.Value;
             if (result == ContentDialogResult.Primary && newValue != viewModel.Amount.Value)
             {
-                Price newAmount = new Price(newValue, viewModel.Amount.Currency);
+                Price newAmount = new Price(newValue, dialog.Currency);
                 await domainFacade.ChangeOutcomeAmount(viewModel.Key, newAmount);
                 viewModel.Amount = newAmount;
             }

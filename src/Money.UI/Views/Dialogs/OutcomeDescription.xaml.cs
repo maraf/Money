@@ -27,7 +27,7 @@ namespace Money.Views.Dialogs
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
             "Value",
             typeof(string),
-            typeof(OutcomeAmount),
+            typeof(OutcomeDescription),
             new PropertyMetadata(null)
         );
 

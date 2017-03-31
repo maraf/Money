@@ -36,7 +36,7 @@ namespace Money.Views.Dialogs
         public static readonly DependencyProperty SelectedKeyProperty = DependencyProperty.Register(
             "SelectedKey",
             typeof(IKey),
-            typeof(OutcomeAmount),
+            typeof(CategoryPicker),
             new PropertyMetadata(KeyFactory.Empty(typeof(Category)), OnSelectedKeyChanged)
         );
 

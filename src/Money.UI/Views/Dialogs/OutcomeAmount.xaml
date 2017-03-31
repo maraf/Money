@@ -6,7 +6,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" PrimaryButtonText="Save" SecondaryButtonText="Cancel" Title="Amount">
-    <StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="120" />
+        </Grid.ColumnDefinitions>
+        
         <TextBox x:Name="tbxAmount" Text="{x:Bind Value, Mode=TwoWay}" InputScope="Number" FontSize="40" TextAlignment="Right" GotFocus="tbxAmount_GotFocus" KeyDown="tbxAmount_KeyDown" />
-    </StackPanel>
+
+        <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind Currency, Mode=TwoWay}" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
+    </Grid>
 </ContentDialog>

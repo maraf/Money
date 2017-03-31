@@ -3,6 +3,7 @@ using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using Neptuo.Activators;
 using Neptuo.Models.Keys;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,19 @@ namespace Money.Views.Dialogs
     public class OutcomeCreate : IWizard
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
 
         public async Task ShowAsync(object context)
         {
             OutcomeParameter parameter = (OutcomeParameter)context;
 
             decimal amount = 0;
+            string currency = domainFacade.PriceFactory.Create(0).Currency;
             string description = String.Empty;
             DateTime when = DateTime.Now;
             IKey categoryKey = parameter.CategoryKey;
 
-            OutcomeAmount amountDialog = new OutcomeAmount();
+            OutcomeAmount amountDialog = new OutcomeAmount(queryDispatcher);
             amountDialog.PrimaryButtonText = "Next";
 
             if (parameter.CategoryKey.IsEmpty)
@@ -42,6 +45,7 @@ namespace Money.Views.Dialogs
                 return;
 
             amount = (decimal)amountDialog.Value;
+            currency = amountDialog.Currency;
             if (result == ContentDialogResult.Primary)
             {
                 OutcomeDescription descriptionDialog = new OutcomeDescription();
@@ -90,7 +94,7 @@ namespace Money.Views.Dialogs
             }
 
             await domainFacade.CreateOutcomeAsync(
-                domainFacade.PriceFactory.Create(amount),
+                new Price(amount, currency),
                 description,
                 when,
                 categoryKey

@@ -111,6 +111,17 @@ namespace Money
         /// </summary>
         /// <param name="name">A name of the currency.</param>
         /// <returns>Continuation task.</returns>
-        Task SetCurrencyAsDefault(string name);
+        Task SetCurrencyAsDefaultAsync(string name);
+
+        /// <summary>
+        /// Sets an exchange rate from <paramref name="sourceName"/> to <paramref name="targetName"/>.
+        /// It is valid from <paramref name="validFrom"/> with exchange <paramref name="rate"/>.
+        /// </summary>
+        /// <param name="sourceName">A source currency name.</param>
+        /// <param name="targetName">A target currency name.</param>
+        /// <param name="validFrom">A date from the exchange rate is valid.</param>
+        /// <param name="rate">An exchange rate.</param>
+        /// <returns>Continuation task.</returns>
+        Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, decimal rate);
     }
 }

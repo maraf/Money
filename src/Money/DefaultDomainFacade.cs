@@ -158,7 +158,7 @@ namespace Money
             });
         }
 
-        public Task SetCurrencyAsDefault(string name)
+        public Task SetCurrencyAsDefaultAsync(string name)
         {
             return Task.Factory.StartNew(() =>
             {

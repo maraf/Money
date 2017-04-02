@@ -167,5 +167,15 @@ namespace Money
                 currencyListRepository.Save(currencies);
             });
         }
+
+        public Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, decimal rate)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+                currencies.SetExchangeRate(sourceName, targetName, validFrom, rate);
+                currencyListRepository.Save(currencies);
+            });
+        }
     }
 }

@@ -119,7 +119,7 @@ namespace Money
         /// </summary>
         /// <param name="sourceName">A source currency name.</param>
         /// <param name="targetName">A target currency name.</param>
-        /// <param name="validFrom">A date from the exchange rate is valid.</param>
+        /// <param name="validFrom">A date from which the exchange rate is valid.</param>
         /// <param name="rate">An exchange rate.</param>
         /// <returns>Continuation task.</returns>
         Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, decimal rate);

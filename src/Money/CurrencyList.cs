@@ -17,7 +17,8 @@ namespace Money
     /// </summary>
     public class CurrencyList : AggregateRoot,
         IEventHandler<CurrencyCreated>,
-        IEventHandler<CurrencyDefaultChanged>
+        IEventHandler<CurrencyDefaultChanged>,
+        IEventHandler<CurrencyExchangeRateSet>
     {
         private readonly HashSet<string> names = new HashSet<string>();
         private string defaultName = null;
@@ -58,6 +59,26 @@ namespace Money
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
         {
             return UpdateState(() => defaultName = payload.Name.ToLowerInvariant());
+        }
+
+        public void SetExchangeRate(string sourceName, string targetName, DateTime validFrom, decimal rate)
+        {
+            Ensure.NotNullOrEmpty(sourceName, "sourceName");
+            Ensure.NotNullOrEmpty(targetName, "targetName");
+            Ensure.Positive(rate, "rate");
+
+            if (!names.Contains(sourceName.ToLowerInvariant()))
+                throw new CurrencyDoesNotExistException();
+
+            if (!names.Contains(targetName.ToLowerInvariant()))
+                throw new CurrencyDoesNotExistException();
+
+            Publish(new CurrencyExchangeRateSet(sourceName, targetName, validFrom, rate));
+        }
+
+        Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
+        {
+            return UpdateState(() => { });
         }
     }
 }

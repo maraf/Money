@@ -164,6 +164,7 @@
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
+    <Compile Include="ViewModels\Parameters\CurrencyNewParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyParameter.cs" />
     <Compile Include="ViewModels\Parameters\OverviewParameter.cs" />
     <Compile Include="ViewModels\Parameters\EmptyParameter.cs" />

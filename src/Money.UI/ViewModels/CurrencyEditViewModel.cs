@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Money.ViewModels.Commands;
+using Neptuo;
 using Neptuo.Observables;
 using System;
 using System.Collections.Generic;
@@ -13,19 +14,7 @@ namespace Money.ViewModels
     {
         private readonly IDomainFacade domainFacade;
 
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                if (name != value)
-                {
-                    name = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
+        public string Name { get; private set; }
 
         private bool isSelected;
         public bool IsSelected
@@ -43,10 +32,17 @@ namespace Money.ViewModels
 
         public ICommand SetAsDefault { get; private set; }
 
-        public CurrencyEditViewModel(IDomainFacade domainFacade)
+        public CurrencyEditViewModel(IDomainFacade domainFacade, string name)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
-            this.domainFacade = domainFacade;
+            Name = name;
+
+            CreateCommands(domainFacade);
+        }
+
+        private void CreateCommands(IDomainFacade domainFacade)
+        {
+            SetAsDefault = new CurrencySetAsDefaultCommand(domainFacade, Name);
         }
     }
 }

@@ -1,22 +1,35 @@
-﻿using Neptuo.Observables.Commands;
+﻿using Neptuo;
+using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Money.ViewModels.Commands
 {
-    public class CurrencySetAsDefaultCommand : Command
+    public class CurrencySetAsDefaultCommand : AsyncCommand
     {
-        public override bool CanExecute()
+        private readonly IDomainFacade domainFacade;
+        private readonly string name;
+
+        public CurrencySetAsDefaultCommand(IDomainFacade domainFacade, string name)
         {
-            throw new NotImplementedException();
+            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(name, "name");
+            this.domainFacade = domainFacade;
+            this.name = name;
         }
 
-        public override void Execute()
+        protected override bool CanExecuteOverride()
         {
-            throw new NotImplementedException();
+            return true;
+        }
+
+        protected override Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            return domainFacade.SetCurrencyAsDefaultAsync(name);
         }
     }
 }

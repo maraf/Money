@@ -1,4 +1,7 @@
-﻿using Neptuo;
+﻿using Money.ViewModels.Commands;
+using Money.ViewModels.Navigation;
+using Money.ViewModels.Parameters;
+using Neptuo;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
 using Neptuo.Observables.Commands;
@@ -18,18 +21,13 @@ namespace Money.ViewModels
         public ObservableCollection<CurrencyEditViewModel> Items { get; private set; }
         public ICommand New { get; private set; }
 
-        public CurrencyListViewModel(IDomainFacade domainFacade)
+        public CurrencyListViewModel(IDomainFacade domainFacade, INavigator navigator)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
             this.domainFacade = domainFacade;
 
             Items = new ObservableCollection<CurrencyEditViewModel>();
-            New = new DelegateCommand(NewExecuted);
-        }
-
-        private void NewExecuted()
-        {
-            Items.Add(new CurrencyEditViewModel(domainFacade));
+            New = new NavigateCommand(navigator, new CurrencyNewParameter());
         }
     }
 }

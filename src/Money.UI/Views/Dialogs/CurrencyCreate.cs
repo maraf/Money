@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Money.Views.Dialogs
 {
-    //[NavigationParameter(typeof(CurrencyParameter))]
+    [NavigationParameter(typeof(CurrencyNewParameter))]
     public class CurrencyCreate : IWizard
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;

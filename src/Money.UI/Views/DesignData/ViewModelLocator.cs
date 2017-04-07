@@ -4,6 +4,7 @@ using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Neptuo;
+using Neptuo.Events;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -52,6 +53,18 @@ namespace Money.Views.DesignData
                     navigator = new Navigator();
 
                 return navigator;
+            }
+        }
+
+        private IEventHandlerCollection eventHandlers;
+        public IEventHandlerCollection EventHandlers
+        {
+            get
+            {
+                if (eventHandlers == null)
+                    eventHandlers = new DefaultEventManager();
+
+                return eventHandlers;
             }
         }
 
@@ -182,12 +195,12 @@ namespace Money.Views.DesignData
         {
             get
             {
-                if(currencyList == null)
+                if (currencyList == null)
                 {
-                    currencyList = new CurrencyListViewModel(ServiceProvider.DomainFacade);
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade) { Name = "CZK" });
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade) { Name = "USD" });
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade) { Name = "EUR" });
+                    currencyList = new CurrencyListViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator);
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade, "CZK"));
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade, "USD"));
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade, "EUR"));
                     currencyList.Items.First().IsSelected = true;
                 }
 
@@ -202,8 +215,7 @@ namespace Money.Views.DesignData
             {
                 if (currencyEdit == null)
                 {
-                    currencyEdit = new CurrencyEditViewModel(ServiceProvider.DomainFacade);
-                    currencyEdit.Name = "CZK";
+                    currencyEdit = new CurrencyEditViewModel(ServiceProvider.DomainFacade, "CZK");
                     currencyEdit.IsSelected = true;
                 }
 
@@ -232,6 +244,7 @@ namespace Money.Views.DesignData
             {
                 ServiceProvider.QueryDispatcher = QueryDispatcher;
                 ServiceProvider.DomainFacade = DomainFacade;
+                ServiceProvider.EventHandlers = EventHandlers;
                 ServiceProvider.Navigator = Navigator;
                 ServiceProvider.TileService = new TileService();
             }

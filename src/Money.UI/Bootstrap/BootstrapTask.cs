@@ -51,6 +51,7 @@ namespace Money.Bootstrap
 
             ServiceProvider.QueryDispatcher = QueryDispatcher;
             ServiceProvider.DomainFacade = DomainFacade;
+            ServiceProvider.EventHandlers = eventDispatcher.Handlers;
             ServiceProvider.UpgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter);
             ServiceProvider.TileService = new TileService();
         }

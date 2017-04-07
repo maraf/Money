@@ -177,6 +177,40 @@ namespace Money.Views.DesignData
             }
         }
 
+        private CurrencyListViewModel currencyList;
+        public CurrencyListViewModel CurrencyList
+        {
+            get
+            {
+                if(currencyList == null)
+                {
+                    currencyList = new CurrencyListViewModel(ServiceProvider.DomainFacade);
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade) { Name = "CZK" });
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade) { Name = "USD" });
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade) { Name = "EUR" });
+                    currencyList.Items.First().IsSelected = true;
+                }
+
+                return currencyList;
+            }
+        }
+
+        private CurrencyEditViewModel currencyEdit;
+        public CurrencyEditViewModel CurrencyEdit
+        {
+            get
+            {
+                if (currencyEdit == null)
+                {
+                    currencyEdit = new CurrencyEditViewModel(ServiceProvider.DomainFacade);
+                    currencyEdit.Name = "CZK";
+                    currencyEdit.IsSelected = true;
+                }
+
+                return currencyEdit;
+            }
+        }
+
         private MigrateViewModel migrate;
         public MigrateViewModel Migrate
         {

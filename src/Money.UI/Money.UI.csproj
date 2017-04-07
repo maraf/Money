@@ -143,7 +143,10 @@
     <Compile Include="Services\Tiles\TileService.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
+    <Compile Include="ViewModels\Commands\CurrencySetAsDefaultCommand.cs" />
     <Compile Include="ViewModels\Commands\DeleteOutcomeCommand.cs" />
+    <Compile Include="ViewModels\CurrencyEditViewModel.cs" />
+    <Compile Include="ViewModels\CurrencyListViewModel.cs" />
     <Compile Include="ViewModels\ISummaryItemViewModel.cs" />
     <Compile Include="ViewModels\OutcomeOverviewViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
@@ -188,6 +191,9 @@
     <Compile Include="Views\Controls\CategoryEdit.xaml.cs">
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\CurrencyEdit.xaml.cs">
+      <DependentUpon>CurrencyEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\EmptyMessage.xaml.cs">
       <DependentUpon>EmptyMessage.xaml</DependentUpon>
     </Compile>
@@ -215,6 +221,9 @@
     <Compile Include="Views\Converters\DateToStringConverter.cs" />
     <Compile Include="Views\Converters\InverseColorConverter.cs" />
     <Compile Include="Views\Converters\NullConverter.cs" />
+    <Compile Include="Views\CurrencyList.xaml.cs">
+      <DependentUpon>CurrencyList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DesignData\QueryDispatcher.cs" />
     <Compile Include="Views\DesignData\DomainFacade.cs" />
     <Compile Include="Views\DesignData\Navigator.cs" />
@@ -309,7 +318,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\CurrencyEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\SummaryContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CurrencyList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

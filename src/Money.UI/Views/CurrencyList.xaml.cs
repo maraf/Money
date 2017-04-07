@@ -75,9 +75,9 @@ namespace Money.Views
             ContentLoaded?.Invoke(this, EventArgs.Empty);
         }
 
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            base.OnNavigatingFrom(e);
+            base.OnNavigatedFrom(e);
 
             eventHandlers
                 .Remove<CurrencyCreated>(this)

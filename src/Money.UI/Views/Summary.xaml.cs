@@ -1,4 +1,5 @@
-﻿using Money.Services.Models;
+﻿using Money.Events;
+using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.Services.Tiles;
 using Money.ViewModels;
@@ -8,6 +9,8 @@ using Money.Views.Controls;
 using Money.Views.Dialogs;
 using Money.Views.Navigation;
 using Neptuo;
+using Neptuo.Events;
+using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -20,6 +23,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -32,10 +36,12 @@ using Windows.UI.Xaml.Navigation;
 namespace Money.Views
 {
     [NavigationParameter(typeof(SummaryParameter))]
-    public sealed partial class Summary : Page, INavigatorPage, INavigatorParameterPage
+    public sealed partial class Summary : Page, INavigatorPage, INavigatorParameterPage,
+        IEventHandler<OutcomeCreated>
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private readonly IEventHandlerCollection eventHandlers = ServiceProvider.EventHandlers;
         private readonly TileService tileService = ServiceProvider.TileService;
         private SummaryParameter parameter;
 
@@ -65,7 +71,20 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
+            eventHandlers.Add(this);
+
             parameter = (SummaryParameter)e.Parameter;
+            await LoadAsync();
+        }
+
+        private Task ReloadAsync()
+        {
+            ViewModel.Clear();
+            return LoadAsync();
+        }
+
+        private async Task LoadAsync()
+        {
             ViewModel.ViewType = parameter.ViewType;
 
             switch (parameter.PeriodType)
@@ -84,6 +103,13 @@ namespace Money.Views
                 ViewModel.SortDescriptor = parameter.SortDescriptor;
 
             ContentLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            eventHandlers.Remove(this);
         }
 
         private async Task LoadMonthViewAsync(GroupViewModel viewModel, MonthModel prefered)
@@ -157,6 +183,8 @@ namespace Money.Views
         private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GroupItemViewModel viewModel = (GroupItemViewModel)e.AddedItems.FirstOrDefault();
+            if (viewModel == null)
+                return;
 
             MonthModel month = viewModel.Parameter as MonthModel;
             if (month != null)
@@ -214,6 +242,11 @@ namespace Money.Views
             navigator
                 .Message(message)
                 .Show();
+        }
+
+        async Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await ReloadAsync());
         }
     }
 }

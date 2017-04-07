@@ -99,5 +99,10 @@ namespace Money.ViewModels
             items.Add(item);
             return item;
         }
+
+        public void Clear()
+        {
+            items.Clear();
+        }
     }
 }

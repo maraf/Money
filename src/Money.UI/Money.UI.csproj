@@ -236,6 +236,9 @@
       <DependentUpon>CategoryPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\CurrencyCreate.cs" />
+    <Compile Include="Views\Dialogs\CurrencyExchangeRate.xaml.cs">
+      <DependentUpon>CurrencyExchangeRate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\IWizard.cs" />
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">
       <DependentUpon>OutcomeAmount.xaml</DependentUpon>
@@ -334,6 +337,10 @@
     <Page Include="Views\Dialogs\CategoryPicker.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\CurrencyExchangeRate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\OutcomeAmount.xaml">
       <SubType>Designer</SubType>

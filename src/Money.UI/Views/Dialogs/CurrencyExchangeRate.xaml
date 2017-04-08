@@ -1,0 +1,19 @@
+﻿<ContentDialog
+    x:Class="Money.Views.Dialogs.CurrencyExchangeRate"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Money.Views.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
+    <StackPanel>
+        <TextBlock Text="Source currency" />
+        <TextBox Text="{x:Bind SourceCurrency}" FontSize="40" IsReadOnly="True" />
+        
+        <TextBlock Text="Target currency" />
+        <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind TargetCurrency, Mode=TwoWay}" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
+
+        <TextBlock Text="Rate" />
+        <TextBox x:Name="tbxRate" Text="{x:Bind Rate}" FontSize="40" KeyDown="tbxRate_KeyDown" />
+    </StackPanel>
+</ContentDialog>

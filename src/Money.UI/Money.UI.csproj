@@ -7,7 +7,7 @@
     <ProjectGuid>{EE4C739D-73E3-4C03-9229-AF0D29C2B52D}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Money.UI</RootNamespace>
+    <RootNamespace>Money</RootNamespace>
     <AssemblyName>Money.UI</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>

@@ -139,6 +139,7 @@
     <Compile Include="ViewModels\Commands\SaveOutcomeCommand.cs" />
     <Compile Include="ViewModels\CurrencyEditViewModel.cs" />
     <Compile Include="ViewModels\CurrencyListViewModel.cs" />
+    <Compile Include="Services\Models\ExchangeRateModel.cs" />
     <Compile Include="ViewModels\GroupItemViewModel.cs" />
     <Compile Include="ViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\ISummaryItemViewModel.cs" />

@@ -1,6 +1,8 @@
-﻿using Money.ViewModels.Commands;
+﻿using Money.Services.Models;
+using Money.ViewModels.Commands;
 using Neptuo;
 using Neptuo.Observables;
+using Neptuo.Observables.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +14,6 @@ namespace Money.ViewModels
 {
     public class CurrencyEditViewModel : ObservableObject
     {
-        private readonly IDomainFacade domainFacade;
-
         public string Name { get; private set; }
 
         private bool isSelected;
@@ -30,12 +30,15 @@ namespace Money.ViewModels
             }
         }
 
+        public ObservableCollection<ExchangeRateModel> ExchangeRates { get; private set; }
+
         public ICommand SetAsDefault { get; private set; }
 
         public CurrencyEditViewModel(IDomainFacade domainFacade, string name)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
             Name = name;
+            ExchangeRates = new ObservableCollection<ExchangeRateModel>();
 
             CreateCommands(domainFacade);
         }

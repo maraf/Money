@@ -62,6 +62,19 @@ namespace Money.Views.Dialogs
             new PropertyMetadata(1)
         );
 
+        public DateTime ValidFrom
+        {
+            get { return (DateTime)GetValue(ValidFromProperty); }
+            set { SetValue(ValidFromProperty, value); }
+        }
+
+        public static readonly DependencyProperty ValidFromProperty = DependencyProperty.Register(
+            "ValidFrom", 
+            typeof(DateTime), 
+            typeof(CurrencyExchangeRate), 
+            new PropertyMetadata(DateTime.Today)
+        );
+
         public CurrencyExchangeRate(IQueryDispatcher queryDispatcher)
         {
             Ensure.NotNull(queryDispatcher, "queryDispatcher");

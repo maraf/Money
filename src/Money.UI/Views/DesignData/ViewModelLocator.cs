@@ -202,6 +202,8 @@ namespace Money.Views.DesignData
                     currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade, "USD"));
                     currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.DomainFacade, "EUR"));
                     currencyList.Items.First().IsSelected = true;
+                    currencyList.Items.First().ExchangeRates.Add(new ExchangeRateModel("USD", 18.90, new DateTime(2016, 10, 11)));
+                    currencyList.Items.First().ExchangeRates.Add(new ExchangeRateModel("EUR", 27.40, new DateTime(2017, 4, 21)));
                 }
 
                 return currencyList;
@@ -217,6 +219,8 @@ namespace Money.Views.DesignData
                 {
                     currencyEdit = new CurrencyEditViewModel(ServiceProvider.DomainFacade, "CZK");
                     currencyEdit.IsSelected = true;
+                    currencyEdit.ExchangeRates.Add(new ExchangeRateModel("USD", 18.90, new DateTime(2016, 10, 11)));
+                    currencyEdit.ExchangeRates.Add(new ExchangeRateModel("EUR", 27.40, new DateTime(2017, 4, 21)));
                 }
 
                 return currencyEdit;

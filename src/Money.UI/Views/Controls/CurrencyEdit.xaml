@@ -16,6 +16,22 @@
     </UserControl.Resources>
     <StackPanel>
         <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" />
+        <ListView ItemsSource="{Binding ExchangeRates}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10,5,5,5">
+                        <TextBlock Text="{Binding SourceCurrency}" Style="{StaticResource NoteTextStyle}" />
+                        <TextBlock Text="{Binding Rate}" Style="{StaticResource NoteTextStyle}" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding ValidFromToString}" Style="{StaticResource NoteTextStyle}" HorizontalAlignment="Right" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">
             <Button Content="Set as default" Command="{Binding SetAsDefault}" />
             <Button Content="Add exchange rate" Command="{Binding AddExchangeRate}" />

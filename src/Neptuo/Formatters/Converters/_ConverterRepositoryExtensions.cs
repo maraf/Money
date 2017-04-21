@@ -20,7 +20,7 @@ namespace Neptuo.Formatters.Converters
         /// </summary>
         /// <param name="repository">The repository to register handler to.</param>
         /// <returns><paramref name="repository"/>.</returns>
-        public static IConverterRepository AddJsonPrimitivesSearchHandler(this IConverterRepository repository) 
+        public static IConverterRepository AddJsonPrimitivesSearchHandler(this IConverterRepository repository)
         {
             Ensure.NotNull(repository, "repository");
             return repository.AddSearchHandler(TryGetJsonPrimitiveConverter);
@@ -113,7 +113,7 @@ namespace Neptuo.Formatters.Converters
         private static bool TryGetJsonObjectConverter(ConverterSearchContext context, out IConverter converter)
         {
             bool isSuccess = false;
-            if(context.SourceType == typeof(JToken))
+            if (context.SourceType == typeof(JToken))
             {
                 if (context.TargetType.GetTypeInfo().IsClass && !context.TargetType.GetTypeInfo().IsAbstract)
                     isSuccess = true;

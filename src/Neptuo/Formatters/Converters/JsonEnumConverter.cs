@@ -91,7 +91,7 @@ namespace Neptuo.Formatters.Converters
                 }
                 else if (type == JsonEnumConverterType.UseTextName)
                 {
-                    if(Converts.Try(sourceType, typeof(string), sourceValue, out targetValue))
+                    if (Converts.Try(sourceType, typeof(string), sourceValue, out targetValue))
                     {
                         targetValue = new JValue(targetValue);
                         return true;

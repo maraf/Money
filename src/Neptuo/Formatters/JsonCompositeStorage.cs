@@ -19,7 +19,7 @@ namespace Neptuo.Formatters
 
         private readonly Formatting formatting;
         private readonly JsonLoadSettings loadSettings;
-        
+
         /// <summary>
         /// Creates new instance with default settings and <see cref="Formatting.None"/> for serialization.
         /// </summary>
@@ -90,7 +90,7 @@ namespace Neptuo.Formatters
         {
             object targetValue = null;
             JToken jValue = null;
-            if(value == null)
+            if (value == null)
                 jValue = null;
             else if (Converts.Try(value.GetType(), typeof(JToken), value, out targetValue))
                 jValue = (JToken)targetValue;

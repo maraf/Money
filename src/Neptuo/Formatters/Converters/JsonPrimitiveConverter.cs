@@ -28,7 +28,7 @@ namespace Neptuo.Formatters.Converters
             typeof(DateTime),
             typeof(TimeSpan),
             typeof(Uri),
-            
+
             typeof(int?),
             typeof(long?),
             typeof(double?),

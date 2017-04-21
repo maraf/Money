@@ -38,5 +38,5 @@ namespace Neptuo.Formatters.Converters
 
             return true;
         }
-	}
+    }
 }

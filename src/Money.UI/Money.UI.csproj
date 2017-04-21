@@ -1,43 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{D575F16C-6F3C-497B-8037-B811B42FDA5E}</ProjectGuid>
+    <ProjectGuid>{EE4C739D-73E3-4C03-9229-AF0D29C2B52D}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Money</RootNamespace>
+    <RootNamespace>Money.UI</RootNamespace>
     <AssemblyName>Money.UI</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.15063.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <PackageCertificateKeyFile>Money.UI_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>04AFEF6890DFBB1405685712E00A5205CD476D56</PackageCertificateThumbprint>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -103,10 +88,9 @@
     <Prefer32Bit>true</Prefer32Bit>
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
-  <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <None Include="project.json" />
-  </ItemGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -120,6 +104,7 @@
     <Compile Include="Data\OutcomeCategoryEntity.cs" />
     <Compile Include="Data\OutcomeEntity.cs" />
     <Compile Include="Data\ReadModelContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />
     <Compile Include="Services\Models\Builders\CurrencyBuilder.cs" />
@@ -132,55 +117,58 @@
     <Compile Include="Services\Models\Queries\GetCategoryColor.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryName.cs" />
     <Compile Include="Services\Models\Queries\GetDefaultCurrency.cs" />
+    <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
     <Compile Include="Services\Models\Queries\ListAllCurrency.cs" />
     <Compile Include="Services\Models\Queries\ListMonthCategoryWithOutcome.cs" />
-    <Compile Include="Services\Models\Queries\ListYearOutcomeFromCategory.cs" />
-    <Compile Include="Services\Models\Queries\ListMonthWithOutcome.cs" />
-    <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListMonthOutcomeFromCategory.cs" />
+    <Compile Include="Services\Models\Queries\ListMonthWithOutcome.cs" />
+    <Compile Include="Services\Models\Queries\ListYearOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\YearModel.cs" />
     <Compile Include="Services\Tiles\TileService.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
-    <Compile Include="ViewModels\Commands\CurrencySetAsDefaultCommand.cs" />
-    <Compile Include="ViewModels\Commands\DeleteOutcomeCommand.cs" />
-    <Compile Include="ViewModels\CurrencyEditViewModel.cs" />
-    <Compile Include="ViewModels\CurrencyListViewModel.cs" />
-    <Compile Include="ViewModels\ISummaryItemViewModel.cs" />
-    <Compile Include="ViewModels\OutcomeOverviewViewModel.cs" />
-    <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />
     <Compile Include="ViewModels\Commands\CategoryChangeColorCommand.cs" />
     <Compile Include="ViewModels\Commands\CategoryRenameCommand.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
+    <Compile Include="ViewModels\Commands\CurrencySetAsDefaultCommand.cs" />
+    <Compile Include="ViewModels\Commands\DeleteOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateBackCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />
     <Compile Include="ViewModels\Commands\SaveOutcomeCommand.cs" />
+    <Compile Include="ViewModels\CurrencyEditViewModel.cs" />
+    <Compile Include="ViewModels\CurrencyListViewModel.cs" />
     <Compile Include="ViewModels\GroupItemViewModel.cs" />
     <Compile Include="ViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\ISummaryItemViewModel.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MigrateViewModel.cs" />
+    <Compile Include="ViewModels\Navigation\INavigator.cs" />
+    <Compile Include="ViewModels\Navigation\INavigatorForm.cs" />
+    <Compile Include="ViewModels\Navigation\INavigatorMessageForm.cs" />
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
+    <Compile Include="ViewModels\OutcomeOverviewViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyNewParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyParameter.cs" />
-    <Compile Include="ViewModels\Parameters\OverviewParameter.cs" />
     <Compile Include="ViewModels\Parameters\EmptyParameter.cs" />
     <Compile Include="ViewModels\Parameters\GroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\IGroupParameter.cs" />
     <Compile Include="ViewModels\Parameters\MigrateParameter.cs" />
     <Compile Include="ViewModels\Parameters\OutcomeParameter.cs" />
+    <Compile Include="ViewModels\Parameters\OverviewParameter.cs" />
     <Compile Include="ViewModels\Parameters\SummaryParameter.cs" />
     <Compile Include="ViewModels\SortDescriptor.cs" />
     <Compile Include="ViewModels\SortDirection.cs" />
+    <Compile Include="ViewModels\SummaryCategoryViewModel.cs" />
+    <Compile Include="ViewModels\SummaryPeriodType.cs" />
     <Compile Include="ViewModels\SummarySortType.cs" />
     <Compile Include="ViewModels\SummaryTotalViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
-    <Compile Include="ViewModels\SummaryCategoryViewModel.cs" />
-    <Compile Include="ViewModels\SummaryPeriodType.cs" />
     <Compile Include="ViewModels\SummaryViewType.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\CategoryList.xaml.cs">
@@ -225,9 +213,9 @@
     <Compile Include="Views\CurrencyList.xaml.cs">
       <DependentUpon>CurrencyList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DesignData\QueryDispatcher.cs" />
     <Compile Include="Views\DesignData\DomainFacade.cs" />
     <Compile Include="Views\DesignData\Navigator.cs" />
+    <Compile Include="Views\DesignData\QueryDispatcher.cs" />
     <Compile Include="Views\DesignData\SummaryGroupViewModelProvider.cs" />
     <Compile Include="Views\DesignData\TestUpgradeService.cs" />
     <Compile Include="Views\DesignData\UpgradeService.cs" />
@@ -235,38 +223,29 @@
     <Compile Include="Views\Dialogs\CategoryPicker.xaml.cs">
       <DependentUpon>CategoryPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\CurrencyCreate.cs" />
     <Compile Include="Views\Dialogs\CurrencyExchangeRate.xaml.cs">
       <DependentUpon>CurrencyExchangeRate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\CurrencyName.xaml.cs">
+      <DependentUpon>CurrencyName.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\IWizard.cs" />
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">
       <DependentUpon>OutcomeAmount.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Dialogs\ColorPicker.xaml.cs">
-      <DependentUpon>ColorPicker.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Dialogs\OutcomeCreate.cs" />
     <Compile Include="Views\Dialogs\OutcomeCreatedGuidePost.xaml.cs">
       <DependentUpon>OutcomeCreatedGuidePost.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\CurrencyName.xaml.cs">
-      <DependentUpon>CurrencyName.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\OutcomeDescription.xaml.cs">
       <DependentUpon>OutcomeDescription.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\OutcomeWhen.xaml.cs">
       <DependentUpon>OutcomeWhen.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Navigation\AppNavigatorForm.cs" />
-    <Compile Include="Views\Navigation\ContentDialogMessageForm.cs" />
-    <Compile Include="ViewModels\Navigation\INavigatorMessageForm.cs" />
-    <Compile Include="Views\Navigation\INavigatorPage.cs" />
-    <Compile Include="Views\Navigation\INavigatorParameterPage.cs" />
-    <Compile Include="Views\Navigation\WizardNavigatorForm.cs" />
-    <Compile Include="Views\Overview.xaml.cs">
-      <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Empty.xaml.cs">
       <DependentUpon>Empty.xaml</DependentUpon>
@@ -275,15 +254,20 @@
       <DependentUpon>Migrate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Navigation\AppNavigator.cs" />
-    <Compile Include="Views\Navigation\NavigatorParameterCollection.cs" />
-    <Compile Include="ViewModels\Navigation\INavigator.cs" />
-    <Compile Include="ViewModels\Navigation\INavigatorForm.cs" />
+    <Compile Include="Views\Navigation\AppNavigatorForm.cs" />
+    <Compile Include="Views\Navigation\ContentDialogMessageForm.cs" />
+    <Compile Include="Views\Navigation\INavigatorPage.cs" />
+    <Compile Include="Views\Navigation\INavigatorParameterPage.cs" />
     <Compile Include="Views\Navigation\NavigationParameterAttribute.cs" />
+    <Compile Include="Views\Navigation\NavigatorParameterCollection.cs" />
     <Compile Include="Views\Navigation\PageNavigatorForm.cs" />
+    <Compile Include="Views\Navigation\WizardNavigatorForm.cs" />
     <Compile Include="Views\OutcomeCreate.xaml.cs">
       <DependentUpon>OutcomeCreate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Overview.xaml.cs">
+      <DependentUpon>Overview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StateTriggers\MobileStateTrigger.cs" />
     <Compile Include="Views\Summary.xaml.cs">
       <DependentUpon>Summary.xaml</DependentUpon>
@@ -315,76 +299,32 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Views\CategoryList.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Controls\Bar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\CurrencyEdit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\SummaryContent.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CurrencyList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\CategoryPicker.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Dialogs\CurrencyExchangeRate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\OutcomeAmount.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\ColorPicker.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Dialogs\OutcomeCreatedGuidePost.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\CurrencyName.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Dialogs\OutcomeDescription.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\OutcomeWhen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Overview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\CategoryEdit.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\CurrencyEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Controls\EmptyMessage.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Controls\Loading.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Controls\MainMenuAppBarToggleButton.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Controls\PieChart.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -394,48 +334,93 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Empty.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\Controls\SummaryContent.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CurrencyList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\CategoryPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\ColorPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\CurrencyExchangeRate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\CurrencyName.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\OutcomeAmount.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\OutcomeCreatedGuidePost.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\OutcomeDescription.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\OutcomeWhen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Empty.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Migrate.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\OutcomeCreate.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Overview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Summary.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Template.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>5.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="WindowsStateTriggers">
+      <Version>1.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Money\Money.csproj">
-      <Project>{4d6a47f1-249c-4b95-b08a-b6dbbc95c3a0}</Project>
+      <Project>{cced2dc9-b1bc-4a66-a7c3-488cf1de3616}</Project>
       <Name>Money</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neptuo\Neptuo.csproj">
-      <Project>{c63023bf-64f8-4c85-8ddd-521d4d2a0f7f}</Project>
+      <Project>{c637b589-5769-4661-9b6d-a34571a5ae08}</Project>
       <Name>Neptuo</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
+    <SDKReference Include="WindowsMobile, Version=10.0.15063.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

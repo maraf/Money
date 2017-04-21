@@ -36,7 +36,7 @@ namespace Neptuo.Data.Entity
         {
             optionsBuilder.UseSqlite(connectionString);
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

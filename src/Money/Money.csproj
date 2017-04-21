@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4D6A47F1-249C-4B95-B08A-B6DBBC95C3A0}</ProjectGuid>
+    <ProjectGuid>{CCED2DC9-B1BC-4A66-A7C3-488CF1DE3616}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Money</RootNamespace>
     <AssemblyName>Money</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.15063.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -102,15 +102,14 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <None Include="project.json" />
-  </ItemGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
+    <Compile Include="CurrencyAlreadyExistsException.cs" />
     <Compile Include="CurrencyDoesNotExistException.cs" />
     <Compile Include="CurrencyList.cs" />
-    <Compile Include="CurrencyAlreadyExistsException.cs" />
     <Compile Include="DefaultDomainFacade.cs" />
     <Compile Include="Events\CategoryColorChanged.cs" />
     <Compile Include="Events\CategoryCreated.cs" />
@@ -135,8 +134,13 @@
     <EmbeddedResource Include="Properties\Money.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>5.2.3</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Neptuo\Neptuo.csproj">
-      <Project>{C63023BF-64F8-4C85-8DDD-521D4D2A0F7F}</Project>
+      <Project>{c637b589-5769-4661-9b6d-a34571a5ae08}</Project>
       <Name>Neptuo</Name>
     </ProjectReference>
   </ItemGroup>

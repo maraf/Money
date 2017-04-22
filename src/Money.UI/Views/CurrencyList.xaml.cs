@@ -67,7 +67,7 @@ namespace Money.Views
 
             foreach (string model in models)
             {
-                ViewModel.Items.Add(new CurrencyEditViewModel(domainFacade, model));
+                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, model));
             }
 
             // TODO: Set a default one.
@@ -103,7 +103,7 @@ namespace Money.Views
 
         async Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => ViewModel.Items.Add(new CurrencyEditViewModel(domainFacade, payload.Name)));
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, payload.Name)));
         }
 
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)

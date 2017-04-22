@@ -1,5 +1,7 @@
 ﻿using Money.Services.Models;
 using Money.ViewModels.Commands;
+using Money.ViewModels.Navigation;
+using Money.ViewModels.Parameters;
 using Neptuo;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
@@ -33,19 +35,22 @@ namespace Money.ViewModels
         public ObservableCollection<ExchangeRateModel> ExchangeRates { get; private set; }
 
         public ICommand SetAsDefault { get; private set; }
+        public ICommand AddExchangeRate { get; private set; }
 
-        public CurrencyEditViewModel(IDomainFacade domainFacade, string name)
+        public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, string name)
         {
+            Ensure.NotNull(navigator, "navigator");
             Ensure.NotNull(domainFacade, "domainFacade");
             Name = name;
             ExchangeRates = new ObservableCollection<ExchangeRateModel>();
 
-            CreateCommands(domainFacade);
+            CreateCommands(navigator, domainFacade);
         }
 
-        private void CreateCommands(IDomainFacade domainFacade)
+        private void CreateCommands(INavigator navigator, IDomainFacade domainFacade)
         {
             SetAsDefault = new CurrencySetAsDefaultCommand(domainFacade, Name);
+            AddExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(Name));
         }
     }
 }

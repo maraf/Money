@@ -168,7 +168,7 @@ namespace Money
             });
         }
 
-        public Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, decimal rate)
+        public Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, double rate)
         {
             return Task.Factory.StartNew(() =>
             {

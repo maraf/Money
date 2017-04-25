@@ -4,13 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignHeight="400" d:DesignWidth="400">
+    mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="400"
+    Title="Set exchange rate" PrimaryButtonText="Save">
     <StackPanel>
-        <TextBlock Text="Source currency" />
-        <TextBox Text="{x:Bind SourceCurrency}" FontSize="40" IsReadOnly="True" />
-        
         <TextBlock Text="Target currency" />
-        <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind TargetCurrency, Mode=TwoWay}" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
+        <TextBox Text="{x:Bind TargetCurrency}" FontSize="40" IsReadOnly="True" />
+        
+        <TextBlock Text="Source currency" />
+        <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind SourceCurrency, Mode=TwoWay}" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
 
         <TextBlock Text="Rate" />
         <TextBox x:Name="tbxRate" Text="{x:Bind Rate}" FontSize="40" KeyDown="tbxRate_KeyDown" />

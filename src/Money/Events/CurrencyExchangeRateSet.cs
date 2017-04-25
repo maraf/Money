@@ -30,9 +30,9 @@ namespace Money.Events
         /// <summary>
         /// Gets an exchange rate.
         /// </summary>
-        public decimal Rate { get; private set; }
+        public double Rate { get; private set; }
 
-        internal CurrencyExchangeRateSet(string sourceName, string targetName, DateTime validFrom, decimal rate)
+        internal CurrencyExchangeRateSet(string sourceName, string targetName, DateTime validFrom, double rate)
         {
             SourceName = sourceName;
             TargetName = targetName;

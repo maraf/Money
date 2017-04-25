@@ -59,7 +59,7 @@ namespace Money.Views.Dialogs
             "Rate", 
             typeof(double), 
             typeof(CurrencyExchangeRate), 
-            new PropertyMetadata(1)
+            new PropertyMetadata(1d)
         );
 
         public DateTime ValidFrom

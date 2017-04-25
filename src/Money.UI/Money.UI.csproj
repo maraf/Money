@@ -182,6 +182,7 @@
     <Compile Include="Views\Controls\CategoryEdit.xaml.cs">
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\CurrencyAddExchangeRateWizard.cs" />
     <Compile Include="Views\Controls\CurrencyEdit.xaml.cs">
       <DependentUpon>CurrencyEdit.xaml</DependentUpon>
     </Compile>

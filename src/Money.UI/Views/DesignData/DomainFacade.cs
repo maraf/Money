@@ -84,7 +84,7 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
-        public Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, decimal rate)
+        public Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, double rate)
         {
             throw new NotImplementedException();
         }

@@ -61,7 +61,7 @@ namespace Money
             return UpdateState(() => defaultName = payload.Name.ToLowerInvariant());
         }
 
-        public void SetExchangeRate(string sourceName, string targetName, DateTime validFrom, decimal rate)
+        public void SetExchangeRate(string sourceName, string targetName, DateTime validFrom, double rate)
         {
             Ensure.NotNullOrEmpty(sourceName, "sourceName");
             Ensure.NotNullOrEmpty(targetName, "targetName");

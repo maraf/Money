@@ -14,17 +14,34 @@ namespace Money.ViewModels.Commands
         private readonly IDomainFacade domainFacade;
         private readonly string name;
 
+        private bool isExecutable;
+
+        public bool IsExecutable
+        {
+            get { return isExecutable; }
+            set
+            {
+                if (isExecutable != value)
+                {
+                    isExecutable = value;
+                    RaiseCanExecuteChanged();
+                }
+            }
+        }
+
         public CurrencySetAsDefaultCommand(IDomainFacade domainFacade, string name)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(name, "name");
             this.domainFacade = domainFacade;
             this.name = name;
+
+            IsExecutable = true;
         }
 
         protected override bool CanExecuteOverride()
         {
-            return true;
+            return IsExecutable;
         }
 
         protected override Task ExecuteAsync(CancellationToken cancellationToken)

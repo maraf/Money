@@ -16,17 +16,34 @@ namespace Money.ViewModels.Commands
         private readonly INavigator navigator;
         private readonly object parameter;
 
+        private bool isExecutable;
+
+        public bool IsExecutable
+        {
+            get { return isExecutable; }
+            set
+            {
+                if (isExecutable != value)
+                {
+                    isExecutable = value;
+                    RaiseCanExecuteChanged();
+                }
+            }
+        }
+
         public NavigateCommand(INavigator navigator, object parameter)
         {
             Ensure.NotNull(navigator, "navigator");
             Ensure.NotNull(parameter, "parameter");
             this.navigator = navigator;
             this.parameter = parameter;
+
+            IsExecutable = true;
         }
 
         public override bool CanExecute()
         {
-            return true;
+            return IsExecutable;
         }
 
         public override void Execute()

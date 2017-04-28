@@ -48,16 +48,36 @@ namespace Money.ViewModels
             }
         }
 
+        private bool isStandalone;
+        public bool IsStandalone
+        {
+            get { return isStandalone; }
+            set
+            {
+                if (isStandalone != value)
+                {
+                    isStandalone = value;
+                    RaisePropertyChanged();
+
+                    addExchangeRate.IsExecutable = !value;
+                }
+            }
+        }
+
         public ObservableCollection<ExchangeRateModel> ExchangeRates { get; private set; }
 
         private CurrencySetAsDefaultCommand setAsDefault;
+        private NavigateCommand addExchangeRate;
 
         public ICommand SetAsDefault
         {
             get { return setAsDefault; }
         }
 
-        public ICommand AddExchangeRate { get; private set; }
+        public ICommand AddExchangeRate
+        {
+            get { return addExchangeRate; }
+        }
 
         public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, string name)
         {
@@ -72,7 +92,7 @@ namespace Money.ViewModels
         private void CreateCommands(INavigator navigator, IDomainFacade domainFacade)
         {
             setAsDefault = new CurrencySetAsDefaultCommand(domainFacade, Name);
-            AddExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(Name));
+            addExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(Name));
         }
     }
 }

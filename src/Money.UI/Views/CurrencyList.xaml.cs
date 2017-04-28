@@ -63,9 +63,11 @@ namespace Money.Views
             IEnumerable<string> models = await queryDispatcher.QueryAsync(new ListAllCurrency());
 
             ViewModel = new CurrencyListViewModel(domainFacade, navigator);
-
+            
             foreach (string model in models)
                 ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, model));
+
+            UpdateStandalone();
 
             string defaultModel = await queryDispatcher.QueryAsync(new GetDefaultCurrency());
             UpdateDefaultCurrency(defaultModel);
@@ -88,6 +90,13 @@ namespace Money.Views
                 viewModel.IsDefault = viewModel.Name == name;
         }
 
+        private void UpdateStandalone()
+        {
+            bool isStandalone = ViewModel.Items.Count < 2;
+            foreach (CurrencyEditViewModel viewModel in ViewModel.Items)
+                viewModel.IsStandalone = isStandalone;
+        }
+
         private void lvwItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (CurrencyEditViewModel viewModel in ViewModel.Items)
@@ -107,7 +116,11 @@ namespace Money.Views
 
         async Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, payload.Name)));
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, payload.Name));
+                UpdateStandalone();
+            });
         }
 
         async Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)

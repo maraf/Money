@@ -22,6 +22,7 @@ namespace Money.Views.Dialogs
     public sealed partial class CurrencyExchangeRate : ContentDialog
     {
         private readonly IQueryDispatcher queryDispatcher;
+        private List<string> currencies;
 
         public string SourceCurrency
         {
@@ -46,8 +47,14 @@ namespace Money.Views.Dialogs
             "TargetCurrency", 
             typeof(string), 
             typeof(CurrencyExchangeRate), 
-            new PropertyMetadata(null)
+            new PropertyMetadata(null, OnTargetCurrencyChanged)
         );
+
+        private static void OnTargetCurrencyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            CurrencyExchangeRate control = (CurrencyExchangeRate)d;
+            control.FilterListSource();
+        }
 
         public double Rate
         {
@@ -86,8 +93,21 @@ namespace Money.Views.Dialogs
 
         private async void Initialize()
         {
-            List<string> currencies = await queryDispatcher.QueryAsync(new ListAllCurrency());
+            currencies = await queryDispatcher.QueryAsync(new ListAllCurrency());
+            FilterListSource();
+        }
+
+        private void FilterListSource()
+        {
+            List<string> currencies = this.currencies
+                .Where(c => c != TargetCurrency)
+                .ToList();
+
             cbxCurrency.ItemsSource = currencies;
+
+            // TODO: Not working.
+            //if (currencies.Count > 0)
+            //    cbxCurrency.SelectedIndex = 0;
         }
 
         private void tbxRate_KeyDown(object sender, KeyRoutedEventArgs e)

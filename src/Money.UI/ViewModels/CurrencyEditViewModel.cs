@@ -1,10 +1,12 @@
 ﻿using Money.Services.Models;
+using Money.Services.Models.Queries;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Neptuo;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,8 @@ namespace Money.ViewModels
 {
     public class CurrencyEditViewModel : ObservableObject
     {
+        private readonly IQueryDispatcher queryDispatcher;
+
         public string Name { get; private set; }
 
         private bool isSelected;
@@ -28,6 +32,9 @@ namespace Money.ViewModels
                 {
                     isSelected = value;
                     RaisePropertyChanged();
+
+                    if(!isExchangeRateListLoaded)
+                        LoadExchangeRateList();
                 }
             }
         }
@@ -64,7 +71,9 @@ namespace Money.ViewModels
             }
         }
 
-        public ObservableCollection<ExchangeRateModel> ExchangeRates { get; private set; }
+        private bool isExchangeRateListLoaded;
+
+        public SortableObservableCollection<ExchangeRateModel> ExchangeRates { get; private set; }
 
         private CurrencySetAsDefaultCommand setAsDefault;
         private NavigateCommand addExchangeRate;
@@ -79,12 +88,14 @@ namespace Money.ViewModels
             get { return addExchangeRate; }
         }
 
-        public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, string name)
+        public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, IQueryDispatcher queryDispatcher, string name)
         {
             Ensure.NotNull(navigator, "navigator");
             Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(queryDispatcher, "queryDispatcher");
+            this.queryDispatcher = queryDispatcher;
             Name = name;
-            ExchangeRates = new ObservableCollection<ExchangeRateModel>();
+            ExchangeRates = new SortableObservableCollection<ExchangeRateModel>();
 
             CreateCommands(navigator, domainFacade);
         }
@@ -93,6 +104,15 @@ namespace Money.ViewModels
         {
             setAsDefault = new CurrencySetAsDefaultCommand(domainFacade, Name);
             addExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(Name));
+        }
+
+        private async void LoadExchangeRateList()
+        {
+            List<ExchangeRateModel> exchangeRates = await queryDispatcher.QueryAsync(new ListTargetCurrencyExchangeRates(Name));
+            ExchangeRates.AddRange(exchangeRates);
+            ExchangeRates.SortDescending(e => e.ValidFrom);
+
+            isExchangeRateListLoaded = true;
         }
     }
 }

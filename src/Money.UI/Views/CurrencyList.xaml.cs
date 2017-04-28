@@ -24,13 +24,15 @@ using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
 using Neptuo.Threading.Tasks;
 using Windows.UI.Core;
+using Money.Services.Models;
 
 namespace Money.Views
 {
     [NavigationParameter(typeof(CurrencyParameter))]
     public sealed partial class CurrencyList : Page, INavigatorPage,
         IEventHandler<CurrencyCreated>,
-        IEventHandler<CurrencyDefaultChanged>
+        IEventHandler<CurrencyDefaultChanged>,
+        IEventHandler<CurrencyExchangeRateSet>
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private readonly INavigator navigator = ServiceProvider.Navigator;
@@ -56,16 +58,17 @@ namespace Money.Views
 
             eventHandlers
                 .Add<CurrencyCreated>(this)
-                .Add<CurrencyDefaultChanged>(this);
+                .Add<CurrencyDefaultChanged>(this)
+                .Add< CurrencyExchangeRateSet>(this);
 
             CurrencyParameter parameter = (CurrencyParameter)e.Parameter;
 
             IEnumerable<string> models = await queryDispatcher.QueryAsync(new ListAllCurrency());
 
             ViewModel = new CurrencyListViewModel(domainFacade, navigator);
-            
+
             foreach (string model in models)
-                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, model));
+                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, queryDispatcher, model));
 
             UpdateStandalone();
 
@@ -81,7 +84,8 @@ namespace Money.Views
 
             eventHandlers
                 .Remove<CurrencyCreated>(this)
-                .Remove<CurrencyDefaultChanged>(this);
+                .Remove<CurrencyDefaultChanged>(this)
+                .Remove<CurrencyExchangeRateSet>(this);
         }
 
         private void UpdateDefaultCurrency(string name)
@@ -118,7 +122,7 @@ namespace Money.Views
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, payload.Name));
+                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, queryDispatcher, payload.Name));
                 UpdateStandalone();
             });
         }
@@ -126,6 +130,23 @@ namespace Money.Views
         async Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => UpdateDefaultCurrency(payload.Name));
+        }
+
+        async Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                CurrencyEditViewModel viewModel = ViewModel.Items.FirstOrDefault(c => c.Name == payload.TargetName);
+                if (viewModel != null)
+                {
+                    viewModel.ExchangeRates.Add(new ExchangeRateModel(
+                        payload.SourceName,
+                        payload.Rate,
+                        payload.ValidFrom
+                    ));
+                    viewModel.ExchangeRates.SortDescending(r => r.ValidFrom);
+                }
+            });
         }
     }
 }

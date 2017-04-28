@@ -13,6 +13,7 @@ namespace Money.Data
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<OutcomeEntity> Outcomes { get; set; }
         public DbSet<CurrencyEntity> Currencies { get; set; }
+        public DbSet<CurrencyExchangeRateEntity> ExchangeRates { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,6 +39,9 @@ namespace Money.Data
 
             modelBuilder.Entity<CurrencyEntity>()
                 .HasKey(c => c.Name);
+
+            modelBuilder.Entity<CurrencyExchangeRateEntity>()
+                .HasKey(e => e.Id);
         }
     }
 }

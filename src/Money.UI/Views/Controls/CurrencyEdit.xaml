@@ -16,7 +16,7 @@
     </UserControl.Resources>
     <StackPanel>
         <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" />
-        <ListView ItemsSource="{Binding ExchangeRates}">
+        <ListView ItemsSource="{Binding ExchangeRates}" SelectionMode="None" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

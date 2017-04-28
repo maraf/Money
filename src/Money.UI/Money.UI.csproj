@@ -100,6 +100,7 @@
     <Compile Include="Bootstrap\UpgradeService.cs" />
     <Compile Include="Data\CategoryEntity.cs" />
     <Compile Include="Data\CurrencyEntity.cs" />
+    <Compile Include="Data\CurrencyExchangeRateEntity.cs" />
     <Compile Include="Data\EventSourcingContext.cs" />
     <Compile Include="Data\OutcomeCategoryEntity.cs" />
     <Compile Include="Data\OutcomeEntity.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Services\Models\Queries\ListMonthCategoryWithOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListMonthOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\Queries\ListMonthWithOutcome.cs" />
+    <Compile Include="Services\Models\Queries\ListTargetCurrencyExchangeRates.cs" />
     <Compile Include="Services\Models\Queries\ListYearOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\YearModel.cs" />
     <Compile Include="Services\Tiles\TileService.cs" />

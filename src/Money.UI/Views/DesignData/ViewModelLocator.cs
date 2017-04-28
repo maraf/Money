@@ -198,9 +198,9 @@ namespace Money.Views.DesignData
                 if (currencyList == null)
                 {
                     currencyList = new CurrencyListViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator);
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, "CZK"));
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, "USD"));
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, "EUR"));
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, ServiceProvider.QueryDispatcher, "CZK"));
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, ServiceProvider.QueryDispatcher, "USD"));
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, ServiceProvider.QueryDispatcher, "EUR"));
                     currencyList.Items.First().IsSelected = true;
                     currencyList.Items.First().ExchangeRates.Add(new ExchangeRateModel("USD", 18.90, new DateTime(2016, 10, 11)));
                     currencyList.Items.First().ExchangeRates.Add(new ExchangeRateModel("EUR", 27.40, new DateTime(2017, 4, 21)));
@@ -217,7 +217,7 @@ namespace Money.Views.DesignData
             {
                 if (currencyEdit == null)
                 {
-                    currencyEdit = new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, "CZK");
+                    currencyEdit = new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, ServiceProvider.QueryDispatcher, "CZK");
                     currencyEdit.IsSelected = true;
                     currencyEdit.ExchangeRates.Add(new ExchangeRateModel("USD", 18.90, new DateTime(2016, 10, 11)));
                     currencyEdit.ExchangeRates.Add(new ExchangeRateModel("EUR", 27.40, new DateTime(2017, 4, 21)));

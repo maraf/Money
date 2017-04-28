@@ -15,11 +15,13 @@ namespace Money.Services.Models.Builders
     /// <summary>
     /// A builder for querying currencies.
     /// </summary>
-    public class CurrencyBuilder : 
+    public class CurrencyBuilder :
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
+        IEventHandler<CurrencyExchangeRateSet>,
         IQueryHandler<ListAllCurrency, List<string>>,
-        IQueryHandler<GetDefaultCurrency, string>
+        IQueryHandler<GetDefaultCurrency, string>,
+        IQueryHandler<ListTargetCurrencyExchangeRates, List<ExchangeRateModel>>
     {
         public async Task HandleAsync(CurrencyCreated payload)
         {
@@ -68,6 +70,34 @@ namespace Money.Services.Models.Builders
                     .FirstAsync(c => c.IsDefault);
 
                 return entity.Name;
+            }
+        }
+
+        public async Task HandleAsync(CurrencyExchangeRateSet payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                await db.ExchangeRates.AddAsync(new CurrencyExchangeRateEntity()
+                {
+                    TargetCurrency = payload.TargetName,
+                    SourceCurrency = payload.SourceName,
+                    Rate = payload.Rate,
+                    ValidFrom = payload.ValidFrom
+                });
+
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public Task<List<ExchangeRateModel>> HandleAsync(ListTargetCurrencyExchangeRates query)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                return db.ExchangeRates
+                    .Where(e => e.TargetCurrency == query.TargetCurrency)
+                    .OrderByDescending(e => e.ValidFrom)
+                    .Select(e => new ExchangeRateModel(e.SourceCurrency, e.Rate, e.ValidFrom))
+                    .ToListAsync();
             }
         }
     }

@@ -108,7 +108,13 @@ namespace Money.ViewModels
 
         private async void LoadExchangeRateList()
         {
+            if (queryDispatcher == null)
+                return;
+
             List<ExchangeRateModel> exchangeRates = await queryDispatcher.QueryAsync(new ListTargetCurrencyExchangeRates(Name));
+            if (exchangeRates == null)
+                return;
+
             ExchangeRates.AddRange(exchangeRates);
             ExchangeRates.SortDescending(e => e.ValidFrom);
 

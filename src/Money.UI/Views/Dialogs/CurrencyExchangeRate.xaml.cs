@@ -89,6 +89,8 @@ namespace Money.Views.Dialogs
 
             InitializeComponent();
             Initialize();
+
+            cbxCurrency.Focus(FocusState.Keyboard);
         }
 
         private async void Initialize()

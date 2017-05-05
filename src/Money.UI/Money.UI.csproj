@@ -127,6 +127,7 @@
     <Compile Include="Services\Models\Queries\ListTargetCurrencyExchangeRates.cs" />
     <Compile Include="Services\Models\Queries\ListYearOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\YearModel.cs" />
+    <Compile Include="Services\PriceCalculator.cs" />
     <Compile Include="Services\Tiles\TileService.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />

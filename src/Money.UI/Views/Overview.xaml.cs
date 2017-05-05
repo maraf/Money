@@ -149,6 +149,9 @@ namespace Money.Views
 
             ContentDialogResult result = await dialog.ShowAsync();
             decimal newValue = (decimal)dialog.Value;
+            if (result == ContentDialogResult.None && dialog.Result != null)
+                result = dialog.Result.Value;
+
             if (result == ContentDialogResult.Primary && newValue != viewModel.Amount.Value)
             {
                 Price newAmount = new Price(newValue, dialog.Currency);

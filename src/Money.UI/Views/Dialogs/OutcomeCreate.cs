@@ -45,7 +45,12 @@ namespace Money.Views.Dialogs
 
             ContentDialogResult result = await amountDialog.ShowAsync();
             if (result == ContentDialogResult.None)
-                return;
+            {
+                if (amountDialog.Result == null)
+                    return;
+
+                result = amountDialog.Result.Value;
+            }
 
             amount = (decimal)amountDialog.Value;
             currency = amountDialog.Currency;

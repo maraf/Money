@@ -24,6 +24,8 @@ namespace Money.Views.Dialogs
     {
         private readonly IQueryDispatcher queryDispatcher;
 
+        public ContentDialogResult? Result { get; set; }
+
         public double Value
         {
             get { return (double)GetValue(ValueProperty); }
@@ -76,7 +78,9 @@ namespace Money.Views.Dialogs
         {
             if (e.Key == VirtualKey.Enter)
             {
+                Result = ContentDialogResult.Primary;
                 e.Handled = true;
+                Hide();
             }
             else if (e.Key == VirtualKey.Escape)
             {

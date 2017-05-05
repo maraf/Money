@@ -144,7 +144,7 @@ namespace Money.Views
             OutcomeOverviewViewModel viewModel = (OutcomeOverviewViewModel)((Button)sender).DataContext;
 
             OutcomeAmount dialog = new OutcomeAmount(queryDispatcher);
-            dialog.Value = (double)viewModel.Amount.Value;
+            dialog.Value = viewModel.Amount.Value;
             dialog.Currency = viewModel.Amount.Currency;
 
             ContentDialogResult result = await dialog.ShowAsync();

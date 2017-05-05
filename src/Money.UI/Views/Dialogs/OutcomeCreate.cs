@@ -39,7 +39,7 @@ namespace Money.Views.Dialogs
 
             if (parameter.Amount != null)
             {
-                amountDialog.Value = (double)parameter.Amount.Value;
+                amountDialog.Value = parameter.Amount.Value;
                 amountDialog.Currency = parameter.Amount.Currency;
             }
 
@@ -52,7 +52,10 @@ namespace Money.Views.Dialogs
                 result = amountDialog.Result.Value;
             }
 
-            amount = (decimal)amountDialog.Value;
+            amount = amountDialog.Value;
+            if (amount <= 0)
+                return;
+
             currency = amountDialog.Currency;
             if (result == ContentDialogResult.Primary)
             {

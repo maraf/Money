@@ -12,7 +12,7 @@
             <ColumnDefinition Width="120" />
         </Grid.ColumnDefinitions>
         
-        <TextBox x:Name="tbxAmount" Text="{x:Bind Value, Mode=TwoWay}" InputScope="Number" FontSize="40" TextAlignment="Right" GotFocus="tbxAmount_GotFocus" KeyDown="tbxAmount_KeyDown" />
+        <TextBox x:Name="tbxAmount" InputScope="Number" FontSize="40" TextAlignment="Right" GotFocus="tbxAmount_GotFocus" KeyDown="tbxAmount_KeyDown" />
 
         <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind Currency, Mode=TwoWay}" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
     </Grid>

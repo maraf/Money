@@ -26,20 +26,22 @@ namespace Money.Views.Dialogs
 
         public ContentDialogResult? Result { get; set; }
 
-        public double Value
+        public decimal Value
         {
-            get { return (double)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get
+            {
+                decimal value;
+                if (Decimal.TryParse(tbxAmount.Text, out value))
+                    return value;
+
+                return 0;
+            }
+            set
+            {
+                tbxAmount.Text = value.ToString();
+            }
         }
-
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
-            "Value",
-            typeof(double),
-            typeof(OutcomeAmount),
-            new PropertyMetadata(0d)
-        );
-
-
+        
         public string Currency
         {
             get { return (string)GetValue(CurrencyProperty); }

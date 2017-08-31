@@ -13,6 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -151,6 +152,36 @@ namespace Money.Views
                 ApplicationData.Current.LocalSettings.DeleteContainer(containerName);
 
             Application.Current.Exit();
+#endif
+        }
+
+        private async void btnLoadStorage_Click(object sender, RoutedEventArgs e)
+        {
+#if DEBUG
+            FileOpenPicker picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".db");
+
+            StorageFile file = await picker.PickSingleFileAsync();
+            await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
+#endif
+        }
+
+        private async void btnSaveStorage_Click(object sender, RoutedEventArgs e)
+        {
+#if DEBUG
+            foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
+            {
+                FileSavePicker picker = new FileSavePicker();
+                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                picker.FileTypeChoices.Add(source.DisplayName, new List<string>() { ".db" });
+                picker.SuggestedFileName = source.Name;
+
+                StorageFile target = await picker.PickSaveFileAsync();
+
+                using (Stream sourceContent = await source.OpenStreamForReadAsync())
+                using (Stream targetContent = await target.OpenStreamForWriteAsync())
+                    sourceContent.CopyTo(targetContent);
+            }
 #endif
         }
     }

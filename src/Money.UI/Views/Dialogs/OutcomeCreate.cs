@@ -29,6 +29,9 @@ namespace Money.Views.Dialogs
             DateTime when = DateTime.Now;
             IKey categoryKey = parameter.CategoryKey;
 
+            // Initiate categories loading...
+            CategoryPicker categoryDialog = new CategoryPicker();
+
             OutcomeAmount amountDialog = new OutcomeAmount(queryDispatcher);
             amountDialog.PrimaryButtonText = "Next";
 
@@ -77,7 +80,6 @@ namespace Money.Views.Dialogs
                     if (descriptionDialog.IsEnterPressed)
                         await Task.Delay(50);
 
-                    CategoryPicker categoryDialog = new CategoryPicker();
                     categoryDialog.PrimaryButtonText = "Next";
                     categoryDialog.SecondaryButtonText = "Create today";
                     if (!parameter.CategoryKey.IsEmpty)

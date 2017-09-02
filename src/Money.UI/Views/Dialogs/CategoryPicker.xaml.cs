@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -46,9 +47,12 @@ namespace Money.Views.Dialogs
             control.OnSelectedKeyChanged();
         }
 
+        private Task loadTask;
+
         public CategoryPicker()
         {
             InitializeComponent();
+            loadTask = LoadModelsAsync();
             Loaded += OnLoaded;
         }
 
@@ -64,9 +68,14 @@ namespace Money.Views.Dialogs
             isCategoriesViewChangedAttached = true;
         }
 
+        private async Task LoadModelsAsync()
+        {
+            models = await queryDispatcher.QueryAsync(new ListAllCategory());
+        }
+
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            models = (await queryDispatcher.QueryAsync(new ListAllCategory())).ToList();
+            await loadTask;
             gvwCategories.ItemsSource = models;
 
             if (!SelectedKey.IsEmpty)

@@ -15,7 +15,10 @@
         </Style>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" />
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Symbol}" Style="{ThemeResource TitleTextBlockStyle}" />
+            <TextBlock Text="{Binding UniqueCode}" Style="{ThemeResource TitleTextBlockStyle}" Margin="8,0,0,0" Opacity=".5" />
+        </StackPanel>
         <ListView ItemsSource="{Binding ExchangeRates}" SelectionMode="None" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">

@@ -24,12 +24,16 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
+using Neptuo.ReadModels;
+using Money.Services.Models.Builders;
+using Money.Services;
 
 namespace Money.Views
 {
     public sealed partial class Template : Page
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
+        private readonly IDevelopmentService developmentService = ServiceProvider.DevelopmentService;
         private readonly List<MenuItemViewModel> menuItems;
 
         public Frame ContentFrame
@@ -135,6 +139,17 @@ namespace Money.Views
             loaContent.IsActive = false;
         }
 
+        private async Task ShowExitDialogAsync()
+        {
+            MessageDialog dialog = new MessageDialog("Do you want to exit the application?");
+            UICommand yes = new UICommand("Yes");
+            dialog.Commands.Add(yes);
+            dialog.Commands.Add(new UICommand("No"));
+
+            if (await dialog.ShowAsync() == yes)
+                CoreApplication.Exit();
+        }
+
         private async void btnClearStorage_Click(object sender, RoutedEventArgs e)
         {
 #if DEBUG
@@ -156,17 +171,6 @@ namespace Money.Views
 
             await ShowExitDialogAsync();
 #endif
-        }
-
-        private async Task ShowExitDialogAsync()
-        {
-            MessageDialog dialog = new MessageDialog("Do you want to exit the application?");
-            UICommand yes = new UICommand("Yes");
-            dialog.Commands.Add(yes);
-            dialog.Commands.Add(new UICommand("No"));
-
-            if (await dialog.ShowAsync() == yes)
-                CoreApplication.Exit();
         }
 
         private async void btnUploadStorage_Click(object sender, RoutedEventArgs e)
@@ -225,6 +229,14 @@ namespace Money.Views
                 }
             }
 
+            await ShowExitDialogAsync();
+#endif
+        }
+
+        private async void btnRebuildReadModels_Click(object sender, RoutedEventArgs e)
+        {
+#if DEBUG
+            await developmentService.RebuildReadModelsAsync();
             await ShowExitDialogAsync();
 #endif
         }

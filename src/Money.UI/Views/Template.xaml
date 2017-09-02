@@ -258,6 +258,9 @@
                         <Button x:Name="btnSetRevisionStorage" Click="btnSetRevisionStorage_Click" ToolTipService.ToolTip="Set storage revision" Margin="4">
                             <SymbolIcon Symbol="ImportAll" />
                         </Button>
+                        <Button x:Name="btnRebuildReadModels" Click="btnRebuildReadModels_Click" ToolTipService.ToolTip="Rebuild read models" Margin="4">
+                            <SymbolIcon Symbol="RepeatAll" />
+                        </Button>
                     </StackPanel>
                 </Grid>
             </SplitView.Pane>

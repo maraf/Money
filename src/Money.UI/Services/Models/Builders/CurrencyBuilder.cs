@@ -19,6 +19,8 @@ namespace Money.Services.Models.Builders
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyExchangeRateSet>,
+        IEventHandler<CurrencySymbolChanged>,
+        IEventHandler<CurrencyDeleted>,
         IQueryHandler<ListAllCurrency, List<CurrencyModel>>,
         IQueryHandler<ListTargetCurrencyExchangeRates, List<ExchangeRateModel>>
     {
@@ -28,7 +30,8 @@ namespace Money.Services.Models.Builders
             {
                 await db.Currencies.AddAsync(new CurrencyEntity()
                 {
-                    UniqueCode = payload.UniqueCode
+                    UniqueCode = payload.UniqueCode,
+                    Symbol = payload.Symbol
                 });
 
                 await db.SaveChangesAsync();
@@ -51,11 +54,32 @@ namespace Money.Services.Models.Builders
             }
         }
 
+        public async Task HandleAsync(CurrencySymbolChanged payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                CurrencyEntity entity = db.Currencies.First(c => c.UniqueCode == payload.UniqueCode);
+                entity.Symbol = payload.Symbol;
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task HandleAsync(CurrencyDeleted payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                CurrencyEntity entity = db.Currencies.First(c => c.UniqueCode == payload.UniqueCode);
+                entity.IsDeleted = true;
+                await db.SaveChangesAsync();
+            }
+        }
+
         public Task<List<CurrencyModel>> HandleAsync(ListAllCurrency query)
         {
             using (ReadModelContext db = new ReadModelContext())
             {
                 return db.Currencies
+                    .Where(e => !e.IsDeleted)
                     .Select(e => new CurrencyModel(e.UniqueCode, e.Symbol, e.IsDefault))
                     .ToListAsync();
             }

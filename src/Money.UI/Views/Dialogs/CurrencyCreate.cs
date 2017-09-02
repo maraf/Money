@@ -18,8 +18,8 @@ namespace Money.Views.Dialogs
         {
             CurrencyName name = new CurrencyName();
             ContentDialogResult result = await name.ShowAsync();
-            if (result == ContentDialogResult.Primary && !String.IsNullOrEmpty(name.Value))
-                await domainFacade.CreateCurrencyAsync(name.Value);
+            if (result == ContentDialogResult.Primary && !String.IsNullOrEmpty(name.UniqueCode))
+                await domainFacade.CreateCurrencyAsync(name.UniqueCode, name.Symbol);
         }
     }
 }

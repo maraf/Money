@@ -20,7 +20,8 @@ namespace Money.ViewModels
     {
         private readonly IQueryDispatcher queryDispatcher;
 
-        public string Name { get; private set; }
+        public string UniqueCode { get; private set; }
+        public string Symbol { get; private set; }
 
         private bool isSelected;
         public bool IsSelected
@@ -88,13 +89,14 @@ namespace Money.ViewModels
             get { return addExchangeRate; }
         }
 
-        public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, IQueryDispatcher queryDispatcher, string name)
+        public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, IQueryDispatcher queryDispatcher, string uniqueCode, string symbol)
         {
             Ensure.NotNull(navigator, "navigator");
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.queryDispatcher = queryDispatcher;
-            Name = name;
+            UniqueCode = uniqueCode;
+            Symbol = symbol;
             ExchangeRates = new SortableObservableCollection<ExchangeRateModel>();
 
             CreateCommands(navigator, domainFacade);
@@ -102,8 +104,8 @@ namespace Money.ViewModels
 
         private void CreateCommands(INavigator navigator, IDomainFacade domainFacade)
         {
-            setAsDefault = new CurrencySetAsDefaultCommand(domainFacade, Name);
-            addExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(Name));
+            setAsDefault = new CurrencySetAsDefaultCommand(domainFacade, UniqueCode);
+            addExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(UniqueCode));
         }
 
         private async void LoadExchangeRateList()
@@ -111,7 +113,7 @@ namespace Money.ViewModels
             if (queryDispatcher == null)
                 return;
 
-            List<ExchangeRateModel> exchangeRates = await queryDispatcher.QueryAsync(new ListTargetCurrencyExchangeRates(Name));
+            List<ExchangeRateModel> exchangeRates = await queryDispatcher.QueryAsync(new ListTargetCurrencyExchangeRates(UniqueCode));
             if (exchangeRates == null)
                 return;
 

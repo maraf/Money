@@ -5,8 +5,12 @@
     xmlns:local="using:Money.Views.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" PrimaryButtonText="Create" SecondaryButtonText="Cancel" Title="Currency Code">
+    mc:Ignorable="d" PrimaryButtonText="Create" SecondaryButtonText="Cancel" Title="Currency">
     <StackPanel>
-        <TextBox x:Name="tbxName" Text="{x:Bind Value, Mode=TwoWay}" KeyDown="tbxName_KeyDown" />
+        <TextBlock Text="Unique code" />
+        <TextBox x:Name="tbxUniqueCode" Text="{x:Bind UniqueCode, Mode=TwoWay}" KeyDown="tbxUniqueCode_KeyDown" />
+        
+        <TextBlock Text="Symbol" Margin="0,8,0,0" />
+        <TextBox x:Name="tbxSymbol" Text="{x:Bind Symbol, Mode=TwoWay}" />
     </StackPanel>
 </ContentDialog>

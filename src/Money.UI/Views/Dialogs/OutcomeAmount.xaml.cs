@@ -1,4 +1,5 @@
-﻿using Money.Services.Models.Queries;
+﻿using Money.Services.Models;
+using Money.Services.Models.Queries;
 using Neptuo;
 using Neptuo.Observables.Collections;
 using Neptuo.Queries;
@@ -55,13 +56,13 @@ namespace Money.Views.Dialogs
             new PropertyMetadata(null)
         );
 
-        protected ObservableCollection<string> Currencies { get; private set; }
+        public ObservableCollection<CurrencyModel> Currencies { get; private set; }
 
         public OutcomeAmount(IQueryDispatcher queryDispatcher)
         {
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.queryDispatcher = queryDispatcher;
-            Currencies = new ObservableCollection<string>();
+            Currencies = new ObservableCollection<CurrencyModel>();
 
             InitializeComponent();
             Initialize();
@@ -69,11 +70,12 @@ namespace Money.Views.Dialogs
 
         private async void Initialize()
         {
-            Currencies.AddRange(await queryDispatcher.QueryAsync(new ListAllCurrency()));
+            IEnumerable<CurrencyModel> currencies = await queryDispatcher.QueryAsync(new ListAllCurrency());
+            Currencies.AddRange(currencies);
             cbxCurrency.ItemsSource = Currencies;
 
             if (Currency == null)
-                Currency = await queryDispatcher.QueryAsync(new GetDefaultCurrency());
+                Currency = currencies.FirstOrDefault(c => c.IsDefault)?.UniqueCode;
         }
 
         private void tbxAmount_KeyDown(object sender, KeyRoutedEventArgs e)

@@ -108,7 +108,7 @@ namespace Money.Bootstrap
         private async Task UpgradeVersion3()
         {
             await RecreateReadModelContext();
-            await domainFacade.CreateCurrencyAsync("CZK");
+            await domainFacade.CreateCurrencyAsync("CZK", "Kč");
         }
 
         private void EventSourcingContext()

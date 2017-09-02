@@ -19,8 +19,7 @@ namespace Money.Services.Models.Builders
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyExchangeRateSet>,
-        IQueryHandler<ListAllCurrency, List<string>>,
-        IQueryHandler<GetDefaultCurrency, string>,
+        IQueryHandler<ListAllCurrency, List<CurrencyModel>>,
         IQueryHandler<ListTargetCurrencyExchangeRates, List<ExchangeRateModel>>
     {
         public async Task HandleAsync(CurrencyCreated payload)
@@ -29,7 +28,7 @@ namespace Money.Services.Models.Builders
             {
                 await db.Currencies.AddAsync(new CurrencyEntity()
                 {
-                    Name = payload.UniqueCode
+                    UniqueCode = payload.UniqueCode
                 });
 
                 await db.SaveChangesAsync();
@@ -44,7 +43,7 @@ namespace Money.Services.Models.Builders
                 if (entity != null)
                     entity.IsDefault = false;
 
-                entity = db.Currencies.FirstOrDefault(c => c.Name == payload.UniqueCode);
+                entity = db.Currencies.FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
                 if (entity != null)
                     entity.IsDefault = true;
 
@@ -52,27 +51,16 @@ namespace Money.Services.Models.Builders
             }
         }
 
-        public Task<List<string>> HandleAsync(ListAllCurrency query)
+        public Task<List<CurrencyModel>> HandleAsync(ListAllCurrency query)
         {
             using (ReadModelContext db = new ReadModelContext())
             {
                 return db.Currencies
-                    .Select(c => c.Name)
+                    .Select(e => new CurrencyModel(e.UniqueCode, e.Symbol, e.IsDefault))
                     .ToListAsync();
             }
         }
-
-        public async Task<string> HandleAsync(GetDefaultCurrency query)
-        {
-            using (ReadModelContext db = new ReadModelContext())
-            {
-                CurrencyEntity entity = await db.Currencies
-                    .FirstAsync(c => c.IsDefault);
-
-                return entity.Name;
-            }
-        }
-
+        
         public async Task HandleAsync(CurrencyExchangeRateSet payload)
         {
             using (ReadModelContext db = new ReadModelContext())

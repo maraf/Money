@@ -8,7 +8,9 @@ namespace Money.Data
 {
     internal class CurrencyEntity
     {
-        public string Name { get; set; }
+        public string UniqueCode { get; set; }
+        public string Symbol { get; set; }
         public bool IsDefault { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

@@ -30,12 +30,12 @@ namespace Money.Services
 
         public async Task Initialize(IQueryDispatcher queryDispatcher)
         {
-            IEnumerable<string> currencies = await queryDispatcher.QueryAsync(new ListAllCurrency());
-            foreach (string currency in currencies)
+            IEnumerable<CurrencyModel> currencies = await queryDispatcher.QueryAsync(new ListAllCurrency());
+            foreach (CurrencyModel currency in currencies)
             {
-                List<ExchangeRateModel> rates = await queryDispatcher.QueryAsync(new ListTargetCurrencyExchangeRates(currency));
+                List<ExchangeRateModel> rates = await queryDispatcher.QueryAsync(new ListTargetCurrencyExchangeRates(currency.UniqueCode));
                 rates.Sort(exchangeRateComparer);
-                this.currencies[currency] = rates;
+                this.currencies[currency.UniqueCode] = rates;
             }
         }
 

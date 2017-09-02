@@ -112,12 +112,12 @@
     <Compile Include="Services\Models\Builders\OutcomeBuilder.cs" />
     <Compile Include="Services\Models\CategoryModel.cs" />
     <Compile Include="Services\Models\CategoryWithAmountModel.cs" />
+    <Compile Include="Services\Models\CurrencyModel.cs" />
     <Compile Include="Services\Models\MonthModel.cs" />
     <Compile Include="Services\Models\OutcomeModel.cs" />
     <Compile Include="Services\Models\OutcomeOverviewModel.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryColor.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryName.cs" />
-    <Compile Include="Services\Models\Queries\GetDefaultCurrency.cs" />
     <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
     <Compile Include="Services\Models\Queries\ListAllCurrency.cs" />

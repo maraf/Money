@@ -38,7 +38,7 @@ namespace Money.Data
                 .HasForeignKey(pt => pt.CategoryId);
 
             modelBuilder.Entity<CurrencyEntity>()
-                .HasKey(c => c.Name);
+                .HasKey(c => c.UniqueCode);
 
             modelBuilder.Entity<CurrencyExchangeRateEntity>()
                 .HasKey(e => e.Id);

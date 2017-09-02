@@ -18,16 +18,29 @@ namespace Money.Views.Dialogs
 {
     public sealed partial class CurrencyName : ContentDialog
     {
-        public string Value
+        public string UniqueCode
         {
-            get { return (string)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get { return (string)GetValue(UniqueCodeProperty); }
+            set { SetValue(UniqueCodeProperty, value); }
         }
 
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
-            "Value",
+        public static readonly DependencyProperty UniqueCodeProperty = DependencyProperty.Register(
+            "UniqueCode",
             typeof(string),
             typeof(CurrencyName),
+            new PropertyMetadata(null)
+        );
+
+        public string Symbol
+        {
+            get { return (string)GetValue(SymbolProperty); }
+            set { SetValue(SymbolProperty, value); }
+        }
+
+        public static readonly DependencyProperty SymbolProperty = DependencyProperty.Register(
+            "Symbol", 
+            typeof(string), 
+            typeof(CurrencyName), 
             new PropertyMetadata(null)
         );
 
@@ -38,7 +51,7 @@ namespace Money.Views.Dialogs
             InitializeComponent();
         }
 
-        private void tbxName_KeyDown(object sender, KeyRoutedEventArgs e)
+        private void tbxUniqueCode_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)
             {
@@ -48,17 +61,17 @@ namespace Money.Views.Dialogs
             }
             else if (e.Key == VirtualKey.Escape)
             {
-                if (sender == tbxName)
+                if (sender == tbxUniqueCode)
                 {
-                    tbxName.Text = string.Empty;
+                    tbxUniqueCode.Text = string.Empty;
                     e.Handled = true;
                 }
             }
         }
 
-        private void tbxName_GotFocus(object sender, RoutedEventArgs e)
+        private void tbxUniqueCode_GotFocus(object sender, RoutedEventArgs e)
         {
-            tbxName.SelectAll();
+            tbxUniqueCode.SelectAll();
         }
     }
 }

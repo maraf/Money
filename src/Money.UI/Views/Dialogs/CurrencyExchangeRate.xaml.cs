@@ -1,4 +1,5 @@
-﻿using Money.Services.Models.Queries;
+﻿using Money.Services.Models;
+using Money.Services.Models.Queries;
 using Neptuo;
 using Neptuo.Queries;
 using System;
@@ -22,7 +23,7 @@ namespace Money.Views.Dialogs
     public sealed partial class CurrencyExchangeRate : ContentDialog
     {
         private readonly IQueryDispatcher queryDispatcher;
-        private List<string> currencies;
+        private List<CurrencyModel> currencies;
 
         public string SourceCurrency
         {
@@ -53,8 +54,10 @@ namespace Money.Views.Dialogs
         private static void OnTargetCurrencyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             CurrencyExchangeRate control = (CurrencyExchangeRate)d;
-            control.FilterListSource();
+            control.OnTargetCurrencyChanged();
         }
+
+        private CurrencyModel TargetCurrencyModel { get; set; }
 
         public double Rate
         {
@@ -96,17 +99,18 @@ namespace Money.Views.Dialogs
         private async void Initialize()
         {
             currencies = await queryDispatcher.QueryAsync(new ListAllCurrency());
-            FilterListSource();
+            OnTargetCurrencyChanged();
         }
 
-        private void FilterListSource()
+        private void OnTargetCurrencyChanged()
         {
-            List<string> currencies = this.currencies
-                .Where(c => c != TargetCurrency)
+            List<CurrencyModel> currencies = this.currencies
+                .Where(c => c.UniqueCode != TargetCurrency)
                 .ToList();
 
             cbxCurrency.ItemsSource = currencies;
 
+            TargetCurrencyModel = this.currencies.FirstOrDefault(c => c.UniqueCode == TargetCurrency);
             // TODO: Not working.
             //if (currencies.Count > 0)
             //    cbxCurrency.SelectedIndex = 0;

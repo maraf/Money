@@ -12,13 +12,13 @@
     </ContentDialog.Resources>
     <StackPanel>
         <TextBlock Text="Source currency" />
-        <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind SourceCurrency, Mode=TwoWay}" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
+        <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind SourceCurrency, Mode=TwoWay}" SelectedValuePath="UniqueCode" DisplayMemberPath="Symbol" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
 
         <TextBlock Text="Rate" />
         <TextBox x:Name="tbxRate" Text="{x:Bind Rate, Mode=TwoWay}" FontSize="40" KeyDown="tbxRate_KeyDown" />
 
         <TextBlock Text="Target currency" />
-        <TextBox Text="{x:Bind TargetCurrency}" FontSize="40" IsReadOnly="True" />
+        <TextBox Text="{x:Bind TargetCurrencyModel.Symbol}" FontSize="40" IsReadOnly="True" />
 
         <TextBlock Text="Valid from" />
         <DatePicker x:Name="dpkValidFrom" Date="{x:Bind ValidFrom, Converter={StaticResource DateTimeOffsetToDateTimeConverter}, Mode=TwoWay}" FontSize="40" />

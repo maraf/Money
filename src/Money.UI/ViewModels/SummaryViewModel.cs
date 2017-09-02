@@ -100,22 +100,24 @@ namespace Money.ViewModels
                 IsLoading = true;
                 Items.Clear();
 
+                TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
+                Items.Add(new SummaryTotalViewModel(TotalAmount));
+
+                IsLoading = false;
+
                 IEnumerable<CategoryWithAmountModel> categories = await queryDispatcher.QueryAsync(new ListMonthCategoryWithOutcome(Month));
+                int index = 0;
                 foreach (CategoryWithAmountModel category in categories)
                 {
-                    Items.Add(new SummaryCategoryViewModel()
+                    Items.Insert(index, new SummaryCategoryViewModel()
                     {
                         CategoryKey = category.Key,
                         Name = category.Name,
                         Color = category.Color,
                         Amount = category.TotalAmount
                     });
+                    index++;
                 }
-
-                TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
-                Items.Add(new SummaryTotalViewModel(TotalAmount));
-
-                IsLoading = false;
             }
         }
 

@@ -14,6 +14,6 @@
         
         <TextBox x:Name="tbxAmount" InputScope="Number" FontSize="40" TextAlignment="Right" GotFocus="tbxAmount_GotFocus" KeyDown="tbxAmount_KeyDown" />
 
-        <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind Currency, Mode=TwoWay}" SelectedValuePath="UniqueCode" DisplayMemberPath="Symbol" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
+        <ComboBox x:Name="cbxCurrency" DisplayMemberPath="Symbol" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
     </Grid>
 </ContentDialog>

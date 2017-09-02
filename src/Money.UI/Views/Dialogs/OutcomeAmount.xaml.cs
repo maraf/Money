@@ -42,19 +42,28 @@ namespace Money.Views.Dialogs
                 tbxAmount.Text = value.ToString();
             }
         }
-        
+
+        private string presetCurrency;
+
         public string Currency
         {
-            get { return (string)GetValue(CurrencyProperty); }
-            set { SetValue(CurrencyProperty, value); }
+            get { return (cbxCurrency.SelectedItem as CurrencyModel)?.UniqueCode; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    cbxCurrency.SelectedItem = null;
+                }
+                else
+                {
+                    CurrencyModel model = Currencies.FirstOrDefault(c => c.UniqueCode == value);
+                    if (model == null)
+                        presetCurrency = value;
+                    else
+                        cbxCurrency.SelectedItem = model;
+                }
+            }
         }
-
-        public static readonly DependencyProperty CurrencyProperty = DependencyProperty.Register(
-            "Currency",
-            typeof(string),
-            typeof(OutcomeAmount),
-            new PropertyMetadata(null)
-        );
 
         public ObservableCollection<CurrencyModel> Currencies { get; private set; }
 
@@ -75,7 +84,14 @@ namespace Money.Views.Dialogs
             cbxCurrency.ItemsSource = Currencies;
 
             if (Currency == null)
-                Currency = currencies.FirstOrDefault(c => c.IsDefault)?.UniqueCode;
+            {
+                if (presetCurrency == null)
+                    cbxCurrency.SelectedItem = currencies.FirstOrDefault(c => c.IsDefault);
+                else
+                    cbxCurrency.SelectedItem = currencies.FirstOrDefault(c => c.UniqueCode == presetCurrency);
+
+                presetCurrency = null;
+            }
         }
 
         private void tbxAmount_KeyDown(object sender, KeyRoutedEventArgs e)

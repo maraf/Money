@@ -37,14 +37,14 @@ namespace Money.ViewModels
 
     public static class SortDescriptorExtensions
     {
-        public static SortDescriptor<T> Update<T>(this SortDescriptor<T> source, T type)
+        public static SortDescriptor<T> Update<T>(this SortDescriptor<T> source, T type, SortDirection defaultDirection = SortDirection.Ascending)
             where T : struct
         {
             if (source == null)
-                return new SortDescriptor<T>(type, SortDirection.Ascending);
+                return new SortDescriptor<T>(type, defaultDirection);
 
             if (!source.Type.Equals(type))
-                return new SortDescriptor<T>(type, SortDirection.Ascending);
+                return new SortDescriptor<T>(type, defaultDirection);
 
             if (source.Direction == SortDirection.Ascending)
                 return new SortDescriptor<T>(type, SortDirection.Descending);

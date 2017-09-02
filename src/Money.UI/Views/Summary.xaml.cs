@@ -166,7 +166,7 @@ namespace Money.Views
 
         private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByAmount);
+            ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByAmount, SortDirection.Descending);
             parameter.SortDescriptor = ViewModel.SortDescriptor;
             isAmountSorted = !isAmountSorted;
             isCategorySorted = false;

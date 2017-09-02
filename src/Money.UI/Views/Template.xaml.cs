@@ -10,10 +10,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -155,7 +157,7 @@ namespace Money.Views
 #endif
         }
 
-        private async void btnLoadStorage_Click(object sender, RoutedEventArgs e)
+        private async void btnUploadStorage_Click(object sender, RoutedEventArgs e)
         {
 #if DEBUG
             FileOpenPicker picker = new FileOpenPicker();
@@ -163,10 +165,23 @@ namespace Money.Views
 
             StorageFile file = await picker.PickSingleFileAsync();
             await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
+
+            //ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+            //ApplicationDataContainer migrationContainer;
+            //if (root.Containers.TryGetValue("Migration", out migrationContainer))
+            //    migrationContainer.Values["Version"] = 0;
+
+            MessageDialog dialog = new MessageDialog("Do you want to exit the application?");
+            UICommand yes = new UICommand("Yes");
+            dialog.Commands.Add(yes);
+            dialog.Commands.Add(new UICommand("No"));
+
+            if (await dialog.ShowAsync() == yes)
+                CoreApplication.Exit();
 #endif
         }
 
-        private async void btnSaveStorage_Click(object sender, RoutedEventArgs e)
+        private async void btnDownloadStorage_Click(object sender, RoutedEventArgs e)
         {
 #if DEBUG
             foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())

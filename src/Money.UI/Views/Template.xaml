@@ -249,10 +249,10 @@
                         <Button x:Name="btnClearStorage" Click="btnClearStorage_Click" ToolTipService.ToolTip="Delete everything" Margin="4">
                             <SymbolIcon Symbol="Delete" />
                         </Button>
-                        <Button x:Name="btnSaveStorage" Click="btnSaveStorage_Click" ToolTipService.ToolTip="Download db" Margin="4">
+                        <Button x:Name="btnSaveStorage" Click="btnDownloadStorage_Click" ToolTipService.ToolTip="Download db" Margin="4">
                             <SymbolIcon Symbol="Download" />
                         </Button>
-                        <Button x:Name="btnLoadStorage" Click="btnLoadStorage_Click" ToolTipService.ToolTip="Upload db" Margin="4">
+                        <Button x:Name="btnLoadStorage" Click="btnUploadStorage_Click" ToolTipService.ToolTip="Upload db" Margin="4">
                             <SymbolIcon Symbol="Upload" />
                         </Button>
                     </StackPanel>

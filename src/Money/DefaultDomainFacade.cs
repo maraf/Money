@@ -145,7 +145,7 @@ namespace Money
             });
         }
 
-        public Task CreateCurrencyAsync(string name)
+        public Task CreateCurrencyAsync(string uniqueCode, string symbol)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -153,27 +153,50 @@ namespace Money
                 if (currencies == null)
                     currencies = new CurrencyList();
 
-                currencies.Add(name);
+                currencies.Add(uniqueCode, symbol);
                 currencyListRepository.Save(currencies);
             });
         }
 
-        public Task SetCurrencyAsDefaultAsync(string name)
+        public Task ChangeCurrencySymbolAsync(string uniqueCode, string symbol)
         {
             return Task.Factory.StartNew(() =>
             {
-                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
-                currencies.SetAsDefault(name);
+                CurrencyList currencies = currencyListRepository.Find(currencyListKey);
+                if (currencies == null)
+                    currencies = new CurrencyList();
+
+                currencies.ChangeSymbol(uniqueCode, symbol);
                 currencyListRepository.Save(currencies);
             });
         }
 
-        public Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, double rate)
+        public Task SetCurrencyAsDefaultAsync(string uniqueCode)
         {
             return Task.Factory.StartNew(() =>
             {
                 CurrencyList currencies = currencyListRepository.Get(currencyListKey);
-                currencies.SetExchangeRate(sourceName, targetName, validFrom, rate);
+                currencies.SetAsDefault(uniqueCode);
+                currencyListRepository.Save(currencies);
+            });
+        }
+
+        public Task SetExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+                currencies.SetExchangeRate(sourceUniqueCode, targetUniqueCode, validFrom, rate);
+                currencyListRepository.Save(currencies);
+            });
+        }
+
+        public Task DeleteCurrencyAsync(string uniqueCode)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+                currencies.Delete(uniqueCode);
                 currencyListRepository.Save(currencies);
             });
         }

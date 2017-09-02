@@ -41,14 +41,14 @@ namespace Money.Services
 
         Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
-            currencies.Add(payload.Name, new List<ExchangeRateModel>());
+            currencies.Add(payload.UniqueCode, new List<ExchangeRateModel>());
             return Async.CompletedTask;
         }
 
         Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
         {
-            List<ExchangeRateModel> exchangeRates = currencies[payload.TargetName];
-            exchangeRates.Add(new ExchangeRateModel(payload.SourceName, payload.Rate, payload.ValidFrom));
+            List<ExchangeRateModel> exchangeRates = currencies[payload.TargetUniqueCode];
+            exchangeRates.Add(new ExchangeRateModel(payload.SourceUniqueCode, payload.Rate, payload.ValidFrom));
             exchangeRates.Sort(exchangeRateComparer);
             return Async.CompletedTask;
         }

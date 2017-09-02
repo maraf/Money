@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 namespace Money.Events
 {
     /// <summary>
-    /// An event raised when a new currency is created.
+    /// An event raised when symbol of a currency is changed.
     /// </summary>
-    public class CurrencyCreated : Event
+    public class CurrencySymbolChanged : Event
     {
         /// <summary>
-        /// Gets an unique code of the new currency.
+        /// Gets an unique code of the currency.
         /// </summary>
         public string UniqueCode { get; private set; }
 
         /// <summary>
-        /// Gets a symbol of the new currency.
+        /// Gets a new symbol of the currency.
         /// </summary>
         public string Symbol { get; private set; }
 
-        internal CurrencyCreated(string uniqueCode, string symbol)
+        internal CurrencySymbolChanged(string uniqueCode, string symbol)
         {
             UniqueCode = uniqueCode;
             Symbol = symbol;

@@ -13,14 +13,14 @@ namespace Money.Events
     public class CurrencyExchangeRateSet : Event
     {
         /// <summary>
-        /// Gets a name of the source currency,
+        /// Gets an unique code of the source currency,
         /// </summary>
-        public string SourceName { get; private set; }
+        public string SourceUniqueCode { get; private set; }
 
         /// <summary>
-        /// Gets a name of the target currency,
+        /// Gets an unique code of the target currency,
         /// </summary>
-        public string TargetName { get; private set; }
+        public string TargetUniqueCode { get; private set; }
 
         /// <summary>
         /// Gets a date from which the exchange rate is valid.
@@ -32,10 +32,10 @@ namespace Money.Events
         /// </summary>
         public double Rate { get; private set; }
 
-        internal CurrencyExchangeRateSet(string sourceName, string targetName, DateTime validFrom, double rate)
+        internal CurrencyExchangeRateSet(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
         {
-            SourceName = sourceName;
-            TargetName = targetName;
+            SourceUniqueCode = sourceUniqueCode;
+            TargetUniqueCode = targetUniqueCode;
             ValidFrom = validFrom;
             Rate = rate;
         }

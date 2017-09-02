@@ -29,7 +29,7 @@ namespace Money.Services.Models.Builders
             {
                 await db.Currencies.AddAsync(new CurrencyEntity()
                 {
-                    Name = payload.Name
+                    Name = payload.UniqueCode
                 });
 
                 await db.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace Money.Services.Models.Builders
                 if (entity != null)
                     entity.IsDefault = false;
 
-                entity = db.Currencies.FirstOrDefault(c => c.Name == payload.Name);
+                entity = db.Currencies.FirstOrDefault(c => c.Name == payload.UniqueCode);
                 if (entity != null)
                     entity.IsDefault = true;
 
@@ -79,8 +79,8 @@ namespace Money.Services.Models.Builders
             {
                 await db.ExchangeRates.AddAsync(new CurrencyExchangeRateEntity()
                 {
-                    TargetCurrency = payload.TargetName,
-                    SourceCurrency = payload.SourceName,
+                    TargetCurrency = payload.TargetUniqueCode,
+                    SourceCurrency = payload.SourceUniqueCode,
                     Rate = payload.Rate,
                     ValidFrom = payload.ValidFrom
                 });

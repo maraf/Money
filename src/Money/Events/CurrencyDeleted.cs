@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 namespace Money.Events
 {
     /// <summary>
-    /// An event raised when a default currency was changed.
+    /// An event raised when a currency is deleted (soft).
     /// </summary>
-    public class CurrencyDefaultChanged : Event
+    public class CurrencyDeleted : Event
     {
         /// <summary>
-        /// Gets an unique code of the default currency.
+        /// Gets an unique code of the deleted currency.
         /// </summary>
         public string UniqueCode { get; private set; }
 
-        internal CurrencyDefaultChanged(string uniqueCode)
+        internal CurrencyDeleted(string uniqueCode)
         {
             UniqueCode = uniqueCode;
         }

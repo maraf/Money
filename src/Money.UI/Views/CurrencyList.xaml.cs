@@ -122,25 +122,25 @@ namespace Money.Views
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, queryDispatcher, payload.Name));
+                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, queryDispatcher, payload.UniqueCode));
                 UpdateStandalone();
             });
         }
 
         async Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => UpdateDefaultCurrency(payload.Name));
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => UpdateDefaultCurrency(payload.UniqueCode));
         }
 
         async Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                CurrencyEditViewModel viewModel = ViewModel.Items.FirstOrDefault(c => c.Name == payload.TargetName);
+                CurrencyEditViewModel viewModel = ViewModel.Items.FirstOrDefault(c => c.Name == payload.TargetUniqueCode);
                 if (viewModel != null)
                 {
                     viewModel.ExchangeRates.Add(new ExchangeRateModel(
-                        payload.SourceName,
+                        payload.SourceUniqueCode,
                         payload.Rate,
                         payload.ValidFrom
                     ));

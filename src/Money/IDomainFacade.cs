@@ -100,28 +100,44 @@ namespace Money
         Task ChangeCategoryColorAsync(IKey categoryKey, Color color);
 
         /// <summary>
-        /// Creates a new currency with <paramref name="name"/> as a unique identifier.
+        /// Creates a new currency with <paramref name="uniqueCode"/> as a unique identifier.
         /// </summary>
-        /// <param name="name">A name of the new currency.</param>
+        /// <param name="uniqueCode">An unique code of the new currency.</param>
+        /// <param name="symbol">A symbol of the new currency</param>
         /// <returns>Continuation task.</returns>
-        Task CreateCurrencyAsync(string name);
+        Task CreateCurrencyAsync(string uniqueCode, string symbol);
 
         /// <summary>
-        /// Sets a <paramref name="name"/> as a default currency.
+        /// Sets a <paramref name="uniqueCode"/> as a default currency.
         /// </summary>
-        /// <param name="name">A name of the currency.</param>
+        /// <param name="uniqueCode">An unique code of the currency.</param>
         /// <returns>Continuation task.</returns>
-        Task SetCurrencyAsDefaultAsync(string name);
+        Task SetCurrencyAsDefaultAsync(string uniqueCode);
 
         /// <summary>
-        /// Sets an exchange rate from <paramref name="sourceName"/> to <paramref name="targetName"/>.
+        /// Changes a <paramref name="symbol"/> of the currency with <paramref name="uniqueCode"/>.
+        /// </summary>
+        /// <param name="uniqueCode">An unique code of the currency to change symbol for.</param>
+        /// <param name="symbol">A new symbol for the currency.</param>
+        /// <returns>Continuation task.</returns>
+        Task ChangeCurrencySymbolAsync(string uniqueCode, string symbol);
+
+        /// <summary>
+        /// Sets an exchange rate from <paramref name="sourceUniqueCode"/> to <paramref name="targetUniqueCode"/>.
         /// It is valid from <paramref name="validFrom"/> with exchange <paramref name="rate"/>.
         /// </summary>
-        /// <param name="sourceName">A source currency name.</param>
-        /// <param name="targetName">A target currency name.</param>
+        /// <param name="sourceUniqueCode">A source currency unique code.</param>
+        /// <param name="targetUniqueCode">A target currency unique code.</param>
         /// <param name="validFrom">A date from which the exchange rate is valid.</param>
         /// <param name="rate">An exchange rate.</param>
         /// <returns>Continuation task.</returns>
-        Task SetExchangeRateAsync(string sourceName, string targetName, DateTime validFrom, double rate);
+        Task SetExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate);
+
+        /// <summary>
+        /// Deletes (soft) currency with <paramref name="uniqueCode"/>.
+        /// </summary>
+        /// <param name="uniqueCode">An unique code for the currency to delete.</param>
+        /// <returns>Continuation task.</returns>
+        Task DeleteCurrencyAsync(string uniqueCode);
     }
 }

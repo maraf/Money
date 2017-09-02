@@ -34,6 +34,11 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task ChangeCurrencySymbolAsync(string uniqueCode, string symbol)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount)
         {
             throw new NotImplementedException();
@@ -55,6 +60,11 @@ namespace Money.Views.DesignData
         }
 
         public Task CreateCurrencyAsync(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateCurrencyAsync(string uniqueCode, string symbol)
         {
             throw new NotImplementedException();
         }

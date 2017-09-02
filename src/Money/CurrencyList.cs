@@ -18,67 +18,115 @@ namespace Money
     public class CurrencyList : AggregateRoot,
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
-        IEventHandler<CurrencyExchangeRateSet>
+        IEventHandler<CurrencyExchangeRateSet>,
+        IEventHandler<CurrencySymbolChanged>,
+        IEventHandler<CurrencyDeleted>
     {
-        private readonly HashSet<string> names = new HashSet<string>();
+        private readonly HashSet<string> uniqueCodes = new HashSet<string>();
+        private readonly HashSet<string> deletedUniqueCodes = new HashSet<string>();
         private string defaultName = null;
 
         public CurrencyList()
         { }
 
-        public CurrencyList(IKey key, IEnumerable<IEvent> events) 
+        public CurrencyList(IKey key, IEnumerable<IEvent> events)
             : base(key, events)
         { }
 
-        public void Add(string name)
+        private void EnsureExists(string uniqueCode, bool isDeletedIncluded = false)
         {
-            Ensure.NotNullOrEmpty(name, "name");
-            if (names.Contains(name.ToLowerInvariant()))
+            uniqueCode = uniqueCode.ToLowerInvariant();
+
+            if (uniqueCodes.Contains(uniqueCode))
                 throw new CurrencyAlreadyExistsException();
 
-            Publish(new CurrencyCreated(name));
+            if (isDeletedIncluded && deletedUniqueCodes.Contains(uniqueCode))
+                throw new CurrencyAlreadyExistsException();
+        }
+
+        public void Add(string uniqueCode, string symbol)
+        {
+            Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
+            Ensure.NotNullOrEmpty(symbol, "symbol");
+            EnsureExists(uniqueCode);
+            Publish(new CurrencyCreated(uniqueCode, symbol));
 
             if (defaultName == null)
-                Publish(new CurrencyDefaultChanged(name));
+                Publish(new CurrencyDefaultChanged(uniqueCode));
         }
 
         Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
-            return UpdateState(() => names.Add(payload.Name.ToLowerInvariant()));
+            return UpdateState(() => uniqueCodes.Add(payload.UniqueCode.ToLowerInvariant()));
         }
 
-        public void SetAsDefault(string name)
+        public void SetAsDefault(string uniqueCode)
         {
-            Ensure.NotNullOrEmpty(name, "name");
-            if (!names.Contains(name.ToLowerInvariant()))
-                throw new CurrencyDoesNotExistException();
+            Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
+            EnsureExists(uniqueCode);
 
-            Publish(new CurrencyDefaultChanged(name));
+            if (defaultName == uniqueCode.ToLowerInvariant())
+                throw new CurrencyAlreadyAsDefaultException();
+
+            Publish(new CurrencyDefaultChanged(uniqueCode));
         }
 
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
         {
-            return UpdateState(() => defaultName = payload.Name.ToLowerInvariant());
+            return UpdateState(() => defaultName = payload.UniqueCode.ToLowerInvariant());
         }
 
-        public void SetExchangeRate(string sourceName, string targetName, DateTime validFrom, double rate)
+        public void ChangeSymbol(string uniqueCode, string symbol)
         {
-            Ensure.NotNullOrEmpty(sourceName, "sourceName");
-            Ensure.NotNullOrEmpty(targetName, "targetName");
+            Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
+            EnsureExists(uniqueCode);
+
+            Publish(new CurrencySymbolChanged(uniqueCode, symbol));
+        }
+
+        Task IEventHandler<CurrencySymbolChanged>.HandleAsync(CurrencySymbolChanged payload)
+        {
+            return Task.CompletedTask;
+        }
+
+        public void SetExchangeRate(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        {
+            Ensure.NotNullOrEmpty(sourceUniqueCode, "sourceUniqueCode");
+            Ensure.NotNullOrEmpty(targetUniqueCode, "targetUniqueCode");
+            EnsureExists(sourceUniqueCode);
+            EnsureExists(targetUniqueCode);
             Ensure.Positive(rate, "rate");
 
-            if (!names.Contains(sourceName.ToLowerInvariant()))
-                throw new CurrencyDoesNotExistException();
-
-            if (!names.Contains(targetName.ToLowerInvariant()))
-                throw new CurrencyDoesNotExistException();
-
-            Publish(new CurrencyExchangeRateSet(sourceName, targetName, validFrom, rate));
+            Publish(new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate));
         }
 
         Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
         {
-            return UpdateState(() => { });
+            return Task.CompletedTask;
+        }
+
+        public void Delete(string uniqueCode)
+        {
+            Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
+            EnsureExists(uniqueCode, true);
+
+            if (defaultName == uniqueCode.ToLowerInvariant())
+                throw new CantDeleteDefaultCurrencyException();
+
+            if (uniqueCodes.Count == 1)
+                throw new CantDeleteLastCurrencyException();
+
+            Publish(new CurrencyDeleted(uniqueCode));
+        }
+
+        Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload)
+        {
+            return UpdateState(() =>
+            {
+                string uniqueCode = payload.UniqueCode.ToLowerInvariant();
+                uniqueCodes.Remove(uniqueCode);
+                deletedUniqueCodes.Remove(uniqueCode);
+            });
         }
     }
 }

@@ -93,7 +93,7 @@ namespace Money.Bootstrap
         private async Task UpgradeVersion1()
         {
             EventSourcingContext();
-            await RecreateReadModelContext();
+            await RecreateReadModelContextAsync();
 
             await domainFacade.CreateCategoryAsync("Home", Colors.SandyBrown);
             await domainFacade.CreateCategoryAsync("Food", Colors.OrangeRed);
@@ -102,12 +102,12 @@ namespace Money.Bootstrap
 
         private Task UpgradeVersion2()
         {
-            return RecreateReadModelContext();
+            return RecreateReadModelContextAsync();
         }
 
         private async Task UpgradeVersion3()
         {
-            await RecreateReadModelContext();
+            await RecreateReadModelContextAsync();
             await domainFacade.CreateCurrencyAsync("CZK", "Kč");
         }
 
@@ -121,7 +121,7 @@ namespace Money.Bootstrap
             }
         }
 
-        private Task RecreateReadModelContext()
+        internal Task RecreateReadModelContextAsync()
         {
             using (var readModels = new ReadModelContext())
             {

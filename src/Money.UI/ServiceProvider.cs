@@ -20,5 +20,7 @@ namespace Money
         public static INavigator Navigator { get; set; }
         public static IUpgradeService UpgradeService { get; set; }
         public static TileService TileService { get; set; }
+
+        public static IDevelopmentService DevelopmentService { get; set; }
     }
 }

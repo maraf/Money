@@ -138,32 +138,47 @@ namespace Money.Views.Controls
         private static void OnSortDescriptorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             SummaryContent control = (SummaryContent)d;
-            if (control.SortDescriptor != null)
-            {
-                switch (control.SortDescriptor.Type)
-                {
-                    case SummarySortType.ByAmount:
-                        if (control.SortDescriptor.Direction == SortDirection.Ascending)
-                            control.ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderBy(i => i.AmountValue));
-                        else
-                            control.ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderByDescending(i => i.AmountValue));
+            control.OnSortDescriptorChanged(e);
+        }
 
-                        break;
-                    case SummarySortType.ByCategory:
-                        if (control.SortDescriptor.Direction == SortDirection.Ascending)
-                            control.ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderBy(i => i.Name));
-                        else
-                            control.ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderByDescending(i => i.Name));
-
-                        break;
-                }
-            }
+        private void OnSortDescriptorChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (ViewModel.Items.Count == 0)
+                ViewModel.OnItemsReloaded += ApplySortDescriptor;
+            else
+                ApplySortDescriptor();
         }
 
         public SummaryContent()
         {
             InitializeComponent();
             ViewModel = new SummaryViewModel(navigator, queryDispatcher);
+        }
+
+        private void ApplySortDescriptor()
+        {
+            if (SortDescriptor != null)
+            {
+                switch (SortDescriptor.Type)
+                {
+                    case SummarySortType.ByAmount:
+                        if (SortDescriptor.Direction == SortDirection.Ascending)
+                            ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderBy(i => i.AmountValue));
+                        else
+                            ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderByDescending(i => i.AmountValue));
+
+                        break;
+                    case SummarySortType.ByCategory:
+                        if (SortDescriptor.Direction == SortDirection.Ascending)
+                            ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderBy(i => i.Name));
+                        else
+                            ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderByDescending(i => i.Name));
+
+                        break;
+                }
+            }
+
+            ViewModel.OnItemsReloaded -= ApplySortDescriptor;
         }
 
         private void OnSelectedItemChanged(DependencyPropertyChangedEventArgs e)
@@ -189,7 +204,7 @@ namespace Money.Views.Controls
             ISummaryItemViewModel item = (ISummaryItemViewModel)e.ClickedItem;
             OpenOverview(item.CategoryKey);
         }
-        
+
         private void OpenOverview(IKey categoryKey)
         {
             OverviewParameter parameter = null;

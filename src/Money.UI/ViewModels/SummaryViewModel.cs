@@ -85,6 +85,8 @@ namespace Money.ViewModels
 
         public SortableObservableCollection<ISummaryItemViewModel> Items { get; private set; }
 
+        public event Action OnItemsReloaded;
+
         public SummaryViewModel(INavigator navigator, IQueryDispatcher queryDispatcher)
             : base(navigator)
         {
@@ -118,6 +120,8 @@ namespace Money.ViewModels
                     });
                     index++;
                 }
+
+                OnItemsReloaded?.Invoke();
             }
         }
 

@@ -252,7 +252,6 @@
                         <Button x:Name="btnRebuildReadModels" Click="btnRebuildReadModels_Click" ToolTipService.ToolTip="Rebuild read models" Margin="4">
                             <SymbolIcon Symbol="RepeatAll" />
                         </Button>
-                        <AppBarSeparator />
                         <Button x:Name="btnSaveStorage" Click="btnDownloadStorage_Click" ToolTipService.ToolTip="Download db" Margin="4">
                             <SymbolIcon Symbol="Download" />
                         </Button>

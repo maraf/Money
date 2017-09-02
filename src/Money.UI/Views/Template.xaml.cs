@@ -23,6 +23,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
 
 namespace Money.Views
 {
@@ -134,7 +135,7 @@ namespace Money.Views
             loaContent.IsActive = false;
         }
 
-        private void btnClearStorage_Click(object sender, RoutedEventArgs e)
+        private async void btnClearStorage_Click(object sender, RoutedEventArgs e)
         {
 #if DEBUG
             using (var readModels = new ReadModelContext())
@@ -153,8 +154,19 @@ namespace Money.Views
             foreach (string containerName in ApplicationData.Current.LocalSettings.Containers.Select(c => c.Key))
                 ApplicationData.Current.LocalSettings.DeleteContainer(containerName);
 
-            Application.Current.Exit();
+            await ShowExitDialogAsync();
 #endif
+        }
+
+        private async Task ShowExitDialogAsync()
+        {
+            MessageDialog dialog = new MessageDialog("Do you want to exit the application?");
+            UICommand yes = new UICommand("Yes");
+            dialog.Commands.Add(yes);
+            dialog.Commands.Add(new UICommand("No"));
+
+            if (await dialog.ShowAsync() == yes)
+                CoreApplication.Exit();
         }
 
         private async void btnUploadStorage_Click(object sender, RoutedEventArgs e)
@@ -166,21 +178,10 @@ namespace Money.Views
             StorageFile file = await picker.PickSingleFileAsync();
             await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
 
-            //ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
-            //ApplicationDataContainer migrationContainer;
-            //if (root.Containers.TryGetValue("Migration", out migrationContainer))
-            //    migrationContainer.Values["Version"] = 0;
-
-            MessageDialog dialog = new MessageDialog("Do you want to exit the application?");
-            UICommand yes = new UICommand("Yes");
-            dialog.Commands.Add(yes);
-            dialog.Commands.Add(new UICommand("No"));
-
-            if (await dialog.ShowAsync() == yes)
-                CoreApplication.Exit();
+            await ShowExitDialogAsync();
 #endif
         }
-
+        
         private async void btnDownloadStorage_Click(object sender, RoutedEventArgs e)
         {
 #if DEBUG
@@ -197,6 +198,34 @@ namespace Money.Views
                 using (Stream targetContent = await target.OpenStreamForWriteAsync())
                     sourceContent.CopyTo(targetContent);
             }
+#endif
+        }
+
+        private async void btnSetRevisionStorage_Click(object sender, RoutedEventArgs e)
+        {
+#if DEBUG
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = "Set storage revision";
+
+            TextBox input = new TextBox();
+            dialog.Content = input;
+
+            dialog.PrimaryButtonText = "Ok";
+            dialog.SecondaryButtonText = "Cancel";
+
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+            {
+                if (Int32.TryParse(input.Text, out int revision))
+                {
+                    ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+                    ApplicationDataContainer migrationContainer;
+                    if (root.Containers.TryGetValue("Migration", out migrationContainer))
+                        migrationContainer.Values["Version"] = revision;
+
+                }
+            }
+
+            await ShowExitDialogAsync();
 #endif
         }
     }

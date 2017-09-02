@@ -255,6 +255,9 @@
                         <Button x:Name="btnLoadStorage" Click="btnUploadStorage_Click" ToolTipService.ToolTip="Upload db" Margin="4">
                             <SymbolIcon Symbol="Upload" />
                         </Button>
+                        <Button x:Name="btnSetRevisionStorage" Click="btnSetRevisionStorage_Click" ToolTipService.ToolTip="Set storage revision" Margin="4">
+                            <SymbolIcon Symbol="ImportAll" />
+                        </Button>
                     </StackPanel>
                 </Grid>
             </SplitView.Pane>

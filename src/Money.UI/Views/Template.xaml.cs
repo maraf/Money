@@ -68,7 +68,7 @@ namespace Money.Views
                 new MenuItemViewModel("Bar Graph", "\uE94C", new SummaryParameter(SummaryViewType.BarGraph)) { Group = "Summary" },
                 new MenuItemViewModel("Categories", "\uE8FD", new CategoryListParameter()) { Group = "Manage" },
                 new MenuItemViewModel("Currencies", "\uE1D0", new CurrencyParameter()) { Group = "Manage" },
-                new MenuItemViewModel("Settings", "\uE713", new EmptyParameter()) { Group = "Settings" },
+                new MenuItemViewModel("Settings", "\uE713", new AboutParameter()) { Group = "Settings" },
             };
 
             MenuItemsSource.Source = menuItems.GroupBy(i => i.Group);

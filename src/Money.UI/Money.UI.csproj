@@ -157,6 +157,7 @@
     <Compile Include="ViewModels\OutcomeOverviewViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
+    <Compile Include="ViewModels\Parameters\AboutParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyAddExchangeRateParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyNewParameter.cs" />
@@ -178,6 +179,9 @@
     <Compile Include="ViewModels\SummaryViewModel.IProvider.cs" />
     <Compile Include="ViewModels\SummaryViewType.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="Views\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CategoryList.xaml.cs">
       <DependentUpon>CategoryList.xaml</DependentUpon>
     </Compile>
@@ -306,6 +310,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CategoryList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

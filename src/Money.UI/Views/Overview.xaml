@@ -64,18 +64,18 @@
                             <TextBlock Text="{x:Bind Amount, Mode=OneWay}" Style="{ThemeResource NoteTextStyle}" FontSize="24" VerticalAlignment="Center" Grid.RowSpan="2" Grid.Column="1"/>
                         </Grid>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button x:Name="btnAmount" Content="Amount" Click="btnAmount_Click" />
-                            <Button x:Name="btnDescription" Click="btnDescription_Click">
+                            <Button x:Name="btnAmount" Content="$" Click="btnAmount_Click" ToolTipService.ToolTip="Amount" />
+                            <Button x:Name="btnDescription" Click="btnDescription_Click" ToolTipService.ToolTip="Description">
                                 <Button.Content>
                                     <SymbolIcon Symbol="Message" />
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="btnWhen" Click="btnWhen_Click">
+                            <Button x:Name="btnWhen" Click="btnWhen_Click" ToolTipService.ToolTip="When">
                                 <Button.Content>
                                     <SymbolIcon Symbol="Calendar" />
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="btnDelete" Click="btnDelete_Click">
+                            <Button x:Name="btnDelete" Click="btnDelete_Click" ToolTipService.ToolTip="Delete">
                                 <Button.Content>
                                     <SymbolIcon Symbol="Delete" />
                                 </Button.Content>

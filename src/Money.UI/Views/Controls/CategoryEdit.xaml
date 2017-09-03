@@ -23,7 +23,7 @@
             <Rectangle Width="60" Height="60" Fill="{Binding ColorBrush}" Margin="0,0,10,0" />
             <StackPanel>
                 <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" />
-                <TextBlock Text="{Binding Description}" />
+                <TextBlock Text="{Binding Description}" Style="{StaticResource NoteTextStyle}" />
             </StackPanel>
         </StackPanel>
         <StackPanel Name="s2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">

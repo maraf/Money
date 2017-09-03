@@ -168,7 +168,7 @@ namespace Money.Views
             dialog.Value = viewModel.Description;
 
             ContentDialogResult result = await dialog.ShowAsync();
-            if (result == ContentDialogResult.Primary && dialog.Value != viewModel.Description)
+            if ((result == ContentDialogResult.Primary || dialog.IsEnterPressed) && dialog.Value != viewModel.Description)
             {
                 await domainFacade.ChangeOutcomeDescriptionAsync(viewModel.Key, dialog.Value);
                 viewModel.Description = dialog.Value;

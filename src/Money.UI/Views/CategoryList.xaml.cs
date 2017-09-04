@@ -58,7 +58,8 @@ namespace Money.Views
             ViewModel = new CategoryListViewModel(domainFacade, navigator);
 
             // Bind events.
-            handlers.Add(eventHandlers.AddUiThread(ViewModel, Dispatcher));
+            handlers.Add(eventHandlers.AddUiThread<CategoryIconChanged>(ViewModel, Dispatcher));
+            handlers.Add(eventHandlers.AddUiThread<CategoryDeleted>(ViewModel, Dispatcher));
 
             // Just to show the loading wheel.
             await Task.Delay(100);

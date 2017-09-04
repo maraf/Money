@@ -100,7 +100,7 @@
                     <SymbolIcon Symbol="Emoji2" />
                 </Button.Content>
             </Button>
-            <Button IsEnabled="False">
+            <Button Command="{Binding Delete}">
                 <Button.Content>
                     <SymbolIcon Symbol="Delete" />
                 </Button.Content>

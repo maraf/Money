@@ -26,6 +26,7 @@ namespace Money.Services.Models.Builders
         IEventHandler<CategoryDescriptionChanged>,
         IEventHandler<CategoryColorChanged>,
         IEventHandler<CategoryIconChanged>,
+        IEventHandler<CategoryDeleted>,
         IQueryHandler<ListAllCategory, List<CategoryModel>>,
         IQueryHandler<GetCategoryIcon, string>
     {
@@ -85,12 +86,23 @@ namespace Money.Services.Models.Builders
             }
         }
 
+        public async Task HandleAsync(CategoryDeleted payload)
+        {
+            using (ReadModelContext db = new ReadModelContext())
+            {
+                CategoryEntity entity = await db.Categories.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
+                entity.IsDeleted = true;
+                await db.SaveChangesAsync();
+            }
+        }
+
         public Task<List<CategoryModel>> HandleAsync(ListAllCategory query)
         {
             List<CategoryModel> result = new List<CategoryModel>();
             using (ReadModelContext db = new ReadModelContext())
             {
                 return db.Categories
+                    .Where(c => !c.IsDeleted)
                     .OrderBy(c => c.Name)
                     .Select(e => e.ToModel())
                     .ToListAsync();

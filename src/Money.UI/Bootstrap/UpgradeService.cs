@@ -24,7 +24,7 @@ namespace Money.Bootstrap
         private readonly IEventRebuilderStore eventStore;
         private readonly IFormatter eventFormatter;
 
-        public const int CurrentVersion = 3;
+        public const int CurrentVersion = 4;
 
         public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter)
         {
@@ -66,6 +66,12 @@ namespace Money.Bootstrap
             {
                 context.StartingStep(2 - currentVersion, "Creating default currencies.");
                 await UpgradeVersion3();
+            }
+
+            if (currentVersion < 4)
+            {
+                context.StartingStep(3 - currentVersion, "Adding support for category icons.");
+                await UpgradeVersion4();
             }
 
             ApplicationDataContainer migrationContainer = GetMigrationContainer();
@@ -135,6 +141,11 @@ namespace Money.Bootstrap
             rebuilder.AddAll(new OutcomeBuilder(domainFacade.PriceFactory));
             rebuilder.AddAll(new CurrencyBuilder());
             return rebuilder.RunAsync();
+        }
+
+        private async Task UpgradeVersion4()
+        {
+            await RecreateReadModelContextAsync();
         }
     }
 }

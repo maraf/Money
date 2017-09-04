@@ -108,6 +108,13 @@ namespace Money
         Task ChangeCategoryIconAsync(IKey categoryKey, string icon);
 
         /// <summary>
+        /// Deletes (soft) category with <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <returns>Continuation task.</returns>
+        Task DeleteCategoryAsync(IKey categoryKey);
+
+        /// <summary>
         /// Creates a new currency with <paramref name="uniqueCode"/> as a unique identifier.
         /// </summary>
         /// <param name="uniqueCode">An unique code of the new currency.</param>

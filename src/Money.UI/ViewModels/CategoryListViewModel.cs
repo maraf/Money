@@ -17,7 +17,9 @@ using Windows.UI;
 
 namespace Money.ViewModels
 {
-    public class CategoryListViewModel : ObservableObject, IEventHandler<CategoryIconChanged>
+    public class CategoryListViewModel : ObservableObject, 
+        IEventHandler<CategoryIconChanged>,
+        IEventHandler<CategoryDeleted>
     {
         private readonly IDomainFacade domainFacade;
         private readonly INavigator navigator;
@@ -46,6 +48,15 @@ namespace Money.ViewModels
             CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(payload.AggregateKey));
             if (viewModel != null)
                 viewModel.Icon = payload.Icon;
+
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(CategoryDeleted payload)
+        {
+            CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(payload.AggregateKey));
+            if (viewModel != null)
+                Items.Remove(viewModel);
 
             return Task.CompletedTask;
         }

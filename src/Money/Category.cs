@@ -22,7 +22,8 @@ namespace Money
         IEventHandler<CategoryRenamed>,
         IEventHandler<CategoryDescriptionChanged>,
         IEventHandler<CategoryColorChanged>,
-        IEventHandler<CategoryIconChanged>
+        IEventHandler<CategoryIconChanged>,
+        IEventHandler<CategoryDeleted>
     {
         /// <summary>
         /// Gets a name of the category.
@@ -38,6 +39,11 @@ namespace Money
         /// Gets a font icon of the category.
         /// </summary>
         public string Icon { get; private set; }
+
+        /// <summary>
+        /// Gets a <c>true</c> if a category is (soft) deleted.
+        /// </summary>
+        public bool IsDeleted { get; private set; }
 
         public Category(string name, Color color)
         {
@@ -101,6 +107,17 @@ namespace Money
         Task IEventHandler<CategoryIconChanged>.HandleAsync(CategoryIconChanged payload)
         {
             return UpdateState(() => Icon = payload.Icon);
+        }
+
+        public void Delete()
+        {
+            if (!IsDeleted)
+                Publish(new CategoryDeleted());
+        }
+
+        public Task HandleAsync(CategoryDeleted payload)
+        {
+            return UpdateState(() => IsDeleted = true);
         }
     }
 }

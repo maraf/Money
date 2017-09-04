@@ -79,6 +79,11 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task DeleteCategoryAsync(IKey categoryKey)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task DeleteCurrencyAsync(string uniqueCode)
         {
             throw new NotImplementedException();

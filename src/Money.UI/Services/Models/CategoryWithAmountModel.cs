@@ -12,8 +12,8 @@ namespace Money.Services.Models
     {
         public Price TotalAmount { get; private set; }
 
-        public CategoryWithAmountModel(IKey key, string name, string description, Color color, Price totalAmount) 
-            : base(key, name, description, color)
+        public CategoryWithAmountModel(IKey key, string name, string description, Color color, string icon, Price totalAmount) 
+            : base(key, name, description, color, icon)
         {
             TotalAmount = totalAmount;
         }

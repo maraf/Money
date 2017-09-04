@@ -87,6 +87,7 @@ namespace Money.Services.Models.Builders
                         model.Name,
                         model.Description,
                         model.Color,
+                        model.Icon,
                         item.Value
                     ));
                 }

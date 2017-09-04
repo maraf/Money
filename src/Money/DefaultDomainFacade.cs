@@ -105,6 +105,16 @@ namespace Money
             });
         }
 
+        public Task ChangeCategoryIconAsync(IKey categoryKey, string icon)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                Category category = categoryRepository.Get(categoryKey);
+                category.ChangeIcon(icon);
+                categoryRepository.Save(category);
+            });
+        }
+
         public Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount)
         {
             return Task.Factory.StartNew(() =>

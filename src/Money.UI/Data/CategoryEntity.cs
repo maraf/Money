@@ -14,7 +14,8 @@ namespace Money.Data
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Description { get;  set; }
+        public string Description { get; set; }
+        public string Icon { get; set; }
         public byte ColorA { get; set; }
         public byte ColorR { get; set; }
         public byte ColorG { get; set; }
@@ -31,6 +32,7 @@ namespace Money.Data
             Name = model.Name;
             Description = model.Description;
             SetColor(model.Color);
+            Icon = model.Icon;
         }
 
         public void SetColor(Color color)
@@ -47,7 +49,8 @@ namespace Money.Data
                 GuidKey.Create(Id, KeyFactory.Empty(typeof(Category)).Type),
                 Name,
                 Description,
-                ToColor()
+                ToColor(),
+                Icon
             );
         }
 

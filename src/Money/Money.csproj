@@ -117,6 +117,7 @@
     <Compile Include="Events\CategoryColorChanged.cs" />
     <Compile Include="Events\CategoryCreated.cs" />
     <Compile Include="Events\CategoryDescriptionChanged.cs" />
+    <Compile Include="Events\CategoryIconChanged.cs" />
     <Compile Include="Events\CategoryRenamed.cs" />
     <Compile Include="Events\CurrencyCreated.cs" />
     <Compile Include="Events\CurrencyDefaultChanged.cs" />

@@ -100,6 +100,14 @@ namespace Money
         Task ChangeCategoryColorAsync(IKey categoryKey, Color color);
 
         /// <summary>
+        /// Changes a font icon for a category with a key <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <param name="icon">A font icon of the category</param>
+        /// <returns>Continuation task.</returns>
+        Task ChangeCategoryIconAsync(IKey categoryKey, string icon);
+
+        /// <summary>
         /// Creates a new currency with <paramref name="uniqueCode"/> as a unique identifier.
         /// </summary>
         /// <param name="uniqueCode">An unique code of the new currency.</param>

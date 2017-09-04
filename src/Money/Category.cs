@@ -21,7 +21,8 @@ namespace Money
         IEventHandler<CategoryCreated>,
         IEventHandler<CategoryRenamed>,
         IEventHandler<CategoryDescriptionChanged>,
-        IEventHandler<CategoryColorChanged>
+        IEventHandler<CategoryColorChanged>,
+        IEventHandler<CategoryIconChanged>
     {
         /// <summary>
         /// Gets a name of the category.
@@ -32,6 +33,11 @@ namespace Money
         /// Gets a color of the category.
         /// </summary>
         public Color Color { get; private set; }
+
+        /// <summary>
+        /// Gets a font icon of the category.
+        /// </summary>
+        public string Icon { get; private set; }
 
         public Category(string name, Color color)
         {
@@ -84,6 +90,17 @@ namespace Money
         Task IEventHandler<CategoryColorChanged>.HandleAsync(CategoryColorChanged payload)
         {
             return UpdateState(() => Color = payload.Color);
+        }
+
+        public void ChangeIcon(string icon)
+        {
+            if (icon != Icon)
+                Publish(new CategoryIconChanged(icon));
+        }
+
+        Task IEventHandler<CategoryIconChanged>.HandleAsync(CategoryIconChanged payload)
+        {
+            return UpdateState(() => Icon = payload.Icon);
         }
     }
 }

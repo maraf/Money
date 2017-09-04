@@ -20,7 +20,10 @@
     </UserControl.Resources>
     <StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Rectangle Width="60" Height="60" Fill="{Binding ColorBrush}" Margin="0,0,10,0" />
+            <Grid Margin="0,0,10,0">
+                <Rectangle Width="60" Height="60" Fill="{Binding ColorBrush}" />
+                <TextBlock Text="{Binding Icon}" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            </Grid>
             <StackPanel>
                 <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" />
                 <TextBlock Text="{Binding Description}" Style="{StaticResource NoteTextStyle}" />
@@ -92,7 +95,7 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <Button IsEnabled="False">
+            <Button Command="{Binding ChangeIcon}">
                 <Button.Content>
                     <SymbolIcon Symbol="Emoji2" />
                 </Button.Content>

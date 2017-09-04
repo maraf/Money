@@ -34,13 +34,19 @@ namespace Money.Services.Models
         /// </summary>
         public Color Color { get; private set; }
         
-        public CategoryModel(IKey key, string name, string description, Color color)
+        /// <summary>
+        /// Gets a font icon of the category.
+        /// </summary>
+        public string Icon { get; private set; }
+
+        public CategoryModel(IKey key, string name, string description, Color color, string icon)
         {
             Ensure.Condition.NotEmptyKey(key);
             Key = key;
             Name = name;
             Description = description;
             Color = color;
+            Icon = icon;
         }
     }
 }

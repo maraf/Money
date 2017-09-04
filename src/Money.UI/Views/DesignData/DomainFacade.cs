@@ -34,6 +34,11 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task ChangeCategoryIconAsync(IKey categoryKey, string icon)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task ChangeCurrencySymbolAsync(string uniqueCode, string symbol)
         {
             throw new NotImplementedException();

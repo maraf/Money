@@ -149,9 +149,9 @@ namespace Money.Views.DesignData
                     createOutcome = new OutcomeViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade);
                     createOutcome.Amount = 5400;
                     createOutcome.Description = "New home PC motherboard";
-                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue));
-                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Eating out", "When we are lay and let others to feed us", Colors.Brown));
-                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold));
+                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue, "🦉"));
+                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Eating out", "When we are lay and let others to feed us", Colors.Brown, "🦊"));
+                    createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold, "🦆"));
                 }
 
                 return createOutcome;
@@ -165,10 +165,10 @@ namespace Money.Views.DesignData
             {
                 if (categoryList == null)
                 {
-                    categoryList = new CategoryListViewModel(ServiceProvider.DomainFacade);
-                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue));
-                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown) { IsSelected = true });
-                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold));
+                    categoryList = new CategoryListViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator);
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", Colors.CadetBlue, "🦉"));
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown, "🦊") { IsSelected = true });
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", Colors.Gold, "🦆"));
                 }
 
                 return categoryList;
@@ -182,7 +182,7 @@ namespace Money.Views.DesignData
             {
                 if (categoryEdit == null)
                 {
-                    categoryEdit = new CategoryEditViewModel(ServiceProvider.DomainFacade, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown);
+                    categoryEdit = new CategoryEditViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", Colors.Brown, "🦊");
                     categoryEdit.IsSelected = true;
                 }
 

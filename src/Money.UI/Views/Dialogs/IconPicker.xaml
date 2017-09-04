@@ -1,0 +1,18 @@
+﻿<ContentDialog
+    x:Class="Money.Views.Dialogs.IconPicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" PrimaryButtonText="Select" SecondaryButtonText="Cancel">
+
+    <Grid>
+        <GridView x:Name="List" SelectionMode="Single" SelectedValue="{x:Bind Value, Mode=TwoWay}">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" FontSize="24" />
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</ContentDialog>

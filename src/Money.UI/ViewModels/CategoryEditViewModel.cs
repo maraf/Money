@@ -1,5 +1,7 @@
 ﻿using Money.Services;
 using Money.ViewModels.Commands;
+using Money.ViewModels.Navigation;
+using Money.ViewModels.Parameters;
 using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;
@@ -61,6 +63,20 @@ namespace Money.ViewModels
             }
         }
 
+        private string icon;
+        public string Icon
+        {
+            get { return icon; }
+            set
+            {
+                if (icon != value)
+                {
+                    icon = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
         public Brush ColorBrush
         {
             get { return new SolidColorBrush(Color); }
@@ -82,30 +98,37 @@ namespace Money.ViewModels
 
         public ICommand Rename { get; private set; }
         public ICommand ChangeColor { get; private set; }
+        public ICommand ChangeIcon { get; set; }
 
-        public CategoryEditViewModel(IDomainFacade domainFacade, IKey key)
+        public CategoryEditViewModel(IDomainFacade domainFacade, INavigator navigator, IKey key)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(navigator, "navigator");
             Ensure.NotNull(key, "key");
             Key = key;
-            CreateCommands(domainFacade);
+            CreateCommands(domainFacade, navigator);
         }
 
-        public CategoryEditViewModel(IDomainFacade domainFacade, IKey key, string name, string description, Color color)
+        public CategoryEditViewModel(IDomainFacade domainFacade, INavigator navigator, IKey key, string name, string description, Color color, string icon)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(navigator, "navigator");
             Ensure.Condition.NotEmptyKey(key);
             Key = key;
             Name = name;
             Description = description;
             Color = color;
-            CreateCommands(domainFacade);
+            Icon = icon;
+            CreateCommands(domainFacade, navigator);
         }
 
-        private void CreateCommands(IDomainFacade domainFacade)
+        private void CreateCommands(IDomainFacade domainFacade, INavigator navigator)
         {
             Rename = new CategoryRenameCommand(domainFacade, this);
             ChangeColor = new CategoryChangeColorCommand(domainFacade, this);
+
+            if (!Key.IsEmpty)
+                ChangeIcon = new NavigateCommand(navigator, new CategoryChangeIconParameter(Key));
         }
     }
 }

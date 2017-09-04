@@ -119,6 +119,7 @@
     <Compile Include="Services\Models\OutcomeModel.cs" />
     <Compile Include="Services\Models\OutcomeOverviewModel.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryColor.cs" />
+    <Compile Include="Services\Models\Queries\GetCategoryIcon.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryName.cs" />
     <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
@@ -131,9 +132,11 @@
     <Compile Include="Services\Models\YearModel.cs" />
     <Compile Include="Services\PriceCalculator.cs" />
     <Compile Include="Services\Tiles\TileService.cs" />
+    <Compile Include="UiThreadEventHandler.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />
+    <Compile Include="ViewModels\Collections\IconObservableCollection.cs" />
     <Compile Include="ViewModels\Commands\CategoryChangeColorCommand.cs" />
     <Compile Include="ViewModels\Commands\CategoryRenameCommand.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
@@ -158,6 +161,7 @@
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Parameters\AboutParameter.cs" />
+    <Compile Include="ViewModels\Parameters\CategoryChangeIconParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyAddExchangeRateParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyNewParameter.cs" />
@@ -191,6 +195,7 @@
     <Compile Include="Views\Controls\CategoryEdit.xaml.cs">
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\CategoryChangeIcon.cs" />
     <Compile Include="Views\Dialogs\CurrencyAddExchangeRateWizard.cs" />
     <Compile Include="Views\Controls\CurrencyEdit.xaml.cs">
       <DependentUpon>CurrencyEdit.xaml</DependentUpon>
@@ -244,6 +249,9 @@
     </Compile>
     <Compile Include="Views\Dialogs\CurrencyName.xaml.cs">
       <DependentUpon>CurrencyName.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\IconPicker.xaml.cs">
+      <DependentUpon>IconPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\IWizard.cs" />
     <Compile Include="Views\Dialogs\OutcomeAmount.xaml.cs">
@@ -373,6 +381,10 @@
     <Page Include="Views\Dialogs\CurrencyName.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\IconPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\OutcomeAmount.xaml">
       <Generator>MSBuild:Compile</Generator>

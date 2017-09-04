@@ -9,6 +9,6 @@
     Visibility="Collapsed">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ProgressRing x:Name="Ring" IsActive="{x:Bind IsActive}" Width="100" Height="100" />
-        <ProgressBar x:Name="Bar" IsIndeterminate="True" Margin="12,0" />
+        <ProgressBar x:Name="Bar" IsIndeterminate="True" Margin="12,0" Visibility="Collapsed" />
     </Grid>
 </UserControl>

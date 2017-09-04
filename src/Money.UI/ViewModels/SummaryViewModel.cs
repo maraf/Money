@@ -105,8 +105,6 @@ namespace Money.ViewModels
                 TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
                 Items.Add(new SummaryTotalViewModel(TotalAmount));
 
-                IsLoading = false;
-
                 IEnumerable<CategoryWithAmountModel> categories = await queryDispatcher.QueryAsync(new ListMonthCategoryWithOutcome(Month));
                 int index = 0;
                 foreach (CategoryWithAmountModel category in categories)
@@ -122,6 +120,7 @@ namespace Money.ViewModels
                 }
 
                 OnItemsReloaded?.Invoke();
+                IsLoading = false;
             }
         }
 

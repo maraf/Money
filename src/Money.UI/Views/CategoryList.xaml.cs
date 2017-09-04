@@ -22,7 +22,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System.ComponentModel;
 
 namespace Money.Views
 {

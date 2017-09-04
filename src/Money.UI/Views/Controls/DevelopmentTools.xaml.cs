@@ -78,9 +78,11 @@ namespace Money.Views.Controls
             picker.FileTypeFilter.Add(".db");
 
             StorageFile file = await picker.PickSingleFileAsync();
-            await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
-
-            await ShowExitDialogAsync();
+            if (file != null)
+            {
+                await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
+                await ShowExitDialogAsync();
+            }
 #endif
         }
 
@@ -95,10 +97,12 @@ namespace Money.Views.Controls
                 picker.SuggestedFileName = source.Name;
 
                 StorageFile target = await picker.PickSaveFileAsync();
-
-                using (Stream sourceContent = await source.OpenStreamForReadAsync())
-                using (Stream targetContent = await target.OpenStreamForWriteAsync())
-                    sourceContent.CopyTo(targetContent);
+                if (target != null)
+                {
+                    using (Stream sourceContent = await source.OpenStreamForReadAsync())
+                    using (Stream targetContent = await target.OpenStreamForWriteAsync())
+                        sourceContent.CopyTo(targetContent);
+                }
             }
 #endif
         }

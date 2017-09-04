@@ -170,13 +170,17 @@ namespace Money.UI
             container.Values["Type"] = e.Exception.GetType().FullName;
             container.Values["Message"] = e.Exception.Message;
             container.Values["Callstack"] = e.Exception.StackTrace;
+            container.Values["DateTime"] = DateTime.Now.ToString();
 
 #if DEBUG
             if (Debugger.IsAttached)
                 Debugger.Break();
 
-            Template template = Window.Current.Content as Template;
-            if (template != null)
+            object content = Window.Current.Content;
+            if (content is Frame frame)
+                content = frame.Content;
+
+            if (content is Template template)
                 template.HideLoading();
 
             if (ServiceProvider.Navigator != null)

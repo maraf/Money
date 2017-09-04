@@ -16,5 +16,19 @@
         <TextBlock Text="v1.0.0-beta2" Opacity=".5" />
 
         <HyperlinkButton Content="Documentation" NavigateUri="http://www.neptuo.com/project/universal/money" Margin="0,20,0,0" />
+
+        <StackPanel x:Name="ExceptionPanel" Margin="0,20,0,0">
+            <Grid>
+                <TextBlock Text="Last exception" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <Button x:Name="ClearException" Click="ClearException_Click" HorizontalAlignment="Right">
+                    <SymbolIcon Symbol="Cancel" Foreground="Red" />
+                </Button>
+            </Grid>
+
+            <TextBlock x:Name="ExceptionType" />
+            <TextBlock x:Name="ExceptionMessage" />
+            <TextBlock x:Name="ExceptionCallstack" />
+            <TextBlock x:Name="ExceptionDateTime" />
+        </StackPanel>
     </StackPanel>
 </Page>

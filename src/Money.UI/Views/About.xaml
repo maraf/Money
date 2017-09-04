@@ -2,9 +2,9 @@
     x:Class="Money.Views.About"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Money.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Money.Views.Controls"
     mc:Ignorable="d">
     <Page.BottomAppBar>
         <CommandBar />
@@ -17,18 +17,21 @@
 
         <HyperlinkButton Content="Documentation" NavigateUri="http://www.neptuo.com/project/universal/money" Margin="0,20,0,0" />
 
+        <TextBlock Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
+        <controls:DevelopmentTools Orientation="Horizontal" Visibility="Visible" />
+
         <StackPanel x:Name="ExceptionPanel" Margin="0,20,0,0">
             <Grid>
-                <TextBlock Text="Last exception" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <TextBlock Text="Last Exception" Style="{ThemeResource SubtitleTextBlockStyle}" />
                 <Button x:Name="ClearException" Click="ClearException_Click" HorizontalAlignment="Right">
                     <SymbolIcon Symbol="Cancel" Foreground="Red" />
                 </Button>
             </Grid>
 
-            <TextBlock x:Name="ExceptionType" />
-            <TextBlock x:Name="ExceptionMessage" />
-            <TextBlock x:Name="ExceptionCallstack" />
-            <TextBlock x:Name="ExceptionDateTime" />
+            <TextBlock x:Name="ExceptionType" Opacity=".5" />
+            <TextBlock x:Name="ExceptionMessage" Opacity=".5" />
+            <TextBlock x:Name="ExceptionCallstack" Opacity=".5" />
+            <TextBlock x:Name="ExceptionDateTime" Opacity=".5" />
         </StackPanel>
     </StackPanel>
 </Page>

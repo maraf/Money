@@ -28,7 +28,6 @@ namespace Money.Views
     public sealed partial class Template : Page
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
-        private readonly IDevelopmentService developmentService = ServiceProvider.DevelopmentService;
         private readonly List<MenuItemViewModel> menuItems;
 
         public Frame ContentFrame
@@ -57,10 +56,6 @@ namespace Money.Views
         public Template()
         {
             InitializeComponent();
-
-#if DEBUG
-            stpDevelopment.Visibility = Visibility.Visible;
-#endif
 
             menuItems = new List<MenuItemViewModel>()
             {
@@ -132,108 +127,6 @@ namespace Money.Views
         public void HideLoading()
         {
             loaContent.IsActive = false;
-        }
-
-        private async Task ShowExitDialogAsync()
-        {
-            MessageDialog dialog = new MessageDialog("Do you want to exit the application?");
-            UICommand yes = new UICommand("Yes");
-            dialog.Commands.Add(yes);
-            dialog.Commands.Add(new UICommand("No"));
-
-            if (await dialog.ShowAsync() == yes)
-                CoreApplication.Exit();
-        }
-
-        private async void btnClearStorage_Click(object sender, RoutedEventArgs e)
-        {
-#if DEBUG
-            using (var readModels = new ReadModelContext())
-            {
-                readModels.Database.EnsureDeleted();
-                readModels.Database.EnsureCreated();
-            }
-
-            using (var eventSourcing = new EventSourcingContext())
-            {
-                eventSourcing.Database.EnsureDeleted();
-                eventSourcing.Database.EnsureCreated();
-                eventSourcing.Database.Migrate();
-            }
-
-            foreach (string containerName in ApplicationData.Current.LocalSettings.Containers.Select(c => c.Key))
-                ApplicationData.Current.LocalSettings.DeleteContainer(containerName);
-
-            await ShowExitDialogAsync();
-#endif
-        }
-
-        private async void btnUploadStorage_Click(object sender, RoutedEventArgs e)
-        {
-#if DEBUG
-            FileOpenPicker picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".db");
-
-            StorageFile file = await picker.PickSingleFileAsync();
-            await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
-
-            await ShowExitDialogAsync();
-#endif
-        }
-        
-        private async void btnDownloadStorage_Click(object sender, RoutedEventArgs e)
-        {
-#if DEBUG
-            foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
-            {
-                FileSavePicker picker = new FileSavePicker();
-                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                picker.FileTypeChoices.Add(source.DisplayName, new List<string>() { ".db" });
-                picker.SuggestedFileName = source.Name;
-
-                StorageFile target = await picker.PickSaveFileAsync();
-
-                using (Stream sourceContent = await source.OpenStreamForReadAsync())
-                using (Stream targetContent = await target.OpenStreamForWriteAsync())
-                    sourceContent.CopyTo(targetContent);
-            }
-#endif
-        }
-
-        private async void btnSetRevisionStorage_Click(object sender, RoutedEventArgs e)
-        {
-#if DEBUG
-            ContentDialog dialog = new ContentDialog();
-            dialog.Title = "Set storage revision";
-
-            TextBox input = new TextBox();
-            dialog.Content = input;
-
-            dialog.PrimaryButtonText = "Ok";
-            dialog.SecondaryButtonText = "Cancel";
-
-            if (await dialog.ShowAsync() == ContentDialogResult.Primary)
-            {
-                if (Int32.TryParse(input.Text, out int revision))
-                {
-                    ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
-                    ApplicationDataContainer migrationContainer;
-                    if (root.Containers.TryGetValue("Migration", out migrationContainer))
-                        migrationContainer.Values["Version"] = revision;
-
-                }
-            }
-
-            await ShowExitDialogAsync();
-#endif
-        }
-
-        private async void btnRebuildReadModels_Click(object sender, RoutedEventArgs e)
-        {
-#if DEBUG
-            await developmentService.RebuildReadModelsAsync();
-            await ShowExitDialogAsync();
-#endif
         }
     }
 }

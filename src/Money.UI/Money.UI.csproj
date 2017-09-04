@@ -196,6 +196,9 @@
     <Compile Include="Views\Controls\CategoryEdit.xaml.cs">
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\DevelopmentTools.xaml.cs">
+      <DependentUpon>DevelopmentTools.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\LoadingType.cs" />
     <Compile Include="Views\Dialogs\CategoryChangeIcon.cs" />
     <Compile Include="Views\Dialogs\CurrencyAddExchangeRateWizard.cs" />
@@ -339,6 +342,10 @@
     <Page Include="Views\Controls\CurrencyEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\DevelopmentTools.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\EmptyMessage.xaml">
       <Generator>MSBuild:Compile</Generator>

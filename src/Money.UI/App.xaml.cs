@@ -183,6 +183,9 @@ namespace Money.UI
             if (content is Template template)
                 template.HideLoading();
 
+            if (e.Exception is LayoutCycleException)
+                Exit();
+
             if (ServiceProvider.Navigator != null)
             {
                 ServiceProvider.Navigator

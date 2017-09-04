@@ -107,7 +107,7 @@
                                         <RowDefinition Height="10" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock x:Name="tblName" Text="{x:Bind Name}" Style="{ThemeResource CategoryNameStyle}" FontWeight="Normal" Grid.RowSpan="2" />
+                                    <TextBlock x:Name="tblName" Text="{x:Bind Name}" Style="{ThemeResource CategoryNameStyle}" FontWeight="Normal" Opacity=".7" Grid.RowSpan="2" />
                                     <TextBlock Text="{x:Bind Amount}" Style="{ThemeResource NoteTextStyle}" Grid.Column="1" />
 
                                     <controls:Bar Value="{x:Bind Amount.Value}" Max="{Binding DataContext.TotalAmount.Value, ElementName=grdBarGraph}" Grid.ColumnSpan="2" Grid.Row="1">

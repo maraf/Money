@@ -50,7 +50,6 @@ namespace Money.Views.Controls
 
         private async void btnClearStorage_Click(object sender, RoutedEventArgs e)
         {
-#if DEBUG
             using (var readModels = new ReadModelContext())
             {
                 readModels.Database.EnsureDeleted();
@@ -68,12 +67,10 @@ namespace Money.Views.Controls
                 ApplicationData.Current.LocalSettings.DeleteContainer(containerName);
 
             await ShowExitDialogAsync();
-#endif
         }
 
         private async void btnUploadStorage_Click(object sender, RoutedEventArgs e)
         {
-#if DEBUG
             FileOpenPicker picker = new FileOpenPicker();
             picker.FileTypeFilter.Add(".db");
 
@@ -83,12 +80,10 @@ namespace Money.Views.Controls
                 await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
                 await ShowExitDialogAsync();
             }
-#endif
         }
 
         private async void btnDownloadStorage_Click(object sender, RoutedEventArgs e)
         {
-#if DEBUG
             foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
             {
                 FileSavePicker picker = new FileSavePicker();
@@ -104,12 +99,10 @@ namespace Money.Views.Controls
                         sourceContent.CopyTo(targetContent);
                 }
             }
-#endif
         }
 
         private async void btnSetRevisionStorage_Click(object sender, RoutedEventArgs e)
         {
-#if DEBUG
             ContentDialog dialog = new ContentDialog();
             dialog.Title = "Set storage revision";
 
@@ -132,15 +125,12 @@ namespace Money.Views.Controls
             }
 
             await ShowExitDialogAsync();
-#endif
         }
 
         private async void btnRebuildReadModels_Click(object sender, RoutedEventArgs e)
         {
-#if DEBUG
             await developmentService.RebuildReadModelsAsync();
             await ShowExitDialogAsync();
-#endif
         }
     }
 }

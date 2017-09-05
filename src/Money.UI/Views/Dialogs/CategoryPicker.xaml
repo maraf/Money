@@ -5,9 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Money.Views.Converters"
-    mc:Ignorable="d" Title="Select a category" PrimaryButtonText="Select" SecondaryButtonText="Without category" FullSizeDesired="True">
+    mc:Ignorable="d" Title="Select a category" PrimaryButtonText="Select" SecondaryButtonText="Without category">
     <ContentDialog.Resources>
         <converters:InverseColorConverter x:Key="InverseColorConverter" />
+        <converters:NullConverter x:Name="NullToCollapsedConverter" TrueValue="Collapsed" FalseValue="Visible" />
 
         <Style TargetType="GridView">
             <Setter Property="Margin" Value="0,10,0,0" />
@@ -24,11 +25,15 @@
                                     <SolidColorBrush Color="{Binding Color}" />
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0">
-                                <TextBlock.Foreground>
-                                    <SolidColorBrush Color="{Binding Color, Converter={StaticResource InverseColorConverter}}" />
-                                </TextBlock.Foreground>
-                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="14,0">
+                                <TextBlock Text="{Binding Icon}" Visibility="{Binding Icon, Converter={StaticResource NullToCollapsedConverter}}" VerticalAlignment="Center" Margin="0,0,14,0" />
+
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{Binding Color, Converter={StaticResource InverseColorConverter}}" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </StackPanel>
                         </Grid>
                     </StackPanel>
                 </DataTemplate>

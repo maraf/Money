@@ -272,5 +272,15 @@ namespace Money.Views
                 .Message(message)
                 .Show();
         }
+
+        private void PieChart_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.ViewType = SummaryViewType.PieChart;
+        }
+
+        private void BarGraph_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.ViewType = SummaryViewType.BarGraph;
+        }
     }
 }

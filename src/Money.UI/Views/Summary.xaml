@@ -4,14 +4,33 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Money.Views.Controls"
+    xmlns:converters="using:Money.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" d:DataContext="{Binding Group, Source={StaticResource ViewModelLocator}}">
+    <Page.Resources>
+        <converters:SymmaryViewTypeToVisibilityConverter x:Key="BarGraphToCollapsedConverter" ViewType="BarGraph" IsInverted="True" />
+        <converters:SymmaryViewTypeToVisibilityConverter x:Key="PieChartToCollapsedConverter" ViewType="PieChart" IsInverted="True" />
+    </Page.Resources>
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="btnPinOutcomeCreate" Label="Pin outcome create to start" Click="btnPinOutcomeCreate_Click" />
             </CommandBar.SecondaryCommands>
+
+            <AppBarButton x:Name="PieChart" Click="PieChart_Click" Label="Pie Chart" ToolTipService.ToolTip="Pie Chart" Visibility="{Binding ViewType, Converter={StaticResource PieChartToCollapsedConverter}}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xEB05;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BarGraph" Click="BarGraph_Click" Label="Bar Graph" ToolTipService.ToolTip="Bar Graph" Visibility="{Binding ViewType, Converter={StaticResource BarGraphToCollapsedConverter}}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE94C;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+
+            <AppBarSeparator />
+
             <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
             <AppBarButton Icon="Sort" Label="Sort">
                 <AppBarButton.Flyout>

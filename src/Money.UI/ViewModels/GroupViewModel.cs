@@ -77,7 +77,7 @@ namespace Money.ViewModels
         {
             get { return items; }
         }
-
+        
         /// <summary>
         /// Creates a new instance.
         /// </summary>

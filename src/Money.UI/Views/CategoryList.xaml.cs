@@ -28,7 +28,7 @@ namespace Money.Views
     [NavigationParameter(typeof(CategoryListParameter))]
     public sealed partial class CategoryList : Page, INavigatorPage
     {
-        private List<UiThreadEventHandler> handlers = new List<UiThreadEventHandler>();
+        private readonly List<UiThreadEventHandler> handlers = new List<UiThreadEventHandler>();
 
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;

@@ -1,8 +1,10 @@
-﻿using Money.Services.Models;
+﻿using Money.Events;
+using Money.Services.Models;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Neptuo;
+using Neptuo.Events;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -25,10 +27,13 @@ namespace Money.Views.Controls
     /// <summary>
     /// User control containing month or year summary of outcomes.
     /// </summary>
-    public sealed partial class SummaryContent : UserControl
+    public sealed partial class SummaryContent : UserControl, System.IDisposable
     {
+        private readonly List<UiThreadEventHandler> handlers = new List<UiThreadEventHandler>();
+
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private readonly IEventHandlerCollection eventHandlers = ServiceProvider.EventHandlers;
 
         /// <summary>
         /// [Internal]
@@ -153,6 +158,9 @@ namespace Money.Views.Controls
         {
             InitializeComponent();
             ViewModel = new SummaryViewModel(navigator, queryDispatcher);
+
+            // Bind events.
+            handlers.Add(eventHandlers.AddUiThread<OutcomeCreated>(ViewModel, Dispatcher));
         }
 
         private void ApplySortDescriptor()
@@ -193,7 +201,8 @@ namespace Money.Views.Controls
             YearModel year = SelectedItem as YearModel;
             if (year != null)
             {
-                throw new NotImplementedException();
+                ViewModel.Year = year;
+                return;
             }
 
             throw Ensure.Exception.NotSupported();
@@ -220,6 +229,12 @@ namespace Money.Views.Controls
             navigator
                 .Open(parameter)
                 .Show();
+        }
+
+        public void Dispose()
+        {
+            foreach (UiThreadEventHandler handler in handlers)
+                handler.Remove(eventHandlers);
         }
     }
 }

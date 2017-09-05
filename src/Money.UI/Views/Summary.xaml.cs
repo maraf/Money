@@ -37,17 +37,13 @@ using Windows.UI.Xaml.Navigation;
 namespace Money.Views
 {
     [NavigationParameter(typeof(SummaryParameter))]
-    public sealed partial class Summary : Page, INavigatorPage, INavigatorParameterPage,
-        IEventHandler<OutcomeCreated>
+    public sealed partial class Summary : Page, INavigatorPage, INavigatorParameterPage
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
-        private readonly IEventHandlerCollection eventHandlers = ServiceProvider.EventHandlers;
         private readonly TileService tileService = ServiceProvider.TileService;
-        private SummaryParameter parameter;
 
-        private bool isAmountSorted;
-        private bool isCategorySorted = true;
+        private SummaryParameter parameter;
 
         public event EventHandler ContentLoaded;
 
@@ -71,8 +67,6 @@ namespace Money.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-            eventHandlers.Add(this);
 
             parameter = (SummaryParameter)e.Parameter;
             await LoadAsync();
@@ -143,7 +137,12 @@ namespace Money.Views
         {
             base.OnNavigatedFrom(e);
 
-            eventHandlers.Remove(this);
+            foreach (GroupItemViewModel viewModel in ViewModel.Items)
+            {
+                PivotItem item = (PivotItem)pvtGroups.ContainerFromItem(viewModel);
+                if (item.ContentTemplateRoot is System.IDisposable content)
+                    content.Dispose();
+            }
         }
 
         private async Task LoadMonthViewAsync(GroupViewModel viewModel, MonthModel prefered)
@@ -202,16 +201,12 @@ namespace Money.Views
         {
             ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByAmount, SortDirection.Descending);
             parameter.SortDescriptor = ViewModel.SortDescriptor;
-            isAmountSorted = !isAmountSorted;
-            isCategorySorted = false;
         }
 
         private void mfiSortCategory_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByCategory);
             parameter.SortDescriptor = ViewModel.SortDescriptor;
-            isCategorySorted = !isCategorySorted;
-            isAmountSorted = false;
         }
 
         private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -276,11 +271,6 @@ namespace Money.Views
             navigator
                 .Message(message)
                 .Show();
-        }
-
-        async Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await ReloadAsync());
         }
     }
 }

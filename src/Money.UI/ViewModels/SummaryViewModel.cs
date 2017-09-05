@@ -1,8 +1,10 @@
-﻿using Money.Services.Models;
+﻿using Money.Events;
+using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels.Navigation;
 using Neptuo;
 using Neptuo.Activators;
+using Neptuo.Events.Handlers;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
 using Neptuo.Queries;
@@ -17,7 +19,7 @@ using Windows.UI;
 
 namespace Money.ViewModels
 {
-    public partial class SummaryViewModel : ViewModel
+    public partial class SummaryViewModel : ViewModel, IEventHandler<OutcomeCreated>
     {
         private readonly IQueryDispatcher queryDispatcher;
 
@@ -94,7 +96,7 @@ namespace Money.ViewModels
             this.queryDispatcher = queryDispatcher;
             Items = new SortableObservableCollection<ISummaryItemViewModel>();
         }
-        
+
         private async Task ReloadMonth()
         {
             if (Month != null)
@@ -130,6 +132,24 @@ namespace Money.ViewModels
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public Task HandleAsync(OutcomeCreated payload)
+        {
+            if (Month != null)
+            {
+                MonthModel payloadMonth = payload.When;
+                if (payloadMonth == Month)
+                    return ReloadMonth();
+            }
+            else if (Year != null)
+            {
+                YearModel payloadYear = new YearModel(payload.When.Year);
+                if (payloadYear == Year)
+                    return ReloadYear();
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -22,6 +22,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -100,9 +101,42 @@ namespace Money.Views
             }
 
             if (parameter.SortDescriptor != null)
+            {
                 ViewModel.SortDescriptor = parameter.SortDescriptor;
+            }
+            else if (ApplicationData.Current.LocalSettings.Containers.TryGetValue("Summary", out ApplicationDataContainer summary) && summary.Containers.TryGetValue("SortDescriptor", out ApplicationDataContainer sortDescriptor))
+            {
+                ViewModel.SortDescriptor = new SortDescriptor<SummarySortType>(
+                    (SummarySortType)sortDescriptor.Values["Type"],
+                    (SortDirection)sortDescriptor.Values["Direction"]
+                );
+            }
 
+            ViewModel.PropertyChanged += OnViewModelChanged;
             ContentLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnViewModelChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ViewModel.SortDescriptor))
+            {
+                ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+                if (!root.Containers.TryGetValue("Summary", out ApplicationDataContainer summary))
+                    summary = root.CreateContainer("Summary", ApplicationDataCreateDisposition.Always);
+
+                if (!summary.Containers.TryGetValue("SortDescriptor", out ApplicationDataContainer sortDescriptor))
+                    sortDescriptor = summary.CreateContainer("SortDescriptor", ApplicationDataCreateDisposition.Always);
+
+                if (ViewModel.SortDescriptor == null)
+                {
+                    summary.DeleteContainer("SortDescriptor");
+                }
+                else
+                {
+                    sortDescriptor.Values["Type"] = (int)ViewModel.SortDescriptor.Type;
+                    sortDescriptor.Values["Direction"] = (int)ViewModel.SortDescriptor.Direction;
+                }
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

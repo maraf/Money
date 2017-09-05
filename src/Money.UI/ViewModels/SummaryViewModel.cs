@@ -116,6 +116,7 @@ namespace Money.ViewModels
                         CategoryKey = category.Key,
                         Name = category.Name,
                         Color = category.Color,
+                        Icon = category.Icon,
                         Amount = new Price(category.TotalAmount.Value, category.CurrencySymbol)
                     });
                     index++;

@@ -91,5 +91,19 @@ namespace Money.ViewModels
         {
             get { return new SolidColorBrush(Color); }
         }
+
+        private string icon;
+        public string Icon
+        {
+            get { return icon; }
+            set
+            {
+                if (icon != value)
+                {
+                    icon = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
     }
 }

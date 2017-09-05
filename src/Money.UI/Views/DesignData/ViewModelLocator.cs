@@ -99,18 +99,21 @@ namespace Money.Views.DesignData
                         Name = "Food",
                         Color = Colors.Olive,
                         Amount = new Price(9540, "CZK"),
+                        Icon = "❤"
                     });
                     summary.Items.Add(new SummaryCategoryViewModel()
                     {
                         Name = "Eating Out",
                         Color = Colors.DarkRed,
                         Amount = new Price(3430, "CZK"),
+                        Icon = "🍔"
                     });
                     summary.Items.Add(new SummaryCategoryViewModel()
                     {
                         Name = "Home",
                         Color = Colors.RosyBrown,
                         Amount = new Price(950, "CZK"),
+                        Icon = "🏡"
                     });
                     summary.Items.Add(new SummaryTotalViewModel(new Price(13520, "CZK")));
                     summary.IsLoading = false;

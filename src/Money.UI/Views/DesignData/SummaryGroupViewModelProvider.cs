@@ -22,19 +22,22 @@ namespace Money.Views.DesignData
             {
                 Amount = new Price(2500, "CZK"),
                 Name = "Food",
-                Color = Colors.CadetBlue
+                Color = Colors.CadetBlue,
+                Icon = "❤"
             });
             collection.Add(new SummaryCategoryViewModel()
             {
                 Amount = new Price(900, "CZK"),
                 Name = "Eating out",
-                Color = Colors.Brown
+                Color = Colors.Brown,
+                Icon = "🍔"
             });
             collection.Add(new SummaryCategoryViewModel()
             {
                 Amount = new Price(4400, "CZK"),
                 Name = "Home",
-                Color = Colors.Gold
+                Color = Colors.Gold,
+                Icon = "🏡"
             });
 
             return Async.CompletedTask;

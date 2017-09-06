@@ -82,7 +82,12 @@ namespace Money.Views
 
         private async Task LoadAsync()
         {
-            ViewModel.ViewType = parameter.ViewType;
+            if (parameter.ViewType != null)
+                ViewModel.ViewType = parameter.ViewType.Value;
+            else if (userPreferences.TryLoad("Summary.ViewTypeDescriptor", out SummaryViewTypeDescriptor viewTypeDescriptor))
+                ViewModel.ViewType = viewTypeDescriptor.Type;
+            else
+                ViewModel.ViewType = SummaryViewType.BarGraph;
 
             switch (parameter.PeriodType)
             {
@@ -97,13 +102,9 @@ namespace Money.Views
             }
 
             if (parameter.SortDescriptor != null)
-            {
                 ViewModel.SortDescriptor = parameter.SortDescriptor;
-            }
             else if (userPreferences.TryLoad("Summary.SortDescriptor", out SortDescriptor<SummarySortType> sortDescriptor))
-            {
                 ViewModel.SortDescriptor = sortDescriptor;
-            }
 
             ViewModel.PropertyChanged += OnViewModelChanged;
             ContentLoaded?.Invoke(this, EventArgs.Empty);
@@ -115,6 +116,10 @@ namespace Money.Views
             {
                 if (ViewModel.SortDescriptor != null)
                     userPreferences.TrySave("Summary.SortDescriptor", ViewModel.SortDescriptor);
+            }
+            else if (e.PropertyName == nameof(ViewModel.ViewType))
+            {
+                userPreferences.TrySave("Summary.ViewTypeDescriptor", new SummaryViewTypeDescriptor(ViewModel.ViewType));
             }
         }
 

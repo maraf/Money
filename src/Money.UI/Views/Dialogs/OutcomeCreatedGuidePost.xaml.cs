@@ -41,7 +41,7 @@ namespace Money.Views.Dialogs
             Hide();
 
             navigator
-                .Open(new SummaryParameter(SummaryViewType.BarGraph))
+                .Open(new SummaryParameter())
                 .Show();
         }
 

@@ -1,5 +1,6 @@
 ﻿using Neptuo;
 using Neptuo.Activators;
+using Neptuo.Converters;
 using Neptuo.Formatters;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Money.Services.Settings
     internal class ApplicationSettingsService : IUserPreferenceService
     {
         private readonly IFactory<IFormatter, ICompositeStorage> formatterFactory;
+        private readonly IConverterRepository converters = Converts.Repository;
 
         public ApplicationSettingsService(IFactory<IFormatter, ICompositeStorage> formatterFactory)
         {

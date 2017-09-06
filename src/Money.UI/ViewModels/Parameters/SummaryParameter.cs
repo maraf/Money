@@ -24,7 +24,7 @@ namespace Money.ViewModels.Parameters
         /// <summary>
         /// Gets a prefered view type.
         /// </summary>
-        public SummaryViewType ViewType { get; set; }
+        public SummaryViewType? ViewType { get; set; }
 
         /// <summary>
         /// Gets or sets a year to display.
@@ -68,31 +68,27 @@ namespace Money.ViewModels.Parameters
         public SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
         /// <summary>
-        /// Creates new instance with prefered <paramref name="viewType"/> and sets period to month.
+        /// Creates new instance.
         /// </summary>
-        /// <param name="viewType">A prefered view type.</param>
-        public SummaryParameter(SummaryViewType viewType)
-            : this(viewType, SummaryPeriodType.Month)
+        public SummaryParameter()
+            : this(SummaryPeriodType.Month)
         { }
 
         /// <summary>
-        /// Creates new instance with prefered <paramref name="viewType"/> and <paramref name="periodType" />.
+        /// Creates new instance with prefered <paramref name="periodType" />.
         /// </summary>
-        /// <param name="viewType">A prefered view type.</param>
         /// <param name="periodType">A period type to display.</param>
-        public SummaryParameter(SummaryViewType viewType, SummaryPeriodType periodType)
+        public SummaryParameter(SummaryPeriodType periodType)
         {
-            ViewType = viewType;
             PeriodType = periodType;
         }
 
         /// <summary>
         /// Creates new instance with prefered <paramref name="viewType"/> and specific <paramref name="year" /> to display.
         /// </summary>
-        /// <param name="viewType">A prefered view type.</param>
         /// <param name="year">A specific year to display.</param>
-        public SummaryParameter(SummaryViewType viewType, YearModel year)
-            : this(viewType, SummaryPeriodType.Year)
+        public SummaryParameter(YearModel year)
+            : this(SummaryPeriodType.Year)
         {
             Ensure.NotNull(year, "year");
             this.year = year;
@@ -101,10 +97,9 @@ namespace Money.ViewModels.Parameters
         /// <summary>
         /// Creates new instance with prefered <paramref name="viewType"/> and specific <paramref name="month" /> to display.
         /// </summary>
-        /// <param name="viewType">A prefered view type.</param>
         /// <param name="month">A specific month to display.</param>
-        public SummaryParameter(SummaryViewType viewType, MonthModel month)
-            : this(viewType, SummaryPeriodType.Month)
+        public SummaryParameter(MonthModel month)
+            : this(SummaryPeriodType.Month)
         {
             Ensure.NotNull(month, "month");
             this.month = month;
@@ -116,7 +111,7 @@ namespace Money.ViewModels.Parameters
             if (other == null)
                 return false;
 
-            if (!ViewType.Equals(other.ViewType))
+            if ((ViewType != null && other.ViewType == null) || (ViewType == null && other.ViewType != null) || !ViewType.Equals(other.ViewType))
                 return false;
 
             if (!PeriodType.Equals(other.PeriodType))

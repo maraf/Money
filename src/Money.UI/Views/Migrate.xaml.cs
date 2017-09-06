@@ -48,7 +48,7 @@ namespace Money.Views
             }
 
             ServiceProvider.Navigator
-                .Open(new SummaryParameter(SummaryViewType.BarGraph))
+                .Open(new SummaryParameter())
                 .Show();
         }
     }

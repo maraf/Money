@@ -31,7 +31,7 @@
 
             <!--<AppBarSeparator x:Name="GraphSeparator" />-->
 
-            <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
+            <!--<AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />-->
             <AppBarButton Icon="Sort" Label="Sort">
                 <AppBarButton.Flyout>
                     <MenuFlyout>

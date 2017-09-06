@@ -40,78 +40,26 @@
             <ColumnDefinition x:Name="codRight" Width="*" />
         </Grid.ColumnDefinitions>
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="vsgStates">
-                <VisualState>
+            <VisualStateGroup>
+                <VisualState x:Name="LargeSize">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="{StaticResource LargeSize}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="grdPieChart.(Grid.Column)" Value="1" />
-                        <Setter Target="grdPieChart.Visibility" Value="Visible" />
-                        <Setter Target="grdBarGraph.Visibility" Value="Visible" />
+                        <Setter Target="lvwPieChart.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
-                <VisualState>
+                <VisualState x:Name="SmallSize">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="grdPieChart.(Grid.Column)" Value="0" />
                         <Setter Target="codRight.Width" Value="0" />
-
-                        <Setter Target="grdBarGraph.Visibility" Value="{x:Bind IsBarGraphPrefered, Converter={StaticResource TrueToVisibleConverter}, Mode=OneWay}" />
-                        <Setter Target="grdPieChart.Visibility" Value="{x:Bind IsPieChartPrefered, Converter={StaticResource TrueToVisibleConverter}, Mode=OneWay}" />
-                    </VisualState.Setters>
-                </VisualState>
-
-                <!--<VisualState>
-                    <VisualState.StateTriggers>
-                        <triggers:CompositeStateTrigger>
-                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource LargeSize}" />
-                            <StateTrigger IsActive="{x:Bind IsBarGraphPrefered}" />
-                        </triggers:CompositeStateTrigger>
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="codRight.Width" Value="*" />
-                        <Setter Target="lvwPieChart.Visibility" Value="Collapsed" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <triggers:CompositeStateTrigger>
-                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
-                            <StateTrigger IsActive="{x:Bind IsBarGraphPrefered}" />
-                        </triggers:CompositeStateTrigger>
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="codRight.Width" Value="0" />
                         <Setter Target="lvwPieChart.Visibility" Value="Visible" />
                     </VisualState.Setters>
-                </VisualState>-->
-                <!--<VisualState>
-                    <VisualState.StateTriggers>
-                        <triggers:CompositeStateTrigger>
-                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource LargeSize}" />
-                            <StateTrigger IsActive="{x:Bind IsPieChartPrefered}" />
-                        </triggers:CompositeStateTrigger>
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="codLeft.Width" Value="*" />
-                        <Setter Target="lvwPieChart.Visibility" Value="Collapsed" />
-                    </VisualState.Setters>
                 </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <triggers:CompositeStateTrigger>
-                            <triggers:AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
-                            <StateTrigger IsActive="{x:Bind IsPieChartPrefered}" />
-                        </triggers:CompositeStateTrigger>
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="codLeft.Width" Value="0" />
-                        <Setter Target="lvwPieChart.Visibility" Value="Visible" />
-                    </VisualState.Setters>
-                </VisualState>-->
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 

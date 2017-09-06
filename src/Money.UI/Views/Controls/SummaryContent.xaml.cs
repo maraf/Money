@@ -67,18 +67,31 @@ namespace Money.Views.Controls
         private static void OnPreferedViewTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             SummaryContent control = (SummaryContent)d;
-            switch (control.PreferedViewType)
+            control.OnPreferedViewTypeChanged(VisualStateManager.GetVisualStateGroups(control.grdMain).First().CurrentState);
+        }
+
+        private void OnPreferedViewTypeChanged(VisualState state)
+        {
+            if (state.Name == "SmallSize")
             {
-                case SummaryViewType.PieChart:
-                    control.IsPieChartPrefered = true;
-                    control.IsBarGraphPrefered = false;
-                    break;
-                case SummaryViewType.BarGraph:
-                    control.IsPieChartPrefered = false;
-                    control.IsBarGraphPrefered = true;
-                    break;
-                default:
-                    throw Ensure.Exception.NotSupported(control.PreferedViewType.ToString());
+                switch (PreferedViewType)
+                {
+                    case SummaryViewType.PieChart:
+                        IsPieChartPrefered = true;
+                        IsBarGraphPrefered = false;
+                        break;
+                    case SummaryViewType.BarGraph:
+                        IsPieChartPrefered = false;
+                        IsBarGraphPrefered = true;
+                        break;
+                    default:
+                        throw Ensure.Exception.NotSupported(PreferedViewType.ToString());
+                }
+            }
+            else if (state.Name == "LargeSize")
+            {
+                IsPieChartPrefered = true;
+                IsBarGraphPrefered = true;
             }
         }
 
@@ -157,10 +170,21 @@ namespace Money.Views.Controls
         public SummaryContent()
         {
             InitializeComponent();
+
+            VisualStateManager
+                .GetVisualStateGroups(grdMain)
+                .First()
+                .CurrentStateChanged += OnCurrentStateChanged;
+
             ViewModel = new SummaryViewModel(navigator, queryDispatcher);
 
             // Bind events.
             handlers.Add(eventHandlers.AddUiThread<OutcomeCreated>(ViewModel, Dispatcher));
+        }
+
+        private void OnCurrentStateChanged(object sender, VisualStateChangedEventArgs e)
+        {
+            OnPreferedViewTypeChanged(e.NewState);
         }
 
         private void ApplySortDescriptor()

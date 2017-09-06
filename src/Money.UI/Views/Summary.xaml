@@ -29,7 +29,7 @@
                 </AppBarButton.Icon>
             </AppBarButton>
 
-            <AppBarSeparator x:Name="GraphSeparator" />
+            <!--<AppBarSeparator x:Name="GraphSeparator" />-->
 
             <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
             <AppBarButton Icon="Sort" Label="Sort">
@@ -40,7 +40,7 @@
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarSeparator />
+            <!--<AppBarSeparator />-->
             <!--<AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />-->
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
         </CommandBar>
@@ -55,7 +55,7 @@
                     <VisualState.Setters>
                         <Setter Target="PieChart.Visibility" Value="Collapsed" />
                         <Setter Target="BarGraph.Visibility" Value="Collapsed" />
-                        <Setter Target="GraphSeparator.Visibility" Value="Collapsed" />
+                        <!--<Setter Target="GraphSeparator.Visibility" Value="Collapsed" />-->
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="SmallSize">
@@ -65,7 +65,7 @@
                     <VisualState.Setters>
                         <Setter Target="PieChart.Visibility" Value="{Binding ViewType, Converter={StaticResource PieChartToCollapsedConverter}}" />
                         <Setter Target="BarGraph.Visibility" Value="{Binding ViewType, Converter={StaticResource BarGraphToCollapsedConverter}}" />
-                        <Setter Target="GraphSeparator.Visibility" Value="Visible" />
+                        <!--<Setter Target="GraphSeparator.Visibility" Value="Visible" />-->
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

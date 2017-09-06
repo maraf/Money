@@ -40,7 +40,7 @@
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <!--<AppBarSeparator />-->
+            <AppBarSeparator />
             <!--<AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />-->
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
         </CommandBar>

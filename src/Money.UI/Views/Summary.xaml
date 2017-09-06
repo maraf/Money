@@ -29,7 +29,7 @@
                 </AppBarButton.Icon>
             </AppBarButton>
 
-            <AppBarSeparator />
+            <AppBarSeparator x:Name="GraphSeparator" />
 
             <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
             <AppBarButton Icon="Sort" Label="Sort">
@@ -46,6 +46,30 @@
         </CommandBar>
     </Page.BottomAppBar>
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="LargeSize">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource LargeSize}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PieChart.Visibility" Value="Collapsed" />
+                        <Setter Target="BarGraph.Visibility" Value="Collapsed" />
+                        <Setter Target="GraphSeparator.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="SmallSize">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource SmallSize}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PieChart.Visibility" Value="{Binding ViewType, Converter={StaticResource PieChartToCollapsedConverter}}" />
+                        <Setter Target="BarGraph.Visibility" Value="{Binding ViewType, Converter={StaticResource BarGraphToCollapsedConverter}}" />
+                        <Setter Target="GraphSeparator.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Pivot x:Name="pvtGroups" ItemsSource="{Binding Items}" SelectionChanged="pvtGroups_SelectionChanged" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <Pivot.HeaderTemplate>
                 <DataTemplate>

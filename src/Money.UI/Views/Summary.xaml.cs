@@ -1,6 +1,7 @@
 ﻿using Money.Events;
 using Money.Services.Models;
 using Money.Services.Models.Queries;
+using Money.Services.Settings;
 using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
@@ -42,6 +43,7 @@ namespace Money.Views
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private readonly TileService tileService = ServiceProvider.TileService;
+        private readonly IUserPreferenceService userPreferences = ServiceProvider.UserPreferences;
 
         private SummaryParameter parameter;
 
@@ -98,12 +100,9 @@ namespace Money.Views
             {
                 ViewModel.SortDescriptor = parameter.SortDescriptor;
             }
-            else if (ApplicationData.Current.LocalSettings.Containers.TryGetValue("Summary", out ApplicationDataContainer summary) && summary.Containers.TryGetValue("SortDescriptor", out ApplicationDataContainer sortDescriptor))
+            else if (userPreferences.TryLoad("Summary.SortDescriptor", out SortDescriptor<SummarySortType> sortDescriptor))
             {
-                ViewModel.SortDescriptor = new SortDescriptor<SummarySortType>(
-                    (SummarySortType)sortDescriptor.Values["Type"],
-                    (SortDirection)sortDescriptor.Values["Direction"]
-                );
+                ViewModel.SortDescriptor = sortDescriptor;
             }
 
             ViewModel.PropertyChanged += OnViewModelChanged;
@@ -114,22 +113,8 @@ namespace Money.Views
         {
             if (e.PropertyName == nameof(ViewModel.SortDescriptor))
             {
-                ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
-                if (!root.Containers.TryGetValue("Summary", out ApplicationDataContainer summary))
-                    summary = root.CreateContainer("Summary", ApplicationDataCreateDisposition.Always);
-
-                if (!summary.Containers.TryGetValue("SortDescriptor", out ApplicationDataContainer sortDescriptor))
-                    sortDescriptor = summary.CreateContainer("SortDescriptor", ApplicationDataCreateDisposition.Always);
-
-                if (ViewModel.SortDescriptor == null)
-                {
-                    summary.DeleteContainer("SortDescriptor");
-                }
-                else
-                {
-                    sortDescriptor.Values["Type"] = (int)ViewModel.SortDescriptor.Type;
-                    sortDescriptor.Values["Direction"] = (int)ViewModel.SortDescriptor.Direction;
-                }
+                if (ViewModel.SortDescriptor != null)
+                    userPreferences.TrySave("Summary.SortDescriptor", ViewModel.SortDescriptor);
             }
         }
 

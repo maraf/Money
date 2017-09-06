@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Bootstrap\BootstrapTask.cs" />
     <Compile Include="Bootstrap\ColorConverter.cs" />
+    <Compile Include="Bootstrap\CompositeTypeFormatterFactory.cs" />
     <Compile Include="Bootstrap\DevelopmentService.cs" />
     <Compile Include="Bootstrap\UpgradeService.cs" />
     <Compile Include="Data\CategoryEntity.cs" />
@@ -131,6 +132,9 @@
     <Compile Include="Services\Models\Queries\ListYearOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\YearModel.cs" />
     <Compile Include="Services\PriceCalculator.cs" />
+    <Compile Include="Services\Settings\ApplicationDataCompositeStorage.cs" />
+    <Compile Include="Services\Settings\ApplicationSettingsService.cs" />
+    <Compile Include="Services\Settings\IUserPreferenceService.cs" />
     <Compile Include="Services\Tiles\TileService.cs" />
     <Compile Include="UiThreadEventHandler.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />

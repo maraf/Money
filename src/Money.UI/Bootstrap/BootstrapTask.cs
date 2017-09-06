@@ -2,6 +2,7 @@
 using Money.Data;
 using Money.Services;
 using Money.Services.Models.Builders;
+using Money.Services.Settings;
 using Money.Services.Tiles;
 using Neptuo;
 using Neptuo.Activators;
@@ -31,6 +32,7 @@ namespace Money.Bootstrap
     public class BootstrapTask : IExceptionHandler
     {
         private PersistentEventDispatcher eventDispatcher;
+        private ICompositeTypeProvider typeProvider;
 
         public IFactory<Price, decimal> PriceFactory { get; private set; }
         public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
@@ -58,17 +60,22 @@ namespace Money.Bootstrap
 
             ServiceProvider.TileService = new TileService();
             ServiceProvider.DevelopmentService = new DevelopmentService(upgradeService);
+            ServiceProvider.UserPreferences = new ApplicationSettingsService(new CompositeTypeFormatterFactory(typeProvider));
         }
         
         private void Domain()
         {
             Converts.Repository
+                .AddStringTo<int>(Int32.TryParse)
+                .AddStringTo<bool>(Boolean.TryParse)
+                .AddEnumSearchHandler(false)
                 .AddJsonEnumSearchHandler()
                 .AddJsonPrimitivesSearchHandler()
                 .AddJsonObjectSearchHandler()
                 .AddJsonKey()
                 .AddJsonTimeSpan()
-                .Add(new ColorConverter());
+                .Add(new ColorConverter())
+                .AddToStringSearchHandler();
             
             EventStore = new EntityEventStore(Factory.Default<EventSourcingContext>());
             eventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
@@ -77,7 +84,7 @@ namespace Money.Bootstrap
 
             IFactory<ICompositeStorage> compositeStorageFactory = Factory.Default<JsonCompositeStorage>();
 
-            ICompositeTypeProvider typeProvider = new ReflectionCompositeTypeProvider(
+            typeProvider = new ReflectionCompositeTypeProvider(
                 new ReflectionCompositeDelegateFactory(),
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
             );

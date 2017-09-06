@@ -164,6 +164,7 @@
     <Compile Include="ViewModels\NotEmptyMonthCategoryGroupProvider.cs" />
     <Compile Include="ViewModels\OutcomeOverviewViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\OverviewSortType.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Parameters\AboutParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryChangeIconParameter.cs" />

@@ -1,6 +1,7 @@
 ﻿using Money.Services;
 using Money.Services.Models;
 using Money.Services.Models.Queries;
+using Money.Services.Settings;
 using Money.ViewModels;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
@@ -28,13 +29,12 @@ namespace Money.Views
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly IUserPreferenceService userPreferences = ServiceProvider.UserPreferences;
 
         private MonthModel month;
         private YearModel year;
 
-        private bool isDateSorted = true;
-        private bool isAmountSorted;
-        private bool isDescriptionSorted;
+        private SortDescriptor<OverviewSortType> sortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByDate, SortDirection.Ascending);
 
         public OverviewViewModel ViewModel
         {
@@ -79,57 +79,63 @@ namespace Money.Views
                 foreach (OutcomeOverviewModel model in models)
                     ViewModel.Items.Add(new OutcomeOverviewViewModel(model));
             }
+
+            if (userPreferences.TryLoad("Overview.SortDescriptor", out SortDescriptor<OverviewSortType> sortDescriptor))
+            {
+                this.sortDescriptor = sortDescriptor;
+                ApplySortDescriptor(false);
+            }
+        }
+
+        private void ApplySortDescriptor(bool isSaveRequired)
+        {
+            if (sortDescriptor != null)
+            {
+                switch (sortDescriptor.Type)
+                {
+                    case OverviewSortType.ByDate:
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                            ViewModel.Items.Sort(i => i.When);
+                        else
+                            ViewModel.Items.SortDescending(i => i.When);
+                        break;
+
+                    case OverviewSortType.ByAmount:
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                            ViewModel.Items.Sort(i => i.Amount.Value);
+                        else
+                            ViewModel.Items.SortDescending(i => i.Amount.Value);
+                        break;
+
+                    case OverviewSortType.ByDescription:
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                            ViewModel.Items.Sort(i => i.Description);
+                        else
+                            ViewModel.Items.SortDescending(i => i.Description);
+                        break;
+                }
+            }
+
+            if (isSaveRequired)
+                userPreferences.TrySave("Overview.SortDescriptor", sortDescriptor);
         }
 
         private void mfiSortDate_Click(object sender, RoutedEventArgs e)
         {
-            if (isDateSorted)
-            {
-                ViewModel.Items.SortDescending(i => i.When);
-                isDateSorted = false;
-            }
-            else
-            {
-                ViewModel.Items.Sort(i => i.When);
-                isDateSorted = true;
-            }
-
-            isAmountSorted = false;
-            isDescriptionSorted = false;
+            sortDescriptor = sortDescriptor.Update(OverviewSortType.ByDate);
+            ApplySortDescriptor(true);
         }
 
         private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
         {
-            if (isAmountSorted)
-            {
-                ViewModel.Items.SortDescending(i => i.Amount.Value);
-                isAmountSorted = false;
-            }
-            else
-            {
-                ViewModel.Items.Sort(i => i.Amount.Value);
-                isAmountSorted = true;
-            }
-
-            isDateSorted = false;
-            isDescriptionSorted = false;
+            sortDescriptor = sortDescriptor.Update(OverviewSortType.ByAmount, SortDirection.Descending);
+            ApplySortDescriptor(true);
         }
 
         private void mfiSortDescription_Click(object sender, RoutedEventArgs e)
         {
-            if (isDescriptionSorted)
-            {
-                ViewModel.Items.SortDescending(i => i.Description);
-                isDescriptionSorted = false;
-            }
-            else
-            {
-                ViewModel.Items.Sort(i => i.Description);
-                isDescriptionSorted = true;
-            }
-
-            isAmountSorted = false;
-            isDateSorted = false;
+            sortDescriptor = sortDescriptor.Update(OverviewSortType.ByDescription);
+            ApplySortDescriptor(true);
         }
 
         private void lvwItems_SelectionChanged(object sender, SelectionChangedEventArgs e)

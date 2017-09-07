@@ -94,28 +94,28 @@ namespace Money.Views.DesignData
                 if (summary == null)
                 {
                     summary = new SummaryViewModel(ServiceProvider.Navigator, ServiceProvider.QueryDispatcher);
-                    summary.Items.Add(new SummaryCategoryViewModel()
+                    summary.Items.Add(new SummaryCategoryViewModel(ServiceProvider.QueryDispatcher)
                     {
                         Name = "Food",
                         Color = Colors.Olive,
                         Amount = new Price(9540, "CZK"),
                         Icon = "❤"
                     });
-                    summary.Items.Add(new SummaryCategoryViewModel()
+                    summary.Items.Add(new SummaryCategoryViewModel(ServiceProvider.QueryDispatcher)
                     {
                         Name = "Eating Out",
                         Color = Colors.DarkRed,
                         Amount = new Price(3430, "CZK"),
                         Icon = "🍔"
                     });
-                    summary.Items.Add(new SummaryCategoryViewModel()
+                    summary.Items.Add(new SummaryCategoryViewModel(ServiceProvider.QueryDispatcher)
                     {
                         Name = "Home",
                         Color = Colors.RosyBrown,
                         Amount = new Price(950, "CZK"),
                         Icon = "🏡"
                     });
-                    summary.Items.Add(new SummaryTotalViewModel(new Price(13520, "CZK")));
+                    summary.Items.Add(new SummaryTotalViewModel(ServiceProvider.QueryDispatcher, new Price(13520, "CZK")));
                     summary.IsLoading = false;
                 }
 

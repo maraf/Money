@@ -11,13 +11,11 @@ namespace Money.Services.Models
     public class CategoryWithAmountModel : CategoryModel
     {
         public Price TotalAmount { get; private set; }
-        public string CurrencySymbol { get; private set; }
 
-        public CategoryWithAmountModel(IKey key, string name, string description, Color color, string icon, Price totalAmount, string currencySymbol) 
+        public CategoryWithAmountModel(IKey key, string name, string description, Color color, string icon, Price totalAmount) 
             : base(key, name, description, color, icon)
         {
             TotalAmount = totalAmount;
-            CurrencySymbol = currencySymbol;
         }
     }
 }

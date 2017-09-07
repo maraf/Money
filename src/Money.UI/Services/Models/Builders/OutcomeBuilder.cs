@@ -88,8 +88,7 @@ namespace Money.Services.Models.Builders
                         model.Description,
                         model.Color,
                         model.Icon,
-                        item.Value,
-                        db.Currencies.First(c => c.UniqueCode == item.Value.Currency).Symbol
+                        item.Value
                     ));
                 }
 

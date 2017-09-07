@@ -105,19 +105,19 @@ namespace Money.ViewModels
                 Items.Clear();
 
                 TotalAmount = await queryDispatcher.QueryAsync(new GetTotalMonthOutcome(Month));
-                Items.Add(new SummaryTotalViewModel(TotalAmount));
+                Items.Add(new SummaryTotalViewModel(queryDispatcher, TotalAmount));
 
                 IEnumerable<CategoryWithAmountModel> categories = await queryDispatcher.QueryAsync(new ListMonthCategoryWithOutcome(Month));
                 int index = 0;
                 foreach (CategoryWithAmountModel category in categories)
                 {
-                    Items.Insert(index, new SummaryCategoryViewModel()
+                    Items.Insert(index, new SummaryCategoryViewModel(queryDispatcher)
                     {
                         CategoryKey = category.Key,
                         Name = category.Name,
                         Color = category.Color,
                         Icon = category.Icon,
-                        Amount = new Price(category.TotalAmount.Value, category.CurrencySymbol)
+                        Amount = category.TotalAmount
                     });
                     index++;
                 }

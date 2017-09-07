@@ -1,7 +1,9 @@
 ﻿using Money.Services.Models;
+using Money.Services.Models.Queries;
 using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,8 @@ namespace Money.ViewModels
 {
     public class OutcomeOverviewViewModel : ObservableObject
     {
+        private readonly IQueryDispatcher queryDispatcher;
+
         /// <summary>
         /// Gets a key of the outcome.
         /// </summary>
@@ -30,6 +34,22 @@ namespace Money.ViewModels
                 if (amount != value)
                 {
                     amount = value;
+                    RaisePropertyChanged();
+
+                    queryDispatcher.QueryAsync(new GetCurrencySymbol(amount.Currency)).ContinueWith(t => CurrencySymbol = t.Result);
+                }
+            }
+        }
+
+        private string currencySymbol;
+        public string CurrencySymbol
+        {
+            get { return currencySymbol; }
+            set
+            {
+                if (currencySymbol != value)
+                {
+                    currencySymbol = value;
                     RaisePropertyChanged();
                 }
             }
@@ -89,9 +109,12 @@ namespace Money.ViewModels
             }
         }
 
-        public OutcomeOverviewViewModel(OutcomeOverviewModel model)
+        public OutcomeOverviewViewModel(IQueryDispatcher queryDispatcher, OutcomeOverviewModel model)
         {
+            Ensure.NotNull(queryDispatcher, "queryDispatcher");
             Ensure.NotNull(model, "model");
+            this.queryDispatcher = queryDispatcher;
+
             Key = model.Key;
             Amount = model.Amount;
             When = model.When;

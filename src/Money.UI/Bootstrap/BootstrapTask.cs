@@ -33,6 +33,7 @@ namespace Money.Bootstrap
     {
         private PersistentEventDispatcher eventDispatcher;
         private ICompositeTypeProvider typeProvider;
+        private DefaultQueryDispatcher queryDispatcher;
 
         public IFactory<Price, decimal> PriceFactory { get; private set; }
         public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
@@ -44,14 +45,12 @@ namespace Money.Bootstrap
 
         public IFormatter EventFormatter { get; private set; }
 
-        public IQueryDispatcher QueryDispatcher { get; private set; }
-
         public void Initialize()
         {
             Domain();
             ReadModels();
 
-            ServiceProvider.QueryDispatcher = QueryDispatcher;
+            ServiceProvider.QueryDispatcher = queryDispatcher;
             ServiceProvider.DomainFacade = DomainFacade;
             ServiceProvider.EventHandlers = eventDispatcher.Handlers;
 
@@ -61,6 +60,9 @@ namespace Money.Bootstrap
             ServiceProvider.TileService = new TileService();
             ServiceProvider.DevelopmentService = new DevelopmentService(upgradeService);
             ServiceProvider.UserPreferences = new ApplicationSettingsService(new CompositeTypeFormatterFactory(typeProvider));
+
+            CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
+            currencyCache.InitializeAsync(queryDispatcher);
         }
         
         private void Domain()
@@ -130,8 +132,7 @@ namespace Money.Bootstrap
         private void ReadModels()
         {
             // Should match with RecreateReadModelContext.
-            DefaultQueryDispatcher queryDispatcher = new DefaultQueryDispatcher();
-            QueryDispatcher = queryDispatcher;
+            queryDispatcher = new DefaultQueryDispatcher();
 
             CategoryBuilder categoryBuilder = new CategoryBuilder();
             queryDispatcher.AddAll(categoryBuilder);

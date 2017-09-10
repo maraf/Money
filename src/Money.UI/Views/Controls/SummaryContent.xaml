@@ -115,12 +115,17 @@
                 </ListView.ItemTemplateSelector>
             </ListView>
         </Grid>
-        <Grid x:Name="grdPieChart" Visibility="{x:Bind IsPieChartPrefered, Converter={StaticResource TrueToVisibleConverter}, Mode=OneWay}" Grid.Row="1" Grid.Column="1">
+        <Grid x:Name="grdPieChart" Visibility="{x:Bind IsPieChartPrefered, Converter={StaticResource TrueToVisibleConverter}, Mode=OneWay}" Margin="30" Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
             <!-- We should bind here a collection without the summary item -->
-            <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Margin="30" Thickness="30"
-             Visibility="{Binding IsLoading, Converter={StaticResource TrueToCollapsedConverter}}" />
+            <controls:PieChart ItemsSource="{Binding Items}" ValuePath="AmountValue" ForegroundPath="ColorBrush" Thickness="30"
+             Visibility="{Binding IsLoading, Converter={StaticResource TrueToCollapsedConverter}}" Grid.Row="1" />
 
-            <GridView x:Name="lvwPieChart" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360">
+            <GridView x:Name="lvwPieChart" ItemsSource="{Binding Items}" ItemClick="lvwBarGraph_ItemClick" IsItemClickEnabled="True" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0">
                 <GridView.ItemTemplateSelector>
                     <controls:SummaryItemTemplateSelector>
                         <controls:SummaryItemTemplateSelector.Category>
@@ -132,7 +137,7 @@
                         </controls:SummaryItemTemplateSelector.Category>
                         <controls:SummaryItemTemplateSelector.Total>
                             <DataTemplate>
-                                <TextBlock />
+                                <TextBlock Text="All" FontWeight="Bold" />
                             </DataTemplate>
                         </controls:SummaryItemTemplateSelector.Total>
                     </controls:SummaryItemTemplateSelector>

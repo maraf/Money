@@ -32,14 +32,7 @@
             <!--<AppBarSeparator x:Name="GraphSeparator" />-->
 
             <!--<AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />-->
-            <AppBarButton Icon="Sort" Label="Sort">
-                <AppBarButton.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem x:Name="mfiSortAmount" Text="By amount" Click="mfiSortAmount_Click" />
-                        <MenuFlyoutItem x:Name="mfiSortCategory" Text="By category name" Click="mfiSortCategory_Click" />
-                    </MenuFlyout>
-                </AppBarButton.Flyout>
-            </AppBarButton>
+            <controls:SortAppBarButton SortDescriptor="{Binding SortDescriptor, Mode=TwoWay}" />
             <!--<AppBarSeparator />-->
             <!--<AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />-->
             <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />

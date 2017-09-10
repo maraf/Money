@@ -161,9 +161,7 @@ namespace Money.Views.Controls
 
         private void OnSortDescriptorChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (ViewModel.Items.Count == 0)
-                ViewModel.OnItemsReloaded += ApplySortDescriptor;
-            else
+            if (ViewModel.Items.Count != 0)
                 ApplySortDescriptor();
         }
 
@@ -177,6 +175,7 @@ namespace Money.Views.Controls
                 .CurrentStateChanged += OnCurrentStateChanged;
 
             ViewModel = new SummaryViewModel(navigator, queryDispatcher);
+            ViewModel.OnItemsReloaded += ApplySortDescriptor;
 
             // Bind events.
             handlers.Add(eventHandlers.AddUiThread<OutcomeCreated>(ViewModel, Dispatcher));
@@ -209,8 +208,6 @@ namespace Money.Views.Controls
                         break;
                 }
             }
-
-            ViewModel.OnItemsReloaded -= ApplySortDescriptor;
         }
 
         private void OnSelectedItemChanged(DependencyPropertyChangedEventArgs e)

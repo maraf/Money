@@ -1,7 +1,9 @@
-﻿using Money.ViewModels.Commands;
+﻿using Money.Events;
+using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Neptuo;
+using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Observables.Collections;
 using System;
@@ -16,8 +18,13 @@ namespace Money.ViewModels
     /// <summary>
     /// A view model for category outcome overview.
     /// </summary>
-    public class OverviewViewModel : ViewModel
+    public class OverviewViewModel : ViewModel, IEventHandler<OutcomeCreated>
     {
+        /// <summary>
+        /// An event raised when a request to reload the data is made.
+        /// </summary>
+        public event Action Reload;
+
         /// <summary>
         /// Gets a key of the category.
         /// </summary>
@@ -61,6 +68,14 @@ namespace Money.ViewModels
 
             if (!key.IsEmpty)
                 EditCategory = new NavigateCommand(navigator, new CategoryListParameter(key));
+        }
+
+        Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
+        {
+            if (Key.IsEmpty || payload.CategoryKey.Equals(Key))
+                Reload?.Invoke();
+
+            return Task.CompletedTask;
         }
     }
 }

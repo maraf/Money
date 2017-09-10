@@ -1,4 +1,5 @@
-﻿using Money.Services;
+﻿using Money.Events;
+using Money.Services;
 using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.Services.Settings;
@@ -8,12 +9,14 @@ using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Dialogs;
 using Money.Views.Navigation;
+using Neptuo.Events;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -24,17 +27,23 @@ using Windows.UI.Xaml.Navigation;
 namespace Money.Views
 {
     [NavigationParameter(typeof(OverviewParameter))]
-    public sealed partial class Overview : Page
+    public sealed partial class Overview : Page, INavigatorPage
     {
+        private readonly List<UiThreadEventHandler> handlers = new List<UiThreadEventHandler>();
+
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private readonly IEventHandlerCollection eventHandlers = ServiceProvider.EventHandlers;
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private readonly IUserPreferenceService userPreferences = ServiceProvider.UserPreferences;
 
+        private IKey categoryKey;
         private MonthModel month;
         private YearModel year;
 
         private SortDescriptor<OverviewSortType> sortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByDate, SortDirection.Ascending);
+
+        public event EventHandler ContentLoaded;
 
         public OverviewViewModel ViewModel
         {
@@ -57,34 +66,56 @@ namespace Money.Views
                 ? "All"
                 : await queryDispatcher.QueryAsync(new GetCategoryName(parameter.CategoryKey));
 
+            categoryKey = parameter.CategoryKey;
             object period = null;
-            IEnumerable<OutcomeOverviewModel> models = null;
             if (parameter.Month != null)
             {
                 month = parameter.Month;
                 period = parameter.Month;
-                models = await queryDispatcher.QueryAsync(new ListMonthOutcomeFromCategory(parameter.CategoryKey, parameter.Month));
             }
 
             if (parameter.Year != null)
             {
                 year = parameter.Year;
                 period = parameter.Year;
-                models = await queryDispatcher.QueryAsync(new ListYearOutcomeFromCategory(parameter.CategoryKey, parameter.Year));
+
             }
 
             ViewModel = new OverviewViewModel(navigator, parameter.CategoryKey, categoryName, period);
+            ViewModel.Reload += OnViewModelReload;
+
+            handlers.Add(eventHandlers.AddUiThread<OutcomeCreated>(ViewModel, Dispatcher));
+
+            if (userPreferences.TryLoad("Overview.SortDescriptor", out SortDescriptor<OverviewSortType> sortDescriptor))
+                this.sortDescriptor = sortDescriptor;
+
+            await ReloadAsync();
+            ContentLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        private async void OnViewModelReload()
+        {
+            await ReloadAsync();
+        }
+
+        private async Task ReloadAsync()
+        {
+
+            ViewModel.Items.Clear();
+            IEnumerable<OutcomeOverviewModel> models = null;
+            if (month != null)
+                models = await queryDispatcher.QueryAsync(new ListMonthOutcomeFromCategory(categoryKey, month));
+
+            if (year != null)
+                models = await queryDispatcher.QueryAsync(new ListYearOutcomeFromCategory(categoryKey, year));
+
             if (models != null)
             {
                 foreach (OutcomeOverviewModel model in models)
                     ViewModel.Items.Add(new OutcomeOverviewViewModel(queryDispatcher, model));
             }
 
-            if (userPreferences.TryLoad("Overview.SortDescriptor", out SortDescriptor<OverviewSortType> sortDescriptor))
-            {
-                this.sortDescriptor = sortDescriptor;
-                ApplySortDescriptor(false);
-            }
+            ApplySortDescriptor(false);
         }
 
         private void ApplySortDescriptor(bool isSaveRequired)
@@ -118,6 +149,14 @@ namespace Money.Views
 
             if (isSaveRequired)
                 userPreferences.TrySave("Overview.SortDescriptor", sortDescriptor);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            foreach (UiThreadEventHandler handler in handlers)
+                handler.Remove(eventHandlers);
         }
 
         private void mfiSortDate_Click(object sender, RoutedEventArgs e)

@@ -204,7 +204,6 @@ namespace Money.Views
             {
                 Price newAmount = new Price(newValue, dialog.Currency);
                 await domainFacade.ChangeOutcomeAmountAsync(viewModel.Key, newAmount);
-                //viewModel.Amount = newAmount;
             }
         }
 
@@ -217,10 +216,7 @@ namespace Money.Views
 
             ContentDialogResult result = await dialog.ShowAsync();
             if ((result == ContentDialogResult.Primary || dialog.IsEnterPressed) && dialog.Value != viewModel.Description)
-            {
                 await domainFacade.ChangeOutcomeDescriptionAsync(viewModel.Key, dialog.Value);
-                //viewModel.Description = dialog.Value;
-            }
         }
 
         private async void btnWhen_Click(object sender, RoutedEventArgs e)
@@ -232,16 +228,7 @@ namespace Money.Views
 
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary && dialog.Value != viewModel.When)
-            {
                 await domainFacade.ChangeOutcomeWhenAsync(viewModel.Key, dialog.Value);
-                //viewModel.When = dialog.Value;
-
-                //if (month != null && (dialog.Value.Year != month.Year || dialog.Value.Month != month.Month))
-                //    ViewModel.Items.Remove(viewModel);
-
-                //if (year != null && (dialog.Value.Year != year.Year))
-                //    ViewModel.Items.Remove(viewModel);
-            }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)

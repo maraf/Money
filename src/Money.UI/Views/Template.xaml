@@ -200,6 +200,7 @@
                         <Setter Target="ficTopMenu.Visibility" Value="Collapsed" />
                         <Setter Target="imgTopMenu.Visibility" Value="Visible" />
                         <Setter Target="stpMainMenu.VerticalAlignment" Value="Bottom" />
+                        <Setter Target="DevelopmentTools.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -245,7 +246,7 @@
                         </controls:MainMenu>
                     </StackPanel>
 
-                    <controls:DevelopmentTools VerticalAlignment="Bottom" Visibility="Collapsed" />
+                    <controls:DevelopmentTools x:Name="DevelopmentTools" VerticalAlignment="Bottom" />
                 </Grid>
             </SplitView.Pane>
 

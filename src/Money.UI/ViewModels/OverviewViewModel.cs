@@ -25,6 +25,8 @@ namespace Money.ViewModels
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>
     {
+        private SortDescriptor<OverviewSortType> lastSortDescriptor;
+
         /// <summary>
         /// An event raised when a request to reload the data is made.
         /// </summary>
@@ -75,6 +77,38 @@ namespace Money.ViewModels
                 EditCategory = new NavigateCommand(navigator, new CategoryListParameter(key));
         }
 
+        public void Sort(SortDescriptor<OverviewSortType> sortDescriptor)
+        {
+            if (sortDescriptor != null)
+            {
+                switch (sortDescriptor.Type)
+                {
+                    case OverviewSortType.ByDate:
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                            Items.Sort(i => i.When);
+                        else
+                            Items.SortDescending(i => i.When);
+                        break;
+
+                    case OverviewSortType.ByAmount:
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                            Items.Sort(i => i.Amount.Value);
+                        else
+                            Items.SortDescending(i => i.Amount.Value);
+                        break;
+
+                    case OverviewSortType.ByDescription:
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                            Items.Sort(i => i.Description);
+                        else
+                            Items.SortDescending(i => i.Description);
+                        break;
+                }
+            }
+
+            lastSortDescriptor = sortDescriptor;
+        }
+
         Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
         {
             if (Key.IsEmpty || payload.CategoryKey.Equals(Key))
@@ -87,7 +121,10 @@ namespace Money.ViewModels
         {
             OutcomeOverviewViewModel viewModel = Items.FirstOrDefault(vm => payload.AggregateKey.Equals(vm.Key));
             if (viewModel != null)
+            {
                 viewModel.Amount = payload.NewValue;
+                Sort(lastSortDescriptor);
+            }
 
             return Task.CompletedTask;
         }

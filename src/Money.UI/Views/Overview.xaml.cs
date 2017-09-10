@@ -103,7 +103,6 @@ namespace Money.Views
 
         private async Task ReloadAsync()
         {
-
             ViewModel.Items.Clear();
             IEnumerable<OutcomeOverviewModel> models = null;
             if (month != null)
@@ -123,32 +122,7 @@ namespace Money.Views
 
         private void ApplySortDescriptor(bool isSaveRequired)
         {
-            if (sortDescriptor != null)
-            {
-                switch (sortDescriptor.Type)
-                {
-                    case OverviewSortType.ByDate:
-                        if (sortDescriptor.Direction == SortDirection.Ascending)
-                            ViewModel.Items.Sort(i => i.When);
-                        else
-                            ViewModel.Items.SortDescending(i => i.When);
-                        break;
-
-                    case OverviewSortType.ByAmount:
-                        if (sortDescriptor.Direction == SortDirection.Ascending)
-                            ViewModel.Items.Sort(i => i.Amount.Value);
-                        else
-                            ViewModel.Items.SortDescending(i => i.Amount.Value);
-                        break;
-
-                    case OverviewSortType.ByDescription:
-                        if (sortDescriptor.Direction == SortDirection.Ascending)
-                            ViewModel.Items.Sort(i => i.Description);
-                        else
-                            ViewModel.Items.SortDescending(i => i.Description);
-                        break;
-                }
-            }
+            ViewModel.Sort(sortDescriptor);
 
             if (isSaveRequired)
                 userPreferences.TrySave("Overview.SortDescriptor", sortDescriptor);

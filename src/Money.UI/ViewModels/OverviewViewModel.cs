@@ -1,4 +1,5 @@
 ﻿using Money.Events;
+using Money.Services.Models;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
@@ -18,7 +19,11 @@ namespace Money.ViewModels
     /// <summary>
     /// A view model for category outcome overview.
     /// </summary>
-    public class OverviewViewModel : ViewModel, IEventHandler<OutcomeCreated>
+    public class OverviewViewModel : ViewModel,
+        IEventHandler<OutcomeCreated>,
+        IEventHandler<OutcomeAmountChanged>,
+        IEventHandler<OutcomeDescriptionChanged>,
+        IEventHandler<OutcomeWhenChanged>
     {
         /// <summary>
         /// An event raised when a request to reload the data is made.
@@ -74,6 +79,47 @@ namespace Money.ViewModels
         {
             if (Key.IsEmpty || payload.CategoryKey.Equals(Key))
                 Reload?.Invoke();
+
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
+        {
+            OutcomeOverviewViewModel viewModel = Items.FirstOrDefault(vm => payload.AggregateKey.Equals(vm.Key));
+            if (viewModel != null)
+                viewModel.Amount = payload.NewValue;
+
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
+        {
+            OutcomeOverviewViewModel viewModel = Items.FirstOrDefault(vm => payload.AggregateKey.Equals(vm.Key));
+            if (viewModel != null)
+                viewModel.Description = payload.Description;
+
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
+        {
+            OutcomeOverviewViewModel viewModel = Items.FirstOrDefault(vm => payload.AggregateKey.Equals(vm.Key));
+            if (viewModel != null)
+            {
+                viewModel.When = payload.When;
+                if (Period is MonthModel month)
+                {
+                    MonthModel newValue = payload.When;
+                    if (month != newValue)
+                        Items.Remove(viewModel);
+                }
+                else if (Period is YearModel year)
+                {
+                    YearModel newValue = new YearModel(payload.When.Year);
+                    if (year != newValue)
+                        Items.Remove(viewModel);
+                }
+            }
 
             return Task.CompletedTask;
         }

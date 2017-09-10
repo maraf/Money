@@ -85,6 +85,9 @@ namespace Money.Views
             ViewModel.Reload += OnViewModelReload;
 
             handlers.Add(eventHandlers.AddUiThread<OutcomeCreated>(ViewModel, Dispatcher));
+            handlers.Add(eventHandlers.AddUiThread<OutcomeAmountChanged>(ViewModel, Dispatcher));
+            handlers.Add(eventHandlers.AddUiThread<OutcomeDescriptionChanged>(ViewModel, Dispatcher));
+            handlers.Add(eventHandlers.AddUiThread<OutcomeWhenChanged>(ViewModel, Dispatcher));
 
             if (userPreferences.TryLoad("Overview.SortDescriptor", out SortDescriptor<OverviewSortType> sortDescriptor))
                 this.sortDescriptor = sortDescriptor;
@@ -201,7 +204,7 @@ namespace Money.Views
             {
                 Price newAmount = new Price(newValue, dialog.Currency);
                 await domainFacade.ChangeOutcomeAmountAsync(viewModel.Key, newAmount);
-                viewModel.Amount = newAmount;
+                //viewModel.Amount = newAmount;
             }
         }
 
@@ -216,7 +219,7 @@ namespace Money.Views
             if ((result == ContentDialogResult.Primary || dialog.IsEnterPressed) && dialog.Value != viewModel.Description)
             {
                 await domainFacade.ChangeOutcomeDescriptionAsync(viewModel.Key, dialog.Value);
-                viewModel.Description = dialog.Value;
+                //viewModel.Description = dialog.Value;
             }
         }
 
@@ -231,13 +234,13 @@ namespace Money.Views
             if (result == ContentDialogResult.Primary && dialog.Value != viewModel.When)
             {
                 await domainFacade.ChangeOutcomeWhenAsync(viewModel.Key, dialog.Value);
-                viewModel.When = dialog.Value;
+                //viewModel.When = dialog.Value;
 
-                if (month != null && (dialog.Value.Year != month.Year || dialog.Value.Month != month.Month))
-                    ViewModel.Items.Remove(viewModel);
+                //if (month != null && (dialog.Value.Year != month.Year || dialog.Value.Month != month.Month))
+                //    ViewModel.Items.Remove(viewModel);
 
-                if (year != null && (dialog.Value.Year != year.Year))
-                    ViewModel.Items.Remove(viewModel);
+                //if (year != null && (dialog.Value.Year != year.Year))
+                //    ViewModel.Items.Remove(viewModel);
             }
         }
 

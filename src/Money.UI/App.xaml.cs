@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Devices.Input;
@@ -46,6 +47,7 @@ namespace Money.UI
             InitializeComponent();
             Suspending += OnSuspending;
             UnhandledException += OnUnhandledException;
+            TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
         }
 
         /// <summary>
@@ -164,37 +166,52 @@ namespace Money.UI
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            if (ProcessException(e.Exception))
+                e.Handled = true;
+        }
+
+        private void OnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            if (ProcessException(e.Exception))
+                e.SetObserved();
+        }
+
+        private bool ProcessException(Exception e)
+        {
+
             ApplicationDataContainer container = ApplicationData.Current.LocalSettings
                 .CreateContainer("Exception", ApplicationDataCreateDisposition.Always);
 
-            container.Values["Type"] = e.Exception.GetType().FullName;
-            container.Values["Message"] = e.Exception.Message;
-            container.Values["Callstack"] = e.Exception.StackTrace;
+            container.Values["Type"] = e.GetType().FullName;
+            container.Values["Message"] = e.Message;
+            container.Values["Callstack"] = e.StackTrace;
             container.Values["DateTime"] = DateTime.Now.ToString();
 
 #if DEBUG
             if (Debugger.IsAttached)
                 Debugger.Break();
 
-            object content = Window.Current.Content;
+            object content = Window.Current?.Content;
             if (content is Frame frame)
                 content = frame.Content;
 
             if (content is Template template)
                 template.HideLoading();
 
-            if (e.Exception is LayoutCycleException)
+            if (e is LayoutCycleException)
                 Exit();
 
             if (ServiceProvider.Navigator != null)
             {
                 ServiceProvider.Navigator
-                    .Message(e.Exception.ToString(), "Exception")
+                    .Message(e.ToString(), "Exception")
                     .Show();
 
-                e.Handled = true;
+                return true;
             }
 #endif
+
+            return false;
         }
     }
 }

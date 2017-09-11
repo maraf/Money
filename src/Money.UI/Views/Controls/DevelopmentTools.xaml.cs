@@ -37,6 +37,23 @@ namespace Money.Views.Controls
 #endif
         }
 
+        private async Task ExecuteActionAsync(object sender, Func<Task> handler)
+        {
+            try
+            {
+                if (sender is Button button)
+                    button.IsEnabled = false;
+
+                await handler();
+
+            }
+            finally
+            {
+                if (sender is Button button)
+                    button.IsEnabled = true;
+            }
+        }
+
         private async Task ShowExitDialogAsync()
         {
             MessageDialog dialog = new MessageDialog("Do you want to exit the application?");
@@ -50,87 +67,102 @@ namespace Money.Views.Controls
 
         private async void btnClearStorage_Click(object sender, RoutedEventArgs e)
         {
-            using (var readModels = new ReadModelContext())
+            await ExecuteActionAsync(sender, async () =>
             {
-                readModels.Database.EnsureDeleted();
-                readModels.Database.EnsureCreated();
-            }
+                using (var readModels = new ReadModelContext())
+                {
+                    readModels.Database.EnsureDeleted();
+                    readModels.Database.EnsureCreated();
+                }
 
-            using (var eventSourcing = new EventSourcingContext())
-            {
-                eventSourcing.Database.EnsureDeleted();
-                eventSourcing.Database.EnsureCreated();
-                await eventSourcing.Database.MigrateAsync();
-            }
+                using (var eventSourcing = new EventSourcingContext())
+                {
+                    eventSourcing.Database.EnsureDeleted();
+                    eventSourcing.Database.EnsureCreated();
+                    await eventSourcing.Database.MigrateAsync();
+                }
 
-            foreach (string containerName in ApplicationData.Current.LocalSettings.Containers.Select(c => c.Key))
-                ApplicationData.Current.LocalSettings.DeleteContainer(containerName);
+                foreach (string containerName in ApplicationData.Current.LocalSettings.Containers.Select(c => c.Key))
+                    ApplicationData.Current.LocalSettings.DeleteContainer(containerName);
 
-            await ShowExitDialogAsync();
+                await ShowExitDialogAsync();
+            });
         }
 
         private async void btnUploadStorage_Click(object sender, RoutedEventArgs e)
         {
-            FileOpenPicker picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".db");
-
-            StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
+            await ExecuteActionAsync(sender, async () =>
             {
-                await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
-                await ShowExitDialogAsync();
-            }
+                FileOpenPicker picker = new FileOpenPicker();
+                picker.FileTypeFilter.Add(".db");
+
+                StorageFile file = await picker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name, NameCollisionOption.ReplaceExisting);
+                    await ShowExitDialogAsync();
+                }
+            });
         }
 
         private async void btnDownloadStorage_Click(object sender, RoutedEventArgs e)
         {
-            foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
+            await ExecuteActionAsync(sender, async () =>
             {
-                FileSavePicker picker = new FileSavePicker();
-                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                picker.FileTypeChoices.Add(source.DisplayName, new List<string>() { ".db" });
-                picker.SuggestedFileName = source.Name;
-
-                StorageFile target = await picker.PickSaveFileAsync();
-                if (target != null)
+                foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
                 {
-                    using (Stream sourceContent = await source.OpenStreamForReadAsync())
-                    using (Stream targetContent = await target.OpenStreamForWriteAsync())
-                        sourceContent.CopyTo(targetContent);
+                    FileSavePicker picker = new FileSavePicker();
+                    picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                    picker.FileTypeChoices.Add(source.DisplayName, new List<string>() { ".db" });
+                    picker.SuggestedFileName = source.Name;
+
+                    StorageFile target = await picker.PickSaveFileAsync();
+                    if (target != null)
+                    {
+                        using (Stream sourceContent = await source.OpenStreamForReadAsync())
+                        using (Stream targetContent = await target.OpenStreamForWriteAsync())
+                            sourceContent.CopyTo(targetContent);
+                    }
                 }
-            }
+            });
         }
 
         private async void btnSetRevisionStorage_Click(object sender, RoutedEventArgs e)
         {
-            ContentDialog dialog = new ContentDialog();
-            dialog.Title = "Set storage revision";
-
-            TextBox input = new TextBox();
-            dialog.Content = input;
-
-            dialog.PrimaryButtonText = "Ok";
-            dialog.SecondaryButtonText = "Cancel";
-
-            if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+            await ExecuteActionAsync(sender, async () =>
             {
-                if (Int32.TryParse(input.Text, out int revision))
+                ContentDialog dialog = new ContentDialog();
+                dialog.Title = "Set storage revision";
+
+                TextBox input = new TextBox();
+                dialog.Content = input;
+
+                dialog.PrimaryButtonText = "Ok";
+                dialog.SecondaryButtonText = "Cancel";
+
+                if (await dialog.ShowAsync() == ContentDialogResult.Primary)
                 {
-                    ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
-                    ApplicationDataContainer migrationContainer;
-                    if (root.Containers.TryGetValue("Migration", out migrationContainer))
-                        migrationContainer.Values["Version"] = revision;
+                    if (Int32.TryParse(input.Text, out int revision))
+                    {
+                        ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+                        ApplicationDataContainer migrationContainer;
+                        if (root.Containers.TryGetValue("Migration", out migrationContainer))
+                            migrationContainer.Values["Version"] = revision;
 
+                    }
                 }
-            }
 
-            await ShowExitDialogAsync();
+                await ShowExitDialogAsync();
+            });
         }
 
         private async void btnRebuildReadModels_Click(object sender, RoutedEventArgs e)
         {
-            await developmentService.RebuildReadModelsAsync();
-            await ShowExitDialogAsync();
+            await ExecuteActionAsync(sender, async () =>
+            {
+                await developmentService.RebuildReadModelsAsync();
+                await ShowExitDialogAsync();
+            });
         }
     }
 }

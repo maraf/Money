@@ -23,6 +23,10 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Grid Margin="8" VerticalAlignment="Top">
             <Rectangle Fill="{ThemeResource ButtonBackgroundPointerOver}" Height="64" Width="64" />
             <TextBlock x:Name="SymbolText" Text="{Binding Symbol}" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" />

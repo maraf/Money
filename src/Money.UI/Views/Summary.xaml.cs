@@ -186,19 +186,7 @@ namespace Money.Views
                 }
             }
         }
-
-        private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByAmount, SortDirection.Descending);
-            parameter.SortDescriptor = ViewModel.SortDescriptor;
-        }
-
-        private void mfiSortCategory_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.SortDescriptor = ViewModel.SortDescriptor.Update(SummarySortType.ByCategory);
-            parameter.SortDescriptor = ViewModel.SortDescriptor;
-        }
-
+        
         private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GroupItemViewModel viewModel = (GroupItemViewModel)e.AddedItems.FirstOrDefault();

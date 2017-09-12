@@ -3,6 +3,7 @@ using Money.Data;
 using Money.Events;
 using Money.Services.Models.Queries;
 using Neptuo;
+using Neptuo.Activators;
 using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries.Handlers;
@@ -20,7 +21,7 @@ namespace Money.Services.Models.Builders
     /// <summary>
     /// A builder for querying categories.
     /// </summary>
-    public class CategoryBuilder :
+    internal class CategoryBuilder :
         IEventHandler<CategoryCreated>,
         IEventHandler<CategoryRenamed>,
         IEventHandler<CategoryDescriptionChanged>,
@@ -30,9 +31,17 @@ namespace Money.Services.Models.Builders
         IQueryHandler<ListAllCategory, List<CategoryModel>>,
         IQueryHandler<GetCategoryIcon, string>
     {
+        private readonly IFactory<ReadModelContext> readModelContextFactory;
+
+        public CategoryBuilder(IFactory<ReadModelContext> readModelContextFactory)
+        {
+            Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
+            this.readModelContextFactory = readModelContextFactory;
+        }
+
         public Task HandleAsync(CategoryCreated payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 db.Categories.Add(new CategoryEntity(new CategoryModel(
                     payload.AggregateKey,
@@ -48,7 +57,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(CategoryRenamed payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity entity = await db.Categories.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 entity.Name = payload.NewName;
@@ -58,7 +67,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(CategoryDescriptionChanged payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity entity = await db.Categories.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 entity.Description = payload.Description;
@@ -68,7 +77,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(CategoryColorChanged payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity entity = await db.Categories.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 entity.SetColor(payload.Color);
@@ -78,7 +87,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(CategoryIconChanged payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity entity = await db.Categories.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 entity.Icon = payload.Icon;
@@ -88,7 +97,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(CategoryDeleted payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity entity = await db.Categories.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 entity.IsDeleted = true;
@@ -99,7 +108,7 @@ namespace Money.Services.Models.Builders
         public Task<List<CategoryModel>> HandleAsync(ListAllCategory query)
         {
             List<CategoryModel> result = new List<CategoryModel>();
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 return db.Categories
                     .Where(c => !c.IsDeleted)
@@ -111,7 +120,7 @@ namespace Money.Services.Models.Builders
 
         public async Task<string> HandleAsync(GetCategoryIcon query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity entity = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
                 return entity.Icon;

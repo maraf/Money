@@ -15,9 +15,16 @@ namespace Money.Data
         public DbSet<CurrencyEntity> Currencies { get; set; }
         public DbSet<CurrencyExchangeRateEntity> ExchangeRates { get; set; }
 
+        private readonly string connectionString;
+
+        public ReadModelContext(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=ReadModel.db");
+            optionsBuilder.UseSqlite(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

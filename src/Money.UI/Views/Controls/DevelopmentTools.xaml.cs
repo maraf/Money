@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Money.Data;
 using Money.Services;
+using Neptuo.Activators;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,8 @@ namespace Money.Views.Controls
     public sealed partial class DevelopmentTools : StackPanel
     {
         private readonly IDevelopmentService developmentService = ServiceProvider.DevelopmentService;
+        private readonly IFactory<EventSourcingContext> eventSourcingContextFactory = ServiceProvider.EventSourcingContextFactory;
+        private readonly IFactory<ReadModelContext> readModelContextFactory = ServiceProvider.ReadModelContextFactory;
 
         public DevelopmentTools()
         {
@@ -69,13 +72,13 @@ namespace Money.Views.Controls
         {
             await ExecuteActionAsync(sender, async () =>
             {
-                using (var readModels = new ReadModelContext())
+                using (var readModels = readModelContextFactory.Create())
                 {
                     readModels.Database.EnsureDeleted();
                     readModels.Database.EnsureCreated();
                 }
 
-                using (var eventSourcing = new EventSourcingContext())
+                using (var eventSourcing = eventSourcingContextFactory.Create())
                 {
                     eventSourcing.Database.EnsureDeleted();
                     eventSourcing.Database.EnsureCreated();

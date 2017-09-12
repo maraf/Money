@@ -8,8 +8,8 @@ namespace Money.Data
 {
     internal class EventSourcingContext : Neptuo.Data.Entity.EventSourcingContext
     {
-        public EventSourcingContext() 
-            : base("Filename=EventSourcing.db")
+        public EventSourcingContext(string connectionString) 
+            : base(connectionString)
         { }
     }
 }

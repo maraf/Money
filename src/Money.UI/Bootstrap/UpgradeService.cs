@@ -3,6 +3,7 @@ using Money.Data;
 using Money.Services;
 using Money.Services.Models.Builders;
 using Neptuo;
+using Neptuo.Activators;
 using Neptuo.Data;
 using Neptuo.Events;
 using Neptuo.Formatters;
@@ -23,17 +24,23 @@ namespace Money.Bootstrap
         private readonly IDomainFacade domainFacade;
         private readonly IEventRebuilderStore eventStore;
         private readonly IFormatter eventFormatter;
+        private readonly IFactory<EventSourcingContext> eventSourceContextFactory;
+        private readonly IFactory<ReadModelContext> readModelContextFactory;
 
         public const int CurrentVersion = 4;
 
-        public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter)
+        public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(eventStore, "eventStore");
             Ensure.NotNull(eventFormatter, "eventFormatter");
+            Ensure.NotNull(eventSourceContextFactory, "eventSourceContextFactory");
+            Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
             this.domainFacade = domainFacade;
             this.eventStore = eventStore;
             this.eventFormatter = eventFormatter;
+            this.eventSourceContextFactory = eventSourceContextFactory;
+            this.readModelContextFactory = readModelContextFactory;
         }
 
         public bool IsRequired()
@@ -98,7 +105,7 @@ namespace Money.Bootstrap
 
         private async Task UpgradeVersion1()
         {
-            EventSourcingContext();
+            RecreateEventSourcingContext();
             await RecreateReadModelContextAsync();
 
             await domainFacade.CreateCategoryAsync("Home", Colors.SandyBrown);
@@ -117,9 +124,9 @@ namespace Money.Bootstrap
             await domainFacade.CreateCurrencyAsync("CZK", "Kč");
         }
 
-        private void EventSourcingContext()
+        private void RecreateEventSourcingContext()
         {
-            using (var eventSourcing = new EventSourcingContext())
+            using (var eventSourcing = eventSourceContextFactory.Create())
             {
                 eventSourcing.Database.EnsureDeleted();
                 eventSourcing.Database.EnsureCreated();
@@ -129,7 +136,7 @@ namespace Money.Bootstrap
 
         internal Task RecreateReadModelContextAsync()
         {
-            using (var readModels = new ReadModelContext())
+            using (var readModels = readModelContextFactory.Create())
             {
                 readModels.Database.EnsureDeleted();
                 readModels.Database.EnsureCreated();
@@ -137,9 +144,9 @@ namespace Money.Bootstrap
 
             // Should match with ReadModels.
             Rebuilder rebuilder = new Rebuilder(eventStore, eventFormatter);
-            rebuilder.AddAll(new CategoryBuilder());
-            rebuilder.AddAll(new OutcomeBuilder(domainFacade.PriceFactory));
-            rebuilder.AddAll(new CurrencyBuilder());
+            rebuilder.AddAll(new CategoryBuilder(readModelContextFactory));
+            rebuilder.AddAll(new OutcomeBuilder(readModelContextFactory, domainFacade.PriceFactory));
+            rebuilder.AddAll(new CurrencyBuilder(readModelContextFactory));
             return rebuilder.RunAsync();
         }
 

@@ -1,7 +1,9 @@
-﻿using Money.Services;
+﻿using Money.Data;
+using Money.Services;
 using Money.Services.Settings;
 using Money.Services.Tiles;
 using Money.ViewModels.Navigation;
+using Neptuo.Activators;
 using Neptuo.Events;
 using Neptuo.Migrations;
 using Neptuo.Queries;
@@ -24,5 +26,8 @@ namespace Money
         public static IUserPreferenceService UserPreferences { get; set; }
 
         public static IDevelopmentService DevelopmentService { get; set; }
+
+        internal static IFactory<EventSourcingContext> EventSourcingContextFactory { get; set; }
+        internal static IFactory<ReadModelContext> ReadModelContextFactory { get; set; }
     }
 }

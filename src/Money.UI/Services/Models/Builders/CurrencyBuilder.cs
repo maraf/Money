@@ -2,6 +2,8 @@
 using Money.Data;
 using Money.Events;
 using Money.Services.Models.Queries;
+using Neptuo;
+using Neptuo.Activators;
 using Neptuo.Events.Handlers;
 using Neptuo.Queries.Handlers;
 using System;
@@ -24,9 +26,17 @@ namespace Money.Services.Models.Builders
         IQueryHandler<ListAllCurrency, List<CurrencyModel>>,
         IQueryHandler<ListTargetCurrencyExchangeRates, List<ExchangeRateModel>>
     {
+        private readonly IFactory<ReadModelContext> readModelContextFactory;
+
+        internal CurrencyBuilder(IFactory<ReadModelContext> readModelContextFactory)
+        {
+            Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
+            this.readModelContextFactory = readModelContextFactory;
+        }
+
         public async Task HandleAsync(CurrencyCreated payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 await db.Currencies.AddAsync(new CurrencyEntity()
                 {
@@ -40,7 +50,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(CurrencyDefaultChanged payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CurrencyEntity entity = db.Currencies.FirstOrDefault(c => c.IsDefault);
                 if (entity != null)
@@ -56,7 +66,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(CurrencySymbolChanged payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CurrencyEntity entity = db.Currencies.First(c => c.UniqueCode == payload.UniqueCode);
                 entity.Symbol = payload.Symbol;
@@ -66,7 +76,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(CurrencyDeleted payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CurrencyEntity entity = db.Currencies.First(c => c.UniqueCode == payload.UniqueCode);
                 entity.IsDeleted = true;
@@ -76,7 +86,7 @@ namespace Money.Services.Models.Builders
 
         public Task<List<CurrencyModel>> HandleAsync(ListAllCurrency query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 return db.Currencies
                     .Where(e => !e.IsDeleted)
@@ -87,7 +97,7 @@ namespace Money.Services.Models.Builders
         
         public async Task HandleAsync(CurrencyExchangeRateSet payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 await db.ExchangeRates.AddAsync(new CurrencyExchangeRateEntity()
                 {
@@ -103,7 +113,7 @@ namespace Money.Services.Models.Builders
 
         public Task<List<ExchangeRateModel>> HandleAsync(ListTargetCurrencyExchangeRates query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 return db.ExchangeRates
                     .Where(e => e.TargetCurrency == query.TargetCurrency)

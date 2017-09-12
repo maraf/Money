@@ -30,17 +30,20 @@ namespace Money.Services.Models.Builders
         IQueryHandler<ListMonthOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>,
         IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>
     {
+        private readonly IFactory<ReadModelContext> readModelContextFactory;
         private readonly IFactory<Price, decimal> priceFactory;
 
-        public OutcomeBuilder(IFactory<Price, decimal> priceFactory)
+        internal OutcomeBuilder(IFactory<ReadModelContext> readModelContextFactory, IFactory<Price, decimal> priceFactory)
         {
+            Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
             Ensure.NotNull(priceFactory, "priceFactory");
+            this.readModelContextFactory = readModelContextFactory;
             this.priceFactory = priceFactory;
         }
 
         public async Task<IEnumerable<MonthModel>> HandleAsync(ListMonthWithOutcome query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 var entities = await db.Outcomes
                     .OrderByDescending(o => o.When)
@@ -55,7 +58,7 @@ namespace Money.Services.Models.Builders
 
         public async Task<IEnumerable<CategoryWithAmountModel>> HandleAsync(ListMonthCategoryWithOutcome query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 Dictionary<Guid, Price> totals = new Dictionary<Guid, Price>();
 
@@ -98,7 +101,7 @@ namespace Money.Services.Models.Builders
 
         public async Task<string> HandleAsync(GetCategoryName query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity category = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
                 if (category == null)
@@ -110,7 +113,7 @@ namespace Money.Services.Models.Builders
 
         public async Task<Color> HandleAsync(GetCategoryColor query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity category = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
                 if (category == null)
@@ -122,7 +125,7 @@ namespace Money.Services.Models.Builders
 
         public async Task<Price> HandleAsync(GetTotalMonthOutcome query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 List<Price> outcomes = await db.Outcomes
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
@@ -139,7 +142,7 @@ namespace Money.Services.Models.Builders
 
         public async Task<IEnumerable<OutcomeOverviewModel>> HandleAsync(ListYearOutcomeFromCategory query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 IQueryable<OutcomeEntity> entities = db.Outcomes;
                 if (!query.CategoryKey.IsEmpty)
@@ -157,7 +160,7 @@ namespace Money.Services.Models.Builders
 
         public async Task<IEnumerable<OutcomeOverviewModel>> HandleAsync(ListMonthOutcomeFromCategory query)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 IQueryable<OutcomeEntity> entities = db.Outcomes;
                 if (!query.CategoryKey.IsEmpty)
@@ -175,7 +178,7 @@ namespace Money.Services.Models.Builders
 
         public Task HandleAsync(OutcomeCreated payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 db.Outcomes.Add(new OutcomeEntity(new OutcomeModel(
                     payload.AggregateKey,
@@ -190,7 +193,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(OutcomeCategoryAdded payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -207,7 +210,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(OutcomeAmountChanged payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -221,7 +224,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(OutcomeDescriptionChanged payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -234,7 +237,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(OutcomeWhenChanged payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -247,7 +250,7 @@ namespace Money.Services.Models.Builders
 
         public async Task HandleAsync(OutcomeDeleted payload)
         {
-            using (ReadModelContext db = new ReadModelContext())
+            using (ReadModelContext db = readModelContextFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)

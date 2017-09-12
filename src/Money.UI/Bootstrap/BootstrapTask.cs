@@ -54,7 +54,11 @@ namespace Money.Bootstrap
             ServiceProvider.DomainFacade = DomainFacade;
             ServiceProvider.EventHandlers = eventDispatcher.Handlers;
 
-            UpgradeService upgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter);
+            StorageFactory storageFactory = new StorageFactory();
+            ServiceProvider.EventSourcingContextFactory = storageFactory;
+            ServiceProvider.ReadModelContextFactory = storageFactory;
+
+            UpgradeService upgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter, storageFactory, storageFactory);
             ServiceProvider.UpgradeService = upgradeService;
 
             ServiceProvider.TileService = new TileService();
@@ -79,7 +83,7 @@ namespace Money.Bootstrap
                 .Add(new ColorConverter())
                 .AddToStringSearchHandler();
             
-            EventStore = new EntityEventStore(Factory.Default<EventSourcingContext>());
+            EventStore = new EntityEventStore(ServiceProvider.EventSourcingContextFactory);
             eventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
             eventDispatcher.DispatcherExceptionHandlers.Add(this);
             eventDispatcher.EventExceptionHandlers.Add(this);
@@ -134,15 +138,15 @@ namespace Money.Bootstrap
             // Should match with RecreateReadModelContext.
             queryDispatcher = new DefaultQueryDispatcher();
 
-            CategoryBuilder categoryBuilder = new CategoryBuilder();
+            CategoryBuilder categoryBuilder = new CategoryBuilder(ServiceProvider.ReadModelContextFactory);
             queryDispatcher.AddAll(categoryBuilder);
             eventDispatcher.Handlers.AddAll(categoryBuilder);
 
-            OutcomeBuilder outcomeBuilder = new OutcomeBuilder(PriceFactory);
+            OutcomeBuilder outcomeBuilder = new OutcomeBuilder(ServiceProvider.ReadModelContextFactory, PriceFactory);
             queryDispatcher.AddAll(outcomeBuilder);
             eventDispatcher.Handlers.AddAll(outcomeBuilder);
 
-            CurrencyBuilder currencyBuilder = new CurrencyBuilder();
+            CurrencyBuilder currencyBuilder = new CurrencyBuilder(ServiceProvider.ReadModelContextFactory);
             queryDispatcher.AddAll(currencyBuilder);
             eventDispatcher.Handlers.AddAll(currencyBuilder);
         }

@@ -99,6 +99,7 @@
     <Compile Include="Bootstrap\ColorConverter.cs" />
     <Compile Include="Bootstrap\CompositeTypeFormatterFactory.cs" />
     <Compile Include="Bootstrap\DevelopmentService.cs" />
+    <Compile Include="Bootstrap\StorageFactory.cs" />
     <Compile Include="Bootstrap\UpgradeService.cs" />
     <Compile Include="Data\CategoryEntity.cs" />
     <Compile Include="Data\CurrencyEntity.cs" />

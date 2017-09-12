@@ -48,11 +48,13 @@ namespace Money
         {
             uniqueCode = uniqueCode.ToLowerInvariant();
 
-            if (!uniqueCodes.Contains(uniqueCode))
-                throw new CurrencyDoesNotExistException();
+            if (uniqueCodes.Contains(uniqueCode))
+                return;
 
-            if (isDeletedIncluded && !deletedUniqueCodes.Contains(uniqueCode))
-                throw new CurrencyDoesNotExistException();
+            if (isDeletedIncluded && deletedUniqueCodes.Contains(uniqueCode))
+                return;
+
+            throw new CurrencyDoesNotExistException();
         }
 
         public void Add(string uniqueCode, string symbol)

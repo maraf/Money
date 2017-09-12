@@ -9,6 +9,7 @@
     <UserControl.Resources>
         <converters:ExchangeRateListToStringConverter x:Key="ExchangeRateListToStringConverter" />
         <converters:CuttingConverter x:Key="ZeroToCollapsedConverter" EdgeValue="0" GreaterValue="Visible" LowerValue="Collapsed" EqualValue="Collapsed" />
+        <converters:BoolConverter x:Key="FalseToTrueConverter" TrueValue="False" FalseValue="True" />
 
         <Style TargetType="Button">
             <Setter Property="Margin" Value="8,0,0,0" />
@@ -62,6 +63,9 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Grid.Row="2" Grid.ColumnSpan="2">
             <Button Content="Set as default" Command="{Binding SetAsDefault}" />
             <Button Content="Add exchange rate" Command="{Binding AddExchangeRate}" />
+            <Button Command="{Binding Delete}" IsEnabled="{Binding IsDefault, Converter={StaticResource FalseToTrueConverter}}" ToolTipService.ToolTip="Delete currency">
+                <SymbolIcon Symbol="Delete" />
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

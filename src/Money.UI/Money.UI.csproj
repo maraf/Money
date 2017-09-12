@@ -150,6 +150,7 @@
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\CurrencySetAsDefaultCommand.cs" />
     <Compile Include="ViewModels\Commands\CategoryDeleteCommand.cs" />
+    <Compile Include="ViewModels\Commands\DeleteCurrencyCommand.cs" />
     <Compile Include="ViewModels\Commands\DeleteOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateBackCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />

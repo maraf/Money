@@ -89,6 +89,8 @@ namespace Money.ViewModels
             get { return addExchangeRate; }
         }
 
+        public ICommand Delete { get; private set; }
+
         public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, IQueryDispatcher queryDispatcher, string uniqueCode, string symbol)
         {
             Ensure.NotNull(navigator, "navigator");
@@ -106,6 +108,7 @@ namespace Money.ViewModels
         {
             setAsDefault = new CurrencySetAsDefaultCommand(domainFacade, UniqueCode);
             addExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(UniqueCode));
+            Delete = new DeleteCurrencyCommand(navigator, domainFacade, UniqueCode);
         }
 
         private async void LoadExchangeRateList()

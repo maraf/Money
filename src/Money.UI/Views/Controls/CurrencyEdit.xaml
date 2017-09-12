@@ -22,14 +22,9 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid Margin="8">
+        <Grid Margin="8" VerticalAlignment="Top">
             <Rectangle Fill="{ThemeResource ButtonBackgroundPointerOver}" Height="64" Width="64" />
-            <TextBlock Text="{Binding Symbol}" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <TextBlock x:Name="SymbolText" Text="{Binding Symbol}" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Grid>
         <StackPanel Margin="0,8,8,8" Grid.Column="1">
             <TextBlock Text="Is the default currency" Style="{ThemeResource NoteTextStyle}" Visibility="{Binding IsDefault, Converter={StaticResource TrueToVisibleConverter}}" />
@@ -42,23 +37,28 @@
                 <TextBlock Text="With unique code" Style="{ThemeResource NoteTextStyle}" Margin="0,0,2,0" />
                 <TextBlock Text="{Binding UniqueCode}" Style="{ThemeResource NoteTextStyle}" />
             </StackPanel>
+            <ListView ItemsSource="{Binding ExchangeRates}" SelectionMode="None" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Margin="0,16,0,0">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="MinHeight" Value="0" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="From 1" />
+                            <TextBlock Text="{Binding SourceCurrency}" Margin="2,0,0,0" />
+                            <TextBlock Text=" to " Style="{StaticResource NoteTextStyle}" Margin="2,0,0,0" />
+                            <TextBlock Text="{Binding Rate}" HorizontalAlignment="Center" Margin="2,0,0,0" />
+                            <TextBlock Text="{Binding Text, ElementName=SymbolText}" Margin="2,0,0,0" />
+                            <TextBlock Text=" used since " Style="{StaticResource NoteTextStyle}" Margin="2,0,0,0" />
+                            <TextBlock Text="{Binding ValidFromToString}" Margin="2,0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
-        <ListView ItemsSource="{Binding ExchangeRates}" SelectionMode="None" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Grid.Row="1" Grid.ColumnSpan="2">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10,5,5,5">
-                        <TextBlock Text="{Binding SourceCurrency}" Style="{StaticResource NoteTextStyle}" />
-                        <TextBlock Text="{Binding Rate}" Style="{StaticResource NoteTextStyle}" HorizontalAlignment="Center" />
-                        <TextBlock Text="{Binding ValidFromToString}" Style="{StaticResource NoteTextStyle}" HorizontalAlignment="Right" />
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Grid.Row="2" Grid.ColumnSpan="2">
             <Button Content="Set as default" Command="{Binding SetAsDefault}" />
             <Button Content="Add exchange rate" Command="{Binding AddExchangeRate}" />

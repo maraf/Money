@@ -5,14 +5,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Money.Views.Converters"
-    mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="400"
+    mc:Ignorable="d" d:DesignHeight="480" d:DesignWidth="548"
     Title="Set exchange rate" PrimaryButtonText="Save">
     <ContentDialog.Resources>
         <converters:DateTimeOffsetToDateTimeConverter x:Key="DateTimeOffsetToDateTimeConverter" />
     </ContentDialog.Resources>
     <StackPanel>
         <TextBlock Text="Source currency" />
-        <ComboBox x:Name="cbxCurrency" SelectedItem="{x:Bind SourceCurrency, Mode=TwoWay}" SelectedValuePath="UniqueCode" DisplayMemberPath="Symbol" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
+        <ComboBox x:Name="cbxCurrency" SelectionChanged="cbxCurrency_SelectionChanged" DisplayMemberPath="Symbol" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
 
         <TextBlock Text="Rate" />
         <TextBox x:Name="tbxRate" Text="{x:Bind Rate, Mode=TwoWay}" FontSize="40" KeyDown="tbxRate_KeyDown" />
@@ -21,6 +21,6 @@
         <TextBox Text="{x:Bind TargetCurrencyModel.Symbol}" FontSize="40" IsReadOnly="True" />
 
         <TextBlock Text="Valid from" />
-        <DatePicker x:Name="dpkValidFrom" Date="{x:Bind ValidFrom, Converter={StaticResource DateTimeOffsetToDateTimeConverter}, Mode=TwoWay}" FontSize="40" />
+        <DatePicker x:Name="dpkValidFrom" Date="{x:Bind ValidFrom, Converter={StaticResource DateTimeOffsetToDateTimeConverter}, Mode=TwoWay}" HorizontalAlignment="Stretch" FontSize="40" />
     </StackPanel>
 </ContentDialog>

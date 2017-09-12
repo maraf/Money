@@ -24,6 +24,7 @@ namespace Money.Views.Dialogs
     {
         private readonly IQueryDispatcher queryDispatcher;
         private List<CurrencyModel> currencies;
+        private bool isSourceCurrencyChanging;
 
         public string SourceCurrency
         {
@@ -35,8 +36,14 @@ namespace Money.Views.Dialogs
             "SourceCurrency", 
             typeof(string), 
             typeof(CurrencyExchangeRate), 
-            new PropertyMetadata(null)
+            new PropertyMetadata(null, OnSourceCurrencyChanged)
         );
+
+        private static void OnSourceCurrencyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            CurrencyExchangeRate control = (CurrencyExchangeRate)d;
+            control.OnSourceCurrencyChanged();
+        }
 
         public string TargetCurrency
         {
@@ -116,6 +123,15 @@ namespace Money.Views.Dialogs
             //    cbxCurrency.SelectedIndex = 0;
         }
 
+        private void OnSourceCurrencyChanged()
+        {
+            if (isSourceCurrencyChanging)
+                return;
+
+            CurrencyModel model = currencies.FirstOrDefault(c => c.UniqueCode == SourceCurrency);
+            cbxCurrency.SelectedItem = model;
+        }
+
         private void tbxRate_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)
@@ -139,5 +155,19 @@ namespace Money.Views.Dialogs
             }
         }
 
+        private void cbxCurrency_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                isSourceCurrencyChanging = true;
+
+                if (cbxCurrency.SelectedItem is CurrencyModel model)
+                    SourceCurrency = model.UniqueCode;
+            }
+            finally
+            {
+                isSourceCurrencyChanging = false;
+            }
+        }
     }
 }

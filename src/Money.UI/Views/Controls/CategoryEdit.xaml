@@ -21,7 +21,7 @@
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             <Grid Margin="0,0,10,0">
-                <Rectangle Width="60" Height="60" Fill="{Binding ColorBrush}" />
+                <Rectangle Width="64" Height="64" Fill="{Binding ColorBrush}" />
                 <TextBlock Text="{Binding Icon}" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Grid>
             <StackPanel>

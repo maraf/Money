@@ -41,14 +41,31 @@ namespace Money.Views
         private MonthModel month;
         private YearModel year;
 
-        private SortDescriptor<OverviewSortType> sortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByDate, SortDirection.Ascending);
-
         public event EventHandler ContentLoaded;
 
         public OverviewViewModel ViewModel
         {
             get { return (OverviewViewModel)DataContext; }
             set { DataContext = value; }
+        }
+
+        public SortDescriptor<OverviewSortType> SortDescriptor
+        {
+            get { return (SortDescriptor<OverviewSortType>)GetValue(SortDescriptorProperty); }
+            set { SetValue(SortDescriptorProperty, value); }
+        }
+
+        public static readonly DependencyProperty SortDescriptorProperty = DependencyProperty.Register(
+            "SortDescriptor",
+            typeof(SortDescriptor<OverviewSortType>),
+            typeof(Overview),
+            new PropertyMetadata(null, OnSortDescriptorChanged)
+        );
+
+        private static void OnSortDescriptorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Overview page = (Overview)d;
+            page.ApplySortDescriptor(true);
         }
 
         public Overview()
@@ -78,7 +95,6 @@ namespace Money.Views
             {
                 year = parameter.Year;
                 period = parameter.Year;
-
             }
 
             ViewModel = new OverviewViewModel(navigator, parameter.CategoryKey, categoryName, period);
@@ -90,7 +106,9 @@ namespace Money.Views
             handlers.Add(eventHandlers.AddUiThread<OutcomeWhenChanged>(ViewModel, Dispatcher));
 
             if (userPreferences.TryLoad("Overview.SortDescriptor", out SortDescriptor<OverviewSortType> sortDescriptor))
-                this.sortDescriptor = sortDescriptor;
+                SortDescriptor = sortDescriptor;
+            else
+                SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByDate, SortDirection.Ascending);
 
             await ReloadAsync();
             ContentLoaded?.Invoke(this, EventArgs.Empty);
@@ -122,10 +140,10 @@ namespace Money.Views
 
         private void ApplySortDescriptor(bool isSaveRequired)
         {
-            ViewModel.Sort(sortDescriptor);
+            ViewModel.Sort(SortDescriptor);
 
             if (isSaveRequired)
-                userPreferences.TrySave("Overview.SortDescriptor", sortDescriptor);
+                userPreferences.TrySave("Overview.SortDescriptor", SortDescriptor);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -135,25 +153,7 @@ namespace Money.Views
             foreach (UiThreadEventHandler handler in handlers)
                 handler.Remove(eventHandlers);
         }
-
-        private void mfiSortDate_Click(object sender, RoutedEventArgs e)
-        {
-            sortDescriptor = sortDescriptor.Update(OverviewSortType.ByDate);
-            ApplySortDescriptor(true);
-        }
-
-        private void mfiSortAmount_Click(object sender, RoutedEventArgs e)
-        {
-            sortDescriptor = sortDescriptor.Update(OverviewSortType.ByAmount, SortDirection.Descending);
-            ApplySortDescriptor(true);
-        }
-
-        private void mfiSortDescription_Click(object sender, RoutedEventArgs e)
-        {
-            sortDescriptor = sortDescriptor.Update(OverviewSortType.ByDescription);
-            ApplySortDescriptor(true);
-        }
-
+        
         private void lvwItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             OutcomeOverviewViewModel selected = (OutcomeOverviewViewModel)e.AddedItems.FirstOrDefault();

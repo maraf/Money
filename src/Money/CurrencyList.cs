@@ -33,7 +33,7 @@ namespace Money
             : base(key, events)
         { }
 
-        private void EnsureExists(string uniqueCode, bool isDeletedIncluded = false)
+        private void EnsureUnique(string uniqueCode, bool isDeletedIncluded = false)
         {
             uniqueCode = uniqueCode.ToLowerInvariant();
 
@@ -44,11 +44,22 @@ namespace Money
                 throw new CurrencyAlreadyExistsException();
         }
 
+        private void EnsureExists(string uniqueCode, bool isDeletedIncluded = false)
+        {
+            uniqueCode = uniqueCode.ToLowerInvariant();
+
+            if (!uniqueCodes.Contains(uniqueCode))
+                throw new CurrencyDoesNotExistException();
+
+            if (isDeletedIncluded && !deletedUniqueCodes.Contains(uniqueCode))
+                throw new CurrencyDoesNotExistException();
+        }
+
         public void Add(string uniqueCode, string symbol)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
             Ensure.NotNullOrEmpty(symbol, "symbol");
-            EnsureExists(uniqueCode);
+            EnsureUnique(uniqueCode);
             Publish(new CurrencyCreated(uniqueCode, symbol));
 
             if (defaultName == null)

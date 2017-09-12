@@ -47,16 +47,16 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
+            StorageFactory storageFactory = new StorageFactory();
+            ServiceProvider.EventSourcingContextFactory = storageFactory;
+            ServiceProvider.ReadModelContextFactory = storageFactory;
+
             Domain();
             ReadModels();
 
             ServiceProvider.QueryDispatcher = queryDispatcher;
             ServiceProvider.DomainFacade = DomainFacade;
             ServiceProvider.EventHandlers = eventDispatcher.Handlers;
-
-            StorageFactory storageFactory = new StorageFactory();
-            ServiceProvider.EventSourcingContextFactory = storageFactory;
-            ServiceProvider.ReadModelContextFactory = storageFactory;
 
             UpgradeService upgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter, storageFactory, storageFactory);
             ServiceProvider.UpgradeService = upgradeService;

@@ -9,5 +9,9 @@ namespace Money.Services
     public interface IDevelopmentService
     {
         Task RebuildReadModelsAsync();
+
+        bool IsTestDatabaseEnabled();
+
+        IDevelopmentService IsTestDatabaseEnabled(bool isEnabled);
     }
 }

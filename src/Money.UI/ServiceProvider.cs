@@ -26,7 +26,7 @@ namespace Money
         public static TileService TileService { get; set; }
         public static IUserPreferenceService UserPreferences { get; set; }
 
-        public static IDevelopmentService DevelopmentService { get; set; }
+        public static IDevelopmentService DevelopmentTools { get; set; }
 
         internal static IFactory<EventSourcingContext> EventSourcingContextFactory { get; set; }
         internal static IFactory<ReadModelContext> ReadModelContextFactory { get; set; }

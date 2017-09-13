@@ -63,7 +63,7 @@ namespace Money.Bootstrap
             ServiceProvider.UpgradeService = upgradeService;
 
             ServiceProvider.TileService = new TileService();
-            ServiceProvider.DevelopmentService = new DevelopmentService(upgradeService);
+            ServiceProvider.DevelopmentTools = new DevelopmentService(upgradeService, storageFactory);
             ServiceProvider.UserPreferences = new ApplicationSettingsService(new CompositeTypeFormatterFactory(typeProvider), storageFactory);
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);

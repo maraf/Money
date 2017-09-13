@@ -10,29 +10,33 @@
         <CommandBar />
     </Page.BottomAppBar>
 
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="20">
-        <TextBlock Text="Money" Style="{ThemeResource TitleTextBlockStyle}" />
-        <TextBlock Text="Neptuo" />
-        <TextBlock Text="v1.0.0-beta7" Opacity=".5" />
+    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
+        <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="20">
+            <TextBlock Text="Money" Style="{ThemeResource TitleTextBlockStyle}" />
+            <TextBlock Text="Neptuo" />
+            <TextBlock Text="v1.0.0-beta7" Opacity=".5" />
 
-        <HyperlinkButton Content="Documentation" NavigateUri="http://www.neptuo.com/project/universal/money" Margin="0,20,0,0" />
-        <HyperlinkButton Content="Report an issue" NavigateUri="https://github.com/maraf/Money/issues/new" />
+            <HyperlinkButton Content="Documentation" NavigateUri="http://www.neptuo.com/project/universal/money" Margin="0,20,0,0" />
+            <HyperlinkButton Content="Report an issue" NavigateUri="https://github.com/maraf/Money/issues/new" />
 
-        <TextBlock Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
-        <controls:DevelopmentTools Orientation="Horizontal" Visibility="Visible" />
+            <ToggleSwitch x:Name="DatabaseSwitch" Margin="0,20,0,0" OnContent="Turn test database off" OffContent="Turn test database on" Toggled="DatabaseSwitch_Toggled" />
 
-        <StackPanel x:Name="ExceptionPanel" Margin="0,20,0,0">
-            <Grid>
-                <TextBlock Text="Last Exception" Style="{ThemeResource SubtitleTextBlockStyle}" />
-                <Button x:Name="ClearException" Click="ClearException_Click" HorizontalAlignment="Right">
-                    <SymbolIcon Symbol="Cancel" Foreground="Red" />
-                </Button>
-            </Grid>
+            <TextBlock Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
+            <controls:DevelopmentTools Orientation="Horizontal" Visibility="Visible" />
 
-            <TextBlock x:Name="ExceptionType" Opacity=".5" />
-            <TextBlock x:Name="ExceptionMessage" Opacity=".5" />
-            <TextBlock x:Name="ExceptionCallstack" Opacity=".5" />
-            <TextBlock x:Name="ExceptionDateTime" Opacity=".5" />
+            <StackPanel x:Name="ExceptionPanel" Margin="0,20,0,0">
+                <Grid>
+                    <TextBlock Text="Last Exception" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                    <Button x:Name="ClearException" Click="ClearException_Click" HorizontalAlignment="Right">
+                        <SymbolIcon Symbol="Cancel" Foreground="Red" />
+                    </Button>
+                </Grid>
+
+                <TextBlock x:Name="ExceptionType" Opacity=".5" />
+                <TextBlock x:Name="ExceptionMessage" Opacity=".5" />
+                <TextBlock x:Name="ExceptionCallstack" Opacity=".5" />
+                <TextBlock x:Name="ExceptionDateTime" Opacity=".5" />
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </Page>

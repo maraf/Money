@@ -25,7 +25,7 @@ namespace Money.Views.Controls
 {
     public sealed partial class DevelopmentTools : StackPanel
     {
-        private readonly IDevelopmentService developmentService = ServiceProvider.DevelopmentService;
+        private readonly IDevelopmentService developmentTools = ServiceProvider.DevelopmentTools;
         private readonly IFactory<EventSourcingContext> eventSourcingContextFactory = ServiceProvider.EventSourcingContextFactory;
         private readonly IFactory<ReadModelContext> readModelContextFactory = ServiceProvider.ReadModelContextFactory;
         private readonly IFactory<ApplicationDataContainer> storageContainerFactory = ServiceProvider.StorageContainerFactory;
@@ -165,7 +165,7 @@ namespace Money.Views.Controls
         {
             await ExecuteActionAsync(sender, async () =>
             {
-                await developmentService.RebuildReadModelsAsync();
+                await developmentTools.RebuildReadModelsAsync();
                 await ShowExitDialogAsync();
             });
         }

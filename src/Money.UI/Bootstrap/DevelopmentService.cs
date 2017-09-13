@@ -10,15 +10,28 @@ namespace Money.Bootstrap
     internal class DevelopmentService : IDevelopmentService
     {
         private readonly UpgradeService upgradeService;
+        private readonly StorageFactory storageFactory;
 
-        internal DevelopmentService(UpgradeService upgradeService)
+        internal DevelopmentService(UpgradeService upgradeService, StorageFactory storageFactory)
         {
             this.upgradeService = upgradeService;
+            this.storageFactory = storageFactory;
         }
 
         public Task RebuildReadModelsAsync()
         {
             return upgradeService.RecreateReadModelContextAsync();
+        }
+
+        public bool IsTestDatabaseEnabled()
+        {
+            return storageFactory.IsTestDatabaseEnabled;
+        }
+
+        public IDevelopmentService IsTestDatabaseEnabled(bool isEnabled)
+        {
+            storageFactory.IsTestDatabaseEnabled = isEnabled;
+            return this;
         }
     }
 }

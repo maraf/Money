@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Money
 {
@@ -29,5 +30,6 @@ namespace Money
 
         internal static IFactory<EventSourcingContext> EventSourcingContextFactory { get; set; }
         internal static IFactory<ReadModelContext> ReadModelContextFactory { get; set; }
+        internal static IFactory<ApplicationDataContainer> StorageContainerFactory { get; set; }
     }
 }

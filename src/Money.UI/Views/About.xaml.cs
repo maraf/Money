@@ -1,5 +1,6 @@
 ﻿using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
+using Neptuo.Activators;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +21,8 @@ namespace Money.Views
     [NavigationParameter(typeof(AboutParameter))]
     public sealed partial class About : Page
     {
+        private readonly IFactory<ApplicationDataContainer> storageContainerFactory = ServiceProvider.StorageContainerFactory;
+
         public About()
         {
             InitializeComponent();
@@ -28,7 +31,7 @@ namespace Money.Views
 
         private void ReloadException()
         {
-            if (ApplicationData.Current.LocalSettings.Containers.TryGetValue("Exception", out ApplicationDataContainer container))
+            if (storageContainerFactory.Create().Containers.TryGetValue("Exception", out ApplicationDataContainer container))
             {
                 ExceptionPanel.Visibility = Visibility.Visible;
 
@@ -52,7 +55,7 @@ namespace Money.Views
 
         private void ClearException_Click(object sender, RoutedEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.DeleteContainer("Exception");
+            storageContainerFactory.Create().DeleteContainer("Exception");
             ReloadException();
         }
     }

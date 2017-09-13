@@ -26,21 +26,24 @@ namespace Money.Bootstrap
         private readonly IFormatter eventFormatter;
         private readonly IFactory<EventSourcingContext> eventSourceContextFactory;
         private readonly IFactory<ReadModelContext> readModelContextFactory;
+        private readonly IFactory<ApplicationDataContainer> storageContainerFactory;
 
         public const int CurrentVersion = 4;
 
-        public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory)
+        public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(eventStore, "eventStore");
             Ensure.NotNull(eventFormatter, "eventFormatter");
             Ensure.NotNull(eventSourceContextFactory, "eventSourceContextFactory");
             Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
+            Ensure.NotNull(storageContainerFactory, "storageContainerFactory");
             this.domainFacade = domainFacade;
             this.eventStore = eventStore;
             this.eventFormatter = eventFormatter;
             this.eventSourceContextFactory = eventSourceContextFactory;
             this.readModelContextFactory = readModelContextFactory;
+            this.storageContainerFactory = storageContainerFactory;
         }
 
         public bool IsRequired()
@@ -87,7 +90,7 @@ namespace Money.Bootstrap
 
         private ApplicationDataContainer GetMigrationContainer()
         {
-            ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+            ApplicationDataContainer root = storageContainerFactory.Create();
 
             ApplicationDataContainer migrationContainer;
             if (!root.Containers.TryGetValue("Migration", out migrationContainer))

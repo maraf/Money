@@ -16,11 +16,7 @@ namespace Money.Services.Settings
     {
         private readonly ApplicationDataContainer root;
         private readonly IConverterRepository converters = Converts.Repository;
-
-        public ApplicationDataCompositeStorage()
-            : this(ApplicationData.Current.LocalSettings)
-        { }
-
+        
         public ApplicationDataCompositeStorage(ApplicationDataContainer root)
         {
             Ensure.NotNull(root, "root");

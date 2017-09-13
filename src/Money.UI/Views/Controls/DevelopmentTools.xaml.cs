@@ -28,6 +28,7 @@ namespace Money.Views.Controls
         private readonly IDevelopmentService developmentService = ServiceProvider.DevelopmentService;
         private readonly IFactory<EventSourcingContext> eventSourcingContextFactory = ServiceProvider.EventSourcingContextFactory;
         private readonly IFactory<ReadModelContext> readModelContextFactory = ServiceProvider.ReadModelContextFactory;
+        private readonly IFactory<ApplicationDataContainer> storageContainerFactory = ServiceProvider.StorageContainerFactory;
 
         public DevelopmentTools()
         {
@@ -85,8 +86,9 @@ namespace Money.Views.Controls
                     await eventSourcing.Database.MigrateAsync();
                 }
 
-                foreach (string containerName in ApplicationData.Current.LocalSettings.Containers.Select(c => c.Key))
-                    ApplicationData.Current.LocalSettings.DeleteContainer(containerName);
+                ApplicationDataContainer rootContainer = storageContainerFactory.Create();
+                foreach (string containerName in rootContainer.Containers.Select(c => c.Key))
+                    rootContainer.DeleteContainer(containerName);
 
                 await ShowExitDialogAsync();
             });
@@ -147,9 +149,9 @@ namespace Money.Views.Controls
                 {
                     if (Int32.TryParse(input.Text, out int revision))
                     {
-                        ApplicationDataContainer root = ApplicationData.Current.LocalSettings;
+                        ApplicationDataContainer rootContainer = storageContainerFactory.Create();
                         ApplicationDataContainer migrationContainer;
-                        if (root.Containers.TryGetValue("Migration", out migrationContainer))
+                        if (rootContainer.Containers.TryGetValue("Migration", out migrationContainer))
                             migrationContainer.Values["Version"] = revision;
 
                     }

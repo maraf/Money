@@ -178,8 +178,7 @@ namespace Money.UI
 
         private bool ProcessException(Exception e)
         {
-
-            ApplicationDataContainer container = ApplicationData.Current.LocalSettings
+            ApplicationDataContainer container = ServiceProvider.StorageContainerFactory.Create()
                 .CreateContainer("Exception", ApplicationDataCreateDisposition.Always);
 
             container.Values["Type"] = e.GetType().FullName;

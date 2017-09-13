@@ -16,18 +16,21 @@ namespace Money.Services.Settings
     {
         private readonly IFactory<IFormatter, ICompositeStorage> formatterFactory;
         private readonly IConverterRepository converters = Converts.Repository;
+        private readonly IFactory<ApplicationDataContainer> storageContainerFactory;
 
-        public ApplicationSettingsService(IFactory<IFormatter, ICompositeStorage> formatterFactory)
+        public ApplicationSettingsService(IFactory<IFormatter, ICompositeStorage> formatterFactory, IFactory<ApplicationDataContainer> storageContainerFactory)
         {
             Ensure.NotNull(formatterFactory, "formatterFactory");
+            Ensure.NotNull(storageContainerFactory, "storageContainerFactory");
             this.formatterFactory = formatterFactory;
+            this.storageContainerFactory = storageContainerFactory;
         }
 
         private bool TryGetContainer(string containerPath, bool isCreatedWhenNotExists, out ApplicationDataContainer container)
         {
             Ensure.NotNullOrEmpty(containerPath, "containerPath");
 
-            ApplicationDataContainer result = ApplicationData.Current.LocalSettings;
+            ApplicationDataContainer result = storageContainerFactory.Create();
             string[] paths = containerPath.Split('.');
             foreach (string path in paths)
             {

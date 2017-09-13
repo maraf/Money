@@ -50,6 +50,7 @@ namespace Money.Bootstrap
             StorageFactory storageFactory = new StorageFactory();
             ServiceProvider.EventSourcingContextFactory = storageFactory;
             ServiceProvider.ReadModelContextFactory = storageFactory;
+            ServiceProvider.StorageContainerFactory = storageFactory;
 
             Domain();
             ReadModels();
@@ -58,12 +59,12 @@ namespace Money.Bootstrap
             ServiceProvider.DomainFacade = DomainFacade;
             ServiceProvider.EventHandlers = eventDispatcher.Handlers;
 
-            UpgradeService upgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter, storageFactory, storageFactory);
+            UpgradeService upgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory);
             ServiceProvider.UpgradeService = upgradeService;
 
             ServiceProvider.TileService = new TileService();
             ServiceProvider.DevelopmentService = new DevelopmentService(upgradeService);
-            ServiceProvider.UserPreferences = new ApplicationSettingsService(new CompositeTypeFormatterFactory(typeProvider));
+            ServiceProvider.UserPreferences = new ApplicationSettingsService(new CompositeTypeFormatterFactory(typeProvider), storageFactory);
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
             currencyCache.InitializeAsync(queryDispatcher);

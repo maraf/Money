@@ -38,12 +38,14 @@ using Windows.UI.Xaml.Navigation;
 namespace Money.Views
 {
     [NavigationParameter(typeof(SummaryParameter))]
-    public sealed partial class Summary : Page, INavigatorPage, INavigatorParameterPage
+    public sealed partial class Summary : Page, INavigatorPage, INavigatorParameterPage, IEventHandler<OutcomeCreated>
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private readonly TileService tileService = ServiceProvider.TileService;
         private readonly IUserPreferenceService userPreferences = ServiceProvider.UserPreferences;
+        private readonly IEventHandlerCollection eventHandlers = ServiceProvider.EventHandlers;
+        private readonly List<UiThreadEventHandler> handlers = new List<UiThreadEventHandler>();
 
         private SummaryParameter parameter;
 
@@ -72,6 +74,8 @@ namespace Money.Views
 
             parameter = (SummaryParameter)e.Parameter;
             await LoadAsync();
+
+            handlers.Add(eventHandlers.AddUiThread(this, Dispatcher));
         }
 
         private Task ReloadAsync()
@@ -135,6 +139,9 @@ namespace Money.Views
                 if (item.ContentTemplateRoot is System.IDisposable content)
                     content.Dispose();
             }
+
+            foreach (UiThreadEventHandler handler in handlers)
+                handler.Remove(eventHandlers);
         }
 
         private async Task LoadMonthViewAsync(GroupViewModel viewModel, MonthModel prefered)
@@ -261,6 +268,14 @@ namespace Money.Views
         private void BarGraph_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.ViewType = SummaryViewType.BarGraph;
+        }
+
+        public Task HandleAsync(OutcomeCreated payload)
+        {
+            if (!ViewModel.Items.Any())
+                ReloadAsync();
+
+            return Task.CompletedTask;
         }
     }
 }

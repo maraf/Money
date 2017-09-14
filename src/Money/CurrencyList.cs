@@ -24,6 +24,7 @@ namespace Money
     {
         private readonly HashSet<string> uniqueCodes = new HashSet<string>();
         private readonly HashSet<string> deletedUniqueCodes = new HashSet<string>();
+        private readonly HashSet<int> exchangeRateHashCodes = new HashSet<int>();
         private string defaultName = null;
 
         public CurrencyList()
@@ -110,11 +111,16 @@ namespace Money
             EnsureExists(targetUniqueCode);
             Ensure.Positive(rate, "rate");
 
-            Publish(new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate));
+            CurrencyExchangeRateSet payload = new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate);
+            if (exchangeRateHashCodes.Contains(payload.GetHashCode()))
+                throw new CurrencyExchangeRateAlreadyExistsException();
+
+            Publish(payload);
         }
 
         Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
         {
+            exchangeRateHashCodes.Add(payload.GetHashCode());
             return Task.CompletedTask;
         }
 

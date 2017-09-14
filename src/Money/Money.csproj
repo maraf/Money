@@ -112,6 +112,7 @@
     <Compile Include="CurrencyAlreadyExistsException.cs" />
     <Compile Include="CurrencyDoesNotExistException.cs" />
     <Compile Include="CantDeleteDefaultCurrencyException.cs" />
+    <Compile Include="CurrencyExchangeRateAlreadyExistsException.cs" />
     <Compile Include="CurrencyList.cs" />
     <Compile Include="DefaultDomainFacade.cs" />
     <Compile Include="Events\CategoryColorChanged.cs" />

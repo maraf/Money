@@ -72,10 +72,45 @@
                 </StackPanel>
             </Button>
             <Button Command="{Binding AddExchangeRate}">
-                <StackPanel Orientation="Horizontal">
-                    <FontIcon Glyph="&#xE877;" />
-                    <TextBlock Text="Add exchange rate" Margin="4,0,0,0" />
-                </StackPanel>
+                <TextBlock Text="Add exchange rate" Margin="4,0,0,0" />
+            </Button>
+            <Button ToolTipService.ToolTip="Exchange rates">
+                <Button.Flyout>
+                    <Flyout>
+                        <ListView ItemsSource="{Binding ExchangeRates}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0">
+                                            <TextBlock Text="From 1" />
+                                            <TextBlock Text="{Binding SourceCurrency}" Margin="2,0,0,0" />
+                                            <TextBlock Text=" to " Style="{StaticResource NoteTextStyle}" Margin="2,0,0,0" />
+                                            <TextBlock Text="{Binding Rate}" HorizontalAlignment="Center" Margin="2,0,0,0" />
+                                            <TextBlock Text="{Binding Text, ElementName=SymbolText}" Margin="2,0,0,0" />
+                                            <TextBlock Text=" used since " Style="{StaticResource NoteTextStyle}" Margin="2,0,0,0" />
+                                            <TextBlock Text="{Binding ValidFromToString}" Margin="2,0" />
+                                        </StackPanel>
+                                        
+                                        <Button Grid.Column="1">
+                                            <SymbolIcon Symbol="Delete" />
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Flyout>
+                </Button.Flyout>
+                <FontIcon Glyph="&#xE877;" />
             </Button>
             <Button x:Name="btnEdit" Click="btnEdit_Click" ToolTipService.ToolTip="Edit symbol">
                 <SymbolIcon Symbol="Edit" />

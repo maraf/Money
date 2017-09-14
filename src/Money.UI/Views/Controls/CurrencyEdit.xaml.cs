@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Money.ViewModels;
+using Money.Views.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,9 +21,30 @@ namespace Money.Views.Controls
 {
     public sealed partial class CurrencyEdit : UserControl
     {
+        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+
+        public CurrencyEditViewModel ViewModel
+        {
+            get { return (CurrencyEditViewModel)DataContext; }
+        }
+
         public CurrencyEdit()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        private async void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            CurrencyName dialog = new CurrencyName();
+            dialog.UniqueCode = ViewModel.UniqueCode;
+            dialog.IsUniqueCodeEnabled = false;
+            dialog.Symbol = ViewModel.Symbol;
+
+            dialog.PrimaryButtonText = "Update";
+
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary || dialog.IsEnterPressed && ViewModel.Symbol != dialog.Symbol)
+                await domainFacade.ChangeCurrencySymbolAsync(ViewModel.UniqueCode, dialog.Symbol);
         }
     }
 }

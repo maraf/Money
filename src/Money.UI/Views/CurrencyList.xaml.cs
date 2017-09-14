@@ -1,4 +1,5 @@
 ﻿using Money.Events;
+using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
@@ -11,9 +12,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -21,10 +23,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System.Threading.Tasks;
-using Neptuo.Threading.Tasks;
-using Windows.UI.Core;
-using Money.Services.Models;
 
 namespace Money.Views
 {
@@ -32,7 +30,9 @@ namespace Money.Views
     public sealed partial class CurrencyList : Page, INavigatorPage,
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
-        IEventHandler<CurrencyExchangeRateSet>
+        IEventHandler<CurrencyExchangeRateSet>,
+        IEventHandler<CurrencySymbolChanged>,
+        IEventHandler<CurrencyDeleted>
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private readonly INavigator navigator = ServiceProvider.Navigator;
@@ -59,7 +59,9 @@ namespace Money.Views
             eventHandlers
                 .Add<CurrencyCreated>(this)
                 .Add<CurrencyDefaultChanged>(this)
-                .Add<CurrencyExchangeRateSet>(this);
+                .Add<CurrencyExchangeRateSet>(this)
+                .Add<CurrencySymbolChanged>(this)
+                .Add<CurrencyDeleted>(this);
 
             CurrencyParameter parameter = (CurrencyParameter)e.Parameter;
 
@@ -86,7 +88,9 @@ namespace Money.Views
             eventHandlers
                 .Remove<CurrencyCreated>(this)
                 .Remove<CurrencyDefaultChanged>(this)
-                .Remove<CurrencyExchangeRateSet>(this);
+                .Remove<CurrencyExchangeRateSet>(this)
+                .Remove<CurrencySymbolChanged>(this)
+                .Remove<CurrencyDeleted>(this);
         }
 
         private void UpdateDefaultCurrency(string name)
@@ -147,6 +151,26 @@ namespace Money.Views
                     ));
                     viewModel.ExchangeRates.SortDescending(r => r.ValidFrom);
                 }
+            });
+        }
+
+        async Task IEventHandler<CurrencySymbolChanged>.HandleAsync(CurrencySymbolChanged payload)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                CurrencyEditViewModel viewModel = ViewModel.Items.FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
+                if (viewModel != null)
+                    viewModel.Symbol = payload.Symbol;
+            });
+        }
+
+        async Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                CurrencyEditViewModel viewModel = ViewModel.Items.FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
+                if (viewModel != null)
+                    ViewModel.Items.Remove(viewModel);
             });
         }
     }

@@ -44,6 +44,12 @@ namespace Money.Views.Dialogs
             new PropertyMetadata(null)
         );
 
+        public bool IsUniqueCodeEnabled
+        {
+            get { return tbxUniqueCode.IsEnabled; }
+            set { tbxUniqueCode.IsEnabled = value; }
+        }
+
         public bool IsEnterPressed { get; private set; }
 
         public CurrencyName()
@@ -68,10 +74,23 @@ namespace Money.Views.Dialogs
                 }
             }
         }
-
-        private void tbxUniqueCode_GotFocus(object sender, RoutedEventArgs e)
+        
+        private void tbxSymbol_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            tbxUniqueCode.SelectAll();
+            if (e.Key == VirtualKey.Enter)
+            {
+                e.Handled = true;
+                IsEnterPressed = true;
+                Hide();
+            }
+            else if (e.Key == VirtualKey.Escape)
+            {
+                if (sender == tbxSymbol && tbxSymbol.Text != string.Empty)
+                {
+                    tbxSymbol.Text = string.Empty;
+                    e.Handled = true;
+                }
+            }
         }
     }
 }

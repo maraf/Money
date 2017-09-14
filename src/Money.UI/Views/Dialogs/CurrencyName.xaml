@@ -10,6 +10,6 @@
         <TextBox x:Name="tbxUniqueCode" Text="{x:Bind UniqueCode, Mode=TwoWay}" KeyDown="tbxUniqueCode_KeyDown" />
         
         <TextBlock Text="Symbol" Margin="0,8,0,0" />
-        <TextBox x:Name="tbxSymbol" Text="{x:Bind Symbol, Mode=TwoWay}" />
+        <TextBox x:Name="tbxSymbol" Text="{x:Bind Symbol, Mode=TwoWay}" KeyDown="tbxSymbol_KeyDown" />
     </StackPanel>
 </ContentDialog>

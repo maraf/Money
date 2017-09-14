@@ -21,7 +21,20 @@ namespace Money.ViewModels
         private readonly IQueryDispatcher queryDispatcher;
 
         public string UniqueCode { get; private set; }
-        public string Symbol { get; private set; }
+
+        private string symbol;
+        public string Symbol
+        {
+            get { return symbol; }
+            set
+            {
+                if (symbol != value)
+                {
+                    symbol = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         private bool isSelected;
         public bool IsSelected

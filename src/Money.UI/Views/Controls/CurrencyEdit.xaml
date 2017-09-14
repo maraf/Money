@@ -77,6 +77,9 @@
                     <TextBlock Text="Add exchange rate" Margin="4,0,0,0" />
                 </StackPanel>
             </Button>
+            <Button x:Name="btnEdit" Click="btnEdit_Click" ToolTipService.ToolTip="Edit symbol">
+                <SymbolIcon Symbol="Edit" />
+            </Button>
             <Button Command="{Binding Delete}" IsEnabled="{Binding IsDefault, Converter={StaticResource FalseToTrueConverter}}" ToolTipService.ToolTip="Delete currency">
                 <SymbolIcon Symbol="Delete" />
             </Button>

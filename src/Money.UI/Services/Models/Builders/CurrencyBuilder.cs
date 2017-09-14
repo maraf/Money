@@ -24,7 +24,8 @@ namespace Money.Services.Models.Builders
         IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyDeleted>,
         IQueryHandler<ListAllCurrency, List<CurrencyModel>>,
-        IQueryHandler<ListTargetCurrencyExchangeRates, List<ExchangeRateModel>>
+        IQueryHandler<ListTargetCurrencyExchangeRates, List<ExchangeRateModel>>,
+        IQueryHandler<GetCurrencyDefault, string>
     {
         private readonly IFactory<ReadModelContext> readModelContextFactory;
 
@@ -120,6 +121,15 @@ namespace Money.Services.Models.Builders
                     .OrderByDescending(e => e.ValidFrom)
                     .Select(e => new ExchangeRateModel(e.SourceCurrency, e.Rate, e.ValidFrom))
                     .ToListAsync();
+            }
+        }
+
+        public async Task<string> HandleAsync(GetCurrencyDefault query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                CurrencyEntity currency = await db.Currencies.FirstAsync(c => c.IsDefault);
+                return currency.UniqueCode;
             }
         }
     }

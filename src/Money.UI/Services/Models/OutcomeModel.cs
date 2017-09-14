@@ -10,7 +10,7 @@ namespace Money.Services.Models
     /// <summary>
     /// A model of a single outcome.
     /// </summary>
-    public class OutcomeModel
+    public class OutcomeModel : IPriceFixed
     {
         public IKey Key { get; private set; }
         public Price Amount { get; private set; }

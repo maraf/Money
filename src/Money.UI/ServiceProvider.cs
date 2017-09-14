@@ -25,6 +25,7 @@ namespace Money
         public static IUpgradeService UpgradeService { get; set; }
         public static TileService TileService { get; set; }
         public static IUserPreferenceService UserPreferences { get; set; }
+        public static IPriceConverter PriceConverter { get; set; }
 
         public static IDevelopmentService DevelopmentTools { get; set; }
 

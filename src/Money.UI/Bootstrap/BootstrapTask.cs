@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Money.Data;
-using Money.Services;
+﻿using Money.Services;
 using Money.Services.Models.Builders;
 using Money.Services.Settings;
 using Money.Services.Tiles;
@@ -17,15 +15,12 @@ using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
 using Neptuo.Models.Snapshots;
 using Neptuo.Queries;
-using Neptuo.ReadModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.UI;
 
 namespace Money.Bootstrap
 {
@@ -68,6 +63,10 @@ namespace Money.Bootstrap
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
             currencyCache.InitializeAsync(queryDispatcher);
+
+            PriceCalculator priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
+            ServiceProvider.PriceConverter = priceCalculator;
+            priceCalculator.InitializeAsync(queryDispatcher);
         }
         
         private void Domain()

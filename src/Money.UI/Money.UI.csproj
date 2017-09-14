@@ -113,6 +113,8 @@
     <Compile Include="Services\CurrencyCache.cs" />
     <Compile Include="Services\CurrencyCache.Model.cs" />
     <Compile Include="Services\IDevelopmentService.cs" />
+    <Compile Include="Services\IPriceConverter.cs" />
+    <Compile Include="Services\Models\IPriceFixed.cs" />
     <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />
     <Compile Include="Services\Models\Builders\CurrencyBuilder.cs" />
     <Compile Include="Services\Models\Builders\OutcomeBuilder.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Services\Models\Queries\GetCategoryColor.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryIcon.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryName.cs" />
+    <Compile Include="Services\Models\Queries\GetCurrencyDefault.cs" />
     <Compile Include="Services\Models\Queries\GetCurrencySymbol.cs" />
     <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
     <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
@@ -136,6 +139,7 @@
     <Compile Include="Services\Models\Queries\ListYearOutcomeFromCategory.cs" />
     <Compile Include="Services\Models\YearModel.cs" />
     <Compile Include="Services\PriceCalculator.cs" />
+    <Compile Include="Services\PriceCalculator.ExchangeRateModelComparer.cs" />
     <Compile Include="Services\Settings\ApplicationDataCompositeStorage.cs" />
     <Compile Include="Services\Settings\ApplicationSettingsService.cs" />
     <Compile Include="Services\Settings\IUserPreferenceService.cs" />

@@ -14,11 +14,14 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    public class PriceCalculator : DisposableBase,
+    public partial class PriceCalculator : DisposableBase,
+        IPriceConverter,
         IEventHandler<CurrencyCreated>,
+        IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyExchangeRateSet>
     {
         private readonly IEventHandlerCollection eventHandlers;
+        private string defaultCurrencyUniqueCode;
         private readonly ExchangeRateModelComparer exchangeRateComparer = new ExchangeRateModelComparer();
         private readonly Dictionary<string, List<ExchangeRateModel>> currencies = new Dictionary<string, List<ExchangeRateModel>>();
 
@@ -28,8 +31,10 @@ namespace Money.Services
             this.eventHandlers = eventHandlers;
         }
 
-        public async Task Initialize(IQueryDispatcher queryDispatcher)
+        public async Task InitializeAsync(IQueryDispatcher queryDispatcher)
         {
+            defaultCurrencyUniqueCode = await queryDispatcher.QueryAsync(new GetCurrencyDefault());
+
             IEnumerable<CurrencyModel> currencies = await queryDispatcher.QueryAsync(new ListAllCurrency());
             foreach (CurrencyModel currency in currencies)
             {
@@ -42,7 +47,7 @@ namespace Money.Services
         Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
             currencies.Add(payload.UniqueCode, new List<ExchangeRateModel>());
-            return Async.CompletedTask;
+            return Task.CompletedTask;
         }
 
         Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
@@ -50,15 +55,40 @@ namespace Money.Services
             List<ExchangeRateModel> exchangeRates = currencies[payload.TargetUniqueCode];
             exchangeRates.Add(new ExchangeRateModel(payload.SourceUniqueCode, payload.Rate, payload.ValidFrom));
             exchangeRates.Sort(exchangeRateComparer);
-            return Async.CompletedTask;
+            return Task.CompletedTask;
         }
 
-        private class ExchangeRateModelComparer : IComparer<ExchangeRateModel>
+        Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
         {
-            public int Compare(ExchangeRateModel x, ExchangeRateModel y)
+            defaultCurrencyUniqueCode = payload.UniqueCode;
+            return Task.CompletedTask;
+        }
+
+        public Price ToDefault(IPriceFixed price)
+        {
+            Ensure.NotNull(price, "price");
+
+            if (price.Amount.Currency == defaultCurrencyUniqueCode)
+                return price.Amount;
+
+            if (currencies.TryGetValue(defaultCurrencyUniqueCode, out List<ExchangeRateModel> rates))
             {
-                return y.ValidFrom.CompareTo(x.ValidFrom);
+                ExchangeRateModel rate = rates.FirstOrDefault(e => e.SourceCurrency == price.Amount.Currency && e.ValidFrom <= price.When);
+                if (rate != null)
+                    return new Price(price.Amount.Value * (decimal)rate.Rate, defaultCurrencyUniqueCode);
             }
+
+            return new Price(price.Amount.Value, defaultCurrencyUniqueCode);
+        }
+
+        public Price Add(IPriceFixed price1, IPriceFixed price2)
+        {
+            return ToDefault(price1) + ToDefault(price2);
+        }
+
+        public Price Substract(IPriceFixed price1, IPriceFixed price2)
+        {
+            return ToDefault(price1) - ToDefault(price2);
         }
     }
 }

@@ -48,7 +48,7 @@ namespace Money.Views.Dialogs
             }
             else if (e.Key == VirtualKey.Escape)
             {
-                if (sender == tbxDescription)
+                if (sender == tbxDescription && tbxDescription.Text != string.Empty)
                 {
                     tbxDescription.Text = string.Empty;
                     e.Handled = true;

@@ -104,7 +104,7 @@ namespace Money.Views.Dialogs
             }
             else if (e.Key == VirtualKey.Escape)
             {
-                if (sender == tbxAmount)
+                if (sender == tbxAmount && tbxAmount.Text != "0")
                 {
                     tbxAmount.Text = "0";
                     tbxAmount.SelectAll();

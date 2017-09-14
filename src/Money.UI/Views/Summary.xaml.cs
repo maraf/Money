@@ -195,7 +195,7 @@ namespace Money.Views
                 }
             }
         }
-        
+
         private void pvtGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GroupItemViewModel viewModel = (GroupItemViewModel)e.AddedItems.FirstOrDefault();
@@ -204,11 +204,11 @@ namespace Money.Views
 
             MonthModel month = viewModel.Parameter as MonthModel;
             if (month != null)
-                this.parameter.Month = month;
+                parameter.Month = month;
 
             YearModel year = viewModel.Parameter as YearModel;
             if (year != null)
-                this.parameter.Year = year;
+                parameter.Year = year;
         }
 
         private async void btnPinOutcomeCreate_Click(object sender, RoutedEventArgs e)
@@ -272,7 +272,21 @@ namespace Money.Views
 
         public Task HandleAsync(OutcomeCreated payload)
         {
-            if (!ViewModel.Items.Any())
+            bool isReloadRequired = false;
+            if (parameter.Month != null)
+            {
+                MonthModel other = payload.When;
+                if (!ViewModel.Items.Any(g => g.Parameter.Equals(other)))
+                    isReloadRequired = true;
+            }
+            else if (parameter.Year != null)
+            {
+                YearModel other = new YearModel(payload.When.Year);
+                if (!ViewModel.Items.Any(g => g.Parameter.Equals(other)))
+                    isReloadRequired = true;
+            }
+
+            if (isReloadRequired)
                 ReloadAsync();
 
             return Task.CompletedTask;

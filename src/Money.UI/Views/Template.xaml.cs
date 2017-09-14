@@ -59,7 +59,7 @@ namespace Money.Views
 
             menuItems = new List<MenuItemViewModel>()
             {
-                new MenuItemViewModel("Month", "\uE9D9", new SummaryParameter()) { Group = "Summary" },
+                new MenuItemViewModel("Month", "\uE908", new SummaryParameter()) { Group = "Summary" },
                 new MenuItemViewModel("Categories", "\uE8FD", new CategoryListParameter()) { Group = "Manage" },
                 new MenuItemViewModel("Currencies", "\uE1D0", new CurrencyParameter()) { Group = "Manage" },
                 new MenuItemViewModel("Settings", "\uE713", new AboutParameter()) { Group = "Settings" },

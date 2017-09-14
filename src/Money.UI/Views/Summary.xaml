@@ -25,7 +25,7 @@
             </AppBarButton>
             <AppBarButton x:Name="BarGraph" Click="BarGraph_Click" Label="Bar Graph" ToolTipService.ToolTip="Bar Graph" Visibility="{Binding ViewType, Converter={StaticResource BarGraphToCollapsedConverter}}">
                 <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xEA37;" />
+                    <FontIcon Glyph="&#xEA55;" />
                 </AppBarButton.Icon>
             </AppBarButton>
 

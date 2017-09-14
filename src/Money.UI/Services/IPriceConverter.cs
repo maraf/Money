@@ -13,6 +13,12 @@ namespace Money.Services
     public interface IPriceConverter
     {
         /// <summary>
+        /// Creates a zero price in default currency.
+        /// </summary>
+        /// <returns></returns>
+        Price ZeroDefault();
+
+        /// <summary>
         /// Converts <paramref name="price"/> to default currency.
         /// </summary>
         /// <param name="price">A price to convert.</param>

@@ -20,15 +20,14 @@ namespace Money.Services
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyExchangeRateSet>
     {
-        private readonly IEventHandlerCollection eventHandlers;
-        private string defaultCurrencyUniqueCode;
         private readonly ExchangeRateModelComparer exchangeRateComparer = new ExchangeRateModelComparer();
         private readonly Dictionary<string, List<ExchangeRateModel>> currencies = new Dictionary<string, List<ExchangeRateModel>>();
+        private string defaultCurrencyUniqueCode;
 
         public PriceCalculator(IEventHandlerCollection eventHandlers)
         {
             Ensure.NotNull(eventHandlers, "eventHandlers");
-            this.eventHandlers = eventHandlers;
+            eventHandlers.AddAll(this);
         }
 
         public async Task InitializeAsync(IQueryDispatcher queryDispatcher)
@@ -62,6 +61,11 @@ namespace Money.Services
         {
             defaultCurrencyUniqueCode = payload.UniqueCode;
             return Task.CompletedTask;
+        }
+
+        public Price ZeroDefault()
+        {
+            return Price.Zero(defaultCurrencyUniqueCode);
         }
 
         public Price ToDefault(IPriceFixed price)

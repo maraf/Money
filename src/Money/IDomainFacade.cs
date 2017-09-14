@@ -15,11 +15,6 @@ namespace Money
     public interface IDomainFacade
     {
         /// <summary>
-        /// Gets a factory for creating prices.
-        /// </summary>
-        IFactory<Price, decimal> PriceFactory { get; }
-
-        /// <summary>
         /// Creates an category.
         /// </summary>
         /// <param name="name">A name of the category.</param>

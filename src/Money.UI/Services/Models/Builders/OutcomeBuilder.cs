@@ -31,14 +31,14 @@ namespace Money.Services.Models.Builders
         IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>
     {
         private readonly IFactory<ReadModelContext> readModelContextFactory;
-        private readonly IFactory<Price, decimal> priceFactory;
+        private readonly IPriceConverter priceConverter;
 
-        internal OutcomeBuilder(IFactory<ReadModelContext> readModelContextFactory, IFactory<Price, decimal> priceFactory)
+        internal OutcomeBuilder(IFactory<ReadModelContext> readModelContextFactory, IPriceConverter priceConverter)
         {
             Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
-            Ensure.NotNull(priceFactory, "priceFactory");
+            Ensure.NotNull(priceConverter, "priceConverter");
             this.readModelContextFactory = readModelContextFactory;
-            this.priceFactory = priceFactory;
+            this.priceConverter = priceConverter;
         }
 
         public async Task<IEnumerable<MonthModel>> HandleAsync(ListMonthWithOutcome query)
@@ -73,9 +73,9 @@ namespace Money.Services.Models.Builders
                     {
                         Price price;
                         if (totals.TryGetValue(category.CategoryId, out price))
-                            price = price + new Price(outcome.Amount, outcome.Currency);
+                            price = price + priceConverter.ToDefault(outcome);
                         else
-                            price = new Price(outcome.Amount, outcome.Currency);
+                            price = priceConverter.ToDefault(outcome);
 
                         totals[category.CategoryId] = price;
                     }
@@ -127,14 +127,14 @@ namespace Money.Services.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                List<Price> outcomes = await db.Outcomes
+                List<PriceFixed> outcomes = await db.Outcomes
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
-                    .Select(o => new Price(o.Amount, o.Currency))
+                    .Select(o => new PriceFixed(new Price(o.Amount, o.Currency), o.When))
                     .ToListAsync();
 
-                Price price = priceFactory.Create(0);
-                foreach (Price outcome in outcomes)
-                    price += outcome;
+                Price price = priceConverter.ZeroDefault();
+                foreach (PriceFixed outcome in outcomes)
+                    price += priceConverter.ToDefault(outcome);
 
                 return price;
             }

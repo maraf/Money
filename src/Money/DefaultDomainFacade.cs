@@ -27,22 +27,17 @@ namespace Money
             KeyFactory.Empty(typeof(CurrencyList)).Type
         );
 
-        public IFactory<Price, decimal> PriceFactory { get; private set; }
-
         public DefaultDomainFacade(
             IRepository<Outcome, IKey> outcomeRepository, 
             IRepository<Category, IKey> categoryRepository,
-            IRepository<CurrencyList, IKey> currencyListRepository,
-            IFactory<Price, decimal> priceFactory)
+            IRepository<CurrencyList, IKey> currencyListRepository)
         {
             Ensure.NotNull(outcomeRepository, "outcomeRepository");
             Ensure.NotNull(categoryRepository, "categoryRepository");
             Ensure.NotNull(currencyListRepository, "currencyListRepository");
-            Ensure.NotNull(priceFactory, "priceFactory");
             this.outcomeRepository = outcomeRepository;
             this.categoryRepository = categoryRepository;
             this.currencyListRepository = currencyListRepository;
-            PriceFactory = priceFactory;
         }
 
         public Task<IKey> CreateCategoryAsync(string name, Color color)

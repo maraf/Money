@@ -27,10 +27,11 @@ namespace Money.Bootstrap
         private readonly IFactory<EventSourcingContext> eventSourceContextFactory;
         private readonly IFactory<ReadModelContext> readModelContextFactory;
         private readonly IFactory<ApplicationDataContainer> storageContainerFactory;
+        private readonly IPriceConverter priceConverter;
 
         public const int CurrentVersion = 4;
 
-        public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory)
+        public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory, IPriceConverter priceConverter)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(eventStore, "eventStore");
@@ -38,12 +39,14 @@ namespace Money.Bootstrap
             Ensure.NotNull(eventSourceContextFactory, "eventSourceContextFactory");
             Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
             Ensure.NotNull(storageContainerFactory, "storageContainerFactory");
+            Ensure.NotNull(priceConverter, "priceConverter");
             this.domainFacade = domainFacade;
             this.eventStore = eventStore;
             this.eventFormatter = eventFormatter;
             this.eventSourceContextFactory = eventSourceContextFactory;
             this.readModelContextFactory = readModelContextFactory;
             this.storageContainerFactory = storageContainerFactory;
+            this.priceConverter = priceConverter;
         }
 
         public bool IsRequired()
@@ -148,7 +151,7 @@ namespace Money.Bootstrap
             // Should match with ReadModels.
             Rebuilder rebuilder = new Rebuilder(eventStore, eventFormatter);
             rebuilder.AddAll(new CategoryBuilder(readModelContextFactory));
-            rebuilder.AddAll(new OutcomeBuilder(readModelContextFactory, domainFacade.PriceFactory));
+            rebuilder.AddAll(new OutcomeBuilder(readModelContextFactory, priceConverter));
             rebuilder.AddAll(new CurrencyBuilder(readModelContextFactory));
             return rebuilder.RunAsync();
         }

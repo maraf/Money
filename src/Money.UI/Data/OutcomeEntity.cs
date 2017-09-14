@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Data
 {
-    internal class OutcomeEntity
+    internal class OutcomeEntity : IPriceFixed
     {
         public Guid Id { get; set; }
         public string Description { get; set; }
@@ -17,6 +17,9 @@ namespace Money.Data
         public string Currency { get; set; }
         public DateTime When { get; set; }
         public IList<OutcomeCategoryEntity> Categories { get; set; }
+
+        Price IPriceFixed.Amount => new Price(Amount, Currency);
+        DateTime IPriceFixed.When => When;
 
         public OutcomeEntity()
         { }

@@ -30,7 +30,6 @@ namespace Money.Bootstrap
         private ICompositeTypeProvider typeProvider;
         private DefaultQueryDispatcher queryDispatcher;
 
-        public IFactory<Price, decimal> PriceFactory { get; private set; }
         public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
         public IRepository<Category, IKey> CategoryRepository { get; private set; }
         public IRepository<CurrencyList, IKey> CurrencyListRepository { get; private set; }
@@ -48,13 +47,17 @@ namespace Money.Bootstrap
             ServiceProvider.StorageContainerFactory = storageFactory;
 
             Domain();
+
+            PriceCalculator priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
+            ServiceProvider.PriceConverter = priceCalculator;
+
             ReadModels();
 
             ServiceProvider.QueryDispatcher = queryDispatcher;
             ServiceProvider.DomainFacade = DomainFacade;
             ServiceProvider.EventHandlers = eventDispatcher.Handlers;
 
-            UpgradeService upgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory);
+            UpgradeService upgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory, priceCalculator);
             ServiceProvider.UpgradeService = upgradeService;
 
             ServiceProvider.TileService = new TileService();
@@ -62,10 +65,8 @@ namespace Money.Bootstrap
             ServiceProvider.UserPreferences = new ApplicationSettingsService(new CompositeTypeFormatterFactory(typeProvider), storageFactory);
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
-            currencyCache.InitializeAsync(queryDispatcher);
 
-            PriceCalculator priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
-            ServiceProvider.PriceConverter = priceCalculator;
+            currencyCache.InitializeAsync(queryDispatcher);
             priceCalculator.InitializeAsync(queryDispatcher);
         }
         
@@ -124,12 +125,10 @@ namespace Money.Bootstrap
                 new EmptySnapshotStore()
             );
 
-            PriceFactory = new PriceFactory("CZK");
             DomainFacade = new DefaultDomainFacade(
                 OutcomeRepository,
                 CategoryRepository,
-                CurrencyListRepository,
-                PriceFactory
+                CurrencyListRepository
             );
         }
 
@@ -142,7 +141,7 @@ namespace Money.Bootstrap
             queryDispatcher.AddAll(categoryBuilder);
             eventDispatcher.Handlers.AddAll(categoryBuilder);
 
-            OutcomeBuilder outcomeBuilder = new OutcomeBuilder(ServiceProvider.ReadModelContextFactory, PriceFactory);
+            OutcomeBuilder outcomeBuilder = new OutcomeBuilder(ServiceProvider.ReadModelContextFactory, ServiceProvider.PriceConverter);
             queryDispatcher.AddAll(outcomeBuilder);
             eventDispatcher.Handlers.AddAll(outcomeBuilder);
 

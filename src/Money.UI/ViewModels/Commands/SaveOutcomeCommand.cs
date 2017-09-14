@@ -47,25 +47,27 @@ namespace Money.ViewModels.Commands
 
         public override async void Execute()
         {
-            IKey outcomeKey = await domainFacade.CreateOutcomeAsync(
-                domainFacade.PriceFactory.Create((decimal)viewModel.Amount),
-                viewModel.Description,
-                viewModel.When,
-                viewModel.SelectedCategories.First()
-            );
+            throw Ensure.Exception.NotImplemented();
 
-            if (viewModel.SelectedCategories.Count > 1)
-            {
-                for (int i = 2; i < viewModel.SelectedCategories.Count; i++)
-                {
-                    IKey categoryKey = viewModel.SelectedCategories[i];
-                    await domainFacade.AddOutcomeCategoryAsync(outcomeKey, categoryKey);
-                }
-            }
+            //IKey outcomeKey = await domainFacade.CreateOutcomeAsync(
+            //    domainFacade.PriceFactory.Create((decimal)viewModel.Amount),
+            //    viewModel.Description,
+            //    viewModel.When,
+            //    viewModel.SelectedCategories.First()
+            //);
 
-            viewModel.Amount = 0;
-            viewModel.Description = null;
-            viewModel.When = DateTime.Now;
+            //if (viewModel.SelectedCategories.Count > 1)
+            //{
+            //    for (int i = 2; i < viewModel.SelectedCategories.Count; i++)
+            //    {
+            //        IKey categoryKey = viewModel.SelectedCategories[i];
+            //        await domainFacade.AddOutcomeCategoryAsync(outcomeKey, categoryKey);
+            //    }
+            //}
+
+            //viewModel.Amount = 0;
+            //viewModel.Description = null;
+            //viewModel.When = DateTime.Now;
 
             base.Execute();
         }

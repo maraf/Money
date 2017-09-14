@@ -112,13 +112,13 @@ namespace Money.Views
             }
             else if (e.Key == VirtualKey.Escape)
             {
-                if (sender == tbxAmount)
+                if (sender == tbxAmount && tbxAmount.Text != "0")
                 {
                     tbxAmount.Text = "0";
                     tbxAmount.SelectAll();
                     e.Handled = true;
                 }
-                else if (sender == tbxDescription)
+                else if (sender == tbxDescription && tbxDescription.Text != String.Empty)
                 {
                     tbxDescription.Text = String.Empty;
                     e.Handled = true;

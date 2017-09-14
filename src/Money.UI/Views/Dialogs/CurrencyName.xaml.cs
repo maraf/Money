@@ -61,7 +61,7 @@ namespace Money.Views.Dialogs
             }
             else if (e.Key == VirtualKey.Escape)
             {
-                if (sender == tbxUniqueCode)
+                if (sender == tbxUniqueCode && tbxUniqueCode.Text != string.Empty)
                 {
                     tbxUniqueCode.Text = string.Empty;
                     e.Handled = true;

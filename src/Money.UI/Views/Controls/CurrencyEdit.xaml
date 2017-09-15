@@ -45,11 +45,8 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Grid.Row="2" Grid.ColumnSpan="2">
-            <Button Command="{Binding SetAsDefault}">
-                <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Symbol="Home" />
-                    <TextBlock Text="Set as default" Margin="4,0,0,0" />
-                </StackPanel>
+            <Button Command="{Binding SetAsDefault}" ToolTipService.ToolTip="Set as default">
+                <SymbolIcon Symbol="Home" />
             </Button>
             <Button ToolTipService.ToolTip="Exchange rates">
                 <Button.Flyout>

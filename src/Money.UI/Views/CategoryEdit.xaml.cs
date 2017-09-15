@@ -76,7 +76,7 @@ namespace Money.Views
                 else if (ViewModel.Name != dialog.Name)
                 {
                     await domainFacade.RenameCategoryAsync(ViewModel.Key, dialog.Name);
-                    ViewModel.Name = Name;
+                    ViewModel.Name = dialog.Name;
                 }
 
                 if (ViewModel.Description != dialog.Description)

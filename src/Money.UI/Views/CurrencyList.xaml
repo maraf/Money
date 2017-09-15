@@ -15,8 +15,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ListView x:Name="lvwItems" ItemsSource="{Binding Items}" SelectionMode="Single" SelectionChanged="lvwItems_SelectionChanged">
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
                     <Setter Property="Padding" Value="8,4" />
                 </Style>
             </ListView.ItemContainerStyle>

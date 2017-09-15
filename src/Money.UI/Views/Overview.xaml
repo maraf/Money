@@ -74,9 +74,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Padding" Value="8,4" />
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
+                    <Setter Property="Padding" Value="8,4,8,12" />
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>

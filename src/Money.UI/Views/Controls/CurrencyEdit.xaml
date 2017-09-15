@@ -65,11 +65,6 @@
                             </Grid>
                             <controls:EmptyMessage Main="{x:Null}" Additional="No exchange rates" ItemCount="{Binding ExchangeRates.Count}" />
                             <ListView ItemsSource="{Binding ExchangeRates}">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>

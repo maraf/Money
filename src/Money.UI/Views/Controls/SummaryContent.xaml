@@ -25,8 +25,7 @@
         <Setter x:Key="setPieVisible" Target="codRight.Width" Value="*" />
         <Setter x:Key="setPieCollapsed" Target="codRight.Width" Value="0" />
 
-        <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
             <Setter Property="Padding" Value="0" />
         </Style>
     </UserControl.Resources>

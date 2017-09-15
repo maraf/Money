@@ -2,7 +2,9 @@
     x:Class="Money.UI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Money.Views.Controls"
     xmlns:converters="using:Money.Views.Converters"
+    xmlns:viewModels="using:Money.ViewModels"
     xmlns:dd="using:Money.Views.DesignData"
     xmlns:domain="using:Money">
     <Application.Resources>

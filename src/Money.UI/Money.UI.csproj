@@ -215,6 +215,9 @@
       <DependentUpon>DevelopmentTools.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\LoadingType.cs" />
+    <Compile Include="Views\Controls\MainMenu.xaml.cs">
+      <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\MainMenuAppBarButton.cs" />
     <Compile Include="Views\Controls\SortAppBarButton.cs" />
     <Compile Include="Views\Converters\ExchangeRateListToStringConverter.cs" />
@@ -357,6 +360,10 @@
     <Page Include="Views\CategoryEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\MainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CurrencyEdit.xaml">
       <Generator>MSBuild:Compile</Generator>

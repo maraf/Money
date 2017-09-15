@@ -55,6 +55,10 @@ namespace Money.ViewModels
         
         public object Parameter { get; private set; }
 
+        [Obsolete("Designer only.")]
+        public MenuItemViewModel()
+        { }
+
         public MenuItemViewModel(string label, object parameter)
         {
             Ensure.NotNull(parameter, "parameter");

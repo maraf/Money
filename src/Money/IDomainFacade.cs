@@ -144,6 +144,17 @@ namespace Money
         Task SetExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate);
 
         /// <summary>
+        /// Removes an exchange rate from <paramref name="sourceUniqueCode"/> to <paramref name="targetUniqueCode"/>.
+        /// It is valid from <paramref name="validFrom"/> with exchange <paramref name="rate"/>.
+        /// </summary>
+        /// <param name="sourceUniqueCode">A source currency unique code.</param>
+        /// <param name="targetUniqueCode">A target currency unique code.</param>
+        /// <param name="validFrom">A date from which the exchange rate is valid.</param>
+        /// <param name="rate">An exchange rate.</param>
+        /// <returns>Continuation task.</returns>
+        Task RemoveExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate);
+
+        /// <summary>
         /// Deletes (soft) currency with <paramref name="uniqueCode"/>.
         /// </summary>
         /// <param name="uniqueCode">An unique code for the currency to delete.</param>

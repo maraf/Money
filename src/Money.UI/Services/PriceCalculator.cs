@@ -18,7 +18,8 @@ namespace Money.Services
         IPriceConverter,
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
-        IEventHandler<CurrencyExchangeRateSet>
+        IEventHandler<CurrencyExchangeRateSet>,
+        IEventHandler<CurrencyExchangeRateRemoved>
     {
         private readonly ExchangeRateModelComparer exchangeRateComparer = new ExchangeRateModelComparer();
         private readonly Dictionary<string, List<ExchangeRateModel>> currencies = new Dictionary<string, List<ExchangeRateModel>>();
@@ -54,6 +55,19 @@ namespace Money.Services
             List<ExchangeRateModel> exchangeRates = currencies[payload.TargetUniqueCode];
             exchangeRates.Add(new ExchangeRateModel(payload.SourceUniqueCode, payload.Rate, payload.ValidFrom));
             exchangeRates.Sort(exchangeRateComparer);
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
+        {
+            List<ExchangeRateModel> exchangeRates = currencies[payload.TargetUniqueCode];
+            ExchangeRateModel exchangeRate = exchangeRates.FirstOrDefault(r => r.SourceCurrency == payload.SourceUniqueCode && r.Rate == payload.Rate && r.ValidFrom == payload.ValidFrom);
+            if (exchangeRate != null)
+            {
+                exchangeRates.Remove(exchangeRate);
+                exchangeRates.Sort(exchangeRateComparer);
+            }
+
             return Task.CompletedTask;
         }
 

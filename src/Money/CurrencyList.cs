@@ -19,6 +19,7 @@ namespace Money
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyExchangeRateSet>,
+        IEventHandler<CurrencyExchangeRateRemoved>,
         IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyDeleted>
     {
@@ -121,6 +122,27 @@ namespace Money
         Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
         {
             exchangeRateHashCodes.Add(payload.GetHashCode());
+            return Task.CompletedTask;
+        }
+
+        public void RemoveExchangeRate(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        {
+            Ensure.NotNullOrEmpty(sourceUniqueCode, "sourceUniqueCode");
+            Ensure.NotNullOrEmpty(targetUniqueCode, "targetUniqueCode");
+            EnsureExists(sourceUniqueCode);
+            EnsureExists(targetUniqueCode);
+            Ensure.Positive(rate, "rate");
+
+            CurrencyExchangeRateSet payload = new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate);
+            if (!exchangeRateHashCodes.Contains(payload.GetHashCode()))
+                throw new CurrencyExchangeRateAlreadyExistsException();
+
+            Publish(new CurrencyExchangeRateRemoved(sourceUniqueCode, targetUniqueCode, validFrom, rate));
+        }
+
+        Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
+        {
+            exchangeRateHashCodes.Add(new CurrencyExchangeRateSet(payload.SourceUniqueCode, payload.TargetUniqueCode, payload.ValidFrom, payload.Rate).GetHashCode());
             return Task.CompletedTask;
         }
 

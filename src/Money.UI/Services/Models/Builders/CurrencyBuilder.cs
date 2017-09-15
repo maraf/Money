@@ -21,6 +21,7 @@ namespace Money.Services.Models.Builders
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyExchangeRateSet>,
+        IEventHandler<CurrencyExchangeRateRemoved>,
         IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyDeleted>,
         IQueryHandler<ListAllCurrency, List<CurrencyModel>>,
@@ -107,6 +108,20 @@ namespace Money.Services.Models.Builders
                     Rate = payload.Rate,
                     ValidFrom = payload.ValidFrom
                 });
+
+                await db.SaveChangesAsync();
+            }
+        }
+        
+        public async Task HandleAsync(CurrencyExchangeRateRemoved payload)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                CurrencyExchangeRateEntity entity = await db.ExchangeRates
+                    .FirstOrDefaultAsync(r => r.TargetCurrency == payload.TargetUniqueCode && r.SourceCurrency == payload.SourceUniqueCode && r.Rate == payload.Rate && r.ValidFrom == payload.ValidFrom);
+
+                if (entity != null)
+                    db.ExchangeRates.Remove(entity);
 
                 await db.SaveChangesAsync();
             }

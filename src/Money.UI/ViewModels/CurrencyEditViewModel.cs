@@ -47,8 +47,7 @@ namespace Money.ViewModels
                     isSelected = value;
                     RaisePropertyChanged();
 
-                    if(!isExchangeRateListLoaded)
-                        LoadExchangeRateList();
+                    LoadExchangeRateList();
                 }
             }
         }
@@ -92,17 +91,10 @@ namespace Money.ViewModels
         private CurrencySetAsDefaultCommand setAsDefault;
         private NavigateCommand addExchangeRate;
 
-        public ICommand SetAsDefault
-        {
-            get { return setAsDefault; }
-        }
-
-        public ICommand AddExchangeRate
-        {
-            get { return addExchangeRate; }
-        }
-
+        public ICommand SetAsDefault => setAsDefault;
+        public ICommand AddExchangeRate => addExchangeRate;
         public ICommand Delete { get; private set; }
+        public ICommand DeleteExchangeRate { get; private set; }
 
         public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, IQueryDispatcher queryDispatcher, string uniqueCode, string symbol)
         {
@@ -115,6 +107,7 @@ namespace Money.ViewModels
             ExchangeRates = new SortableObservableCollection<ExchangeRateModel>();
 
             CreateCommands(navigator, domainFacade);
+            LoadExchangeRateList();
         }
 
         private void CreateCommands(INavigator navigator, IDomainFacade domainFacade)
@@ -122,10 +115,14 @@ namespace Money.ViewModels
             setAsDefault = new CurrencySetAsDefaultCommand(domainFacade, UniqueCode);
             addExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(UniqueCode));
             Delete = new CurrencyDeleteCommand(navigator, domainFacade, UniqueCode);
+            DeleteExchangeRate = new CurrencyDeleteExchangeRateCommand(domainFacade, navigator, UniqueCode);
         }
 
         private async void LoadExchangeRateList()
         {
+            if (isExchangeRateListLoaded)
+                return;
+
             if (queryDispatcher == null)
                 return;
 
@@ -135,6 +132,7 @@ namespace Money.ViewModels
 
             ExchangeRates.AddRange(exchangeRates);
             ExchangeRates.SortDescending(e => e.ValidFrom);
+            RaisePropertyChanged(nameof(ExchangeRates));
 
             isExchangeRateListLoaded = true;
         }

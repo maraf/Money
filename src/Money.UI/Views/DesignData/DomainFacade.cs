@@ -99,6 +99,11 @@ namespace Money.Views.DesignData
             throw new NotImplementedException();
         }
 
+        public Task RemoveExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task RenameCategoryAsync(IKey categoryKey, string newName)
         {
             throw new NotImplementedException();

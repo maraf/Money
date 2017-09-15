@@ -31,6 +31,7 @@ namespace Money.Views
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyExchangeRateSet>,
+        IEventHandler<CurrencyExchangeRateRemoved>,
         IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyDeleted>
     {
@@ -60,6 +61,7 @@ namespace Money.Views
                 .Add<CurrencyCreated>(this)
                 .Add<CurrencyDefaultChanged>(this)
                 .Add<CurrencyExchangeRateSet>(this)
+                .Add<CurrencyExchangeRateRemoved>(this)
                 .Add<CurrencySymbolChanged>(this)
                 .Add<CurrencyDeleted>(this);
 
@@ -89,6 +91,7 @@ namespace Money.Views
                 .Remove<CurrencyCreated>(this)
                 .Remove<CurrencyDefaultChanged>(this)
                 .Remove<CurrencyExchangeRateSet>(this)
+                .Remove<CurrencyExchangeRateRemoved>(this)
                 .Remove<CurrencySymbolChanged>(this)
                 .Remove<CurrencyDeleted>(this);
         }
@@ -150,6 +153,25 @@ namespace Money.Views
                         payload.ValidFrom
                     ));
                     viewModel.ExchangeRates.SortDescending(r => r.ValidFrom);
+                }
+            });
+        }
+
+        async Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                CurrencyEditViewModel viewModel = ViewModel.Items.FirstOrDefault(c => c.UniqueCode == payload.TargetUniqueCode);
+                if (viewModel != null)
+                {
+                    ExchangeRateModel model = viewModel.ExchangeRates
+                        .FirstOrDefault(r => r.SourceCurrency == payload.SourceUniqueCode && r.Rate == payload.Rate && r.ValidFrom == payload.ValidFrom);
+
+                    if (model != null)
+                    {
+                        viewModel.ExchangeRates.Remove(model);
+                        viewModel.ExchangeRates.SortDescending(r => r.ValidFrom);
+                    }
                 }
             });
         }

@@ -113,6 +113,7 @@
     <Compile Include="CurrencyDoesNotExistException.cs" />
     <Compile Include="CantDeleteDefaultCurrencyException.cs" />
     <Compile Include="CurrencyExchangeRateAlreadyExistsException.cs" />
+    <Compile Include="CurrencyExchangeRateDoesNotExistException.cs" />
     <Compile Include="CurrencyList.cs" />
     <Compile Include="DefaultDomainFacade.cs" />
     <Compile Include="Events\CategoryColorChanged.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Events\CurrencyCreated.cs" />
     <Compile Include="Events\CurrencyDefaultChanged.cs" />
     <Compile Include="Events\CurrencyDeleted.cs" />
+    <Compile Include="Events\CurrencyExchangeRateRemoved.cs" />
     <Compile Include="Events\CurrencyExchangeRateSet.cs" />
     <Compile Include="Events\CurrencySymbolChanged.cs" />
     <Compile Include="Events\OutcomeAmountChanged.cs" />

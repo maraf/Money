@@ -14,17 +14,21 @@ namespace Money.Views.Converters
         {
             IReadOnlyList<ExchangeRateModel> models = (IReadOnlyList<ExchangeRateModel>)value;
             StringBuilder result = new StringBuilder();
+            HashSet<string> uniqueCodes = new HashSet<string>();
             for (int i = 0; i < models.Count; i++)
             {
-                if (result.Length > 0)
+                if (uniqueCodes.Add(models[i].SourceCurrency))
                 {
-                    if (i == models.Count - 1)
-                        result.Append(" and ");
-                    else
-                        result.Append(", ");
-                }
+                    if (result.Length > 0)
+                    {
+                        if (i == models.Count - 1)
+                            result.Append(" and ");
+                        else
+                            result.Append(", ");
+                    }
 
-                result.Append(models[i].SourceCurrency);
+                    result.Append(models[i].SourceCurrency);
+                }
             }
 
             return result;

@@ -206,6 +206,16 @@ namespace Money
             });
         }
 
+        public Task RemoveExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+                currencies.RemoveExchangeRate(sourceUniqueCode, targetUniqueCode, validFrom, rate);
+                currencyListRepository.Save(currencies);
+            });
+        }
+
         public Task DeleteCurrencyAsync(string uniqueCode)
         {
             return Task.Factory.StartNew(() =>

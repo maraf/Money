@@ -65,6 +65,7 @@ namespace Money.Views.Controls
         public EmptyMessage()
         {
             InitializeComponent();
+            Background = Resources["ApplicationPageBackgroundThemeBrush"] as Brush;
         }
     }
 }

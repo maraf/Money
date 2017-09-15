@@ -16,16 +16,16 @@ namespace Money.Views.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value == null)
-                return TrueValue;
+                return TypeConverterHelper.TryConvertValue(TrueValue, targetType);
 
             if (value is string)
             {
                 string stringValue = value as string;
                 if (stringValue == String.Empty)
-                    return TrueValue;
+                    return TypeConverterHelper.TryConvertValue(TrueValue, targetType);
             }
 
-            return FalseValue;
+            return TypeConverterHelper.TryConvertValue(FalseValue, targetType);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

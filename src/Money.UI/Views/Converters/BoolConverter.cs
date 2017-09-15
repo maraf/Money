@@ -23,24 +23,9 @@ namespace Money.Views.Converters
                 boolValue = false;
 
             if (Test == boolValue.Value)
-                return TryConvertValue(TrueValue, targetType);
+                return TypeConverterHelper.TryConvertValue(TrueValue, targetType);
 
-            return TryConvertValue(FalseValue, targetType);
-        }
-
-        private object TryConvertValue(object value, Type targetType)
-        {
-            if (value == null)
-                return value;
-
-            TypeConverter converter = TypeDescriptor.GetConverter(targetType);
-            if (converter == null)
-                return value;
-
-            if (converter.CanConvertFrom(value.GetType()))
-                return converter.ConvertFrom(value);
-
-            return value;
+            return TypeConverterHelper.TryConvertValue(FalseValue, targetType);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

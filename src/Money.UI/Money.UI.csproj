@@ -220,6 +220,7 @@
     <Compile Include="Views\Controls\SortAppBarButton.cs" />
     <Compile Include="Views\Converters\ExchangeRateListToStringConverter.cs" />
     <Compile Include="Views\Converters\SymmaryViewTypeToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\TypeConverterHelper.cs" />
     <Compile Include="Views\Dialogs\CategoryChangeIcon.cs" />
     <Compile Include="Views\Dialogs\CurrencyAddExchangeRateWizard.cs" />
     <Compile Include="Views\Controls\CurrencyEdit.xaml.cs">

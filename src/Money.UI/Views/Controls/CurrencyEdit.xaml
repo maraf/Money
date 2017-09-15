@@ -59,14 +59,14 @@
                                 <Setter Property="Padding" Value="2,4" />
                             </Style>
                         </Flyout.FlyoutPresenterStyle>
-                        <StackPanel x:Name="stpExchangeRateList">
-                            <Grid>
-                                <TextBlock Text="Exchange rates" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="14,0,0,0" />
-                                <Button Command="{Binding AddExchangeRate}" HorizontalAlignment="Right" Margin="0,0,12,0">
+                        <StackPanel x:Name="stpExchangeRateList" MinWidth="300">
+                            <Grid Margin="14,4,12,4">
+                                <TextBlock Text="Exchange rates" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                                <Button Command="{Binding AddExchangeRate}" HorizontalAlignment="Right" ToolTipService.ToolTip="Add exchange rate">
                                     <SymbolIcon Symbol="Add" />
                                 </Button>
                             </Grid>
-                            <controls:EmptyMessage Additional="No exchange rates" ItemCount="{Binding ExchangeRates.Count}" />
+                            <controls:EmptyMessage Main="{x:Null}" Additional="No exchange rates" ItemCount="{Binding ExchangeRates.Count}" />
                             <ListView ItemsSource="{Binding ExchangeRates}">
                                 <ListView.ItemContainerStyle>
                                     <Style TargetType="ListViewItem">
@@ -92,7 +92,7 @@
                                             </StackPanel>
 
                                             <StackPanel Margin="8,0,0,0" Orientation="Horizontal" Grid.Column="1">
-                                                <Button Command="{Binding DataContext.DeleteExchangeRate, ElementName=stpExchangeRateList}" CommandParameter="{Binding}">
+                                                <Button Command="{Binding DataContext.DeleteExchangeRate, ElementName=stpExchangeRateList}" CommandParameter="{Binding}" ToolTipService.ToolTip="Remove exchange rate">
                                                     <SymbolIcon Symbol="Delete" />
                                                 </Button>
                                             </StackPanel>

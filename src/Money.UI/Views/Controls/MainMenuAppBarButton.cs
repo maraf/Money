@@ -1,33 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Text;
+using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views.Controls
 {
-    public sealed partial class MainMenuAppBarToggleButton : AppBarToggleButton, IDisposable
+    public class MainMenuAppBarButton : AppBarToggleButton, IDisposable
     {
-        public MainMenuAppBarToggleButton()
+        public MainMenuAppBarButton()
         {
-            InitializeComponent();
+            Label = "Menu";
+            Icon = new FontIcon()
+            {
+                Glyph = "\uE700"
+            };
 
             CoreWindow window = CoreWindow.GetForCurrentThread();
             window.SizeChanged += OnWindowSizeChanged;
             EnsureVisibility(window);
         }
-        
+
         private void OnWindowSizeChanged(CoreWindow window, WindowSizeChangedEventArgs e)
         {
             EnsureVisibility(window);
@@ -35,8 +31,8 @@ namespace Money.Views.Controls
 
         private void EnsureVisibility(CoreWindow window)
         {
-            Visibility = window.Bounds.Width < (double)Application.Current.Resources["MediumSize"] 
-                ? Visibility.Visible 
+            Visibility = window.Bounds.Width < (double)Application.Current.Resources["MediumSize"]
+                ? Visibility.Visible
                 : Visibility.Collapsed;
         }
 

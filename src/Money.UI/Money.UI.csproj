@@ -215,6 +215,7 @@
       <DependentUpon>DevelopmentTools.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\LoadingType.cs" />
+    <Compile Include="Views\Controls\MainMenuAppBarButton.cs" />
     <Compile Include="Views\Controls\SortAppBarButton.cs" />
     <Compile Include="Views\Converters\ExchangeRateListToStringConverter.cs" />
     <Compile Include="Views\Converters\SymmaryViewTypeToVisibilityConverter.cs" />
@@ -234,9 +235,6 @@
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\MainMenu.cs" />
-    <Compile Include="Views\Controls\MainMenuAppBarToggleButton.xaml.cs">
-      <DependentUpon>MainMenuAppBarToggleButton.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\PieChart.xaml.cs">
       <DependentUpon>PieChart.xaml</DependentUpon>
     </Compile>
@@ -373,10 +371,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Controls\Loading.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Controls\MainMenuAppBarToggleButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

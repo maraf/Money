@@ -201,7 +201,7 @@ namespace Money.Views.Navigation
         {
             if (page.BottomAppBar != null)
             {
-                MainMenuAppBarToggleButton button = page.BottomAppBar.Content as MainMenuAppBarToggleButton;
+                MainMenuAppBarButton button = page.BottomAppBar.Content as MainMenuAppBarButton;
                 if (button != null)
                 {
                     button.Dispose();
@@ -216,7 +216,7 @@ namespace Money.Views.Navigation
             {
                 Template template = (Template)rootFrame.Content;
 
-                MainMenuAppBarToggleButton button = new MainMenuAppBarToggleButton();
+                MainMenuAppBarButton button = new MainMenuAppBarButton();
                 button.SetBinding(
                     AppBarToggleButton.IsCheckedProperty,
                     new Binding()

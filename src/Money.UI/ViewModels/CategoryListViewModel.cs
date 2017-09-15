@@ -40,7 +40,8 @@ namespace Money.ViewModels
 
         private void NewExecuted()
         {
-            Items.Add(new CategoryEditViewModel(domainFacade, navigator, KeyFactory.Empty(typeof(Category))));
+            CategoryEditViewModel viewModel = new CategoryEditViewModel(domainFacade, navigator, KeyFactory.Empty(typeof(Category)));
+            Items.Add(viewModel);
         }
 
         public Task HandleAsync(CategoryIconChanged payload)

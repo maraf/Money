@@ -34,8 +34,6 @@ namespace Money.Views.Dialogs
         public IconPicker()
         {
             InitializeComponent();
-
-            List.ItemsSource = new IconObservableCollection();
         }
     }
 }

@@ -7,8 +7,6 @@
     xmlns:collections="using:Money.ViewModels.Collections"
     mc:Ignorable="d">
     <ContentDialog.Resources>
-        <collections:ColorObservableCollection x:Key="ColorCollection" />
-
         <Style TargetType="GridView">
             <Setter Property="Margin" Value="0,10,0,0" />
         </Style>
@@ -20,13 +18,16 @@
         </Grid.RowDefinitions>
         <TextBox x:Name="tbxSearch" KeyDown="tbxSearch_KeyDown" />
 
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Grid.Row="1">
-            <GridView x:Name="grvColors" ItemsSource="{Binding Source={StaticResource ColorCollection}}" SelectedItem="{x:Bind Value, Mode=TwoWay}" SelectionMode="Single">
-                <GridView.ItemsPanel>
+        <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <GridView x:Name="grvColors" SelectedItem="{x:Bind Value, Mode=TwoWay}" SelectionMode="Single">
+                <GridView.ItemsSource>
+                    <collections:ColorObservableCollection />
+                </GridView.ItemsSource>
+                <!--<GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid MaximumRowsOrColumns="7" Orientation="Horizontal" GroupPadding="0" />
                     </ItemsPanelTemplate>
-                </GridView.ItemsPanel>
+                </GridView.ItemsPanel>-->
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Rectangle Width="48" Height="48">

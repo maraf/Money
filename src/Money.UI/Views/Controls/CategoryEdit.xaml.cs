@@ -1,78 +1,90 @@
 ﻿using Money.ViewModels;
-using Money.ViewModels.Collections;
+using Money.Views.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Windows.System;
 
 namespace Money.Views.Controls
 {
     public sealed partial class CategoryEdit : UserControl
     {
+        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+
+        public CategoryEditViewModel ViewModel
+        {
+            get { return (CategoryEditViewModel)DataContext; }
+        }
+
         public CategoryEdit()
         {
             InitializeComponent();
         }
 
-        private void OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs e)
+        private async void OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs e)
         {
-            CategoryEditViewModel viewModel = e.NewValue as CategoryEditViewModel;
-            if (viewModel != null)
-            {
-                viewModel.PropertyChanged += OnViewModelPropertyChanged;
+            if (e.NewValue is CategoryEditViewModel viewModel && viewModel.Key.IsEmpty)
+                await RenameCategoryAsync();
+        }
 
-                if (viewModel.Key.IsEmpty)
-                    flyRename.ShowAt(btnRename);
+        private async void btnColor_Click(object sender, RoutedEventArgs e)
+        {
+            ColorPicker dialog = new ColorPicker();
+            dialog.Value = ViewModel.Color;
+
+            dialog.Title = "Background color";
+            dialog.PrimaryButtonText = "Select";
+            dialog.SecondaryButtonText = "Cancel";
+
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary && dialog.Value != ViewModel.Color)
+            {
+                await domainFacade.ChangeCategoryColorAsync(ViewModel.Key, dialog.Value);
+                ViewModel.Color = dialog.Value;
             }
         }
 
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void btnRename_Click(object sender, RoutedEventArgs e)
         {
-            if (e.PropertyName == nameof(CategoryEditViewModel.Color))
-                flyColor.Hide();
-            else if (e.PropertyName == nameof(CategoryEditViewModel.Name) || e.PropertyName == nameof(CategoryEditViewModel.Description))
-                flyRename.Hide();
+            await RenameCategoryAsync();
         }
 
-        private void flyRename_Opened(object sender, object e)
+        private async Task RenameCategoryAsync()
         {
-            tbxName.Focus(FocusState.Keyboard);
-        }
+            CategoryName dialog = new CategoryName();
+            dialog.Name = ViewModel.Name;
+            dialog.Description = ViewModel.Description;
 
-        private void tbxName_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Enter)
+            ContentDialogResult result = await dialog.ShowAsync();
+            if ((result == ContentDialogResult.Primary || dialog.IsEnterPressed) && (dialog.Name != ViewModel.Name || dialog.Description != ViewModel.Description))
             {
-                tbxDescription.Focus(FocusState.Keyboard);
-                e.Handled = true;
-            }
-        }
+                if (ViewModel.Key.IsEmpty)
+                {
+                    if (String.IsNullOrEmpty(dialog.Name))
+                        return;
 
-        private void tbxDescription_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Enter)
-            {
-                if (btnSave.Command.CanExecute(null))
-                    btnSave.Command.Execute(null);
-            }
-        }
+                    Color color = Colors.Black;
+                    ViewModel.Key = await domainFacade.CreateCategoryAsync(dialog.Name, color);
+                    ViewModel.Name = dialog.Name;
+                    ViewModel.Color = color;
+                }
+                else if (ViewModel.Name != dialog.Name)
+                {
+                    await domainFacade.RenameCategoryAsync(ViewModel.Key, dialog.Name);
+                    ViewModel.Name = Name;
+                }
 
-        private void btnBack_Click(object sender, RoutedEventArgs e)
-        {
-            flyRename.Hide();
+                if (ViewModel.Description != dialog.Description)
+                {
+                    await domainFacade.ChangeCategoryDescriptionAsync(ViewModel.Key, dialog.Description);
+                    ViewModel.Description = dialog.Description;
+                }
+            }
         }
     }
 }

@@ -2,15 +2,11 @@
     x:Class="Money.Views.Controls.CategoryEdit"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Money.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:collections="using:Money.ViewModels.Collections"
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{Binding CategoryEdit, Source={StaticResource ViewModelLocator}}"
     DataContextChanged="OnDataContextChanged">
     <UserControl.Resources>
-        <collections:ColorObservableCollection x:Key="ColorCollection" />
-
         <Style TargetType="Button">
             <Setter Property="Margin" Value="8,0,0,0" />
         </Style>
@@ -30,80 +26,17 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Name="s2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">
-            <Button x:Name="btnRename">
-                <Button.Content>
-                    <SymbolIcon Symbol="Rename" />
-                </Button.Content>
-                <Button.Flyout>
-                    <Flyout x:Name="flyRename" LightDismissOverlayMode="On" Placement="Full" Opened="flyRename_Opened">
-                        <StackPanel>
-                            <StackPanel Style="{StaticResource EditorStackPanelStyle}">
-                                <TextBlock Text="Name" />
-                                <TextBox x:Name="tbxName" Text="{Binding Rename.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyDown="tbxName_KeyDown" />
-                            </StackPanel>
-                            <StackPanel Style="{StaticResource EditorStackPanelStyle}">
-                                <TextBlock Text="Description" />
-                                <TextBox x:Name="tbxDescription" Text="{Binding Rename.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyDown="tbxDescription_KeyDown" />
-                            </StackPanel>
-                            <StackPanel Style="{StaticResource EditorStackPanelStyle}" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                                <Button x:Name="btnSave" Command="{Binding Rename}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <SymbolIcon Symbol="Save" />
-                                        <TextBlock Text="Save" Padding="8,0,0,0" />
-                                    </StackPanel>
-                                </Button>
-                                <Button x:Name="btnBack" Click="btnBack_Click" Margin="16,0,0,0">
-                                    <StackPanel Orientation="Horizontal">
-                                        <SymbolIcon Symbol="Cancel" />
-                                        <TextBlock Text="Close" Padding="8,0,0,0" />
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
-                        </StackPanel>
-                    </Flyout>
-                </Button.Flyout>
+            <Button x:Name="btnRename" Click="btnRename_Click" ToolTipService.ToolTip="Rename category">
+                <SymbolIcon Symbol="Rename" />
             </Button>
-            <Button Name="btnColor">
-                <Button.Content>
-                    <Rectangle Width="20" Height="20" Fill="{Binding ColorBrush}" Opacity=".5" />
-                </Button.Content>
-                <Button.Flyout>
-                    <Flyout x:Name="flyColor" LightDismissOverlayMode="On" Placement="Full">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <!--<TextBox x:Name="tbxColorFilter" TextChanged="tbxColorFilter_TextChanged" Margin="0,0,0,20" Grid.Row="0" />-->
-                            <GridView x:Name="grvColors" ItemsSource="{Binding Source={StaticResource ColorCollection}}" SelectedItem="{Binding ChangeColor.Color, Mode=TwoWay}" SelectionMode="Single" Grid.Row="1">
-                                <GridView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <ItemsWrapGrid MaximumRowsOrColumns="7" Orientation="Horizontal" GroupPadding="0" />
-                                    </ItemsPanelTemplate>
-                                </GridView.ItemsPanel>
-                                <GridView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Rectangle Width="48" Height="48">
-                                            <Rectangle.Fill>
-                                                <SolidColorBrush Color="{Binding}" />
-                                            </Rectangle.Fill>
-                                        </Rectangle>
-                                    </DataTemplate>
-                                </GridView.ItemTemplate>
-                            </GridView>
-                        </Grid>
-                    </Flyout>
-                </Button.Flyout>
+            <Button Name="btnColor" Click="btnColor_Click" ToolTipService.ToolTip="Change category background color">
+                <Rectangle Width="20" Height="20" Fill="{Binding ColorBrush}" Opacity=".5" />
             </Button>
-            <Button Command="{Binding ChangeIcon}">
-                <Button.Content>
-                    <SymbolIcon Symbol="Emoji2" />
-                </Button.Content>
+            <Button Command="{Binding ChangeIcon}" ToolTipService.ToolTip="Change category icon">
+                <SymbolIcon Symbol="Emoji2" />
             </Button>
-            <Button Command="{Binding Delete}">
-                <Button.Content>
-                    <SymbolIcon Symbol="Delete" />
-                </Button.Content>
+            <Button Command="{Binding Delete}" ToolTipService.ToolTip="Delete category">
+                <SymbolIcon Symbol="Delete" />
             </Button>
         </StackPanel>
     </StackPanel>

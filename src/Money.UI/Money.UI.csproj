@@ -150,8 +150,6 @@
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\Collections\ColorObservableCollection.cs" />
     <Compile Include="ViewModels\Collections\IconObservableCollection.cs" />
-    <Compile Include="ViewModels\Commands\CategoryChangeColorCommand.cs" />
-    <Compile Include="ViewModels\Commands\CategoryRenameCommand.cs" />
     <Compile Include="ViewModels\Commands\CreateOutcomeCommand.cs" />
     <Compile Include="ViewModels\Commands\CurrencyDeleteExchangeRateCommand.cs" />
     <Compile Include="ViewModels\Commands\CurrencySetAsDefaultCommand.cs" />
@@ -222,6 +220,9 @@
     <Compile Include="Views\Converters\SymmaryViewTypeToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\TypeConverterHelper.cs" />
     <Compile Include="Views\Dialogs\CategoryChangeIcon.cs" />
+    <Compile Include="Views\Dialogs\CategoryName.xaml.cs">
+      <DependentUpon>CategoryName.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\CurrencyAddExchangeRateWizard.cs" />
     <Compile Include="Views\Controls\CurrencyEdit.xaml.cs">
       <DependentUpon>CurrencyEdit.xaml</DependentUpon>
@@ -394,6 +395,10 @@
     <Page Include="Views\CurrencyList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\CategoryName.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\CategoryPicker.xaml">
       <Generator>MSBuild:Compile</Generator>

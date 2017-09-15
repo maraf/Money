@@ -4,10 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:collections="using:Money.ViewModels.Collections"
     mc:Ignorable="d" PrimaryButtonText="Select" SecondaryButtonText="Cancel">
-
     <Grid>
         <GridView x:Name="List" SelectionMode="Single" SelectedValue="{x:Bind Value, Mode=TwoWay}">
+            <GridView.ItemsSource>
+                <collections:IconObservableCollection />
+            </GridView.ItemsSource>
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" FontSize="24" />

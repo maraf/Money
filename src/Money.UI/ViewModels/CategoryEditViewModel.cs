@@ -18,7 +18,19 @@ namespace Money.ViewModels
 {
     public class CategoryEditViewModel : ObservableObject
     {
-        public IKey Key { get; internal set; }
+        private readonly IDomainFacade domainFacade;
+        private readonly INavigator navigator;
+        private IKey key;
+
+        public IKey Key
+        {
+            get { return key; }
+            set
+            {
+                key = value;
+                EnsureCommands();
+            }
+        }
 
         private string name;
         public string Name
@@ -96,16 +108,44 @@ namespace Money.ViewModels
             }
         }
 
-        public ICommand ChangeIcon { get; private set; }
-        public ICommand Delete { get; private set; }
+        private ICommand changeIcon;
+        public ICommand ChangeIcon
+        {
+            get { return changeIcon; }
+            private set
+            {
+                if (changeIcon != value)
+                {
+                    changeIcon = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        private ICommand delete;
+        public ICommand Delete
+        {
+            get { return delete; }
+            private set
+            {
+                if (delete != value)
+                {
+                    delete = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         public CategoryEditViewModel(IDomainFacade domainFacade, INavigator navigator, IKey key)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(navigator, "navigator");
             Ensure.NotNull(key, "key");
+            this.domainFacade = domainFacade;
+            this.navigator = navigator;
+
             Key = key;
-            CreateCommands(domainFacade, navigator);
+            EnsureCommands();
         }
 
         public CategoryEditViewModel(IDomainFacade domainFacade, INavigator navigator, IKey key, string name, string description, Color color, string icon)
@@ -113,20 +153,26 @@ namespace Money.ViewModels
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(navigator, "navigator");
             Ensure.Condition.NotEmptyKey(key);
+            this.domainFacade = domainFacade;
+            this.navigator = navigator;
+
             Key = key;
             Name = name;
             Description = description;
             Color = color;
             Icon = icon;
-            CreateCommands(domainFacade, navigator);
+            EnsureCommands();
         }
 
-        private void CreateCommands(IDomainFacade domainFacade, INavigator navigator)
+        private void EnsureCommands()
         {
             if (!Key.IsEmpty)
             {
-                ChangeIcon = new NavigateCommand(navigator, new CategoryChangeIconParameter(Key));
-                Delete = new CategoryDeleteCommand(navigator, domainFacade, Key);
+                if (ChangeIcon == null)
+                    ChangeIcon = new NavigateCommand(navigator, new CategoryChangeIconParameter(Key));
+
+                if (Delete == null)
+                    Delete = new CategoryDeleteCommand(navigator, domainFacade, Key);
             }
         }
     }

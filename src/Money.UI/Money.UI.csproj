@@ -234,7 +234,7 @@
     <Compile Include="Views\Controls\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\MainMenu.cs" />
+    <Compile Include="Views\Controls\MainMenuListView.cs" />
     <Compile Include="Views\Controls\PieChart.xaml.cs">
       <DependentUpon>PieChart.xaml</DependentUpon>
     </Compile>

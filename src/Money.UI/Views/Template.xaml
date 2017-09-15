@@ -140,7 +140,7 @@
                 <TextBlock Text="{x:Bind Label}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
             </Grid>
         </DataTemplate>
-        <Style TargetType="controls:MainMenu">
+        <Style TargetType="controls:MainMenuListView">
             <Setter Property="ItemTemplate" Value="{StaticResource MenuItemTemplate}" />
             <Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemContainerStyle}" />
         </Style>
@@ -228,8 +228,8 @@
                             </Grid>
                         </ToggleButton>
 
-                        <controls:MainMenu x:Name="mnuMain" ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="OnMainMenuItemInvoked" VerticalAlignment="Bottom">
-                            <controls:MainMenu.GroupStyle>
+                        <controls:MainMenuListView x:Name="mnuMain" ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="OnMainMenuItemInvoked" VerticalAlignment="Bottom">
+                            <controls:MainMenuListView.GroupStyle>
                                 <GroupStyle>
                                     <GroupStyle.HeaderContainerStyle>
                                         <Style TargetType="ListViewHeaderItem">
@@ -242,8 +242,8 @@
                                         </DataTemplate>
                                     </GroupStyle.HeaderTemplate>
                                 </GroupStyle>
-                            </controls:MainMenu.GroupStyle>
-                        </controls:MainMenu>
+                            </controls:MainMenuListView.GroupStyle>
+                        </controls:MainMenuListView>
                     </StackPanel>
 
                     <controls:DevelopmentTools x:Name="DevelopmentTools" VerticalAlignment="Bottom" />

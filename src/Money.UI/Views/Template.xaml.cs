@@ -35,7 +35,7 @@ namespace Money.Views
             get { return frmContent; }
         }
 
-        public MainMenu MainMenu
+        public MainMenuListView MainMenu
         {
             get { return mnuMain; }
         }
@@ -82,7 +82,7 @@ namespace Money.Views
 
         private void OnMainMenuItemInvoked(object sender, ListViewItem e)
         {
-            MenuItemViewModel item = (MenuItemViewModel)((MainMenu)sender).ItemFromContainer(e);
+            MenuItemViewModel item = (MenuItemViewModel)((MainMenuListView)sender).ItemFromContainer(e);
 
             navigator
                 .Open(item.Parameter)

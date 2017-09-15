@@ -12,11 +12,11 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Money.Views.Controls
 {
-    public class MainMenu : ListView
+    public class MainMenuListView : ListView
     {
         private SplitView splitView;
 
-        public MainMenu()
+        public MainMenuListView()
         {
             SelectionMode = ListViewSelectionMode.Single;
             SingleSelectionFollowsFocus = false;

@@ -208,7 +208,7 @@
     <Compile Include="Views\Controls\Bar.xaml.cs">
       <DependentUpon>Bar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\CategoryEdit.xaml.cs">
+    <Compile Include="Views\CategoryEdit.xaml.cs">
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\DevelopmentTools.xaml.cs">
@@ -224,7 +224,7 @@
       <DependentUpon>CategoryName.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\CurrencyAddExchangeRateWizard.cs" />
-    <Compile Include="Views\Controls\CurrencyEdit.xaml.cs">
+    <Compile Include="Views\CurrencyEdit.xaml.cs">
       <DependentUpon>CurrencyEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\EmptyMessage.xaml.cs">
@@ -356,11 +356,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Controls\CategoryEdit.xaml">
+    <Page Include="Views\CategoryEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Controls\CurrencyEdit.xaml">
+    <Page Include="Views\CurrencyEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

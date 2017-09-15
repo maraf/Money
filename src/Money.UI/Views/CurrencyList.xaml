@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:Money.Views.Controls"
+    xmlns:views="using:Money.Views"
     xmlns:vm="using:Money.ViewModels"
     mc:Ignorable="d" d:DataContext="{Binding CurrencyList, Source={StaticResource ViewModelLocator}}">
     <Page.BottomAppBar>
@@ -21,7 +21,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="vm:CurrencyEditViewModel">
-                    <controls:CurrencyEdit />
+                    <views:CurrencyEdit />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

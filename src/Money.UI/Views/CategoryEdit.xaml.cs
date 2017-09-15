@@ -10,7 +10,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace Money.Views.Controls
+namespace Money.Views
 {
     public sealed partial class CategoryEdit : UserControl
     {

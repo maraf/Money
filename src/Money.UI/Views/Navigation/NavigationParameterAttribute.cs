@@ -10,6 +10,7 @@ namespace Money.Views.Navigation
     /// <summary>
     /// Associates parameter type with page.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class NavigationParameterAttribute : Attribute
     {
         /// <summary>

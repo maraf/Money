@@ -114,6 +114,7 @@
     <Compile Include="Services\CurrencyCache.Model.cs" />
     <Compile Include="Services\IDevelopmentService.cs" />
     <Compile Include="Services\IPriceConverter.cs" />
+    <Compile Include="Services\Models\CategoryNameDescriptionModel.cs" />
     <Compile Include="Services\Models\IPriceFixed.cs" />
     <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />
     <Compile Include="Services\Models\Builders\CurrencyBuilder.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Services\Models\Queries\GetCategoryColor.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryIcon.cs" />
     <Compile Include="Services\Models\Queries\GetCategoryName.cs" />
+    <Compile Include="Services\Models\Queries\GetCategoryNameDescription.cs" />
     <Compile Include="Services\Models\Queries\GetCurrencyDefault.cs" />
     <Compile Include="Services\Models\Queries\GetCurrencySymbol.cs" />
     <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
@@ -177,7 +179,9 @@
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Parameters\AboutParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryChangeIconParameter.cs" />
+    <Compile Include="ViewModels\Parameters\CategoryCreateParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
+    <Compile Include="ViewModels\Parameters\CategoryRenameParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyAddExchangeRateParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyNewParameter.cs" />
     <Compile Include="ViewModels\Parameters\CurrencyParameter.cs" />

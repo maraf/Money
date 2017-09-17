@@ -1,11 +1,20 @@
-﻿using System;
+﻿using Money.Services.Models;
+using Money.Services.Models.Queries;
+using Money.ViewModels.Parameters;
+using Money.Views.Navigation;
+using Neptuo;
+using Neptuo.Models.Keys;
+using Neptuo.Queries;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -16,7 +25,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views.Dialogs
 {
-    public sealed partial class CategoryName : ContentDialog
+    [NavigationParameter(typeof(CategoryCreateParameter))]
+    [NavigationParameter(typeof(CategoryRenameParameter))]
+    public sealed partial class CategoryName : ContentDialog, IWizard
     {
         public new string Name
         {
@@ -69,5 +80,55 @@ namespace Money.Views.Dialogs
                 Hide();
             }
         }
+
+        #region IWizard
+
+        private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
+        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private IKey key;
+        private CategoryNameDescriptionModel model;
+
+        public async Task ShowAsync(object parameter)
+        {
+            if (parameter is CategoryCreateParameter create)
+            {
+                key = KeyFactory.Empty(typeof(Category));
+                model = new CategoryNameDescriptionModel(null, null);
+            }
+            else if (parameter is CategoryRenameParameter rename)
+            {
+                key = rename.Key;
+                model = await queryDispatcher.QueryAsync(new GetCategoryNameDescription(key));
+                Name = model.Name;
+                Description = model.Description;
+            }
+
+            ContentDialogResult result = await ShowAsync();
+            if ((result == ContentDialogResult.Primary || IsEnterPressed) && (Name != model.Name || Description != model.Description))
+            {
+                if (key.IsEmpty)
+                {
+                    if (String.IsNullOrEmpty(Name))
+                        return;
+
+                    Color color = Colors.Black;
+                    key = await domainFacade.CreateCategoryAsync(Name, color);
+                    Name = Name;
+                }
+                else if (Name != model.Name)
+                {
+                    await domainFacade.RenameCategoryAsync(key, Name);
+                    Name = Name;
+                }
+
+                if (Description != model.Description)
+                {
+                    await domainFacade.ChangeCategoryDescriptionAsync(key, Description);
+                    Description = Description;
+                }
+            }
+        }
+
+        #endregion
     }
 }

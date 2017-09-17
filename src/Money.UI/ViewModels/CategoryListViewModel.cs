@@ -1,6 +1,7 @@
 ﻿using Money.Events;
-using Money.Services;
+using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
+using Money.ViewModels.Parameters;
 using Neptuo;
 using Neptuo.Events.Handlers;
 using Neptuo.Observables;
@@ -13,11 +14,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.UI;
 
 namespace Money.ViewModels
 {
     public class CategoryListViewModel : ObservableObject, 
+        IEventHandler<CategoryCreated>,
+        IEventHandler<CategoryRenamed>,
+        IEventHandler<CategoryDescriptionChanged>,
         IEventHandler<CategoryIconChanged>,
         IEventHandler<CategoryDeleted>
     {
@@ -35,13 +38,32 @@ namespace Money.ViewModels
             this.navigator = navigator;
 
             Items = new ObservableCollection<CategoryEditViewModel>();
-            New = new DelegateCommand(NewExecuted);
+            New = new NavigateCommand(navigator, new CategoryCreateParameter());
         }
 
-        private void NewExecuted()
+        public Task HandleAsync(CategoryCreated payload)
         {
-            CategoryEditViewModel viewModel = new CategoryEditViewModel(domainFacade, navigator, KeyFactory.Empty(typeof(Category)));
+            CategoryEditViewModel viewModel = new CategoryEditViewModel(domainFacade, navigator, payload.AggregateKey, payload.Name, null, payload.Color, null);
             Items.Add(viewModel);
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(CategoryRenamed payload)
+        {
+            CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(payload.AggregateKey));
+            if (viewModel != null)
+                viewModel.Name = payload.NewName;
+
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(CategoryDescriptionChanged payload)
+        {
+            CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(payload.AggregateKey));
+            if (viewModel != null)
+                viewModel.Description = payload.Description;
+
+            return Task.CompletedTask;
         }
 
         public Task HandleAsync(CategoryIconChanged payload)

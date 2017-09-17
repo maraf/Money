@@ -29,7 +29,8 @@ namespace Money.Services.Models.Builders
         IEventHandler<CategoryIconChanged>,
         IEventHandler<CategoryDeleted>,
         IQueryHandler<ListAllCategory, List<CategoryModel>>,
-        IQueryHandler<GetCategoryIcon, string>
+        IQueryHandler<GetCategoryIcon, string>,
+        IQueryHandler<GetCategoryNameDescription, CategoryNameDescriptionModel>
     {
         private readonly IFactory<ReadModelContext> readModelContextFactory;
 
@@ -124,6 +125,15 @@ namespace Money.Services.Models.Builders
             {
                 CategoryEntity entity = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
                 return entity.Icon;
+            }
+        }
+
+        public async Task<CategoryNameDescriptionModel> HandleAsync(GetCategoryNameDescription query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                CategoryEntity entity = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
+                return new CategoryNameDescriptionModel(entity.Name, entity.Description);
             }
         }
     }

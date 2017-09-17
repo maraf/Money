@@ -18,8 +18,7 @@ namespace Money.Views.Navigation
         {
             foreach (Type type in GetType().GetTypeInfo().Assembly.GetTypes())
             {
-                NavigationParameterAttribute attribute = type.GetTypeInfo().GetCustomAttribute<NavigationParameterAttribute>();
-                if (attribute != null)
+                foreach (NavigationParameterAttribute attribute in type.GetTypeInfo().GetCustomAttributes<NavigationParameterAttribute>())
                 {
                     if (typeof(IWizard).IsAssignableFrom(type))
                         wizards[attribute.ParameterType] = type;

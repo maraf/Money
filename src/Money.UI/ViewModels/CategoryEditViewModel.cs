@@ -18,19 +18,7 @@ namespace Money.ViewModels
 {
     public class CategoryEditViewModel : ObservableObject
     {
-        private readonly IDomainFacade domainFacade;
-        private readonly INavigator navigator;
-        private IKey key;
-
-        public IKey Key
-        {
-            get { return key; }
-            set
-            {
-                key = value;
-                EnsureCommands();
-            }
-        }
+        public IKey Key { get; private set; }
 
         private string name;
         public string Name
@@ -108,72 +96,24 @@ namespace Money.ViewModels
             }
         }
 
-        private ICommand changeIcon;
-        public ICommand ChangeIcon
-        {
-            get { return changeIcon; }
-            private set
-            {
-                if (changeIcon != value)
-                {
-                    changeIcon = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        private ICommand delete;
-        public ICommand Delete
-        {
-            get { return delete; }
-            private set
-            {
-                if (delete != value)
-                {
-                    delete = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public CategoryEditViewModel(IDomainFacade domainFacade, INavigator navigator, IKey key)
-        {
-            Ensure.NotNull(domainFacade, "domainFacade");
-            Ensure.NotNull(navigator, "navigator");
-            Ensure.NotNull(key, "key");
-            this.domainFacade = domainFacade;
-            this.navigator = navigator;
-
-            Key = key;
-            EnsureCommands();
-        }
+        public ICommand Rename { get; private set; }
+        public ICommand ChangeIcon { get; private set; }
+        public ICommand Delete { get; private set; }
 
         public CategoryEditViewModel(IDomainFacade domainFacade, INavigator navigator, IKey key, string name, string description, Color color, string icon)
         {
             Ensure.NotNull(domainFacade, "domainFacade");
             Ensure.NotNull(navigator, "navigator");
             Ensure.Condition.NotEmptyKey(key);
-            this.domainFacade = domainFacade;
-            this.navigator = navigator;
-
             Key = key;
             Name = name;
             Description = description;
             Color = color;
             Icon = icon;
-            EnsureCommands();
-        }
 
-        private void EnsureCommands()
-        {
-            if (!Key.IsEmpty)
-            {
-                if (ChangeIcon == null)
-                    ChangeIcon = new NavigateCommand(navigator, new CategoryChangeIconParameter(Key));
-
-                if (Delete == null)
-                    Delete = new CategoryDeleteCommand(navigator, domainFacade, Key);
-            }
+            Rename = new NavigateCommand(navigator, new CategoryRenameParameter(Key));
+            ChangeIcon = new NavigateCommand(navigator, new CategoryChangeIconParameter(Key));
+            Delete = new CategoryDeleteCommand(navigator, domainFacade, Key);
         }
     }
 }

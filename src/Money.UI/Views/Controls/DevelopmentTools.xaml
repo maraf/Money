@@ -20,4 +20,5 @@
     <Button x:Name="btnSetRevisionStorage" Click="btnSetRevisionStorage_Click" ToolTipService.ToolTip="Set Storage Revision" Margin="4">
         <SymbolIcon Symbol="ImportAll" />
     </Button>
+    <ToggleSwitch x:Name="tswMobile" OnContent="Mobile" OffContent="Off" Toggled="tswMobile_Toggled" />
 </StackPanel>

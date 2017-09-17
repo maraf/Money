@@ -11,7 +11,9 @@ namespace Money.Services
         Task RebuildReadModelsAsync();
 
         bool IsTestDatabaseEnabled();
+        bool IsMobileDevice();
 
         IDevelopmentService IsTestDatabaseEnabled(bool isEnabled);
+        IDevelopmentService IsMobileDevice(bool isMobile);
     }
 }

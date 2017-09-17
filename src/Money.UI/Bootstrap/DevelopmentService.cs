@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.System.Profile;
 
 namespace Money.Bootstrap
 {
@@ -31,6 +33,26 @@ namespace Money.Bootstrap
         public IDevelopmentService IsTestDatabaseEnabled(bool isEnabled)
         {
             storageFactory.IsTestDatabaseEnabled = isEnabled;
+            return this;
+        }
+
+        public bool IsMobileDevice()
+        {
+            if (ApplicationData.Current.LocalSettings.Containers.TryGetValue("DevelopmentSettings", out ApplicationDataContainer container))
+            {
+                if (container.Values.TryGetValue("IsMobile", out object rawValue) && rawValue is bool isEnabled && isEnabled)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public IDevelopmentService IsMobileDevice(bool isMobile)
+        {
+            ApplicationData.Current.LocalSettings
+                .CreateContainer("DevelopmentSettings", ApplicationDataCreateDisposition.Always)
+                .Values["IsMobile"] = isMobile;
+
             return this;
         }
     }

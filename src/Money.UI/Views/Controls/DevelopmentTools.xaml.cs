@@ -30,6 +30,8 @@ namespace Money.Views.Controls
         private readonly IFactory<ReadModelContext> readModelContextFactory = ServiceProvider.ReadModelContextFactory;
         private readonly IFactory<ApplicationDataContainer> storageContainerFactory = ServiceProvider.StorageContainerFactory;
 
+        private bool isInitialization;
+
         public DevelopmentTools()
         {
             InitializeComponent();
@@ -39,6 +41,16 @@ namespace Money.Views.Controls
 #else
             Visibility = Visibility.Collapsed;
 #endif
+
+            try
+            {
+                isInitialization = true;
+                tswMobile.IsOn = developmentTools.IsMobileDevice();
+            }
+            finally
+            {
+                isInitialization = false;
+            }
         }
 
         private async Task ExecuteActionAsync(object sender, Func<Task> handler)
@@ -168,6 +180,15 @@ namespace Money.Views.Controls
                 await developmentTools.RebuildReadModelsAsync();
                 await ShowExitDialogAsync();
             });
+        }
+
+        private async void tswMobile_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (isInitialization)
+                return;
+
+            developmentTools.IsMobileDevice(tswMobile.IsOn);
+            await ShowExitDialogAsync();
         }
     }
 }

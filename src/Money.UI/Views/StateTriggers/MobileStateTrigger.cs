@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Money.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,10 +11,17 @@ namespace Money.Views.StateTriggers
 {
     public class MobileStateTrigger : StateTriggerBase
     {
+        private readonly IDevelopmentService developmentTools = ServiceProvider.DevelopmentTools;
+
         public MobileStateTrigger()
         {
-            string deviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
-            bool isActive = deviceFamily == "Windows.Mobile";
+            bool isActive = developmentTools.IsMobileDevice();
+            if (!isActive)
+            {
+                string deviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
+                isActive = deviceFamily == "Windows.Mobile";
+            }
+
             SetActive(isActive);
         }
     }

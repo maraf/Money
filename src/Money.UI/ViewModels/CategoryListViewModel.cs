@@ -4,6 +4,7 @@ using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Neptuo;
 using Neptuo.Events.Handlers;
+using Neptuo.Models.Keys;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
 using Neptuo.Observables.Commands;
@@ -21,6 +22,7 @@ namespace Money.ViewModels
         IEventHandler<CategoryCreated>,
         IEventHandler<CategoryRenamed>,
         IEventHandler<CategoryDescriptionChanged>,
+        IEventHandler<CategoryColorChanged>,
         IEventHandler<CategoryIconChanged>,
         IEventHandler<CategoryDeleted>
     {
@@ -41,6 +43,15 @@ namespace Money.ViewModels
             New = new NavigateCommand(navigator, new CategoryCreateParameter());
         }
 
+        private Task UpdateItem(IKey categoryKey, Action<CategoryEditViewModel> handler)
+        {
+            CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(categoryKey));
+            if (viewModel != null)
+                handler(viewModel);
+
+            return Task.CompletedTask;
+        }
+
         public Task HandleAsync(CategoryCreated payload)
         {
             CategoryEditViewModel viewModel = new CategoryEditViewModel(domainFacade, navigator, payload.AggregateKey, payload.Name, null, payload.Color, null);
@@ -50,38 +61,27 @@ namespace Money.ViewModels
 
         public Task HandleAsync(CategoryRenamed payload)
         {
-            CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(payload.AggregateKey));
-            if (viewModel != null)
-                viewModel.Name = payload.NewName;
-
-            return Task.CompletedTask;
+            return UpdateItem(payload.AggregateKey, viewModel => viewModel.Name = payload.NewName);
         }
 
         public Task HandleAsync(CategoryDescriptionChanged payload)
         {
-            CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(payload.AggregateKey));
-            if (viewModel != null)
-                viewModel.Description = payload.Description;
+            return UpdateItem(payload.AggregateKey, viewModel => viewModel.Description = payload.Description);
+        }
 
-            return Task.CompletedTask;
+        public Task HandleAsync(CategoryColorChanged payload)
+        {
+            return UpdateItem(payload.AggregateKey, viewModel => viewModel.Color = payload.Color);
         }
 
         public Task HandleAsync(CategoryIconChanged payload)
         {
-            CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(payload.AggregateKey));
-            if (viewModel != null)
-                viewModel.Icon = payload.Icon;
-
-            return Task.CompletedTask;
+            return UpdateItem(payload.AggregateKey, viewModel => viewModel.Icon = payload.Icon);
         }
 
         public Task HandleAsync(CategoryDeleted payload)
         {
-            CategoryEditViewModel viewModel = Items.FirstOrDefault(vm => vm.Key.Equals(payload.AggregateKey));
-            if (viewModel != null)
-                Items.Remove(viewModel);
-
-            return Task.CompletedTask;
+            return UpdateItem(payload.AggregateKey, viewModel => Items.Remove(viewModel));
         }
     }
 }

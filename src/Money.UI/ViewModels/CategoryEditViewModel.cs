@@ -98,6 +98,7 @@ namespace Money.ViewModels
 
         public ICommand Rename { get; private set; }
         public ICommand ChangeIcon { get; private set; }
+        public ICommand ChangeColor { get; private set; }
         public ICommand Delete { get; private set; }
 
         public CategoryEditViewModel(IDomainFacade domainFacade, INavigator navigator, IKey key, string name, string description, Color color, string icon)
@@ -113,6 +114,7 @@ namespace Money.ViewModels
 
             Rename = new NavigateCommand(navigator, new CategoryRenameParameter(Key));
             ChangeIcon = new NavigateCommand(navigator, new CategoryChangeIconParameter(Key));
+            ChangeColor = new NavigateCommand(navigator, new CategoryChangeColorParameter(Key));
             Delete = new CategoryDeleteCommand(navigator, domainFacade, Key);
         }
     }

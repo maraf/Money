@@ -28,7 +28,7 @@
             <Button Command="{Binding Rename}" ToolTipService.ToolTip="Rename category">
                 <SymbolIcon Symbol="Rename" />
             </Button>
-            <Button Name="btnColor" Click="btnColor_Click" ToolTipService.ToolTip="Change category background color">
+            <Button Command="{Binding ChangeColor}" ToolTipService.ToolTip="Change category background color">
                 <Rectangle Width="20" Height="20" Fill="{Binding ColorBrush}" Opacity=".5" />
             </Button>
             <Button Command="{Binding ChangeIcon}" ToolTipService.ToolTip="Change category icon">

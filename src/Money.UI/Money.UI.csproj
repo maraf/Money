@@ -178,6 +178,7 @@
     <Compile Include="ViewModels\OverviewSortType.cs" />
     <Compile Include="ViewModels\OverviewViewModel.cs" />
     <Compile Include="ViewModels\Parameters\AboutParameter.cs" />
+    <Compile Include="ViewModels\Parameters\CategoryChangeColorParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryChangeIconParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryCreateParameter.cs" />
     <Compile Include="ViewModels\Parameters\CategoryListParameter.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="Views\Converters\ExchangeRateListToStringConverter.cs" />
     <Compile Include="Views\Converters\SymmaryViewTypeToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\TypeConverterHelper.cs" />
+    <Compile Include="Views\Dialogs\CategoryChangeColor.cs" />
     <Compile Include="Views\Dialogs\CategoryChangeIcon.cs" />
     <Compile Include="Views\Dialogs\CategoryName.xaml.cs">
       <DependentUpon>CategoryName.xaml</DependentUpon>

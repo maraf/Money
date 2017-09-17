@@ -60,6 +60,7 @@ namespace Money.Views
             handlers.Add(eventHandlers.AddUiThread<CategoryCreated>(ViewModel, Dispatcher));
             handlers.Add(eventHandlers.AddUiThread<CategoryRenamed>(ViewModel, Dispatcher));
             handlers.Add(eventHandlers.AddUiThread<CategoryDescriptionChanged>(ViewModel, Dispatcher));
+            handlers.Add(eventHandlers.AddUiThread<CategoryColorChanged>(ViewModel, Dispatcher));
             handlers.Add(eventHandlers.AddUiThread<CategoryIconChanged>(ViewModel, Dispatcher));
             handlers.Add(eventHandlers.AddUiThread<CategoryDeleted>(ViewModel, Dispatcher));
 

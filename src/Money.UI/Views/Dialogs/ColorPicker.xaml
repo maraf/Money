@@ -16,18 +16,13 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBox x:Name="tbxSearch" KeyDown="tbxSearch_KeyDown" />
+        <TextBox x:Name="tbxSearch" KeyDown="tbxSearch_KeyDown" Visibility="Collapsed" />
 
         <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="1">
             <GridView x:Name="grvColors" SelectedItem="{x:Bind Value, Mode=TwoWay}" SelectionMode="Single">
                 <GridView.ItemsSource>
                     <collections:ColorObservableCollection />
                 </GridView.ItemsSource>
-                <!--<GridView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <ItemsWrapGrid MaximumRowsOrColumns="7" Orientation="Horizontal" GroupPadding="0" />
-                    </ItemsPanelTemplate>
-                </GridView.ItemsPanel>-->
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Rectangle Width="48" Height="48">

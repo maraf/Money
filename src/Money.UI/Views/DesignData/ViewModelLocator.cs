@@ -25,7 +25,7 @@ namespace Money.Views.DesignData
             get
             {
                 if (queryDispatcher == null)
-                    queryDispatcher = new QueryDispatcher();
+                    queryDispatcher = new MockQueryDispatcher();
 
                 return queryDispatcher;
             }
@@ -37,7 +37,7 @@ namespace Money.Views.DesignData
             get
             {
                 if (domainFacade == null)
-                    domainFacade = new DomainFacade();
+                    domainFacade = new MockDomainFacade();
 
                 return domainFacade;
             }
@@ -49,7 +49,7 @@ namespace Money.Views.DesignData
             get
             {
                 if (navigator == null)
-                    navigator = new Navigator();
+                    navigator = new MockNavigator();
 
                 return navigator;
             }
@@ -236,7 +236,7 @@ namespace Money.Views.DesignData
             {
                 if (migrate == null)
                 {
-                    migrate = new MigrateViewModel(new UpgradeService());
+                    migrate = new MigrateViewModel(new MockUpgradeService());
                     migrate.StartAsync();
                 }
 

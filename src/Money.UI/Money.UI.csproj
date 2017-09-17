@@ -265,11 +265,11 @@
     <Compile Include="Views\CurrencyList.xaml.cs">
       <DependentUpon>CurrencyList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DesignData\DomainFacade.cs" />
-    <Compile Include="Views\DesignData\Navigator.cs" />
-    <Compile Include="Views\DesignData\QueryDispatcher.cs" />
+    <Compile Include="Views\DesignData\MockDomainFacade.cs" />
+    <Compile Include="Views\DesignData\MockNavigator.cs" />
+    <Compile Include="Views\DesignData\MockQueryDispatcher.cs" />
     <Compile Include="Views\DesignData\TestUpgradeService.cs" />
-    <Compile Include="Views\DesignData\UpgradeService.cs" />
+    <Compile Include="Views\DesignData\MockUpgradeService.cs" />
     <Compile Include="Views\DesignData\ViewModelLocator.cs" />
     <Compile Include="Views\Dialogs\CategoryPicker.xaml.cs">
       <DependentUpon>CategoryPicker.xaml</DependentUpon>

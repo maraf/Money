@@ -10,7 +10,6 @@
     xmlns:vm="using:Money.ViewModels"
     mc:Ignorable="d">
     <Page.Resources>
-        <converters:BoolConverter x:Key="TrueToFalseConverter" TrueValue="False" FalseValue="True" />
 
         <Style x:Key="MenuItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="MinWidth" Value="{StaticResource SplitViewCompactPaneThemeLength}"/>

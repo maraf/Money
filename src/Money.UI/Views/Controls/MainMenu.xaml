@@ -8,6 +8,7 @@
     xmlns:viewModels="using:Money.ViewModels"
     mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="400">
     <UserControl.Resources>
+        <CollectionViewSource x:Key="MenuItemsSource" x:Name="MenuItemsSource" IsSourceGrouped="True" />
 
         <Style x:Key="MenuItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="MinWidth" Value="{StaticResource SplitViewCompactPaneThemeLength}"/>
@@ -63,12 +64,6 @@
                 <TextBlock Text="Money" Style="{ThemeResource HeaderTextBlockStyle}" Foreground="White" />
             </StackPanel>
         </Grid>
-        <controls:MainMenuListView x:Name="mlvList" Padding="20" Grid.Row="1">
-            <viewModels:MenuItemViewModel Label="Summary" Icon="&#xE908;" />
-            <viewModels:MenuItemViewModel Label="Categories" Icon="&#xE8FD;" />
-            <viewModels:MenuItemViewModel Label="Currencies" Icon="&#xE1D0;" />
-            <viewModels:MenuItemViewModel Label="Settings" Icon="&#xE713;" />
-
-        </controls:MainMenuListView>
+        <controls:MainMenuListView x:Name="mlvList" ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="mlvList_ItemInvoked"  Padding="20" Grid.Row="1" />
     </Grid>
 </UserControl>

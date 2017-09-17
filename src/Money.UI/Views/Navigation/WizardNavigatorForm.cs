@@ -34,7 +34,7 @@ namespace Money.Views.Navigation
             bool isEmpty = rootFrame.Content == null;
             if (!isEmpty)
             {
-                Template template = rootFrame.Content as Template;
+                ITemplate template = rootFrame.Content as ITemplate;
                 isEmpty = template != null && template.ContentFrame.Content == null;
             }
 

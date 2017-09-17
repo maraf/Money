@@ -224,6 +224,7 @@
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\MainMenuAppBarButton.cs" />
+    <Compile Include="Views\Controls\MainMenuEventArgs.cs" />
     <Compile Include="Views\Controls\SortAppBarButton.cs" />
     <Compile Include="Views\Converters\ExchangeRateListToStringConverter.cs" />
     <Compile Include="Views\Converters\SymmaryViewTypeToVisibilityConverter.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Views\Empty.xaml.cs">
       <DependentUpon>Empty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ITemplate.cs" />
     <Compile Include="Views\Migrate.xaml.cs">
       <DependentUpon>Migrate.xaml</DependentUpon>
     </Compile>
@@ -328,6 +330,9 @@
     </Compile>
     <Compile Include="Views\Template.xaml.cs">
       <DependentUpon>Template.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TemplateMobile.xaml.cs">
+      <DependentUpon>TemplateMobile.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -467,6 +472,10 @@
     <Page Include="Views\Template.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TemplateMobile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

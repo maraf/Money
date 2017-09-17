@@ -25,7 +25,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views
 {
-    public sealed partial class Template : Page
+    public sealed partial class Template : Page, ITemplate
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly List<MenuItemViewModel> menuItems;

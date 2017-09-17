@@ -194,7 +194,7 @@ namespace Money.UI
             if (content is Frame frame)
                 content = frame.Content;
 
-            if (content is Template template)
+            if (content is ITemplate template)                                                       
                 template.HideLoading();
 
             if (e is LayoutCycleException)

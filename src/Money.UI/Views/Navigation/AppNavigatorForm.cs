@@ -9,9 +9,9 @@ namespace Money.Views.Navigation
 {
     internal class AppNavigatorForm : PageNavigatorForm
     {
-        private readonly Template template;
+        private readonly ITemplate template;
 
-        public AppNavigatorForm(Template template, Type pageType, object parameter)
+        public AppNavigatorForm(ITemplate template, Type pageType, object parameter)
             : base(template.ContentFrame, pageType, parameter)
         {
             this.template = template;

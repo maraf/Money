@@ -29,9 +29,9 @@ namespace Money.Views.Controls
                 while (parent != null && !(parent is SplitView))
                     parent = VisualTreeHelper.GetParent(parent);
 
-                if (parent != null)
+                if (parent != null && parent is SplitView sv)
                 {
-                    splitView = (SplitView)parent;
+                    splitView = sv;
                     splitView.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, (sender, args) => OnPaneToggled());
                     splitView.RegisterPropertyChangedCallback(SplitView.DisplayModeProperty, (sender, args) => OnPaneToggled());
                     OnPaneToggled();
@@ -137,7 +137,8 @@ namespace Money.Views.Controls
             SetSelectedItem(focusedItem as ListViewItem);
             ItemInvoked?.Invoke(this, focusedItem as ListViewItem);
 
-            if (splitView.IsPaneOpen && (
+            if (splitView != null &&
+                splitView.IsPaneOpen && (
                 splitView.DisplayMode == SplitViewDisplayMode.CompactOverlay ||
                 splitView.DisplayMode == SplitViewDisplayMode.Overlay))
             {
@@ -155,15 +156,18 @@ namespace Money.Views.Controls
         /// </summary>
         private void OnPaneToggled()
         {
-            if (splitView.IsPaneOpen)
+            if (splitView != null)
             {
-                ItemsPanelRoot.ClearValue(FrameworkElement.WidthProperty);
-                ItemsPanelRoot.ClearValue(FrameworkElement.HorizontalAlignmentProperty);
-            }
-            else if (splitView.DisplayMode == SplitViewDisplayMode.CompactInline || splitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
-            {
-                ItemsPanelRoot.SetValue(FrameworkElement.WidthProperty, this.splitView.CompactPaneLength);
-                ItemsPanelRoot.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
+                if (splitView.IsPaneOpen)
+                {
+                    ItemsPanelRoot.ClearValue(FrameworkElement.WidthProperty);
+                    ItemsPanelRoot.ClearValue(FrameworkElement.HorizontalAlignmentProperty);
+                }
+                else if (splitView.DisplayMode == SplitViewDisplayMode.CompactInline || splitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
+                {
+                    ItemsPanelRoot.SetValue(FrameworkElement.WidthProperty, this.splitView.CompactPaneLength);
+                    ItemsPanelRoot.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
+                }
             }
         }
     }

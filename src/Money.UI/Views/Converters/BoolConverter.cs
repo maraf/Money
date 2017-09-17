@@ -30,7 +30,12 @@ namespace Money.Views.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            if (TrueValue.Equals(value))
+                return Test;
+            else if (FalseValue.Equals(value))
+                return !Test;
+
+            return false;
         }
     }
 }

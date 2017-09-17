@@ -1,8 +1,8 @@
-﻿using Money.ViewModels;
-using Money.ViewModels.Navigation;
+﻿using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
 using Money.Views.Dialogs;
+using Money.Views.StateTriggers;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -44,7 +44,7 @@ namespace Money.Views.Navigation
         {
             bool isOutcome;
 
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             if (template != null)
             {
                 if (NavigateBack(template.ContentFrame))
@@ -66,7 +66,7 @@ namespace Money.Views.Navigation
 
         public void GoForward()
         {
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             if (template != null)
                 NavigateForward(template.ContentFrame);
         }
@@ -78,13 +78,17 @@ namespace Money.Views.Navigation
             Type pageType;
             Type parameterType = parameter.GetType();
 
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             if (template == null)
             {
                 if (parameterType == typeof(MigrateParameter) && rules.TryGetPageType(parameterType, out pageType))
                     return new PageNavigatorForm(rootFrame, pageType, parameter);
 
-                return new PageNavigatorForm(rootFrame, typeof(Template), parameter);
+                Type templateType = typeof(Template);
+                if (new MobileStateTrigger().IsActive)
+                    templateType = typeof(TemplateMobile);
+
+                return new PageNavigatorForm(rootFrame, templateType, parameter);
             }
 
             if (rules.TryGetPageType(parameterType, out pageType))
@@ -105,7 +109,7 @@ namespace Money.Views.Navigation
 
         private void OnRootFrameNavigating(object sender, NavigatingCancelEventArgs e)
         {
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             if (template != null)
             {
                 template.ContentFrame.Navigated -= OnTemplateContentFrameNavigated;
@@ -115,7 +119,7 @@ namespace Money.Views.Navigation
 
         private void OnRootFrameNavigated(object sender, NavigationEventArgs e)
         {
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             if (template != null)
             {
                 template.ContentFrame.Navigated += OnTemplateContentFrameNavigated;
@@ -129,7 +133,7 @@ namespace Money.Views.Navigation
         {
             Frame frame = (Frame)sender;
 
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             if (template != null)
             {
                 if (e.Parameter != null)
@@ -162,7 +166,7 @@ namespace Money.Views.Navigation
                 AddMainMenuButton(page);
             }
 
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             INavigatorPage navigatorPage = frame.Content as INavigatorPage;
             if (navigatorPage != null && template != null)
             {
@@ -192,7 +196,7 @@ namespace Money.Views.Navigation
             if (navigatorPage != null)
                 navigatorPage.ContentLoaded -= OnTemplateContentPageLoaded;
 
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             if (template != null)
                 template.HideLoading();
         }
@@ -214,14 +218,14 @@ namespace Money.Views.Navigation
         {
             if (page.BottomAppBar != null)
             {
-                Template template = (Template)rootFrame.Content;
+                ITemplate template = (ITemplate)rootFrame.Content;
 
                 MainMenuAppBarButton button = new MainMenuAppBarButton();
                 button.SetBinding(
                     AppBarToggleButton.IsCheckedProperty,
                     new Binding()
                     {
-                        Path = new PropertyPath(nameof(Template.IsMainMenuOpened)),
+                        Path = new PropertyPath(nameof(ITemplate.IsMainMenuOpened)),
                         Source = template,
                         Mode = BindingMode.TwoWay
                     }
@@ -232,7 +236,7 @@ namespace Money.Views.Navigation
                     {
                         Path = new PropertyPath(nameof(CommandBar.IsOpen)),
                         Source = page.BottomAppBar,
-                        Converter = (IValueConverter)template.Resources["TrueToFalseConverter"],
+                        Converter = (IValueConverter)Application.Current.Resources["TrueToFalseConverter"],
                         Mode = BindingMode.OneWay
                     }
                 );
@@ -247,7 +251,7 @@ namespace Money.Views.Navigation
                 Page page = (Page)sender;
 
                 Frame frame = null;
-                Template template = rootFrame.Content as Template;
+                ITemplate template = rootFrame.Content as ITemplate;
                 if (template == null)
                     frame = page.Frame;
                 else
@@ -269,7 +273,7 @@ namespace Money.Views.Navigation
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            Template template = rootFrame.Content as Template;
+            ITemplate template = rootFrame.Content as ITemplate;
             if (template == null)
                 return;
 

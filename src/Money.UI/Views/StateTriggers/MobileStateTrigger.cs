@@ -13,6 +13,8 @@ namespace Money.Views.StateTriggers
     {
         private readonly IDevelopmentService developmentTools = ServiceProvider.DevelopmentTools;
 
+        public bool IsActive { get; private set; }
+
         public MobileStateTrigger()
         {
             bool isActive = developmentTools.IsMobileDevice();
@@ -22,6 +24,7 @@ namespace Money.Views.StateTriggers
                 isActive = deviceFamily == "Windows.Mobile";
             }
 
+            IsActive = isActive;
             SetActive(isActive);
         }
     }

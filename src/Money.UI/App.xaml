@@ -17,6 +17,7 @@
         <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
         <converters:DateToStringConverter x:Key="DateToStringConverter" />
         <converters:CuttingConverter x:Key="ZeroToVisibleConverter" EdgeValue="0" GreaterValue="Collapsed" LowerValue="Visible" />
+        <converters:BoolConverter x:Key="TrueToFalseConverter" TrueValue="False" FalseValue="True" />
 
         <BitmapImage x:Key="SquareLogo44Image" UriSource="/Assets/Square44x44Logo.scale-200.png" />
 

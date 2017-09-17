@@ -1,5 +1,4 @@
-﻿using Money.Services;
-using Money.Services.Models;
+﻿using Money.Services.Models;
 using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
@@ -254,6 +253,7 @@ namespace Money.Views.DesignData
                 ServiceProvider.EventHandlers = EventHandlers;
                 ServiceProvider.Navigator = Navigator;
                 ServiceProvider.TileService = new TileService();
+                ServiceProvider.DevelopmentTools = new MockDevelopmentService();
             }
         }
     }

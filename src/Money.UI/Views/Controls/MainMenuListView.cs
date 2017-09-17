@@ -31,7 +31,7 @@ namespace Money.Views.Controls
 
                 if (parent != null)
                 {
-                    splitView = parent as SplitView;
+                    splitView = (SplitView)parent;
                     splitView.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, (sender, args) => OnPaneToggled());
                     splitView.RegisterPropertyChangedCallback(SplitView.DisplayModeProperty, (sender, args) => OnPaneToggled());
                     OnPaneToggled();

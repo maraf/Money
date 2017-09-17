@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Views.DesignData
 {
-    internal class QueryDispatcher : IQueryDispatcher
+    internal class MockQueryDispatcher : IQueryDispatcher
     {
         public Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
         {

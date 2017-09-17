@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Money.Views.DesignData
 {
-    internal class UpgradeService : IUpgradeService
+    internal class MockUpgradeService : IUpgradeService
     {
         public bool IsRequired()
         {

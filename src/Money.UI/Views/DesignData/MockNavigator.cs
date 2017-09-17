@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Money.Views.DesignData
 {
-    internal class Navigator : INavigator
+    internal class MockNavigator : INavigator
     {
         public void GoBack()
         {

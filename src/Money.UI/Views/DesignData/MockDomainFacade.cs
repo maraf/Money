@@ -12,7 +12,7 @@ using Windows.UI;
 
 namespace Money.Views.DesignData
 {
-    internal class DomainFacade : IDomainFacade
+    internal class MockDomainFacade : IDomainFacade
     {
         public IFactory<Price, decimal> PriceFactory
         {

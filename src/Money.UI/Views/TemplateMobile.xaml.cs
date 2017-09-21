@@ -88,12 +88,12 @@ namespace Money.Views
 
         public void ShowLoading()
         {
-            loaContent.Visibility = Visibility.Visible;
+            loaContent.IsActive = true;
         }
 
         public void HideLoading()
         {
-            loaContent.Visibility = Visibility.Collapsed;
+            loaContent.IsActive = false;
         }
 
         private void maiMenu_ItemSelected(object sender, MainMenuEventArgs e)

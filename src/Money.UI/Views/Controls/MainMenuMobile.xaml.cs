@@ -1,6 +1,7 @@
 ﻿using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
+using Neptuo.Activators;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,9 +19,10 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views.Controls
 {
-    public sealed partial class MainMenu : UserControl
+    public sealed partial class MainMenuMobile : UserControl
     {
-        private readonly List<MenuItemViewModel> items;
+        private readonly IFactory<IReadOnlyList<MenuItemViewModel>, bool> mainMenuFactory = ServiceProvider.MainMenuFactory;
+        private readonly IReadOnlyList<MenuItemViewModel> items;
 
         public event EventHandler<MainMenuEventArgs> ItemSelected;
 
@@ -32,25 +34,12 @@ namespace Money.Views.Controls
             set => mlvList.SelectedItem = value;
         }
 
-        public MainMenu()
+        public MainMenuMobile()
         {
             InitializeComponent();
 
-            items = new List<MenuItemViewModel>()
-            {
-                new MenuItemViewModel("Month", "\uE908", new SummaryParameter()) { Group = "Summary" },
-                new MenuItemViewModel("Create Outcome", "\uE108", new OutcomeParameter()) { Group = "Summary" },
-
-                new MenuItemViewModel("Categories", "\uE8FD", new CategoryListParameter()) { Group = "Manage" },
-                new MenuItemViewModel("Currencies", "\uE1D0", new CurrencyParameter()) { Group = "Manage" },
-
-                new MenuItemViewModel("Settings", "\uE713", new AboutParameter()) { Group = "Settings" },
-            };
-
+            items = mainMenuFactory.Create(false);
             MenuItemsSource.Source = items.GroupBy(i => i.Group);
-
-            // TODO: Remove after making the synchronization of selected item.
-            mlvList.SelectedIndex = 0;
         }
 
         private void mlvList_ItemInvoked(object sender, ListViewItem e)

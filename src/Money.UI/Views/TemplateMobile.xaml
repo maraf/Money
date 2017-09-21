@@ -20,6 +20,6 @@
             </Frame.ContentTransitions>
         </Frame>
         <controls:Loading x:Name="loaContent" />
-        <controls:MainMenu x:Name="maiMenu" ItemSelected="maiMenu_ItemSelected" Visibility="Collapsed" />
+        <controls:MainMenuMobile x:Name="maiMenu" ItemSelected="maiMenu_ItemSelected" Visibility="Collapsed" />
     </Grid>
 </Page>

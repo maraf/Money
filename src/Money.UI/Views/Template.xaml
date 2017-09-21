@@ -193,7 +193,6 @@
             </SplitView.Pane>
 
             <SplitView.Content>
-                <!-- OnNavigatingToPage we synchronize the selected item in the nav menu with the current page.-->
                 <Grid>
                     <Frame x:Name="frmContent">
                         <Frame.ContentTransitions>

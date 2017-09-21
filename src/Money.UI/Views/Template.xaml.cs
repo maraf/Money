@@ -6,6 +6,7 @@ using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Controls;
 using Neptuo;
+using Neptuo.Activators;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +29,8 @@ namespace Money.Views
     public sealed partial class Template : Page, ITemplate
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
-        private readonly List<MenuItemViewModel> menuItems;
+        private readonly IFactory<IReadOnlyList<MenuItemViewModel>, bool> mainMenuFactory = ServiceProvider.MainMenuFactory;
+        private readonly IReadOnlyList<MenuItemViewModel> menuItems;
 
         public Frame ContentFrame
         {
@@ -57,18 +59,8 @@ namespace Money.Views
         {
             InitializeComponent();
 
-            menuItems = new List<MenuItemViewModel>()
-            {
-                new MenuItemViewModel("Month", "\uE908", new SummaryParameter()) { Group = "Summary" },
-                new MenuItemViewModel("Categories", "\uE8FD", new CategoryListParameter()) { Group = "Manage" },
-                new MenuItemViewModel("Currencies", "\uE1D0", new CurrencyParameter()) { Group = "Manage" },
-                new MenuItemViewModel("Settings", "\uE713", new AboutParameter()) { Group = "Settings" },
-            };
-
+            menuItems = mainMenuFactory.Create(true);
             MenuItemsSource.Source = menuItems.GroupBy(i => i.Group);
-
-            // TODO: Remove after making the synchronization of selected item.
-            mnuMain.SelectedIndex = 1;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

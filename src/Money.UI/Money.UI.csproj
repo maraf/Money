@@ -167,6 +167,7 @@
     <Compile Include="ViewModels\GroupItemViewModel.cs" />
     <Compile Include="ViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\ISummaryItemViewModel.cs" />
+    <Compile Include="ViewModels\MainMenuListFactory.cs" />
     <Compile Include="ViewModels\MenuItemViewModel.cs" />
     <Compile Include="ViewModels\MigrateViewModel.cs" />
     <Compile Include="ViewModels\Navigation\INavigator.cs" />
@@ -220,8 +221,8 @@
       <DependentUpon>DevelopmentTools.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\LoadingType.cs" />
-    <Compile Include="Views\Controls\MainMenu.xaml.cs">
-      <DependentUpon>MainMenu.xaml</DependentUpon>
+    <Compile Include="Views\Controls\MainMenuMobile.xaml.cs">
+      <DependentUpon>MainMenuMobile.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\MainMenuAppBarButton.cs" />
     <Compile Include="Views\Controls\MainMenuEventArgs.cs" />
@@ -373,7 +374,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Controls\MainMenu.xaml">
+    <Page Include="Views\Controls\MainMenuMobile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

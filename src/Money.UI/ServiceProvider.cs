@@ -2,6 +2,7 @@
 using Money.Services;
 using Money.Services.Settings;
 using Money.Services.Tiles;
+using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Neptuo.Activators;
 using Neptuo.Events;
@@ -32,5 +33,7 @@ namespace Money
         internal static IFactory<EventSourcingContext> EventSourcingContextFactory { get; set; }
         internal static IFactory<ReadModelContext> ReadModelContextFactory { get; set; }
         internal static IFactory<ApplicationDataContainer> StorageContainerFactory { get; set; }
+
+        public static IFactory<IReadOnlyList<MenuItemViewModel>, bool> MainMenuFactory { get; set; }
     }
 }

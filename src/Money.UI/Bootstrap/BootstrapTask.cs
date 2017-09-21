@@ -2,6 +2,7 @@
 using Money.Services.Models.Builders;
 using Money.Services.Settings;
 using Money.Services.Tiles;
+using Money.ViewModels;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Converters;
@@ -41,6 +42,8 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
+            ServiceProvider.MainMenuFactory = new MainMenuListFactory();
+
             StorageFactory storageFactory = new StorageFactory();
             ServiceProvider.EventSourcingContextFactory = storageFactory;
             ServiceProvider.ReadModelContextFactory = storageFactory;

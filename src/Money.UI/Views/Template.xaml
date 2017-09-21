@@ -49,7 +49,7 @@
             <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Background" Value="{ThemeResource ToggleButtonBackgroundChecked}" />
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <Setter Property="Content" Value="&#xE700;" />
             <Setter Property="AutomationProperties.Name" Value="Navigation" />
@@ -64,9 +64,6 @@
                                     <VisualState x:Name="Normal" />
                                     <VisualState x:Name="PointerOver">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="(Grid.Background)">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListLowBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
                                             </ObjectAnimationUsingKeyFrames>
@@ -74,9 +71,6 @@
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="(Grid.Background)">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListMediumBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
                                             </ObjectAnimationUsingKeyFrames>
@@ -92,9 +86,6 @@
                                     <VisualState x:Name="Checked"/>
                                     <VisualState x:Name="CheckedPointerOver">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="(Grid.Background)">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListLowBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
                                             </ObjectAnimationUsingKeyFrames>
@@ -102,9 +93,6 @@
                                     </VisualState>
                                     <VisualState x:Name="CheckedPressed">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="(Grid.Background)">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListMediumBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
                                             </ObjectAnimationUsingKeyFrames>
@@ -214,16 +202,16 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel x:Name="stpMainMenu">
-                        <ToggleButton x:Name="tbtTopMenu" Style="{StaticResource MainMenuToggleButtonStyle}" Canvas.ZIndex="100" TabIndex="1"
+                        <ToggleButton x:Name="tbtTopMenu" Style="{StaticResource MainMenuToggleButtonStyle}" Canvas.ZIndex="100" TabIndex="1" Background="{ThemeResource ToggleButtonBackgroundChecked}"
                             IsChecked="{x:Bind IsMainMenuOpened, Mode=TwoWay}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="48" />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <FontIcon x:Name="ficTopMenu" FontSize="16" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="Money"/>
+                                <FontIcon x:Name="ficTopMenu" Glyph="&#xE700;" Foreground="White" ToolTipService.ToolTip="Money"/>
                                 <Image x:Name="imgTopMenu" Width="32" Height="32" Source="{StaticResource SquareLogo44Image}" />
-                                <TextBlock Text="Money" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
+                                <TextBlock Text="Money" Style="{StaticResource BodyTextBlockStyle}" Foreground="White" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
                             </Grid>
                         </ToggleButton>
 

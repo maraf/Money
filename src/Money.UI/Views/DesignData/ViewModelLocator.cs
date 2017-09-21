@@ -248,6 +248,7 @@ namespace Money.Views.DesignData
         {
             if (DesignMode.DesignModeEnabled)
             {
+                ServiceProvider.MainMenuFactory = new MainMenuListFactory();
                 ServiceProvider.QueryDispatcher = QueryDispatcher;
                 ServiceProvider.DomainFacade = DomainFacade;
                 ServiceProvider.EventHandlers = EventHandlers;

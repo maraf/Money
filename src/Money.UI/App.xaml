@@ -5,14 +5,15 @@
     xmlns:controls="using:Money.Views.Controls"
     xmlns:converters="using:Money.Views.Converters"
     xmlns:viewModels="using:Money.ViewModels"
-    xmlns:dd="using:Money.Views.DesignData"
-    xmlns:domain="using:Money">
+    xmlns:dd="using:Money.Views.DesignData">
     <Application.Resources>
         <dd:ViewModelLocator x:Key="ViewModelLocator" />
 
         <x:Double x:Key="SmallSize">0</x:Double>
         <x:Double x:Key="MediumSize">641</x:Double>
         <x:Double x:Key="LargeSize">1008</x:Double>
+
+        <BitmapImage x:Key="IconSquare44" UriSource="/Assets/Square44x44Logo.scale-200.png" />
 
         <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
         <converters:DateToStringConverter x:Key="DateToStringConverter" />
@@ -369,5 +370,47 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="MenuItemContainerStyle" TargetType="ListViewItem">
+            <Setter Property="MinWidth" Value="{StaticResource SplitViewCompactPaneThemeLength}"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter ContentTransitions="{TemplateBinding ContentTransitions}"
+                         Control.IsTemplateFocusTarget="True"
+                         SelectionCheckMarkVisualEnabled="False"
+                         PointerOverBackground="{ThemeResource SystemControlHighlightListLowBrush}"
+                         PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}"
+                         SelectedBackground="Transparent"
+                         SelectedForeground="{ThemeResource SystemControlForegroundAccentBrush}"
+                         SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListLowBrush}"
+                         PressedBackground="{ThemeResource SystemControlHighlightListMediumBrush}"
+                         SelectedPressedBackground="{ThemeResource SystemControlHighlightListMediumBrush}"
+                         DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
+                         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                         ContentMargin="{TemplateBinding Padding}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="MenuItemTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <FontIcon FontSize="16" Glyph="{Binding Icon}" ToolTipService.ToolTip="{Binding Label}"/>
+                <TextBlock Text="{Binding Label}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="controls:MainMenuListView">
+            <Setter Property="ItemTemplate" Value="{StaticResource MenuItemTemplate}" />
+            <Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemContainerStyle}" />
+        </Style>
+
     </Application.Resources>
 </Application>

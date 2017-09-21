@@ -5,52 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Money.Views.Controls"
-    xmlns:viewModels="using:Money.ViewModels"
     mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="400">
     <UserControl.Resources>
         <CollectionViewSource x:Key="MenuItemsSource" x:Name="MenuItemsSource" IsSourceGrouped="True" />
-
-        <Style x:Key="MenuItemContainerStyle" TargetType="ListViewItem">
-            <Setter Property="MinWidth" Value="{StaticResource SplitViewCompactPaneThemeLength}"/>
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="UseSystemFocusVisuals" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
-                        <ListViewItemPresenter ContentTransitions="{TemplateBinding ContentTransitions}"
-                         Control.IsTemplateFocusTarget="True"
-                         SelectionCheckMarkVisualEnabled="False"
-                         PointerOverBackground="{ThemeResource SystemControlHighlightListLowBrush}"
-                         PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}"
-                         SelectedBackground="Transparent"
-                         SelectedForeground="{ThemeResource SystemControlForegroundAccentBrush}"
-                         SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListLowBrush}"
-                         PressedBackground="{ThemeResource SystemControlHighlightListMediumBrush}"
-                         SelectedPressedBackground="{ThemeResource SystemControlHighlightListMediumBrush}"
-                         DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
-                         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                         ContentMargin="{TemplateBinding Padding}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <DataTemplate x:Key="MenuItemTemplate" x:DataType="viewModels:MenuItemViewModel">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="48" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <FontIcon FontSize="16" FontFamily="Segoe MDL2 Assets" Glyph="{x:Bind Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind Label}"/>
-                <TextBlock Text="{x:Bind Label}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
-            </Grid>
-        </DataTemplate>
-        <Style TargetType="controls:MainMenuListView">
-            <Setter Property="ItemTemplate" Value="{StaticResource MenuItemTemplate}" />
-            <Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemContainerStyle}" />
-        </Style>
-
     </UserControl.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -60,7 +17,7 @@
 
         <Grid Background="{ThemeResource ToggleButtonBackgroundChecked}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Image Source="/Assets/Square44x44Logo.scale-200.png" Height="64" />
+                <Image Source="{StaticResource IconSquare44}" Height="64" />
                 <TextBlock Text="Money" Style="{ThemeResource HeaderTextBlockStyle}" Foreground="White" />
             </StackPanel>
         </Grid>

@@ -10,34 +10,6 @@
     xmlns:vm="using:Money.ViewModels"
     mc:Ignorable="d">
     <Page.Resources>
-
-        <Style x:Key="MenuItemContainerStyle" TargetType="ListViewItem">
-            <Setter Property="MinWidth" Value="{StaticResource SplitViewCompactPaneThemeLength}"/>
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="UseSystemFocusVisuals" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
-                        <ListViewItemPresenter ContentTransitions="{TemplateBinding ContentTransitions}"
-                         Control.IsTemplateFocusTarget="True"
-                         SelectionCheckMarkVisualEnabled="False"
-                         PointerOverBackground="{ThemeResource SystemControlHighlightListLowBrush}"
-                         PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}"
-                         SelectedBackground="Transparent"
-                         SelectedForeground="{ThemeResource SystemControlForegroundAccentBrush}"
-                         SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListLowBrush}"
-                         PressedBackground="{ThemeResource SystemControlHighlightListMediumBrush}"
-                         SelectedPressedBackground="{ThemeResource SystemControlHighlightListMediumBrush}"
-                         DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
-                         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                         ContentMargin="{TemplateBinding Padding}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style x:Key="MainMenuToggleButtonStyle" TargetType="ToggleButton">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="FontFamily" Value="{StaticResource SymbolThemeFontFamily}" />
@@ -115,23 +87,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-
-        <DataTemplate x:Key="MenuItemTemplate" x:DataType="vm:MenuItemViewModel">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="48" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <FontIcon FontSize="16" FontFamily="Segoe MDL2 Assets" Glyph="{x:Bind Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind Label}"/>
-                <TextBlock Text="{x:Bind Label}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" />
-            </Grid>
-        </DataTemplate>
-        <Style TargetType="controls:MainMenuListView">
-            <Setter Property="ItemTemplate" Value="{StaticResource MenuItemTemplate}" />
-            <Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemContainerStyle}" />
-        </Style>
-
         <CollectionViewSource x:Key="MenuItemsSource" x:Name="MenuItemsSource" IsSourceGrouped="True" />
     </Page.Resources>
 

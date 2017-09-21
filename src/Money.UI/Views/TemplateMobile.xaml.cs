@@ -62,40 +62,11 @@ namespace Money.Views
                 .Show();
         }
 
-        public void UpdateActiveMenuItem(object parameter)
-        {
-            Ensure.NotNull(parameter, "parameter");
-            foreach (MenuItemViewModel item in maiMenu.Items)
-            {
-                if (item.Parameter.Equals(parameter))
-                {
-                    maiMenu.SelectedItem = item;
-                    return;
-                }
-            }
+        public void UpdateActiveMenuItem(object parameter) 
+            => Money.Views.Template.UpdateActiveMenuItem(vm => maiMenu.SelectedItem = vm, maiMenu.Items, parameter);
 
-            Type parameterType = parameter.GetType();
-            foreach (MenuItemViewModel item in maiMenu.Items)
-            {
-                if (item.Parameter.GetType() == parameterType)
-                {
-                    maiMenu.SelectedItem = item;
-                    return;
-                }
-            }
-
-            maiMenu.SelectedItem = null;
-        }
-
-        public void ShowLoading()
-        {
-            loaContent.IsActive = true;
-        }
-
-        public void HideLoading()
-        {
-            loaContent.IsActive = false;
-        }
+        public void ShowLoading() => loaContent.IsActive = true;
+        public void HideLoading() => loaContent.IsActive = false;
 
         private void maiMenu_ItemSelected(object sender, MainMenuEventArgs e)
         {

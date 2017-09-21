@@ -81,18 +81,28 @@ namespace Money.Views
                 .Show();
         }
 
-        /// <summary>
-        /// Updates currently active/selected menu item to match <paramref name="parameter"/>.
-        /// </summary>
-        /// <param name="parameter">A parameter to by selected.</param>
-        public void UpdateActiveMenuItem(object parameter)
+        public void UpdateActiveMenuItem(object parameter) 
+            => UpdateActiveMenuItem(vm => mnuMain.SelectedItem = vm, menuItems, parameter);
+
+        public void ShowLoading() => loaContent.IsActive = true;
+        public void HideLoading() => loaContent.IsActive = false;
+
+        event PointerEventHandler ITemplate.PointerPressed
+        {
+            add { PointerPressed += value; }
+            remove { PointerPressed -= value; }
+        }
+
+        #region Common extensions
+        
+        public static void UpdateActiveMenuItem(Action<MenuItemViewModel> selector, IEnumerable<MenuItemViewModel> menuItems, object parameter)
         {
             Ensure.NotNull(parameter, "parameter");
             foreach (MenuItemViewModel item in menuItems)
             {
                 if (item.Parameter.Equals(parameter))
                 {
-                    mnuMain.SelectedItem = item;
+                    selector(item);
                     return;
                 }
             }
@@ -102,28 +112,14 @@ namespace Money.Views
             {
                 if (item.Parameter.GetType() == parameterType)
                 {
-                    mnuMain.SelectedItem = item;
+                    selector(item);
                     return;
                 }
             }
 
-            mnuMain.SelectedItem = null;
+            selector(null);
         }
 
-        public void ShowLoading()
-        {
-            loaContent.IsActive = true;
-        }
-
-        public void HideLoading()
-        {
-            loaContent.IsActive = false;
-        }
-
-        event PointerEventHandler ITemplate.PointerPressed
-        {
-            add { PointerPressed += value; }
-            remove { PointerPressed -= value; }
-        }
+        #endregion
     }
 }

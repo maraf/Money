@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace Money.Views
 {
     public interface ITemplate
     {
         ResourceDictionary Resources { get; }
+        event PointerEventHandler PointerPressed;
 
         Frame ContentFrame { get; }
 

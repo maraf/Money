@@ -114,6 +114,7 @@ namespace Money.Views.Navigation
             {
                 template.ContentFrame.Navigated -= OnTemplateContentFrameNavigated;
                 template.ContentFrame.Navigating -= OnTemplateContentFrameNavigating;
+                template.PointerPressed -= OnTemplatePointerPressed;
             }
         }
 
@@ -124,10 +125,22 @@ namespace Money.Views.Navigation
             {
                 template.ContentFrame.Navigated += OnTemplateContentFrameNavigated;
                 template.ContentFrame.Navigating += OnTemplateContentFrameNavigating;
+                template.PointerPressed += OnTemplatePointerPressed;
             }
         }
 
         private object lastParameter;
+
+        private void OnTemplatePointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            ITemplate template = rootFrame.Content as ITemplate;
+            if (template != null)
+            {
+                PointerPoint point = e.GetCurrentPoint((UIElement)template);
+                if (point.Properties.IsXButton1Pressed && template.IsMainMenuOpened)
+                    template.IsMainMenuOpened = false;
+            }
+        }
 
         private void OnTemplateContentFrameNavigating(object sender, NavigatingCancelEventArgs e)
         {

@@ -127,5 +127,11 @@ namespace Money.Views
         {
             loaContent.IsActive = false;
         }
+
+        event PointerEventHandler ITemplate.PointerPressed
+        {
+            add { PointerPressed += value; }
+            remove { PointerPressed -= value; }
+        }
     }
 }

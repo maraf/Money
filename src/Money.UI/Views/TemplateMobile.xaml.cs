@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -103,6 +104,12 @@ namespace Money.Views
             navigator
                 .Open(e.Item.Parameter)
                 .Show();
+        }
+
+        event PointerEventHandler ITemplate.PointerPressed
+        {
+            add { PointerPressed += value; }
+            remove { PointerPressed -= value; }
         }
     }
 }

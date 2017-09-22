@@ -18,8 +18,6 @@ namespace Money.ViewModels
     /// </summary>
     public class SummaryCategoryViewModel : ObservableObject, ISummaryItemViewModel
     {
-        private readonly IQueryDispatcher queryDispatcher;
-
         private IKey categoryKey;
         public IKey CategoryKey
         {
@@ -59,21 +57,6 @@ namespace Money.ViewModels
                     amount = value;
                     RaisePropertyChanged();
                     AmountValue = (double)value.Value;
-                    queryDispatcher.QueryAsync(new GetCurrencySymbol(amount.Currency)).ContinueWith(t => CurrencySymbol = t.Result);
-                }
-            }
-        }
-
-        private string currencySymbol;
-        public string CurrencySymbol
-        {
-            get { return currencySymbol; }
-            set
-            {
-                if (currencySymbol != value)
-                {
-                    currencySymbol = value;
-                    RaisePropertyChanged();
                 }
             }
         }
@@ -124,12 +107,6 @@ namespace Money.ViewModels
                     RaisePropertyChanged();
                 }
             }
-        }
-
-        public SummaryCategoryViewModel(IQueryDispatcher queryDispatcher)
-        {
-            Ensure.NotNull(queryDispatcher, "queryDispatcher");
-            this.queryDispatcher = queryDispatcher;
         }
     }
 }

@@ -93,28 +93,28 @@ namespace Money.Views.DesignData
                 if (summary == null)
                 {
                     summary = new SummaryViewModel(ServiceProvider.Navigator, ServiceProvider.QueryDispatcher);
-                    summary.Items.Add(new SummaryCategoryViewModel(ServiceProvider.QueryDispatcher)
+                    summary.Items.Add(new SummaryCategoryViewModel()
                     {
                         Name = "Food",
                         Color = Colors.Olive,
                         Amount = new Price(9540, "CZK"),
                         Icon = "❤"
                     });
-                    summary.Items.Add(new SummaryCategoryViewModel(ServiceProvider.QueryDispatcher)
+                    summary.Items.Add(new SummaryCategoryViewModel()
                     {
                         Name = "Eating Out",
                         Color = Colors.DarkRed,
                         Amount = new Price(3430, "CZK"),
                         Icon = "🍔"
                     });
-                    summary.Items.Add(new SummaryCategoryViewModel(ServiceProvider.QueryDispatcher)
+                    summary.Items.Add(new SummaryCategoryViewModel()
                     {
                         Name = "Home",
                         Color = Colors.RosyBrown,
                         Amount = new Price(950, "CZK"),
                         Icon = "🏡"
                     });
-                    summary.Items.Add(new SummaryTotalViewModel(ServiceProvider.QueryDispatcher, new Price(13520, "CZK")));
+                    summary.Items.Add(new SummaryTotalViewModel(new Price(13520, "CZK")));
                     summary.IsLoading = false;
                 }
 
@@ -130,10 +130,10 @@ namespace Money.Views.DesignData
                 if (overview == null)
                 {
                     overview = new OverviewViewModel(ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Food", new MonthModel(2016, 11));
-                    overview.Items.Add(new OutcomeOverviewViewModel(ServiceProvider.QueryDispatcher, new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market")));
-                    overview.Items.Add(new OutcomeOverviewViewModel(ServiceProvider.QueryDispatcher, new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese")));
-                    overview.Items.Add(new OutcomeOverviewViewModel(ServiceProvider.QueryDispatcher, new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine")));
-                    overview.Items.Add(new OutcomeOverviewViewModel(ServiceProvider.QueryDispatcher, new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta")));
+                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market")));
+                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese")));
+                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine")));
+                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta")));
                     overview.Items[2].IsSelected = true;
                 }
 

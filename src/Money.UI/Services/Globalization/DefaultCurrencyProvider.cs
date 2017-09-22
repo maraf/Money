@@ -46,10 +46,12 @@ namespace Money.Services.Globalization
         public ICurrency Get(string uniqueCode)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
-            if (currencies != null && currencies.TryGetValue(uniqueCode, out var currency))
-            {
-                return new 
-            }
+            EnsureCurrencies();
+            if (currencies.TryGetValue(uniqueCode, out var currency))
+                return new DefaultCurrency(currency.culture, currency.region);
+
+            // TODO: Return some generic invariant culture.
+            throw Ensure.Exception.NotImplemented();
         }
 
         #region List Helper
@@ -97,22 +99,23 @@ namespace Money.Services.Globalization
                         // This culture is not supported by .NET (not happened so far)
                         // Must be ignored.
                     }
+
                     return true;
                 };
 
                 if (EnumSystemLocalesEx(enumCallback, (LocaleType)cultureTypes, 0, (IntPtr)0) == false)
                 {
                     int errorCode = Marshal.GetLastWin32Error();
-                    throw new LocalesRetrievalException("Win32 error " + errorCode + " while trying to get the Windows locales");
+                    throw new LocalesRetrievalException($"Win32 error '{errorCode}' while trying to get the Windows locales");
                 }
 
                 // Add the two neutral cultures that Windows misses 
                 // (CultureInfo.GetCultures adds them also):
-                if (cultureTypes == CultureTypes.NeutralCultures || cultureTypes == CultureTypes.AllCultures)
-                {
-                    cultures.Add(new CultureInfo("zh-CHS"));
-                    cultures.Add(new CultureInfo("zh-CHT"));
-                }
+                //if (cultureTypes == CultureTypes.NeutralCultures || cultureTypes == CultureTypes.AllCultures)
+                //{
+                //    cultures.Add(new CultureInfo("zh-CHS"));
+                //    cultures.Add(new CultureInfo("zh-CHT"));
+                //}
 
                 return new ReadOnlyCollection<CultureInfo>(cultures);
             }

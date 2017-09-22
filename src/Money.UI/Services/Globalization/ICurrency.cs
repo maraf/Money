@@ -12,6 +12,16 @@ namespace Money.Services.Globalization
     public interface ICurrency
     {
         /// <summary>
+        /// Gets a currency unique code.
+        /// </summary>
+        string UniqueCode { get; }
+
+        /// <summary>
+        /// Gets a currency symbol.
+        /// </summary>
+        string Symbol { get; }
+
+        /// <summary>
         /// Formats <paramref name="amount"/> as money string.
         /// </summary>
         /// <param name="amount">An amount.</param>

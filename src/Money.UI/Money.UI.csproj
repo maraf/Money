@@ -221,6 +221,7 @@
     <Compile Include="Views\CategoryEdit.xaml.cs">
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\Currency.cs" />
     <Compile Include="Views\Controls\DevelopmentTools.xaml.cs">
       <DependentUpon>DevelopmentTools.xaml</DependentUpon>
     </Compile>

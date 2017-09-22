@@ -32,7 +32,7 @@ namespace Money.ViewModels
             IEnumerable<CategoryWithAmountModel> categories = await queryDispatcher.QueryAsync(new ListMonthCategoryWithOutcome(month));
             foreach (CategoryWithAmountModel category in categories)
             {
-                collection.Add(new SummaryCategoryViewModel(queryDispatcher)
+                collection.Add(new SummaryCategoryViewModel()
                 {
                     CategoryKey = category.Key,
                     Name = category.Name,

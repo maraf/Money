@@ -132,7 +132,7 @@ namespace Money.Views
             if (models != null)
             {
                 foreach (OutcomeOverviewModel model in models)
-                    ViewModel.Items.Add(new OutcomeOverviewViewModel(queryDispatcher, model));
+                    ViewModel.Items.Add(new OutcomeOverviewViewModel(model));
             }
 
             ApplySortDescriptor(false);

@@ -14,8 +14,6 @@ namespace Money.ViewModels
 {
     public class OutcomeOverviewViewModel : ObservableObject
     {
-        private readonly IQueryDispatcher queryDispatcher;
-
         /// <summary>
         /// Gets a key of the outcome.
         /// </summary>
@@ -35,26 +33,10 @@ namespace Money.ViewModels
                 {
                     amount = value;
                     RaisePropertyChanged();
-
-                    queryDispatcher.QueryAsync(new GetCurrencySymbol(amount.Currency)).ContinueWith(t => CurrencySymbol = t.Result);
                 }
             }
         }
-
-        private string currencySymbol;
-        public string CurrencySymbol
-        {
-            get { return currencySymbol; }
-            set
-            {
-                if (currencySymbol != value)
-                {
-                    currencySymbol = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
+        
         private DateTime when;
 
         /// <summary>
@@ -109,11 +91,9 @@ namespace Money.ViewModels
             }
         }
 
-        public OutcomeOverviewViewModel(IQueryDispatcher queryDispatcher, OutcomeOverviewModel model)
+        public OutcomeOverviewViewModel(OutcomeOverviewModel model)
         {
-            Ensure.NotNull(queryDispatcher, "queryDispatcher");
             Ensure.NotNull(model, "model");
-            this.queryDispatcher = queryDispatcher;
 
             Key = model.Key;
             Amount = model.Amount;

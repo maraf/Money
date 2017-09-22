@@ -51,10 +51,7 @@
 
                             <TextBlock Text="{x:Bind Description, Mode=OneWay}" Style="{ThemeResource BaseTextBlockStyle}" />
                             <TextBlock Text="{x:Bind When, Mode=OneWay, Converter={StaticResource DateToStringConverter}}" Style="{ThemeResource NoteTextStyle}" Grid.Row="1" />
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.RowSpan="2" Grid.Column="1">
-                                <TextBlock Text="{x:Bind Amount.Value, Mode=OneWay}" Style="{ThemeResource NoteTextStyle}" FontSize="24" />
-                                <TextBlock Text="{x:Bind CurrencySymbol, Mode=OneWay}" Style="{ThemeResource NoteTextStyle}" Margin="2,0,0,0" FontSize="24" />
-                            </StackPanel>
+                            <controls:Currency Price="{x:Bind Amount, Mode=OneWay}" Style="{ThemeResource PriceStyle}" FontSize="24" Grid.RowSpan="2" Grid.Column="1" />
                         </Grid>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button x:Name="btnAmount" Click="btnAmount_Click" ToolTipService.ToolTip="Amount">

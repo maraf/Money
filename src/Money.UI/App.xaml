@@ -25,6 +25,9 @@
         <Style x:Key="NoteTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </Style>
+        <Style x:Key="PriceStyle" TargetType="controls:Currency">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
 
         <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>

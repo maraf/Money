@@ -19,27 +19,11 @@ namespace Money.ViewModels
         public IKey CategoryKey { get; private set; }
         public Price Amount { get; private set; }
 
-        private string currencySymbol;
-        public string CurrencySymbol
+        public SummaryTotalViewModel(Price value)
         {
-            get { return currencySymbol; }
-            private set
-            {
-                if (currencySymbol != value)
-                {
-                    currencySymbol = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public SummaryTotalViewModel(IQueryDispatcher queryDispatcher, Price value)
-        {
-            Ensure.NotNull(queryDispatcher, "queryDispatcher");
             Ensure.NotNull(value, "value");
             CategoryKey = KeyFactory.Empty(typeof(Category));
             Amount = value;
-            queryDispatcher.QueryAsync(new GetCurrencySymbol(Amount.Currency)).ContinueWith(t => CurrencySymbol = t.Result);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Money.Services;
+using Money.Services.Globalization;
 using Money.Services.Models.Builders;
 using Money.Services.Settings;
 using Money.Services.Tiles;
@@ -43,6 +44,7 @@ namespace Money.Bootstrap
         public void Initialize()
         {
             ServiceProvider.MainMenuFactory = new MainMenuListFactory();
+            ServiceProvider.CurrencyProvider = new DefaultCurrencyProvider();
 
             StorageFactory storageFactory = new StorageFactory();
             ServiceProvider.EventSourcingContextFactory = storageFactory;

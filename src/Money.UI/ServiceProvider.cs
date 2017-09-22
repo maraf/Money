@@ -1,5 +1,6 @@
 ﻿using Money.Data;
 using Money.Services;
+using Money.Services.Globalization;
 using Money.Services.Settings;
 using Money.Services.Tiles;
 using Money.ViewModels;
@@ -27,6 +28,7 @@ namespace Money
         public static TileService TileService { get; set; }
         public static IUserPreferenceService UserPreferences { get; set; }
         public static IPriceConverter PriceConverter { get; set; }
+        public static ICurrencyProvider CurrencyProvider { get; set; }
 
         public static IDevelopmentService DevelopmentTools { get; set; }
 

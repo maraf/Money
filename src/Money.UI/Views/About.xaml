@@ -23,20 +23,7 @@
 
             <TextBlock Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
             <controls:DevelopmentTools Orientation="Horizontal" Visibility="Visible" />
-
-            <StackPanel x:Name="ExceptionPanel" Margin="0,20,0,0">
-                <Grid>
-                    <TextBlock Text="Last Exception" Style="{ThemeResource SubtitleTextBlockStyle}" />
-                    <Button x:Name="ClearException" Click="ClearException_Click" HorizontalAlignment="Right">
-                        <SymbolIcon Symbol="Cancel" Foreground="Red" />
-                    </Button>
-                </Grid>
-
-                <TextBlock x:Name="ExceptionType" Opacity=".5" />
-                <TextBlock x:Name="ExceptionMessage" Opacity=".5" />
-                <TextBlock x:Name="ExceptionCallstack" Opacity=".5" />
-                <TextBlock x:Name="ExceptionDateTime" Opacity=".5" />
-            </StackPanel>
+            <controls:LastException Margin="0,20,0,0" />
         </StackPanel>
     </ScrollViewer>
 </Page>

@@ -225,6 +225,9 @@
     <Compile Include="Views\Controls\DevelopmentTools.xaml.cs">
       <DependentUpon>DevelopmentTools.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\LastException.xaml.cs">
+      <DependentUpon>LastException.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\LoadingType.cs" />
     <Compile Include="Views\Controls\MainMenuMobile.xaml.cs">
       <DependentUpon>MainMenuMobile.xaml</DependentUpon>
@@ -378,6 +381,10 @@
     <Page Include="Views\CategoryEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\LastException.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\MainMenuMobile.xaml">
       <SubType>Designer</SubType>

@@ -3,7 +3,6 @@ using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using Neptuo;
-using Neptuo.Activators;
 using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
@@ -25,46 +24,14 @@ namespace Money.Views
     [NavigationParameter(typeof(AboutParameter))]
     public sealed partial class About : Page
     {
-        private readonly IFactory<ApplicationDataContainer> storageContainerFactory = ServiceProvider.StorageContainerFactory;
         private readonly IDevelopmentService developmentTools = ServiceProvider.DevelopmentTools;
         private readonly INavigator navigator = ServiceProvider.Navigator;
 
         public About()
         {
             InitializeComponent();
-            ReloadException();
 
             DatabaseSwitch.IsOn = developmentTools.IsTestDatabaseEnabled();
-        }
-
-        private void ReloadException()
-        {
-            if (storageContainerFactory.Create().Containers.TryGetValue("Exception", out ApplicationDataContainer container))
-            {
-                ExceptionPanel.Visibility = Visibility.Visible;
-
-                if (container.Values.TryGetValue("Type", out object type))
-                    ExceptionType.Text = (string)type;
-
-                if (container.Values.TryGetValue("Callstack", out object message))
-                    ExceptionMessage.Text = (string)message;
-
-                if (container.Values.TryGetValue("Callstack", out object callstack))
-                    ExceptionCallstack.Text = (string)callstack;
-
-                if (container.Values.TryGetValue("DateTime", out object dateTime))
-                    ExceptionCallstack.Text = (string)dateTime;
-            }
-            else
-            {
-                ExceptionPanel.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void ClearException_Click(object sender, RoutedEventArgs e)
-        {
-            storageContainerFactory.Create().DeleteContainer("Exception");
-            ReloadException();
         }
 
         private void DatabaseSwitch_Toggled(object sender, RoutedEventArgs e)

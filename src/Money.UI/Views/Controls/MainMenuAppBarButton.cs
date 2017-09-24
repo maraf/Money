@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Money.Views.Controls
 {
-    public class MainMenuAppBarButton : AppBarToggleButton
+    public class MainMenuAppBarButton : AppBarToggleButton, IDisposable
     {
         public MainMenuAppBarButton()
         {
@@ -20,10 +20,28 @@ namespace Money.Views.Controls
                 Glyph = "\uE700"
             };
 
-            if (new MobileStateTrigger().IsActive)
+            CoreWindow window = CoreWindow.GetForCurrentThread();
+            window.SizeChanged += OnWindowSizeChanged;
+            EnsureVisibility(window);
+        }
+
+        private void OnWindowSizeChanged(CoreWindow window, WindowSizeChangedEventArgs e)
+        {
+            EnsureVisibility(window);
+        }
+
+        private void EnsureVisibility(CoreWindow window)
+        {
+            if (new MobileStateTrigger().IsActive || window.Bounds.Width < (double)Application.Current.Resources["MediumSize"])
                 Visibility = Visibility.Visible;
             else
                 Visibility = Visibility.Collapsed;
+        }
+
+        public void Dispose()
+        {
+            CoreWindow window = CoreWindow.GetForCurrentThread();
+            window.SizeChanged -= OnWindowSizeChanged;
         }
     }
 }

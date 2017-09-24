@@ -220,10 +220,7 @@ namespace Money.Views.Navigation
             {
                 MainMenuAppBarButton button = page.BottomAppBar.Content as MainMenuAppBarButton;
                 if (button != null)
-                {
-                    button.Dispose();
                     page.BottomAppBar.Content = null;
-                }
             }
         }
 

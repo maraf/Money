@@ -15,10 +15,12 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Background="{ThemeResource ToggleButtonBackgroundChecked}">
+        <Grid>
+            <Grid Background="{ThemeResource ToggleButtonBackgroundChecked}" Opacity=".7" />
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Image Source="{StaticResource IconSquare44}" Height="64" />
-                <TextBlock Text="Money" Style="{ThemeResource HeaderTextBlockStyle}" Foreground="White" />
+                <TextBlock Text="Money" Style="{ThemeResource HeaderTextBlockStyle}" HorizontalAlignment="Center" Foreground="White" />
+                <TextBlock Text="Neptuo" HorizontalAlignment="Center" Foreground="White" />
             </StackPanel>
         </Grid>
         <controls:MainMenuListView x:Name="mlvList" ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="mlvList_ItemInvoked" Padding="20" Grid.Row="1" />

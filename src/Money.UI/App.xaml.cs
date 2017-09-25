@@ -63,7 +63,6 @@ namespace Money.UI
             //    this.DebugSettings.EnableFrameRateCounter = true;
             //}
 #endif
-            Bootstrap();
 
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
@@ -73,10 +72,11 @@ namespace Money.UI
 
             Frame rootFrame = Window.Current.Content as Frame;
 
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
+            // Do not repeat app initialization when the Window already has content, just ensure that the window is active
             if (rootFrame == null)
             {
+                Bootstrap();
+
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
                 rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
@@ -89,9 +89,8 @@ namespace Money.UI
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
+                ServiceProvider.Navigator = new AppNavigator(new NavigatorParameterCollection(), rootFrame);
             }
-
-            ServiceProvider.Navigator = new AppNavigator(new NavigatorParameterCollection(), rootFrame);
 
             // This one is for migration designing.
             //ServiceProvider.UpgradeService = new Views.DesignData.TestUpgradeService();
@@ -101,12 +100,6 @@ namespace Money.UI
                 object parameter;
                 if (ServiceProvider.TileService.TryParseNavigation(e, out parameter))
                 {
-                    //rootFrame.BackStack.Add(new PageStackEntry(
-                    //    typeof(Summary),
-                    //    new SummaryParameter(SummaryViewType.BarGraph),
-                    //    null
-                    //));
-
                     ServiceProvider.Navigator
                         .Open(parameter)
                         .Show();

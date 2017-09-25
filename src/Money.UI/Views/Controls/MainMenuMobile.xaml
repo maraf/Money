@@ -41,7 +41,7 @@
         </Grid.RowDefinitions>
 
         <Grid>
-            <Grid Background="{ThemeResource ToggleButtonBackgroundChecked}" Opacity=".7" />
+            <Grid Background="#005496" />
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Image Source="{StaticResource IconSquare44}" Height="64" />
                 <TextBlock Text="Money" Style="{ThemeResource HeaderTextBlockStyle}" HorizontalAlignment="Center" Foreground="White" />

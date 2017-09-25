@@ -6,26 +6,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Money.Views.Controls" mc:Ignorable="d">
     <Page.Resources>
-        <BeginStoryboard x:Key="MainMenuShowAnimation">
-            <Storyboard>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="trtMenu" Storyboard.TargetProperty="Y">
-                    <SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="0" />
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="maiMenu" Storyboard.TargetProperty="Opacity">
-                    <SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="1" />
-                </DoubleAnimationUsingKeyFrames>
-            </Storyboard>
-        </BeginStoryboard>
-        <BeginStoryboard x:Key="MainMenuHideAnimation">
-            <Storyboard>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="trtMenu" Storyboard.TargetProperty="Y">
-                    <SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="400" />
-                </DoubleAnimationUsingKeyFrames>
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="maiMenu" Storyboard.TargetProperty="Opacity">
-                    <SplineDoubleKeyFrame KeyTime="0:0:0.25" Value="0" />
-                </DoubleAnimationUsingKeyFrames>
-            </Storyboard>
-        </BeginStoryboard>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -41,10 +21,6 @@
             </Frame.ContentTransitions>
         </Frame>
         <controls:Loading x:Name="loaContent" />
-        <controls:MainMenuMobile x:Name="maiMenu" ItemSelected="maiMenu_ItemSelected" Visibility="Collapsed">
-            <controls:MainMenuMobile.RenderTransform>
-                <TranslateTransform x:Name="trtMenu" Y="400" />
-            </controls:MainMenuMobile.RenderTransform>
-        </controls:MainMenuMobile>
+        <controls:MainMenuMobile x:Name="maiMenu" ItemSelected="maiMenu_ItemSelected" />
     </Grid>
 </Page>

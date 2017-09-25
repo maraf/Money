@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views
@@ -23,6 +24,8 @@ namespace Money.Views
     public sealed partial class TemplateMobile : Page, ITemplate
     {
         private readonly INavigator navigator = ServiceProvider.Navigator;
+        private BeginStoryboard showAnimation;
+        private BeginStoryboard hideAnimation;
 
         public bool IsMainMenuOpened
         {
@@ -41,9 +44,14 @@ namespace Money.Views
         {
             TemplateMobile control = (TemplateMobile)d;
             if ((bool)e.NewValue)
+            {
                 control.maiMenu.Visibility = Visibility.Visible;
+                control.RunAnimation(control.showAnimation);
+            }
             else
-                control.maiMenu.Visibility = Visibility.Collapsed;
+            {
+                control.RunAnimation(control.hideAnimation);
+            }
         }
 
         public Frame ContentFrame => frmContent;
@@ -51,6 +59,16 @@ namespace Money.Views
         public TemplateMobile()
         {
             InitializeComponent();
+
+            showAnimation = (BeginStoryboard)Resources["MainMenuShowAnimation"];
+            hideAnimation = (BeginStoryboard)Resources["MainMenuHideAnimation"];
+
+            hideAnimation.Storyboard.Completed += OnHideAnimationCompleted;
+        }
+
+        private void OnHideAnimationCompleted(object sender, object e)
+        {
+            maiMenu.Visibility = Visibility.Collapsed;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -62,7 +80,7 @@ namespace Money.Views
                 .Show();
         }
 
-        public void UpdateActiveMenuItem(object parameter) 
+        public void UpdateActiveMenuItem(object parameter)
             => Money.Views.Template.UpdateActiveMenuItem(vm => maiMenu.SelectedItem = vm, maiMenu.Items, parameter);
 
         public void ShowLoading() => loaContent.IsActive = true;
@@ -81,6 +99,15 @@ namespace Money.Views
         {
             add { PointerPressed += value; }
             remove { PointerPressed -= value; }
+        }
+
+        private void RunAnimation(BeginStoryboard animation)
+        {
+            if (animation != null)
+            {
+                animation.Storyboard.Seek(TimeSpan.Zero);
+                animation.Storyboard.Begin();
+            }
         }
     }
 }

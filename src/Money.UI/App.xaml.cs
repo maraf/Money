@@ -63,6 +63,7 @@ namespace Money.UI
             //    this.DebugSettings.EnableFrameRateCounter = true;
             //}
 #endif
+            TryBootstrap();
 
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
@@ -75,8 +76,6 @@ namespace Money.UI
             // Do not repeat app initialization when the Window already has content, just ensure that the window is active
             if (rootFrame == null)
             {
-                Bootstrap();
-
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
                 rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
@@ -127,10 +126,16 @@ namespace Money.UI
 
         public BootstrapTask BootstrapTask { get; private set; }
 
-        private void Bootstrap()
+        private bool TryBootstrap()
         {
-            BootstrapTask = new BootstrapTask();
-            BootstrapTask.Initialize();
+            if (BootstrapTask == null)
+            {
+                BootstrapTask = new BootstrapTask();
+                BootstrapTask.Initialize();
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

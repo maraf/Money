@@ -14,12 +14,13 @@
         <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="20">
             <TextBlock Text="Money" Style="{ThemeResource TitleTextBlockStyle}" />
             <TextBlock Text="Neptuo" />
-            <TextBlock Text="v1.0.0-alfa9" Opacity=".5" />
+            <TextBlock Text="v1.0.0-alfa10" Opacity=".5" />
 
             <HyperlinkButton Content="Documentation" NavigateUri="http://www.neptuo.com/project/universal/money" Margin="0,20,0,0" />
             <HyperlinkButton Content="Report an issue" NavigateUri="https://github.com/maraf/Money/issues/new" />
 
-            <ToggleSwitch x:Name="DatabaseSwitch" Margin="0,20,0,0" OnContent="Turn test database off" OffContent="Turn test database on" Toggled="DatabaseSwitch_Toggled" />
+            <TextBlock Text="Test database" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
+            <ToggleSwitch x:Name="DatabaseSwitch" Toggled="DatabaseSwitch_Toggled" />
 
             <TextBlock Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
             <controls:DevelopmentTools Orientation="Horizontal" Visibility="Visible" />

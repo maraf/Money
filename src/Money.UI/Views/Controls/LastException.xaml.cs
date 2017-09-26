@@ -35,26 +35,32 @@ namespace Money.Views.Controls
             {
                 Visibility = Visibility.Visible;
 
-                ExceptionType.Text = exception.Value.type;
-                ExceptionMessage.Text = exception.Value.message;
-                ExceptionCallstack.Text = exception.Value.callstack;
-                ExceptionCallstack.Text = exception.Value.dateTime;
+                if (!String.IsNullOrEmpty(exception.Value.type))
+                    ExceptionType.Text = exception.Value.type;
 
+                if (!String.IsNullOrEmpty(exception.Value.message))
+                    ExceptionMessage.Text = exception.Value.message;
+
+                if (!String.IsNullOrEmpty(exception.Value.callstack))
+                    ExceptionCallstack.Text = exception.Value.callstack;
+
+                if (!String.IsNullOrEmpty(exception.Value.dateTime))
+                    ExceptionDateTime.Text = exception.Value.dateTime;
 
                 StringBuilder url = new StringBuilder();
                 url.Append("https://github.com/maraf/Money/issues/new");
                 url.Append("?title=Unhandled exception");
                 url.Append("&body=");
-                url.Append($"Type:{Environment.NewLine}{exception.Value.type}");
+                url.Append($"**Type:**{Environment.NewLine}{exception.Value.type ?? "empty"}");
                 url.Append(Environment.NewLine);
                 url.Append(Environment.NewLine);
-                url.Append($"Message:{Environment.NewLine}{exception.Value.message}");
+                url.Append($"**Message:**{Environment.NewLine}{exception.Value.message ?? "empty"}");
                 url.Append(Environment.NewLine);
                 url.Append(Environment.NewLine);
-                url.Append($"CallStack:{Environment.NewLine}{exception.Value.callstack}");
+                url.Append($"**CallStack:**{Environment.NewLine}{exception.Value.callstack ?? "empty"}");
                 url.Append(Environment.NewLine);
                 url.Append(Environment.NewLine);
-                url.Append($"DateTime:{Environment.NewLine}{exception.Value.dateTime}");
+                url.Append($"**DateTime:**{Environment.NewLine}{exception.Value.dateTime ?? "empty"}");
 
                 btnReport.NavigateUri = new Uri(url.ToString().Replace(Environment.NewLine, "%0D%0A"), UriKind.Absolute);
             }

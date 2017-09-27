@@ -34,20 +34,22 @@
     <UserControl.RenderTransform>
         <TranslateTransform x:Name="rootTranslate" Y="400" />
     </UserControl.RenderTransform>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="200" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
+        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,0,50">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <Grid>
-            <Grid Background="#005496" />
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Image Source="{StaticResource IconSquare44}" Height="64" />
-                <TextBlock Text="Money" Style="{ThemeResource HeaderTextBlockStyle}" HorizontalAlignment="Center" Foreground="White" />
-                <TextBlock Text="Neptuo" HorizontalAlignment="Center" Foreground="White" />
-            </StackPanel>
+            <Grid>
+                <Grid Background="#005496" />
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Image Source="{StaticResource IconSquare44}" Height="64" />
+                    <TextBlock Text="Money" Style="{ThemeResource HeaderTextBlockStyle}" HorizontalAlignment="Center" Foreground="White" />
+                    <TextBlock Text="Neptuo" HorizontalAlignment="Center" Foreground="White" />
+                </StackPanel>
+            </Grid>
+            <controls:MainMenuListView x:Name="mlvList" ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="mlvList_ItemInvoked" Padding="20" Grid.Row="1" />
         </Grid>
-        <controls:MainMenuListView x:Name="mlvList" ItemsSource="{Binding Source={StaticResource MenuItemsSource}}" ItemInvoked="mlvList_ItemInvoked" Padding="20" Grid.Row="1" />
-    </Grid>
+    </ScrollViewer>
 </UserControl>

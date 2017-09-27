@@ -102,7 +102,7 @@ namespace Money.Views.Navigation
             }
 
             if (rules.TryGetWizardType(parameterType, out pageType))
-                return new WizardNavigatorForm(pageType, parameter, rootFrame);
+                return new WizardNavigatorForm(pageType, parameter, rootFrame, currentParameter);
 
             throw Ensure.Exception.InvalidOperation("Missing navigation page for parameter of type '{0}'.", parameterType.FullName);
         }
@@ -129,6 +129,7 @@ namespace Money.Views.Navigation
             }
         }
 
+        private object currentParameter;
         private object lastParameter;
 
         private void OnTemplatePointerPressed(object sender, PointerRoutedEventArgs e)
@@ -145,6 +146,7 @@ namespace Money.Views.Navigation
         private void OnTemplateContentFrameNavigating(object sender, NavigatingCancelEventArgs e)
         {
             Frame frame = (Frame)sender;
+            currentParameter = e.Parameter;
 
             ITemplate template = rootFrame.Content as ITemplate;
             if (template != null)

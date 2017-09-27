@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace Money.Views.Navigation
 {
@@ -15,8 +16,9 @@ namespace Money.Views.Navigation
         private readonly Type wizardType;
         private readonly object parameter;
         private readonly Frame rootFrame;
+        private readonly object lastParameter;
 
-        public WizardNavigatorForm(Type wizardType, object parameter, Frame rootFrame)
+        public WizardNavigatorForm(Type wizardType, object parameter, Frame rootFrame, object lastParameter)
         {
             Ensure.NotNull(wizardType, "wizardType");
             Ensure.NotNull(parameter, "parameter");
@@ -24,6 +26,7 @@ namespace Money.Views.Navigation
             this.wizardType = wizardType;
             this.parameter = parameter;
             this.rootFrame = rootFrame;
+            this.lastParameter = lastParameter;
         }
 
         public async void Show()
@@ -31,17 +34,23 @@ namespace Money.Views.Navigation
             IWizard wizard = (IWizard)Activator.CreateInstance(wizardType);
             await wizard.ShowAsync(parameter);
 
+            ITemplate template = null;
             bool isEmpty = rootFrame.Content == null;
             if (!isEmpty)
             {
-                ITemplate template = rootFrame.Content as ITemplate;
-                isEmpty = template != null && template.ContentFrame.Content == null;
+                template = rootFrame.Content as ITemplate;
+                if (template != null)
+                    isEmpty = template.ContentFrame.Content == null;
             }
 
             if (isEmpty)
             {
                 OutcomeCreatedGuidePost dialog = new OutcomeCreatedGuidePost();
                 await dialog.ShowAsync();
+            }
+            else if (template != null && lastParameter != null)
+            {
+                template.UpdateActiveMenuItem(lastParameter);
             }
         }
     }

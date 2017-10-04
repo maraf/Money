@@ -1,4 +1,5 @@
 ﻿using Money.Events;
+using Money.Services;
 using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels;
@@ -37,6 +38,7 @@ namespace Money.Views
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
         private readonly INavigator navigator = ServiceProvider.Navigator;
+        private readonly MessageBuilder messageBuilder = ServiceProvider.MessageBuilder;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private readonly IEventHandlerCollection eventHandlers = ServiceProvider.EventHandlers;
 
@@ -72,7 +74,7 @@ namespace Money.Views
             ViewModel = new CurrencyListViewModel(domainFacade, navigator);
 
             foreach (CurrencyModel model in models)
-                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, queryDispatcher, model.UniqueCode, model.Symbol));
+                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, messageBuilder, queryDispatcher, model.UniqueCode, model.Symbol));
 
             UpdateStandalone();
 
@@ -130,7 +132,7 @@ namespace Money.Views
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                CurrencyEditViewModel viewModel = new CurrencyEditViewModel(navigator, domainFacade, queryDispatcher, payload.UniqueCode, payload.Symbol);
+                CurrencyEditViewModel viewModel = new CurrencyEditViewModel(navigator, domainFacade, messageBuilder, queryDispatcher, payload.UniqueCode, payload.Symbol);
                 ViewModel.Items.Add(viewModel);
                 lvwItems.SelectedItem = viewModel;
                 UpdateStandalone();

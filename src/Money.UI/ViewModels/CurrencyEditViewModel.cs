@@ -1,4 +1,5 @@
-﻿using Money.Services.Models;
+﻿using Money.Services;
+using Money.Services.Models;
 using Money.Services.Models.Queries;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
@@ -96,7 +97,7 @@ namespace Money.ViewModels
         public ICommand Delete { get; private set; }
         public ICommand DeleteExchangeRate { get; private set; }
 
-        public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, IQueryDispatcher queryDispatcher, string uniqueCode, string symbol)
+        public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, MessageBuilder messageBuilder, IQueryDispatcher queryDispatcher, string uniqueCode, string symbol)
         {
             Ensure.NotNull(navigator, "navigator");
             Ensure.NotNull(domainFacade, "domainFacade");
@@ -106,15 +107,15 @@ namespace Money.ViewModels
             Symbol = symbol;
             ExchangeRates = new SortableObservableCollection<ExchangeRateModel>();
 
-            CreateCommands(navigator, domainFacade);
+            CreateCommands(navigator, domainFacade, messageBuilder);
             LoadExchangeRateList();
         }
 
-        private void CreateCommands(INavigator navigator, IDomainFacade domainFacade)
+        private void CreateCommands(INavigator navigator, IDomainFacade domainFacade, MessageBuilder messageBuilder)
         {
             setAsDefault = new CurrencySetAsDefaultCommand(domainFacade, UniqueCode);
             addExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(UniqueCode));
-            Delete = new CurrencyDeleteCommand(navigator, domainFacade, UniqueCode);
+            Delete = new CurrencyDeleteCommand(navigator, domainFacade, messageBuilder, UniqueCode);
             DeleteExchangeRate = new CurrencyDeleteExchangeRateCommand(domainFacade, navigator, UniqueCode);
         }
 

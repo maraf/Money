@@ -66,14 +66,32 @@ namespace Money.Views.Controls
 
             showAnimation = (BeginStoryboard)Resources["MainMenuShowAnimation"];
             hideAnimation = (BeginStoryboard)Resources["MainMenuHideAnimation"];
+            hideAnimation.Storyboard.Completed += OnHideAnimationCompleted;
+
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Visibility = Visibility.Collapsed;
         }
 
         private void OnIsVisibleChanged()
         {
             if (IsVisible)
+            {
+                Visibility = Visibility.Visible;
                 RunAnimation(showAnimation);
+            }
             else
+            {
                 RunAnimation(hideAnimation);
+            }
+        }
+
+        private void OnHideAnimationCompleted(object sender, object e)
+        {
+            Visibility = Visibility.Collapsed;
         }
 
         private void RunAnimation(BeginStoryboard animation)

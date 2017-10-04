@@ -1,9 +1,11 @@
 ﻿using Money.Bootstrap;
 using Money.Services;
 using Money.ViewModels;
+using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views;
 using Money.Views.Navigation;
+using Neptuo.Models;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -176,6 +178,35 @@ namespace Money.UI
 
         private bool ProcessException(Exception e)
         {
+            INavigator navigator = ServiceProvider.Navigator;
+            if (e is AggregateRootException && navigator != null)
+            {
+                string message = null;
+
+                MessageBuilder messageBuilder = ServiceProvider.MessageBuilder;
+                if (e is CurrencyAlreadyAsDefaultException)
+                    message = messageBuilder.CurrencyAlreadyAsDefault();
+                else if (e is CurrencyAlreadyExistsException)
+                    message = messageBuilder.CurrencyAlreadyExists();
+                else if (e is CurrencyDoesNotExistException)
+                    message = messageBuilder.CurrencyDoesNotExist();
+                else if (e is CurrencyExchangeRateDoesNotExistException)
+                    message = messageBuilder.CurrencyExchangeRateDoesNotExist();
+                else if (e is OutcomeAlreadyDeletedException)
+                    message = messageBuilder.OutcomeAlreadyDeleted();
+                else if (e is OutcomeAlreadyHasCategoryException)
+                    message = messageBuilder.OutcomeAlreadyHasCategory();
+
+                if (message != null)
+                {
+                    navigator
+                        .Message(message, "Error")
+                        .Show();
+
+                    return true;
+                }
+            }
+
             ApplicationDataContainer container = ServiceProvider.StorageContainerFactory.Create()
                 .CreateContainer("Exception", ApplicationDataCreateDisposition.Always);
 
@@ -192,15 +223,15 @@ namespace Money.UI
             if (content is Frame frame)
                 content = frame.Content;
 
-            if (content is ITemplate template)                                                       
+            if (content is ITemplate template)
                 template.HideLoading();
 
             if (e is LayoutCycleException)
                 Exit();
 
-            if (ServiceProvider.Navigator != null)
+            if (navigator != null)
             {
-                ServiceProvider.Navigator
+                navigator
                     .Message(e.ToString(), "Exception")
                     .Show();
 

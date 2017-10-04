@@ -1,4 +1,5 @@
-﻿using Money.ViewModels.Parameters;
+﻿using Money.Services;
+using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using Neptuo.Queries;
 using System;
@@ -14,23 +15,38 @@ namespace Money.Views.Dialogs
     public class CurrencyAddExchangeRateWizard : IWizard
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly MessageBuilder messageBuilder = ServiceProvider.MessageBuilder;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
 
-        public async Task ShowAsync(object rawParameter)
+        public Task ShowAsync(object rawParameter)
         {
             CurrencyAddExchangeRateParameter parameter = (CurrencyAddExchangeRateParameter)rawParameter;
 
             CurrencyExchangeRate dialog = new CurrencyExchangeRate(queryDispatcher);
             dialog.TargetCurrency = parameter.TargetCurrency;
+            return ShowInternalAsync(dialog, null);
+        }
 
-            if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+        private async Task ShowInternalAsync(CurrencyExchangeRate dialog, string errorMessage)
+        {
+            dialog.ErrorMessage = errorMessage;
+
+            ContentDialogResult result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
             {
-                await domainFacade.SetExchangeRateAsync(
-                    dialog.SourceCurrency, 
-                    dialog.TargetCurrency, 
-                    dialog.ValidFrom, 
-                    dialog.Rate
-                );
+                try
+                {
+                    await domainFacade.SetExchangeRateAsync(
+                        dialog.SourceCurrency,
+                        dialog.TargetCurrency,
+                        dialog.ValidFrom,
+                        dialog.Rate
+                    );
+                }
+                catch (CurrencyExchangeRateAlreadyExistsException)
+                {
+                    await ShowInternalAsync(dialog, messageBuilder.CurrencyExchangeRateAlreadyExists());
+                }
             }
         }
     }

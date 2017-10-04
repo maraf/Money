@@ -11,16 +11,18 @@
         <converters:DateTimeOffsetToDateTimeConverter x:Key="DateTimeOffsetToDateTimeConverter" />
     </ContentDialog.Resources>
     <StackPanel>
+        <TextBlock x:Name="tblError" Style="{StaticResource ErrorMessageStyle}" />
+
         <TextBlock Text="Source currency" />
-        <ComboBox x:Name="cbxCurrency" SelectionChanged="cbxCurrency_SelectionChanged" DisplayMemberPath="Symbol" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
+        <ComboBox x:Name="cbxCurrency" SelectionChanged="cbxCurrency_SelectionChanged" DisplayMemberPath="Symbol" HorizontalAlignment="Stretch" Grid.Column="1" />
 
         <TextBlock Text="Rate" />
-        <TextBox x:Name="tbxRate" Text="{x:Bind Rate, Mode=TwoWay}" FontSize="40" KeyDown="tbxRate_KeyDown" />
+        <TextBox x:Name="tbxRate" Text="{x:Bind Rate, Mode=TwoWay}" KeyDown="tbxRate_KeyDown" />
 
         <TextBlock Text="Target currency" />
-        <TextBox Text="{x:Bind TargetCurrencyModel.Symbol}" FontSize="40" IsReadOnly="True" />
+        <TextBox Text="{x:Bind TargetCurrencyModel.Symbol}" IsReadOnly="True" />
 
         <TextBlock Text="Valid from" />
-        <DatePicker x:Name="dpkValidFrom" Date="{x:Bind ValidFrom, Converter={StaticResource DateTimeOffsetToDateTimeConverter}, Mode=TwoWay}" HorizontalAlignment="Stretch" FontSize="40" />
+        <DatePicker x:Name="dpkValidFrom" Date="{x:Bind ValidFrom, Converter={StaticResource DateTimeOffsetToDateTimeConverter}, Mode=TwoWay}" HorizontalAlignment="Stretch" />
     </StackPanel>
 </ContentDialog>

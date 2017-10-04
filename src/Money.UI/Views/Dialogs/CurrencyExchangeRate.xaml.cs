@@ -92,6 +92,35 @@ namespace Money.Views.Dialogs
             new PropertyMetadata(DateTime.Today)
         );
 
+        public string ErrorMessage
+        {
+            get { return (string)GetValue(ErrorMessageProperty); }
+            set { SetValue(ErrorMessageProperty, value); }
+        }
+
+        public static readonly DependencyProperty ErrorMessageProperty = DependencyProperty.Register(
+            "ErrorMessage",
+            typeof(string),
+            typeof(CurrencyExchangeRate),
+            new PropertyMetadata(null, OnErrorMessageChanged)
+        );
+
+        private static void OnErrorMessageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            CurrencyExchangeRate control = (CurrencyExchangeRate)d;
+
+            if (String.IsNullOrEmpty(control.ErrorMessage))
+            {
+                control.tblError.Text = String.Empty;
+                control.tblError.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                control.tblError.Text = control.ErrorMessage;
+                control.tblError.Visibility = Visibility.Visible;
+            }
+        }
+
         public CurrencyExchangeRate(IQueryDispatcher queryDispatcher)
         {
             Ensure.NotNull(queryDispatcher, "queryDispatcher");

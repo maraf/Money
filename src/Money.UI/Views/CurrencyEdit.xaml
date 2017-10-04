@@ -73,13 +73,13 @@
                                             </Grid.ColumnDefinitions>
 
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0">
-                                                <TextBlock Text="From 1" />
-                                                <TextBlock Text="{Binding SourceCurrency}" Margin="2,0,0,0" />
-                                                <TextBlock Text=" to " Style="{StaticResource NoteTextStyle}" Margin="2,0,0,0" />
-                                                <TextBlock Text="{Binding Rate}" HorizontalAlignment="Center" Margin="2,0,0,0" />
-                                                <TextBlock Text="{Binding DataContext.Symbol, ElementName=stpExchangeRateList}" Margin="2,0,0,0" />
-                                                <TextBlock Text=" used since " Style="{StaticResource NoteTextStyle}" Margin="2,0,0,0" />
-                                                <TextBlock Text="{Binding ValidFromToString}" Margin="2,0" />
+                                                <TextBlock Text="From 1" Style="{StaticResource NoteTextStyle}" />
+                                                <TextBlock Text="{Binding SourceCurrency}" Margin="4,0,0,0" />
+                                                <TextBlock Text="to" Style="{StaticResource NoteTextStyle}" Margin="4,0,0,0" />
+                                                <TextBlock Text="{Binding Rate}" HorizontalAlignment="Center" Margin="4,0,0,0" />
+                                                <TextBlock Text="{Binding DataContext.Symbol, ElementName=stpExchangeRateList}" Margin="4,0,0,0" />
+                                                <TextBlock Text="used since" Style="{StaticResource NoteTextStyle}" Margin="4,0,0,0" />
+                                                <TextBlock Text="{Binding ValidFromToString}" Margin="4,0" />
                                             </StackPanel>
 
                                             <StackPanel Margin="8,0,0,0" Orientation="Horizontal" Grid.Column="1">

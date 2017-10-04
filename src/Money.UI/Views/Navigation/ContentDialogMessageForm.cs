@@ -47,6 +47,9 @@ namespace Money.Views.Navigation
             ContentDialog dialog = new ContentDialog();
             dialog.Content = content;
 
+            if (title != null)
+                dialog.Title = title;
+
             if (buttons.Count > 0)
             {
                 dialog.PrimaryButtonText = buttons[0].Item1;

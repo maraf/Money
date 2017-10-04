@@ -135,7 +135,7 @@ namespace Money
 
             CurrencyExchangeRateSet payload = new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate);
             if (!exchangeRateHashCodes.Contains(payload.GetHashCode()))
-                throw new CurrencyExchangeRateAlreadyExistsException();
+                throw new CurrencyExchangeRateDoesNotExistException();
 
             Publish(new CurrencyExchangeRateRemoved(sourceUniqueCode, targetUniqueCode, validFrom, rate));
         }

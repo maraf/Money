@@ -42,7 +42,8 @@
             </Grid.RowDefinitions>
 
             <Grid>
-                <Grid Background="#005496" />
+                <Grid Background="{ThemeResource ToggleButtonBackgroundChecked}" />
+                <Image Source="{StaticResource CitySilhouetteImage}" Height="180" VerticalAlignment="Bottom" Opacity=".3" />
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Image Source="{StaticResource IconSquare44}" Height="64" />
                     <TextBlock Text="Money" Style="{ThemeResource HeaderTextBlockStyle}" HorizontalAlignment="Center" Foreground="White" />

@@ -14,6 +14,7 @@
         <x:Double x:Key="LargeSize">1008</x:Double>
 
         <BitmapImage x:Key="IconSquare44" UriSource="/Assets/Square44x44Logo.scale-200.png" />
+        <BitmapImage x:Key="CitySilhouetteImage" UriSource="/Assets/CitySilhouette.png" />
 
         <converters:BoolConverter x:Key="TrueToVisibleConverter" TrueValue="Visible" FalseValue="Collapsed" />
         <converters:DateToStringConverter x:Key="DateToStringConverter" />

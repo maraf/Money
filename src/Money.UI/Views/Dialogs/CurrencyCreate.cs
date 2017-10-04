@@ -1,4 +1,5 @@
-﻿using Money.ViewModels.Parameters;
+﻿using Money.Services;
+using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Money.Views.Dialogs
     public class CurrencyCreate : IWizard
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly MessageBuilder messageBuilder = ServiceProvider.MessageBuilder;
 
         public Task ShowAsync(object parameter) => ShowInternalAsync(new CurrencyName(), null);
 
@@ -30,7 +32,7 @@ namespace Money.Views.Dialogs
                 }
                 catch (CurrencyAlreadyExistsException)
                 {
-                    await ShowInternalAsync(dialog, String.Format("A currency with code '{0}' already exists.", dialog.UniqueCode));
+                    await ShowInternalAsync(dialog, messageBuilder.CurrencyAlreadyExists(dialog.UniqueCode));
                 }
             }
         }

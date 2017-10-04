@@ -20,6 +20,7 @@ namespace Money
 {
     internal static class ServiceProvider
     {
+        public static MessageBuilder MessageBuilder { get; set; }
         public static IQueryDispatcher QueryDispatcher { get; set; }
         public static IDomainFacade DomainFacade { get; set; }
         public static IEventHandlerCollection EventHandlers { get; set; }

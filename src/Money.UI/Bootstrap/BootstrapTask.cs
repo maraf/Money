@@ -43,6 +43,7 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
+            ServiceProvider.MessageBuilder = new MessageBuilder();
             ServiceProvider.MainMenuFactory = new MainMenuListFactory();
             ServiceProvider.CurrencyProvider = new DefaultCurrencyProvider();
 

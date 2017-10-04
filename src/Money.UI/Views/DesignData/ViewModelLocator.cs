@@ -1,4 +1,5 @@
-﻿using Money.Services.Models;
+﻿using Money.Services;
+using Money.Services.Models;
 using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
@@ -248,6 +249,7 @@ namespace Money.Views.DesignData
         {
             if (DesignMode.DesignModeEnabled)
             {
+                ServiceProvider.MessageBuilder = new MessageBuilder();
                 ServiceProvider.MainMenuFactory = new MainMenuListFactory();
                 ServiceProvider.QueryDispatcher = QueryDispatcher;
                 ServiceProvider.DomainFacade = DomainFacade;

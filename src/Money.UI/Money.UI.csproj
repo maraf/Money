@@ -118,6 +118,7 @@
     <Compile Include="Services\Globalization\ICurrencyProvider.cs" />
     <Compile Include="Services\IDevelopmentService.cs" />
     <Compile Include="Services\IPriceConverter.cs" />
+    <Compile Include="Services\MessageBuilder.cs" />
     <Compile Include="Services\Models\CategoryNameDescriptionModel.cs" />
     <Compile Include="Services\Models\IPriceFixed.cs" />
     <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />

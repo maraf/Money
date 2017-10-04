@@ -16,10 +16,10 @@ namespace Money.Views.Dialogs
 
         public async Task ShowAsync(object parameter)
         {
-            CurrencyName name = new CurrencyName();
-            ContentDialogResult result = await name.ShowAsync();
-            if (result == ContentDialogResult.Primary && !String.IsNullOrEmpty(name.UniqueCode))
-                await domainFacade.CreateCurrencyAsync(name.UniqueCode, name.Symbol);
+            CurrencyName dialog = new CurrencyName();
+            ContentDialogResult result = await dialog.ShowAsync();
+            if ((result == ContentDialogResult.Primary || dialog.IsEnterPressed) && !String.IsNullOrEmpty(dialog.UniqueCode))
+                await domainFacade.CreateCurrencyAsync(dialog.UniqueCode, dialog.Symbol);
         }
     }
 }

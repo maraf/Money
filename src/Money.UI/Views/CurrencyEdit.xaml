@@ -29,8 +29,8 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Margin="8" VerticalAlignment="Top">
-            <Rectangle Fill="{ThemeResource ButtonBackgroundPointerOver}" Height="64" Width="64" />
-            <TextBlock x:Name="SymbolText" Text="{Binding Symbol}" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <Rectangle Fill="{ThemeResource ToggleButtonBackgroundChecked}" Height="64" Width="64" />
+            <TextBlock x:Name="SymbolText" Text="{Binding Symbol}" Style="{ThemeResource TitleTextBlockStyle}" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Grid>
         <StackPanel Margin="0,8,8,8" Grid.Column="1">
             <TextBlock Text="Is the default currency" Style="{ThemeResource NoteTextStyle}" Visibility="{Binding IsDefault, Converter={StaticResource TrueToVisibleConverter}}" />

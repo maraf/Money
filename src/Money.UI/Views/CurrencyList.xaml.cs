@@ -130,7 +130,9 @@ namespace Money.Views
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, queryDispatcher, payload.UniqueCode, payload.Symbol));
+                CurrencyEditViewModel viewModel = new CurrencyEditViewModel(navigator, domainFacade, queryDispatcher, payload.UniqueCode, payload.Symbol);
+                ViewModel.Items.Add(viewModel);
+                lvwItems.SelectedItem = viewModel;
                 UpdateStandalone();
             });
         }

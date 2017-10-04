@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" PrimaryButtonText="Create" SecondaryButtonText="Cancel" Title="Currency">
+    mc:Ignorable="d" PrimaryButtonText="Create" SecondaryButtonText="Cancel" Title="Currency" Opened="OnOpened">
     <StackPanel>
+        <TextBlock x:Name="tblError" Margin="0,0,0,16" Foreground="Red" Visibility="Collapsed" />
+
         <TextBlock Text="Unique code" />
         <TextBox x:Name="tbxUniqueCode" Text="{x:Bind UniqueCode, Mode=TwoWay}" KeyDown="tbxUniqueCode_KeyDown" />
         

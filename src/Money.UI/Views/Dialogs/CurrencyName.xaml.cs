@@ -38,9 +38,9 @@ namespace Money.Views.Dialogs
         }
 
         public static readonly DependencyProperty SymbolProperty = DependencyProperty.Register(
-            "Symbol", 
-            typeof(string), 
-            typeof(CurrencyName), 
+            "Symbol",
+            typeof(string),
+            typeof(CurrencyName),
             new PropertyMetadata(null)
         );
 
@@ -50,11 +50,45 @@ namespace Money.Views.Dialogs
             set { tbxUniqueCode.IsEnabled = value; }
         }
 
+        public string ErrorMessage
+        {
+            get { return (string)GetValue(ErrorMessageProperty); }
+            set { SetValue(ErrorMessageProperty, value); }
+        }
+
+        public static readonly DependencyProperty ErrorMessageProperty = DependencyProperty.Register(
+            "ErrorMessage",
+            typeof(string),
+            typeof(CurrencyName),
+            new PropertyMetadata(null, OnErrorMessageChanged)
+        );
+
+        private static void OnErrorMessageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            CurrencyName control = (CurrencyName)d;
+
+            if (String.IsNullOrEmpty(control.ErrorMessage))
+            {
+                control.tblError.Text = String.Empty;
+                control.tblError.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                control.tblError.Text = control.ErrorMessage;
+                control.tblError.Visibility = Visibility.Visible;
+            }
+        }
+
         public bool IsEnterPressed { get; private set; }
 
         public CurrencyName()
         {
             InitializeComponent();
+        }
+
+        private void OnOpened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        {
+            IsEnterPressed = false;
         }
 
         private void tbxUniqueCode_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -74,7 +108,7 @@ namespace Money.Views.Dialogs
                 }
             }
         }
-        
+
         private void tbxSymbol_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)

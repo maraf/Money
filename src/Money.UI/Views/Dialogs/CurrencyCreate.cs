@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
 namespace Money.Views.Dialogs
@@ -14,12 +15,24 @@ namespace Money.Views.Dialogs
     {
         private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
 
-        public async Task ShowAsync(object parameter)
+        public Task ShowAsync(object parameter) => ShowInternalAsync(new CurrencyName(), null);
+
+        private async Task ShowInternalAsync(CurrencyName dialog, string errorMessage)
         {
-            CurrencyName dialog = new CurrencyName();
+            dialog.ErrorMessage = errorMessage;
+
             ContentDialogResult result = await dialog.ShowAsync();
             if ((result == ContentDialogResult.Primary || dialog.IsEnterPressed) && !String.IsNullOrEmpty(dialog.UniqueCode))
-                await domainFacade.CreateCurrencyAsync(dialog.UniqueCode, dialog.Symbol);
+            {
+                try
+                {
+                    await domainFacade.CreateCurrencyAsync(dialog.UniqueCode, dialog.Symbol);
+                }
+                catch (CurrencyAlreadyExistsException)
+                {
+                    await ShowInternalAsync(dialog, String.Format("A currency with code '{0}' already exists.", dialog.UniqueCode));
+                }
+            }
         }
     }
 }

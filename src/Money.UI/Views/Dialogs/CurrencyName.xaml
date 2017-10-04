@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" PrimaryButtonText="Create" SecondaryButtonText="Cancel" Title="Currency" Opened="OnOpened">
     <StackPanel>
-        <TextBlock x:Name="tblError" Margin="0,0,0,16" Foreground="Red" Visibility="Collapsed" />
+        <TextBlock x:Name="tblError" Style="{StaticResource ErrorMessageStyle}" />
 
         <TextBlock Text="Unique code" />
         <TextBox x:Name="tbxUniqueCode" Text="{x:Bind UniqueCode, Mode=TwoWay}" KeyDown="tbxUniqueCode_KeyDown" />

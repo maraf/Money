@@ -29,6 +29,11 @@
         <Style x:Key="PriceStyle" TargetType="controls:Currency">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </Style>
+        <Style x:Key="ErrorMessageStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,0,16" />
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
 
         <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>

@@ -101,7 +101,7 @@
                                     
                                     <TextBlock Text="Summary" Style="{ThemeResource CategoryNameStyle}" VerticalAlignment="Center" />
 
-                                    <controls:Currency Price="{x:Bind Amount}" Style="{ThemeResource PriceStyle}" Grid.Column="1" />
+                                    <controls:Currency Price="{x:Bind Amount}" Style="{ThemeResource PriceStyle}" FontWeight="Bold" Grid.Column="1" />
                                 </Grid>
                             </DataTemplate>
                         </controls:SummaryItemTemplateSelector.Total>

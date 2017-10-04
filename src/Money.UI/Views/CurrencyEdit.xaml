@@ -35,8 +35,7 @@
         <StackPanel Margin="0,8,8,8" Grid.Column="1">
             <TextBlock Text="Is the default currency" Style="{ThemeResource NoteTextStyle}" Visibility="{Binding IsDefault, Converter={StaticResource TrueToVisibleConverter}}" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding ExchangeRates.Count, Converter={StaticResource ZeroToCollapsedConverter}}">
-                <TextBlock Text="Has exchange rates from" Style="{ThemeResource NoteTextStyle}" Margin="0,0,2,0" />
-                <TextBlock Text="{Binding ExchangeRates, Converter={StaticResource ExchangeRateListToStringConverter}}" Style="{ThemeResource NoteTextStyle}" />
+                <TextBlock Text="Has exchange rates" Style="{ThemeResource NoteTextStyle}" Margin="0,0,2,0" />
             </StackPanel>
             <TextBlock Text="Has not any exchange rates" Style="{ThemeResource NoteTextStyle}" Visibility="{Binding ExchangeRates.Count, Converter={StaticResource ZeroToVisibleConverter}}" />
             <StackPanel Orientation="Horizontal">

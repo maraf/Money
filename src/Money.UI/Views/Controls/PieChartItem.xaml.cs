@@ -176,7 +176,7 @@ namespace Money.Views.Controls
             if (thickness == 0)
                 thickness = pieChart.Thickness;
 
-            double minHalfSize = Math.Min(ActualWidth, ActualHeight) / 2;
+            double minHalfSize = Math.Min(pieChart.ActualWidth, pieChart.ActualHeight) / 2;
             thickness = Math.Min(minHalfSize, thickness);
 
             double radius = minHalfSize - thickness / 2;

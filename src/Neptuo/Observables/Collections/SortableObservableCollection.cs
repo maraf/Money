@@ -12,7 +12,15 @@ namespace Neptuo.Observables.Collections
         public virtual void Sort(Func<IEnumerable<T>, IEnumerable<T>> sorter)
         {
             Ensure.NotNull(sorter, "sorter");
-            InternalSort(sorter(Items));
+
+            IEnumerable<T> items = this.ToList();
+            items = sorter(items);
+
+            foreach (T item in items)
+            {
+                Remove(item);
+                Add(item);
+            }
         }
 
         /// <summary>
@@ -22,7 +30,7 @@ namespace Neptuo.Observables.Collections
         /// <param name="keySelector">A function to extract a key from an item.</param>
         public virtual void Sort<TKey>(Func<T, TKey> keySelector)
         {
-            InternalSort(Items.OrderBy(keySelector));
+            Sort(items => items.OrderBy(keySelector));
         }
 
         /// <summary>
@@ -32,7 +40,7 @@ namespace Neptuo.Observables.Collections
         /// <param name="keySelector">A function to extract a key from an item.</param>
         public virtual void SortDescending<TKey>(Func<T, TKey> keySelector)
         {
-            InternalSort(Items.OrderByDescending(keySelector));
+            Sort(items => items.OrderByDescending(keySelector));
         }
 
         /// <summary>
@@ -43,7 +51,7 @@ namespace Neptuo.Observables.Collections
         /// <param name="comparer">An <see cref="IComparer{T}"/> to compare keys.</param>
         public virtual void Sort<TKey>(Func<T, TKey> keySelector, IComparer<TKey> comparer)
         {
-            InternalSort(Items.OrderBy(keySelector, comparer));
+            Sort(items => items.OrderBy(keySelector, comparer));
         }
 
         /// <summary>
@@ -54,18 +62,7 @@ namespace Neptuo.Observables.Collections
         /// <param name="comparer">An <see cref="IComparer{T}"/> to compare keys.</param>
         public virtual void SortDescending<TKey>(Func<T, TKey> keySelector, IComparer<TKey> comparer)
         {
-            InternalSort(Items.OrderByDescending(keySelector, comparer));
-        }
-
-        /// <summary>
-        /// Moves the items of the collection so that their orders are the same as those of the items provided.
-        /// </summary>
-        /// <param name="sortedItems">An <see cref="IEnumerable{T}"/> to provide item orders.</param>
-        private void InternalSort(IEnumerable<T> sortedItems)
-        {
-            List<T> sortedItemsList = sortedItems.ToList();
-            foreach (var item in sortedItemsList)
-                Move(IndexOf(item), sortedItemsList.IndexOf(item));
+            Sort(items => items.OrderByDescending(keySelector, comparer));
         }
     }
 }

@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Money.Views.Controls"
-    mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="400">
+    mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="400"
+    Opacity="0">
     <UserControl.Resources>
         <CollectionViewSource x:Key="MenuItemsSource" x:Name="MenuItemsSource" IsSourceGrouped="True" />
 
@@ -35,7 +36,7 @@
         <TranslateTransform x:Name="rootTranslate" Y="400" />
     </UserControl.RenderTransform>
     <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
-        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,0,50">
+        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,0,48">
             <Grid.RowDefinitions>
                 <RowDefinition Height="200" />
                 <RowDefinition Height="Auto" />

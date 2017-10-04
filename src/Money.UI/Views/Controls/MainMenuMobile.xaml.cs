@@ -60,32 +60,20 @@ namespace Money.Views.Controls
         public MainMenuMobile()
         {
             InitializeComponent();
-            Visibility = Visibility.Collapsed;
 
             items = mainMenuFactory.Create(false);
             MenuItemsSource.Source = items.GroupBy(i => i.Group);
 
             showAnimation = (BeginStoryboard)Resources["MainMenuShowAnimation"];
             hideAnimation = (BeginStoryboard)Resources["MainMenuHideAnimation"];
-            hideAnimation.Storyboard.Completed += OnHideAnimationCompleted;
         }
 
         private void OnIsVisibleChanged()
         {
             if (IsVisible)
-            {
-                Visibility = Visibility.Visible;
                 RunAnimation(showAnimation);
-            }
             else
-            {
                 RunAnimation(hideAnimation);
-            }
-        }
-
-        private void OnHideAnimationCompleted(object sender, object e)
-        {
-            Visibility = Visibility.Collapsed;
         }
 
         private void RunAnimation(BeginStoryboard animation)

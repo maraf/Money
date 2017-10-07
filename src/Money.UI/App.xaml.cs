@@ -23,6 +23,7 @@ using Windows.Foundation.Metadata;
 using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Input;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -177,6 +178,20 @@ namespace Money.UI
         }
 
         private bool ProcessException(Exception e)
+        {
+            try
+            {
+                return ProcessExceptionInernal(e);
+            }
+            catch(Exception ex)
+            {
+                MessageDialog dialog = new MessageDialog(ex.ToString(), "Fatal Error");
+                dialog.ShowAsync();
+                return true;
+            }
+        }
+
+        private bool ProcessExceptionInernal(Exception e)
         {
             INavigator navigator = ServiceProvider.Navigator;
             if (e is AggregateRootException && navigator != null)

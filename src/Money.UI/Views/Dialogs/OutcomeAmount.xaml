@@ -6,13 +6,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" PrimaryButtonText="Save" SecondaryButtonText="Cancel" Title="Amount">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="120" />
         </Grid.ColumnDefinitions>
-        
-        <TextBox x:Name="tbxAmount" InputScope="Number" FontSize="40" TextAlignment="Right" GotFocus="tbxAmount_GotFocus" KeyDown="tbxAmount_KeyDown" />
+        <TextBlock x:Name="tblError" Style="{StaticResource ErrorMessageStyle}" Grid.ColumnSpan="2" />
 
-        <ComboBox x:Name="cbxCurrency" DisplayMemberPath="Symbol" FontSize="40" HorizontalAlignment="Stretch" Grid.Column="1" />
+        <TextBox x:Name="tbxAmount" InputScope="Number" FontSize="40" TextAlignment="Right" GotFocus="tbxAmount_GotFocus" KeyDown="tbxAmount_KeyDown" Grid.Row="1" />
+
+        <ComboBox x:Name="cbxCurrency" DisplayMemberPath="Symbol" FontSize="40" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" />
     </Grid>
 </ContentDialog>

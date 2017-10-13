@@ -67,6 +67,35 @@ namespace Money.Views.Dialogs
 
         public ObservableCollection<CurrencyModel> Currencies { get; private set; }
 
+        public string ErrorMessage
+        {
+            get { return (string)GetValue(ErrorMessageProperty); }
+            set { SetValue(ErrorMessageProperty, value); }
+        }
+
+        public static readonly DependencyProperty ErrorMessageProperty = DependencyProperty.Register(
+            "ErrorMessage",
+            typeof(string),
+            typeof(OutcomeAmount),
+            new PropertyMetadata(null, OnErrorMessageChanged)
+        );
+
+        private static void OnErrorMessageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            OutcomeAmount control = (OutcomeAmount)d;
+
+            if (String.IsNullOrEmpty(control.ErrorMessage))
+            {
+                control.tblError.Text = String.Empty;
+                control.tblError.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                control.tblError.Text = control.ErrorMessage;
+                control.tblError.Visibility = Visibility.Visible;
+            }
+        }
+
         public OutcomeAmount(IQueryDispatcher queryDispatcher)
         {
             Ensure.NotNull(queryDispatcher, "queryDispatcher");

@@ -79,7 +79,7 @@ namespace Money.ViewModels
 
         public Brush ColorBrush
         {
-            get { return new SolidColorBrush(Color); }
+            get { return new SolidColorBrush(ColorConverter.Map(Color)); }
         }
 
         private bool isSelected;

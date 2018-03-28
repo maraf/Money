@@ -7,23 +7,33 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
 
-namespace Money.Bootstrap
+namespace Money
 {
     public class ColorConverter : TwoWayConverter<JToken, Color>
     {
+        public static Color Map(Windows.UI.Color color)
+        {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        public static Windows.UI.Color Map(Color color)
+        {
+            return Windows.UI.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
         public override bool TryConvertFromOneToTwo(JToken sourceValue, out Color targetValue)
         {
             JValue value = sourceValue as JValue;
             if (value == null)
             {
-                targetValue = Colors.White;
+                targetValue = Map(Colors.White);
                 return false;
             }
 
             string stringValue = value.ToString();
             if (String.IsNullOrEmpty(stringValue))
             {
-                targetValue = Colors.White;
+                targetValue = Map(Colors.White);
                 return false;
             }
 

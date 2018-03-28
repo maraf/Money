@@ -75,7 +75,7 @@ namespace Money.Services.Tiles
             tile.RoamingEnabled = false;
 
             if (backgroundColor != null)
-                tile.VisualElements.BackgroundColor = backgroundColor.Value;
+                tile.VisualElements.BackgroundColor = ColorConverter.Map(backgroundColor.Value);
 
             await tile.RequestCreateAsync();
         }

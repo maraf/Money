@@ -46,18 +46,22 @@ namespace Money.Views.Dialogs
                 amountDialog.Currency = parameter.Amount.Currency;
             }
 
-            ContentDialogResult result = await amountDialog.ShowAsync();
-            if (result == ContentDialogResult.None)
-            {
-                if (amountDialog.Result == null)
-                    return;
+            ContentDialogResult result;
+            do {
+                result = await amountDialog.ShowAsync();
+                if (result == ContentDialogResult.None)
+                {
+                    if (amountDialog.Result == null)
+                        return;
 
-                result = amountDialog.Result.Value;
+                    result = amountDialog.Result.Value;
+                }
+
+                amount = amountDialog.Value;
+                if (amount <= 0)
+                    amountDialog.ErrorMessage = "Amount must be greater than zero.";
             }
-
-            amount = amountDialog.Value;
-            if (amount <= 0)
-                return;
+            while (amount <= 0);
 
             currency = amountDialog.Currency;
             if (result == ContentDialogResult.Primary)

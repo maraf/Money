@@ -16,13 +16,13 @@ namespace Money.ViewModels.Collections
         {
             if (DesignMode.DesignModeEnabled)
             {
-                Add(Colors.Black);
-                Add(Colors.White);
-                Add(Colors.Green);
-                Add(Colors.Blue);
-                Add(Colors.Yellow);
-                Add(Colors.Brown);
-                Add(Colors.RoyalBlue);
+                Add(ColorConverter.Map(Colors.Black));
+                Add(ColorConverter.Map(Colors.White));
+                Add(ColorConverter.Map(Colors.Green));
+                Add(ColorConverter.Map(Colors.Blue));
+                Add(ColorConverter.Map(Colors.Yellow));
+                Add(ColorConverter.Map(Colors.Brown));
+                Add(ColorConverter.Map(Colors.RoyalBlue));
             }
             else
             {

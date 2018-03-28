@@ -114,9 +114,9 @@ namespace Money.Bootstrap
             RecreateEventSourcingContext();
             await RecreateReadModelContextAsync();
 
-            await domainFacade.CreateCategoryAsync("Home", Colors.SandyBrown);
-            await domainFacade.CreateCategoryAsync("Food", Colors.OrangeRed);
-            await domainFacade.CreateCategoryAsync("Eating Out", Colors.DarkRed);
+            await domainFacade.CreateCategoryAsync("Home", ColorConverter.Map(Colors.SandyBrown));
+            await domainFacade.CreateCategoryAsync("Food", ColorConverter.Map(Colors.OrangeRed));
+            await domainFacade.CreateCategoryAsync("Eating Out", ColorConverter.Map(Colors.DarkRed));
         }
 
         private Task UpgradeVersion2()

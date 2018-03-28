@@ -165,7 +165,7 @@ namespace Money.UI
             deferral.Complete();
         }
 
-        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private void OnUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
             if (ProcessException(e.Exception))
                 e.Handled = true;

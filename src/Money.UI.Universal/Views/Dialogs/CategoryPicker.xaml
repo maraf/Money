@@ -22,7 +22,7 @@
                         <Grid>
                             <Rectangle Height="50">
                                 <Rectangle.Fill>
-                                    <SolidColorBrush Color="{Binding Color}" />
+                                    <SolidColorBrush Color="{Binding Color, Converter={StaticResource ColorToColorConverter}}" />
                                 </Rectangle.Fill>
                             </Rectangle>
                             <StackPanel Orientation="Horizontal" Margin="14,0">

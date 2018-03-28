@@ -34,6 +34,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using ColorPicker = Money.Views.Dialogs.ColorPicker;
 
 namespace Money.Views
 {

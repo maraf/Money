@@ -111,7 +111,7 @@ namespace Money.Views.Dialogs
                     if (String.IsNullOrEmpty(Name))
                         return;
 
-                    Color color = Colors.Black;
+                    Color color = ColorConverter.Map(Colors.Black);
                     key = await domainFacade.CreateCategoryAsync(Name, color);
                     Name = Name;
                 }

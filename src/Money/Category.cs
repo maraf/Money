@@ -9,7 +9,6 @@ using Neptuo.Models.Keys;
 using Neptuo;
 using Money.Events;
 using Neptuo.Events.Handlers;
-using Windows.UI;
 using Neptuo.Threading.Tasks;
 
 namespace Money

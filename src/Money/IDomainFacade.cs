@@ -1,11 +1,9 @@
-﻿using Neptuo.Activators;
-using Neptuo.Models.Keys;
+﻿using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI;
 
 namespace Money
 {

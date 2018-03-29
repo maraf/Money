@@ -113,7 +113,7 @@ namespace Money.Bootstrap
 
             commandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
             eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
-            queryFormatter = new CompositeTypeFormatter(typeProvider, compositeStorageFactory);
+            queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory);
 
             commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), commandFormatter);
 

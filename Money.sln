@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money", "src\Money\Money.csproj", "{CCED2DC9-B1BC-4A66-A7C3-488CF1DE3616}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money", "src\Money\Money.csproj", "{CCED2DC9-B1BC-4A66-A7C3-488CF1DE3616}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptuo", "src\Neptuo\Neptuo.csproj", "{C637B589-5769-4661-9B6D-A34571A5AE08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptuo", "src\Neptuo\Neptuo.csproj", "{C637B589-5769-4661-9B6D-A34571A5AE08}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Models", "src\Money.Models\Money.Models.csproj", "{CA416337-12D3-4406-85C8-2717FAB7A7D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.UI.Universal", "src\Money.UI.Universal\Money.UI.Universal.csproj", "{6D351EA3-9664-48F9-8937-EA14924755FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.Data", "src\Money.Data\Money.Data.csproj", "{1AD9F4C2-F7E0-4179-8938-D39A2D291BDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Data", "src\Money.Data\Money.Data.csproj", "{1AD9F4C2-F7E0-4179-8938-D39A2D291BDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.Models.Builders", "src\Money.Models.Builders\Money.Models.Builders.csproj", "{DEBB89D5-7BA3-465C-B6D0-927FD61C0DFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Models.Builders", "src\Money.Models.Builders\Money.Models.Builders.csproj", "{DEBB89D5-7BA3-465C-B6D0-927FD61C0DFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.UI.Backend", "src\Money.UI.Backend\Money.UI.Backend.csproj", "{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,22 @@ Global
 		{DEBB89D5-7BA3-465C-B6D0-927FD61C0DFB}.Release|x64.Build.0 = Release|Any CPU
 		{DEBB89D5-7BA3-465C-B6D0-927FD61C0DFB}.Release|x86.ActiveCfg = Release|Any CPU
 		{DEBB89D5-7BA3-465C-B6D0-927FD61C0DFB}.Release|x86.Build.0 = Release|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Debug|ARM.Build.0 = Debug|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Debug|x64.Build.0 = Debug|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Debug|x86.Build.0 = Debug|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|ARM.Build.0 = Release|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|x64.ActiveCfg = Release|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|x64.Build.0 = Release|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|x86.ActiveCfg = Release|Any CPU
+		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

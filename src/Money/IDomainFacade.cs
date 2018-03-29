@@ -35,6 +35,7 @@ namespace Money
         /// <param name="outcomeKey">A key of the outcome to add category to.</param>
         /// <param name="categoryKey">A key of the category to add outcome to.</param>
         /// <returns>Continuation task.</returns>
+        [Obsolete]
         Task AddOutcomeCategoryAsync(IKey outcomeKey, IKey categoryKey);
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Money
         /// <param name="outcomeKey">A key of the outcome to modify.</param>
         /// <param name="amount">A new outcome value.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount);
+        //Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount);
 
         /// <summary>
         /// Changes a <paramref name="description"/> of the outcome with <paramref name="key"/>.
@@ -51,7 +52,7 @@ namespace Money
         /// <param name="outcomeKey">A key of the outcome to modify.</param>
         /// <param name="description">A new description of the outcome.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeOutcomeDescriptionAsync(IKey outcomeKey, string description);
+        //Task ChangeOutcomeDescriptionAsync(IKey outcomeKey, string description);
 
         /// <summary>
         /// Changes a <paramref name="when"/> of the outcome with <paramref name="key"/>.
@@ -59,14 +60,14 @@ namespace Money
         /// <param name="outcomeKey">A key of the outcome to modify.</param>
         /// <param name="when">A date when the outcome occured.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeOutcomeWhenAsync(IKey outcomeKey, DateTime when);
+        //Task ChangeOutcomeWhenAsync(IKey outcomeKey, DateTime when);
 
         /// <summary>
         /// Deletes an outcome with <paramref name="outcomeKey"/>.
         /// </summary>
         /// <param name="outcomeKey">A key of the outcome to delete.</param>
         /// <returns>Continuation task.</returns>
-        Task DeleteOutcomeAsync(IKey outcomeKey);
+        //Task DeleteOutcomeAsync(IKey outcomeKey);
 
         /// <summary>
         /// Renames a category with a key <paramref name="categoryKey"/>.
@@ -74,7 +75,7 @@ namespace Money
         /// <param name="categoryKey">A key of the category to rename.</param>
         /// <param name="newName">A new name of the category.</param>
         /// <returns>Continuation task.</returns>
-        Task RenameCategoryAsync(IKey categoryKey, string newName);
+        //Task RenameCategoryAsync(IKey categoryKey, string newName);
 
         /// <summary>
         /// Changes a description of a category with a key <paramref name="categoryKey"/>.
@@ -82,7 +83,7 @@ namespace Money
         /// <param name="categoryKey">A key of the category.</param>
         /// <param name="description">A new description of the category.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeCategoryDescriptionAsync(IKey categoryKey, string description);
+        //Task ChangeCategoryDescriptionAsync(IKey categoryKey, string description);
 
         /// <summary>
         /// Changes a color of a category with a key <paramref name="categoryKey"/>.
@@ -90,7 +91,7 @@ namespace Money
         /// <param name="categoryKey">A key of the category.</param>
         /// <param name="color">A new color of the category.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeCategoryColorAsync(IKey categoryKey, Color color);
+        //Task ChangeCategoryColorAsync(IKey categoryKey, Color color);
 
         /// <summary>
         /// Changes a font icon for a category with a key <paramref name="categoryKey"/>.
@@ -98,14 +99,14 @@ namespace Money
         /// <param name="categoryKey">A key of the category.</param>
         /// <param name="icon">A font icon of the category</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeCategoryIconAsync(IKey categoryKey, string icon);
+        //Task ChangeCategoryIconAsync(IKey categoryKey, string icon);
 
         /// <summary>
         /// Deletes (soft) category with <paramref name="categoryKey"/>.
         /// </summary>
         /// <param name="categoryKey">A key of the category.</param>
         /// <returns>Continuation task.</returns>
-        Task DeleteCategoryAsync(IKey categoryKey);
+        //Task DeleteCategoryAsync(IKey categoryKey);
 
         /// <summary>
         /// Creates a new currency with <paramref name="uniqueCode"/> as a unique identifier.
@@ -113,14 +114,14 @@ namespace Money
         /// <param name="uniqueCode">An unique code of the new currency.</param>
         /// <param name="symbol">A symbol of the new currency</param>
         /// <returns>Continuation task.</returns>
-        Task CreateCurrencyAsync(string uniqueCode, string symbol);
+        //Task CreateCurrencyAsync(string uniqueCode, string symbol);
 
         /// <summary>
         /// Sets a <paramref name="uniqueCode"/> as a default currency.
         /// </summary>
         /// <param name="uniqueCode">An unique code of the currency.</param>
         /// <returns>Continuation task.</returns>
-        Task SetCurrencyAsDefaultAsync(string uniqueCode);
+        //Task SetCurrencyAsDefaultAsync(string uniqueCode);
 
         /// <summary>
         /// Changes a <paramref name="symbol"/> of the currency with <paramref name="uniqueCode"/>.
@@ -128,7 +129,7 @@ namespace Money
         /// <param name="uniqueCode">An unique code of the currency to change symbol for.</param>
         /// <param name="symbol">A new symbol for the currency.</param>
         /// <returns>Continuation task.</returns>
-        Task ChangeCurrencySymbolAsync(string uniqueCode, string symbol);
+        //Task ChangeCurrencySymbolAsync(string uniqueCode, string symbol);
 
         /// <summary>
         /// Sets an exchange rate from <paramref name="sourceUniqueCode"/> to <paramref name="targetUniqueCode"/>.
@@ -139,7 +140,7 @@ namespace Money
         /// <param name="validFrom">A date from which the exchange rate is valid.</param>
         /// <param name="rate">An exchange rate.</param>
         /// <returns>Continuation task.</returns>
-        Task SetExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate);
+        //Task SetExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate);
 
         /// <summary>
         /// Removes an exchange rate from <paramref name="sourceUniqueCode"/> to <paramref name="targetUniqueCode"/>.
@@ -150,13 +151,13 @@ namespace Money
         /// <param name="validFrom">A date from which the exchange rate is valid.</param>
         /// <param name="rate">An exchange rate.</param>
         /// <returns>Continuation task.</returns>
-        Task RemoveExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate);
+        //Task RemoveExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate);
 
         /// <summary>
         /// Deletes (soft) currency with <paramref name="uniqueCode"/>.
         /// </summary>
         /// <param name="uniqueCode">An unique code for the currency to delete.</param>
         /// <returns>Continuation task.</returns>
-        Task DeleteCurrencyAsync(string uniqueCode);
+        //Task DeleteCurrencyAsync(string uniqueCode);
     }
 }

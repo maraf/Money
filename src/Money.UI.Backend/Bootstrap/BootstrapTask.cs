@@ -42,6 +42,7 @@ namespace Money.Bootstrap
 
         private IFormatter commandFormatter;
         private IFormatter eventFormatter;
+        private IFormatter queryFormatter;
 
         public BootstrapTask(IServiceCollection services)
         {
@@ -51,8 +52,8 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
-            readModelContextFactory = Factory.Getter(() => new ReadModelContext("ReadModel.db"));
-            eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext("EventSourcing.db"));
+            readModelContextFactory = Factory.Getter(() => new ReadModelContext("Filename=ReadModel.db"));
+            eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext("Filename=EventSourcing.db"));
 
             services
                 .AddSingleton(readModelContextFactory)
@@ -63,7 +64,8 @@ namespace Money.Bootstrap
             priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
 
             services
-                .AddSingleton(priceCalculator);
+                .AddSingleton(priceCalculator)
+                .AddSingleton(new Formatters(commandFormatter, eventFormatter, queryFormatter));
 
             ReadModels();
 
@@ -109,6 +111,7 @@ namespace Money.Bootstrap
 
             commandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
             eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
+            queryFormatter = new CompositeTypeFormatter(typeProvider, compositeStorageFactory);
 
             commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), commandFormatter);
 

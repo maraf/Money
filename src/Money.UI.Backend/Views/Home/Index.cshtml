@@ -1,3 +1,29 @@
 ﻿@{
     ViewData["Title"] = null;
 }
+
+
+<button id="query">Query data</button>
+
+@section Scripts 
+{
+<script>
+
+    $(function () {
+
+        $("button#query").click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "api/query",
+                data: { "payload": '{"Name":"Money.Models.Queries.ListAllCategory","Version":1,"Payload":{}}', "type": "Money.Models.Queries.ListAllCategory, Money.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" },
+                success: function (result) { debugger; },
+                dataType: "text/json"
+            });
+
+        });
+
+    });
+
+</script>
+}

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Money.Data
 {
-    internal class CurrencyEntity
+    public class CurrencyEntity
     {
         public string UniqueCode { get; set; }
         public string Symbol { get; set; }

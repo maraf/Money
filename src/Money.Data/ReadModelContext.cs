@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace Money.Data
 {
-    internal class ReadModelContext : DbContext
+    public class ReadModelContext : DbContext
     {
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<OutcomeEntity> Outcomes { get; set; }

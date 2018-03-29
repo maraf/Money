@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Money.Data
 {
-    internal class CurrencyExchangeRateEntity
+    public class CurrencyExchangeRateEntity
     {
         public int Id { get; set; }
         public string TargetCurrency { get; set; }

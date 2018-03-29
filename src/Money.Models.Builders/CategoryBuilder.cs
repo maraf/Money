@@ -7,14 +7,11 @@ using Neptuo.Activators;
 using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries.Handlers;
-using Neptuo.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.UI;
 
 namespace Money.Services.Models.Builders
 {

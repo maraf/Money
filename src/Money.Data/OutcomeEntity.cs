@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Data
 {
-    internal class OutcomeEntity : IPriceFixed
+    public class OutcomeEntity : IPriceFixed
     {
         public Guid Id { get; set; }
         public string Description { get; set; }

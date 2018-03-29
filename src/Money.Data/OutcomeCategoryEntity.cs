@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Money.Data
 {
-    internal class OutcomeCategoryEntity
+    public class OutcomeCategoryEntity
     {
         [Key]
         public Guid OutcomeId { get; set; }

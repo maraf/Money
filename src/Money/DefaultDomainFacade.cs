@@ -56,6 +56,7 @@ namespace Money
             });
         }
 
+        [Obsolete]
         public Task AddOutcomeCategoryAsync(IKey outcomeKey, IKey categoryKey)
         {
             return Task.Factory.StartNew(() =>
@@ -66,160 +67,160 @@ namespace Money
             });
         }
         
-        public Task RenameCategoryAsync(IKey categoryKey, string newName)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = categoryRepository.Get(categoryKey);
-                category.Rename(newName);
-                categoryRepository.Save(category);
-            });
-        }
+        //public Task RenameCategoryAsync(IKey categoryKey, string newName)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Category category = categoryRepository.Get(categoryKey);
+        //        category.Rename(newName);
+        //        categoryRepository.Save(category);
+        //    });
+        //}
 
-        public Task ChangeCategoryDescriptionAsync(IKey categoryKey, string description)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = categoryRepository.Get(categoryKey);
-                category.ChangeDescription(description);
-                categoryRepository.Save(category);
-            });
-        }
+        //public Task ChangeCategoryDescriptionAsync(IKey categoryKey, string description)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Category category = categoryRepository.Get(categoryKey);
+        //        category.ChangeDescription(description);
+        //        categoryRepository.Save(category);
+        //    });
+        //}
 
-        public Task ChangeCategoryColorAsync(IKey categoryKey, Color color)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = categoryRepository.Get(categoryKey);
-                category.ChangeColor(color);
-                categoryRepository.Save(category);
-            });
-        }
+        //public Task ChangeCategoryColorAsync(IKey categoryKey, Color color)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Category category = categoryRepository.Get(categoryKey);
+        //        category.ChangeColor(color);
+        //        categoryRepository.Save(category);
+        //    });
+        //}
 
-        public Task ChangeCategoryIconAsync(IKey categoryKey, string icon)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = categoryRepository.Get(categoryKey);
-                category.ChangeIcon(icon);
-                categoryRepository.Save(category);
-            });
-        }
+        //public Task ChangeCategoryIconAsync(IKey categoryKey, string icon)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Category category = categoryRepository.Get(categoryKey);
+        //        category.ChangeIcon(icon);
+        //        categoryRepository.Save(category);
+        //    });
+        //}
 
-        public Task DeleteCategoryAsync(IKey categoryKey)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = categoryRepository.Get(categoryKey);
-                category.Delete();
-                categoryRepository.Save(category);
-            });
-        }
+        //public Task DeleteCategoryAsync(IKey categoryKey)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Category category = categoryRepository.Get(categoryKey);
+        //        category.Delete();
+        //        categoryRepository.Save(category);
+        //    });
+        //}
 
-        public Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Outcome outcome = outcomeRepository.Get(outcomeKey);
-                outcome.ChangeAmount(amount);
-                outcomeRepository.Save(outcome);
-            });
-        }
+        //public Task ChangeOutcomeAmountAsync(IKey outcomeKey, Price amount)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Outcome outcome = outcomeRepository.Get(outcomeKey);
+        //        outcome.ChangeAmount(amount);
+        //        outcomeRepository.Save(outcome);
+        //    });
+        //}
 
-        public Task ChangeOutcomeDescriptionAsync(IKey outcomeKey, string description)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Outcome outcome = outcomeRepository.Get(outcomeKey);
-                outcome.ChangeDescription(description);
-                outcomeRepository.Save(outcome);
-            });
-        }
+        //public Task ChangeOutcomeDescriptionAsync(IKey outcomeKey, string description)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Outcome outcome = outcomeRepository.Get(outcomeKey);
+        //        outcome.ChangeDescription(description);
+        //        outcomeRepository.Save(outcome);
+        //    });
+        //}
 
-        public Task ChangeOutcomeWhenAsync(IKey outcomeKey, DateTime when)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Outcome outcome = outcomeRepository.Get(outcomeKey);
-                outcome.ChangeWhen(when);
-                outcomeRepository.Save(outcome);
-            });
-        }
+        //public Task ChangeOutcomeWhenAsync(IKey outcomeKey, DateTime when)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Outcome outcome = outcomeRepository.Get(outcomeKey);
+        //        outcome.ChangeWhen(when);
+        //        outcomeRepository.Save(outcome);
+        //    });
+        //}
 
-        public Task DeleteOutcomeAsync(IKey outcomeKey)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Outcome outcome = outcomeRepository.Get(outcomeKey);
-                outcome.Delete();
-                outcomeRepository.Save(outcome);
-            });
-        }
+        //public Task DeleteOutcomeAsync(IKey outcomeKey)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        Outcome outcome = outcomeRepository.Get(outcomeKey);
+        //        outcome.Delete();
+        //        outcomeRepository.Save(outcome);
+        //    });
+        //}
 
-        public Task CreateCurrencyAsync(string uniqueCode, string symbol)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                CurrencyList currencies = currencyListRepository.Find(currencyListKey);
-                if (currencies == null)
-                    currencies = new CurrencyList();
+        //public Task CreateCurrencyAsync(string uniqueCode, string symbol)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        CurrencyList currencies = currencyListRepository.Find(currencyListKey);
+        //        if (currencies == null)
+        //            currencies = new CurrencyList();
 
-                currencies.Add(uniqueCode, symbol);
-                currencyListRepository.Save(currencies);
-            });
-        }
+        //        currencies.Add(uniqueCode, symbol);
+        //        currencyListRepository.Save(currencies);
+        //    });
+        //}
 
-        public Task ChangeCurrencySymbolAsync(string uniqueCode, string symbol)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                CurrencyList currencies = currencyListRepository.Find(currencyListKey);
-                if (currencies == null)
-                    currencies = new CurrencyList();
+        //public Task ChangeCurrencySymbolAsync(string uniqueCode, string symbol)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        CurrencyList currencies = currencyListRepository.Find(currencyListKey);
+        //        if (currencies == null)
+        //            currencies = new CurrencyList();
 
-                currencies.ChangeSymbol(uniqueCode, symbol);
-                currencyListRepository.Save(currencies);
-            });
-        }
+        //        currencies.ChangeSymbol(uniqueCode, symbol);
+        //        currencyListRepository.Save(currencies);
+        //    });
+        //}
 
-        public Task SetCurrencyAsDefaultAsync(string uniqueCode)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
-                currencies.SetAsDefault(uniqueCode);
-                currencyListRepository.Save(currencies);
-            });
-        }
+        //public Task SetCurrencyAsDefaultAsync(string uniqueCode)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+        //        currencies.SetAsDefault(uniqueCode);
+        //        currencyListRepository.Save(currencies);
+        //    });
+        //}
 
-        public Task SetExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
-                currencies.SetExchangeRate(sourceUniqueCode, targetUniqueCode, validFrom, rate);
-                currencyListRepository.Save(currencies);
-            });
-        }
+        //public Task SetExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+        //        currencies.SetExchangeRate(sourceUniqueCode, targetUniqueCode, validFrom, rate);
+        //        currencyListRepository.Save(currencies);
+        //    });
+        //}
 
-        public Task RemoveExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
-                currencies.RemoveExchangeRate(sourceUniqueCode, targetUniqueCode, validFrom, rate);
-                currencyListRepository.Save(currencies);
-            });
-        }
+        //public Task RemoveExchangeRateAsync(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+        //        currencies.RemoveExchangeRate(sourceUniqueCode, targetUniqueCode, validFrom, rate);
+        //        currencyListRepository.Save(currencies);
+        //    });
+        //}
 
-        public Task DeleteCurrencyAsync(string uniqueCode)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                CurrencyList currencies = currencyListRepository.Get(currencyListKey);
-                currencies.Delete(uniqueCode);
-                currencyListRepository.Save(currencies);
-            });
-        }
+        //public Task DeleteCurrencyAsync(string uniqueCode)
+        //{
+        //    return Task.Factory.StartNew(() =>
+        //    {
+        //        CurrencyList currencies = currencyListRepository.Get(currencyListKey);
+        //        currencies.Delete(uniqueCode);
+        //        currencyListRepository.Save(currencies);
+        //    });
+        //}
     }
 }

@@ -4,6 +4,7 @@
 
 
 <button id="query">Query data</button>
+<button id="command">Create category 'Eating out'</button>
 
 @section Scripts 
 {
@@ -17,6 +18,18 @@
                 type: "POST",
                 url: "api/query",
                 data: { "payload": '{"Name":"Money.Models.Queries.ListAllCategory","Version":1,"Payload":{}}', "type": "Money.Models.Queries.ListAllCategory, Money.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" },
+                success: function (result) { debugger; },
+                dataType: "text/json"
+            });
+
+        });
+
+        $("button#command").click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "api/command",
+                data: { "payload": '{"Name":"Money.Commands.CreateCategory","Version":1,"Payload":{"Name":"Eating Out","Description":"Outsourced","Color":"255;255;0;0","Key":{"Type":"Money.Commands.CreateCategory, Money, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null","Guid":"f95b55b9-4947-4ec2-bf8c-d30771d9396d"}}}', "type": "Money.Commands.CreateCategory, Money, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" },
                 success: function (result) { debugger; },
                 dataType: "text/json"
             });

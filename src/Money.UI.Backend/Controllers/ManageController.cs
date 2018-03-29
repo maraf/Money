@@ -45,7 +45,7 @@ namespace Money.Controllers
 
             var model = new IndexViewModel
             {
-                Username = user.UserName,
+                UserName = user.UserName,
                 Email = user.Email,
                 StatusMessage = StatusMessage
             };

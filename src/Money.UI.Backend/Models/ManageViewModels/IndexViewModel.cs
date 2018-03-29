@@ -8,7 +8,7 @@ namespace Money.Models.ManageViewModels
 {
     public class IndexViewModel
     {
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         [EmailAddress]

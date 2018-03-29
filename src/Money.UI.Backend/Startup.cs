@@ -29,10 +29,11 @@ namespace Money
                 options.UseSqlite($"Filename=Application.db")
             );
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => Configuration.GetSection("Identity").GetSection("Password").Bind(options.Password))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc();
         }
 

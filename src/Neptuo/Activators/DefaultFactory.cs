@@ -11,7 +11,7 @@ namespace Neptuo.Activators
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class DefaultFactory<T> : IFactory<T>
-        where T : new()
+        where T  : new()
     {
         public T Create()
         {

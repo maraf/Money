@@ -61,7 +61,7 @@ namespace Neptuo.Activators
         /// <typeparam name="T">The type of the object the factory will be creating.</typeparam>
         /// <returns>The instance of the factory.</returns>
         public static IFactory<T> Default<T>()
-            where T : new()
+            where T  : new()
         {
             return new DefaultFactory<T>();
         }

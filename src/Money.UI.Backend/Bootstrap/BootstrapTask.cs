@@ -54,6 +54,8 @@ namespace Money.Bootstrap
         {
             readModelContextFactory = Factory.Getter(() => new ReadModelContext("Filename=ReadModel.db"));
             eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext("Filename=EventSourcing.db"));
+            CreateReadModelContext();
+            CreateEventSourcingContext();
 
             services
                 .AddSingleton(readModelContextFactory)
@@ -82,7 +84,7 @@ namespace Money.Bootstrap
             currencyCache.InitializeAsync(queryDispatcher);
             priceCalculator.InitializeAsync(queryDispatcher);
         }
-        
+
         private void Domain()
         {
             Converts.Repository
@@ -141,11 +143,11 @@ namespace Money.Bootstrap
                 new NoSnapshotProvider(),
                 new EmptySnapshotStore()
             );
-            
+
             Money.BootstrapTask bootstrapTask = new Money.BootstrapTask(
-                commandDispatcher.Handlers, 
-                Factory.Instance(outcomeRepository), 
-                Factory.Instance(categoryRepository), 
+                commandDispatcher.Handlers,
+                Factory.Instance(outcomeRepository),
+                Factory.Instance(categoryRepository),
                 Factory.Instance(currencyListRepository)
             );
 
@@ -157,13 +159,25 @@ namespace Money.Bootstrap
             queryDispatcher = new DefaultQueryDispatcher();
 
             Models.Builders.BootstrapTask bootstrapTask = new Models.Builders.BootstrapTask(
-                queryDispatcher, 
-                eventDispatcher.Handlers, 
-                readModelContextFactory, 
+                queryDispatcher,
+                eventDispatcher.Handlers,
+                readModelContextFactory,
                 priceCalculator
             );
 
             bootstrapTask.Initialize();
+        }
+
+        private void CreateEventSourcingContext()
+        {
+            using (var eventSourcing = eventSourcingContextFactory.Create())
+                eventSourcing.Database.EnsureCreated();
+        }
+
+        private void CreateReadModelContext()
+        {
+            using (var readModels = readModelContextFactory.Create())
+                readModels.Database.EnsureCreated();
         }
 
         public void Handle(Exception exception)

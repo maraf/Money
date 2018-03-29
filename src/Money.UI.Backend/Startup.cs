@@ -48,7 +48,7 @@ namespace Money
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error");
             }
 
             app.UseStaticFiles();
@@ -59,7 +59,9 @@ namespace Money
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{action=index}",
+                    defaults: new { Controller = "home" }
+                );
             });
         }
     }

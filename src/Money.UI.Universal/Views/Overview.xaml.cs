@@ -1,7 +1,7 @@
-﻿using Money.Events;
-using Money.Services;
-using Money.Services.Models;
-using Money.Services.Models.Queries;
+﻿using Money.Commands;
+using Money.Events;
+using Money.Models;
+using Money.Models.Queries;
 using Money.Services.Settings;
 using Money.ViewModels;
 using Money.ViewModels.Commands;
@@ -9,6 +9,7 @@ using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Dialogs;
 using Money.Views.Navigation;
+using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
@@ -34,7 +35,7 @@ namespace Money.Views
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private readonly IEventHandlerCollection eventHandlers = ServiceProvider.EventHandlers;
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private readonly IUserPreferenceService userPreferences = ServiceProvider.UserPreferences;
 
         private IKey categoryKey;
@@ -177,7 +178,7 @@ namespace Money.Views
             if (result == ContentDialogResult.Primary && newValue != viewModel.Amount.Value)
             {
                 Price newAmount = new Price(newValue, dialog.Currency);
-                await domainFacade.ChangeOutcomeAmountAsync(viewModel.Key, newAmount);
+                await commandDispatcher.HandleAsync(new ChangeOutcomeAmount(viewModel.Key, newAmount));
             }
         }
 
@@ -190,7 +191,7 @@ namespace Money.Views
 
             ContentDialogResult result = await dialog.ShowAsync();
             if ((result == ContentDialogResult.Primary || dialog.IsEnterPressed) && dialog.Value != viewModel.Description)
-                await domainFacade.ChangeOutcomeDescriptionAsync(viewModel.Key, dialog.Value);
+                await commandDispatcher.HandleAsync(new ChangeOutcomeDescription(viewModel.Key, dialog.Value));
         }
 
         private async void btnWhen_Click(object sender, RoutedEventArgs e)
@@ -202,7 +203,7 @@ namespace Money.Views
 
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary && dialog.Value != viewModel.When)
-                await domainFacade.ChangeOutcomeWhenAsync(viewModel.Key, dialog.Value);
+                await commandDispatcher.HandleAsync(new ChangeOutcomeWhen(viewModel.Key, dialog.Value));
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -211,7 +212,7 @@ namespace Money.Views
 
             navigator
                 .Message(String.Format("Do you realy want to delete an outcome for '{0}' from '{1}'?", viewModel.Amount, viewModel.When))
-                .Button("Yes", new DeleteOutcomeCommand(domainFacade, viewModel.Key).AddExecuted(() => ViewModel.Items.Remove(viewModel)))
+                .Button("Yes", new DeleteOutcomeCommand(commandDispatcher, viewModel.Key).AddExecuted(() => ViewModel.Items.Remove(viewModel)))
                 .ButtonClose("No")
                 .Show();
         }

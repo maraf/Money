@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Money.ViewModels.Commands
 {
-    public class NavigateBackCommand : Command
+    public class NavigateBackCommand : Neptuo.Observables.Commands.Command
     {
         private readonly INavigator navigator;
 

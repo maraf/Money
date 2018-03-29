@@ -1,6 +1,8 @@
-﻿using Money.Services;
+﻿using Money.Commands;
+using Money.Services;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
+using Neptuo.Commands;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace Money.Views.Dialogs
     [NavigationParameter(typeof(CurrencyAddExchangeRateParameter))]
     public class CurrencyAddExchangeRateWizard : IWizard
     {
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private readonly MessageBuilder messageBuilder = ServiceProvider.MessageBuilder;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
 
@@ -36,12 +38,13 @@ namespace Money.Views.Dialogs
             {
                 try
                 {
-                    await domainFacade.SetExchangeRateAsync(
+                    // TODO: Not working after rewrite to commands.
+                    await commandDispatcher.HandleAsync(new SetExchangeRate(
                         dialog.SourceCurrency,
                         dialog.TargetCurrency,
                         dialog.ValidFrom,
                         dialog.Rate
-                    );
+                    ));
                 }
                 catch (CurrencyExchangeRateAlreadyExistsException)
                 {

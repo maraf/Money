@@ -23,6 +23,11 @@ namespace Money.Commands
         /// </summary>
         public string NewSymbol { get; private set; }
 
+        /// <summary>
+        /// Changes a <paramref name="newSymbol"/> of the currency with <paramref name="uniqueCode"/>.
+        /// </summary>
+        /// <param name="uniqueCode">An unique code of the currency to change symbol for.</param>
+        /// <param name="newSymbol">A new symbol for the currency.</param>
         public ChangeCurrencySymbol(string uniqueCode, string newSymbol)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");

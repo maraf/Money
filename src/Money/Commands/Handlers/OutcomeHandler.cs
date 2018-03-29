@@ -1,4 +1,4 @@
-﻿using Neptuo;
+﻿using Neptuo.Activators;
 using Neptuo.Commands.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
@@ -10,54 +10,21 @@ using System.Threading.Tasks;
 
 namespace Money.Commands.Handlers
 {
-    public class OutcomeHandler : ICommandHandler<ChangeOutcomeAmount>, ICommandHandler<ChangeOutcomeDescription>, ICommandHandler<ChangeOutcomeWhen>, ICommandHandler<DeleteOutcome>
+    public class OutcomeHandler : AggregateRootCommandHandler<Outcome>, 
+        ICommandHandler<CreateOutcome>, 
+        ICommandHandler<ChangeOutcomeAmount>, 
+        ICommandHandler<ChangeOutcomeDescription>, 
+        ICommandHandler<ChangeOutcomeWhen>, 
+        ICommandHandler<DeleteOutcome>
     {
-        private readonly IRepository<Outcome, IKey> repository;
+        public OutcomeHandler(IFactory<IRepository<Outcome, IKey>> repositoryFactory) 
+            : base(repositoryFactory)
+        { }
 
-        public OutcomeHandler(IRepository<Outcome, IKey> repository)
-        {
-            Ensure.NotNull(repository, "repository");
-            this.repository = repository;
-        }
-
-        public Task HandleAsync(ChangeOutcomeAmount command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Outcome outcome = repository.Get(command.OutcomeKey);
-                outcome.ChangeAmount(command.Amount);
-                repository.Save(outcome);
-            });
-        }
-
-        public Task HandleAsync(ChangeOutcomeDescription command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Outcome outcome = repository.Get(command.OutcomeKey);
-                outcome.ChangeDescription(command.Description);
-                repository.Save(outcome);
-            });
-        }
-
-        public Task HandleAsync(ChangeOutcomeWhen command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Outcome outcome = repository.Get(command.OutcomeKey);
-                outcome.ChangeWhen(command.When);
-                repository.Save(outcome);
-            });
-        }
-
-        public Task HandleAsync(DeleteOutcome command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Outcome outcome = repository.Get(command.OutcomeKey);
-                outcome.Delete();
-                repository.Save(outcome);
-            });
-        }
+        public Task HandleAsync(CreateOutcome command) => WithCommand(command.Key).Execute(() => new Outcome(command.Amount, command.Description, command.When, command.CategoryKey));
+        public Task HandleAsync(ChangeOutcomeAmount command) => WithCommand(command.Key).Execute(command.OutcomeKey, model => model.ChangeAmount(command.Amount));
+        public Task HandleAsync(ChangeOutcomeDescription command) => WithCommand(command.Key).Execute(command.OutcomeKey, model => model.ChangeDescription(command.Description));
+        public Task HandleAsync(ChangeOutcomeWhen command) => WithCommand(command.Key).Execute(command.OutcomeKey, model => model.ChangeWhen(command.When));
+        public Task HandleAsync(DeleteOutcome command) => WithCommand(command.Key).Execute(command.OutcomeKey, model => model.Delete());
     }
 }

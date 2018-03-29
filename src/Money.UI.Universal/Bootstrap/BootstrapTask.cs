@@ -1,11 +1,12 @@
 ﻿using Money.Services;
 using Money.Services.Globalization;
-using Money.Services.Models.Builders;
 using Money.Services.Settings;
 using Money.Services.Tiles;
 using Money.ViewModels;
 using Neptuo;
 using Neptuo.Activators;
+using Neptuo.Bootstrap;
+using Neptuo.Commands;
 using Neptuo.Converters;
 using Neptuo.Data;
 using Neptuo.Events;
@@ -26,8 +27,9 @@ using System.Threading.Tasks;
 
 namespace Money.Bootstrap
 {
-    public class BootstrapTask : IExceptionHandler
+    public class BootstrapTask : IBootstrapTask, IExceptionHandler
     {
+        private PersistentCommandDispatcher commandDispatcher;
         private PersistentEventDispatcher eventDispatcher;
         private ICompositeTypeProvider typeProvider;
         private DefaultQueryDispatcher queryDispatcher;
@@ -35,10 +37,10 @@ namespace Money.Bootstrap
         public IRepository<Outcome, IKey> OutcomeRepository { get; private set; }
         public IRepository<Category, IKey> CategoryRepository { get; private set; }
         public IRepository<CurrencyList, IKey> CurrencyListRepository { get; private set; }
-        public IDomainFacade DomainFacade { get; private set; }
 
         public EntityEventStore EventStore { get; private set; }
 
+        public IFormatter CommandFormatter { get; private set; }
         public IFormatter EventFormatter { get; private set; }
 
         public void Initialize()
@@ -60,10 +62,10 @@ namespace Money.Bootstrap
             ReadModels();
 
             ServiceProvider.QueryDispatcher = queryDispatcher;
-            ServiceProvider.DomainFacade = DomainFacade;
+            ServiceProvider.CommandDispatcher = commandDispatcher;
             ServiceProvider.EventHandlers = eventDispatcher.Handlers;
 
-            UpgradeService upgradeService = new UpgradeService(DomainFacade, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory, priceCalculator);
+            UpgradeService upgradeService = new UpgradeService(commandDispatcher, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory, priceCalculator);
             ServiceProvider.UpgradeService = upgradeService;
 
             ServiceProvider.TileService = new TileService();
@@ -89,7 +91,7 @@ namespace Money.Bootstrap
                 .AddJsonTimeSpan()
                 .Add(new ColorConverter())
                 .AddToStringSearchHandler();
-            
+
             EventStore = new EntityEventStore(ServiceProvider.EventSourcingContextFactory);
             eventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
             eventDispatcher.DispatcherExceptionHandlers.Add(this);
@@ -102,7 +104,10 @@ namespace Money.Bootstrap
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
             );
 
+            CommandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
             EventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
+
+            commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), CommandFormatter);
 
             OutcomeRepository = new AggregateRootRepository<Outcome>(
                 EventStore,
@@ -130,32 +135,24 @@ namespace Money.Bootstrap
                 new NoSnapshotProvider(),
                 new EmptySnapshotStore()
             );
-
-            DomainFacade = new DefaultDomainFacade(
-                OutcomeRepository,
-                CategoryRepository,
-                CurrencyListRepository
+            
+            Money.BootstrapTask bootstrapTask = new Money.BootstrapTask(
+                commandDispatcher.Handlers, 
+                Factory.Instance(OutcomeRepository), 
+                Factory.Instance(CategoryRepository), 
+                Factory.Instance(CurrencyListRepository)
             );
+            bootstrapTask.Initialize();
         }
 
         private void ReadModels()
         {
             // Should match with RecreateReadModelContext.
             queryDispatcher = new DefaultQueryDispatcher();
-
-            CategoryBuilder categoryBuilder = new CategoryBuilder(ServiceProvider.ReadModelContextFactory);
-            queryDispatcher.AddAll(categoryBuilder);
-            eventDispatcher.Handlers.AddAll(categoryBuilder);
-
-            OutcomeBuilder outcomeBuilder = new OutcomeBuilder(ServiceProvider.ReadModelContextFactory, ServiceProvider.PriceConverter);
-            queryDispatcher.AddAll(outcomeBuilder);
-            eventDispatcher.Handlers.AddAll(outcomeBuilder);
-
-            CurrencyBuilder currencyBuilder = new CurrencyBuilder(ServiceProvider.ReadModelContextFactory);
-            queryDispatcher.AddAll(currencyBuilder);
-            eventDispatcher.Handlers.AddAll(currencyBuilder);
+            Models.Builders.BootstrapTask bootstrapTask = new Models.Builders.BootstrapTask(queryDispatcher, eventDispatcher.Handlers, ServiceProvider.ReadModelContextFactory, ServiceProvider.PriceConverter);
+            bootstrapTask.Initialize();
         }
-        
+
         public void Handle(Exception exception)
         {
             throw new NotImplementedException();

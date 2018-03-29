@@ -24,6 +24,11 @@ namespace Money.Commands
         /// </summary>
         public string Description { get; private set; }
 
+        /// <summary>
+        /// Changes a description of a category with a key <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <param name="description">A new description of the category.</param>
         public ChangeCategoryDescription(IKey categoryKey, string description)
         {
             Ensure.Condition.NotEmptyKey(categoryKey);

@@ -1,5 +1,7 @@
-﻿using Money.Services;
+﻿using Money.Commands;
+using Money.Services;
 using Neptuo;
+using Neptuo.Commands;
 using Neptuo.Models.Keys;
 using Neptuo.Observables.Commands;
 using System;
@@ -10,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Money.ViewModels.Commands
 {
-    public class DeleteOutcomeCommand : Command
+    public class DeleteOutcomeCommand : Neptuo.Observables.Commands.Command
     {
-        private readonly IDomainFacade domainFacade;
+        private readonly ICommandDispatcher commandDispatcher;
         private readonly IKey outcomeKey;
 
         private Action executed;
@@ -20,11 +22,11 @@ namespace Money.ViewModels.Commands
         private bool isExecuted;
         private bool isExecuting;
 
-        public DeleteOutcomeCommand(IDomainFacade domainFacade, IKey outcomeKey)
+        public DeleteOutcomeCommand(ICommandDispatcher commandDispatcher, IKey outcomeKey)
         {
-            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.Condition.NotEmptyKey(outcomeKey);
-            this.domainFacade = domainFacade;
+            this.commandDispatcher = commandDispatcher;
             this.outcomeKey = outcomeKey;
         }
 
@@ -47,7 +49,7 @@ namespace Money.ViewModels.Commands
                 isExecuting = true;
                 RaiseCanExecuteChanged();
 
-                await domainFacade.DeleteOutcomeAsync(outcomeKey);
+                await commandDispatcher.HandleAsync(new DeleteOutcome(outcomeKey));
 
                 isExecuting = false;
                 isExecuted = true;

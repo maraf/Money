@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Services.Models
+namespace Money.Models
 {
     /// <summary>
     /// A model for a month of a year.

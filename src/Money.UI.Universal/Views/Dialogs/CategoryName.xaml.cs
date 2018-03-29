@@ -1,8 +1,10 @@
-﻿using Money.Services.Models;
-using Money.Services.Models.Queries;
+﻿using Money.Commands;
+using Money.Models;
+using Money.Models.Queries;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using Neptuo;
+using Neptuo.Commands;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -84,7 +86,7 @@ namespace Money.Views.Dialogs
         #region IWizard
 
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private IKey key;
         private CategoryNameDescriptionModel model;
 
@@ -112,19 +114,22 @@ namespace Money.Views.Dialogs
                         return;
 
                     Color color = ColorConverter.Map(Colors.Black);
-                    key = await domainFacade.CreateCategoryAsync(Name, color);
+                    await commandDispatcher.HandleAsync(new CreateCategory(Name, Description, color));
                     Name = Name;
                 }
-                else if (Name != model.Name)
+                else
                 {
-                    await domainFacade.RenameCategoryAsync(key, Name);
-                    Name = Name;
-                }
+                    if (Name != model.Name)
+                    {
+                        await commandDispatcher.HandleAsync(new RenameCategory(key, Name));
+                        Name = Name;
+                    }
 
-                if (Description != model.Description)
-                {
-                    await domainFacade.ChangeCategoryDescriptionAsync(key, Description);
-                    Description = Description;
+                    if (Description != model.Description)
+                    {
+                        await commandDispatcher.HandleAsync(new ChangeCategoryDescription(key, Description));
+                        Description = Description;
+                    }
                 }
             }
         }

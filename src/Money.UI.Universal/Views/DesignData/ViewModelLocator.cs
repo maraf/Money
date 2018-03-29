@@ -1,5 +1,5 @@
 ﻿using Money.Services;
-using Money.Services.Models;
+using Money.Models;
 using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.UI;
 using Windows.UI.Xaml.Controls;
+using Neptuo.Commands;
 
 namespace Money.Views.DesignData
 {
@@ -32,15 +33,15 @@ namespace Money.Views.DesignData
             }
         }
 
-        private IDomainFacade domainFacade;
-        public IDomainFacade DomainFacade
+        private ICommandDispatcher commandDispatcher;
+        public ICommandDispatcher CommandDispatcher
         {
             get
             {
-                if (domainFacade == null)
-                    domainFacade = new MockDomainFacade();
+                if (commandDispatcher == null)
+                    commandDispatcher = new DefaultCommandDispatcher();
 
-                return domainFacade;
+                return commandDispatcher;
             }
         }
 
@@ -149,7 +150,7 @@ namespace Money.Views.DesignData
             {
                 if (createOutcome == null)
                 {
-                    createOutcome = new OutcomeViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade);
+                    createOutcome = new OutcomeViewModel(ServiceProvider.Navigator, ServiceProvider.CommandDispatcher);
                     createOutcome.Amount = 5400;
                     createOutcome.Description = "New home PC motherboard";
                     createOutcome.Categories.Add(new CategoryModel(KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", ColorConverter.Map(Colors.CadetBlue), "🦉"));
@@ -168,10 +169,10 @@ namespace Money.Views.DesignData
             {
                 if (categoryList == null)
                 {
-                    categoryList = new CategoryListViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator);
-                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", ColorConverter.Map(Colors.CadetBlue), "🦉"));
-                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", ColorConverter.Map(Colors.Brown), "🦊") { IsSelected = true });
-                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", ColorConverter.Map(Colors.Gold), "🦆"));
+                    categoryList = new CategoryListViewModel(ServiceProvider.CommandDispatcher, ServiceProvider.Navigator);
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.CommandDispatcher, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Food", "Making out loved foods from igredients", ColorConverter.Map(Colors.CadetBlue), "🦉"));
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.CommandDispatcher, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", ColorConverter.Map(Colors.Brown), "🦊") { IsSelected = true });
+                    categoryList.Items.Add(new CategoryEditViewModel(ServiceProvider.CommandDispatcher, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Home", "Manly stuff", ColorConverter.Map(Colors.Gold), "🦆"));
                 }
 
                 return categoryList;
@@ -185,7 +186,7 @@ namespace Money.Views.DesignData
             {
                 if (categoryEdit == null)
                 {
-                    categoryEdit = new CategoryEditViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", ColorConverter.Map(Colors.Brown), "🦊");
+                    categoryEdit = new CategoryEditViewModel(ServiceProvider.CommandDispatcher, ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Eating out", "When we are lazy and let others to feed us", ColorConverter.Map(Colors.Brown), "🦊");
                     categoryEdit.IsSelected = true;
                 }
 
@@ -200,10 +201,10 @@ namespace Money.Views.DesignData
             {
                 if (currencyList == null)
                 {
-                    currencyList = new CurrencyListViewModel(ServiceProvider.DomainFacade, ServiceProvider.Navigator);
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, ServiceProvider.MessageBuilder, ServiceProvider.QueryDispatcher, "CZK", "Kč"));
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, ServiceProvider.MessageBuilder, ServiceProvider.QueryDispatcher, "USD", "$"));
-                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, ServiceProvider.MessageBuilder, ServiceProvider.QueryDispatcher, "EUR", "€"));
+                    currencyList = new CurrencyListViewModel(ServiceProvider.Navigator);
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.CommandDispatcher, ServiceProvider.MessageBuilder, ServiceProvider.QueryDispatcher, "CZK", "Kč"));
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.CommandDispatcher, ServiceProvider.MessageBuilder, ServiceProvider.QueryDispatcher, "USD", "$"));
+                    currencyList.Items.Add(new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.CommandDispatcher, ServiceProvider.MessageBuilder, ServiceProvider.QueryDispatcher, "EUR", "€"));
                     currencyList.Items.First().IsSelected = true;
                     currencyList.Items.First().ExchangeRates.Add(new ExchangeRateModel("USD", 18.90, new DateTime(2016, 10, 11)));
                     currencyList.Items.First().ExchangeRates.Add(new ExchangeRateModel("EUR", 27.40, new DateTime(2017, 4, 21)));
@@ -220,7 +221,7 @@ namespace Money.Views.DesignData
             {
                 if (currencyEdit == null)
                 {
-                    currencyEdit = new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.DomainFacade, ServiceProvider.MessageBuilder, ServiceProvider.QueryDispatcher, "CZK", "Kč");
+                    currencyEdit = new CurrencyEditViewModel(ServiceProvider.Navigator, ServiceProvider.CommandDispatcher, ServiceProvider.MessageBuilder, ServiceProvider.QueryDispatcher, "CZK", "Kč");
                     currencyEdit.IsSelected = true;
                     currencyEdit.ExchangeRates.Add(new ExchangeRateModel("USD", 18.90, new DateTime(2016, 10, 11)));
                     currencyEdit.ExchangeRates.Add(new ExchangeRateModel("EUR", 27.40, new DateTime(2017, 4, 21)));
@@ -252,7 +253,7 @@ namespace Money.Views.DesignData
                 ServiceProvider.MessageBuilder = new MessageBuilder();
                 ServiceProvider.MainMenuFactory = new MainMenuListFactory();
                 ServiceProvider.QueryDispatcher = QueryDispatcher;
-                ServiceProvider.DomainFacade = DomainFacade;
+                ServiceProvider.CommandDispatcher = CommandDispatcher;
                 ServiceProvider.EventHandlers = EventHandlers;
                 ServiceProvider.Navigator = Navigator;
                 ServiceProvider.TileService = new TileService();

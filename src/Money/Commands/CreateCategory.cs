@@ -1,23 +1,18 @@
 ﻿using Neptuo;
-using Neptuo.Models.Keys;
+using Neptuo.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Models
+namespace Money.Commands
 {
     /// <summary>
-    /// A model of a outcome or income category.
+    /// Creates an category.
     /// </summary>
-    public class CategoryModel
+    public class CreateCategory : Command
     {
-        /// <summary>
-        /// Gets a key of the category.
-        /// </summary>
-        public IKey Key { get; private set; }
-
         /// <summary>
         /// Gets a name of the category.
         /// </summary>
@@ -32,20 +27,15 @@ namespace Money.Models
         /// Gets a color of the category.
         /// </summary>
         public Color Color { get; private set; }
-        
-        /// <summary>
-        /// Gets a font icon of the category.
-        /// </summary>
-        public string Icon { get; private set; }
 
-        public CategoryModel(IKey key, string name, string description, Color color, string icon)
+        public CreateCategory(string name, string description, Color color)
         {
-            Ensure.Condition.NotEmptyKey(key);
-            Key = key;
+            Ensure.NotNull(name, "name");
+            Ensure.NotNull(description, "description");
+            Ensure.NotNull(color, "color");
             Name = name;
             Description = description;
             Color = color;
-            Icon = icon;
         }
     }
 }

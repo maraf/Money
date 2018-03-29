@@ -3,18 +3,18 @@ using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Neptuo;
+using Neptuo.Commands;
 using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
-using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using ICommand = System.Windows.Input.ICommand;
 
 namespace Money.ViewModels
 {
@@ -26,17 +26,17 @@ namespace Money.ViewModels
         IEventHandler<CategoryIconChanged>,
         IEventHandler<CategoryDeleted>
     {
-        private readonly IDomainFacade domainFacade;
+        private readonly ICommandDispatcher commandDispatcher;
         private readonly INavigator navigator;
 
         public ObservableCollection<CategoryEditViewModel> Items { get; private set; }
         public ICommand New { get; private set; }
         
-        public CategoryListViewModel(IDomainFacade domainFacade, INavigator navigator)
+        public CategoryListViewModel(ICommandDispatcher commandDispatcher, INavigator navigator)
         {
-            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.NotNull(navigator, "navigator");
-            this.domainFacade = domainFacade;
+            this.commandDispatcher = commandDispatcher;
             this.navigator = navigator;
 
             Items = new ObservableCollection<CategoryEditViewModel>();
@@ -54,7 +54,7 @@ namespace Money.ViewModels
 
         public Task HandleAsync(CategoryCreated payload)
         {
-            CategoryEditViewModel viewModel = new CategoryEditViewModel(domainFacade, navigator, payload.AggregateKey, payload.Name, null, payload.Color, null);
+            CategoryEditViewModel viewModel = new CategoryEditViewModel(commandDispatcher, navigator, payload.AggregateKey, payload.Name, null, payload.Color, null);
             Items.Add(viewModel);
             return Task.CompletedTask;
         }

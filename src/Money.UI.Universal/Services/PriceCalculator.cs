@@ -1,6 +1,6 @@
 ﻿using Money.Events;
-using Money.Services.Models;
-using Money.Services.Models.Queries;
+using Money.Models;
+using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;

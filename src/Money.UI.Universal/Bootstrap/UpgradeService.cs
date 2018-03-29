@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Money.Commands;
 using Money.Data;
-using Money.Services;
-using Money.Services.Models.Builders;
+using Money.Models.Builders;
 using Neptuo;
 using Neptuo.Activators;
+using Neptuo.Commands;
 using Neptuo.Data;
 using Neptuo.Events;
 using Neptuo.Formatters;
 using Neptuo.Migrations;
+using Neptuo.Queries;
 using Neptuo.ReadModels;
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,7 @@ namespace Money.Bootstrap
 {
     internal class UpgradeService : IUpgradeService
     {
-        private readonly IDomainFacade domainFacade;
+        private readonly ICommandDispatcher commandDispatcher;
         private readonly IEventRebuilderStore eventStore;
         private readonly IFormatter eventFormatter;
         private readonly IFactory<EventSourcingContext> eventSourceContextFactory;
@@ -31,16 +33,16 @@ namespace Money.Bootstrap
 
         public const int CurrentVersion = 4;
 
-        public UpgradeService(IDomainFacade domainFacade, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory, IPriceConverter priceConverter)
+        public UpgradeService(ICommandDispatcher commandDispatcher, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory, IPriceConverter priceConverter)
         {
-            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.NotNull(eventStore, "eventStore");
             Ensure.NotNull(eventFormatter, "eventFormatter");
             Ensure.NotNull(eventSourceContextFactory, "eventSourceContextFactory");
             Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
             Ensure.NotNull(storageContainerFactory, "storageContainerFactory");
             Ensure.NotNull(priceConverter, "priceConverter");
-            this.domainFacade = domainFacade;
+            this.commandDispatcher = commandDispatcher;
             this.eventStore = eventStore;
             this.eventFormatter = eventFormatter;
             this.eventSourceContextFactory = eventSourceContextFactory;
@@ -114,9 +116,9 @@ namespace Money.Bootstrap
             RecreateEventSourcingContext();
             await RecreateReadModelContextAsync();
 
-            await domainFacade.CreateCategoryAsync("Home", ColorConverter.Map(Colors.SandyBrown));
-            await domainFacade.CreateCategoryAsync("Food", ColorConverter.Map(Colors.OrangeRed));
-            await domainFacade.CreateCategoryAsync("Eating Out", ColorConverter.Map(Colors.DarkRed));
+            await commandDispatcher.HandleAsync(new CreateCategory("Home", "DIY", ColorConverter.Map(Colors.SandyBrown)));
+            await commandDispatcher.HandleAsync(new CreateCategory("Food", "Home boilt stuff", ColorConverter.Map(Colors.OrangeRed)));
+            await commandDispatcher.HandleAsync(new CreateCategory("Eating Out", "Outsourced", ColorConverter.Map(Colors.DarkRed)));
         }
 
         private Task UpgradeVersion2()
@@ -127,7 +129,7 @@ namespace Money.Bootstrap
         private async Task UpgradeVersion3()
         {
             await RecreateReadModelContextAsync();
-            await domainFacade.CreateCurrencyAsync("CZK", "Kč");
+            await commandDispatcher.HandleAsync(new CreateCurrency("CZK", "Kč"));
         }
 
         private void RecreateEventSourcingContext()
@@ -150,9 +152,11 @@ namespace Money.Bootstrap
 
             // Should match with ReadModels.
             Rebuilder rebuilder = new Rebuilder(eventStore, eventFormatter);
-            rebuilder.AddAll(new CategoryBuilder(readModelContextFactory));
-            rebuilder.AddAll(new OutcomeBuilder(readModelContextFactory, priceConverter));
-            rebuilder.AddAll(new CurrencyBuilder(readModelContextFactory));
+            DefaultQueryDispatcher queryDispatcher = new DefaultQueryDispatcher();
+
+            Models.Builders.BootstrapTask bootstrapTask = new Models.Builders.BootstrapTask(queryDispatcher, rebuilder, readModelContextFactory, priceConverter);
+            bootstrapTask.Initialize();
+
             return rebuilder.RunAsync();
         }
 

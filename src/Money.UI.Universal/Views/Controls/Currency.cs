@@ -1,5 +1,5 @@
 ﻿using Money.Services.Globalization;
-using Money.Services.Models.Queries;
+using Money.Models.Queries;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;

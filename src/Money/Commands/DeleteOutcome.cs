@@ -19,6 +19,10 @@ namespace Money.Commands
         /// </summary>
         public IKey OutcomeKey { get; private set; }
 
+        /// <summary>
+        /// Deletes an outcome with <paramref name="outcomeKey"/>.
+        /// </summary>
+        /// <param name="outcomeKey">A key of the outcome to delete.</param>
         public DeleteOutcome(IKey outcomeKey)
         {
             Ensure.Condition.NotEmptyKey(outcomeKey);

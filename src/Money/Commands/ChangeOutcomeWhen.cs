@@ -24,6 +24,11 @@ namespace Money.Commands
         /// </summary>
         public DateTime When { get; private set; }
 
+        /// <summary>
+        /// Changes a <paramref name="when"/> of the outcome with <paramref name="outcomeKey"/>.
+        /// </summary>
+        /// <param name="outcomeKey">A key of the outcome to modify.</param>
+        /// <param name="when">A date when the outcome occured.</param>
         public ChangeOutcomeWhen(IKey outcomeKey, DateTime when)
         {
             Ensure.Condition.NotEmptyKey(outcomeKey);

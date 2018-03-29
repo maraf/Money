@@ -18,6 +18,10 @@ namespace Money.Commands
         /// </summary>
         public string UniqueCode { get; private set; }
 
+        /// <summary>
+        /// Sets a <paramref name="uniqueCode"/> as a default currency.
+        /// </summary>
+        /// <param name="uniqueCode">An unique code of the currency.</param>
         public SetCurrencyAsDefault(string uniqueCode)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");

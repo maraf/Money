@@ -1,10 +1,11 @@
 ﻿using Money.Services;
-using Money.Services.Models;
-using Money.Services.Models.Queries;
+using Money.Models;
+using Money.Models.Queries;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Neptuo;
+using Neptuo.Commands;
 using Neptuo.Observables;
 using Neptuo.Observables.Collections;
 using Neptuo.Queries;
@@ -13,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using ICommand = System.Windows.Input.ICommand;
 
 namespace Money.ViewModels
 {
@@ -97,26 +98,26 @@ namespace Money.ViewModels
         public ICommand Delete { get; private set; }
         public ICommand DeleteExchangeRate { get; private set; }
 
-        public CurrencyEditViewModel(INavigator navigator, IDomainFacade domainFacade, MessageBuilder messageBuilder, IQueryDispatcher queryDispatcher, string uniqueCode, string symbol)
+        public CurrencyEditViewModel(INavigator navigator, ICommandDispatcher commandDispatcher, MessageBuilder messageBuilder, IQueryDispatcher queryDispatcher, string uniqueCode, string symbol)
         {
             Ensure.NotNull(navigator, "navigator");
-            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
             this.queryDispatcher = queryDispatcher;
             UniqueCode = uniqueCode;
             Symbol = symbol;
             ExchangeRates = new SortableObservableCollection<ExchangeRateModel>();
 
-            CreateCommands(navigator, domainFacade, messageBuilder);
+            CreateCommands(navigator, commandDispatcher, messageBuilder);
             LoadExchangeRateList();
         }
 
-        private void CreateCommands(INavigator navigator, IDomainFacade domainFacade, MessageBuilder messageBuilder)
+        private void CreateCommands(INavigator navigator, ICommandDispatcher commandDispatcher, MessageBuilder messageBuilder)
         {
-            setAsDefault = new CurrencySetAsDefaultCommand(domainFacade, UniqueCode);
+            setAsDefault = new CurrencySetAsDefaultCommand(commandDispatcher, UniqueCode);
             addExchangeRate = new NavigateCommand(navigator, new CurrencyAddExchangeRateParameter(UniqueCode));
-            Delete = new CurrencyDeleteCommand(navigator, domainFacade, messageBuilder, UniqueCode);
-            DeleteExchangeRate = new CurrencyDeleteExchangeRateCommand(domainFacade, navigator, UniqueCode);
+            Delete = new CurrencyDeleteCommand(navigator, commandDispatcher, messageBuilder, UniqueCode);
+            DeleteExchangeRate = new CurrencyDeleteExchangeRateCommand(commandDispatcher, navigator, UniqueCode);
         }
 
         private async void LoadExchangeRateList()

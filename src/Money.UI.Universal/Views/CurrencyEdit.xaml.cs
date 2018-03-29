@@ -1,5 +1,7 @@
-﻿using Money.ViewModels;
+﻿using Money.Commands;
+using Money.ViewModels;
 using Money.Views.Dialogs;
+using Neptuo.Commands;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +21,7 @@ namespace Money.Views
 {
     public sealed partial class CurrencyEdit : UserControl
     {
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
 
         public CurrencyEditViewModel ViewModel
         {
@@ -42,7 +44,7 @@ namespace Money.Views
 
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary || dialog.IsEnterPressed && ViewModel.Symbol != dialog.Symbol)
-                await domainFacade.ChangeCurrencySymbolAsync(ViewModel.UniqueCode, dialog.Symbol);
+                await commandDispatcher.HandleAsync(new ChangeCurrencySymbol(ViewModel.UniqueCode, dialog.Symbol));
         }
     }
 }

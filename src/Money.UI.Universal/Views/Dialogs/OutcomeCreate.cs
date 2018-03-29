@@ -1,7 +1,9 @@
-﻿using Money.Services;
+﻿using Money.Commands;
+using Money.Services;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
 using Neptuo.Activators;
+using Neptuo.Commands;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -16,7 +18,7 @@ namespace Money.Views.Dialogs
     [NavigationParameter(typeof(OutcomeParameter))]
     public class OutcomeCreate : IWizard
     {
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
 
         public async Task ShowAsync(object context)
@@ -110,12 +112,12 @@ namespace Money.Views.Dialogs
                 }
             }
 
-            await domainFacade.CreateOutcomeAsync(
+            await commandDispatcher.HandleAsync(new CreateOutcome(
                 new Price(amount, currency),
                 description,
                 when,
                 categoryKey
-            );
+            ));
 
             //OutcomeCreatedGuidePost nextDialog = new OutcomeCreatedGuidePost();
             //await nextDialog.ShowAsync();

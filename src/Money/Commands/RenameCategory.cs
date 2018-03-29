@@ -24,6 +24,11 @@ namespace Money.Commands
         /// </summary>
         public string NewName { get; private set; }
 
+        /// <summary>
+        /// Renames a category with a key <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category to rename.</param>
+        /// <param name="newName">A new name of the category.</param>
         public RenameCategory(IKey categoryKey, string newName)
         {
             Ensure.Condition.NotEmptyKey(categoryKey);

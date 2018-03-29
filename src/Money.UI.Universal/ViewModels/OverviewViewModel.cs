@@ -1,5 +1,5 @@
 ﻿using Money.Events;
-using Money.Services.Models;
+using Money.Models;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;

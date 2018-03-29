@@ -1,5 +1,5 @@
 ﻿using Money.Services;
-using Money.Services.Models;
+using Money.Models;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Neptuo;
@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Neptuo.Commands;
 
 namespace Money.ViewModels
 {
@@ -63,13 +64,13 @@ namespace Money.ViewModels
         public ObservableCollection<IKey> SelectedCategories { get; private set; }
         public SaveOutcomeCommand Save { get; private set; }
 
-        public OutcomeViewModel(INavigator navigator, IDomainFacade domainFacade)
+        public OutcomeViewModel(INavigator navigator, ICommandDispatcher commandDispatcher)
         {
             SelectedCategories = new ObservableCollection<IKey>();
             Categories = new ObservableCollection<CategoryModel>();
 
             When = DateTime.Now;
-            Save = new SaveOutcomeCommand(navigator, this, domainFacade);
+            Save = new SaveOutcomeCommand(navigator, this, commandDispatcher);
         }
     }
 }

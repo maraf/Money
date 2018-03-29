@@ -1,7 +1,7 @@
 ﻿using Money.Events;
 using Money.Services;
-using Money.Services.Models;
-using Money.Services.Models.Queries;
+using Money.Models;
+using Money.Models.Queries;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
@@ -24,6 +24,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Neptuo.Commands;
 
 namespace Money.Views
 {
@@ -36,7 +37,7 @@ namespace Money.Views
         IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyDeleted>
     {
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly MessageBuilder messageBuilder = ServiceProvider.MessageBuilder;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
@@ -71,10 +72,10 @@ namespace Money.Views
 
             IEnumerable<CurrencyModel> models = await queryDispatcher.QueryAsync(new ListAllCurrency());
 
-            ViewModel = new CurrencyListViewModel(domainFacade, navigator);
+            ViewModel = new CurrencyListViewModel(navigator);
 
             foreach (CurrencyModel model in models)
-                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, domainFacade, messageBuilder, queryDispatcher, model.UniqueCode, model.Symbol));
+                ViewModel.Items.Add(new CurrencyEditViewModel(navigator, commandDispatcher, messageBuilder, queryDispatcher, model.UniqueCode, model.Symbol));
 
             UpdateStandalone();
 
@@ -132,7 +133,7 @@ namespace Money.Views
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                CurrencyEditViewModel viewModel = new CurrencyEditViewModel(navigator, domainFacade, messageBuilder, queryDispatcher, payload.UniqueCode, payload.Symbol);
+                CurrencyEditViewModel viewModel = new CurrencyEditViewModel(navigator, commandDispatcher, messageBuilder, queryDispatcher, payload.UniqueCode, payload.Symbol);
                 ViewModel.Items.Add(viewModel);
                 lvwItems.SelectedItem = viewModel;
                 UpdateStandalone();

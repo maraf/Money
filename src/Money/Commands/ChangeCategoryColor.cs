@@ -24,6 +24,11 @@ namespace Money.Commands
         /// </summary>
         public Color Color { get; private set; }
 
+        /// <summary>
+        /// Changes a color of a category with a key <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <param name="color">A new color of the category.</param>
         public ChangeCategoryColor(IKey categoryKey, Color color)
         {
             Ensure.Condition.NotEmptyKey(categoryKey);

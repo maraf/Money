@@ -1,5 +1,5 @@
-﻿using Money.Services.Models;
-using Money.Services.Models.Queries;
+﻿using Money.Models;
+using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Queries;
 using System;

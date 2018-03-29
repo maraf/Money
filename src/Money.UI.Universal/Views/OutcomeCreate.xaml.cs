@@ -1,6 +1,6 @@
 ﻿using Money.Services;
-using Money.Services.Models;
-using Money.Services.Models.Queries;
+using Money.Models;
+using Money.Models.Queries;
 using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
@@ -29,13 +29,14 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ColorPicker = Money.Views.Dialogs.ColorPicker;
+using Neptuo.Commands;
 
 namespace Money.Views
 {
     //[NavigationParameter(typeof(OutcomeParameter))]
     public sealed partial class OutcomeCreate : Page
     {
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private readonly INavigator navigator = ServiceProvider.Navigator;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private readonly TileService tileService = ServiceProvider.TileService;
@@ -57,7 +58,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            OutcomeViewModel viewModel = new OutcomeViewModel(navigator, domainFacade);
+            OutcomeViewModel viewModel = new OutcomeViewModel(navigator, commandDispatcher);
             OutcomeParameter parameter = e.Parameter as OutcomeParameter;
             if (parameter != null)
             {

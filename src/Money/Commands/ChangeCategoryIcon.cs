@@ -24,6 +24,11 @@ namespace Money.Commands
         /// </summary>
         public string Icon { get; private set; }
 
+        /// <summary>
+        /// Changes a font icon for a category with a key <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <param name="icon">A font icon of the category</param>
         public ChangeCategoryIcon(IKey categoryKey, string icon)
         {
             Ensure.Condition.NotEmptyKey(categoryKey);

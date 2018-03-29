@@ -49,7 +49,7 @@ namespace Money.Views
             }
         }
 
-        private class SwitchDatabaseCommand : Command
+        private class SwitchDatabaseCommand : Neptuo.Observables.Commands.Command
         {
             private readonly IDevelopmentService developmentTools;
             private readonly bool isEnabled;

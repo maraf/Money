@@ -3,6 +3,7 @@ using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Neptuo;
+using Neptuo.Commands;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;
 using System;
@@ -10,9 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Windows.UI;
 using Windows.UI.Xaml.Media;
+using ICommand = System.Windows.Input.ICommand;
 
 namespace Money.ViewModels
 {
@@ -101,9 +101,9 @@ namespace Money.ViewModels
         public ICommand ChangeColor { get; private set; }
         public ICommand Delete { get; private set; }
 
-        public CategoryEditViewModel(IDomainFacade domainFacade, INavigator navigator, IKey key, string name, string description, Color color, string icon)
+        public CategoryEditViewModel(ICommandDispatcher commandDispatcher, INavigator navigator, IKey key, string name, string description, Color color, string icon)
         {
-            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.NotNull(navigator, "navigator");
             Ensure.Condition.NotEmptyKey(key);
             Key = key;
@@ -115,7 +115,7 @@ namespace Money.ViewModels
             Rename = new NavigateCommand(navigator, new CategoryRenameParameter(Key));
             ChangeIcon = new NavigateCommand(navigator, new CategoryChangeIconParameter(Key));
             ChangeColor = new NavigateCommand(navigator, new CategoryChangeColorParameter(Key));
-            Delete = new CategoryDeleteCommand(navigator, domainFacade, Key);
+            Delete = new CategoryDeleteCommand(navigator, commandDispatcher, Key);
         }
     }
 }

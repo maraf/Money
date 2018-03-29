@@ -44,10 +44,11 @@ namespace Money
         /// </summary>
         public bool IsDeleted { get; private set; }
 
-        public Category(string name, Color color)
+        public Category(string name, string description, Color color)
         {
             Ensure.NotNullOrEmpty(name, "name");
             Publish(new CategoryCreated(name, color));
+            Publish(new CategoryDescriptionChanged(description));
         }
 
         public Category(IKey key, IEnumerable<IEvent> events)

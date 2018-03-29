@@ -23,6 +23,11 @@ namespace Money.Commands
         /// </summary>
         public string Symbol { get; private set; }
 
+        /// <summary>
+        /// Creates a new currency with <paramref name="uniqueCode"/> as a unique identifier.
+        /// </summary>
+        /// <param name="uniqueCode">An unique code of the new currency.</param>
+        /// <param name="symbol">A symbol of the new currency</param>
         public CreateCurrency(string uniqueCode, string symbol)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");

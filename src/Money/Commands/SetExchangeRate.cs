@@ -34,6 +34,14 @@ namespace Money.Commands
         /// </summary>
         public double Rate { get; private set; }
 
+        /// <summary>
+        /// Sets an exchange rate from <paramref name="sourceUniqueCode"/> to <paramref name="targetUniqueCode"/>.
+        /// It is valid from <paramref name="validFrom"/> with exchange <paramref name="rate"/>.
+        /// </summary>
+        /// <param name="sourceUniqueCode">A source currency unique code.</param>
+        /// <param name="targetUniqueCode">A target currency unique code.</param>
+        /// <param name="validFrom">A date from which the exchange rate is valid.</param>
+        /// <param name="rate">An exchange rate.</param>
         public SetExchangeRate(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
         {
             Ensure.NotNullOrEmpty(sourceUniqueCode, "sourceUniqueCode");

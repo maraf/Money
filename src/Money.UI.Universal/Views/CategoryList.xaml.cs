@@ -1,7 +1,7 @@
 ﻿using Neptuo.Events;
 using Money.Events;
-using Money.Services.Models;
-using Money.Services.Models.Queries;
+using Money.Models;
+using Money.Models.Queries;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Neptuo.Commands;
 
 namespace Money.Views
 {
@@ -30,7 +31,7 @@ namespace Money.Views
     {
         private readonly List<UiThreadEventHandler> handlers = new List<UiThreadEventHandler>();
 
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
         private readonly IEventHandlerCollection eventHandlers = ServiceProvider.EventHandlers;
         private readonly INavigator navigator = ServiceProvider.Navigator;
@@ -54,7 +55,7 @@ namespace Money.Views
 
             CategoryListParameter parameter = (CategoryListParameter)e.Parameter;
 
-            ViewModel = new CategoryListViewModel(domainFacade, navigator);
+            ViewModel = new CategoryListViewModel(commandDispatcher, navigator);
 
             // Bind events.
             handlers.Add(eventHandlers.AddUiThread<CategoryCreated>(ViewModel, Dispatcher));
@@ -70,7 +71,7 @@ namespace Money.Views
             IEnumerable<CategoryModel> models = await queryDispatcher.QueryAsync(new ListAllCategory());
             foreach (CategoryModel model in models)
             {
-                CategoryEditViewModel viewModel = new CategoryEditViewModel(domainFacade, navigator, model.Key, model.Name, model.Description, model.Color, model.Icon);
+                CategoryEditViewModel viewModel = new CategoryEditViewModel(commandDispatcher, navigator, model.Key, model.Name, model.Description, model.Color, model.Icon);
                 if (parameter.Key.Equals(model.Key))
                     viewModel.IsSelected = true;
 

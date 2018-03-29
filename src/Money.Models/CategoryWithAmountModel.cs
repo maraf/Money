@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Neptuo.Models.Keys;
 
-namespace Money.Services.Models
+namespace Money.Models
 {
     public class CategoryWithAmountModel : CategoryModel
     {

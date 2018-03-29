@@ -1,6 +1,6 @@
 ﻿using Money.Events;
-using Money.Services.Models;
-using Money.Services.Models.Queries;
+using Money.Models;
+using Money.Models.Queries;
 using Money.Services.Settings;
 using Money.Services.Tiles;
 using Money.ViewModels;

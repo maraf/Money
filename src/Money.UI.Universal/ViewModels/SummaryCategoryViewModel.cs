@@ -1,4 +1,4 @@
-﻿using Money.Services.Models.Queries;
+﻿using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Observables;

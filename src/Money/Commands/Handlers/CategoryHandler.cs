@@ -1,4 +1,4 @@
-﻿using Neptuo;
+﻿using Neptuo.Activators;
 using Neptuo.Commands.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
@@ -10,64 +10,23 @@ using System.Threading.Tasks;
 
 namespace Money.Commands.Handlers
 {
-    public class CategoryHandler : ICommandHandler<RenameCategory>, ICommandHandler<ChangeCategoryDescription>, ICommandHandler<ChangeCategoryColor>, ICommandHandler<ChangeCategoryIcon>, ICommandHandler<DeleteCategory>
+    public class CategoryHandler : AggregateRootCommandHandler<Category>, 
+        ICommandHandler<CreateCategory>, 
+        ICommandHandler<RenameCategory>, 
+        ICommandHandler<ChangeCategoryDescription>, 
+        ICommandHandler<ChangeCategoryColor>, 
+        ICommandHandler<ChangeCategoryIcon>, 
+        ICommandHandler<DeleteCategory>
     {
-        private readonly IRepository<Category, IKey> repository;
+        public CategoryHandler(IFactory<IRepository<Category, IKey>> repositoryFactory) 
+            : base(repositoryFactory)
+        { }
 
-        public CategoryHandler(IRepository<Category, IKey> repository)
-        {
-            Ensure.NotNull(repository, "repository");
-            this.repository = repository;
-        }
-
-        public Task HandleAsync(RenameCategory command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = repository.Get(command.CategoryKey);
-                category.Rename(command.NewName);
-                repository.Save(category);
-            });
-        }
-
-        public Task HandleAsync(ChangeCategoryDescription command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = repository.Get(command.CategoryKey);
-                category.ChangeDescription(command.Description);
-                repository.Save(category);
-            });
-        }
-
-        public Task HandleAsync(ChangeCategoryColor command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = repository.Get(command.CategoryKey);
-                category.ChangeColor(command.Color);
-                repository.Save(category);
-            });
-        }
-
-        public Task HandleAsync(ChangeCategoryIcon command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = repository.Get(command.CategoryKey);
-                category.ChangeIcon(command.Icon);
-                repository.Save(category);
-            });
-        }
-
-        public Task HandleAsync(DeleteCategory command)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                Category category = repository.Get(command.CategoryKey);
-                category.Delete();
-                repository.Save(category);
-            });
-        }
+        public Task HandleAsync(CreateCategory command) => WithCommand(command.Key).Execute(() => new Category(command.Name, command.Description, command.Color));
+        public Task HandleAsync(RenameCategory command) => WithCommand(command.Key).Execute(command.CategoryKey, model => model.Rename(command.NewName));
+        public Task HandleAsync(ChangeCategoryDescription command) => WithCommand(command.Key).Execute(command.CategoryKey, model => model.ChangeDescription(command.Description));
+        public Task HandleAsync(ChangeCategoryColor command) => WithCommand(command.Key).Execute(command.CategoryKey, model => model.ChangeColor(command.Color));
+        public Task HandleAsync(ChangeCategoryIcon command) => WithCommand(command.Key).Execute(command.CategoryKey, model => model.ChangeIcon(command.Icon));
+        public Task HandleAsync(DeleteCategory command) => WithCommand(command.Key).Execute(command.CategoryKey, model => model.Delete());
     }
 }

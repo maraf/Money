@@ -18,6 +18,10 @@ namespace Money.Commands
         /// </summary>
         public string UniqueCode { get; private set; }
 
+        /// <summary>
+        /// Deletes (soft) currency with <paramref name="uniqueCode"/>.
+        /// </summary>
+        /// <param name="uniqueCode">An unique code for the currency to delete.</param>
         public DeleteCurrency(string uniqueCode)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");

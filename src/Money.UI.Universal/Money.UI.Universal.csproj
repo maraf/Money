@@ -101,13 +101,6 @@
     <Compile Include="Bootstrap\DevelopmentService.cs" />
     <Compile Include="Bootstrap\StorageFactory.cs" />
     <Compile Include="Bootstrap\UpgradeService.cs" />
-    <Compile Include="Data\CategoryEntity.cs" />
-    <Compile Include="Data\CurrencyEntity.cs" />
-    <Compile Include="Data\CurrencyExchangeRateEntity.cs" />
-    <Compile Include="Data\EventSourcingContext.cs" />
-    <Compile Include="Data\OutcomeCategoryEntity.cs" />
-    <Compile Include="Data\OutcomeEntity.cs" />
-    <Compile Include="Data\ReadModelContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Services\CurrencyCache.cs" />
@@ -117,36 +110,7 @@
     <Compile Include="Services\Globalization\ICurrency.cs" />
     <Compile Include="Services\Globalization\ICurrencyProvider.cs" />
     <Compile Include="Services\IDevelopmentService.cs" />
-    <Compile Include="Services\IPriceConverter.cs" />
     <Compile Include="Services\MessageBuilder.cs" />
-    <Compile Include="Services\Models\Builders\CategoryBuilder.cs" />
-    <Compile Include="Services\Models\Builders\CurrencyBuilder.cs" />
-    <Compile Include="Services\Models\Builders\OutcomeBuilder.cs" />
-    <Compile Include="Services\Models\CategoryModel.cs" />
-    <Compile Include="Services\Models\CategoryNameDescriptionModel.cs" />
-    <Compile Include="Services\Models\CategoryWithAmountModel.cs" />
-    <Compile Include="Services\Models\CurrencyModel.cs" />
-    <Compile Include="Services\Models\ExchangeRateModel.cs" />
-    <Compile Include="Services\Models\IPriceFixed.cs" />
-    <Compile Include="Services\Models\MonthModel.cs" />
-    <Compile Include="Services\Models\OutcomeModel.cs" />
-    <Compile Include="Services\Models\OutcomeOverviewModel.cs" />
-    <Compile Include="Services\Models\PriceFixed.cs" />
-    <Compile Include="Services\Models\Queries\GetCategoryColor.cs" />
-    <Compile Include="Services\Models\Queries\GetCategoryIcon.cs" />
-    <Compile Include="Services\Models\Queries\GetCategoryName.cs" />
-    <Compile Include="Services\Models\Queries\GetCategoryNameDescription.cs" />
-    <Compile Include="Services\Models\Queries\GetCurrencyDefault.cs" />
-    <Compile Include="Services\Models\Queries\GetCurrencySymbol.cs" />
-    <Compile Include="Services\Models\Queries\GetTotalMonthOutcome.cs" />
-    <Compile Include="Services\Models\Queries\ListAllCategory.cs" />
-    <Compile Include="Services\Models\Queries\ListAllCurrency.cs" />
-    <Compile Include="Services\Models\Queries\ListMonthCategoryWithOutcome.cs" />
-    <Compile Include="Services\Models\Queries\ListMonthOutcomeFromCategory.cs" />
-    <Compile Include="Services\Models\Queries\ListMonthWithOutcome.cs" />
-    <Compile Include="Services\Models\Queries\ListTargetCurrencyExchangeRates.cs" />
-    <Compile Include="Services\Models\Queries\ListYearOutcomeFromCategory.cs" />
-    <Compile Include="Services\Models\YearModel.cs" />
     <Compile Include="Services\PriceCalculator.cs" />
     <Compile Include="Services\PriceCalculator.ExchangeRateModelComparer.cs" />
     <Compile Include="Services\Settings\ApplicationDataCompositeStorage.cs" />
@@ -164,6 +128,7 @@
     <Compile Include="ViewModels\Commands\CurrencyDeleteExchangeRateCommand.cs" />
     <Compile Include="ViewModels\Commands\CurrencySetAsDefaultCommand.cs" />
     <Compile Include="ViewModels\Commands\DeleteOutcomeCommand.cs" />
+    <Compile Include="ViewModels\Commands\DomainCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateBackCommand.cs" />
     <Compile Include="ViewModels\Commands\NavigateCommand.cs" />
     <Compile Include="ViewModels\Commands\SaveOutcomeCommand.cs" />
@@ -271,7 +236,6 @@
       <DependentUpon>CurrencyList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DesignData\MockDevelopmentService.cs" />
-    <Compile Include="Views\DesignData\MockDomainFacade.cs" />
     <Compile Include="Views\DesignData\MockNavigator.cs" />
     <Compile Include="Views\DesignData\MockQueryDispatcher.cs" />
     <Compile Include="Views\DesignData\MockUpgradeService.cs" />
@@ -364,7 +328,15 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Money.UI.Models\Money.UI.Models.csproj">
+    <ProjectReference Include="..\Money.Data\Money.Data.csproj">
+      <Project>{1ad9f4c2-f7e0-4179-8938-d39a2d291bdf}</Project>
+      <Name>Money.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Money.Models.Builders\Money.Models.Builders.csproj">
+      <Project>{debb89d5-7ba3-465c-b6d0-927fd61c0dfb}</Project>
+      <Name>Money.Models.Builders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Money.Models\Money.Models.csproj">
       <Project>{ca416337-12d3-4406-85c8-2717fab7a7d2}</Project>
       <Name>Money.UI.Models</Name>
     </ProjectReference>

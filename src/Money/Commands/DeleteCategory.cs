@@ -19,6 +19,10 @@ namespace Money.Commands
         /// </summary>
         public IKey CategoryKey { get; private set; }
 
+        /// <summary>
+        /// Deletes (soft) category with <paramref name="categoryKey"/>.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
         public DeleteCategory(IKey categoryKey)
         {
             Ensure.Condition.NotEmptyKey(categoryKey);

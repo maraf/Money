@@ -19,7 +19,7 @@
         <TextBox x:Name="tbxSearch" KeyDown="tbxSearch_KeyDown" Visibility="Collapsed" />
 
         <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="1">
-            <GridView x:Name="grvColors" SelectedItem="{x:Bind Value, Mode=TwoWay}" SelectionMode="Single">
+            <GridView x:Name="grvColors" SelectedItem="{x:Bind Value, Mode=TwoWay, Converter={StaticResource ColorToColorConverter}}" SelectionMode="Single">
                 <GridView.ItemsSource>
                     <collections:ColorObservableCollection />
                 </GridView.ItemsSource>

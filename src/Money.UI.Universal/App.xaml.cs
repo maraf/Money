@@ -127,13 +127,13 @@ namespace Money.UI
             }
         }
 
-        public BootstrapTask BootstrapTask { get; private set; }
+        public Bootstrap.BootstrapTask BootstrapTask { get; private set; }
 
         private bool TryBootstrap()
         {
             if (BootstrapTask == null)
             {
-                BootstrapTask = new BootstrapTask();
+                BootstrapTask = new Bootstrap.BootstrapTask();
                 BootstrapTask.Initialize();
                 return true;
             }
@@ -211,6 +211,11 @@ namespace Money.UI
                     message = messageBuilder.OutcomeAlreadyDeleted();
                 else if (e is OutcomeAlreadyHasCategoryException)
                     message = messageBuilder.OutcomeAlreadyHasCategory();
+                else if (e is CantDeleteDefaultCurrencyException)
+                    message = messageBuilder.CantDeleteDefaultCurrency();
+                else if(e is CantDeleteLastCurrencyException)
+                    message = messageBuilder.CantDeleteLastCurrency();
+
 
                 if (message != null)
                 {

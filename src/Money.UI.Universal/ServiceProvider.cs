@@ -6,6 +6,7 @@ using Money.Services.Tiles;
 using Money.ViewModels;
 using Money.ViewModels.Navigation;
 using Neptuo.Activators;
+using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Migrations;
 using Neptuo.Queries;
@@ -22,7 +23,7 @@ namespace Money
     {
         public static MessageBuilder MessageBuilder { get; set; }
         public static IQueryDispatcher QueryDispatcher { get; set; }
-        public static IDomainFacade DomainFacade { get; set; }
+        public static ICommandDispatcher CommandDispatcher { get; set; }
         public static IEventHandlerCollection EventHandlers { get; set; }
         public static INavigator Navigator { get; set; }
         public static IUpgradeService UpgradeService { get; set; }

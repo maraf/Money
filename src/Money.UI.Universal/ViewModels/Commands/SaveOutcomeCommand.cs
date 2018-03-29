@@ -1,6 +1,7 @@
 ﻿using Money.Services;
 using Money.ViewModels.Navigation;
 using Neptuo;
+using Neptuo.Commands;
 using Neptuo.Models.Keys;
 using Neptuo.Observables.Commands;
 using System;
@@ -13,20 +14,20 @@ using System.Threading.Tasks;
 
 namespace Money.ViewModels.Commands
 {
-    public class SaveOutcomeCommand : NavigateBackCommand
+    public class SaveOutcomeCommand  : NavigateBackCommand
     {
         private readonly OutcomeViewModel viewModel;
-        private readonly IDomainFacade domainFacade;
+        private readonly ICommandDispatcher commandDispatcher;
 
-        public SaveOutcomeCommand(INavigator navigator, OutcomeViewModel viewModel, IDomainFacade domainFacade)
+        public SaveOutcomeCommand(INavigator navigator, OutcomeViewModel viewModel, ICommandDispatcher commandDispatcher)
             : base(navigator)
         {
             Ensure.NotNull(viewModel, "viewModel");
-            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(commandDispatcher, "commandDispatcher");
             this.viewModel = viewModel;
             this.viewModel.PropertyChanged += OnViewModelPropertyChanged;
             this.viewModel.SelectedCategories.CollectionChanged += OnViewModelSelectedCategoriesChanged;
-            this.domainFacade = domainFacade;
+            this.commandDispatcher = commandDispatcher;
         }
 
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -48,27 +49,7 @@ namespace Money.ViewModels.Commands
         public override async void Execute()
         {
             throw Ensure.Exception.NotImplemented();
-
-            //IKey outcomeKey = await domainFacade.CreateOutcomeAsync(
-            //    domainFacade.PriceFactory.Create((decimal)viewModel.Amount),
-            //    viewModel.Description,
-            //    viewModel.When,
-            //    viewModel.SelectedCategories.First()
-            //);
-
-            //if (viewModel.SelectedCategories.Count > 1)
-            //{
-            //    for (int i = 2; i < viewModel.SelectedCategories.Count; i++)
-            //    {
-            //        IKey categoryKey = viewModel.SelectedCategories[i];
-            //        await domainFacade.AddOutcomeCategoryAsync(outcomeKey, categoryKey);
-            //    }
-            //}
-
-            //viewModel.Amount = 0;
-            //viewModel.Description = null;
-            //viewModel.When = DateTime.Now;
-
+            
             base.Execute();
         }
     }

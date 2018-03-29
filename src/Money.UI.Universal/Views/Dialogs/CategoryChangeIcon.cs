@@ -1,6 +1,8 @@
-﻿using Money.Services.Models.Queries;
+﻿using Money.Commands;
+using Money.Models.Queries;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
+using Neptuo.Commands;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace Money.Views.Dialogs
     [NavigationParameter(typeof(CategoryChangeIconParameter))]
     public class CategoryChangeIcon : IWizard
     {
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private readonly IQueryDispatcher queryDispatcher = ServiceProvider.QueryDispatcher;
 
         public async Task ShowAsync(object rawParameter)
@@ -28,7 +30,7 @@ namespace Money.Views.Dialogs
 
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
-                await domainFacade.ChangeCategoryIconAsync(parameter.CategoryKey, dialog.Value);
+                await commandDispatcher.HandleAsync(new ChangeCategoryIcon(parameter.CategoryKey, dialog.Value));
         }
     }
 }

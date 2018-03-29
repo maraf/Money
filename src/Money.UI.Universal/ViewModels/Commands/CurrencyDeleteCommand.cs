@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 using Money.ViewModels.Navigation;
 using Neptuo;
 using Money.Services;
+using Neptuo.Commands;
+using Money.Commands;
 
 namespace Money.ViewModels.Commands
 {
     /// <summary>
     /// A command for deleting currency with confirmation.
     /// </summary>
-    public class CurrencyDeleteCommand : Command
+    public class CurrencyDeleteCommand : Neptuo.Observables.Commands.Command
     {
         private readonly INavigator navigator;
-        private readonly IDomainFacade domainFacade;
+        private readonly ICommandDispatcher commandDispatcher;
         private readonly MessageBuilder messageBuilder;
         private readonly string uniqueCode;
 
@@ -24,17 +26,17 @@ namespace Money.ViewModels.Commands
         /// Creates a new instance.
         /// </summary>
         /// <param name="navigator">A navigator for creating confirmation prompt.</param>
-        /// <param name="domainFacade">A domain facade.</param>
+        /// <param name="commandDispatcher">A domain facade.</param>
         /// <param name="messageBuilder">User message builder.</param>
         /// <param name="uniqueCode">An unique currency code to delete.</param>
-        public CurrencyDeleteCommand(INavigator navigator, IDomainFacade domainFacade, MessageBuilder messageBuilder, string uniqueCode)
+        public CurrencyDeleteCommand(INavigator navigator, ICommandDispatcher commandDispatcher, MessageBuilder messageBuilder, string uniqueCode)
         {
             Ensure.NotNull(navigator, "navigator");
-            Ensure.NotNull(domainFacade, "domainFacade");
+            Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.NotNull(messageBuilder, "messageBuilder");
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
             this.navigator = navigator;
-            this.domainFacade = domainFacade;
+            this.commandDispatcher = commandDispatcher;
             this.messageBuilder = messageBuilder;
             this.uniqueCode = uniqueCode;
         }
@@ -47,50 +49,30 @@ namespace Money.ViewModels.Commands
         public override void Execute()
         {
             navigator.Message($"Do you really want to delete currency '{uniqueCode}'? {Environment.NewLine} {Environment.NewLine}You won't be able to restore it later or create a currency with the same unique code.")
-                .Button("Yes", new YesCommand(navigator, domainFacade, messageBuilder, uniqueCode))
+                .Button("Yes", new YesCommand(navigator, commandDispatcher, messageBuilder, uniqueCode))
                 .ButtonClose("No")
                 .Show();
         }
 
-        private class YesCommand : Command
+        private class YesCommand : DomainCommand<DeleteCurrency>
         {
             private readonly INavigator navigator;
-            private readonly IDomainFacade domainFacade;
+            private readonly ICommandDispatcher commandDispatcher;
             private readonly MessageBuilder messageBuilder;
             private readonly string uniqueCode;
 
-            public YesCommand(INavigator navigator, IDomainFacade domainFacade, MessageBuilder messageBuilder, string uniqueCode)
+            public YesCommand(INavigator navigator, ICommandDispatcher commandDispatcher, MessageBuilder messageBuilder, string uniqueCode)
+                : base(commandDispatcher)
             {
                 this.navigator = navigator;
-                this.domainFacade = domainFacade;
+                this.commandDispatcher = commandDispatcher;
                 this.messageBuilder = messageBuilder;
                 this.uniqueCode = uniqueCode;
             }
 
-            public override bool CanExecute()
-            {
-                return true;
-            }
+            public override bool CanExecute() => true;
 
-            public async override void Execute()
-            {
-                try
-                {
-                    await domainFacade.DeleteCurrencyAsync(uniqueCode);
-                }
-                catch(CantDeleteDefaultCurrencyException)
-                {
-                    navigator
-                        .Message(messageBuilder.CantDeleteDefaultCurrency())
-                        .Show();
-                }
-                catch(CantDeleteLastCurrencyException)
-                {
-                    navigator
-                        .Message(messageBuilder.CantDeleteLastCurrency())
-                        .Show();
-                }
-            }
+            protected override DeleteCurrency CreateDomainCommand() => new DeleteCurrency(uniqueCode);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Money.Data;
 using Money.Events;
-using Money.Services.Models.Queries;
+using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Events.Handlers;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Services.Models.Builders
+namespace Money.Models.Builders
 {
     /// <summary>
     /// A builder for querying currencies.

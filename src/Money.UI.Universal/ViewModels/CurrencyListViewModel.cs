@@ -16,16 +16,11 @@ namespace Money.ViewModels
 {
     public class CurrencyListViewModel : ObservableObject
     {
-        private readonly IDomainFacade domainFacade;
-
         public ObservableCollection<CurrencyEditViewModel> Items { get; private set; }
         public ICommand New { get; private set; }
 
-        public CurrencyListViewModel(IDomainFacade domainFacade, INavigator navigator)
+        public CurrencyListViewModel(INavigator navigator)
         {
-            Ensure.NotNull(domainFacade, "domainFacade");
-            this.domainFacade = domainFacade;
-
             Items = new ObservableCollection<CurrencyEditViewModel>();
             New = new NavigateCommand(navigator, new CurrencyNewParameter());
         }

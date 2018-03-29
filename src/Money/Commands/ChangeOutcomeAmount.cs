@@ -24,6 +24,11 @@ namespace Money.Commands
         /// </summary>
         public Price Amount { get; private set; }
 
+        /// <summary>
+        /// Changes an <paramref name="amount"/> of the outcome with <paramref name="key"/>.
+        /// </summary>
+        /// <param name="outcomeKey">A key of the outcome to modify.</param>
+        /// <param name="amount">A new outcome value.</param>
         public ChangeOutcomeAmount(IKey outcomeKey, Price amount)
         {
             Ensure.Condition.NotEmptyKey(outcomeKey);

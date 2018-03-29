@@ -1,6 +1,8 @@
-﻿using Money.Services;
+﻿using Money.Commands;
+using Money.Services;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
+using Neptuo.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace Money.Views.Dialogs
     [NavigationParameter(typeof(CurrencyNewParameter))]
     public class CurrencyCreate : IWizard
     {
-        private readonly IDomainFacade domainFacade = ServiceProvider.DomainFacade;
+        private readonly ICommandDispatcher commandDispatcher = ServiceProvider.CommandDispatcher;
         private readonly MessageBuilder messageBuilder = ServiceProvider.MessageBuilder;
 
         public Task ShowAsync(object parameter) => ShowInternalAsync(new CurrencyName(), null);
@@ -28,7 +30,8 @@ namespace Money.Views.Dialogs
             {
                 try
                 {
-                    await domainFacade.CreateCurrencyAsync(dialog.UniqueCode, dialog.Symbol);
+                    // TODO: Not working after rewrite to commands.
+                    await commandDispatcher.HandleAsync(new CreateCurrency(dialog.UniqueCode, dialog.Symbol));
                 }
                 catch (CurrencyAlreadyExistsException)
                 {

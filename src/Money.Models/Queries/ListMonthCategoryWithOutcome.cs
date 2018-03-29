@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Services.Models.Queries
+namespace Money.Models.Queries
 {
     /// <summary>
     /// A query for getting list of categories with month outcome summary.

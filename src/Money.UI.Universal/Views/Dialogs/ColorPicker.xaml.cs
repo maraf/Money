@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Neptuo;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,16 @@ namespace Money.Views.Dialogs
     {
         public Color Value
         {
-            get { return (Color)GetValue(ValueProperty); }
+            get
+            {
+                object value = GetValue(ValueProperty);
+                if (value is Color color1)
+                    return color1;
+                else if (value is Windows.UI.Color color2)
+                    return ColorConverter.Map(color2);
+
+                throw Ensure.Exception.NotSupported();
+            }
             set
             {
                 if (Value != value)
@@ -31,7 +41,7 @@ namespace Money.Views.Dialogs
 
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
             "Value",
-            typeof(Color),
+            typeof(Windows.UI.Color),
             typeof(ColorPicker),
             new PropertyMetadata(Colors.Transparent)
         );

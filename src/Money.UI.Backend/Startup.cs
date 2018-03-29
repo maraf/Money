@@ -35,6 +35,9 @@ namespace Money
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc();
+
+            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
+            bootstrapTask.Initialize();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

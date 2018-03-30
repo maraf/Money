@@ -6,6 +6,7 @@ using Neptuo.Activators;
 using Neptuo.Bootstrap;
 using Neptuo.Commands;
 using Neptuo.Converters;
+using Neptuo.Events;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Neptuo.Formatters.Metadata;
@@ -26,9 +27,6 @@ namespace Money.Bootstrap
         //private PriceCalculator priceCalculator;
         private ICompositeTypeProvider typeProvider;
 
-        //private PersistentCommandDispatcher commandDispatcher;
-        //private PersistentEventDispatcher eventDispatcher;
-
         private IFormatter commandFormatter;
         private IFormatter eventFormatter;
         private IFormatter queryFormatter;
@@ -44,14 +42,16 @@ namespace Money.Bootstrap
             Domain();
 
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
+            Formatters formatters = new Formatters(commandFormatter, eventFormatter, queryFormatter);
+            BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters);
 
             services
                 //.AddSingleton(priceCalculator)
-                .AddSingleton(new Formatters(commandFormatter, eventFormatter, queryFormatter))
+                .AddSingleton(formatters)
                 .AddTransient<ICommandDispatcher, HttpCommandDispatcher>()
-                .AddTransient<IQueryDispatcher, HttpQueryDispatcher>();
-                //.AddSingleton<IEventHandlerCollection>(eventDispatcher.Handlers)
-                //.AddSingleton<ICommandDispatcher>(commandDispatcher);
+                .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()
+                .AddSingleton(eventDispatcher)
+                .AddSingleton(eventDispatcher.Handlers);
 
             //CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 

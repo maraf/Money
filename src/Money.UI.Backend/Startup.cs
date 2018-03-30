@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Money.Data;
+using Money.Hubs;
 using Money.Models;
 using System;
 using System.Collections.Generic;
@@ -62,6 +63,9 @@ namespace Money
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc();
+            services.AddSignalR();
+
+            services.AddSingleton<ApiEventHub>();
 
             Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
             bootstrapTask.Initialize();
@@ -84,6 +88,11 @@ namespace Money
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ApiEventHub>("/api/events");
+            });
 
             app.UseMvc(routes =>
             {

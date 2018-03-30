@@ -1,5 +1,6 @@
 ﻿@page "/categories"
 @inject Neptuo.Commands.ICommandDispatcher Commands
+@inject IEventHandlerCollection EventHandlers
 @inject Neptuo.Queries.IQueryDispatcher Queries
 
 <h1>Categories</h1>
@@ -29,11 +30,23 @@
 
 @functions {
 
+    private static CategoryEventHandler handler;
+
     public List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
 
     protected override async Task OnInitAsync()
     {
-        Models = await Queries.QueryAsync(new ListAllCategory());
+        if (handler == null)
+        {
+            handler = new CategoryEventHandler(OnEvent);
+            EventHandlers.AddAll(handler);
+        }
+        else
+        {
+            handler.Handler = OnEvent;
+        }
+
+        await LoadDataAsync();
 
         Console.WriteLine($"Categories: Count: {Models.Count}.");
     }
@@ -43,6 +56,14 @@
         byte[] data = new byte[] { model.Color.R, model.Color.G, model.Color.B, model.Color.A };
         return "#" + BitConverter.ToString(data).Replace("-", string.Empty);
     }
+
+    protected async void OnEvent()
+    {
+        await LoadDataAsync();
+        StateHasChanged();
+    }
+
+    protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCategory());
 
     protected async void OnNewClick()
     {

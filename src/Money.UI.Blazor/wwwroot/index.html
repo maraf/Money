@@ -28,12 +28,54 @@
     </app>
 
     <script src="css/bootstrap/bootstrap-native.min.js"></script>
+    <script src="lib/signalr/signalr.min.js"></script>
     <script type="blazor-boot"></script>
     <script>
+
+        var isStarted = false;
+        var isLoaded = false;
+
+        var eventRaiseMethod;
+        var exceptionRaiseMethod;
+
+        function InitializeEventHub() {
+            if (isStarted && isLoaded) {
+                eventRaiseMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.UI.Blazor", "Program", "RaiseEvent");
+                exceptionRaiseMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.UI.Blazor", "Program", "RaiseException");
+            }
+        }
 
         Blazor.registerFunction('NavigateTo', function (href) {
             window.location.href = href;
             return true;
+        });
+
+        Blazor.registerFunction('ApplicationStarted', function (href) {
+            isLoaded = true;
+            InitializeEventHub();
+        });
+
+        var connection = new signalR.HubConnection("/api/events");
+
+        connection.on("RaiseEvent", function (e) {
+            console.log("JS: Event: " + e);
+
+            Blazor.platform.callMethod(eventRaiseMethod, null, [
+                Blazor.platform.toDotNetString(e)
+            ]);
+        });
+
+        connection.on("RaiseException", function (e) {
+            console.log("JS: Exception: " + e);
+
+            Blazor.platform.callMethod(exceptionRaiseMethod, null, [
+                Blazor.platform.toDotNetString(e)
+            ]);
+        });
+
+        connection.start().then(function () {
+            isStarted = true;
+            InitializeEventHub();
         });
 
     </script>

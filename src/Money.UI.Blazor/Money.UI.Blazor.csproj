@@ -50,4 +50,8 @@
     <BlazorGenerate Remove="Pages\Currencies.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="formatters\" />
+  </ItemGroup>
+
 </Project>

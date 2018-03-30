@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Blazor.Browser.Rendering;
+﻿using Microsoft.AspNetCore.Blazor.Browser.Interop;
+using Microsoft.AspNetCore.Blazor.Browser.Rendering;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Money.Internals;
 using Money.Services;
 using System;
 
@@ -8,9 +10,11 @@ namespace Money.UI.Blazor
 {
     public class Program
     {
-        static void Main(string[] args)
+        private static IServiceProvider serviceProvider;
+
+        private static void Main(string[] args)
         {
-            var serviceProvider = new BrowserServiceProvider(services =>
+            serviceProvider = new BrowserServiceProvider(services =>
             {
                 services.AddTransient<ApiClient>();
 
@@ -19,6 +23,15 @@ namespace Money.UI.Blazor
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");
+
+            RegisteredFunction.Invoke<object>("ApplicationStarted", new object[0]);
+        }
+
+        internal static void RaiseEvent(string payload) => serviceProvider.GetService<BrowserEventDispatcher>().Raise(payload);
+
+        internal static void RaiseException(string payload)
+        {
+            Console.WriteLine($"Program: Exception: {payload}");
         }
     }
 }

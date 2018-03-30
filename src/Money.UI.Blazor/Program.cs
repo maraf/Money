@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Blazor.Browser.Rendering;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Money.Services;
 using System;
 
 namespace Money.UI.Blazor
@@ -10,7 +12,7 @@ namespace Money.UI.Blazor
         {
             var serviceProvider = new BrowserServiceProvider(configure =>
             {
-                // Add any custom services here
+                configure.AddTransient<ApiClient>();
             });
              
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

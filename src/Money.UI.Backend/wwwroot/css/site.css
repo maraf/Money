@@ -19,3 +19,11 @@
 .gray {
     opacity: 0.7;
 }
+
+.alert .navbar-nav {
+    margin-top: -15px;
+}
+
+.alert .navbar-nav .btn-link {
+    color: #333;
+}

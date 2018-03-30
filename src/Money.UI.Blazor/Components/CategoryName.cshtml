@@ -1,0 +1,96 @@
+﻿@using Neptuo.Models.Keys
+@inject ICommandDispatcher Commands
+
+<div class="modal fade" id="@Id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="category-name">Name:</label>
+                    <input type="text" class="form-control" id="category-name" placeholder="Category Name" @bind(Name) />
+                </div>
+                <div class="form-group">
+                    <label for="category-description">Description:</label>
+                    <input type="text" class="form-control" id="category-description" placeholder="Category Description" @bind(Description) />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnCreateClick)>@SaveButtonText</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+
+    private string originalName;
+    private string originalDescription;
+
+
+    public string Id { get; set; }
+
+
+    public IKey CategoryKey { get; set; }
+
+    public string Name { get; set; }
+    public string Description { get; set; }
+
+
+    protected string Title { get; set; }
+    protected string SaveButtonText { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (CategoryKey == null || CategoryKey.IsEmpty)
+        {
+            Title = "Create a new Category";
+            SaveButtonText = "Create";
+        }
+        else
+        {
+            Title = "Rename Category";
+            SaveButtonText = "Save";
+        }
+
+        originalName = Name;
+        originalDescription = Description;
+    }
+
+    protected async void OnCreateClick()
+    {
+        if (CategoryKey == null || CategoryKey.IsEmpty)
+        {
+            if (!String.IsNullOrEmpty(Name))
+            {
+                await Commands.HandleAsync(new CreateCategory(Name, Description, NextRandomColor()));
+                Name = Description = String.Empty;
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            if (originalName != Name)
+            {
+                await Commands.HandleAsync(new RenameCategory(CategoryKey, Name));
+                originalName = Name;
+            }
+
+            if (originalDescription != Description)
+            {
+                await Commands.HandleAsync(new ChangeCategoryDescription(CategoryKey, Description));
+                originalDescription = Description;
+            }
+        }
+    }
+
+
+    private Random rnd = new Random();
+
+    protected Color NextRandomColor() => Color.FromArgb((byte)rnd.Next(255), (byte)rnd.Next(255), (byte)rnd.Next(255), (byte)rnd.Next(255));
+
+}

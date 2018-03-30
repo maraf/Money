@@ -55,7 +55,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <BlazorGenerate Remove="Components\CategoryCreate.cshtml" />
+    <BlazorGenerate Remove="Components\CategoryName.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\LoginInfo.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -4,11 +4,10 @@
 }
 
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 15px;
 }
 
 .navbar-brand {
-    padding-left: 60px;
+    padding-left: 50px;
     background: url('../images/logo.png') no-repeat left center;
 }

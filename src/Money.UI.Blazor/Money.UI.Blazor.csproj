@@ -42,4 +42,12 @@
     <BlazorGenerate Remove="Pages\Categories.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\About.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\Currencies.cshtml" />
+  </ItemGroup>
+
 </Project>

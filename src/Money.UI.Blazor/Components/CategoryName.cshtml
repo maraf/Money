@@ -1,7 +1,7 @@
 ﻿@using Neptuo.Models.Keys
 @inject ICommandDispatcher Commands
 
-<div class="modal fade" id="@Id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="@Id" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -19,8 +19,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnCreateClick)>@SaveButtonText</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Models
 {
-    public class CategoryEventHandler : IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>
+    public class CategoryEventHandler : IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>, IEventHandler<CategoryRenamed>, IEventHandler<CategoryDescriptionChanged>
     {
         public Action Handler { get; set; }
 
@@ -19,16 +19,15 @@ namespace Money.Models
             Handler = handler;
         }
 
-        public Task HandleAsync(CategoryCreated payload)
+        private Task RaiseHandler()
         {
             Handler();
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(CategoryDeleted payload)
-        {
-            Handler();
-            return Task.CompletedTask;
-        }
+        public Task HandleAsync(CategoryCreated payload) => RaiseHandler();
+        public Task HandleAsync(CategoryDeleted payload) => RaiseHandler();
+        public Task HandleAsync(CategoryRenamed payload) => RaiseHandler();
+        public Task HandleAsync(CategoryDescriptionChanged payload) => RaiseHandler();
     }
 }

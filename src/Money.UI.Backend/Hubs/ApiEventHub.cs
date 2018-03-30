@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Money.Hubs
 {
-    public class ApiEventHub : Hub, IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>
+    public class ApiEventHub : Hub, IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>, IEventHandler<CategoryRenamed>, IEventHandler<CategoryDescriptionChanged>
     {
         private readonly Formatters formatters;
 
@@ -43,5 +43,7 @@ namespace Money.Hubs
 
         Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload) => RaiseEvent(payload);
         Task IEventHandler<CategoryDeleted>.HandleAsync(CategoryDeleted payload) => RaiseEvent(payload);
+        Task IEventHandler<CategoryRenamed>.HandleAsync(CategoryRenamed payload) => RaiseEvent(payload);
+        Task IEventHandler<CategoryDescriptionChanged>.HandleAsync(CategoryDescriptionChanged payload) => RaiseEvent(payload);
     }
 }

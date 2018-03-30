@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="0.1.0-rc1-10117" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" PrivateAssets="All" />
   </ItemGroup>
@@ -23,6 +24,7 @@
     <ProjectReference Include="..\Money.Data\Money.Data.csproj" />
     <ProjectReference Include="..\Money.Models.Builders\Money.Models.Builders.csproj" />
     <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
+    <ProjectReference Include="..\Money.UI.Blazor\Money.UI.Blazor.csproj" />
     <ProjectReference Include="..\Money\Money.csproj" />
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>

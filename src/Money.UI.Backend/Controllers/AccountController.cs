@@ -120,11 +120,10 @@ namespace Money.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return Redirect("/");
         }
 
         [HttpGet]
@@ -160,7 +159,7 @@ namespace Money.Controllers
             if (Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
             else
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return Redirect("/");
         }
 
         #endregion

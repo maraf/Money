@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Data", "src\Money.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Models.Builders", "src\Money.Models.Builders\Money.Models.Builders.csproj", "{DEBB89D5-7BA3-465C-B6D0-927FD61C0DFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.UI.Backend", "src\Money.UI.Backend\Money.UI.Backend.csproj", "{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.UI.Backend", "src\Money.UI.Backend\Money.UI.Backend.csproj", "{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.UI.Blazor", "src\Money.UI.Blazor\Money.UI.Blazor.csproj", "{F13BAE0F-446F-4E54-8DFD-63776E94D33D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -145,6 +147,22 @@ Global
 		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|x64.Build.0 = Release|Any CPU
 		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|x86.ActiveCfg = Release|Any CPU
 		{E85307D8-DD3E-42C5-84F4-31A0A12AF37A}.Release|x86.Build.0 = Release|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Debug|ARM.Build.0 = Debug|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Debug|x64.Build.0 = Debug|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Debug|x86.Build.0 = Debug|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Release|ARM.Build.0 = Release|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Release|x64.ActiveCfg = Release|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Release|x64.Build.0 = Release|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Release|x86.ActiveCfg = Release|Any CPU
+		{F13BAE0F-446F-4E54-8DFD-63776E94D33D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

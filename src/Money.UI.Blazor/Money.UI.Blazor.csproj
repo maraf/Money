@@ -54,4 +54,8 @@
     <Folder Include="formatters\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\CategoryCreate.cshtml" />
+  </ItemGroup>
+
 </Project>

@@ -1,16 +1,26 @@
 ﻿@page "/categories"
-@inject Neptuo.Commands.ICommandDispatcher Commands
+@inject ICommandDispatcher Commands
 @inject IEventHandlerCollection EventHandlers
-@inject Neptuo.Queries.IQueryDispatcher Queries
+@inject IQueryDispatcher Queries
 
-<h1>Categories</h1>
+<h1>
+    Categories
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#category-create" style="float: right">
+        <span class="glyphicon glyphicon-plus"></span>
+        New Category
+    </button>
+</h1>
+
+
+<CategoryCreate Id="category-create" />
 
 @foreach (var item in Models)
 {
     <div class="alert" style="background-color: @GetColorHashCode(item)">
         <button type="button" class="close" @onclick(() => OnDeleteClick(item))><span aria-hidden="true">&times;</span></button>
 
-        @if(item.Icon != null)
+        @if (item.Icon != null)
         {
             <i>@item.Icon</i>
         }
@@ -23,56 +33,50 @@
     </div>
 }
 
-<button type="button" class="btn btn-primary" @onclick(OnNewClick)>
-    <span class="glyphicon glyphicon-plus"></span>
-    New Category
-</button>
-
 @functions {
 
-    private static CategoryEventHandler handler;
+private static CategoryEventHandler handler;
 
-    public List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
+public List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
 
-    protected override async Task OnInitAsync()
+protected override async Task OnInitAsync()
+{
+    if (handler == null)
     {
-        if (handler == null)
-        {
-            handler = new CategoryEventHandler(OnEvent);
-            EventHandlers.AddAll(handler);
-        }
-        else
-        {
-            handler.Handler = OnEvent;
-        }
-
-        await LoadDataAsync();
-
-        Console.WriteLine($"Categories: Count: {Models.Count}.");
+        handler = new CategoryEventHandler(OnEvent);
+        EventHandlers.AddAll(handler);
+    }
+    else
+    {
+        handler.Handler = OnEvent;
     }
 
-    protected string GetColorHashCode(CategoryModel model)
-    {
-        byte[] data = new byte[] { model.Color.R, model.Color.G, model.Color.B, model.Color.A };
-        return "#" + BitConverter.ToString(data).Replace("-", string.Empty);
-    }
+    await LoadDataAsync();
 
-    protected async void OnEvent()
-    {
-        await LoadDataAsync();
-        StateHasChanged();
-    }
+    Console.WriteLine($"Categories: Count: {Models.Count}.");
+}
 
-    protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCategory());
+protected string GetColorHashCode(CategoryModel model)
+{
+    byte[] data = new byte[] { model.Color.R, model.Color.G, model.Color.B, model.Color.A };
+    return "#" + BitConverter.ToString(data).Replace("-", string.Empty);
+}
 
-    protected async void OnNewClick()
-    {
-        await Commands.HandleAsync(new CreateCategory("Myself", "My stuff", Color.FromArgb(255, 0, 191, 255)));
-    }
+protected async void OnEvent()
+{
+    await LoadDataAsync();
+    StateHasChanged();
+}
 
-    protected async void OnDeleteClick(CategoryModel model)
-    {
-        await Commands.HandleAsync(new DeleteCategory(model.Key));
-    }
+protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCategory());
+
+protected async void OnNewClick()
+{
+}
+
+protected async void OnDeleteClick(CategoryModel model)
+{
+    await Commands.HandleAsync(new DeleteCategory(model.Key));
+}
 
 }

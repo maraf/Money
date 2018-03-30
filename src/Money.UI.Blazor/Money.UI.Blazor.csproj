@@ -23,6 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
+    <ProjectReference Include="..\Money\Money.csproj" />
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>
 
@@ -34,6 +36,10 @@
     <Content Update="Components\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\Categories.cshtml" />
   </ItemGroup>
 
 </Project>

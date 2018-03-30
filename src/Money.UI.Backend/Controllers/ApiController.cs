@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace Money.Controllers
         public string UserName() => HttpContext.User.Identity.Name;
 
         [HttpPost]
-        public ActionResult Query(Request request)
+        public ActionResult Query([FromBody] Request request)
         {
             string payload = request.Payload;
             Type type = Type.GetType(request.Type);
@@ -56,10 +57,11 @@ namespace Money.Controllers
                     payload = formatters.Query.Serialize(output);
                     type = output.GetType();
 
+                    HttpContext.Response.ContentType = "text/json";
                     return Json(new Response()
                     {
-                        Payload = payload,
-                        Type = type.AssemblyQualifiedName
+                        payload = payload,
+                        type = type.AssemblyQualifiedName
                     });
                 }
             }
@@ -67,7 +69,7 @@ namespace Money.Controllers
             return NotFound();
         }
 
-        public async Task<ActionResult> Command(Request request)
+        public async Task<ActionResult> Command([FromBody] Request request)
         {
             string payload = request.Payload;
             Type type = Type.GetType(request.Type);

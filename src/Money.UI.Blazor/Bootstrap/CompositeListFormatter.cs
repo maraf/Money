@@ -90,21 +90,32 @@ namespace Money.Bootstrap
             {
                 if (storage.TryGet("Count", out int count))
                 {
+                    Console.WriteLine($"CLF: Count {count}.");
+
                     Type listType = typeof(List<>).MakeGenericType(type.Type);
                     IList list = (IList)Activator.CreateInstance(listType);
+
+                    Console.WriteLine($"CLF: List: {list != null}");
 
                     for (int i = 0; i < count; i++)
                     {
                         if (storage.TryGet(i.ToString(), out ICompositeStorage innerStorage) && base.TryLoad(input, context, type, innerStorage))
+                        {
+                            Console.WriteLine($"CLF: Add item {context.Output != null}.");
                             list.Add(context.Output);
+                        }
                         else
+                        {
+                            Console.WriteLine($"CLF: Item failed at index {i}.");
                             return false;
+                        }
                     }
 
                     context.Output = list;
                     return true;
                 }
 
+                Console.WriteLine($"CLF: Count not found.");
                 return base.TryLoad(input, context, type, storage);
             }
         }

@@ -64,10 +64,10 @@ namespace Neptuo.Formatters
 
             int version = (int)type.VersionProperty.Getter(input);
             CompositeVersion typeVersion = GetCompositeVersion(type, version, context.InputType);
-            
+
             ICompositeStorage storage = storageFactory.Create();
             bool result = TryStore(input, context, type, typeVersion, storage);
-            
+
             storage.Store(context.Output);
             return result;
         }
@@ -160,7 +160,7 @@ namespace Neptuo.Formatters
 
             CompositeVersion typeVersion = GetCompositeVersion(type, version, context.OutputType);
             ICompositeStorage valueStorage;
-            if(!storage.TryGet(Name.Payload, out valueStorage))
+            if (!storage.TryGet(Name.Payload, out valueStorage))
                 throw new MissingPayloadValueException();
 
             List<object> values = new List<object>();
@@ -209,11 +209,20 @@ namespace Neptuo.Formatters
                 tryGetCache[type] = methodInfo;
             }
 
-            object[] parameters = new object[2] { key, null };
-            bool result = (bool)methodInfo.Invoke(storage, parameters);
+            try
+            {
+                object[] parameters = new object[2] { key, null };
+                bool result = (bool)methodInfo.Invoke(storage, parameters);
 
-            value = parameters[1];
-            return result;
+                value = parameters[1];
+                return result;
+            }
+            catch (TargetInvocationException e)
+            {
+                Console.WriteLine($"CTF: Key {key}, Type: {type.FullName}.");
+                Console.WriteLine(e.InnerException.ToString());
+                throw;
+            }
         }
     }
 }

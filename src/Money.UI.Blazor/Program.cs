@@ -10,11 +10,14 @@ namespace Money.UI.Blazor
     {
         static void Main(string[] args)
         {
-            var serviceProvider = new BrowserServiceProvider(configure =>
+            var serviceProvider = new BrowserServiceProvider(services =>
             {
-                configure.AddTransient<ApiClient>();
+                services.AddTransient<ApiClient>();
+
+                Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
+                bootstrapTask.Initialize();
             });
-             
+
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");
         }
     }

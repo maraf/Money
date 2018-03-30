@@ -1,0 +1,24 @@
+﻿@page "/categories"
+@inject Neptuo.Queries.IQueryDispatcher Queries
+
+@foreach (var item in Models)
+{
+    <span>@item.Name</span>
+}
+
+@functions {
+
+public List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
+
+protected override async Task OnInitAsync()
+{
+    Models = await Queries.QueryAsync(new ListAllCategory());
+
+    Console.WriteLine($"Categories: Count: {Models.Count}.");
+}
+
+async void Download()
+{
+    Models = await Queries.QueryAsync(new ListAllCategory());
+}
+}

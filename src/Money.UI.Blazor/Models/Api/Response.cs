@@ -8,7 +8,7 @@ namespace Money.Models.Api
 {
     public class Response
     {
-        public string Payload { get; set; }
-        public string Type { get; set; }
+        public string payload { get; set; }
+        public string type { get; set; }
     }
 }

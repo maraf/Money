@@ -34,6 +34,8 @@ namespace Money.Controllers
             this.queryDispatcher = queryDispatcher;
         }
 
+        public string UserName() => HttpContext.User.Identity.Name;
+
         [HttpPost]
         public ActionResult Query(Request request)
         {

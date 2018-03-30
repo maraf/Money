@@ -1,5 +1,5 @@
-﻿@using Microsoft.AspNetCore.Blazor.Browser.Interop
-    
+﻿@inject ApiClient Api
+
 <form action="/account/logout" method="post" id="logoutForm" class="navbar-right">
     <ul class="nav navbar-nav navbar-right">
         <li>
@@ -13,11 +13,16 @@
 
 @functions {
 
-public string UserName { get; private set; } = "demo";
+    public string UserName { get; private set; } = "---";
 
-void GoToManage()
-{
-    RegisteredFunction.Invoke<bool>("NavigateTo", "/manage");
-}
+    protected override async Task OnInitAsync()
+    {
+        UserName = await Api.GetUserNameAsync();
+    }
+
+    void GoToManage()
+    {
+        RegisteredFunction.Invoke<bool>("NavigateTo", "/manage");
+    }
 
 }

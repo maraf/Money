@@ -7,6 +7,8 @@
 @foreach (var item in Models)
 {
     <div class="alert" style="background-color: @GetColorHashCode(item)">
+        <button type="button" class="close" @onclick(() => OnDeleteClick(item))><span aria-hidden="true">&times;</span></button>
+
         @if(item.Icon != null)
         {
             <i>@item.Icon</i>
@@ -20,7 +22,7 @@
     </div>
 }
 
-<button type="button" class="btn btn-primary" @onclick(OnNewCategoryClick)>
+<button type="button" class="btn btn-primary" @onclick(OnNewClick)>
     <span class="glyphicon glyphicon-plus"></span>
     New Category
 </button>
@@ -42,9 +44,14 @@
         return "#" + BitConverter.ToString(data).Replace("-", string.Empty);
     }
 
-    protected async void OnNewCategoryClick()
+    protected async void OnNewClick()
     {
         await Commands.HandleAsync(new CreateCategory("Myself", "My stuff", Color.FromArgb(255, 0, 191, 255)));
+    }
+
+    protected async void OnDeleteClick(CategoryModel model)
+    {
+        await Commands.HandleAsync(new DeleteCategory(model.Key));
     }
 
 }

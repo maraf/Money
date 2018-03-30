@@ -11,3 +11,7 @@
     padding-left: 50px;
     background: url('../images/logo.png') no-repeat left center;
 }
+
+.center {
+    text-align: center;
+}

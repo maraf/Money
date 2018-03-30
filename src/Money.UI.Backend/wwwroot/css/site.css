@@ -15,3 +15,7 @@
 .center {
     text-align: center;
 }
+
+.gray {
+    opacity: 0.7;
+}

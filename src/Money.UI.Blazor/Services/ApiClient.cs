@@ -40,5 +40,7 @@ namespace Money.Services
             //var response = JsonUtil.Deserialize<Response>(responseJson);
             //return response;
         }
+
+        public Task CommandAsync(Request request) => http.PostJsonAsync("/api/command", request);
     }
 }

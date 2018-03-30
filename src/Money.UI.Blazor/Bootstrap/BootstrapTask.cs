@@ -4,6 +4,7 @@ using Money.Services;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Bootstrap;
+using Neptuo.Commands;
 using Neptuo.Converters;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
@@ -25,7 +26,6 @@ namespace Money.Bootstrap
         //private PriceCalculator priceCalculator;
         private ICompositeTypeProvider typeProvider;
 
-        private HttpQueryDispatcher queryDispatcher;
         //private PersistentCommandDispatcher commandDispatcher;
         //private PersistentEventDispatcher eventDispatcher;
 
@@ -48,6 +48,7 @@ namespace Money.Bootstrap
             services
                 //.AddSingleton(priceCalculator)
                 .AddSingleton(new Formatters(commandFormatter, eventFormatter, queryFormatter))
+                .AddTransient<ICommandDispatcher, HttpCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>();
                 //.AddSingleton<IEventHandlerCollection>(eventDispatcher.Handlers)
                 //.AddSingleton<ICommandDispatcher>(commandDispatcher);

@@ -49,6 +49,9 @@ namespace Money.Internals
             string value = JsonUtil.Serialize(storage);
             using (MemoryStream valueStream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
                 valueStream.CopyTo(output);
+
+            Console.WriteLine($"JSON-sto: Keys: {String.Join(", ", storage.Keys)}");
+            Console.WriteLine($"JSON-sto: Payload-Keys: {String.Join(", ", ((IDictionary<string, object>)storage["Payload"]).Keys)}");
         }
 
         public Task StoreAsync(Stream output)
@@ -59,7 +62,33 @@ namespace Money.Internals
 
         public ICompositeStorage Add(string key, object value)
         {
-            storage[key] = value;
+            Console.WriteLine($"JSON-add: Key: {key}, ValueType: {value?.GetType()?.FullName}, Value: {value}.");
+
+            if (value == null)
+            {
+                storage[key] = null;
+            }
+            else if (value is GuidKey guidKey)
+            {
+                ICompositeStorage inner = Add(key);
+                inner.Add("Type", guidKey.Type);
+                inner.Add("Guid", guidKey.Guid.ToString());
+            }
+            else if (value is StringKey stringKey)
+            {
+                ICompositeStorage inner = Add(key);
+                inner.Add("Type", stringKey.Type);
+                inner.Add("Identifier", stringKey.Identifier.ToString());
+            }
+            else if (value is Color color)
+            {
+                storage[key] = color.A + ";" + color.R + ";" + color.G + ";" + color.B;
+            }
+            else
+            {
+                storage[key] = value;
+            }
+
             return this;
         }
 
@@ -70,8 +99,10 @@ namespace Money.Internals
 
         public ICompositeStorage Add(string key)
         {
-            JsonCompositeStorage inner = new JsonCompositeStorage();
-            storage[key] = inner.storage;
+            Console.WriteLine($"JSON-add: Key: {key}, SubStorage.");
+            JsonObject innerStorage = new JsonObject();
+            storage[key] = innerStorage;
+            JsonCompositeStorage inner = new JsonCompositeStorage(innerStorage);
             return inner;
         }
 
@@ -79,7 +110,7 @@ namespace Money.Internals
         {
             if (this.storage.TryGetValue(key, out object target))
             {
-                Console.WriteLine($"JSON: Key: {key}, RequiredType: {typeof(ICompositeStorage).FullName}, ActualType: {target.GetType().FullName}.");
+                Console.WriteLine($"JSON-get: Key: {key}, RequiredType: {typeof(ICompositeStorage).FullName}, ActualType: {target.GetType().FullName}.");
                 if (target is JsonObject inner)
                 {
                     storage = new JsonCompositeStorage(inner);
@@ -101,7 +132,7 @@ namespace Money.Internals
                     return true;
                 }
 
-                Console.WriteLine($"JSON: Key: {key}, RequiredType: {typeof(T).FullName}, ActualType: {target.GetType().FullName}.");
+                Console.WriteLine($"JSON-get: Key: {key}, RequiredType: {typeof(T).FullName}, ActualType: {target.GetType().FullName}.");
                 if (typeof(T) == typeof(int) && target.GetType() == typeof(long))
                 {
                     value = (T)(object)(int)(long)target;
@@ -138,7 +169,7 @@ namespace Money.Internals
                 }
             }
 
-            Console.WriteLine($"JSON: Key: {key} NOT FOUND.");
+            Console.WriteLine($"JSON-get: Key: {key} NOT FOUND.");
             value = default(T);
             return false;
         }

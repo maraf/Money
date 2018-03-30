@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Neptuo.Formatters.Internals
 {
-    internal static class _TypeExtensions
+    public static class _TypeExtensions
     {
         /// <summary>
         /// Returns <c>true</c> if <paramref name="type"/> is <see cref="Nullable{T}"/>.

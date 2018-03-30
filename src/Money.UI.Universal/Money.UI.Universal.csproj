@@ -344,6 +344,14 @@
       <Project>{cced2dc9-b1bc-4a66-a7c3-488cf1de3616}</Project>
       <Name>Money</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Neptuo.EntityFrameworkCore\Neptuo.EntityFrameworkCore.csproj">
+      <Project>{8d844524-f0fc-4df7-9df6-704327812309}</Project>
+      <Name>Neptuo.EntityFrameworkCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neptuo.Json\Neptuo.Json.csproj">
+      <Project>{2ceb371b-b0ef-4335-99e3-83f30b1ef21e}</Project>
+      <Name>Neptuo.Json</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Neptuo\Neptuo.csproj">
       <Project>{c637b589-5769-4661-9b6d-a34571a5ae08}</Project>
       <Name>Neptuo</Name>

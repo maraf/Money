@@ -2,11 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Neptuo</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
-    <ProjectReference Include="..\Neptuo.EntityFrameworkCore\Neptuo.EntityFrameworkCore.csproj" />
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>10.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Neptuo
 {
-    internal static class _EnsureExceptionExtensions
+    public static class _EnsureExceptionExtensions
     {
         public static ArgumentOutOfRangeException NotStringKey(this EnsureExceptionHelper exception, Type keyType, string argumentName)
         {

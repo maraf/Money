@@ -27,3 +27,7 @@
 .alert .navbar-nav .btn-link {
     color: #333;
 }
+
+.btn-icon {
+    font-size: 2em;
+}

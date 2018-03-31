@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnCreateClick)>@SaveButtonText</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnSaveClick)>@SaveButtonText</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -61,7 +61,7 @@
         originalDescription = Description;
     }
 
-    protected async void OnCreateClick()
+    protected async void OnSaveClick()
     {
         if (CategoryKey == null || CategoryKey.IsEmpty)
         {

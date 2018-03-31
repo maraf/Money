@@ -62,4 +62,8 @@
     <BlazorGenerate Remove="Components\LoginInfo.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\CategoryIcon.cshtml" />
+  </ItemGroup>
+
 </Project>

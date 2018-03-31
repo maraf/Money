@@ -32,7 +32,6 @@ namespace Money.Commands
         public ChangeCategoryIcon(IKey categoryKey, string icon)
         {
             Ensure.Condition.NotEmptyKey(categoryKey);
-            Ensure.NotNull(icon, "icon");
             CategoryKey = categoryKey;
             Icon = icon;
         }

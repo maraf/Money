@@ -21,12 +21,15 @@
 @foreach (var item in Models)
 {
     i++;
-    int j = i;
+    string nameId1 = i + "-name";
+    string nameId2 = nameId1;
+    string iconId1 = i + "-icon";
+    string iconId2 = iconId1;
 
     <div class="alert" style="background-color: @GetColorHashCode(item)">
         @if (item.Icon != null)
         {
-            <i>@item.Icon</i>
+            <span>@item.Icon</span>
         }
         <strong>
             @item.Name
@@ -37,12 +40,12 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" data-toggle="modal" data_target="#@i">
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" data-toggle="modal" data_target="#@nameId1">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Icon">
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Icon" data-toggle="modal" data_target="#@iconId1">
                     <span class="glyphicon glyphicon-picture"></span>
                 </button>
             </li>
@@ -59,7 +62,8 @@
         </ul>
     </div>
 
-    <CategoryName Id="@j.ToString()" CategoryKey="@item.Key" Name="@item.Name" Description="@item.Description" />
+    <CategoryName Id="@nameId2" CategoryKey="@item.Key" Name="@item.Name" Description="@item.Description" />
+    <CategoryIcon id="@iconId2" CategoryKey="@item.Key" Icon="@item.Icon" />
 }
 
 @functions {

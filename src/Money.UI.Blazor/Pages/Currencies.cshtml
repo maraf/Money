@@ -1,3 +1,12 @@
 ﻿@page "/currencies"
 
-<h1>Not Yet Implemented</h1>
+<h1>
+    Currencies
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#currency-create" style="float: right">
+        <span class="glyphicon glyphicon-plus"></span>
+        New Currency
+    </button>
+</h1>
+
+<CurrencyEdit id="currency-create" />

@@ -70,4 +70,8 @@
     <BlazorGenerate Remove="Components\CategoryColor.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\CurrencyEdit.cshtml" />
+  </ItemGroup>
+
 </Project>

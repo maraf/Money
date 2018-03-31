@@ -6,14 +6,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Pick an Icon for the Category</h4>
+                <h4 class="modal-title" id="myModalLabel">Pick a Color for the Category</h4>
             </div>
             <div class="modal-body">
-                @foreach (string icon in Icons)
+                @foreach (Color color in Colors)
                 {
-                    <button class="btn btn-link btn-icon" @onclick(() => Icon = icon)>
-                        @icon
-                    </button>
+                    <button class="btn btn-link btn-color" style="background-color: @color.ToHashCode()" @onclick(() => Color = color)></button>
                 }
             </div>
             <div class="modal-footer">
@@ -26,9 +24,9 @@
 
 @functions {
 
-    protected IconCollection Icons { get; set; } = new IconCollection();
+    protected ColorCollection Colors { get; set; } = new ColorCollection();
 
-    private string originalIcon;
+    private Color originalColor;
 
 
     public string Id { get; set; }
@@ -36,19 +34,19 @@
 
     public IKey CategoryKey { get; set; }
 
-    public string Icon { get; set; }
+    public Color Color { get; set; }
 
     protected override void OnParametersSet()
     {
-        originalIcon = Icon;
+        originalColor = Color;
     }
 
     protected async void OnSaveClick()
     {
-        if (originalIcon != Icon)
+        if (originalColor != Color)
         {
-            await Commands.HandleAsync(new ChangeCategoryIcon(CategoryKey, Icon));
-            originalIcon = Icon;
+            await Commands.HandleAsync(new ChangeCategoryColor(CategoryKey, Color));
+            originalColor = Color;
         }
     }
 }

@@ -25,8 +25,10 @@
     string nameId2 = nameId1;
     string iconId1 = i + "-icon";
     string iconId2 = iconId1;
+    string colorId1 = i + "-color";
+    string colorId2 = colorId1;
 
-    <div class="alert" style="background-color: @GetColorHashCode(item)">
+    <div class="alert" style="background-color: @item.Color.ToHashCode()">
         @if (item.Icon != null)
         {
             <span>@item.Icon</span>
@@ -50,7 +52,7 @@
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Color">
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Color" data-toggle="modal" data_target="#@colorId1">
                     <span class="glyphicon glyphicon-tint"></span>
                 </button>
             </li>
@@ -64,6 +66,7 @@
 
     <CategoryName Id="@nameId2" CategoryKey="@item.Key" Name="@item.Name" Description="@item.Description" />
     <CategoryIcon id="@iconId2" CategoryKey="@item.Key" Icon="@item.Icon" />
+    <CategoryColor id="@colorId2" CategoryKey="@item.Key" Color="@item.Color" />
 }
 
 @functions {
@@ -87,12 +90,6 @@ protected override async Task OnInitAsync()
     await LoadDataAsync();
 
     Console.WriteLine($"Categories: Count: {Models.Count}.");
-}
-
-protected string GetColorHashCode(CategoryModel model)
-{
-    byte[] data = new byte[] { model.Color.R, model.Color.G, model.Color.B, model.Color.A };
-    return "#" + BitConverter.ToString(data).Replace("-", string.Empty);
 }
 
 protected async void OnEvent()

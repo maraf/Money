@@ -66,4 +66,8 @@
     <BlazorGenerate Remove="Components\CategoryIcon.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\CategoryColor.cshtml" />
+  </ItemGroup>
+
 </Project>

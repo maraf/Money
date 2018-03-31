@@ -56,7 +56,7 @@
             InitializeEventHub();
         });
 
-        var connection = new signalR.HubConnection("/api/events");
+        var connection = new signalR.HubConnection("/api");
 
         connection.on("RaiseEvent", function (e) {
             console.log("JS: Event: " + e);

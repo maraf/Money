@@ -5,6 +5,7 @@ using Money.Services;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Newtonsoft.Json;
 using System;
@@ -15,13 +16,14 @@ using System.Threading.Tasks;
 
 namespace Money.Hubs
 {
-    public class ApiEventHub : Hub, 
+    public class ApiHub : Hub, 
+        IExceptionHandler,
         IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>, IEventHandler<CategoryRenamed>, IEventHandler<CategoryDescriptionChanged>, IEventHandler<CategoryIconChanged>, IEventHandler<CategoryColorChanged>,
         IEventHandler<CurrencyCreated>, IEventHandler<CurrencyDeleted>, IEventHandler<CurrencyDefaultChanged>, IEventHandler<CurrencySymbolChanged>
     {
         private readonly FormatterContainer formatters;
 
-        public ApiEventHub(IEventHandlerCollection eventHandlers, FormatterContainer formatters)
+        public ApiHub(IEventHandlerCollection eventHandlers, FormatterContainer formatters)
         {
             Ensure.NotNull(eventHandlers, "eventHandlers");
             Ensure.NotNull(formatters, "formatters");
@@ -34,6 +36,7 @@ namespace Money.Hubs
             string type = typeof(T).AssemblyQualifiedName;
             string rawPayload = formatters.Event.Serialize(payload);
 
+            // TODO: Per-user.
             Clients.All.SendAsync("RaiseEvent", JsonConvert.SerializeObject(new Response()
             {
                 type = type,
@@ -54,5 +57,18 @@ namespace Money.Hubs
         Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload) => RaiseEvent(payload);
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload) => RaiseEvent(payload);
         Task IEventHandler<CurrencySymbolChanged>.HandleAsync(CurrencySymbolChanged payload) => RaiseEvent(payload);
+
+        public void Handle(Exception exception)
+        {
+            string type = exception.GetType().AssemblyQualifiedName;
+            string rawPayload = formatters.Exception.Serialize(exception);
+
+            // TODO: Per-user.
+            Clients.All.SendAsync("RaiseException", JsonConvert.SerializeObject(new Response()
+            {
+                type = type,
+                payload = rawPayload
+            }));
+        }
     }
 }

@@ -30,6 +30,7 @@ namespace Money.Bootstrap
         private IFormatter commandFormatter;
         private IFormatter eventFormatter;
         private IFormatter queryFormatter;
+        private IFormatter exceptionFormatter;
 
         public BootstrapTask(IServiceCollection services)
         {
@@ -42,7 +43,7 @@ namespace Money.Bootstrap
             Domain();
 
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
-            FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter);
+            FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter, exceptionFormatter);
             BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters);
 
             services
@@ -86,6 +87,7 @@ namespace Money.Bootstrap
             commandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
             eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
             queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory);
+            exceptionFormatter = new CompositeTypeFormatter(typeProvider, compositeStorageFactory);
         }
 
         public void Handle(Exception exception)

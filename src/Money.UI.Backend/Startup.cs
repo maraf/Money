@@ -65,7 +65,7 @@ namespace Money
             services.AddMvc();
             services.AddSignalR();
 
-            services.AddSingleton<ApiEventHub>();
+            services.AddSingleton<ApiHub>();
 
             Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
             bootstrapTask.Initialize();
@@ -91,7 +91,7 @@ namespace Money
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ApiEventHub>("/api/events");
+                routes.MapHub<ApiHub>("/api");
             });
 
             app.UseMvc(routes =>

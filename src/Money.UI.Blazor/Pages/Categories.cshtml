@@ -71,42 +71,38 @@
 
 @functions {
 
-private static CategoryEventHandler handler;
+    private static CategoryEventHandler handler;
 
-public List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
+    public List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
 
-protected override async Task OnInitAsync()
-{
-    if (handler == null)
+    protected override async Task OnInitAsync()
     {
-        handler = new CategoryEventHandler(OnEvent);
-        EventHandlers.AddAll(handler);
+        if (handler == null)
+        {
+            handler = new CategoryEventHandler(OnEvent);
+            EventHandlers.AddAll(handler);
+        }
+        else
+        {
+            handler.Handler = OnEvent;
+        }
+
+        await LoadDataAsync();
+
+        Console.WriteLine($"Categories: Count: {Models.Count}.");
     }
-    else
+
+    protected async void OnEvent()
     {
-        handler.Handler = OnEvent;
+        await LoadDataAsync();
+        StateHasChanged();
     }
 
-    await LoadDataAsync();
+    protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCategory());
 
-    Console.WriteLine($"Categories: Count: {Models.Count}.");
-}
-
-protected async void OnEvent()
-{
-    await LoadDataAsync();
-    StateHasChanged();
-}
-
-protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCategory());
-
-protected async void OnNewClick()
-{
-}
-
-protected async void OnDeleteClick(CategoryModel model)
-{
-    await Commands.HandleAsync(new DeleteCategory(model.Key));
-}
+    protected async void OnDeleteClick(CategoryModel model)
+    {
+        await Commands.HandleAsync(new DeleteCategory(model.Key));
+    }
 
 }

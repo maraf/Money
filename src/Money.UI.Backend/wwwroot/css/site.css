@@ -37,3 +37,8 @@
     height: 40px;
     margin: 4px;
 }
+
+.panel-body .navbar-nav {
+    margin-top: -15px;
+    margin-bottom: -15px;
+}

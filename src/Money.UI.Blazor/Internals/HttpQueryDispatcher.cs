@@ -13,9 +13,9 @@ namespace Money.Services
     internal class HttpQueryDispatcher : IQueryDispatcher
     {
         private readonly ApiClient api;
-        private readonly Formatters formatters;
+        private readonly FormatterContainer formatters;
 
-        public HttpQueryDispatcher(ApiClient api, Formatters formatters)
+        public HttpQueryDispatcher(ApiClient api, FormatterContainer formatters)
         {
             Ensure.NotNull(api, "api");
             Ensure.NotNull(formatters, "formatters");

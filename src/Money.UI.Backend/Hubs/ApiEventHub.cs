@@ -19,9 +19,9 @@ namespace Money.Hubs
         IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>, IEventHandler<CategoryRenamed>, IEventHandler<CategoryDescriptionChanged>, IEventHandler<CategoryIconChanged>, IEventHandler<CategoryColorChanged>,
         IEventHandler<CurrencyCreated>, IEventHandler<CurrencyDeleted>, IEventHandler<CurrencyDefaultChanged>, IEventHandler<CurrencySymbolChanged>
     {
-        private readonly Formatters formatters;
+        private readonly FormatterContainer formatters;
 
-        public ApiEventHub(IEventHandlerCollection eventHandlers, Formatters formatters)
+        public ApiEventHub(IEventHandlerCollection eventHandlers, FormatterContainer formatters)
         {
             Ensure.NotNull(eventHandlers, "eventHandlers");
             Ensure.NotNull(formatters, "formatters");

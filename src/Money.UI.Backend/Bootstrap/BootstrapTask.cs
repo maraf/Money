@@ -67,7 +67,7 @@ namespace Money.Bootstrap
 
             services
                 .AddSingleton(priceCalculator)
-                .AddSingleton(new Formatters(commandFormatter, eventFormatter, queryFormatter));
+                .AddSingleton(new FormatterContainer(commandFormatter, eventFormatter, queryFormatter));
 
             ReadModels();
 

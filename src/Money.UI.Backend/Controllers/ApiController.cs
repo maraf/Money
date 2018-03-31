@@ -21,11 +21,11 @@ namespace Money.Controllers
     [Route("[controller]/[action]")]
     public class ApiController : Controller
     {
-        private readonly Formatters formatters;
+        private readonly FormatterContainer formatters;
         private readonly ICommandDispatcher commandDispatcher;
         private readonly IQueryDispatcher queryDispatcher;
 
-        public ApiController(Formatters formatters, ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
+        public ApiController(FormatterContainer formatters, ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
         {
             Ensure.NotNull(formatters, "formatters");
             Ensure.NotNull(commandDispatcher, "commandDispatcher");

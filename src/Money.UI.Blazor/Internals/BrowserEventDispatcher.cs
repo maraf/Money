@@ -16,9 +16,9 @@ namespace Money.Internals
     internal class BrowserEventDispatcher
     {
         private readonly DefaultEventManager manager = new DefaultEventManager();
-        private readonly Formatters formatters;
+        private readonly FormatterContainer formatters;
 
-        public BrowserEventDispatcher(Formatters formatters)
+        public BrowserEventDispatcher(FormatterContainer formatters)
         {
             Ensure.NotNull(formatters, "formatters");
             this.formatters = formatters;

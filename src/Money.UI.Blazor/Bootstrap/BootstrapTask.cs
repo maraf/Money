@@ -42,7 +42,7 @@ namespace Money.Bootstrap
             Domain();
 
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
-            Formatters formatters = new Formatters(commandFormatter, eventFormatter, queryFormatter);
+            FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter);
             BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters);
 
             services

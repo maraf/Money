@@ -14,9 +14,9 @@ namespace Money.Internals
     internal class HttpCommandDispatcher : ICommandDispatcher
     {
         private readonly ApiClient api;
-        private readonly Formatters formatters;
+        private readonly FormatterContainer formatters;
 
-        public HttpCommandDispatcher(ApiClient api, Formatters formatters)
+        public HttpCommandDispatcher(ApiClient api, FormatterContainer formatters)
         {
             Ensure.NotNull(api, "api");
             Ensure.NotNull(formatters, "formatters");

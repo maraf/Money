@@ -1,6 +1,106 @@
 ﻿@page "/"
 
-@for (int i = 1; i < 5; i++)
+@inject ICommandDispatcher Commands
+@inject IEventHandlerCollection EventHandlers
+@inject IQueryDispatcher Queries
+
+<h1>
+    Outcomes
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#outcome-create" style="float: right" @onclick(OnCreateNewOutcomeClick)>
+        <span class="glyphicon glyphicon-plus"></span>
+        New Outcome
+    </button>
+</h1>
+
+@if (Months != null)
 {
-    <Counter Step="@i" />
+    <ul class="nav nav-tabs">
+        @foreach (var month in Months)
+        {
+            @if (month == SelectedMonth)
+            {
+                <li role="presentation" class="active">
+                    <a href="#" @onclick(() => OnMonthSelected(month))>@month.ToString()</a>
+                </li>
+            }
+            else
+            {
+                <li role="presentation">
+                    <a href="#" @onclick(() => OnMonthSelected(month))>@month.ToString()</a>
+                </li>
+            }
+        }
+    </ul>
+}
+
+@if(Categories != null)
+{
+    foreach (var category in Categories)
+    {
+        <div class="progress">
+            <div class="progress-bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();">
+                <span>@category.TotalAmount</span>
+            </div>
+        </div>
+    }
+}
+
+@functions {
+
+    protected List<MonthModel> Months { get; private set; }
+    protected MonthModel SelectedMonth { get; private set; }
+
+    protected List<CategoryWithAmountModel> Categories { get; private set; }
+
+    protected override async Task OnInitAsync()
+    {
+        //if (handler == null)
+        //{
+        //    handler = new CurrencyEventHandler(OnEvent);
+        //    EventHandlers.AddAll(handler);
+        //}
+        //else
+        //{
+        //    handler.Handler = OnEvent;
+        //}
+
+        await LoadMonthsAsync();
+
+        //Console.WriteLine($"Currencies: Count: {Models.Count}.");
+    }
+
+    protected async Task LoadMonthsAsync()
+    {
+        Months = await Queries.QueryAsync(new ListMonthWithOutcome());
+        OnMonthSelected(Months.FirstOrDefault());
+    }
+
+    protected async Task LoadMonthOutcomesAsync()
+    {
+        if (SelectedMonth != null)
+            Categories = await Queries.QueryAsync(new ListMonthCategoryWithOutcome(SelectedMonth));
+
+        Console.WriteLine($"Outcomes: {Categories?.Count}.");
+    }
+
+    protected async void OnCreateNewOutcomeClick()
+    {
+        var categories = await Queries.QueryAsync(new ListAllCategory());
+        await Commands.HandleAsync(new CreateOutcome(new Price(250, "CZK"), "T-shirt", DateTime.Now.AddDays(-3), categories[2].Key));
+    }
+
+    protected async void OnMonthSelected(MonthModel selectedMonth)
+    {
+        SelectedMonth = selectedMonth;
+        await LoadMonthOutcomesAsync();
+        StateHasChanged();
+    }
+
+    protected decimal GetPercentualValue(CategoryWithAmountModel category)
+    {
+        decimal total = Categories.Sum(c => c.TotalAmount.Value);
+        return 100 / total * category.TotalAmount.Value;
+    }
+
 }

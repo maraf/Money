@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Money.Internals
 {
+    // Worst code ever.
     public class JsonCompositeStorage : ICompositeStorage
     {
         private IDictionary<string, object> storage;
@@ -159,6 +160,15 @@ namespace Money.Internals
                     byte[] parts = rawValue.Split(new char[] { ';' }).Select(p => Byte.Parse(p)).ToArray();
                     value = (T)(object)Color.FromArgb(parts[0], parts[1], parts[2], parts[3]);
                     Console.WriteLine(value);
+                    return true;
+                }
+
+                if (typeof(T) == typeof(Price) && target is JsonObject priceJson)
+                {
+                    Console.WriteLine($"JSON-get: Price value type: {priceJson["Value"].GetType().FullName}.");
+                    decimal priceValue = (decimal)(double)priceJson["Value"];
+                    string priceCurrency = (string)priceJson["Currency"];
+                    value = (T)(object)new Price(priceValue, priceCurrency);
                     return true;
                 }
 

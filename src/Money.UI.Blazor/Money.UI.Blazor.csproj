@@ -74,4 +74,8 @@
     <BlazorGenerate Remove="Components\CurrencyEdit.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\ExceptionPanel.cshtml" />
+  </ItemGroup>
+
 </Project>

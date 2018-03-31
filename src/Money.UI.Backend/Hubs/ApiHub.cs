@@ -7,6 +7,7 @@ using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
+using Neptuo.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,18 +18,19 @@ using System.Threading.Tasks;
 namespace Money.Hubs
 {
     public class ApiHub : Hub, 
-        IExceptionHandler,
+        IExceptionHandler<AggregateRootException>,
         IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>, IEventHandler<CategoryRenamed>, IEventHandler<CategoryDescriptionChanged>, IEventHandler<CategoryIconChanged>, IEventHandler<CategoryColorChanged>,
         IEventHandler<CurrencyCreated>, IEventHandler<CurrencyDeleted>, IEventHandler<CurrencyDefaultChanged>, IEventHandler<CurrencySymbolChanged>
     {
         private readonly FormatterContainer formatters;
 
-        public ApiHub(IEventHandlerCollection eventHandlers, FormatterContainer formatters)
+        public ApiHub(IEventHandlerCollection eventHandlers, FormatterContainer formatters, ExceptionHandlerBuilder exceptionHandlerBuilder)
         {
             Ensure.NotNull(eventHandlers, "eventHandlers");
             Ensure.NotNull(formatters, "formatters");
             this.formatters = formatters;
             eventHandlers.AddAll(this);
+            exceptionHandlerBuilder.Filter<AggregateRootException>().Handler(this);
         }
 
         private Task RaiseEvent<T>(T payload)
@@ -58,7 +60,7 @@ namespace Money.Hubs
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload) => RaiseEvent(payload);
         Task IEventHandler<CurrencySymbolChanged>.HandleAsync(CurrencySymbolChanged payload) => RaiseEvent(payload);
 
-        public void Handle(Exception exception)
+        public void Handle(AggregateRootException exception)
         {
             string type = exception.GetType().AssemblyQualifiedName;
             string rawPayload = formatters.Exception.Serialize(exception);

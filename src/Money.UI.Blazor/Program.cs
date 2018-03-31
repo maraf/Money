@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Blazor.Browser.Interop;
+﻿using Microsoft.AspNetCore.Blazor;
+using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Browser.Rendering;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,10 +29,6 @@ namespace Money.UI.Blazor
         }
 
         internal static void RaiseEvent(string payload) => serviceProvider.GetService<BrowserEventDispatcher>().Raise(payload);
-
-        internal static void RaiseException(string payload)
-        {
-            Console.WriteLine($"Program: Exception: {payload}");
-        }
+        internal static void RaiseException(string payload) => serviceProvider.GetService<BrowserExceptionHandler>().Raise(payload);
     }
 }

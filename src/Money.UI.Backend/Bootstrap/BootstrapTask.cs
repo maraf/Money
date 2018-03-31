@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Money.Bootstrap
 {
-    public class BootstrapTask : IBootstrapTask, IExceptionHandler
+    public class BootstrapTask : IBootstrapTask
     {
         private readonly IServiceCollection services;
 
@@ -33,6 +33,8 @@ namespace Money.Bootstrap
 
         private PriceCalculator priceCalculator;
         private ICompositeTypeProvider typeProvider;
+
+        private ExceptionHandlerBuilder exceptionHandlerBuilder;
 
         private DefaultQueryDispatcher queryDispatcher;
         private PersistentCommandDispatcher commandDispatcher;
@@ -58,9 +60,13 @@ namespace Money.Bootstrap
             CreateReadModelContext();
             CreateEventSourcingContext();
 
+            exceptionHandlerBuilder = new ExceptionHandlerBuilder();
+
             services
                 .AddSingleton(readModelContextFactory)
-                .AddSingleton(eventSourcingContextFactory);
+                .AddSingleton(eventSourcingContextFactory)
+                .AddSingleton(exceptionHandlerBuilder)
+                .AddSingleton<IExceptionHandler>(exceptionHandlerBuilder);
 
             Domain();
 
@@ -102,8 +108,8 @@ namespace Money.Bootstrap
 
             eventStore = new EntityEventStore(eventSourcingContextFactory);
             eventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
-            eventDispatcher.DispatcherExceptionHandlers.Add(this);
-            eventDispatcher.EventExceptionHandlers.Add(this);
+            eventDispatcher.DispatcherExceptionHandlers.Add(exceptionHandlerBuilder);
+            eventDispatcher.EventExceptionHandlers.Add(exceptionHandlerBuilder);
 
             IFactory<ICompositeStorage> compositeStorageFactory = Factory.Default<JsonCompositeStorage>();
 
@@ -118,6 +124,8 @@ namespace Money.Bootstrap
             exceptionFormatter = new CompositeTypeFormatter(typeProvider, compositeStorageFactory);
 
             commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), commandFormatter);
+            commandDispatcher.DispatcherExceptionHandlers.Add(exceptionHandlerBuilder);
+            commandDispatcher.CommandExceptionHandlers.Add(exceptionHandlerBuilder);
 
             var outcomeRepository = new AggregateRootRepository<Outcome>(
                 eventStore,

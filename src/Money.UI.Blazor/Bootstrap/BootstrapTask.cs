@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Money.Bootstrap
 {
-    public class BootstrapTask : IBootstrapTask, IExceptionHandler
+    public class BootstrapTask : IBootstrapTask
     {
         private readonly IServiceCollection services;
 
@@ -45,6 +45,7 @@ namespace Money.Bootstrap
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
             FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter, exceptionFormatter);
             BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters);
+            BrowserExceptionHandler exceptionHandler = new BrowserExceptionHandler(formatters);
 
             services
                 //.AddSingleton(priceCalculator)
@@ -52,7 +53,10 @@ namespace Money.Bootstrap
                 .AddTransient<ICommandDispatcher, HttpCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()
                 .AddSingleton(eventDispatcher)
-                .AddSingleton(eventDispatcher.Handlers);
+                .AddSingleton(eventDispatcher.Handlers)
+                .AddSingleton(exceptionHandler)
+                .AddSingleton(exceptionHandler.Handler)
+                .AddSingleton(exceptionHandler.HandlerBuilder);
 
             //CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 

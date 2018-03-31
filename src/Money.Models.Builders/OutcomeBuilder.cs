@@ -21,8 +21,8 @@ namespace Money.Models.Builders
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>,
         IEventHandler<OutcomeDeleted>,
-        IQueryHandler<ListMonthWithOutcome, IEnumerable<MonthModel>>,
-        IQueryHandler<ListMonthCategoryWithOutcome, IEnumerable<CategoryWithAmountModel>>,
+        IQueryHandler<ListMonthWithOutcome, List<MonthModel>>,
+        IQueryHandler<ListMonthCategoryWithOutcome, List<CategoryWithAmountModel>>,
         IQueryHandler<GetTotalMonthOutcome, Price>,
         IQueryHandler<GetCategoryName, string>,
         IQueryHandler<GetCategoryColor, Color>,
@@ -40,7 +40,7 @@ namespace Money.Models.Builders
             this.priceConverter = priceConverter;
         }
 
-        public async Task<IEnumerable<MonthModel>> HandleAsync(ListMonthWithOutcome query)
+        public async Task<List<MonthModel>> HandleAsync(ListMonthWithOutcome query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
@@ -51,11 +51,12 @@ namespace Money.Models.Builders
                     .ToListAsync();
 
                 return entities
-                    .Select(o => new MonthModel(o.Year, o.Month));
+                    .Select(o => new MonthModel(o.Year, o.Month))
+                    .ToList();
             }
         }
 
-        public async Task<IEnumerable<CategoryWithAmountModel>> HandleAsync(ListMonthCategoryWithOutcome query)
+        public async Task<List<CategoryWithAmountModel>> HandleAsync(ListMonthCategoryWithOutcome query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
@@ -94,7 +95,7 @@ namespace Money.Models.Builders
                     ));
                 }
 
-                return result.OrderBy(m => m.Name);
+                return result.OrderBy(m => m.Name).ToList();
             }
         }
 

@@ -16,27 +16,27 @@ namespace Money.Models
         /// <summary>
         /// Gets a key of the category.
         /// </summary>
-        public IKey Key { get; private set; }
+        public virtual IKey Key { get; private set; }
 
         /// <summary>
         /// Gets a name of the category.
         /// </summary>
-        public string Name { get; private set; }
+        public virtual string Name { get; private set; }
 
         /// <summary>
         /// Gets a description of the category.
         /// </summary>
-        public string Description { get; private set; }
+        public virtual string Description { get; private set; }
 
         /// <summary>
         /// Gets a color of the category.
         /// </summary>
-        public Color Color { get; private set; }
+        public virtual Color Color { get; private set; }
         
         /// <summary>
         /// Gets a font icon of the category.
         /// </summary>
-        public string Icon { get; private set; }
+        public virtual string Icon { get; private set; }
 
         public CategoryModel(IKey key, string name, string description, Color color, string icon)
         {

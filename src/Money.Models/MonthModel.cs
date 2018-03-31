@@ -14,14 +14,14 @@ namespace Money.Models
     public class MonthModel
     {
         /// <summary>
-        /// Gets a month number.
-        /// </summary>
-        public int Month { get; private set; }
-
-        /// <summary>
         /// Gets a year.
         /// </summary>
         public int Year { get; private set; }
+
+        /// <summary>
+        /// Gets a month number.
+        /// </summary>
+        public int Month { get; private set; }
 
         /// <summary>
         /// Creates a new instance.

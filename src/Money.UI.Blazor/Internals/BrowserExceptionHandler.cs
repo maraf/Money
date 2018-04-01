@@ -4,6 +4,7 @@ using Money.Services;
 using Neptuo;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
+using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,16 +19,18 @@ namespace Money.Internals
         public IExceptionHandler Handler { get => HandlerBuilder; }
 
         private readonly FormatterContainer formatters;
+        private readonly ILog log;
 
-        public BrowserExceptionHandler(FormatterContainer formatters)
+        public BrowserExceptionHandler(FormatterContainer formatters, ILogFactory logFactory)
         {
             Ensure.NotNull(formatters, "formatters");
             this.formatters = formatters;
+            this.log = logFactory.Scope("ExceptionHandler");
         }
 
         internal void Raise(string rawPayload)
         {
-            Console.WriteLine($"Program: Exception: {rawPayload}");
+            log.Debug($"'{rawPayload}'.");
 
             Response response = JsonUtil.Deserialize<Response>(rawPayload);
             Type type = Type.GetType(response.type);
@@ -35,6 +38,8 @@ namespace Money.Internals
 
             Exception exception = (Exception)formatters.Exception.Deserialize(type, rawPayload);
             Handler.Handle(exception);
+
+            log.Debug($"Handled exception of type '{exception.GetType().FullName}'.");
         }
     }
 }

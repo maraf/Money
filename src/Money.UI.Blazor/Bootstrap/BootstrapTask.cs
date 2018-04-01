@@ -52,11 +52,13 @@ namespace Money.Bootstrap
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
             FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter, exceptionFormatter);
             BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters);
-            BrowserExceptionHandler exceptionHandler = new BrowserExceptionHandler(formatters);
+            BrowserExceptionHandler exceptionHandler = new BrowserExceptionHandler(formatters, logFactory);
 
             services
                 //.AddSingleton(priceCalculator)
                 .AddSingleton(formatters)
+                .AddSingleton(logFactory)
+                .AddSingleton<MessageBuilder>()
                 .AddTransient<ICommandDispatcher, HttpCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()
                 .AddSingleton(eventDispatcher)

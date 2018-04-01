@@ -1,30 +1,67 @@
 ﻿@inject Neptuo.Exceptions.Handlers.ExceptionHandlerBuilder ExceptionHandlerBuilder
+@inject Money.Services.MessageBuilder MessageBuilder
 
-@if (Exception != null)
+@if (LastException != null)
 {
     <div class="alert alert-danger alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
 
-        <strong>
-            @Exception.GetType().FullName:
-        </strong>
-        <span>
-            @Exception.Message
-        </span>
+        @if (LastExceptionUserMessage != null)
+        {
+            <strong>
+                @LastExceptionUserMessage
+            </strong>
+        }
+        else
+        {
+            <strong>
+                @LastException.GetType().FullName:
+            </strong>
+            <span>
+                @LastException.Message
+            </span>
+        }
     </div>
 }
 
 @functions {
 
-    public Exception Exception { get; private set; }
+    public Exception LastException { get; private set; }
+    public string LastExceptionUserMessage { get; private set; }
 
     protected override async Task OnInitAsync()
     {
-        ExceptionHandlerBuilder.Handler(exception =>
+        ExceptionHandlerBuilder.Handler(e =>
         {
-            Exception = exception;
+            LastException = e;
+
+            if (e is Neptuo.Models.AggregateRootException)
+            {
+                string message = null;
+
+                if (e is CurrencyAlreadyAsDefaultException)
+                    message = MessageBuilder.CurrencyAlreadyAsDefault();
+                else if (e is CurrencyAlreadyExistsException)
+                    message = MessageBuilder.CurrencyAlreadyExists();
+                else if (e is CurrencyDoesNotExistException)
+                    message = MessageBuilder.CurrencyDoesNotExist();
+                else if (e is CurrencyExchangeRateDoesNotExistException)
+                    message = MessageBuilder.CurrencyExchangeRateDoesNotExist();
+                else if (e is OutcomeAlreadyDeletedException)
+                    message = MessageBuilder.OutcomeAlreadyDeleted();
+                else if (e is OutcomeAlreadyHasCategoryException)
+                    message = MessageBuilder.OutcomeAlreadyHasCategory();
+                else if (e is CantDeleteDefaultCurrencyException)
+                    message = MessageBuilder.CantDeleteDefaultCurrency();
+                else if (e is CantDeleteLastCurrencyException)
+                    message = MessageBuilder.CantDeleteLastCurrency();
+
+                LastExceptionUserMessage = message;
+            }
+
+
             StateHasChanged();
         });
     }

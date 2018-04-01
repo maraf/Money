@@ -39,32 +39,35 @@
 @if (Categories != null)
 {
     <div class="outcomes">
-        <div class="panel panel-default bar-graph bar-graph-summary">
-            <div class="panel-body">
-                <h3 class="pull-left">
-                    <span class="glyphicon glyphicon-signal"></span>
-                    <span class="category-name">Summary</span>
-                </h3>
+        @if (TotalAmout != null)
+        {
+            <div class="panel panel-default bar-graph bar-graph-summary">
+                <div class="panel-body">
+                    <h3 class="description">
+                        <span class="glyphicon glyphicon-signal"></span>
+                        <span class="name">Summary</span>
+                    </h3>
 
-                <div class="pull-right">
-                    <strong>@Categories.Sum(c => c.TotalAmount.Value).ToString("#.00") CZK</strong>
+                    <div class="value">
+                        <div class="amount">@TotalAmout</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
 
         @foreach (var category in Categories)
         {
             <div class="panel panel-default bar-graph">
                 <div class="panel-body">
-                    <h3 class="pull-left">
-                        <span>@category.Icon</span>
-                        <span class="category-name">@category.Name</span>
-                    </h3>
-
-                    <div class="pull-right">
+                    <div class="value">
                         <div class="amount">@category.TotalAmount</div>
                         <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
                     </div>
+
+                    <h3 class="description">
+                        <span>@category.Icon</span>
+                        <span class="name">@category.Name</span>
+                    </h3>
                 </div>
             </div>
         }
@@ -76,6 +79,7 @@
     protected List<MonthModel> Months { get; private set; }
     protected MonthModel SelectedMonth { get; private set; }
 
+    protected Price TotalAmout { get; private set; }
     protected List<CategoryWithAmountModel> Categories { get; private set; }
 
     protected override async Task OnInitAsync()
@@ -104,7 +108,10 @@
     protected async Task LoadMonthOutcomesAsync()
     {
         if (SelectedMonth != null)
+        {
             Categories = await Queries.QueryAsync(new ListMonthCategoryWithOutcome(SelectedMonth));
+            TotalAmout = await Queries.QueryAsync(new GetTotalMonthOutcome(SelectedMonth));
+        }
 
         Console.WriteLine($"Outcomes: {Categories?.Count}.");
     }

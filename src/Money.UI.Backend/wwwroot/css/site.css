@@ -53,8 +53,35 @@
     box-shadow: none;
 }
 
-.bar-graph .category-name {
-    font-size: 18px;
+.bar-graph .panel-body {
+    position: relative;
+    height: 60px;
+}
+
+.bar-graph .description, .bar-graph .value {
+    position: absolute;
+    width: calc(100% - 30px);
+}
+
+.bar-graph .description {
+    position: absolute;
+    width: calc(100% - 30px);
+    margin: 0;
+    font-weight: normal;
+}
+
+.bar-graph .description .name {
+    font-size: 16px;
+}
+
+.bar-graph .amount {
+    float: right;
+}
+
+.bar-graph .bar {
+    height: 10px;
+    float: right;
+    clear: both;
 }
 
 .bar-graph-summary {
@@ -66,19 +93,9 @@
 }
 
 .bar-graph-summary .category-name {
-    font-size: 24px;
+    font-weight: bold;
 }
 
 .bar-graph-summary .amount {
     font-weight: bold;
-}
-
-.bar-graph h3 {
-    margin: 0;
-    font-weight: normal;
-}
-
-.bar-graph .bar {
-    height: 10px;
-    float: right;
 }

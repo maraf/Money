@@ -85,6 +85,12 @@ namespace Money.Internals
             {
                 storage[key] = color.A + ";" + color.R + ";" + color.G + ";" + color.B;
             }
+            else if(value is Price price)
+            {
+                ICompositeStorage inner = Add(key);
+                inner.Add("Value", price.Value);
+                inner.Add("Currency", price.Currency);
+            }
             else
             {
                 storage[key] = value;

@@ -2,6 +2,7 @@
 using Neptuo;
 using Neptuo.Collections.Specialized;
 using Neptuo.Formatters;
+using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using SimpleJson;
 using System;
@@ -14,18 +15,20 @@ using System.Threading.Tasks;
 namespace Money.Internals
 {
     // Worst code ever.
-    public class JsonCompositeStorage : ICompositeStorage
+    public class SimpleJsonCompositeStorage : ICompositeStorage
     {
+        private readonly ILog log;
         private IDictionary<string, object> storage;
 
-        public JsonCompositeStorage()
-            : this(new Dictionary<string, object>())
+        public SimpleJsonCompositeStorage(ILogFactory logFactory)
+            : this(new Dictionary<string, object>(), logFactory?.Scope("Json"))
         { }
 
-        public JsonCompositeStorage(IDictionary<string, object> storage)
+        private SimpleJsonCompositeStorage(IDictionary<string, object> storage, ILog log)
         {
             Ensure.NotNull(storage, "storage");
             this.storage = storage;
+            this.log = log;
         }
 
         public IEnumerable<string> Keys => storage.Keys;
@@ -51,8 +54,8 @@ namespace Money.Internals
             using (MemoryStream valueStream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
                 valueStream.CopyTo(output);
 
-            Console.WriteLine($"JSON-sto: Keys: {String.Join(", ", storage.Keys)}");
-            Console.WriteLine($"JSON-sto: Payload-Keys: {String.Join(", ", ((IDictionary<string, object>)storage["Payload"]).Keys)}");
+            log.Debug($"Store: Keys: '{String.Join(", ", storage.Keys)}'.");
+            log.Debug($"Store: Payload-Keys: '{String.Join(", ", ((IDictionary<string, object>)storage["Payload"]).Keys)}'.");
         }
 
         public Task StoreAsync(Stream output)
@@ -63,7 +66,7 @@ namespace Money.Internals
 
         public ICompositeStorage Add(string key, object value)
         {
-            Console.WriteLine($"JSON-add: Key: {key}, ValueType: {value?.GetType()?.FullName}, Value: {value}.");
+            log.Debug($"Add: Key: '{key}', ValueType: '{value?.GetType()?.FullName}', Value: '{value}'.");
 
             if (value == null)
             {
@@ -112,10 +115,10 @@ namespace Money.Internals
 
         public ICompositeStorage Add(string key)
         {
-            Console.WriteLine($"JSON-add: Key: {key}, SubStorage.");
+            log.Debug($"Add: Key: '{key}', SubStorage.");
             JsonObject innerStorage = new JsonObject();
             storage[key] = innerStorage;
-            JsonCompositeStorage inner = new JsonCompositeStorage(innerStorage);
+            SimpleJsonCompositeStorage inner = new SimpleJsonCompositeStorage(innerStorage, log);
             return inner;
         }
 
@@ -123,10 +126,10 @@ namespace Money.Internals
         {
             if (this.storage.TryGetValue(key, out object target))
             {
-                Console.WriteLine($"JSON-get: Key: {key}, RequiredType: {typeof(ICompositeStorage).FullName}, ActualType: {target.GetType().FullName}.");
+                log.Debug($"Get: Key: '{key}', RequiredType: '{typeof(ICompositeStorage).FullName}', ActualType: '{target.GetType().FullName}'.");
                 if (target is JsonObject inner)
                 {
-                    storage = new JsonCompositeStorage(inner);
+                    storage = new SimpleJsonCompositeStorage(inner, log);
                     return true;
                 }
             }
@@ -145,7 +148,7 @@ namespace Money.Internals
                     return true;
                 }
 
-                Console.WriteLine($"JSON-get: Key: {key}, RequiredType: {typeof(T).FullName}, ActualType: {target.GetType().FullName}.");
+                log.Debug($"Get: Key: '{key}', RequiredType: '{typeof(T).FullName}', ActualType: '{target.GetType().FullName}'.");
                 if (target is T targetValue)
                 {
                     value = targetValue;
@@ -191,13 +194,13 @@ namespace Money.Internals
                 {
                     byte[] parts = rawColor.Split(new char[] { ';' }).Select(p => Byte.Parse(p)).ToArray();
                     value = (T)(object)Color.FromArgb(parts[0], parts[1], parts[2], parts[3]);
-                    Console.WriteLine(value);
+                    log.Debug($"Get: Color: '{value}'.");
                     return true;
                 }
 
                 if (typeof(T) == typeof(Price) && target is JsonObject priceJson)
                 {
-                    Console.WriteLine($"JSON-get: Price value type: {priceJson["Value"].GetType().FullName}.");
+                    log.Debug($"Get: Price value type: '{priceJson["Value"].GetType().FullName}'.");
                     decimal priceValue = (decimal)(double)priceJson["Value"];
                     string priceCurrency = (string)priceJson["Currency"];
                     value = (T)(object)new Price(priceValue, priceCurrency);
@@ -213,14 +216,14 @@ namespace Money.Internals
                     }
                     else
                     {
-                        Console.WriteLine($"JSON-get: Key: {key} not parseable to datetime {rawDateTime}.");
+                        log.Warning($"Get: Key: '{key}' not parseable to datetime from value '{rawDateTime}'.");
                         value = default(T);
                         return false;
                     }
                 }
             }
 
-            Console.WriteLine($"JSON-get: Key: {key} NOT FOUND.");
+            log.Debug($"Get: Key: '{key}' NOT FOUND.");
             value = default(T);
             return false;
         }

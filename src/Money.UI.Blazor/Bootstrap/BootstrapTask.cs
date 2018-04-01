@@ -12,6 +12,7 @@ using Neptuo.Formatters;
 using Neptuo.Formatters.Metadata;
 using Neptuo.Logging;
 using Neptuo.Logging.Serialization;
+using Neptuo.Logging.Serialization.Filters;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,8 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
-            logFactory = new DefaultLogFactory("Root").AddSerializer(new ConsoleSerializer());
+            logFactory = new DefaultLogFactory("Root")
+                .AddSerializer(new ConsoleSerializer(new SingleLineLogFormatter(), new AllowedLogFilter()));
 
             Domain();
 
@@ -86,7 +88,7 @@ namespace Money.Bootstrap
                 //.Add(new ColorConverter())
                 //.AddToStringSearchHandler();
 
-            IFactory<ICompositeStorage> compositeStorageFactory = Factory.Default<JsonCompositeStorage>();
+            IFactory<ICompositeStorage> compositeStorageFactory = Factory.Getter(() => new SimpleJsonCompositeStorage(logFactory));
 
             typeProvider = new ReflectionCompositeTypeProvider(
                 new ReflectionCompositeDelegateFactory(),

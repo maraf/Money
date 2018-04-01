@@ -51,10 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="formatters\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <BlazorGenerate Remove="Components\CategoryName.cshtml" />
   </ItemGroup>
 

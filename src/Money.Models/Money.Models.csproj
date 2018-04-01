@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Money\Money.csproj" />
-    <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
+    <Compile Remove="Builders\**" />
+    <EmbeddedResource Remove="Builders\**" />
+    <None Remove="Builders\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Builders\" />
+    <ProjectReference Include="..\Money\Money.csproj" />
+    <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>
 
 </Project>

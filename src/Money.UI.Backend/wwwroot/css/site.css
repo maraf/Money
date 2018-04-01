@@ -42,3 +42,43 @@
     margin-top: -15px;
     margin-bottom: -15px;
 }
+
+.outcomes {
+    margin-bottom: -15px;
+}
+
+.bar-graph {
+    margin: 0;
+    border-width: 1px 0 0 0;
+    box-shadow: none;
+}
+
+.bar-graph .category-name {
+    font-size: 18px;
+}
+
+.bar-graph-summary {
+    border: none;
+}
+
+.bar-graph-summary .glyphicon {
+    margin: 0 4px;
+}
+
+.bar-graph-summary .category-name {
+    font-size: 24px;
+}
+
+.bar-graph-summary .amount {
+    font-weight: bold;
+}
+
+.bar-graph h3 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.bar-graph .bar {
+    height: 10px;
+    float: right;
+}

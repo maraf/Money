@@ -1,0 +1,122 @@
+﻿@using Neptuo.Models.Keys
+@inject ICommandDispatcher Commands
+@inject IQueryDispatcher Queries
+
+<div class="modal fade" id="@Id" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="outcome-amount">Amount:</label>
+                    <input type="text" class="form-control" id="outcome-amount" @bind(AmountString) />
+                </div>
+                <div class="form-group">
+                    <label for="outcome-currency">Currency:</label>
+                    <select class="form-control" id="outcome-currency" @bind(Currency)>
+                        @if(Currencies != null)
+                        {
+                            @foreach (var currency in Currencies)
+                            {
+                                @if(currency.IsDefault)
+                                {
+                                    Currency = currency.UniqueCode;
+                                    <option value="@currency.UniqueCode" selected="selected">
+                                        @currency.Symbol
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@currency.UniqueCode">
+                                        @currency.Symbol
+                                    </option>
+                                }
+                            }
+                        }
+                    </select>
+                    @*<input type="text" class="form-control" id="outcome-currency" @bind(Currency) />*@
+                </div>
+                <div class="form-group">
+                    <label for="outcome-description">Description:</label>
+                    <input type="text" class="form-control" id="outcome-description" @bind(Description) />
+                </div>
+                <div class="form-group">
+                    <label for="outcome-when">When:</label>
+                    <input type="text" class="form-control" id="outcome-when" @bind(When) />
+                </div>
+                <div class="form-group">
+                    <label>Category:</label>
+                    @if (Categories != null)
+                    {
+                        @foreach (var category in Categories)
+                        {
+                            <button class="btn btn-block" style="background-color: @category.Color.ToHashCode();" @onclick(() => CategoryKey = category.Key)>
+                                <span>@category.Icon</span>
+                                <span>@category.Description</span>
+                            </button>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnSaveClick)>@SaveButtonText</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+
+    public string Id { get; set; }
+    protected string Title { get; set; }
+    protected string SaveButtonText { get; set; }
+
+    public List<CategoryModel> Categories { get; private set; }
+    public List<CurrencyModel> Currencies { get; private set; }
+
+    public decimal Amount { get; set; }
+
+    public string AmountString
+    {
+        get => Amount.ToString();
+        set
+        {
+            if (Decimal.TryParse(value, out decimal target))
+                Amount = target;
+            else
+                Amount = 0;
+        }
+    }
+
+    public string Currency { get; set; }
+    public string Description { get; set; }
+    public DateTime When { get; set; } = DateTime.Today;
+    public IKey CategoryKey { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Title = "Create a new Outcome";
+        SaveButtonText = "Create";
+
+        Categories = await Queries.QueryAsync(new ListAllCategory());
+        Currencies = await Queries.QueryAsync(new ListAllCurrency());
+    }
+
+    protected async void OnSaveClick()
+    {
+        Console.WriteLine($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
+
+        if (Amount > 0 && !String.IsNullOrEmpty(Currency) && CategoryKey != null && !CategoryKey.IsEmpty)
+        {
+            await Commands.HandleAsync(new CreateOutcome(new Price(Amount, Currency), Description, When, CategoryKey));
+
+            Amount = 0;
+            CategoryKey = null;
+            Description = null;
+        }
+    }
+}

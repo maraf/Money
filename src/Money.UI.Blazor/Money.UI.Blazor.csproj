@@ -78,4 +78,8 @@
     <BlazorGenerate Remove="Components\ExceptionPanel.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\OutcomeEdit.cshtml" />
+  </ItemGroup>
+
 </Project>

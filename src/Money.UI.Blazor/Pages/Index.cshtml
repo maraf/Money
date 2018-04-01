@@ -7,7 +7,7 @@
 <h1>
     Outcomes
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#outcome-create" style="float: right" @onclick(OnCreateNewOutcomeClick)>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#outcome-create" style="float: right">
         <span class="glyphicon glyphicon-plus"></span>
         New Outcome
     </button>
@@ -34,16 +34,41 @@
     </ul>
 }
 
-@if(Categories != null)
+<OutcomeEdit Id="outcome-create" />
+
+@if (Categories != null)
 {
-    foreach (var category in Categories)
-    {
-        <div class="progress">
-            <div class="progress-bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();">
-                <span>@category.TotalAmount</span>
+    <div class="outcomes">
+        <div class="panel panel-default bar-graph bar-graph-summary">
+            <div class="panel-body">
+                <h3 class="pull-left">
+                    <span class="glyphicon glyphicon-signal"></span>
+                    <span class="category-name">Summary</span>
+                </h3>
+
+                <div class="pull-right">
+                    <strong>@Categories.Sum(c => c.TotalAmount.Value).ToString("#.00") CZK</strong>
+                </div>
             </div>
         </div>
-    }
+
+        @foreach (var category in Categories)
+        {
+            <div class="panel panel-default bar-graph">
+                <div class="panel-body">
+                    <h3 class="pull-left">
+                        <span>@category.Icon</span>
+                        <span class="category-name">@category.Name</span>
+                    </h3>
+
+                    <div class="pull-right">
+                        <div class="amount">@category.TotalAmount</div>
+                        <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 @functions {
@@ -82,12 +107,6 @@
             Categories = await Queries.QueryAsync(new ListMonthCategoryWithOutcome(SelectedMonth));
 
         Console.WriteLine($"Outcomes: {Categories?.Count}.");
-    }
-
-    protected async void OnCreateNewOutcomeClick()
-    {
-        var categories = await Queries.QueryAsync(new ListAllCategory());
-        await Commands.HandleAsync(new CreateOutcome(new Price(250, "CZK"), "T-shirt", DateTime.Now.AddDays(-3), categories[2].Key));
     }
 
     protected async void OnMonthSelected(MonthModel selectedMonth)

@@ -21,23 +21,12 @@
                         {
                             @foreach (var currency in Currencies)
                             {
-                                @if(currency.IsDefault)
-                                {
-                                    Currency = currency.UniqueCode;
-                                    <option value="@currency.UniqueCode" selected="selected">
-                                        @currency.Symbol
-                                    </option>
-                                }
-                                else
-                                {
-                                    <option value="@currency.UniqueCode">
-                                        @currency.Symbol
-                                    </option>
-                                }
+                                <option value="@currency.UniqueCode">
+                                    @currency.Symbol
+                                </option>
                             }
                         }
                     </select>
-                    @*<input type="text" class="form-control" id="outcome-currency" @bind(Currency) />*@
                 </div>
                 <div class="form-group">
                     <label for="outcome-description">Description:</label>
@@ -45,7 +34,7 @@
                 </div>
                 <div class="form-group">
                     <label for="outcome-when">When:</label>
-                    <input type="text" class="form-control" id="outcome-when" @bind(When) />
+                    <input type="text" class="form-control" id="outcome-when" @bind(When, "yyyy-MM-dd") />
                 </div>
                 <div class="form-group">
                     <label>Category:</label>
@@ -104,6 +93,7 @@
 
         Categories = await Queries.QueryAsync(new ListAllCategory());
         Currencies = await Queries.QueryAsync(new ListAllCurrency());
+        Currency = Currencies.FirstOrDefault()?.UniqueCode;
     }
 
     protected async void OnSaveClick()
@@ -117,6 +107,7 @@
             Amount = 0;
             CategoryKey = null;
             Description = null;
+            StateHasChanged();
         }
     }
 }

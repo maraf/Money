@@ -145,6 +145,11 @@ namespace Money.Internals
                     value = (T)(object)(int)(long)target;
                     return true;
                 }
+                if (typeof(T) == typeof(decimal) && target.GetType() == typeof(double))
+                {
+                    value = (T)(object)(decimal)(double)target;
+                    return true;
+                }
 
                 if (typeof(T) == typeof(IKey) && target is JsonObject json)
                 {

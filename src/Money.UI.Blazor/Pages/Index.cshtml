@@ -34,7 +34,7 @@
     </ul>
 }
 
-<OutcomeEdit Id="outcome-create" />
+<OutcomeCreate Id="outcome-create" />
 
 @if (Categories != null)
 {
@@ -74,7 +74,9 @@
     </div>
 }
 
-@functions {
+@functions 
+{
+    private static OutcomeEventHandler handler;
 
     protected List<MonthModel> Months { get; private set; }
     protected MonthModel SelectedMonth { get; private set; }
@@ -84,19 +86,23 @@
 
     protected override async Task OnInitAsync()
     {
-        //if (handler == null)
-        //{
-        //    handler = new CurrencyEventHandler(OnEvent);
-        //    EventHandlers.AddAll(handler);
-        //}
-        //else
-        //{
-        //    handler.Handler = OnEvent;
-        //}
+        if (handler == null)
+        {
+            handler = new OutcomeEventHandler(OnEvent);
+            EventHandlers.AddAll(handler);
+        }
+        else
+        {
+            handler.Handler = OnEvent;
+        }
 
         await LoadMonthsAsync();
+    }
 
-        //Console.WriteLine($"Currencies: Count: {Models.Count}.");
+    protected async void OnEvent()
+    {
+        await LoadMonthSummaryAsync();
+        StateHasChanged();
     }
 
     protected async Task LoadMonthsAsync()
@@ -112,8 +118,6 @@
             Categories = await Queries.QueryAsync(new ListMonthCategoryWithOutcome(SelectedMonth));
             TotalAmout = await Queries.QueryAsync(new GetTotalMonthOutcome(SelectedMonth));
         }
-
-        Console.WriteLine($"Summary: {Categories?.Count}.");
     }
 
     protected async void OnMonthSelected(MonthModel selectedMonth)

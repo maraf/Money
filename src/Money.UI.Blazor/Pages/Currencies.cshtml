@@ -67,42 +67,41 @@
 
 @functions {
 
-private static CurrencyEventHandler handler;
+    private static CurrencyEventHandler handler;
 
-public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
+    public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
 
-protected override async Task OnInitAsync()
-{
-    if (handler == null)
+    protected override async Task OnInitAsync()
     {
-        handler = new CurrencyEventHandler(OnEvent);
-        EventHandlers.AddAll(handler);
+        if (handler == null)
+        {
+            handler = new CurrencyEventHandler(OnEvent);
+            EventHandlers.AddAll(handler);
+        }
+        else
+        {
+            handler.Handler = OnEvent;
+        }
+
+        await LoadDataAsync();
     }
-    else
+
+    protected async void OnEvent()
     {
-        handler.Handler = OnEvent;
+        await LoadDataAsync();
+        StateHasChanged();
     }
 
-    await LoadDataAsync();
+    protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCurrency());
 
-    Console.WriteLine($"Currencies: Count: {Models.Count}.");
-}
+    protected async void OnDeleteClick(CurrencyModel model)
+    {
+        await Commands.HandleAsync(new DeleteCurrency(model.UniqueCode));
+    }
 
-protected async void OnEvent()
-{
-    await LoadDataAsync();
-    StateHasChanged();
-}
+    protected async void OnChangeDefaultClick(CurrencyModel model)
+    {
+        await Commands.HandleAsync(new SetCurrencyAsDefault(model.UniqueCode));
+    }
 
-protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCurrency());
-
-protected async void OnDeleteClick(CurrencyModel model)
-{
-    await Commands.HandleAsync(new DeleteCurrency(model.UniqueCode));
-}
-
-protected async void OnChangeDefaultClick(CurrencyModel model)
-{
-    await Commands.HandleAsync(new SetCurrencyAsDefault(model.UniqueCode));
-}
 }

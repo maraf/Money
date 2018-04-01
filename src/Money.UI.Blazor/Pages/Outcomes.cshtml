@@ -4,7 +4,14 @@
 @inject IEventHandlerCollection EventHandlers
 @inject IQueryDispatcher Queries
 
-<h1>Outcomes in @MonthModel</h1>
+<h1>
+    Outcomes in @MonthModel
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#outcome-create" style="float: right">
+        <span class="glyphicon glyphicon-plus"></span>
+        New Outcome
+    </button>
+</h1>
 
 @if (Models != null)
 {
@@ -53,12 +60,14 @@
     }
 }
 
+<OutcomeCreate Id="outcome-create" />
 <OutcomeAmount Id="outcome-amount-edit" OutcomeKey="@Selected?.Key" Amount="@Selected?.Amount?.Value" Currency="@Selected?.Amount?.Currency" />
 <OutcomeDescription Id="outcome-decription-edit" OutcomeKey="@Selected?.Key" Description="@Selected?.Description" />
-<OutcomeWhen Id="outcome-when-edit" OutcomeKey="@Selected?.Key" Description="@Selected?.When" />
+<OutcomeWhen Id="outcome-when-edit" OutcomeKey="@Selected?.Key" When="@Selected?.When" />
 
 @functions
 {
+    private static OutcomeEventHandler handler;
 
     protected MonthModel MonthModel { get; set; }
     protected List<OutcomeOverviewModel> Models { get; set; }
@@ -69,9 +78,24 @@
 
     protected override async Task OnInitAsync()
     {
+        if (handler == null)
+        {
+            handler = new OutcomeEventHandler(OnEvent);
+            EventHandlers.AddAll(handler);
+        }
+        else
+        {
+            handler.Handler = OnEvent;
+        }
+
         MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
         await LoadDataAsync();
-        Console.WriteLine($"Overview: {Models?.Count}");
+    }
+
+    protected async void OnEvent()
+    {
+        await LoadDataAsync();
+        StateHasChanged();
     }
 
     protected async Task LoadDataAsync()

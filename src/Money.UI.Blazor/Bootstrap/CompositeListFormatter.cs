@@ -2,6 +2,7 @@
 using Neptuo.Activators;
 using Neptuo.Formatters;
 using Neptuo.Formatters.Metadata;
+using Neptuo.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,10 +16,12 @@ namespace Money.Bootstrap
     public class CompositeListFormatter : IFormatter
     {
         private readonly Formatter inner;
+        private readonly ILog log;
 
-        public CompositeListFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory)
+        public CompositeListFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory, ILogFactory logFactory)
         {
-            inner = new Formatter(provider, storageFactory);
+            log = logFactory.Scope("CompositeListFormatter");
+            inner = new Formatter(provider, storageFactory, log);
         }
 
         public bool TryDeserialize(Stream input, IDeserializerContext context)
@@ -61,9 +64,12 @@ namespace Money.Bootstrap
 
         private class Formatter : CompositeTypeFormatter
         {
-            public Formatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory)
+            private readonly ILog log;
+
+            public Formatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory, ILog log)
                 : base(provider, storageFactory)
             {
+                this.log = log;
             }
 
             protected override bool TryStore(object input, ISerializerContext context, CompositeType type, CompositeVersion typeVersion, ICompositeStorage storage)
@@ -90,23 +96,23 @@ namespace Money.Bootstrap
             {
                 if (storage.TryGet("Count", out int count))
                 {
-                    Console.WriteLine($"CLF: Count {count}.");
+                    log.Debug($"Count '{count}'.");
 
                     Type listType = typeof(List<>).MakeGenericType(type.Type);
                     IList list = (IList)Activator.CreateInstance(listType);
 
-                    Console.WriteLine($"CLF: List: {list != null}");
+                    log.Debug($"List: '{list != null}'.");
 
                     for (int i = 0; i < count; i++)
                     {
                         if (storage.TryGet(i.ToString(), out ICompositeStorage innerStorage) && base.TryLoad(input, context, type, innerStorage))
                         {
-                            Console.WriteLine($"CLF: Add item {context.Output != null}.");
+                            log.Debug($"Add item '{context.Output != null}'.");
                             list.Add(context.Output);
                         }
                         else
                         {
-                            Console.WriteLine($"CLF: Item failed at index {i}.");
+                            Console.WriteLine($"Item failed at index '{i}'.");
                             return false;
                         }
                     }
@@ -115,7 +121,7 @@ namespace Money.Bootstrap
                     return true;
                 }
 
-                Console.WriteLine($"CLF: Count not found.");
+                log.Debug($"Count not found.");
                 return base.TryLoad(input, context, type, storage);
             }
         }

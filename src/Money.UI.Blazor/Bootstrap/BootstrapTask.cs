@@ -10,6 +10,8 @@ using Neptuo.Events;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Neptuo.Formatters.Metadata;
+using Neptuo.Logging;
+using Neptuo.Logging.Serialization;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -24,6 +26,7 @@ namespace Money.Bootstrap
     {
         private readonly IServiceCollection services;
 
+        private ILogFactory logFactory;
         //private PriceCalculator priceCalculator;
         private ICompositeTypeProvider typeProvider;
 
@@ -40,6 +43,8 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
+            logFactory = new DefaultLogFactory("Root").AddSerializer(new ConsoleSerializer());
+
             Domain();
 
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
@@ -90,7 +95,7 @@ namespace Money.Bootstrap
 
             commandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
             eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
-            queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory);
+            queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory, logFactory);
             exceptionFormatter = new CompositeExceptionFormatter(typeProvider, compositeStorageFactory);
         }
     }

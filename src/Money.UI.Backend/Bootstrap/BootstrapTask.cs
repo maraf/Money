@@ -12,6 +12,8 @@ using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Neptuo.Formatters.Converters;
 using Neptuo.Formatters.Metadata;
+using Neptuo.Logging;
+using Neptuo.Logging.Serialization;
 using Neptuo.Models.Repositories;
 using Neptuo.Models.Snapshots;
 using Neptuo.Queries;
@@ -28,6 +30,7 @@ namespace Money.Bootstrap
     {
         private readonly IServiceCollection services;
 
+        private ILogFactory logFactory;
         private IFactory<ReadModelContext> readModelContextFactory;
         private IFactory<EventSourcingContext> eventSourcingContextFactory;
 
@@ -55,6 +58,8 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
+            logFactory = new DefaultLogFactory("Root").AddSerializer(new ConsoleSerializer());
+
             readModelContextFactory = Factory.Getter(() => new ReadModelContext("Filename=ReadModel.db"));
             eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext("Filename=EventSourcing.db"));
             CreateReadModelContext();
@@ -120,7 +125,7 @@ namespace Money.Bootstrap
 
             commandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
             eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
-            queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory);
+            queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory, logFactory);
             exceptionFormatter = new CompositeExceptionFormatter(typeProvider, compositeStorageFactory);
 
             commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), commandFormatter);

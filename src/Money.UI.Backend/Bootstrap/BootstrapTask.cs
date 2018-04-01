@@ -121,7 +121,7 @@ namespace Money.Bootstrap
             commandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
             eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
             queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory);
-            exceptionFormatter = new CompositeTypeFormatter(typeProvider, compositeStorageFactory);
+            exceptionFormatter = new CompositeExceptionFormatter(typeProvider, compositeStorageFactory);
 
             commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), commandFormatter);
             commandDispatcher.DispatcherExceptionHandlers.Add(exceptionHandlerBuilder);

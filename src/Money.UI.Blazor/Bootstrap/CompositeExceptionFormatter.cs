@@ -53,9 +53,18 @@ namespace Money.Bootstrap
                 if (storage.TryGet("AggregateRootException", out ICompositeStorage inner))
                 {
                     AggregateRootExceptionDecorator decorator = new AggregateRootExceptionDecorator((AggregateRootException)context.Output);
-                    decorator.SetKey(inner.Get<IKey>(Name.AggregateRootKey));
-                    decorator.SetCommandKey(inner.Get<IKey>(Name.CommandKey));
-                    decorator.SetSourceCommandKey(inner.Get<IKey>(Name.SourceCommandKey));
+
+                    IKey key = inner.Get<IKey>(Name.AggregateRootKey);
+                    if (key != null)
+                        decorator.SetKey(key);
+
+                    key = inner.Get<IKey>(Name.CommandKey);
+                    if (key != null)
+                        decorator.SetCommandKey(key);
+
+                    key = inner.Get<IKey>(Name.SourceCommandKey);
+                    if (key != null)
+                        decorator.SetSourceCommandKey(key);
                 }
 
                 return true;

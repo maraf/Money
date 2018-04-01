@@ -1,0 +1,83 @@
+﻿@page "/outcomes/{Year}/{Month}"
+
+@inject ICommandDispatcher Commands
+@inject IEventHandlerCollection EventHandlers
+@inject IQueryDispatcher Queries
+
+<h1>Outcomes in @MonthModel</h1>
+
+@if (Models != null)
+{
+    if (Models.Count > 0)
+    {
+        <table class="outcomes table table-hover">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>When</th>
+                    <th>Amount</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Models)
+                {
+                    <tr>
+                        <td>@item.Description</td>
+                        <td>@item.When.ToShortDateString()</td>
+                        <td>@item.Amount</td>
+                        <td>
+                            <div class="actions">
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Amount" data-toggle="modal" data-target="#outcome-amount-edit" @onclick(() => Selected = item)>
+                                    <span class="glyphicon glyphicon-usd"></span>
+                                </button>
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Description" data-toggle="modal" data-target="#outcome-decription-edit" @onclick(() => Selected = item)>
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                </button>
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change When" data-toggle="modal" data-target="#outcome-when-edit" @onclick(() => Selected = item)>
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </button>
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" @onclick(() => OnDeleteClick(item))>
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">No data.</div>
+    }
+}
+
+<OutcomeAmount Id="outcome-amount-edit" OutcomeKey="@Selected?.Key" Amount="@Selected?.Amount?.Value" Currency="@Selected?.Amount?.Currency" />
+<OutcomeDescription Id="outcome-decription-edit" OutcomeKey="@Selected?.Key" Description="@Selected?.Description" />
+<OutcomeWhen Id="outcome-when-edit" OutcomeKey="@Selected?.Key" Description="@Selected?.When" />
+
+@functions
+{
+
+    protected MonthModel MonthModel { get; set; }
+    protected List<OutcomeOverviewModel> Models { get; set; }
+    protected OutcomeOverviewModel Selected { get; set; }
+
+    public string Year { get; set; }
+    public string Month { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
+        await LoadDataAsync();
+        Console.WriteLine($"Overview: {Models?.Count}");
+    }
+
+    protected async Task LoadDataAsync()
+        => Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(Neptuo.KeyFactory.Empty(typeof(Category)), MonthModel));
+
+    protected async void OnDeleteClick(OutcomeOverviewModel model)
+        => await Commands.HandleAsync(new DeleteOutcome(model.Key));
+
+}

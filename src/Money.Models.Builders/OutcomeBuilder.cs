@@ -26,7 +26,7 @@ namespace Money.Models.Builders
         IQueryHandler<GetTotalMonthOutcome, Price>,
         IQueryHandler<GetCategoryName, string>,
         IQueryHandler<GetCategoryColor, Color>,
-        IQueryHandler<ListMonthOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>,
+        IQueryHandler<ListMonthOutcomeFromCategory, List<OutcomeOverviewModel>>,
         IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>
     {
         private readonly IFactory<ReadModelContext> readModelContextFactory;
@@ -158,7 +158,7 @@ namespace Money.Models.Builders
             }
         }
 
-        public async Task<IEnumerable<OutcomeOverviewModel>> HandleAsync(ListMonthOutcomeFromCategory query)
+        public async Task<List<OutcomeOverviewModel>> HandleAsync(ListMonthOutcomeFromCategory query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {

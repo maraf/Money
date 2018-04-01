@@ -43,6 +43,8 @@
     margin-bottom: -15px;
 }
 
+
+
 .outcomes {
     margin-bottom: -15px;
 }
@@ -98,4 +100,19 @@
 
 .bar-graph-summary .amount {
     font-weight: bold;
+}
+
+
+
+.outcomes.table {
+    margin-bottom: -20px;
+}
+
+.outcomes .actions {
+    float: right;
+}
+
+.outcomes .actions .btn {
+    padding: 0;
+    margin: 0 0 0 8px;
 }

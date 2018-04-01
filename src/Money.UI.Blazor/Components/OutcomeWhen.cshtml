@@ -1,0 +1,47 @@
+﻿@using Neptuo.Models.Keys
+@inject ICommandDispatcher Commands
+
+<div class="modal fade" id="@Id" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Change Outcome When</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="outcome-description">Description:</label>
+                    <input type="text" class="form-control" id="outcome-description" placeholder="Outcome Description" @bind(When, "yyyy-MM-dd") />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnSaveClick)>Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+
+    private DateTime originalWhen;
+
+    public string Id { get; set; }
+
+    public IKey OutcomeKey { get; set; }
+    public DateTime When { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        originalWhen = When;
+    }
+
+    protected async void OnSaveClick()
+    {
+        if (originalWhen != When)
+        {
+            await Commands.HandleAsync(new ChangeOutcomeWhen(OutcomeKey, When));
+            OnParametersSet();
+        }
+    }
+}

@@ -73,19 +73,25 @@ namespace Money.Internals
             {
                 ICompositeStorage inner = Add(key);
                 inner.Add("Type", guidKey.Type);
-                inner.Add("Guid", guidKey.Guid.ToString());
+                if (guidKey.IsEmpty)
+                    inner.Add("Guid", null);
+                else
+                    inner.Add("Guid", guidKey.Guid.ToString());
             }
             else if (value is StringKey stringKey)
             {
                 ICompositeStorage inner = Add(key);
                 inner.Add("Type", stringKey.Type);
-                inner.Add("Identifier", stringKey.Identifier.ToString());
+                if (stringKey.IsEmpty)
+                    inner.Add("Identifier", null);
+                else
+                    inner.Add("Identifier", stringKey.Identifier.ToString());
             }
             else if (value is Color color)
             {
                 storage[key] = color.A + ";" + color.R + ";" + color.G + ";" + color.B;
             }
-            else if(value is Price price)
+            else if (value is Price price)
             {
                 ICompositeStorage inner = Add(key);
                 inner.Add("Value", price.Value);
@@ -140,11 +146,18 @@ namespace Money.Internals
                 }
 
                 Console.WriteLine($"JSON-get: Key: {key}, RequiredType: {typeof(T).FullName}, ActualType: {target.GetType().FullName}.");
+                if (target is T targetValue)
+                {
+                    value = targetValue;
+                    return true;
+                }
+
                 if (typeof(T) == typeof(int) && target.GetType() == typeof(long))
                 {
                     value = (T)(object)(int)(long)target;
                     return true;
                 }
+
                 if (typeof(T) == typeof(decimal) && target.GetType() == typeof(double))
                 {
                     value = (T)(object)(decimal)(double)target;
@@ -156,19 +169,27 @@ namespace Money.Internals
                     string type = (string)json["Type"];
                     if (json.TryGetValue("Guid", out object rawGuid))
                     {
-                        value = (T)(object)GuidKey.Create(Guid.Parse((string)rawGuid), type);
+                        if (rawGuid == null)
+                            value = (T)(object)GuidKey.Empty(type);
+                        else
+                            value = (T)(object)GuidKey.Create(Guid.Parse((string)rawGuid), type);
+
                         return true;
                     }
                     else if (json.TryGetValue("Identifier", out object rawIdentifier))
                     {
-                        value = (T)(object)StringKey.Create((string)rawIdentifier, type);
+                        if (rawIdentifier == null)
+                            value = (T)(object)StringKey.Empty(type);
+                        else
+                            value = (T)(object)StringKey.Create((string)rawIdentifier, type);
+
                         return true;
                     }
                 }
 
-                if (typeof(T) == typeof(Color) && target is string rawValue)
+                if (typeof(T) == typeof(Color) && target is string rawColor)
                 {
-                    byte[] parts = rawValue.Split(new char[] { ';' }).Select(p => Byte.Parse(p)).ToArray();
+                    byte[] parts = rawColor.Split(new char[] { ';' }).Select(p => Byte.Parse(p)).ToArray();
                     value = (T)(object)Color.FromArgb(parts[0], parts[1], parts[2], parts[3]);
                     Console.WriteLine(value);
                     return true;
@@ -183,10 +204,19 @@ namespace Money.Internals
                     return true;
                 }
 
-                if (target is T targetValue)
+                if (typeof(T) == typeof(DateTime) && target is string rawDateTime)
                 {
-                    value = targetValue;
-                    return true;
+                    if (DateTime.TryParse(rawDateTime, out DateTime dateTime))
+                    {
+                        value = (T)(object)dateTime;
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"JSON-get: Key: {key} not parseable to datetime {rawDateTime}.");
+                        value = default(T);
+                        return false;
+                    }
                 }
             }
 

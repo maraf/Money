@@ -82,4 +82,20 @@
     <BlazorGenerate Remove="Components\OutcomeEdit.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\Outcomes.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\OutcomeDescription.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\OutcomeAmount.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\OutcomeWhen.cshtml" />
+  </ItemGroup>
+
 </Project>

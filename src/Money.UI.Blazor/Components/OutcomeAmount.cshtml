@@ -1,0 +1,86 @@
+﻿@using Neptuo.Models.Keys
+@inject ICommandDispatcher Commands
+@inject IQueryDispatcher Queries
+
+<div class="modal fade" id="@Id" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Change Outcome Amount</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="outcome-amount">Amount:</label>
+                    <input type="text" class="form-control" id="outcome-amount" @bind(AmountString) />
+                </div>
+                <div class="form-group">
+                    <label for="outcome-currency">Currency:</label>
+                    <select class="form-control" id="outcome-currency" @bind(Currency)>
+                        @if(Currencies != null)
+                        {
+                            @foreach (var currency in Currencies)
+                            {
+                                <option value="@currency.UniqueCode">
+                                    @currency.Symbol
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnSaveClick)>Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+
+    private decimal originalAmount;
+    private string originalCurrency;
+
+    public string Id { get; set; }
+    public List<CurrencyModel> Currencies { get; private set; }
+
+    public IKey OutcomeKey { get; set; }
+
+    public decimal Amount { get; set; }
+
+    public string AmountString
+    {
+        get => Amount.ToString();
+        set
+        {
+            if (Decimal.TryParse(value, out decimal target))
+                Amount = target;
+            else
+                Amount = 0;
+        }
+    }
+
+    public string Currency { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        SetOriginal();
+        Currencies = await Queries.QueryAsync(new ListAllCurrency());
+    }
+
+    private void SetOriginal()
+    {
+        originalAmount = Amount;
+        originalCurrency = Currency;
+    }
+
+    protected async void OnSaveClick()
+    {
+        if (originalAmount != Amount || originalCurrency != Currency)
+        {
+            await Commands.HandleAsync(new ChangeOutcomeAmount(OutcomeKey, new Price(Amount, Currency)));
+            SetOriginal();
+        }
+    }
+}

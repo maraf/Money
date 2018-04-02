@@ -1,7 +1,4 @@
 ﻿using Neptuo.Activators;
-using Neptuo.Collections.Specialized;
-using Neptuo.Commands;
-using Neptuo.Events;
 using Neptuo.Formatters.Internals;
 using Neptuo.Formatters.Metadata;
 using System;
@@ -26,9 +23,14 @@ namespace Neptuo.Formatters
         /// </summary>
         /// <param name="provider">The provider for reading composite type definitions.</param>
         /// <param name="storageFactory">The factory for storage.</param>
-        public CompositeEventFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory)
+        /// <param name="extenders">A list of additional payload extenders.</param>
+        public CompositeEventFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory, List<ICompositeFormatterExtender> extenders = null)
         {
-            envelopeFormatter = new EnvelopeFormatter(new Formatter(provider, storageFactory));
+            if (extenders == null)
+                extenders = new List<ICompositeFormatterExtender>();
+
+            extenders.Add(new EventExtender());
+            envelopeFormatter = new EnvelopeFormatter(new EnvelopeMetadataProcessingFormatter(provider, storageFactory, extenders));
         }
 
         public bool TrySerialize(object input, ISerializerContext context)
@@ -49,32 +51,6 @@ namespace Neptuo.Formatters
         public Task<bool> TryDeserializeAsync(Stream input, IDeserializerContext context)
         {
             return envelopeFormatter.TryDeserializeAsync(input, context);
-        }
-
-        /// <summary>
-        /// The inner formatter used inside of the <see cref="EnvelopeFormatter"/>.
-        /// </summary>
-        private class Formatter : EnvelopeMetadataProcessingFormatter
-        {
-            private readonly EventExtender events = new EventExtender();
-
-            public Formatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory)
-                : base(provider, storageFactory)
-            { }
-
-            protected override void TryLoad(ICompositeStorage payloadStorage, object output)
-            {
-                Event payload = output as Event;
-                if (payload != null)
-                    events.Load(payloadStorage, payload);
-            }
-
-            protected override void TryStore(ICompositeStorage payloadStorage, object input)
-            {
-                Event payload = input as Event;
-                if (payload != null)
-                    events.Store(payloadStorage, payload);
-            }
         }
     }
 }

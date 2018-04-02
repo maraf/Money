@@ -12,7 +12,7 @@ namespace Neptuo.Formatters
     /// <summary>
     /// Stores/Loads all-commands-shared properties with internal setters.
     /// </summary>
-    public class CommandExtender
+    public class CommandExtender : ICompositeFormatterExtender
     {
         /// <summary>
         /// The names of the keys used in store/load methods.
@@ -30,9 +30,11 @@ namespace Neptuo.Formatters
         /// </summary>
         /// <param name="storage">The storage to save values to.</param>
         /// <param name="payload">The command payload to store.</param>
-        public void Store(IKeyValueCollection storage, Command payload)
+        public void Store(IKeyValueCollection storage, object input)
         {
-            storage.Add(Name.Key, payload.Key);
+            Command payload = input as Command;
+            if (payload != null)
+                storage.Add(Name.Key, payload.Key);
         }
 
         /// <summary>
@@ -40,9 +42,11 @@ namespace Neptuo.Formatters
         /// </summary>
         /// <param name="storage">The storage to load values from.</param>
         /// <param name="payload">The command payload to load.</param>
-        public void Load(IReadOnlyKeyValueCollection storage, Command payload)
+        public void Load(IReadOnlyKeyValueCollection storage, object output)
         {
-            payload.Key = storage.Get<IKey>(Name.Key);
+            Command payload = output as Command;
+            if (payload != null)
+                payload.Key = storage.Get<IKey>(Name.Key);
         }
     }
 }

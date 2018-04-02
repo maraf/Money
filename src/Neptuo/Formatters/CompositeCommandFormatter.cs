@@ -26,9 +26,14 @@ namespace Neptuo.Formatters
         /// </summary>
         /// <param name="provider">The provider for reading composite type definitions.</param>
         /// <param name="storageFactory">The factory for storage.</param>
-        public CompositeCommandFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory)
+        /// <param name="extenders">A list of additional payload extenders.</param>
+        public CompositeCommandFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory, List<ICompositeFormatterExtender> extenders = null)
         {
-            envelopeFormatter = new EnvelopeFormatter(new Formatter(provider, storageFactory));
+            if (extenders == null)
+                extenders = new List<ICompositeFormatterExtender>();
+
+            extenders.Add(new CommandExtender());
+            envelopeFormatter = new EnvelopeFormatter(new EnvelopeMetadataProcessingFormatter(provider, storageFactory, extenders));
         }
 
         public bool TrySerialize(object input, ISerializerContext context)
@@ -49,32 +54,6 @@ namespace Neptuo.Formatters
         public Task<bool> TryDeserializeAsync(Stream input, IDeserializerContext context)
         {
             return envelopeFormatter.TryDeserializeAsync(input, context);
-        }
-
-        /// <summary>
-        /// The inner formatter used inside of the <see cref="EnvelopeFormatter"/>.
-        /// </summary>
-        private class Formatter : EnvelopeMetadataProcessingFormatter
-        {
-            private readonly CommandExtender commands = new CommandExtender();
-
-            public Formatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory)
-                : base(provider, storageFactory)
-            { }
-
-            protected override void TryLoad(ICompositeStorage payloadStorage, object output)
-            {
-                Command command = output as Command;
-                if (command != null)
-                    commands.Load(payloadStorage, command);
-            }
-
-            protected override void TryStore(ICompositeStorage payloadStorage, object input)
-            {
-                Command command = input as Command;
-                if (command != null)
-                    commands.Store(payloadStorage, command);
-            }
         }
     }
 }

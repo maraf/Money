@@ -12,7 +12,7 @@ namespace Neptuo.Formatters
     /// <summary>
     /// Stores/Loads all-events-shared properties with internal setters.
     /// </summary>
-    public class EventExtender
+    public class EventExtender : ICompositeFormatterExtender
     {
         /// <summary>
         /// The names of the keys used in store/load methods.
@@ -40,11 +40,15 @@ namespace Neptuo.Formatters
         /// </summary>
         /// <param name="storage">The storage to save values to.</param>
         /// <param name="payload">The event payload to store.</param>
-        public void Store(IKeyValueCollection storage, Event payload)
+        public void Store(IKeyValueCollection storage, object input)
         {
-            storage.Add(Name.Key, payload.Key);
-            storage.Add(Name.AggregateKey, payload.AggregateKey);
-            storage.Add(Name.AggregateVersion, payload.Version);
+            Event payload = input as Event;
+            if (payload != null)
+            {
+                storage.Add(Name.Key, payload.Key);
+                storage.Add(Name.AggregateKey, payload.AggregateKey);
+                storage.Add(Name.AggregateVersion, payload.Version);
+            }
         }
 
         /// <summary>
@@ -52,11 +56,15 @@ namespace Neptuo.Formatters
         /// </summary>
         /// <param name="storage">The storage to load values from.</param>
         /// <param name="payload">The event payload to load.</param>
-        public void Load(IReadOnlyKeyValueCollection storage, Event payload)
+        public void Load(IReadOnlyKeyValueCollection storage, object output)
         {
-            payload.Key = storage.Get<IKey>(Name.Key);
-            payload.AggregateKey = storage.Get<IKey>(Name.AggregateKey);
-            payload.Version = storage.Get<int>(Name.AggregateVersion);
+            Event payload = output as Event;
+            if (payload != null)
+            {
+                payload.Key = storage.Get<IKey>(Name.Key);
+                payload.AggregateKey = storage.Get<IKey>(Name.AggregateKey);
+                payload.Version = storage.Get<int>(Name.AggregateVersion);
+            }
         }
     }
 }

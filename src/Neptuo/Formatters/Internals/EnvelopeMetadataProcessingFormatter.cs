@@ -1,4 +1,5 @@
-﻿using Neptuo.Activators;
+﻿using Neptuo;
+using Neptuo.Activators;
 using Neptuo.Collections.Specialized;
 using Neptuo.Commands;
 using Neptuo.Formatters.Metadata;
@@ -11,19 +12,30 @@ using System.Threading.Tasks;
 
 namespace Neptuo.Formatters.Internals
 {
-    internal abstract class EnvelopeMetadataProcessingFormatter : CompositeTypeFormatter
+    internal class EnvelopeMetadataProcessingFormatter : CompositeTypeFormatter
     {
         public const string MetadataKey = "Metadata";
 
-        public EnvelopeMetadataProcessingFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory)
-            : base(provider, storageFactory)
+        private readonly IEnumerable<ICompositeFormatterExtender> extenders;
+
+        public EnvelopeMetadataProcessingFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory, params ICompositeFormatterExtender[] extenders)
+            : this(provider, storageFactory, (IEnumerable<ICompositeFormatterExtender>)extenders)
         { }
+
+        public EnvelopeMetadataProcessingFormatter(ICompositeTypeProvider provider, IFactory<ICompositeStorage> storageFactory, IEnumerable<ICompositeFormatterExtender> extenders)
+            : base(provider, storageFactory)
+        {
+            Ensure.NotNull(extenders, "extenders");
+            this.extenders = extenders;
+        }
 
         protected override bool TryLoad(Stream input, IDeserializerContext context, CompositeType type, ICompositeStorage storage)
         {
             if (base.TryLoad(input, context, type, storage))
             {
-                TryLoad(GetOrAddPayloadStorage(storage), context.Output);
+                ICompositeStorage payloadStorage = GetOrAddPayloadStorage(storage);
+                foreach (ICompositeFormatterExtender extender in extenders)
+                    extender.Load(payloadStorage, context.Output);
 
                 IKeyValueCollection metadata;
                 ICompositeStorage metadataStorage;
@@ -39,13 +51,13 @@ namespace Neptuo.Formatters.Internals
             return false;
         }
 
-        protected abstract void TryLoad(ICompositeStorage payloadStorage, object output);
-
         protected override bool TryStore(object input, ISerializerContext context, CompositeType type, CompositeVersion typeVersion, ICompositeStorage storage)
         {
             if (base.TryStore(input, context, type, typeVersion, storage))
             {
-                TryStore(GetOrAddPayloadStorage(storage), input);
+                ICompositeStorage payloadStorage = GetOrAddPayloadStorage(storage);
+                foreach (ICompositeFormatterExtender extender in extenders)
+                    extender.Store(payloadStorage, input);
 
                 IReadOnlyKeyValueCollection metadata;
                 if (context.TryGetEnvelopeMetadata(out metadata))
@@ -61,15 +73,13 @@ namespace Neptuo.Formatters.Internals
             return false;
         }
 
-        protected abstract void TryStore(ICompositeStorage payloadStorage, object input);
-
         private ICompositeStorage GetOrAddPayloadStorage(ICompositeStorage storage)
         {
             ICompositeStorage payloadStorage;
-            if (storage.TryGet(CompositeTypeFormatter.Name.Payload, out payloadStorage))
+            if (storage.TryGet(Name.Payload, out payloadStorage))
                 return payloadStorage;
 
-            return storage.Add(CompositeTypeFormatter.Name.Payload);
+            return storage.Add(Name.Payload);
         }
     }
 }

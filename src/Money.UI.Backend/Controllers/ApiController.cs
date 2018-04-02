@@ -69,15 +69,23 @@ namespace Money.Controllers
             return NotFound();
         }
 
-        public async Task<ActionResult> Command([FromBody] Request request)
+        public ActionResult Command([FromBody] Request request)
         {
             string payload = request.Payload;
             Type type = Type.GetType(request.Type);
-            Command command = (Command)formatters.Command.Deserialize(type, payload);
+            object command = formatters.Command.Deserialize(type, payload);
 
-            await commandDispatcher.HandleAsync(command);
+            MethodInfo methodInfo = commandDispatcher.GetType().GetMethod(nameof(commandDispatcher.HandleAsync));
+            if (methodInfo != null)
+            {
+                methodInfo = methodInfo.MakeGenericMethod(type);
+                Task task = (Task)methodInfo.Invoke(commandDispatcher, new[] { command });
+                task.Wait();
 
-            return Ok();
+                return Ok();
+            }
+
+            return StatusCode(500);
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Blazor.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,7 @@ namespace Money
             services.AddMvc();
             services.AddSignalR();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ApiHub>();
 
             Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);

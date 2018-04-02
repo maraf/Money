@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Money.Data;
 using Money.Services;
 using Neptuo;
@@ -86,7 +87,7 @@ namespace Money.Bootstrap
             services
                 .AddSingleton<IQueryDispatcher>(queryDispatcher)
                 .AddSingleton<IEventHandlerCollection>(eventDispatcher.Handlers)
-                .AddSingleton<ICommandDispatcher>(commandDispatcher);
+                .AddScoped<ICommandDispatcher>(provider => new UserCommandDispatcher(commandDispatcher, provider.GetService<IHttpContextAccessor>().HttpContext));
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 

@@ -44,5 +44,36 @@ namespace Money.Commands.Handlers
             return Execute(executor, aggregateKey, envelope, (model, userKey) => handler(model));
         }
 
+
+        public static Task Execute<T, TRepository>(this AggregateRootCommandExecutor<T, TRepository> executor, Envelope envelope, Func<IKey, T> handler)
+            where T : AggregateRoot
+            where TRepository : IRepository<T, IKey>
+        {
+            return executor.Execute(() =>
+            {
+                IKey userKey;
+                if (envelope.Metadata.TryGet("UserId", out string userId))
+                    userKey = StringKey.Create(userId, "User");
+                else
+                    userKey = StringKey.Empty("User");
+
+                T model = handler(userKey);
+
+                foreach (IEvent item in model.Events)
+                {
+                    if (item is UserEvent payload)
+                        payload.UserKey = userKey;
+                }
+
+                return model;
+            });
+        }
+
+        public static Task Execute<T, TRepository>(this AggregateRootCommandExecutor<T, TRepository> executor, Envelope envelope, Func<T> handler)
+            where T : AggregateRoot
+            where TRepository : IRepository<T, IKey>
+        {
+            return Execute(executor, envelope, userKey => handler());
+        }
     }
 }

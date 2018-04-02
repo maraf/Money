@@ -11,20 +11,20 @@ using System.Threading.Tasks;
 
 namespace Money.Commands.Handlers
 {
-    public class CurrencyHandler : AggregateRootCommandHandler<CurrencyList>, 
-        ICommandHandler<CreateCurrency>, 
-        ICommandHandler<ChangeCurrencySymbol>, 
-        ICommandHandler<SetCurrencyAsDefault>, 
-        ICommandHandler<SetExchangeRate>, 
-        ICommandHandler<RemoveExchangeRate>, 
-        ICommandHandler<DeleteCurrency>
+    public class CurrencyHandler : AggregateRootCommandHandler<CurrencyList>,
+        ICommandHandler<Envelope<CreateCurrency>>,
+        ICommandHandler<Envelope<ChangeCurrencySymbol>>,
+        ICommandHandler<Envelope<SetCurrencyAsDefault>>,
+        ICommandHandler<Envelope<SetExchangeRate>>,
+        ICommandHandler<Envelope<RemoveExchangeRate>>,
+        ICommandHandler<Envelope<DeleteCurrency>>
     {
         private readonly IKey currencyListKey = GuidKey.Create(
             Guid.Parse("AF215C3D-B228-4004-806B-AC31398660A8"),
             KeyFactory.Empty(typeof(CurrencyList)).Type
         );
 
-        public CurrencyHandler(IFactory<IRepository<CurrencyList, IKey>> repositoryFactory) 
+        public CurrencyHandler(IFactory<IRepository<CurrencyList, IKey>> repositoryFactory)
             : base(repositoryFactory)
         { }
 
@@ -37,11 +37,11 @@ namespace Money.Commands.Handlers
             return currencies;
         }
 
-        public Task HandleAsync(CreateCurrency command) => WithCommand(command.Key).Execute(currencyListKey, model => model.Add(command.UniqueCode, command.Symbol));
-        public Task HandleAsync(ChangeCurrencySymbol command) => WithCommand(command.Key).Execute(currencyListKey, model => model.ChangeSymbol(command.UniqueCode, command.NewSymbol));
-        public Task HandleAsync(SetCurrencyAsDefault command) => WithCommand(command.Key).Execute(currencyListKey, model => model.SetAsDefault(command.UniqueCode));
-        public Task HandleAsync(SetExchangeRate command) => WithCommand(command.Key).Execute(currencyListKey, model => model.SetExchangeRate(command.SourceUniqueCode, command.TargetUniqueCode, command.ValidFrom, command.Rate));
-        public Task HandleAsync(RemoveExchangeRate command) => WithCommand(command.Key).Execute(currencyListKey, model => model.RemoveExchangeRate(command.SourceUniqueCode, command.TargetUniqueCode, command.ValidFrom, command.Rate));
-        public Task HandleAsync(DeleteCurrency command) => WithCommand(command.Key).Execute(currencyListKey, model => model.Delete(command.UniqueCode));
+        public Task HandleAsync(Envelope<CreateCurrency> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.Add(envelope.Body.UniqueCode, envelope.Body.Symbol));
+        public Task HandleAsync(Envelope<ChangeCurrencySymbol> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.ChangeSymbol(envelope.Body.UniqueCode, envelope.Body.NewSymbol));
+        public Task HandleAsync(Envelope<SetCurrencyAsDefault> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.SetAsDefault(envelope.Body.UniqueCode));
+        public Task HandleAsync(Envelope<SetExchangeRate> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.SetExchangeRate(envelope.Body.SourceUniqueCode, envelope.Body.TargetUniqueCode, envelope.Body.ValidFrom, envelope.Body.Rate));
+        public Task HandleAsync(Envelope<RemoveExchangeRate> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.RemoveExchangeRate(envelope.Body.SourceUniqueCode, envelope.Body.TargetUniqueCode, envelope.Body.ValidFrom, envelope.Body.Rate));
+        public Task HandleAsync(Envelope<DeleteCurrency> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.Delete(envelope.Body.UniqueCode));
     }
 }

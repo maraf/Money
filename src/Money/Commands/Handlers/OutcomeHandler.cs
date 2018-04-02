@@ -1,4 +1,5 @@
-﻿using Neptuo.Activators;
+﻿using Neptuo;
+using Neptuo.Activators;
 using Neptuo.Commands.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Models.Repositories;
@@ -11,20 +12,20 @@ using System.Threading.Tasks;
 namespace Money.Commands.Handlers
 {
     public class OutcomeHandler : AggregateRootCommandHandler<Outcome>, 
-        ICommandHandler<CreateOutcome>, 
-        ICommandHandler<ChangeOutcomeAmount>, 
-        ICommandHandler<ChangeOutcomeDescription>, 
-        ICommandHandler<ChangeOutcomeWhen>, 
-        ICommandHandler<DeleteOutcome>
+        ICommandHandler<Envelope<CreateOutcome>>, 
+        ICommandHandler<Envelope<ChangeOutcomeAmount>>, 
+        ICommandHandler<Envelope<ChangeOutcomeDescription>>, 
+        ICommandHandler<Envelope<ChangeOutcomeWhen>>, 
+        ICommandHandler<Envelope<DeleteOutcome>>
     {
         public OutcomeHandler(IFactory<IRepository<Outcome, IKey>> repositoryFactory) 
             : base(repositoryFactory)
         { }
 
-        public Task HandleAsync(CreateOutcome command) => WithCommand(command.Key).Execute(() => new Outcome(command.Amount, command.Description, command.When, command.CategoryKey));
-        public Task HandleAsync(ChangeOutcomeAmount command) => WithCommand(command.Key).Execute(command.OutcomeKey, model => model.ChangeAmount(command.Amount));
-        public Task HandleAsync(ChangeOutcomeDescription command) => WithCommand(command.Key).Execute(command.OutcomeKey, model => model.ChangeDescription(command.Description));
-        public Task HandleAsync(ChangeOutcomeWhen command) => WithCommand(command.Key).Execute(command.OutcomeKey, model => model.ChangeWhen(command.When));
-        public Task HandleAsync(DeleteOutcome command) => WithCommand(command.Key).Execute(command.OutcomeKey, model => model.Delete());
+        public Task HandleAsync(Envelope<CreateOutcome> envelope) => WithCommand(envelope.Body.Key).Execute(envelope, () => new Outcome(envelope.Body.Amount, envelope.Body.Description, envelope.Body.When, envelope.Body.CategoryKey));
+        public Task HandleAsync(Envelope<ChangeOutcomeAmount> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.OutcomeKey, envelope, model => model.ChangeAmount(envelope.Body.Amount));
+        public Task HandleAsync(Envelope<ChangeOutcomeDescription> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.OutcomeKey, envelope, model => model.ChangeDescription(envelope.Body.Description));
+        public Task HandleAsync(Envelope<ChangeOutcomeWhen> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.OutcomeKey, envelope, model => model.ChangeWhen(envelope.Body.When));
+        public Task HandleAsync(Envelope<DeleteOutcome> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.OutcomeKey, envelope, model => model.Delete());
     }
 }

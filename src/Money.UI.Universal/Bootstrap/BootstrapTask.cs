@@ -105,7 +105,7 @@ namespace Money.Bootstrap
             );
 
             CommandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
-            EventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
+            EventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory, new List<ICompositeFormatterExtender>() { new UserKeyEventExtender() });
 
             commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), CommandFormatter);
 

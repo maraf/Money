@@ -11,7 +11,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when category is added to an existing outcome.
     /// </summary>
-    public class OutcomeCategoryAdded : Event
+    public class OutcomeCategoryAdded : UserEvent
     {
         /// <summary>
         /// Gets a key of the category assigned to the outcome.

@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a currency is deleted (soft).
     /// </summary>
-    public class CurrencyDeleted : Event
+    public class CurrencyDeleted : UserEvent
     {
         /// <summary>
         /// Gets an unique code of the deleted currency.

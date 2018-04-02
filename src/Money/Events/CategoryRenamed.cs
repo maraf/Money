@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised after changing a name.
     /// </summary>
-    public class CategoryRenamed : Event
+    public class CategoryRenamed : UserEvent
     {
         /// <summary>
         /// Get a new name of the category.

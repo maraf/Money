@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when after a category description is changed.
     /// </summary>
-    public class CategoryDescriptionChanged : Event
+    public class CategoryDescriptionChanged : UserEvent
     {
         /// <summary>
         /// Gets an description of the category.

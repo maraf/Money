@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when an amount of outcome has changed.
     /// </summary>
-    public class OutcomeAmountChanged : Event
+    public class OutcomeAmountChanged : UserEvent
     {
         /// <summary>
         /// Gets an original value of the outcome.

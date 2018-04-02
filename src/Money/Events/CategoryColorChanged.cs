@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a category color is changed.
     /// </summary>
-    public class CategoryColorChanged : Event
+    public class CategoryColorChanged : UserEvent
     {
         /// <summary>
         /// Gets a new color of the category

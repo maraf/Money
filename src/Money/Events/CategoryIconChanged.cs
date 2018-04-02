@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a category icon is changed.
     /// </summary>
-    public class CategoryIconChanged : Event
+    public class CategoryIconChanged : UserEvent
     {
         /// <summary>
         /// Gets a category font icon.

@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a new currency is created.
     /// </summary>
-    public class CurrencyCreated : Event
+    public class CurrencyCreated : UserEvent
     {
         /// <summary>
         /// Gets an unique code of the new currency.

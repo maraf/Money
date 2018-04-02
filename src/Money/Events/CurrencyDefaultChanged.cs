@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a default currency was changed.
     /// </summary>
-    public class CurrencyDefaultChanged : Event
+    public class CurrencyDefaultChanged : UserEvent
     {
         /// <summary>
         /// Gets an unique code of the default currency.

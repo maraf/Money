@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when an date when the outcome occured has changed.
     /// </summary>
-    public class OutcomeWhenChanged : Event
+    public class OutcomeWhenChanged : UserEvent
     {
         /// <summary>
         /// Get a new date when the outcome occured.

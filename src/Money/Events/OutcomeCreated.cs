@@ -11,7 +11,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when new outcome is created.
     /// </summary>
-    public class OutcomeCreated : Event
+    public class OutcomeCreated : UserEvent
     {
         /// <summary>
         /// Gets a amount of the outcome.

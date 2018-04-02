@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a currency exchange rate is removed.
     /// </summary>
-    public class CurrencyExchangeRateRemoved : Event
+    public class CurrencyExchangeRateRemoved : UserEvent
     {
         /// <summary>
         /// Gets an unique code of the source currency,

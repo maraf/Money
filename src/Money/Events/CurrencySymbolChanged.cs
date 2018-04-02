@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when symbol of a currency is changed.
     /// </summary>
-    public class CurrencySymbolChanged : Event
+    public class CurrencySymbolChanged : UserEvent
     {
         /// <summary>
         /// Gets an unique code of the currency.

@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a new category is created.
     /// </summary>
-    public class CategoryCreated : Event
+    public class CategoryCreated : UserEvent
     {
         /// <summary>
         /// Gets a name of the category.

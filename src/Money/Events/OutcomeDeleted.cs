@@ -10,6 +10,6 @@ namespace Money.Events
     /// <summary>
     /// An event raised when the outcome is deleted.
     /// </summary>
-    public class OutcomeDeleted : Event
+    public class OutcomeDeleted : UserEvent
     { }
 }

@@ -10,6 +10,6 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a category is (soft) deleted.
     /// </summary>
-    public class CategoryDeleted : Event
+    public class CategoryDeleted : UserEvent
     { }
 }

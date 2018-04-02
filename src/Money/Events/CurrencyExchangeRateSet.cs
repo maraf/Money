@@ -10,7 +10,7 @@ namespace Money.Events
     /// <summary>
     /// An event raised when a currency exchange rate is set.
     /// </summary>
-    public class CurrencyExchangeRateSet : Event
+    public class CurrencyExchangeRateSet : UserEvent
     {
         /// <summary>
         /// Gets an unique code of the source currency,

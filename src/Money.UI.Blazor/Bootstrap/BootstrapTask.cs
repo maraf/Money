@@ -98,7 +98,7 @@ namespace Money.Bootstrap
             );
 
             commandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);
-            eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory);
+            eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory, new List<ICompositeFormatterExtender> () { new UserKeyEventExtender() });
             queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory, logFactory);
             exceptionFormatter = new CompositeExceptionFormatter(typeProvider, compositeStorageFactory);
         }

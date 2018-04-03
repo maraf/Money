@@ -18,6 +18,9 @@ namespace Money.Data
             {
                 var services = scope.ServiceProvider;
                 var userManager = services.GetService<UserManager<ApplicationUser>>();
+                var db = services.GetService<ApplicationDbContext>();
+
+                db.Database.EnsureCreated();
 
                 if (!userManager.Users.Any())
                     userManager.CreateAsync(new ApplicationUser("demo"), "demo").Wait();

@@ -4,6 +4,7 @@ using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using Neptuo.Threading.Tasks;
 using System;
@@ -77,12 +78,14 @@ namespace Money.Services
             return Task.CompletedTask;
         }
 
-        public Price ZeroDefault()
+        // TODO: Single user mode for now.
+        public Price ZeroDefault(IKey userKey)
         {
             return Price.Zero(defaultCurrencyUniqueCode);
         }
 
-        public Price ToDefault(IPriceFixed price)
+        // TODO: Single user mode for now.
+        public Price ToDefault(IKey userKey, IPriceFixed price)
         {
             Ensure.NotNull(price, "price");
 
@@ -97,16 +100,6 @@ namespace Money.Services
             }
 
             return new Price(price.Amount.Value, defaultCurrencyUniqueCode);
-        }
-
-        public Price Add(IPriceFixed price1, IPriceFixed price2)
-        {
-            return ToDefault(price1) + ToDefault(price2);
-        }
-
-        public Price Substract(IPriceFixed price1, IPriceFixed price2)
-        {
-            return ToDefault(price1) - ToDefault(price2);
         }
     }
 }

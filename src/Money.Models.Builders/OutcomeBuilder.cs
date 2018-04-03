@@ -75,9 +75,9 @@ namespace Money.Models.Builders
                     {
                         Price price;
                         if (totals.TryGetValue(category.CategoryId, out price))
-                            price = price + priceConverter.ToDefault(outcome);
+                            price = price + priceConverter.ToDefault(query.UserKey, outcome);
                         else
-                            price = priceConverter.ToDefault(outcome);
+                            price = priceConverter.ToDefault(query.UserKey, outcome);
 
                         totals[category.CategoryId] = price;
                     }
@@ -135,9 +135,9 @@ namespace Money.Models.Builders
                     .Select(o => new PriceFixed(new Price(o.Amount, o.Currency), o.When))
                     .ToListAsync();
 
-                Price price = priceConverter.ZeroDefault();
+                Price price = priceConverter.ZeroDefault(query.UserKey);
                 foreach (PriceFixed outcome in outcomes)
-                    price += priceConverter.ToDefault(outcome);
+                    price += priceConverter.ToDefault(query.UserKey, outcome);
 
                 return price;
             }

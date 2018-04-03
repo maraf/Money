@@ -1,4 +1,5 @@
 ﻿using Money.Models;
+using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,13 @@ namespace Money
         /// Creates a zero price in default currency.
         /// </summary>
         /// <returns></returns>
-        Price ZeroDefault();
+        Price ZeroDefault(IKey userKey);
 
         /// <summary>
         /// Converts <paramref name="price"/> to default currency.
         /// </summary>
         /// <param name="price">A price to convert.</param>
         /// <returns>A converted price.</returns>
-        Price ToDefault(IPriceFixed price);
+        Price ToDefault(IKey userKey, IPriceFixed price);
     }
 }

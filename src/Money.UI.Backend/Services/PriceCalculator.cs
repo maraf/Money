@@ -4,9 +4,11 @@ using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using Neptuo.Threading.Tasks;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,74 +24,85 @@ namespace Money.Services
         IEventHandler<CurrencyExchangeRateRemoved>
     {
         private readonly ExchangeRateModelComparer exchangeRateComparer = new ExchangeRateModelComparer();
-        private readonly Dictionary<string, List<ExchangeRateModel>> currencies = new Dictionary<string, List<ExchangeRateModel>>();
-        private string defaultCurrencyUniqueCode;
+        private readonly IQueryDispatcher queryDispatcher;
+        private readonly ConcurrentDictionary<IKey, UserModel> storage = new ConcurrentDictionary<IKey, UserModel>();
 
-        public PriceCalculator(IEventHandlerCollection eventHandlers)
+        public PriceCalculator(IEventHandlerCollection eventHandlers, IQueryDispatcher queryDispatcher)
         {
             Ensure.NotNull(eventHandlers, "eventHandlers");
+            Ensure.NotNull(queryDispatcher, "queryDispatcher");
             eventHandlers.AddAll(this);
+            this.queryDispatcher = queryDispatcher;
         }
 
-        public async Task InitializeAsync(IQueryDispatcher queryDispatcher)
+        private async Task EnsureUserStorageAsync(IKey userKey)
         {
-            defaultCurrencyUniqueCode = await queryDispatcher.QueryAsync(new GetCurrencyDefault());
-
-            IEnumerable<CurrencyModel> currencies = await queryDispatcher.QueryAsync(new ListAllCurrency());
-            foreach (CurrencyModel currency in currencies)
+            if (!storage.TryGetValue(userKey, out UserModel model))
             {
-                List<ExchangeRateModel> rates = await queryDispatcher.QueryAsync(new ListTargetCurrencyExchangeRates(currency.UniqueCode));
-                rates.Sort(exchangeRateComparer);
-                this.currencies[currency.UniqueCode] = rates;
+                storage[userKey] = model = new UserModel();
+
+                model.DefaultCurrencyUniqueCode = await queryDispatcher.QueryAsync(new GetCurrencyDefault() { UserKey = userKey });
+
+                IEnumerable<CurrencyModel> currencies = await queryDispatcher.QueryAsync(new ListAllCurrency() { UserKey = userKey });
+                foreach (CurrencyModel currency in currencies)
+                {
+                    List<ExchangeRateModel> rates = await queryDispatcher.QueryAsync(new ListTargetCurrencyExchangeRates(currency.UniqueCode) { UserKey = userKey });
+                    rates.Sort(exchangeRateComparer);
+                    model.Currencies[currency.UniqueCode] = rates;
+                }
             }
         }
 
-        Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
+        async Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
-            currencies.Add(payload.UniqueCode, new List<ExchangeRateModel>());
-            return Task.CompletedTask;
+            await EnsureUserStorageAsync(payload.UserKey);
+            storage[payload.UserKey].Currencies.TryAdd(payload.UniqueCode, new List<ExchangeRateModel>());
         }
 
-        Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
+        async Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
         {
-            List<ExchangeRateModel> exchangeRates = currencies[payload.TargetUniqueCode];
+            await EnsureUserStorageAsync(payload.UserKey);
+            List<ExchangeRateModel> exchangeRates = storage[payload.UserKey].Currencies[payload.TargetUniqueCode];
             exchangeRates.Add(new ExchangeRateModel(payload.SourceUniqueCode, payload.Rate, payload.ValidFrom));
             exchangeRates.Sort(exchangeRateComparer);
-            return Task.CompletedTask;
         }
 
-        Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
+        async Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
         {
-            List<ExchangeRateModel> exchangeRates = currencies[payload.TargetUniqueCode];
+            await EnsureUserStorageAsync(payload.UserKey);
+            List<ExchangeRateModel> exchangeRates = storage[payload.UserKey].Currencies[payload.TargetUniqueCode];
             ExchangeRateModel exchangeRate = exchangeRates.FirstOrDefault(r => r.SourceCurrency == payload.SourceUniqueCode && r.Rate == payload.Rate && r.ValidFrom == payload.ValidFrom);
             if (exchangeRate != null)
             {
                 exchangeRates.Remove(exchangeRate);
                 exchangeRates.Sort(exchangeRateComparer);
             }
-
-            return Task.CompletedTask;
         }
 
-        Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
+        async Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
         {
-            defaultCurrencyUniqueCode = payload.UniqueCode;
-            return Task.CompletedTask;
+            await EnsureUserStorageAsync(payload.UserKey);
+            storage[payload.UserKey].DefaultCurrencyUniqueCode = payload.UniqueCode;
         }
 
-        public Price ZeroDefault()
+        public Price ZeroDefault(IKey userKey)
         {
-            return Price.Zero(defaultCurrencyUniqueCode);
+            EnsureUserStorageAsync(userKey).Wait();
+            return Price.Zero(storage[userKey].DefaultCurrencyUniqueCode);
         }
 
-        public Price ToDefault(IPriceFixed price)
+        public Price ToDefault(IKey userKey, IPriceFixed price)
         {
             Ensure.NotNull(price, "price");
+
+            EnsureUserStorageAsync(userKey).Wait();
+
+            string defaultCurrencyUniqueCode = storage[userKey].DefaultCurrencyUniqueCode;
 
             if (price.Amount.Currency == defaultCurrencyUniqueCode)
                 return price.Amount;
 
-            if (currencies.TryGetValue(defaultCurrencyUniqueCode, out List<ExchangeRateModel> rates))
+            if (storage[userKey].Currencies.TryGetValue(defaultCurrencyUniqueCode, out List<ExchangeRateModel> rates))
             {
                 ExchangeRateModel rate = rates.FirstOrDefault(e => e.SourceCurrency == price.Amount.Currency && e.ValidFrom <= price.When);
                 if (rate != null)
@@ -97,16 +110,6 @@ namespace Money.Services
             }
 
             return new Price(price.Amount.Value, defaultCurrencyUniqueCode);
-        }
-
-        public Price Add(IPriceFixed price1, IPriceFixed price2)
-        {
-            return ToDefault(price1) + ToDefault(price2);
-        }
-
-        public Price Substract(IPriceFixed price1, IPriceFixed price2)
-        {
-            return ToDefault(price1) - ToDefault(price2);
         }
     }
 }

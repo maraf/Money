@@ -76,7 +76,7 @@ namespace Money.Bootstrap
 
             Domain();
 
-            priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
+            priceCalculator = new PriceCalculator(eventDispatcher.Handlers, queryDispatcher);
 
             services
                 .AddSingleton(priceCalculator)
@@ -89,13 +89,10 @@ namespace Money.Bootstrap
                 .AddScoped<ICommandDispatcher>(provider => new UserCommandDispatcher(commandDispatcher, provider.GetService<IHttpContextAccessor>().HttpContext))
                 .AddScoped<IQueryDispatcher>(provider => new UserQueryDispatcher(queryDispatcher, provider.GetService<IHttpContextAccessor>().HttpContext));
 
-            CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
+            CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher, queryDispatcher);
 
             services
                 .AddSingleton(currencyCache);
-
-            currencyCache.InitializeAsync(queryDispatcher);
-            priceCalculator.InitializeAsync(queryDispatcher);
         }
 
         private void Domain()
@@ -132,6 +129,8 @@ namespace Money.Bootstrap
             commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), commandFormatter);
             commandDispatcher.DispatcherExceptionHandlers.Add(exceptionHandlerBuilder);
             commandDispatcher.CommandExceptionHandlers.Add(exceptionHandlerBuilder);
+
+            queryDispatcher = new DefaultQueryDispatcher();
 
             var outcomeRepository = new AggregateRootRepository<Outcome>(
                 eventStore,
@@ -172,8 +171,6 @@ namespace Money.Bootstrap
 
         private void ReadModels()
         {
-            queryDispatcher = new DefaultQueryDispatcher();
-
             Models.Builders.BootstrapTask bootstrapTask = new Models.Builders.BootstrapTask(
                 queryDispatcher,
                 eventDispatcher.Handlers,

@@ -41,16 +41,17 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                db.Categories.Add(new CategoryEntity(
-                    new CategoryModel(
-                        payload.AggregateKey,
-                        payload.Name,
-                        null,
-                        payload.Color,
-                        null
-                    ),
-                    payload.UserKey.AsStringKey().Identifier
-                ));
+                db.Categories.Add(
+                    new CategoryEntity(
+                        new CategoryModel(
+                            payload.AggregateKey,
+                            payload.Name,
+                            null,
+                            payload.Color,
+                            null
+                        )
+                    ).SetUserKey(payload.UserKey)
+                );
 
                 return db.SaveChangesAsync();
             }
@@ -112,6 +113,7 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 return db.Categories
+                    .WhereUserKey(query.UserKey)
                     .Where(c => !c.IsDeleted)
                     .OrderBy(c => c.Name)
                     .Select(e => e.ToModel())
@@ -124,7 +126,10 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity entity = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
-                return entity.Icon;
+                if (entity.IsUserKey(query.UserKey))
+                    return entity.Icon;
+
+                throw MissingCategory(query.CategoryKey);
             }
         }
 
@@ -133,8 +138,14 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity entity = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
-                return new CategoryNameDescriptionModel(entity.Name, entity.Description);
+                if (entity.IsUserKey(query.UserKey))
+                    return new CategoryNameDescriptionModel(entity.Name, entity.Description);
+
+                throw MissingCategory(query.CategoryKey);
             }
         }
+
+        private InvalidOperationException MissingCategory(IKey categoryKey)
+            => Ensure.Exception.InvalidOperation("Missing category with key '{0}'.", categoryKey);
     }
 }

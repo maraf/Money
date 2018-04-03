@@ -10,6 +10,6 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting a default currency unique code.
     /// </summary>
-    public class GetCurrencyDefault : IQuery<string>
+    public class GetCurrencyDefault : UserQuery, IQuery<string>
     { }
 }

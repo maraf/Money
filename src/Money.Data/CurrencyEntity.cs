@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Money.Data
 {
-    public class CurrencyEntity
+    public class CurrencyEntity : IUserEntity
     {
+        public string UserId { get; set; }
         public string UniqueCode { get; set; }
         public string Symbol { get; set; }
         public bool IsDefault { get; set; }

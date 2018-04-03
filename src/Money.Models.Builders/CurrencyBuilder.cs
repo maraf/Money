@@ -5,6 +5,7 @@ using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Events.Handlers;
+using Neptuo.Models.Keys;
 using Neptuo.Queries.Handlers;
 using System;
 using System.Collections.Generic;
@@ -40,11 +41,13 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                await db.Currencies.AddAsync(new CurrencyEntity()
-                {
-                    UniqueCode = payload.UniqueCode,
-                    Symbol = payload.Symbol
-                });
+                await db.Currencies.AddAsync(
+                    new CurrencyEntity()
+                    {
+                        UniqueCode = payload.UniqueCode,
+                        Symbol = payload.Symbol
+                    }.SetUserKey(payload.UserKey)
+                );
 
                 await db.SaveChangesAsync();
             }
@@ -54,11 +57,11 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                CurrencyEntity entity = db.Currencies.FirstOrDefault(c => c.IsDefault);
+                CurrencyEntity entity = db.Currencies.WhereUserKey(payload.UserKey).FirstOrDefault(c => c.IsDefault);
                 if (entity != null)
                     entity.IsDefault = false;
 
-                entity = db.Currencies.FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
+                entity = db.Currencies.WhereUserKey(payload.UserKey).FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
                 if (entity != null)
                     entity.IsDefault = true;
 
@@ -70,7 +73,7 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                CurrencyEntity entity = db.Currencies.First(c => c.UniqueCode == payload.UniqueCode);
+                CurrencyEntity entity = db.Currencies.WhereUserKey(payload.UserKey).First(c => c.UniqueCode == payload.UniqueCode);
                 entity.Symbol = payload.Symbol;
                 await db.SaveChangesAsync();
             }
@@ -80,7 +83,7 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                CurrencyEntity entity = db.Currencies.First(c => c.UniqueCode == payload.UniqueCode);
+                CurrencyEntity entity = db.Currencies.WhereUserKey(payload.UserKey).First(c => c.UniqueCode == payload.UniqueCode);
                 entity.IsDeleted = true;
                 await db.SaveChangesAsync();
             }
@@ -91,8 +94,9 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 return db.Currencies
-                    .Where(e => !e.IsDeleted)
-                    .Select(e => new CurrencyModel(e.UniqueCode, e.Symbol, e.IsDefault))
+                    .WhereUserKey(query.UserKey)
+                    .Where(c => !c.IsDeleted)
+                    .Select(c => new CurrencyModel(c.UniqueCode, c.Symbol, c.IsDefault))
                     .ToListAsync();
             }
         }
@@ -101,13 +105,15 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                await db.ExchangeRates.AddAsync(new CurrencyExchangeRateEntity()
-                {
-                    TargetCurrency = payload.TargetUniqueCode,
-                    SourceCurrency = payload.SourceUniqueCode,
-                    Rate = payload.Rate,
-                    ValidFrom = payload.ValidFrom
-                });
+                await db.ExchangeRates.AddAsync(
+                    new CurrencyExchangeRateEntity()
+                    {
+                        TargetCurrency = payload.TargetUniqueCode,
+                        SourceCurrency = payload.SourceUniqueCode,
+                        Rate = payload.Rate,
+                        ValidFrom = payload.ValidFrom
+                    }.SetUserKey(payload.UserKey)
+                );
 
                 await db.SaveChangesAsync();
             }
@@ -118,6 +124,7 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CurrencyExchangeRateEntity entity = await db.ExchangeRates
+                    .WhereUserKey(payload.UserKey)
                     .FirstOrDefaultAsync(r => r.TargetCurrency == payload.TargetUniqueCode && r.SourceCurrency == payload.SourceUniqueCode && r.Rate == payload.Rate && r.ValidFrom == payload.ValidFrom);
 
                 if (entity != null)
@@ -132,9 +139,10 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 return db.ExchangeRates
-                    .Where(e => e.TargetCurrency == query.TargetCurrency)
-                    .OrderByDescending(e => e.ValidFrom)
-                    .Select(e => new ExchangeRateModel(e.SourceCurrency, e.Rate, e.ValidFrom))
+                    .WhereUserKey(query.UserKey)
+                    .Where(r => r.TargetCurrency == query.TargetCurrency)
+                    .OrderByDescending(r => r.ValidFrom)
+                    .Select(r => new ExchangeRateModel(r.SourceCurrency, r.Rate, r.ValidFrom))
                     .ToListAsync();
             }
         }
@@ -143,7 +151,7 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                CurrencyEntity currency = await db.Currencies.FirstAsync(c => c.IsDefault);
+                CurrencyEntity currency = await db.Currencies.WhereUserKey(query.UserKey).FirstAsync(c => c.IsDefault);
                 return currency.UniqueCode;
             }
         }

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Money.Data
 {
-    public class CurrencyExchangeRateEntity
+    public class CurrencyExchangeRateEntity : IUserEntity
     {
         public int Id { get; set; }
+        public string UserId { get; set; }
         public string TargetCurrency { get; set; }
         public string SourceCurrency { get; set; }
         public double Rate { get; set; }

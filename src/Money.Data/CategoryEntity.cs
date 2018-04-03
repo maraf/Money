@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Data
 {
-    public class CategoryEntity
+    public class CategoryEntity : IUserEntity
     {
         public Guid Id { get; set; }
         public string UserId { get; set; }
@@ -28,14 +28,13 @@ namespace Money.Data
         public CategoryEntity()
         { }
 
-        public CategoryEntity(CategoryModel model, string userId)
+        public CategoryEntity(CategoryModel model)
         {
             Id = model.Key.AsGuidKey().Guid;
             Name = model.Name;
             Description = model.Description;
             SetColor(model.Color);
             Icon = model.Icon;
-            UserId = userId
         }
 
         public void SetColor(Color color)

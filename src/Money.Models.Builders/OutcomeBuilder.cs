@@ -45,6 +45,7 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 var entities = await db.Outcomes
+                    .WhereUserKey(query.UserKey)
                     .OrderByDescending(o => o.When)
                     .Select(o => new { Year = o.When.Year, Month = o.When.Month })
                     .Distinct()
@@ -63,6 +64,7 @@ namespace Money.Models.Builders
                 Dictionary<Guid, Price> totals = new Dictionary<Guid, Price>();
 
                 List<OutcomeEntity> outcomes = await db.Outcomes
+                    .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
                     .Include(o => o.Categories)
                     .ToListAsync();
@@ -104,10 +106,10 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity category = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
-                if (category == null)
-                    throw Ensure.Exception.ArgumentOutOfRange("categoryKey", "No such category with key '{0}'.", query.CategoryKey);
+                if (category != null && category.IsUserKey(query.UserKey))
+                    return category.Name;
 
-                return category.Name;
+                throw Ensure.Exception.ArgumentOutOfRange("categoryKey", "No such category with key '{0}'.", query.CategoryKey);
             }
         }
 
@@ -116,10 +118,10 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 CategoryEntity category = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
-                if (category == null)
-                    throw Ensure.Exception.ArgumentOutOfRange("categoryKey", "No such category with key '{0}'.", query.CategoryKey);
+                if (category != null && category.IsUserKey(query.UserKey))
+                    return category.ToColor();
 
-                return category.ToColor();
+                throw Ensure.Exception.ArgumentOutOfRange("categoryKey", "No such category with key '{0}'.", query.CategoryKey);
             }
         }
 
@@ -128,6 +130,7 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 List<PriceFixed> outcomes = await db.Outcomes
+                    .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
                     .Select(o => new PriceFixed(new Price(o.Amount, o.Currency), o.When))
                     .ToListAsync();
@@ -149,6 +152,7 @@ namespace Money.Models.Builders
                     entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
 
                 List<OutcomeOverviewModel> outcomes = await entities
+                    .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Year == query.Year.Year)
                     .OrderBy(o => o.When)
                     .Select(o => o.ToOverviewModel())
@@ -162,7 +166,7 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                IQueryable<OutcomeEntity> entities = db.Outcomes;
+                IQueryable<OutcomeEntity> entities = db.Outcomes.WhereUserKey(query.UserKey);
                 if (!query.CategoryKey.IsEmpty)
                     entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
 
@@ -187,9 +191,8 @@ namespace Money.Models.Builders
                         payload.When,
                         payload.Description,
                         new List<IKey>() { payload.CategoryKey }
-                    ),
-                    payload.UserKey.AsStringKey().Identifier
-                ));
+                    )
+                ).SetUserKey(payload.UserKey));
                 return db.SaveChangesAsync();
             }
         }

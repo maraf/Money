@@ -10,6 +10,6 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting all currencies.
     /// </summary>
-    public class ListAllCurrency : IQuery<List<CurrencyModel>>
+    public class ListAllCurrency : UserQuery, IQuery<List<CurrencyModel>>
     { }
 }

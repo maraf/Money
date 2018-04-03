@@ -10,6 +10,6 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting all categories.
     /// </summary>
-    public class ListAllCategory : IQuery<List<CategoryModel>>
+    public class ListAllCategory : UserQuery, IQuery<List<CategoryModel>>
     { }
 }

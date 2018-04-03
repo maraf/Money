@@ -11,7 +11,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting list of categories with month outcome summary.
     /// </summary>
-    public class ListMonthCategoryWithOutcome : IQuery<List<CategoryWithAmountModel>>
+    public class ListMonthCategoryWithOutcome : UserQuery, IQuery<List<CategoryWithAmountModel>>
     {
         public MonthModel Month { get; private set; }
 

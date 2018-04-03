@@ -10,7 +10,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting total month outcome.
     /// </summary>
-    public class GetTotalMonthOutcome : IQuery<Price>
+    public class GetTotalMonthOutcome : UserQuery, IQuery<Price>
     {
         public MonthModel Month { get; private set; }
 

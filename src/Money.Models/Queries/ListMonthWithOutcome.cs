@@ -10,6 +10,6 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting list of month with outcome.
     /// </summary>
-    public class ListMonthWithOutcome : IQuery<List<MonthModel>>
+    public class ListMonthWithOutcome : UserQuery, IQuery<List<MonthModel>>
     { }
 }

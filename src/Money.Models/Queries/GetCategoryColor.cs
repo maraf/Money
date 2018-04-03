@@ -12,7 +12,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting category color.
     /// </summary>
-    public class GetCategoryColor : IQuery<Color>
+    public class GetCategoryColor : UserQuery, IQuery<Color>
     {
         /// <summary>
         /// Gets a key of the category.

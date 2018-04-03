@@ -12,7 +12,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting a category icon.
     /// </summary>
-    public class GetCategoryIcon : IQuery<string>
+    public class GetCategoryIcon : UserQuery, IQuery<string>
     {
         /// <summary>
         /// Gets a key of the category.

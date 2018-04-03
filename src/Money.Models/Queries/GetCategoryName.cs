@@ -12,7 +12,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting category name.
     /// </summary>
-    public class GetCategoryName : IQuery<string>
+    public class GetCategoryName : UserQuery, IQuery<string>
     {
         /// <summary>
         /// Gets a key of the category.

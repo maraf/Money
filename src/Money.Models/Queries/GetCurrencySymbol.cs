@@ -11,7 +11,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// Gets a symbol for currency with <see cref="UniqueCode"/>.
     /// </summary>
-    public class GetCurrencySymbol : IQuery<string>
+    public class GetCurrencySymbol : UserQuery, IQuery<string>
     {
         /// <summary>
         /// Gets an unique code of the currency.

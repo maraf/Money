@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Money.Models.Queries
 {
-    public class ListTargetCurrencyExchangeRates : IQuery<List<ExchangeRateModel>>
+    public class ListTargetCurrencyExchangeRates : UserQuery, IQuery<List<ExchangeRateModel>>
     { 
         public string TargetCurrency { get; private set; }
 

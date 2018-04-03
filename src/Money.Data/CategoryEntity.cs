@@ -12,6 +12,7 @@ namespace Money.Data
     public class CategoryEntity
     {
         public Guid Id { get; set; }
+        public string UserId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Icon { get; set; }
@@ -27,13 +28,14 @@ namespace Money.Data
         public CategoryEntity()
         { }
 
-        public CategoryEntity(CategoryModel model)
+        public CategoryEntity(CategoryModel model, string userId)
         {
             Id = model.Key.AsGuidKey().Guid;
             Name = model.Name;
             Description = model.Description;
             SetColor(model.Color);
             Icon = model.Icon;
+            UserId = userId
         }
 
         public void SetColor(Color color)

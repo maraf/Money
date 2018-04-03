@@ -41,13 +41,16 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                db.Categories.Add(new CategoryEntity(new CategoryModel(
-                    payload.AggregateKey,
-                    payload.Name,
-                    null,
-                    payload.Color,
-                    null
-                )));
+                db.Categories.Add(new CategoryEntity(
+                    new CategoryModel(
+                        payload.AggregateKey,
+                        payload.Name,
+                        null,
+                        payload.Color,
+                        null
+                    ),
+                    payload.UserKey.AsStringKey().Identifier
+                ));
 
                 return db.SaveChangesAsync();
             }

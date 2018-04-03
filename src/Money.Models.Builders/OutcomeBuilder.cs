@@ -180,13 +180,16 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                db.Outcomes.Add(new OutcomeEntity(new OutcomeModel(
-                    payload.AggregateKey,
-                    payload.Amount,
-                    payload.When,
-                    payload.Description,
-                    new List<IKey>() { payload.CategoryKey }
-                )));
+                db.Outcomes.Add(new OutcomeEntity(
+                    new OutcomeModel(
+                        payload.AggregateKey,
+                        payload.Amount,
+                        payload.When,
+                        payload.Description,
+                        new List<IKey>() { payload.CategoryKey }
+                    ),
+                    payload.UserKey.AsStringKey().Identifier
+                ));
                 return db.SaveChangesAsync();
             }
         }

@@ -12,6 +12,7 @@ namespace Money.Data
     public class OutcomeEntity : IPriceFixed
     {
         public Guid Id { get; set; }
+        public string UserId { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
@@ -24,7 +25,7 @@ namespace Money.Data
         public OutcomeEntity()
         { }
 
-        public OutcomeEntity(OutcomeModel model)
+        public OutcomeEntity(OutcomeModel model, string userId)
         {
             Id = model.Key.AsGuidKey().Guid;
             Description = model.Description;
@@ -32,6 +33,7 @@ namespace Money.Data
             Currency = model.Amount.Currency;
             When = model.When;
             Categories = new List<OutcomeCategoryEntity>();
+            UserId = userId;
 
             foreach (IKey categoryKey in model.CategoryKeys)
             {

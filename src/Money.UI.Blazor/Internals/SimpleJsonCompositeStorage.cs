@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor;
-using Neptuo;
+﻿using Neptuo;
 using Neptuo.Collections.Specialized;
 using Neptuo.Formatters;
 using Neptuo.Logging;
@@ -38,7 +37,7 @@ namespace Money.Internals
             using (StreamReader reader = new StreamReader(input))
             {
                 string value = reader.ReadToEnd();
-                storage = JsonUtil.Deserialize<Dictionary<string, object>>(value);
+                storage = SimpleJson.SimpleJson.DeserializeObject<JsonObject>(value);
             }
         }
 
@@ -50,7 +49,7 @@ namespace Money.Internals
 
         public void Store(Stream output)
         {
-            string value = JsonUtil.Serialize(storage);
+            string value = SimpleJson.SimpleJson.SerializeObject(storage);
             using (MemoryStream valueStream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
                 valueStream.CopyTo(output);
 

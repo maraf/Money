@@ -85,9 +85,9 @@ namespace Money.Bootstrap
             ReadModels();
 
             services
-                .AddSingleton<IQueryDispatcher>(queryDispatcher)
                 .AddSingleton<IEventHandlerCollection>(eventDispatcher.Handlers)
-                .AddScoped<ICommandDispatcher>(provider => new UserCommandDispatcher(commandDispatcher, provider.GetService<IHttpContextAccessor>().HttpContext));
+                .AddScoped<ICommandDispatcher>(provider => new UserCommandDispatcher(commandDispatcher, provider.GetService<IHttpContextAccessor>().HttpContext))
+                .AddScoped<IQueryDispatcher>(provider => new UserQueryDispatcher(queryDispatcher, provider.GetService<IHttpContextAccessor>().HttpContext));
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 

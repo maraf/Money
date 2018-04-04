@@ -15,23 +15,30 @@
 
 @if (Months != null)
 {
-    <ul class="nav nav-tabs">
-        @foreach (var month in Months)
-        {
-            @if (month == SelectedMonth)
+    if (Months.Count > 0)
+    {
+        <ul class="nav nav-tabs">
+            @foreach (var month in Months)
             {
-                <li role="presentation" class="active">
-                    <a href="#" @onclick(() => OnMonthSelected(month))>@month.ToString()</a>
-                </li>
+                @if (month == SelectedMonth)
+                {
+                    <li role="presentation" class="active">
+                        <a href="#" @onclick(() => OnMonthSelected(month))>@month.ToString()</a>
+                    </li>
+                }
+                else
+                {
+                    <li role="presentation">
+                        <a href="#" @onclick(() => OnMonthSelected(month))>@month.ToString()</a>
+                    </li>
+                }
             }
-            else
-            {
-                <li role="presentation">
-                    <a href="#" @onclick(() => OnMonthSelected(month))>@month.ToString()</a>
-                </li>
-            }
-        }
-    </ul>
+        </ul>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">No data.</div>
+    }
 }
 
 <OutcomeCreate Id="outcome-create" />

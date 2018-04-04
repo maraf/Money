@@ -27,6 +27,21 @@
         </div>
     </app>
 
+    <script>
+
+        // Support for cookies.
+        var originalFetch = fetch;
+        fetch = function (url, options) {
+            if (url.indexOf('/api/') >= 0) {
+                if (options) {
+                    options.credentials = "same-origin";
+                }
+            }
+
+            return originalFetch(url, options);
+        };
+
+    </script>
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="lib/signalr/signalr.min.js"></script>

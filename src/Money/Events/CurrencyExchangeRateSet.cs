@@ -68,6 +68,7 @@ namespace Money.Events
             hash += 7 * TargetUniqueCode.GetHashCode();
             hash += 7 * ValidFrom.GetHashCode();
             hash += 7 * Rate.GetHashCode();
+            hash += 7 * UserKey.GetHashCode();
             return hash;
         }
     }

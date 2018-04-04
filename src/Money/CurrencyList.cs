@@ -15,7 +15,7 @@ namespace Money
     /// <summary>
     /// All currencies.
     /// </summary>
-    public class CurrencyList : AggregateRoot,
+    public partial class CurrencyList : AggregateRoot,
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyExchangeRateSet>,
@@ -23,10 +23,7 @@ namespace Money
         IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyDeleted>
     {
-        private readonly HashSet<string> uniqueCodes = new HashSet<string>();
-        private readonly HashSet<string> deletedUniqueCodes = new HashSet<string>();
-        private readonly HashSet<int> exchangeRateHashCodes = new HashSet<int>();
-        private string defaultName = null;
+        private readonly Dictionary<IKey, UserModel> storage = new Dictionary<IKey, UserModel>();
 
         public CurrencyList()
         { }
@@ -35,68 +32,84 @@ namespace Money
             : base(key, events)
         { }
 
-        private void EnsureUnique(string uniqueCode, bool isDeletedIncluded = false)
+        private UserModel GetUserModel(IKey userKey)
+        {
+            if (!storage.TryGetValue(userKey, out UserModel model))
+                storage[userKey] = model = new UserModel();
+
+            return model;
+        }
+
+        private void EnsureUnique(IKey userKey, string uniqueCode, bool isDeletedIncluded = false)
         {
             uniqueCode = uniqueCode.ToLowerInvariant();
 
-            if (uniqueCodes.Contains(uniqueCode))
+            UserModel userModel = GetUserModel(userKey);
+            if (userModel.UniqueCodes.Contains(uniqueCode))
                 throw new CurrencyAlreadyExistsException();
 
-            if (isDeletedIncluded && deletedUniqueCodes.Contains(uniqueCode))
+            if (isDeletedIncluded && userModel.DeletedUniqueCodes.Contains(uniqueCode))
                 throw new CurrencyAlreadyExistsException();
         }
 
-        private void EnsureExists(string uniqueCode, bool isDeletedIncluded = false)
+        private void EnsureExists(IKey userKey, string uniqueCode, bool isDeletedIncluded = false)
         {
             uniqueCode = uniqueCode.ToLowerInvariant();
 
-            if (uniqueCodes.Contains(uniqueCode))
+            UserModel userModel = GetUserModel(userKey);
+            if (userModel.UniqueCodes.Contains(uniqueCode))
                 return;
 
-            if (isDeletedIncluded && deletedUniqueCodes.Contains(uniqueCode))
+            if (isDeletedIncluded && userModel.DeletedUniqueCodes.Contains(uniqueCode))
                 return;
 
             throw new CurrencyDoesNotExistException();
         }
 
-        public void Add(string uniqueCode, string symbol)
+        public void Add(IKey userKey, string uniqueCode, string symbol)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
             Ensure.NotNullOrEmpty(symbol, "symbol");
-            EnsureUnique(uniqueCode);
-            Publish(new CurrencyCreated(uniqueCode, symbol));
+            EnsureUnique(userKey, uniqueCode);
+            Publish(new CurrencyCreated(uniqueCode, symbol) { UserKey = userKey });
 
-            if (defaultName == null)
-                Publish(new CurrencyDefaultChanged(uniqueCode));
+            UserModel userModel = GetUserModel(userKey);
+            if (userModel.DefaultName == null)
+                Publish(new CurrencyDefaultChanged(uniqueCode) { UserKey = userKey });
         }
 
         Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
-            return UpdateState(() => uniqueCodes.Add(payload.UniqueCode.ToLowerInvariant()));
+            UserModel userModel = GetUserModel(payload.UserKey);
+            userModel.UniqueCodes.Add(payload.UniqueCode.ToLowerInvariant());
+            return Task.CompletedTask;
         }
 
-        public void SetAsDefault(string uniqueCode)
+        public void SetAsDefault(IKey userKey, string uniqueCode)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
-            EnsureExists(uniqueCode);
+            EnsureExists(userKey, uniqueCode);
 
-            if (defaultName == uniqueCode.ToLowerInvariant())
+            UserModel userModel = GetUserModel(userKey);
+            if (userModel.DefaultName == uniqueCode.ToLowerInvariant())
                 throw new CurrencyAlreadyAsDefaultException();
 
-            Publish(new CurrencyDefaultChanged(uniqueCode));
+            Publish(new CurrencyDefaultChanged(uniqueCode) { UserKey = userKey });
         }
 
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
         {
-            return UpdateState(() => defaultName = payload.UniqueCode.ToLowerInvariant());
+            UserModel userModel = GetUserModel(payload.UserKey);
+            userModel.DefaultName = payload.UniqueCode.ToLowerInvariant();
+            return Task.CompletedTask;
         }
 
-        public void ChangeSymbol(string uniqueCode, string symbol)
+        public void ChangeSymbol(IKey userKey, string uniqueCode, string symbol)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
-            EnsureExists(uniqueCode);
+            EnsureExists(userKey, uniqueCode);
 
-            Publish(new CurrencySymbolChanged(uniqueCode, symbol));
+            Publish(new CurrencySymbolChanged(uniqueCode, symbol) { UserKey = userKey });
         }
 
         Task IEventHandler<CurrencySymbolChanged>.HandleAsync(CurrencySymbolChanged payload)
@@ -104,16 +117,17 @@ namespace Money
             return Task.CompletedTask;
         }
 
-        public void SetExchangeRate(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        public void SetExchangeRate(IKey userKey, string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
         {
             Ensure.NotNullOrEmpty(sourceUniqueCode, "sourceUniqueCode");
             Ensure.NotNullOrEmpty(targetUniqueCode, "targetUniqueCode");
-            EnsureExists(sourceUniqueCode);
-            EnsureExists(targetUniqueCode);
+            EnsureExists(userKey, sourceUniqueCode);
+            EnsureExists(userKey, targetUniqueCode);
             Ensure.Positive(rate, "rate");
 
-            CurrencyExchangeRateSet payload = new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate);
-            if (exchangeRateHashCodes.Contains(payload.GetHashCode()))
+            UserModel userModel = GetUserModel(userKey);
+            CurrencyExchangeRateSet payload = new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate) { UserKey = userKey };
+            if (userModel.ExchangeRateHashCodes.Contains(payload.GetHashCode()))
                 throw new CurrencyExchangeRateAlreadyExistsException();
 
             Publish(payload);
@@ -121,53 +135,56 @@ namespace Money
 
         Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
         {
-            exchangeRateHashCodes.Add(payload.GetHashCode());
+            UserModel userModel = GetUserModel(payload.UserKey);
+            userModel.ExchangeRateHashCodes.Add(payload.GetHashCode());
             return Task.CompletedTask;
         }
 
-        public void RemoveExchangeRate(string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
+        public void RemoveExchangeRate(IKey userKey, string sourceUniqueCode, string targetUniqueCode, DateTime validFrom, double rate)
         {
             Ensure.NotNullOrEmpty(sourceUniqueCode, "sourceUniqueCode");
             Ensure.NotNullOrEmpty(targetUniqueCode, "targetUniqueCode");
-            EnsureExists(sourceUniqueCode);
-            EnsureExists(targetUniqueCode);
+            EnsureExists(userKey, sourceUniqueCode);
+            EnsureExists(userKey, targetUniqueCode);
             Ensure.Positive(rate, "rate");
 
+            UserModel userModel = GetUserModel(userKey);
             CurrencyExchangeRateSet payload = new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate);
-            if (!exchangeRateHashCodes.Contains(payload.GetHashCode()))
+            if (!userModel.ExchangeRateHashCodes.Contains(payload.GetHashCode()))
                 throw new CurrencyExchangeRateDoesNotExistException();
 
-            Publish(new CurrencyExchangeRateRemoved(sourceUniqueCode, targetUniqueCode, validFrom, rate));
+            Publish(new CurrencyExchangeRateRemoved(sourceUniqueCode, targetUniqueCode, validFrom, rate) { UserKey = userKey });
         }
 
         Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
         {
-            exchangeRateHashCodes.Add(new CurrencyExchangeRateSet(payload.SourceUniqueCode, payload.TargetUniqueCode, payload.ValidFrom, payload.Rate).GetHashCode());
+            UserModel userModel = GetUserModel(payload.UserKey);
+            userModel.ExchangeRateHashCodes.Add(new CurrencyExchangeRateSet(payload.SourceUniqueCode, payload.TargetUniqueCode, payload.ValidFrom, payload.Rate).GetHashCode());
             return Task.CompletedTask;
         }
 
-        public void Delete(string uniqueCode)
+        public void Delete(IKey userKey, string uniqueCode)
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
-            EnsureExists(uniqueCode, true);
+            EnsureExists(userKey, uniqueCode, true);
 
-            if (defaultName == uniqueCode.ToLowerInvariant())
+            UserModel userModel = GetUserModel(userKey);
+            if (userModel.DefaultName == uniqueCode.ToLowerInvariant())
                 throw new CantDeleteDefaultCurrencyException();
 
-            if (uniqueCodes.Count == 1)
+            if (userModel.UniqueCodes.Count == 1)
                 throw new CantDeleteLastCurrencyException();
 
-            Publish(new CurrencyDeleted(uniqueCode));
+            Publish(new CurrencyDeleted(uniqueCode) { UserKey = userKey });
         }
 
         Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload)
         {
-            return UpdateState(() =>
-            {
-                string uniqueCode = payload.UniqueCode.ToLowerInvariant();
-                uniqueCodes.Remove(uniqueCode);
-                deletedUniqueCodes.Remove(uniqueCode);
-            });
+            UserModel userModel = GetUserModel(payload.UserKey);
+            string uniqueCode = payload.UniqueCode.ToLowerInvariant();
+            userModel.UniqueCodes.Remove(uniqueCode);
+            userModel.DeletedUniqueCodes.Remove(uniqueCode);
+            return Task.CompletedTask;
         }
     }
 }

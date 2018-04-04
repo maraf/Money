@@ -37,11 +37,11 @@ namespace Money.Commands.Handlers
             return currencies;
         }
 
-        public Task HandleAsync(Envelope<CreateCurrency> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.Add(envelope.Body.UniqueCode, envelope.Body.Symbol));
-        public Task HandleAsync(Envelope<ChangeCurrencySymbol> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.ChangeSymbol(envelope.Body.UniqueCode, envelope.Body.NewSymbol));
-        public Task HandleAsync(Envelope<SetCurrencyAsDefault> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.SetAsDefault(envelope.Body.UniqueCode));
-        public Task HandleAsync(Envelope<SetExchangeRate> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.SetExchangeRate(envelope.Body.SourceUniqueCode, envelope.Body.TargetUniqueCode, envelope.Body.ValidFrom, envelope.Body.Rate));
-        public Task HandleAsync(Envelope<RemoveExchangeRate> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.RemoveExchangeRate(envelope.Body.SourceUniqueCode, envelope.Body.TargetUniqueCode, envelope.Body.ValidFrom, envelope.Body.Rate));
-        public Task HandleAsync(Envelope<DeleteCurrency> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, model => model.Delete(envelope.Body.UniqueCode));
+        public Task HandleAsync(Envelope<CreateCurrency> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, (model, userKey) => model.Add(userKey, envelope.Body.UniqueCode, envelope.Body.Symbol));
+        public Task HandleAsync(Envelope<ChangeCurrencySymbol> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, (model, userKey) => model.ChangeSymbol(userKey, envelope.Body.UniqueCode, envelope.Body.NewSymbol));
+        public Task HandleAsync(Envelope<SetCurrencyAsDefault> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, (model, userKey) => model.SetAsDefault(userKey, envelope.Body.UniqueCode));
+        public Task HandleAsync(Envelope<SetExchangeRate> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, (model, userKey) => model.SetExchangeRate(userKey, envelope.Body.SourceUniqueCode, envelope.Body.TargetUniqueCode, envelope.Body.ValidFrom, envelope.Body.Rate));
+        public Task HandleAsync(Envelope<RemoveExchangeRate> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, (model, userKey) => model.RemoveExchangeRate(userKey, envelope.Body.SourceUniqueCode, envelope.Body.TargetUniqueCode, envelope.Body.ValidFrom, envelope.Body.Rate));
+        public Task HandleAsync(Envelope<DeleteCurrency> envelope) => WithCommand(envelope.Body.Key).Execute(currencyListKey, envelope, (model, userKey) => model.Delete(userKey, envelope.Body.UniqueCode));
     }
 }

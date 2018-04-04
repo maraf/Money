@@ -71,7 +71,7 @@ namespace Money.Models.Builders
 
                 foreach (OutcomeEntity outcome in outcomes)
                 {
-                    foreach (OutcomeCategoryEntity category in outcome.Categories)
+                    foreach (OutcomeCategoryEntity category in db.OutcomeCategories.Where(oc => oc.OutcomeId == outcome.Id))
                     {
                         Price price;
                         if (totals.TryGetValue(category.CategoryId, out price))
@@ -180,7 +180,7 @@ namespace Money.Models.Builders
             }
         }
 
-        public Task HandleAsync(OutcomeCreated payload)
+        public async Task HandleAsync(OutcomeCreated payload)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
@@ -190,10 +190,22 @@ namespace Money.Models.Builders
                         payload.Amount,
                         payload.When,
                         payload.Description,
-                        new List<IKey>() { payload.CategoryKey }
+                        Enumerable.Empty<IKey>()
                     )
                 ).SetUserKey(payload.UserKey));
-                return db.SaveChangesAsync();
+                
+                await db.SaveChangesAsync();
+
+                OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
+                if (entity != null)
+                {
+                    db.OutcomeCategories.Add(new OutcomeCategoryEntity()
+                    {
+                        OutcomeId = payload.AggregateKey.AsGuidKey().Guid,
+                        CategoryId = payload.CategoryKey.AsGuidKey().Guid
+                    });
+                    await db.SaveChangesAsync();
+                }
             }
         }
 
@@ -204,7 +216,7 @@ namespace Money.Models.Builders
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
                 {
-                    entity.Categories.Add(new OutcomeCategoryEntity()
+                    db.OutcomeCategories.Add(new OutcomeCategoryEntity()
                     {
                         OutcomeId = payload.AggregateKey.AsGuidKey().Guid,
                         CategoryId = payload.CategoryKey.AsGuidKey().Guid

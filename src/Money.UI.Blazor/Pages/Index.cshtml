@@ -101,7 +101,11 @@
 
     protected async void OnEvent()
     {
-        await LoadMonthSummaryAsync();
+        if (SelectedMonth == null)
+            await LoadMonthsAsync();
+        else
+            await LoadMonthSummaryAsync();
+
         StateHasChanged();
     }
 

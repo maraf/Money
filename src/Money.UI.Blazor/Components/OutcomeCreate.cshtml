@@ -44,6 +44,7 @@
                         {
                             <button class="btn btn-block" style="background-color: @category.Color.ToHashCode();" @onclick(() => CategoryKey = category.Key)>
                                 <span>@category.Icon</span>
+                                <strong>@category.Name</strong>
                                 <span>@category.Description</span>
                             </button>
                         }

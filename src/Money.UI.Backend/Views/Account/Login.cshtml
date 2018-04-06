@@ -10,12 +10,16 @@
 }
 
 <h2>@ViewData["Title"]</h2>
+<h4>Use a local account to log in.</h4>
+<hr />
+<div class="alert alert-info">
+    You can sign in as <strong>demo</strong> user with <strong>demo</strong> password or register your own account.
+</div>
+
 <div class="row">
     <div class="col-md-4">
         <section>
             <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <h4>Use a local account to log in.</h4>
-                <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="UserName"></label>

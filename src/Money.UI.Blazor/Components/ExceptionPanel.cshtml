@@ -3,33 +3,15 @@
 
 @if (LastException != null)
 {
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-
-        @if (LastExceptionUserMessage != null)
-        {
-            <strong>
-                @LastExceptionUserMessage
-            </strong>
-        }
-        else
-        {
-            <strong>
-                @LastException.GetType().FullName:
-            </strong>
-            <span>
-                @LastException.Message
-            </span>
-        }
-    </div>
+    <Alert Title="@Title" Message="@Message" Mode="AlertMode.Error" IsDismissible="true" />
 }
 
 @functions {
 
     public Exception LastException { get; private set; }
-    public string LastExceptionUserMessage { get; private set; }
+
+    public string Title { get; private set; }
+    public string Message { get; private set; }
 
     protected override async Task OnInitAsync()
     {
@@ -58,9 +40,18 @@
                 else if (e is CantDeleteLastCurrencyException)
                     message = MessageBuilder.CantDeleteLastCurrency();
 
-                LastExceptionUserMessage = message;
+                Message = message;
             }
 
+            if (Message == null)
+            {
+                Title = LastException.GetType().FullName;
+                Message = LastException.Message;
+            }
+            else
+            {
+                Title = null;
+            }
 
             StateHasChanged();
         });

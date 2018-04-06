@@ -17,12 +17,12 @@
             <div class="form-group">
                 <label asp-for="Email"></label>
                 <div class="input-group">
-                    <input asp-for="Email" class="form-control" />
+                    <input asp-for="Email" class="form-control" disabled="@User.IsDemo()" />
                     <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
                 </div>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">Save</button>
+            <button type="submit" class="btn btn-default" disabled="@User.IsDemo()">Save</button>
         </form>
     </div>
 </div>

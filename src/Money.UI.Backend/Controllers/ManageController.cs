@@ -56,6 +56,9 @@ namespace Money.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(IndexViewModel model)
         {
+            if (User.IsDemo())
+                return RedirectToAction(nameof(Index));
+
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -98,10 +101,11 @@ namespace Money.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            if (User.IsDemo())
+                return RedirectToAction(nameof(ChangePassword));
+
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null)

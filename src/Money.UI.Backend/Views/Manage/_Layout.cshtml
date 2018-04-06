@@ -7,6 +7,12 @@
 <div>
     <h4>Change your account settings</h4>
     <hr />
+    @if (User.IsDemo())
+    {
+        <div class="alert alert-warning">
+            <strong>Demo</strong> user can't be modified.
+        </div>
+    }
     <div class="row">
         <div class="col-md-3">
             @await Html.PartialAsync("_ManageNav")

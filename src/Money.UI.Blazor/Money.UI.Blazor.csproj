@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <BlazorGenerate Remove="Components\_ViewImports.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Components\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

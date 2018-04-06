@@ -1,0 +1,85 @@
+﻿@using Money.Components.Bootstrap;
+@using Neptuo;
+
+<div class="alert @ModeCssClass" role="alert">
+    @if (IsDismissible)
+    {
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    }
+
+    @if (Title != null)
+    {
+        <strong>
+            @Title
+        </strong>
+    }
+
+    <span>
+        @Message
+    </span>
+</div>
+
+@functions 
+{
+
+    public string Title { get; set; }
+    public string Message { get; set; }
+
+    private bool isDismissible;
+    public bool IsDismissible
+    {
+        get => isDismissible;
+        set
+        {
+            if (isDismissible != value)
+            {
+                isDismissible = value;
+                UpdateModeCssClass();
+            }
+        }
+    }
+
+    private AlertMode mode;
+    public AlertMode Mode
+    {
+        get => mode;
+        set
+        {
+            if (mode != value)
+            {
+                mode = value;
+                UpdateModeCssClass();
+            }
+        }
+
+    }
+
+    protected string ModeCssClass { get; set; }
+
+    protected void UpdateModeCssClass()
+    {
+        switch (mode)
+        {
+            case AlertMode.Success:
+                ModeCssClass = "alert-success";
+                break;
+            case AlertMode.Info:
+                ModeCssClass = "alert-info";
+                break;
+            case AlertMode.Warning:
+                ModeCssClass = "alert-warning";
+                break;
+            case AlertMode.Error:
+                ModeCssClass = "alert-danger";
+                break;
+            default:
+                throw Ensure.Exception.NotSupported(mode.ToString());
+        }
+
+        if (IsDismissible)
+            ModeCssClass += " alert-dismissible";
+    }
+
+}

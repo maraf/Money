@@ -101,7 +101,9 @@
     <Compile Include="Bootstrap\DevelopmentService.cs" />
     <Compile Include="Bootstrap\StorageFactory.cs" />
     <Compile Include="Bootstrap\UpgradeService.cs" />
+    <Compile Include="Bootstrap\UserCommandDispatcher.cs" />
     <Compile Include="Bootstrap\UserKeyEventExtender.cs" />
+    <Compile Include="Bootstrap\UserQueryDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Services\CurrencyCache.cs" />

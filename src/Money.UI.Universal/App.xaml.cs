@@ -70,7 +70,7 @@ namespace Money.UI
 
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                StatusBar statusBar = StatusBar.GetForCurrentView();
+                StatusBar statusBar = StatusBar.GetForCurrentView();    
                 statusBar.HideAsync();
             }
 

@@ -22,10 +22,13 @@ namespace Money.Commands.Handlers
             return executor.Execute(aggregateKey, model =>
             {
                 IKey userKey;
-                if (envelope.Metadata.TryGet("UserId", out string userId))
-                    userKey = StringKey.Create(userId, "User");
-                else
-                    userKey = StringKey.Empty("User");
+                if (!envelope.Metadata.TryGet("UserKey", out userKey))
+                {
+                    if (envelope.Metadata.TryGet("UserId", out string userId))
+                        userKey = StringKey.Create(userId, "User");
+                    else
+                        userKey = StringKey.Empty("User");
+                }
 
                 handler(model, userKey);
 
@@ -52,10 +55,13 @@ namespace Money.Commands.Handlers
             return executor.Execute(() =>
             {
                 IKey userKey;
-                if (envelope.Metadata.TryGet("UserId", out string userId))
-                    userKey = StringKey.Create(userId, "User");
-                else
-                    userKey = StringKey.Empty("User");
+                if (!envelope.Metadata.TryGet("UserKey", out userKey))
+                {
+                    if (envelope.Metadata.TryGet("UserId", out string userId))
+                        userKey = StringKey.Create(userId, "User");
+                    else
+                        userKey = StringKey.Empty("User");
+                }
 
                 T model = handler(userKey);
 

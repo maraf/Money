@@ -43,6 +43,8 @@ namespace Money.Bootstrap
         public IFormatter CommandFormatter { get; private set; }
         public IFormatter EventFormatter { get; private set; }
 
+        public static IKey UserKey { get; } = StringKey.Create("tmp_user", "User");
+
         public void Initialize()
         {
             ServiceProvider.MessageBuilder = new MessageBuilder();
@@ -61,11 +63,11 @@ namespace Money.Bootstrap
 
             ReadModels();
 
-            ServiceProvider.QueryDispatcher = queryDispatcher;
-            ServiceProvider.CommandDispatcher = commandDispatcher;
+            ServiceProvider.QueryDispatcher = new UserQueryDispatcher(queryDispatcher, () => UserKey);
+            ServiceProvider.CommandDispatcher = new UserCommandDispatcher(commandDispatcher, () => UserKey);
             ServiceProvider.EventHandlers = eventDispatcher.Handlers;
 
-            UpgradeService upgradeService = new UpgradeService(commandDispatcher, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory, priceCalculator);
+            UpgradeService upgradeService = new UpgradeService(ServiceProvider.CommandDispatcher, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory, priceCalculator);
             ServiceProvider.UpgradeService = upgradeService;
 
             ServiceProvider.TileService = new TileService();
@@ -74,8 +76,8 @@ namespace Money.Bootstrap
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 
-            currencyCache.InitializeAsync(queryDispatcher);
-            priceCalculator.InitializeAsync(queryDispatcher);
+            currencyCache.InitializeAsync(ServiceProvider.QueryDispatcher);
+            priceCalculator.InitializeAsync(ServiceProvider.QueryDispatcher);
         }
         
         private void Domain()

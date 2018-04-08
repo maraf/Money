@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.UI.Backend", "src\Mon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.UI.Blazor", "src\Money.UI.Blazor\Money.UI.Blazor.csproj", "{F13BAE0F-446F-4E54-8DFD-63776E94D33D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptuo.Json", "src\Neptuo.Json\Neptuo.Json.csproj", "{2CEB371B-B0EF-4335-99E3-83F30B1EF21E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptuo.Json", "src\Neptuo.Json\Neptuo.Json.csproj", "{2CEB371B-B0EF-4335-99E3-83F30B1EF21E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptuo.EntityFrameworkCore", "src\Neptuo.EntityFrameworkCore\Neptuo.EntityFrameworkCore.csproj", "{8D844524-F0FC-4DF7-9DF6-704327812309}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptuo.EntityFrameworkCore", "src\Neptuo.EntityFrameworkCore\Neptuo.EntityFrameworkCore.csproj", "{8D844524-F0FC-4DF7-9DF6-704327812309}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +84,7 @@ Global
 		{CA416337-12D3-4406-85C8-2717FAB7A7D2}.Release|x86.ActiveCfg = Release|Any CPU
 		{CA416337-12D3-4406-85C8-2717FAB7A7D2}.Release|x86.Build.0 = Release|Any CPU
 		{6D351EA3-9664-48F9-8937-EA14924755FE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6D351EA3-9664-48F9-8937-EA14924755FE}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{6D351EA3-9664-48F9-8937-EA14924755FE}.Debug|ARM.ActiveCfg = Debug|ARM
 		{6D351EA3-9664-48F9-8937-EA14924755FE}.Debug|ARM.Build.0 = Debug|ARM
 		{6D351EA3-9664-48F9-8937-EA14924755FE}.Debug|ARM.Deploy.0 = Debug|ARM

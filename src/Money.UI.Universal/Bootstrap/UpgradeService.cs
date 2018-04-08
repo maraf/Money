@@ -68,6 +68,8 @@ namespace Money.Bootstrap
             if (currentVersion < 1)
             {
                 context.StartingStep(0 - currentVersion, "Creating default categories.");
+                EnsureReadModelDatabase();
+                EnsureEventSourcingDatabase();
                 await UpgradeVersion1();
             }
 
@@ -158,6 +160,40 @@ namespace Money.Bootstrap
             bootstrapTask.Initialize();
 
             return rebuilder.RunAsync();
+        }
+
+        private void EnsureReadModelDatabase(ReadModelContext readModels = null)
+        {
+            if (readModels == null)
+            {
+                using (readModels = readModelContextFactory.Create())
+                {
+                    readModels.Database.EnsureCreated();
+                    readModels.Database.Migrate();
+                }
+            }
+            else
+            {
+                readModels.Database.EnsureCreated();
+                readModels.Database.Migrate();
+            }
+        }
+
+        private void EnsureEventSourcingDatabase(EventSourcingContext eventSourcing = null)
+        {
+            if (eventSourcing == null)
+            {
+                using (eventSourcing = eventSourceContextFactory.Create())
+                {
+                    eventSourcing.Database.EnsureCreated();
+                    eventSourcing.Database.Migrate();
+                }
+            }
+            else
+            {
+                eventSourcing.Database.EnsureCreated();
+                eventSourcing.Database.Migrate();
+            }
         }
 
         private async Task UpgradeVersion4()

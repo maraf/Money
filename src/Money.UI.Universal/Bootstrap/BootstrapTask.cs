@@ -76,6 +76,12 @@ namespace Money.Bootstrap
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 
+            using (var eventSourcing = ServiceProvider.EventSourcingContextFactory.Create())
+                eventSourcing.Database.EnsureCreated();
+
+            using (var readModels = ServiceProvider.ReadModelContextFactory.Create())
+                readModels.Database.EnsureCreated();
+
             currencyCache.InitializeAsync(ServiceProvider.QueryDispatcher);
             priceCalculator.InitializeAsync(ServiceProvider.QueryDispatcher);
         }

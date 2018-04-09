@@ -12,22 +12,10 @@
     </button>
 </h1>
 
-
 <CategoryName Id="category-create" />
 
-@{ 
-    int i = 0;
-}
 @foreach (var item in Models)
 {
-    i++;
-    string nameId1 = i + "-name";
-    string nameId2 = nameId1;
-    string iconId1 = i + "-icon";
-    string iconId2 = iconId1;
-    string colorId1 = i + "-color";
-    string colorId2 = colorId1;
-
     <div class="alert" style="background-color: @item.Color.ToHashCode()">
         @if (item.Icon != null)
         {
@@ -42,17 +30,17 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" data-toggle="modal" data_target="#@nameId1">
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" data-toggle="modal" data-target="#category-edit-name" @onclick(() => Selected = item)>
                     <span class="glyphicon glyphicon-pencil"></span>
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Icon" data-toggle="modal" data_target="#@iconId1">
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Icon" data-toggle="modal" data-target="#category-edit-icon" @onclick(() => Selected = item)>
                     <span class="glyphicon glyphicon-picture"></span>
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Color" data-toggle="modal" data_target="#@colorId1">
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Color" data-toggle="modal" data-target="#category-edit-color" @onclick(() => Selected = item)>
                     <span class="glyphicon glyphicon-tint"></span>
                 </button>
             </li>
@@ -63,17 +51,18 @@
             </li>
         </ul>
     </div>
-
-    <CategoryName Id="@nameId2" CategoryKey="@item.Key" Name="@item.Name" Description="@item.Description" />
-    <CategoryIcon id="@iconId2" CategoryKey="@item.Key" Icon="@item.Icon" />
-    <CategoryColor id="@colorId2" CategoryKey="@item.Key" Color="@item.Color" />
 }
+
+<CategoryName Id="category-edit-name" CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" />
+<CategoryIcon id="category-edit-icon" CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" />
+<CategoryColor id="category-edit-color" CategoryKey="@Selected?.Key" Color="@Selected?.Color" />
 
 @functions {
 
     private static CategoryEventHandler handler;
 
     public List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
+    public CategoryModel Selected { get; private set; }
 
     protected override async Task OnInitAsync()
     {
@@ -96,11 +85,9 @@
         StateHasChanged();
     }
 
-    protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCategory());
+    protected async Task LoadDataAsync()
+        => Models = await Queries.QueryAsync(new ListAllCategory());
 
     protected async void OnDeleteClick(CategoryModel model)
-    {
-        await Commands.HandleAsync(new DeleteCategory(model.Key));
-    }
-
+        => await Commands.HandleAsync(new DeleteCategory(model.Key));
 }

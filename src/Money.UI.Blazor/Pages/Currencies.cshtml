@@ -16,15 +16,8 @@
 
 <CurrencyEdit id="currency-create" />
 
-@{
-    int i = 0;
-}
 @foreach (var item in Models)
 {
-    i++;
-    string editId1 = i + "-edit";
-    string editId2 = editId1;
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>
@@ -34,7 +27,7 @@
         <div class="panel-body">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" data-toggle="modal" data_target="#@editId1">
+                    <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" data-toggle="modal" data-target="#currency-edit" @onclick(() => Selected = item)>
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                 </li>
@@ -64,14 +57,16 @@
         </div>
     </div>
 
-    <CurrencyEdit Id="@editId2" UniqueCode="@item.UniqueCode" Symbol="@item.Symbol" />
 }
+
+<CurrencyEdit Id="currency-edit" UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" />
 
 @functions {
 
     private static CurrencyEventHandler handler;
 
     public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
+    public CurrencyModel Selected { get; protected set; }
 
     protected override async Task OnInitAsync()
     {

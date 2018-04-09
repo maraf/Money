@@ -8,22 +8,31 @@ using Neptuo.Events.Handlers;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Neptuo.Models;
+using Neptuo.Models.Keys;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Money.Hubs
 {
-    public class ApiHub : Hub, 
+    public class ApiHub : Hub,
         IExceptionHandler<AggregateRootException>,
         IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>, IEventHandler<CategoryRenamed>, IEventHandler<CategoryDescriptionChanged>, IEventHandler<CategoryIconChanged>, IEventHandler<CategoryColorChanged>,
         IEventHandler<CurrencyCreated>, IEventHandler<CurrencyDeleted>, IEventHandler<CurrencyDefaultChanged>, IEventHandler<CurrencySymbolChanged>,
         IEventHandler<OutcomeCreated>, IEventHandler<OutcomeDeleted>, IEventHandler<OutcomeAmountChanged>, IEventHandler<OutcomeDescriptionChanged>, IEventHandler<OutcomeWhenChanged>
     {
         private readonly FormatterContainer formatters;
+
+        private readonly Dictionary<IKey, List<string>> userKeyToConnectionId = new Dictionary<IKey, List<string>>();
+        private readonly object userKeyToConnectionIdLock = new object();
+
+        private readonly Dictionary<IKey, IKey> commandKeyToUserKey = new Dictionary<IKey, IKey>();
+        private readonly object commandKeyToUserKeyLock = new object();
 
         public ApiHub(IEventHandlerCollection eventHandlers, FormatterContainer formatters, ExceptionHandlerBuilder exceptionHandlerBuilder)
         {
@@ -34,19 +43,63 @@ namespace Money.Hubs
             exceptionHandlerBuilder.Filter<AggregateRootException>().Handler(this);
         }
 
+        private (string connectionId, IKey key) GetUserInfo()
+        {
+            string connectionId = Context.ConnectionId;
+            string userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IKey userKey = StringKey.Create(userId, "User");
+            return (connectionId, userKey);
+        }
+
+        public async override Task OnConnectedAsync()
+        {
+            await base.OnConnectedAsync();
+
+            var userInfo = GetUserInfo();
+
+            lock (userKeyToConnectionIdLock)
+            {
+                if (!userKeyToConnectionId.TryGetValue(userInfo.key, out List<string> value))
+                    userKeyToConnectionId[userInfo.key] = value = new List<string>();
+
+                value.Add(userInfo.connectionId);
+            }
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            var userInfo = GetUserInfo();
+            lock (userKeyToConnectionIdLock)
+            {
+                if (userKeyToConnectionId.TryGetValue(userInfo.key, out List<string> value))
+                {
+                    if (value.Remove(userInfo.connectionId) && value.Count == 0)
+                        userKeyToConnectionId.Remove(userInfo.key);
+                }
+            }
+
+            return base.OnDisconnectedAsync(exception);
+        }
+
         private Task RaiseEvent<T>(T payload)
         {
             string type = typeof(T).AssemblyQualifiedName;
             string rawPayload = formatters.Event.Serialize(payload);
 
-            // TODO: Per-user.
-            Clients.All.SendAsync("RaiseEvent", JsonConvert.SerializeObject(new Response()
+            IClientProxy target;
+            lock (userKeyToConnectionIdLock)
+            {
+                if (payload is UserEvent userEvent && userKeyToConnectionId.TryGetValue(userEvent.UserKey, out List<string> value))
+                    target = Clients.Clients(value.ToList());
+                else
+                    target = Clients.All;
+            }
+
+            return target.SendAsync("RaiseEvent", JsonConvert.SerializeObject(new Response()
             {
                 type = type,
                 payload = rawPayload
             }));
-
-            return Task.CompletedTask;
         }
 
         Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload) => RaiseEvent(payload);
@@ -72,12 +125,40 @@ namespace Money.Hubs
             string type = exception.GetType().AssemblyQualifiedName;
             string rawPayload = formatters.Exception.Serialize(exception);
 
-            // TODO: Per-user.
-            Clients.All.SendAsync("RaiseException", JsonConvert.SerializeObject(new Response()
+            IClientProxy target;
+            lock (commandKeyToUserKeyLock)
+            {
+                if (commandKeyToUserKey.TryGetValue(exception.FindOriginalCommandKey(), out IKey userKey))
+                {
+                    lock (userKeyToConnectionIdLock)
+                    {
+                        if (userKeyToConnectionId.TryGetValue(userKey, out List<string> value))
+                            target = Clients.Clients(value.ToList());
+                        else
+                            target = Clients.All;
+                    }
+                }
+                else
+                {
+                    target = Clients.All;
+                }
+            }
+
+            target.SendAsync("RaiseException", JsonConvert.SerializeObject(new Response()
             {
                 type = type,
                 payload = rawPayload
             }));
+        }
+
+        public void AddCommand(IKey commandKey, IKey userKey)
+        {
+            Ensure.Condition.NotEmptyKey(commandKey);
+            Ensure.Condition.NotEmptyKey(userKey);
+            lock (commandKeyToUserKeyLock)
+            {
+                commandKeyToUserKey[commandKey] = userKey;
+            }
         }
     }
 }

@@ -13,7 +13,7 @@
     public string Title { get; private set; }
     public string Message { get; private set; }
 
-    protected override async Task OnInitAsync()
+    protected override void OnInit()
     {
         ExceptionHandlerBuilder.Handler(e =>
         {
@@ -55,6 +55,8 @@
 
             StateHasChanged();
         });
+
+        base.OnInit();
     }
 
 }

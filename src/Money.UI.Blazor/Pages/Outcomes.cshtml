@@ -1,8 +1,5 @@
 ﻿@page "/outcomes/{Year}/{Month}"
-
-@inject ICommandDispatcher Commands
-@inject IEventHandlerCollection EventHandlers
-@inject IQueryDispatcher Queries
+@inherits OutcomesBase
 
 <h1>
     Outcomes in @MonthModel
@@ -56,52 +53,15 @@
     }
     else
     {
-        <div class="alert alert-warning" role="alert">No data.</div>
+        <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
     }
 }
 
 <OutcomeCreate Id="outcome-create" />
-<OutcomeAmount Id="outcome-amount-edit" OutcomeKey="@Selected?.Key" Amount="@Selected?.Amount?.Value" Currency="@Selected?.Amount?.Currency" />
-<OutcomeDescription Id="outcome-decription-edit" OutcomeKey="@Selected?.Key" Description="@Selected?.Description" />
-<OutcomeWhen Id="outcome-when-edit" OutcomeKey="@Selected?.Key" When="@Selected?.When" />
 
-@functions
+@if (Selected != null)
 {
-    private static OutcomeEventHandler handler;
-
-    protected MonthModel MonthModel { get; set; }
-    protected List<OutcomeOverviewModel> Models { get; set; }
-    protected OutcomeOverviewModel Selected { get; set; }
-
-    public string Year { get; set; }
-    public string Month { get; set; }
-
-    protected override async Task OnInitAsync()
-    {
-        if (handler == null)
-        {
-            handler = new OutcomeEventHandler(OnEvent);
-            EventHandlers.AddAll(handler);
-        }
-        else
-        {
-            handler.Handler = OnEvent;
-        }
-
-        MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
-        await LoadDataAsync();
-    }
-
-    protected async void OnEvent()
-    {
-        await LoadDataAsync();
-        StateHasChanged();
-    }
-
-    protected async Task LoadDataAsync()
-        => Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(Neptuo.KeyFactory.Empty(typeof(Category)), MonthModel));
-
-    protected async void OnDeleteClick(OutcomeOverviewModel model)
-        => await Commands.HandleAsync(new DeleteOutcome(model.Key));
-
+    <OutcomeAmount Id="outcome-amount-edit" OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" />
+    <OutcomeDescription Id="outcome-decription-edit" OutcomeKey="@Selected.Key" Description="@Selected.Description" />
+    <OutcomeWhen Id="outcome-when-edit" OutcomeKey="@Selected.Key" When="@Selected.When" />
 }

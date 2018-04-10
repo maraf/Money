@@ -10,7 +10,10 @@ namespace Money.Models
     {
         public static string ToHashCode(this Color color)
         {
-            byte[] data = new byte[] { color.R, color.G, color.B, color.A };
+            byte[] data = color.A == Byte.MaxValue
+                ? new byte[] { color.R, color.G, color.B }
+                : new byte[] { color.R, color.G, color.B, color.A };
+
             return "#" + BitConverter.ToString(data).Replace("-", string.Empty);
         }
     }

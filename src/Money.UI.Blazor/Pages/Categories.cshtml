@@ -1,7 +1,5 @@
 ﻿@page "/categories"
-@inject ICommandDispatcher Commands
-@inject IEventHandlerCollection EventHandlers
-@inject IQueryDispatcher Queries
+@inherits CategoriesBase
 
 <h1>
     Categories
@@ -56,38 +54,3 @@
 <CategoryName Id="category-edit-name" CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" />
 <CategoryIcon id="category-edit-icon" CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" />
 <CategoryColor id="category-edit-color" CategoryKey="@Selected?.Key" Color="@Selected?.Color" />
-
-@functions {
-
-    private static CategoryEventHandler handler;
-
-    public List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
-    public CategoryModel Selected { get; private set; }
-
-    protected override async Task OnInitAsync()
-    {
-        if (handler == null)
-        {
-            handler = new CategoryEventHandler(OnEvent);
-            EventHandlers.AddAll(handler);
-        }
-        else
-        {
-            handler.Handler = OnEvent;
-        }
-
-        await LoadDataAsync();
-    }
-
-    protected async void OnEvent()
-    {
-        await LoadDataAsync();
-        StateHasChanged();
-    }
-
-    protected async Task LoadDataAsync()
-        => Models = await Queries.QueryAsync(new ListAllCategory());
-
-    protected async void OnDeleteClick(CategoryModel model)
-        => await Commands.HandleAsync(new DeleteCategory(model.Key));
-}

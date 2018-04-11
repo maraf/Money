@@ -65,7 +65,7 @@
     {
         if (CategoryKey == null || CategoryKey.IsEmpty)
         {
-            if (!String.IsNullOrEmpty(Name))
+            if (!String.IsNullOrEmpty(Name) && !String.IsNullOrEmpty(Description))
             {
                 await Commands.HandleAsync(new CreateCategory(Name, Description, NextRandomColor()));
                 Name = Description = String.Empty;

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class OutcomesBase : BlazorComponent,
+    public class OverviewBase : BlazorComponent,
         IEventHandler<OutcomeCreated>, 
         IEventHandler<OutcomeDeleted>, 
         IEventHandler<OutcomeAmountChanged>, 

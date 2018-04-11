@@ -90,4 +90,8 @@
     <BlazorGenerate Remove="Pages\Overview.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\Summary.cshtml" />
+  </ItemGroup>
+
 </Project>

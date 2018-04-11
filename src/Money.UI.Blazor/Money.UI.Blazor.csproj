@@ -71,10 +71,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <BlazorGenerate Remove="Pages\Outcomes.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <BlazorGenerate Remove="Components\OutcomeDescription.cshtml" />
   </ItemGroup>
 
@@ -88,6 +84,10 @@
 
   <ItemGroup>
     <BlazorGenerate Remove="Components\OutcomeCreate.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\Overview.cshtml" />
   </ItemGroup>
 
 </Project>

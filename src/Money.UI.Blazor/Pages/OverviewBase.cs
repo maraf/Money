@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 namespace Money.Pages
 {
     public class OverviewBase : BlazorComponent,
+        System.IDisposable,
         IEventHandler<OutcomeCreated>, 
         IEventHandler<OutcomeDeleted>, 
         IEventHandler<OutcomeAmountChanged>, 
@@ -62,7 +63,7 @@ namespace Money.Pages
         protected OutcomeOverviewModel FindModel(IEvent payload)
             => Models.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));
 
-        public void Disposable()
+        public void Dispose()
             => UnBindEvents();
 
         #region Events

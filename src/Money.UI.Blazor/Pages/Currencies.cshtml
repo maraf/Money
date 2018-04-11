@@ -1,7 +1,5 @@
 ﻿@page "/currencies"
-@inject ICommandDispatcher Commands
-@inject IEventHandlerCollection EventHandlers
-@inject IQueryDispatcher Queries
+@inherits CurrenciesBase
 
 <h1>
     Currencies
@@ -60,45 +58,3 @@
 }
 
 <CurrencyEdit Id="currency-edit" UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" />
-
-@functions {
-
-    private static CurrencyEventHandler handler;
-
-    public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
-    public CurrencyModel Selected { get; protected set; }
-
-    protected override async Task OnInitAsync()
-    {
-        if (handler == null)
-        {
-            handler = new CurrencyEventHandler(OnEvent);
-            EventHandlers.AddAll(handler);
-        }
-        else
-        {
-            handler.Handler = OnEvent;
-        }
-
-        await LoadDataAsync();
-    }
-
-    protected async void OnEvent()
-    {
-        await LoadDataAsync();
-        StateHasChanged();
-    }
-
-    protected async Task LoadDataAsync() => Models = await Queries.QueryAsync(new ListAllCurrency());
-
-    protected async void OnDeleteClick(CurrencyModel model)
-    {
-        await Commands.HandleAsync(new DeleteCurrency(model.UniqueCode));
-    }
-
-    protected async void OnChangeDefaultClick(CurrencyModel model)
-    {
-        await Commands.HandleAsync(new SetCurrencyAsDefault(model.UniqueCode));
-    }
-
-}

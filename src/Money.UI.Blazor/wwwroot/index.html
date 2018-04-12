@@ -53,15 +53,27 @@
 
         var eventRaiseMethod;
         var exceptionRaiseMethod;
+        var bootstrapModalHiddenMethod;
 
         function InitializeEventHub() {
             if (isStarted && isLoaded) {
                 eventRaiseMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.UI.Blazor", "Program", "RaiseEvent");
                 exceptionRaiseMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.UI.Blazor", "Program", "RaiseException");
+                bootstrapModalHiddenMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.Components.Bootstrap", "Native", "ModalHidden");
             }
         }
 
-        Blazor.registerFunction('Bootstrap_ToggleModal', function (id, isVisible) {
+        Blazor.registerFunction('Bootstrap_Modal_Register', function (id) {
+            $("#" + id).on('hidden.bs.modal', function (e) {
+
+                Blazor.platform.callMethod(bootstrapModalHiddenMethod, null, [
+                    Blazor.platform.toDotNetString(id)
+                ]);
+            })
+            return true;
+        });
+
+        Blazor.registerFunction('Bootstrap_Modal_Toggle', function (id, isVisible) {
             $("#" + id).modal(isVisible ? 'show' : 'hide');
             return true;
         });

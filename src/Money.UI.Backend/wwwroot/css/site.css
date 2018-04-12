@@ -29,7 +29,13 @@
 }
 
 .btn-icon {
+    width: 67px;
+    height: 67px;
     font-size: 2em;
+}
+
+.btn-icon:hover, .btn-icon.btn-selected {
+    background-color: #eee;
 }
 
 .btn-color {

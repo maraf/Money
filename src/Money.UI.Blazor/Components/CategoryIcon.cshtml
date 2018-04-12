@@ -4,9 +4,18 @@
 <Modal Title="Pick an Icon for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
     @foreach (string icon in Icons)
     {
-        <button class="btn btn-link btn-icon" @onclick(() => Icon = icon)>
-            @icon
-        </button>
+        if (Icon == icon)
+        {
+            <a class="btn btn-icon btn-selected" @onclick(() => Icon = icon)>
+                @icon
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-icon" @onclick(() => Icon = icon)>
+                @icon
+            </a>
+        }
     }
 </Modal>
 

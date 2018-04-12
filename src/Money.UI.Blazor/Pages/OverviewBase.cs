@@ -39,6 +39,7 @@ namespace Money.Pages
 
         protected bool IsCreateVisible { get; set; }
         protected bool IsDescriptionEditVisible { get; set; }
+        protected bool IsWhenEditVisible { get; set; }
 
         public string Year { get; set; }
         public string Month { get; set; }

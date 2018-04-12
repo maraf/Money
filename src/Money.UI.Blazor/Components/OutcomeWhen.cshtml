@@ -1,32 +1,19 @@
 ﻿@using Neptuo.Models.Keys
 @inject ICommandDispatcher Commands
 
-<div class="modal fade" id="@Id" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Change Outcome When</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="outcome-when">When:</label>
-                    <input type="text" class="form-control" id="outcome-when" placeholder="Outcome Description" @bind(When, "yyyy-MM-dd") />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnSaveClick)>Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+<Modal Title="Change when outcome occured" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
+    <div class="form-group">
+        <label for="outcome-when">When:</label>
+        <input type="text" class="form-control" id="outcome-when" placeholder="Outcome Description" data-autofocus @bind(When, "yyyy-MM-dd") />
     </div>
-</div>
+</Modal>
 
 @functions {
 
     private DateTime originalWhen;
 
-    public string Id { get; set; }
+    public bool IsVisible { get; set; }
+    public Action Closed { get; set; }
 
     public IKey OutcomeKey { get; set; }
     public DateTime When { get; set; }
@@ -36,12 +23,28 @@
         originalWhen = When;
     }
 
-    protected async void OnSaveClick()
+    protected bool OnSaveClick()
     {
         if (originalWhen != When)
         {
-            await Commands.HandleAsync(new ChangeOutcomeWhen(OutcomeKey, When));
+            Execute();
             OnParametersSet();
+            return true;
         }
+        else
+        {
+            return false;
+        }
+    }
+
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new ChangeOutcomeWhen(OutcomeKey, When));
+    }
+
+    protected void OnModalClosed()
+    {
+        IsVisible = false;
+        Closed?.Invoke();
     }
 }

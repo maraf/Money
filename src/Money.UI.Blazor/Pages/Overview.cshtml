@@ -41,7 +41,7 @@
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Description" @onclick(() => { Selected = item; IsDescriptionEditVisible = true; })>
                                     <span class="glyphicon glyphicon-comment"></span>
                                 </button>
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change When" data-toggle="modal" data-target="#outcome-when-edit" @onclick(() => Selected = item)>
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change When" @onclick(() => { Selected = item; IsWhenEditVisible = true; })>
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </button>
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" @onclick(() => OnDeleteClick(item))>
@@ -64,5 +64,5 @@
 {
     <OutcomeAmount Id="outcome-amount-edit" OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" />
     <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" IsVisible="@IsDescriptionEditVisible" Closed="@(() => IsDescriptionEditVisible = false)" />
-    <OutcomeWhen Id="outcome-when-edit" OutcomeKey="@Selected.Key" When="@Selected.When" />
+    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" IsVisible="@IsWhenEditVisible" Closed="@(() => IsWhenEditVisible = false)" />
 }

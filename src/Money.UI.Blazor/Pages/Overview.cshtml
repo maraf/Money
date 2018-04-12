@@ -5,7 +5,7 @@
 <h1>
     Outcomes in @MonthModel
 
-    <button type="button" class="btn btn-primary" style="float: right">
+    <button type="button" class="btn btn-primary" @onclick(() => IsCreateVisible = true) style="float: right">
         <span class="glyphicon glyphicon-plus"></span>
         New Outcome
     </button>
@@ -38,7 +38,7 @@
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Amount" data-toggle="modal" data-target="#outcome-amount-edit" @onclick(() => Selected = item)>
                                     <span class="glyphicon glyphicon-usd"></span>
                                 </button>
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Description" data-toggle="modal" data-target="#outcome-decription-edit" @onclick(() => Selected = item)>
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Description" @onclick(() => { Selected = item; IsDescriptionEditVisible = true; })>
                                     <span class="glyphicon glyphicon-comment"></span>
                                 </button>
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change When" data-toggle="modal" data-target="#outcome-when-edit" @onclick(() => Selected = item)>
@@ -63,6 +63,6 @@
 @if (Selected != null)
 {
     <OutcomeAmount Id="outcome-amount-edit" OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" />
-    <OutcomeDescription Id="outcome-decription-edit" OutcomeKey="@Selected.Key" Description="@Selected.Description" />
+    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" IsVisible="@IsDescriptionEditVisible" Closed="@(() => IsDescriptionEditVisible = false)" />
     <OutcomeWhen Id="outcome-when-edit" OutcomeKey="@Selected.Key" When="@Selected.When" />
 }

@@ -38,6 +38,7 @@ namespace Money.Pages
         protected OutcomeOverviewModel Selected { get; set; }
 
         protected bool IsCreateVisible { get; set; }
+        protected bool IsDescriptionEditVisible { get; set; }
 
         public string Year { get; set; }
         public string Month { get; set; }

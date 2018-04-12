@@ -4,7 +4,7 @@
 <h1>
     Currencies
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#currency-create" style="float: right">
+    <button type="button" class="btn btn-primary" @onclick(() => IsCreateVisible = true) style="float: right">
         <span class="glyphicon glyphicon-plus"></span>
         New Currency
     </button>
@@ -12,7 +12,7 @@
 
 <Alert Message="Until exchange rates are implemented, all currencies are converted 1:1 and outcomes are displayed in default currency." Mode="AlertMode.Warning" />
 
-<CurrencyEdit id="currency-create" />
+<CurrencyEdit IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
 
 @foreach (var item in Models)
 {
@@ -25,7 +25,7 @@
         <div class="panel-body">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" data-toggle="modal" data-target="#currency-edit" @onclick(() => Selected = item)>
+                    <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" @onclick(() => { Selected = item; IsEditVisible = true; })>
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>
                 </li>
@@ -57,4 +57,4 @@
 
 }
 
-<CurrencyEdit Id="currency-edit" UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" />
+<CurrencyEdit UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" IsVisible="@IsEditVisible" Closed="@(() => IsEditVisible = false)" />

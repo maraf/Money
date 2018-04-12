@@ -43,6 +43,9 @@
     margin-bottom: -15px;
 }
 
+.panel-body p:last-child {
+    margin: 0;
+}
 
 
 .outcomes {

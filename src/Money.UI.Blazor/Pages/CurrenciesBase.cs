@@ -31,6 +31,9 @@ namespace Money.Pages
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
+        protected bool IsCreateVisible { get; set; }
+        protected bool IsEditVisible { get; set; }
+
         public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
         public CurrencyModel Selected { get; protected set; }
 

@@ -1,46 +1,31 @@
 ﻿@using Neptuo.Models.Keys
 @inject ICommandDispatcher Commands
 
-<div class="modal fade" id="@Id" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">@Title</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="currency-unique-code">Unique Code:</label>
-                    @if (IsUniqueCodeEnabled)
-                    {
-                        <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Symbol" @bind(UniqueCode) />
-                    }
-                    else
-                    {
-                        <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Symbol" @bind(UniqueCode) disabled="disabled" />
-                    }
-                </div>
-                <div class="form-group">
-                    <label for="currency-symbol">Symbol:</label>
-                    <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" @bind(Symbol) />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnSaveClick)>@SaveButtonText</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
+    <div class="form-group">
+        <label for="currency-unique-code">Unique Code:</label>
+        @if (IsUniqueCodeEnabled)
+        {
+            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Symbol" @bind(UniqueCode) />
+        }
+        else
+        {
+            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Symbol" @bind(UniqueCode) disabled="disabled" />
+        }
     </div>
-</div>
+    <div class="form-group">
+        <label for="currency-symbol">Symbol:</label>
+        <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" @bind(Symbol) />
+    </div>
+</Modal>
 
 @functions {
 
     private string originalUniqueCode;
     private string originalSymbol;
 
-
-    public string Id { get; set; }
-
+    public bool IsVisible { get; set; }
+    public Action Closed { get; set; }
 
     public string UniqueCode { get; set; }
     public string Symbol { get; set; }
@@ -68,21 +53,40 @@
         }
     }
 
-    protected async void OnSaveClick()
+    protected bool OnSaveClick()
     {
         if (originalUniqueCode == null && !String.IsNullOrEmpty(UniqueCode))
         {
-            await Commands.HandleAsync(new CreateCurrency(UniqueCode, Symbol));
-            UniqueCode = Symbol = String.Empty;
-            StateHasChanged();
+            ExecuteCreate();
+            return true;
+        }
+        else if (originalSymbol != Symbol)
+        {
+            ExecuteChange();
+            originalSymbol = Symbol;
+            return true;
         }
         else
         {
-            if (originalSymbol != Symbol)
-            {
-                await Commands.HandleAsync(new ChangeCurrencySymbol(UniqueCode, Symbol));
-                originalSymbol = Symbol;
-            }
+            return false;
         }
+    }
+
+    private async void ExecuteCreate()
+    {
+        await Commands.HandleAsync(new CreateCurrency(UniqueCode, Symbol));
+        UniqueCode = Symbol = String.Empty;
+        StateHasChanged();
+    }
+
+    private async void ExecuteChange()
+    {
+        await Commands.HandleAsync(new ChangeCurrencySymbol(UniqueCode, Symbol));
+    }
+
+    protected void OnModalClosed()
+    {
+        IsVisible = false;
+        Closed?.Invoke();
     }
 }

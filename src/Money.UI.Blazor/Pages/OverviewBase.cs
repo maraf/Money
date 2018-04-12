@@ -37,6 +37,8 @@ namespace Money.Pages
         protected List<OutcomeOverviewModel> Models { get; set; }
         protected OutcomeOverviewModel Selected { get; set; }
 
+        protected bool IsCreateVisible { get; set; }
+
         public string Year { get; set; }
         public string Month { get; set; }
 

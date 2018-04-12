@@ -2,77 +2,71 @@
 @inject ICommandDispatcher Commands
 @inject IQueryDispatcher Queries
 
-<div class="modal fade" id="@Id" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">@Title</h4>
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
+    @if (!String.IsNullOrEmpty(ErrorMessage))
+    {
+        <Alert Title="Validation." Message="@ErrorMessage" Mode="@AlertMode.Error" />
+    }
+    <div class="row">
+        <div class="col-md-9">
+            <div class="form-group">
+                <label for="outcome-amount">Amount:</label>
+                <input type="text" class="form-control" id="outcome-amount" @bind(AmountString) data-autofocus />
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="form-group">
-                            <label for="outcome-amount">Amount:</label>
-                            <input type="text" class="form-control" id="outcome-amount" @bind(AmountString) />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="outcome-currency">Currency:</label>
-                            <select class="form-control" id="outcome-currency" @bind(Currency)>
-                                @if(Currencies != null)
-                                {
-                                    @foreach (var currency in Currencies)
-                                    {
-                                        <option value="@currency.UniqueCode">
-                                            @currency.Symbol
-                                        </option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="outcome-description">Description:</label>
-                    <input type="text" class="form-control" id="outcome-description" @bind(Description) />
-                </div>
-                <div class="form-group">
-                    <label for="outcome-when">When:</label>
-                    <input type="text" class="form-control" id="outcome-when" @bind(When, "yyyy-MM-dd") />
-                </div>
-                <div class="form-group">
-                    <label>Category:</label>
-                    @if (Categories != null)
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="outcome-currency">Currency:</label>
+                <select class="form-control" id="outcome-currency" @bind(Currency)>
+                    @if (Currencies != null)
                     {
-                        @foreach (var category in Categories)
+                        @foreach (var currency in Currencies)
                         {
-                            <button class="btn btn-block" style="background-color: @category.Color.ToHashCode();" @onclick(() => CategoryKey = category.Key)>
-                                <span>@category.Icon</span>
-                                <strong>@category.Name</strong>
-                                <span>@category.Description</span>
-                            </button>
+                            <option value="@currency.UniqueCode">
+                                @currency.Symbol
+                            </option>
                         }
                     }
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnSaveClick)>@SaveButtonText</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </select>
             </div>
         </div>
     </div>
-</div>
+    <div class="form-group">
+        <label for="outcome-description">Description:</label>
+        <input type="text" class="form-control" id="outcome-description" @bind(Description) />
+    </div>
+    <div class="form-group">
+        <label for="outcome-when">When:</label>
+        <input type="text" class="form-control" id="outcome-when" @bind(When, "yyyy-MM-dd") />
+    </div>
+    <div class="form-group">
+        <label>Category:</label>
+        @if (Categories != null)
+        {
+            @foreach (var category in Categories)
+            {
+                <button class="btn btn-block" style="background-color: @category.Color.ToHashCode();" @onclick(() => CategoryKey = category.Key)>
+                    <span>@category.Icon</span>
+                    <strong>@category.Name</strong>
+                    <span>@category.Description</span>
+                </button>
+            }
+        }
+    </div>
+</Modal>
 
 @functions {
 
-    public string Id { get; set; }
+    public bool IsVisible { get; set; }
+
+    public Action Closed { get; set; }
+
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }
+    protected string ErrorMessage { get; set; }
 
-    public List<CategoryModel> Categories { get; private set; }
-    public List<CurrencyModel> Currencies { get; private set; }
+    protected List<CategoryModel> Categories { get; private set; }
+    protected List<CurrencyModel> Currencies { get; private set; }
 
     public decimal Amount { get; set; }
 
@@ -103,18 +97,36 @@
         Currency = Currencies.FirstOrDefault()?.UniqueCode;
     }
 
-    protected async void OnSaveClick()
+    protected bool OnSaveClick()
     {
         Console.WriteLine($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
 
         if (Amount > 0 && !String.IsNullOrEmpty(Currency) && CategoryKey != null && !CategoryKey.IsEmpty)
         {
-            await Commands.HandleAsync(new CreateOutcome(new Price(Amount, Currency), Description, When, CategoryKey));
-
-            Amount = 0;
-            CategoryKey = null;
-            Description = null;
-            StateHasChanged();
+            ErrorMessage = null;
+            Execute();
+            return true;
         }
+        else
+        {
+            ErrorMessage = "Missing some required parameters!";
+            return false;
+        }
+    }
+
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new CreateOutcome(new Price(Amount, Currency), Description, When, CategoryKey));
+
+        Amount = 0;
+        CategoryKey = null;
+        Description = null;
+        StateHasChanged();
+    }
+
+    protected void OnModalClosed()
+    {
+        IsVisible = false;
+        Closed?.Invoke();
     }
 }

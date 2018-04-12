@@ -5,11 +5,13 @@
 <h1>
     Outcomes in @MonthModel
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#outcome-create" style="float: right">
+    <button type="button" class="btn btn-primary" style="float: right">
         <span class="glyphicon glyphicon-plus"></span>
         New Outcome
     </button>
 </h1>
+
+<OutcomeCreate IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
 
 @if (Models != null)
 {
@@ -57,8 +59,6 @@
         <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
     }
 }
-
-<OutcomeCreate Id="outcome-create" />
 
 @if (Selected != null)
 {

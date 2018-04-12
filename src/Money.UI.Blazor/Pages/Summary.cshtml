@@ -4,11 +4,13 @@
 <h1>
     Summary
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#outcome-create" style="float: right">
+    <button type="button" class="btn btn-primary" @onclick(() => IsCreateVisible = true) style="float: right">
         <span class="glyphicon glyphicon-plus"></span>
         New Outcome
     </button>
 </h1>
+
+<OutcomeCreate IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
 
 @if (Months != null)
 {
@@ -37,8 +39,6 @@
         <div class="alert alert-warning" role="alert">No data.</div>
     }
 }
-
-<OutcomeCreate Id="outcome-create" />
 
 @if (Categories != null)
 {

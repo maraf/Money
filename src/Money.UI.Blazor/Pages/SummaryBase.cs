@@ -36,6 +36,8 @@ namespace Money.Pages
         protected Price TotalAmout { get; private set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
 
+        protected bool IsCreateVisible { get; set; }
+
         protected override async Task OnInitAsync()
         {
             BindEvents();

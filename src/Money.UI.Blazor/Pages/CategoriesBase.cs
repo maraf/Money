@@ -33,6 +33,9 @@ namespace Money.Pages
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
+        protected bool IsCreateVisible { get; set; }
+        protected bool IsNameEditVisible { get; set; }
+
         protected List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
         protected CategoryModel Selected { get; set; }
 

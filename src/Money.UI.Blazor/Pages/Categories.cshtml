@@ -4,13 +4,13 @@
 <h1>
     Categories
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#category-create" style="float: right">
+    <button type="button" class="btn btn-primary" @onclick(() => IsCreateVisible = true) style="float: right">
         <span class="glyphicon glyphicon-plus"></span>
         New Category
     </button>
 </h1>
 
-<CategoryName Id="category-create" />
+<CategoryName IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
 
 @foreach (var item in Models)
 {
@@ -28,7 +28,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" data-toggle="modal" data-target="#category-edit-name" @onclick(() => Selected = item)>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" @onclick(() => { Selected = item; IsNameEditVisible = true; })>
                     <span class="glyphicon glyphicon-pencil"></span>
                 </button>
             </li>
@@ -51,6 +51,6 @@
     </div>
 }
 
-<CategoryName Id="category-edit-name" CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" />
+<CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" IsVisible="@IsNameEditVisible" Closed="@(() => IsNameEditVisible = false)" />
 <CategoryIcon id="category-edit-icon" CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" />
 <CategoryColor id="category-edit-color" CategoryKey="@Selected?.Key" Color="@Selected?.Color" />

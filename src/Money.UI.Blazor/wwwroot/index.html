@@ -64,12 +64,14 @@
         }
 
         Blazor.registerFunction('Bootstrap_Modal_Register', function (id) {
+            $("#" + id).on('shown.bs.modal', function (e) {
+                $(e.currentTarget).find('[data-autofocus]').select().focus();
+            });
             $("#" + id).on('hidden.bs.modal', function (e) {
-
                 Blazor.platform.callMethod(bootstrapModalHiddenMethod, null, [
-                    Blazor.platform.toDotNetString(id)
+                    Blazor.platform.toDotNetString(e.currentTarget.id)
                 ]);
-            })
+            });
             return true;
         });
 

@@ -38,7 +38,7 @@
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Color" data-toggle="modal" data-target="#category-edit-color" @onclick(() => Selected = item)>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Color" @onclick(() => { Selected = item; IsColorEditVisible = true; })>
                     <span class="glyphicon glyphicon-tint"></span>
                 </button>
             </li>
@@ -53,4 +53,4 @@
 
 <CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" IsVisible="@IsNameEditVisible" Closed="@(() => IsNameEditVisible = false)" />
 <CategoryIcon CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" IsVisible="@IsIconEditVisible" Closed="@(() => IsIconEditVisible = false)" />
-<CategoryColor id="category-edit-color" CategoryKey="@Selected?.Key" Color="@Selected?.Color" />
+<CategoryColor CategoryKey="@Selected?.Key" Color="@Selected?.Color" IsVisible="@IsColorEditVisible" Closed="@(() => IsColorEditVisible = false)" />

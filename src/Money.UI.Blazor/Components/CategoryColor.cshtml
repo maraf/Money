@@ -1,52 +1,52 @@
 ﻿@using Neptuo.Models.Keys
 @inject ICommandDispatcher Commands
 
-<div class="modal fade" id="@Id" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Pick a Color for the Category</h4>
-            </div>
-            <div class="modal-body">
-                @foreach (Color color in Colors)
-                {
-                    <button class="btn btn-link btn-color" style="background-color: @color.ToHashCode()" @onclick(() => Color = color)></button>
-                }
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick(OnSaveClick)>Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<Modal Title="Pick a Color for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
+    @foreach (Color color in Colors)
+    {
+        <button class="btn btn-link btn-color" style="background-color: @color.ToHashCode()" @onclick(() => Color = color)></button>
+    }
+</Modal>
 
-@functions {
-
-    protected ColorCollection Colors { get; set; } = new ColorCollection();
-
+@functions 
+{
     private Color originalColor;
 
-
-    public string Id { get; set; }
-
+    public bool IsVisible { get; set; }
+    public Action Closed { get; set; }
 
     public IKey CategoryKey { get; set; }
-
     public Color Color { get; set; }
+
+    protected ColorCollection Colors { get; set; } = new ColorCollection();
 
     protected override void OnParametersSet()
     {
         originalColor = Color;
     }
 
-    protected async void OnSaveClick()
+    protected bool OnSaveClick()
     {
         if (originalColor != Color)
         {
-            await Commands.HandleAsync(new ChangeCategoryColor(CategoryKey, Color));
-            originalColor = Color;
+            Execute();
+            return true;
         }
+        else
+        {
+            return false;
+        }
+    }
+
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new ChangeCategoryColor(CategoryKey, Color));
+        originalColor = Color;
+    }
+
+    protected void OnModalClosed()
+    {
+        IsVisible = false;
+        Closed?.Invoke();
     }
 }

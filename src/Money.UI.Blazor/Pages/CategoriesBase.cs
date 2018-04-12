@@ -36,6 +36,7 @@ namespace Money.Pages
         protected bool IsCreateVisible { get; set; }
         protected bool IsNameEditVisible { get; set; }
         protected bool IsIconEditVisible { get; set; }
+        protected bool IsColorEditVisible { get; set; }
 
         protected List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
         protected CategoryModel Selected { get; set; }

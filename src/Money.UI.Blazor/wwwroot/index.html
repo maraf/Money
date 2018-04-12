@@ -61,6 +61,11 @@
             }
         }
 
+        Blazor.registerFunction('Bootstrap_ToggleModal', function (id, isVisible) {
+            $("#" + id).modal(isVisible ? 'show' : 'hide');
+            return true;
+        });
+
         Blazor.registerFunction('NavigateTo', function (href) {
             window.location.href = href;
             return true;

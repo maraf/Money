@@ -94,4 +94,16 @@
     <BlazorGenerate Remove="Pages\Summary.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\Bootstrap\Modal.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Components\Bootstrap\Modal.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Bootstrap\Modal.cshtml" />
+  </ItemGroup>
+
 </Project>

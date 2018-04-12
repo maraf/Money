@@ -1,0 +1,81 @@
+﻿<div class="modal fade" id="@Id" tabindex="-1" role="dialog" @onclick(OnModalClick)>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" @onclick(() => IsVisible = false)><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Title</h4>
+            </div>
+            <div class="modal-body">
+                @ChildContent
+            </div>
+            <div class="modal-footer">
+                @if (!String.IsNullOrEmpty(PrimaryButtonText))
+                {
+                    <button type="button" class="btn btn-primary" @onclick(OnPrimaryButtonClick)>@PrimaryButtonText</button>
+                }
+                <button type="button" class="btn btn-default" @onclick(OnCloseButtonClick)>@CloseButtonText</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", String.Empty);
+    public string Title { get; set; }
+    public RenderFragment ChildContent { get; set; }
+
+    public string PrimaryButtonText { get; set; }
+
+    /// <summary>
+    /// Ivoked when user clicks on primary button.
+    /// When <c>true</c> is returned, modal is closed.
+    /// </summary>
+    public Func<bool> PrimaryButtonClick { get; set; }
+
+    public string CloseButtonText { get; set; } = "Close";
+
+    /// <summary>
+    /// Invoken when user clicks on close button.
+    /// When <c>true</c> is returned, modal is closed.
+    /// </summary>
+    public Func<bool> CloseButtonClick { get; set; }
+
+    private bool isVisible;
+    private bool isPrimaryClicked;
+
+    public bool IsVisible
+    {
+        get { return isVisible; }
+        set
+        {
+            Console.WriteLine($"Modal: IsVisible: {isVisible}.");
+            if (isVisible != value)
+            {
+                isVisible = value;
+                RegisteredFunction.Invoke<object>("Bootstrap_ToggleModal", Id, isVisible);
+            }
+        }
+    }
+
+    private void OnModalClick()
+    {
+        if (isPrimaryClicked)
+            isPrimaryClicked = false;
+        else
+            IsVisible = false;
+    }
+
+    private void OnPrimaryButtonClick()
+    {
+        isPrimaryClicked = PrimaryButtonClick();
+    }
+
+    private void OnCloseButtonClick()
+    {
+        if (CloseButtonClick != null)
+            IsVisible = !CloseButtonClick();
+        else
+            IsVisible = false;
+    }
+}

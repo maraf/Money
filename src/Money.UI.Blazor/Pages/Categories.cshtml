@@ -33,7 +33,7 @@
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Icon" data-toggle="modal" data-target="#category-edit-icon" @onclick(() => Selected = item)>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Icon" @onclick(() => { Selected = item; IsIconEditVisible = true; })>
                     <span class="glyphicon glyphicon-picture"></span>
                 </button>
             </li>
@@ -52,5 +52,5 @@
 }
 
 <CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" IsVisible="@IsNameEditVisible" Closed="@(() => IsNameEditVisible = false)" />
-<CategoryIcon id="category-edit-icon" CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" />
+<CategoryIcon CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" IsVisible="@IsIconEditVisible" Closed="@(() => IsIconEditVisible = false)" />
 <CategoryColor id="category-edit-color" CategoryKey="@Selected?.Key" Color="@Selected?.Color" />

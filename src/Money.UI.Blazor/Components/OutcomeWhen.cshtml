@@ -1,7 +1,7 @@
 ﻿@using Neptuo.Models.Keys
 @inject ICommandDispatcher Commands
 
-<Modal Title="Change when outcome occured" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="Change when the outcome occured" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
     <div class="form-group">
         <label for="outcome-when">When:</label>
         <input type="text" class="form-control" id="outcome-when" placeholder="Outcome Description" data-autofocus @bind(When, "yyyy-MM-dd") />

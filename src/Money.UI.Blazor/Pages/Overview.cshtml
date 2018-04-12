@@ -35,7 +35,7 @@
                         <td>@item.Amount</td>
                         <td>
                             <div class="actions">
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Amount" data-toggle="modal" data-target="#outcome-amount-edit" @onclick(() => Selected = item)>
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Amount" @onclick(() => { Selected = item; IsAmountEditVisible = true; })>
                                     <span class="glyphicon glyphicon-usd"></span>
                                 </button>
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Description" @onclick(() => { Selected = item; IsDescriptionEditVisible = true; })>
@@ -62,7 +62,7 @@
 
 @if (Selected != null)
 {
-    <OutcomeAmount Id="outcome-amount-edit" OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" />
+    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" IsVisible="@IsAmountEditVisible" Closed="@(() => IsAmountEditVisible = false)" />
     <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" IsVisible="@IsDescriptionEditVisible" Closed="@(() => IsDescriptionEditVisible = false)" />
     <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" IsVisible="@IsWhenEditVisible" Closed="@(() => IsWhenEditVisible = false)" />
 }

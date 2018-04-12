@@ -65,11 +65,9 @@ namespace Money.Components.Bootstrap
                 IsVisible = false;
         }
 
-        protected async override void OnInit()
+        protected override void OnInit()
         {
             base.OnInit();
-
-            await Task.Delay(100);
             Native.AddModal(Id, this);
         }
 

@@ -63,20 +63,37 @@
             }
         }
 
+        function RunOnJQuerySelector(selector, handler) {
+            var target = $(selector);
+            if (target.length == 0) {
+                setTimeout(function () {
+                    var target = $(selector);
+                    handler(target);
+                }, 100);
+            } else {
+                handler(target);
+            }
+        }
+
         Blazor.registerFunction('Bootstrap_Modal_Register', function (id) {
-            $("#" + id).on('shown.bs.modal', function (e) {
-                $(e.currentTarget).find('[data-autofocus]').select().focus();
+            RunOnJQuerySelector("#" + id, function (target) {
+                target.on('shown.bs.modal', function (e) {
+                    $(e.currentTarget).find('[data-autofocus]').select().focus();
+                });
+                target.on('hidden.bs.modal', function (e) {
+                    Blazor.platform.callMethod(bootstrapModalHiddenMethod, null, [
+                        Blazor.platform.toDotNetString(e.currentTarget.id)
+                    ]);
+                });
             });
-            $("#" + id).on('hidden.bs.modal', function (e) {
-                Blazor.platform.callMethod(bootstrapModalHiddenMethod, null, [
-                    Blazor.platform.toDotNetString(e.currentTarget.id)
-                ]);
-            });
+
             return true;
         });
 
         Blazor.registerFunction('Bootstrap_Modal_Toggle', function (id, isVisible) {
-            $("#" + id).modal(isVisible ? 'show' : 'hide');
+            RunOnJQuerySelector("#" + id, function (target) {
+                target.modal(isVisible ? 'show' : 'hide');
+            });
             return true;
         });
 

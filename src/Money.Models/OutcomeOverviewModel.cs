@@ -21,7 +21,7 @@ namespace Money.Models
         /// <summary>
         /// Gets an amount of the outcome.
         /// </summary>
-        public Price Amount { get; private set; }
+        public Price Amount { get; set; }
 
         /// <summary>
         /// Gets a date when the outcome ocured.
@@ -31,7 +31,7 @@ namespace Money.Models
         /// <summary>
         /// Gets a description of the outcome.
         /// </summary>
-        public string Description { get; private set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// Create a new instance.

@@ -47,7 +47,7 @@ namespace Money.Pages
             await LoadDataAsync();
         }
 
-        protected async void OnEvent()
+        protected async void Reload()
         {
             await LoadDataAsync();
             StateHasChanged();
@@ -102,7 +102,7 @@ namespace Money.Pages
             }
             else
             {
-                OnEvent();
+                Reload();
             }
 
             return Task.CompletedTask;

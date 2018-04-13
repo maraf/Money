@@ -18,10 +18,10 @@ namespace Money.Pages
 {
     public class OverviewBase : BlazorComponent,
         System.IDisposable,
-        IEventHandler<OutcomeCreated>, 
-        IEventHandler<OutcomeDeleted>, 
-        IEventHandler<OutcomeAmountChanged>, 
-        IEventHandler<OutcomeDescriptionChanged>, 
+        IEventHandler<OutcomeCreated>,
+        IEventHandler<OutcomeDeleted>,
+        IEventHandler<OutcomeAmountChanged>,
+        IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>
     {
         [Inject]
@@ -68,6 +68,9 @@ namespace Money.Pages
         protected OutcomeOverviewModel FindModel(IEvent payload)
             => Models.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));
 
+        private void SortModels()
+            => Models.Sort((c1, c2) => c1.When.CompareTo(c2.When));
+
         public void Dispose()
             => UnBindEvents();
 
@@ -93,6 +96,18 @@ namespace Money.Pages
                 .Remove<OutcomeWhenChanged>(this);
         }
 
+        private Task UpdateModel(IEvent payload, Action<OutcomeOverviewModel> handler)
+        {
+            OutcomeOverviewModel model = FindModel(payload);
+            if (model != null)
+            {
+                handler(model);
+                StateHasChanged();
+            }
+
+            return Task.CompletedTask;
+        }
+
         Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
         {
             MonthModel payloadMonth = payload.When;
@@ -103,45 +118,25 @@ namespace Money.Pages
         }
 
         Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
-        {
-            OutcomeOverviewModel model = FindModel(payload);
-            if (model != null)
-                Models.Remove(model);
-
-            StateHasChanged();
-            return Task.CompletedTask;
-        }
+            => UpdateModel(payload, model => Models.Remove(model));
 
         Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
-        {
-            OutcomeOverviewModel model = FindModel(payload);
-            if (model != null)
-            {
-                // TODO: We can do even better.
-                Reload();
-            }
-
-            return Task.CompletedTask;
-        }
+            => UpdateModel(payload, model => model.Amount = payload.NewValue);
 
         Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
-        {
-            OutcomeOverviewModel model = FindModel(payload);
-            if (model != null)
-            {
-                // TODO: We can do even better.
-                Reload();
-            }
-
-            return Task.CompletedTask;
-        }
+            => UpdateModel(payload, model => model.Description = payload.Description);
 
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
         {
             OutcomeOverviewModel model = FindModel(payload);
-            if (model != null)
+            if (model != null && model.When.Year == payload.When.Year && model.When.Month == payload.When.Month)
             {
-                // TODO: We can do even better.
+                model.When = payload.When;
+                SortModels();
+                StateHasChanged();
+            }
+            else
+            {
                 Reload();
             }
 

@@ -19,12 +19,12 @@ namespace Money.Models
         /// <summary>
         /// Gets a currency symbol.
         /// </summary>
-        public string Symbol { get; private set; }
+        public string Symbol { get; set; }
 
         /// <summary>
         /// Gets a <c>true</c> if a currency is the default one.
         /// </summary>
-        public bool IsDefault { get; private set; }
+        public bool IsDefault { get; set; }
 
         /// <summary>
         /// Creates a new instance.

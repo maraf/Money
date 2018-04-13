@@ -17,9 +17,9 @@ namespace Money.Pages
 {
     public class CurrenciesBase : BlazorComponent,
         IDisposable,
-        IEventHandler<CurrencyCreated>, 
-        IEventHandler<CurrencySymbolChanged>, 
-        IEventHandler<CurrencyDefaultChanged>, 
+        IEventHandler<CurrencyCreated>,
+        IEventHandler<CurrencySymbolChanged>,
+        IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyDeleted>
     {
         [Inject]
@@ -49,13 +49,13 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        protected async Task LoadDataAsync() 
+        protected async Task LoadDataAsync()
             => Models = await Queries.QueryAsync(new ListAllCurrency());
 
         protected async void OnDeleteClick(CurrencyModel model)
            => await Commands.HandleAsync(new DeleteCurrency(model.UniqueCode));
 
-        protected async void OnChangeDefaultClick(CurrencyModel model) 
+        protected async void OnChangeDefaultClick(CurrencyModel model)
             => await Commands.HandleAsync(new SetCurrencyAsDefault(model.UniqueCode));
 
         public void Dispose()
@@ -83,21 +83,43 @@ namespace Money.Pages
 
         Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
-            // TODO: We can do even better.
-            OnEvent();
+            Models.Add(new CurrencyModel(payload.UniqueCode, payload.Symbol, false));
+            StateHasChanged();
             return Task.CompletedTask;
         }
 
         Task IEventHandler<CurrencySymbolChanged>.HandleAsync(CurrencySymbolChanged payload)
         {
-            // TODO: We can do even better.
-            OnEvent();
+            CurrencyModel model = Models.FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
+            if (model != null)
+            {
+                model.Symbol = payload.Symbol;
+                StateHasChanged();
+            }
+            else
+            {
+                OnEvent();
+            }
+
             return Task.CompletedTask;
         }
 
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
         {
-            // TODO: We can do even better.
+            CurrencyModel model = Models.FirstOrDefault(c => c.IsDefault);
+            if (model != null)
+            {
+                model.IsDefault = false;
+
+                model = Models.FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
+                if (model != null)
+                {
+                    model.IsDefault = true;
+                    StateHasChanged();
+                    return Task.CompletedTask;
+                }
+            }
+
             OnEvent();
             return Task.CompletedTask;
         }

@@ -59,6 +59,12 @@ namespace Money.Pages
         protected async void OnDeleteClick(CategoryModel model)
             => await Commands.HandleAsync(new DeleteCategory(model.Key));
 
+        private CategoryModel FindModel(IEvent payload)
+            => Models.FirstOrDefault(c => c.Key.Equals(payload.AggregateKey));
+
+        private void SortModels()
+            => Models.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
+
         public void Dispose()
             => UnBindEvents();
 
@@ -86,50 +92,47 @@ namespace Money.Pages
                 .Remove<CategoryDeleted>(this);
         }
 
+        private Task UpdateModel(IEvent payload, Action<CategoryModel> handler)
+        {
+            CategoryModel model = FindModel(payload);
+            if (model != null)
+            {
+                handler(model);
+                StateHasChanged();
+            }
+            else
+            {
+                OnEvent();
+            }
+
+            return Task.CompletedTask;
+        }
+
         Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload)
         {
-            // TODO: We can do even better.
-            OnEvent();
+            Models.Add(new CategoryModel(payload.AggregateKey, payload.Name, null, payload.Color, null));
+            SortModels();
             return Task.CompletedTask;
         }
 
         Task IEventHandler<CategoryRenamed>.HandleAsync(CategoryRenamed payload)
-        {
-            // TODO: We can do even better.
-            OnEvent();
-            return Task.CompletedTask;
-        }
+            => UpdateModel(payload, model =>
+            {
+                model.Name = payload.NewName;
+                SortModels();
+            });
 
         Task IEventHandler<CategoryDescriptionChanged>.HandleAsync(CategoryDescriptionChanged payload)
-        {
-            // TODO: We can do even better.
-            OnEvent();
-            return Task.CompletedTask;
-        }
+            => UpdateModel(payload, model => model.Description = payload.Description);
 
         Task IEventHandler<CategoryIconChanged>.HandleAsync(CategoryIconChanged payload)
-        {
-            // TODO: We can do even better.
-            OnEvent();
-            return Task.CompletedTask;
-        }
+            => UpdateModel(payload, model => model.Icon = payload.Icon);
 
         Task IEventHandler<CategoryColorChanged>.HandleAsync(CategoryColorChanged payload)
-        {
-            // TODO: We can do even better.
-            OnEvent();
-            return Task.CompletedTask;
-        }
+            => UpdateModel(payload, model => model.Color = payload.Color);
 
         Task IEventHandler<CategoryDeleted>.HandleAsync(CategoryDeleted payload)
-        {
-            CategoryModel model = Models.FirstOrDefault(c => c.Key.Equals(payload.AggregateKey));
-            if (model != null)
-                Models.Remove(model);
-
-            StateHasChanged();
-            return Task.CompletedTask;
-        }
+            => UpdateModel(payload, model => Models.Remove(model));
 
         #endregion
     }

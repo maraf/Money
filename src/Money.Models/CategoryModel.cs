@@ -21,22 +21,22 @@ namespace Money.Models
         /// <summary>
         /// Gets a name of the category.
         /// </summary>
-        public virtual string Name { get; private set; }
+        public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets a description of the category.
         /// </summary>
-        public virtual string Description { get; private set; }
+        public virtual string Description { get; set; }
 
         /// <summary>
         /// Gets a color of the category.
         /// </summary>
-        public virtual Color Color { get; private set; }
+        public virtual Color Color { get; set; }
         
         /// <summary>
         /// Gets a font icon of the category.
         /// </summary>
-        public virtual string Icon { get; private set; }
+        public virtual string Icon { get; set; }
 
         public CategoryModel(IKey key, string name, string description, Color color, string icon)
         {

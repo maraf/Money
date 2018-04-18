@@ -1,8 +1,9 @@
 ﻿@using Neptuo.Models.Keys
+@inherits DialogBase
 @inject ICommandDispatcher Commands
 @inject IQueryDispatcher Queries
 
-<Modal bind-Title="@Title" bind-PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     @if (!String.IsNullOrEmpty(ErrorMessage))
     {
         <Alert Title="Validation." Message="@ErrorMessage" Mode="@AlertMode.Error" />
@@ -59,10 +60,6 @@
 
     protected string GetCategoryBarStyleValue(CategoryModel category)
         => $"background-color: {category.Color.ToHashCode()};";
-
-    public bool IsVisible { get; set; }
-
-    public Action Closed { get; set; }
 
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }
@@ -125,11 +122,5 @@
         CategoryKey = null;
         Description = null;
         StateHasChanged();
-    }
-
-    protected void OnModalClosed()
-    {
-        IsVisible = false;
-        Closed?.Invoke();
     }
 }

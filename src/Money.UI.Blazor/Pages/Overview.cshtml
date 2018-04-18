@@ -11,7 +11,7 @@
     </button>
 </h1>
 
-<OutcomeCreate bind-IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
+<OutcomeCreate bind-IsVisible="@IsCreateVisible" />
 
 @if (Models != null)
 {
@@ -62,7 +62,7 @@
 
 @if (Selected != null)
 {
-    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" IsVisible="@IsAmountEditVisible" Closed="@(() => IsAmountEditVisible = false)" />
-    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" IsVisible="@IsDescriptionEditVisible" Closed="@(() => IsDescriptionEditVisible = false)" />
-    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" IsVisible="@IsWhenEditVisible" Closed="@(() => IsWhenEditVisible = false)" />
+    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" bind-IsVisible="@IsAmountEditVisible" />
+    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" bind-IsVisible="@IsDescriptionEditVisible" />
+    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" bind-IsVisible="@IsWhenEditVisible" />
 }

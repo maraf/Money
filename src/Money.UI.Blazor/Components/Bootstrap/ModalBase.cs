@@ -31,8 +31,8 @@ namespace Money.Components.Bootstrap
         /// </summary>
         public Func<bool> CloseButtonClick { get; set; }
 
+        public Action<bool> IsVisibleChanged { get; set; }
         private bool isVisible;
-
         public bool IsVisible
         {
             get { return isVisible; }
@@ -44,8 +44,7 @@ namespace Money.Components.Bootstrap
                     isVisible = value;
                     RegisteredFunction.Invoke<object>("Bootstrap_Modal_Toggle", Id, isVisible);
 
-                    if (isVisible == false)
-                        Closed?.Invoke();
+                    IsVisibleChanged?.Invoke(isVisible);
                 }
             }
         }

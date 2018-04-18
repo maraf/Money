@@ -1,7 +1,8 @@
 ﻿@using Neptuo.Models.Keys
+@inherits DialogBase
 @inject ICommandDispatcher Commands
 
-<Modal bind-Title="@Title" bind-PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     <div class="form-group">
         <label for="category-name">Name:</label>
         <input type="text" class="form-control" id="category-name" placeholder="Category Name" data-autofocus bind="@Name" />
@@ -16,9 +17,6 @@
 {
     private string originalName;
     private string originalDescription;
-
-    public bool IsVisible { get; set; }
-    public Action Closed { get; set; }
 
     public IKey CategoryKey { get; set; }
     public string Name { get; set; }
@@ -87,12 +85,6 @@
     {
         await Commands.HandleAsync(new ChangeCategoryDescription(CategoryKey, Description));
         originalDescription = Description;
-    }
-
-    protected void OnModalClosed()
-    {
-        IsVisible = false;
-        Closed?.Invoke();
     }
 
     private Random rnd = new Random();

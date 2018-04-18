@@ -10,7 +10,7 @@
     </button>
 </h1>
 
-<CategoryName bind-IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
+<CategoryName bind-IsVisible="@IsCreateVisible" />
 
 @foreach (var item in Models)
 {
@@ -51,6 +51,6 @@
     </div>
 }
 
-<CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" IsVisible="@IsNameEditVisible" Closed="@(() => IsNameEditVisible = false)" />
-<CategoryIcon CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" IsVisible="@IsIconEditVisible" Closed="@(() => IsIconEditVisible = false)" />
-<CategoryColor CategoryKey="@Selected?.Key" Color="@Selected?.Color" IsVisible="@IsColorEditVisible" Closed="@(() => IsColorEditVisible = false)" />
+<CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" bind-IsVisible="@IsNameEditVisible" />
+<CategoryIcon CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" bind-IsVisible="@IsIconEditVisible" />
+<CategoryColor CategoryKey="@Selected?.Key" Color="@Selected?.Color" bind-IsVisible="@IsColorEditVisible" />

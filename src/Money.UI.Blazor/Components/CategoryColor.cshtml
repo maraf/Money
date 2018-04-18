@@ -1,7 +1,8 @@
 ﻿@using Neptuo.Models.Keys
+@inherits DialogBase
 @inject ICommandDispatcher Commands
 
-<Modal Title="Pick a Color for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="Pick a Color for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     @foreach (Color color in Colors)
     {
         <button class="btn btn-link btn-color" style="@GetCategoryBarStyleValue(color)" onclick="@(() => Color = color)"></button>
@@ -14,9 +15,6 @@
         => $"background-color: {color.ToHashCode()};";
 
     private Color originalColor;
-
-    public bool IsVisible { get; set; }
-    public Action Closed { get; set; }
 
     public IKey CategoryKey { get; set; }
     public Color Color { get; set; }
@@ -45,11 +43,5 @@
     {
         await Commands.HandleAsync(new ChangeCategoryColor(CategoryKey, Color));
         originalColor = Color;
-    }
-
-    protected void OnModalClosed()
-    {
-        IsVisible = false;
-        Closed?.Invoke();
     }
 }

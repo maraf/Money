@@ -1,7 +1,8 @@
 ﻿@using Neptuo.Models.Keys
+@inherits DialogBase
 @inject ICommandDispatcher Commands
 
-<Modal Title="Change when the outcome occured" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="Change when the outcome occured" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     <div class="form-group">
         <label for="outcome-when">When:</label>
         <input type="text" class="form-control" id="outcome-when" placeholder="Outcome Description" data-autofocus bind="@When" format-value="yyyy-MM-dd" />
@@ -11,9 +12,6 @@
 @functions {
 
     private DateTime originalWhen;
-
-    public bool IsVisible { get; set; }
-    public Action Closed { get; set; }
 
     public IKey OutcomeKey { get; set; }
     public DateTime When { get; set; }
@@ -40,11 +38,5 @@
     private async void Execute()
     {
         await Commands.HandleAsync(new ChangeOutcomeWhen(OutcomeKey, When));
-    }
-
-    protected void OnModalClosed()
-    {
-        IsVisible = false;
-        Closed?.Invoke();
     }
 }

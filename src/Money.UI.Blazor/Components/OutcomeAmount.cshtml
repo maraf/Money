@@ -1,8 +1,9 @@
 ﻿@using Neptuo.Models.Keys
+@inherits DialogBase
 @inject ICommandDispatcher Commands
 @inject IQueryDispatcher Queries
 
-<Modal Title="Change an amount of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="Change an amount of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     <div class="row">
         <div class="col-md-9">
             <div class="form-group">
@@ -33,9 +34,6 @@
 
     private decimal originalAmount;
     private string originalCurrency;
-
-    public bool IsVisible { get; set; }
-    public Action Closed { get; set; }
 
     public List<CurrencyModel> Currencies { get; private set; }
     public IKey OutcomeKey { get; set; }
@@ -84,11 +82,5 @@
     private async void Execute()
     {
         await Commands.HandleAsync(new ChangeOutcomeAmount(OutcomeKey, new Price(Amount, Currency)));
-    }
-
-    protected void OnModalClosed()
-    {
-        IsVisible = false;
-        Closed?.Invoke();
     }
 }

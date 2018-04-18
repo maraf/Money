@@ -1,7 +1,8 @@
 ﻿@using Neptuo.Models.Keys
+@inherits DialogBase
 @inject ICommandDispatcher Commands
 
-<Modal bind-Title="@Title" bind-PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     <div class="form-group">
         <label for="currency-unique-code">Unique Code:</label>
         @if (IsUniqueCodeEnabled)
@@ -23,9 +24,6 @@
 
     private string originalUniqueCode;
     private string originalSymbol;
-
-    public bool IsVisible { get; set; }
-    public Action Closed { get; set; }
 
     public string UniqueCode { get; set; }
     public string Symbol { get; set; }
@@ -82,11 +80,5 @@
     private async void ExecuteChange()
     {
         await Commands.HandleAsync(new ChangeCurrencySymbol(UniqueCode, Symbol));
-    }
-
-    protected void OnModalClosed()
-    {
-        IsVisible = false;
-        Closed?.Invoke();
     }
 }

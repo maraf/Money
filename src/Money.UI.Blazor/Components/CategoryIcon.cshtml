@@ -1,7 +1,8 @@
 ﻿@using Neptuo.Models.Keys
+@inherits DialogBase
 @inject ICommandDispatcher Commands
 
-<Modal Title="Pick an Icon for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="Pick an Icon for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     @foreach (string icon in Icons)
     {
         if (Icon == icon)
@@ -22,9 +23,6 @@
 @functions 
 {
     private string originalIcon;
-
-    public bool IsVisible { get; set; }
-    public Action Closed { get; set; }
 
     public IKey CategoryKey { get; set; }
     public string Icon { get; set; }
@@ -53,11 +51,5 @@
     {
         await Commands.HandleAsync(new ChangeCategoryIcon(CategoryKey, Icon));
         originalIcon = Icon;
-    }
-
-    protected void OnModalClosed()
-    {
-        IsVisible = false;
-        Closed?.Invoke();
     }
 }

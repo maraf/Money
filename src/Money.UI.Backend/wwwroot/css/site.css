@@ -7,8 +7,24 @@
     padding: 15px;
 }
 
-.navbar-brand {
+.navbar {
+    background-color: #0078D7;
+    border-color: #398BF5;
+}
+
+.navbar .navbar-nav > li > a,
+.navbar .navbar-nav > li > button, 
+.navbar a.navbar-brand {
+    color: #bcdbff;
+}
+
+.navbar .navbar-nav > li > button:hover {
+    text-decoration: none;
+}
+
+.navbar a.navbar-brand {
     padding-left: 50px;
+    color: #fff;
     background: url('../images/logo.png') no-repeat left center;
 }
 

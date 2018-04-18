@@ -4,13 +4,13 @@
 <h1>
     Categories
 
-    <button class="btn btn-primary" @onclick(() => IsCreateVisible = true) style="float: right">
+    <button class="btn btn-primary" onclick="@(() => IsCreateVisible = true)" style="float: right">
         <span class="glyphicon glyphicon-plus"></span>
         New Category
     </button>
 </h1>
 
-<CategoryName IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
+<CategoryName bind-IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
 
 @foreach (var item in Models)
 {
@@ -28,22 +28,22 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" @onclick(() => { Selected = item; IsNameEditVisible = true; })>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" onclick="@(() => { Selected = item; IsNameEditVisible = true; })">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Icon" @onclick(() => { Selected = item; IsIconEditVisible = true; })>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Icon" onclick="@(() => { Selected = item; IsIconEditVisible = true; })">
                     <span class="glyphicon glyphicon-picture"></span>
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Color" @onclick(() => { Selected = item; IsColorEditVisible = true; })>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Color" onclick="@(() => { Selected = item; IsColorEditVisible = true; })">
                     <span class="glyphicon glyphicon-tint"></span>
                 </button>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" @onclick(() => OnDeleteClick(item))>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClick(item))">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
             </li>

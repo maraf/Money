@@ -3,7 +3,7 @@
 
 @if (LastException != null)
 {
-    <Alert Title="@Title" Message="@Message" Mode="AlertMode.Error" IsDismissible="true" />
+    <Alert bind-Title="@Title" bind-Message="@Message" Mode="@AlertMode.Error" IsDismissible="true" />
 }
 
 @functions {

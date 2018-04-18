@@ -4,13 +4,13 @@
 <h1>
     Summary
 
-    <button type="button" class="btn btn-primary" @onclick(() => IsCreateVisible = true) style="float: right">
+    <button type="button" class="btn btn-primary" onclick="@(() => IsCreateVisible = true)" style="float: right">
         <span class="glyphicon glyphicon-plus"></span>
         New Outcome
     </button>
 </h1>
 
-<OutcomeCreate IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
+<OutcomeCreate bind-IsVisible="@IsCreateVisible" Closed="@(() => IsCreateVisible = false)" />
 
 @if (Months != null)
 {
@@ -22,13 +22,13 @@
                 @if (month == SelectedMonth)
                 {
                     <li role="presentation" class="active">
-                        <a href="#" @onclick(() => OnMonthSelected(month))>@month.ToString()</a>
+                        <a href="#" onclick="@(() => OnMonthSelected(month))">@month.ToString()</a>
                     </li>
                 }
                 else
                 {
                     <li role="presentation">
-                        <a href="#" @onclick(() => OnMonthSelected(month))>@month.ToString()</a>
+                        <a href="#" onclick="@(() => OnMonthSelected(month))">@month.ToString()</a>
                     </li>
                 }
             }
@@ -65,7 +65,7 @@
                 <div class="panel-body">
                     <div class="value">
                         <div class="amount">@category.TotalAmount</div>
-                        <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
+                        <div class="bar" style="@GetCategoryBarStyleValue(category)"></div>
                     </div>
 
                     <h3 class="description">
@@ -76,4 +76,10 @@
             </div>
         }
     </div>
+}
+
+@functions
+{
+    protected string GetCategoryBarStyleValue(CategoryWithAmountModel category)
+        => $"width: {GetPercentualValue(category)}%; background-color: {category.Color.ToHashCode()};";
 }

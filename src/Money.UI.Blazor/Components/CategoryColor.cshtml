@@ -1,15 +1,18 @@
 ﻿@using Neptuo.Models.Keys
 @inject ICommandDispatcher Commands
 
-<Modal Title="Pick a Color for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="Pick a Color for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
     @foreach (Color color in Colors)
     {
-        <button class="btn btn-link btn-color" style="background-color: @color.ToHashCode()" @onclick(() => Color = color)></button>
+        <button class="btn btn-link btn-color" style="@GetCategoryBarStyleValue(color)" onclick="@(() => Color = color)"></button>
     }
 </Modal>
 
 @functions 
 {
+    protected string GetCategoryBarStyleValue(Color color)
+        => $"background-color: {color.ToHashCode()};";
+
     private Color originalColor;
 
     public bool IsVisible { get; set; }

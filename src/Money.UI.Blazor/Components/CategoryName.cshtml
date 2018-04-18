@@ -1,14 +1,14 @@
 ﻿@using Neptuo.Models.Keys
 @inject ICommandDispatcher Commands
 
-<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal bind-Title="@Title" bind-PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
     <div class="form-group">
         <label for="category-name">Name:</label>
-        <input type="text" class="form-control" id="category-name" placeholder="Category Name" data-autofocus @bind(Name) />
+        <input type="text" class="form-control" id="category-name" placeholder="Category Name" data-autofocus bind="@Name" />
     </div>
     <div class="form-group">
         <label for="category-description">Description:</label>
-        <input type="text" class="form-control" id="category-description" placeholder="Category Description" @bind(Description) />
+        <input type="text" class="form-control" id="category-description" placeholder="Category Description" bind="@Description" />
     </div>
 </Modal>
 

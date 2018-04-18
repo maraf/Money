@@ -2,18 +2,18 @@
 @inject ICommandDispatcher Commands
 @inject IQueryDispatcher Queries
 
-<Modal Title="Change an amount of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" IsVisible="@IsVisible" Closed="@OnModalClosed">
+<Modal Title="Change an amount of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible" Closed="@OnModalClosed">
     <div class="row">
         <div class="col-md-9">
             <div class="form-group">
                 <label for="outcome-amount">Amount:</label>
-                <input type="text" class="form-control" id="outcome-amount" data-autofocus @bind(AmountString) />
+                <input type="text" class="form-control" id="outcome-amount" data-autofocus bind="@AmountString" />
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label for="outcome-currency">Currency:</label>
-                <select class="form-control" id="outcome-currency" @bind(Currency)>
+                <select class="form-control" id="outcome-currency" bind="@Currency">
                     @if (Currencies != null)
                     {
                         @foreach (var currency in Currencies)

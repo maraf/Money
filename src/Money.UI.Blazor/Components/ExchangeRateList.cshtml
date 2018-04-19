@@ -1,5 +1,4 @@
-﻿@inherits DialogBase
-@inject IQueryDispatcher Queries
+﻿@inherits ExchangeRateListBase
 
 <Modal Title="@Title" PrimaryButtonText="Add" PrimaryButtonClick="@OnAddClick" bind-IsVisible="@IsVisible">
     @if (Models != null)
@@ -40,32 +39,3 @@
         }
     }
 </Modal>
-
-@functions
-{
-    public string TargetCurrency { get; set; }
-    public Action AddClick { get; set; }
-
-    protected string Title { get; set; }
-    protected List<ExchangeRateModel> Models { get; set; }
-
-    protected async override Task OnParametersSetAsync()
-    {
-        if (IsVisible)
-        {
-            Title = $"List of Exchange Rates for {TargetCurrency}";
-            Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
-        }
-    }
-
-    protected bool OnAddClick()
-    {
-        AddClick?.Invoke();
-        return true;
-    }
-
-    protected void OnDeleteClick(ExchangeRateModel model)
-    {
-
-    }
-}

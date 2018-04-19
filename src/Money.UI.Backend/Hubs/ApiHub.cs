@@ -24,6 +24,7 @@ namespace Money.Hubs
         IExceptionHandler<AggregateRootException>,
         IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>, IEventHandler<CategoryRenamed>, IEventHandler<CategoryDescriptionChanged>, IEventHandler<CategoryIconChanged>, IEventHandler<CategoryColorChanged>,
         IEventHandler<CurrencyCreated>, IEventHandler<CurrencyDeleted>, IEventHandler<CurrencyDefaultChanged>, IEventHandler<CurrencySymbolChanged>,
+        IEventHandler<CurrencyExchangeRateSet>, IEventHandler<CurrencyExchangeRateRemoved>,
         IEventHandler<OutcomeCreated>, IEventHandler<OutcomeDeleted>, IEventHandler<OutcomeAmountChanged>, IEventHandler<OutcomeDescriptionChanged>, IEventHandler<OutcomeWhenChanged>
     {
         private readonly FormatterContainer formatters;
@@ -113,6 +114,8 @@ namespace Money.Hubs
         Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload) => RaiseEvent(payload);
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload) => RaiseEvent(payload);
         Task IEventHandler<CurrencySymbolChanged>.HandleAsync(CurrencySymbolChanged payload) => RaiseEvent(payload);
+        Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload) => RaiseEvent(payload);
+        Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload) => RaiseEvent(payload);
 
         Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload) => RaiseEvent(payload);
         Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload) => RaiseEvent(payload);

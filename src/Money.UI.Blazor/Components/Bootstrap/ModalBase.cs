@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Blazor;
 using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Components;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap
 {
-    public class ModalBase : BlazorComponent, IDisposable
+    public class ModalBase : BlazorComponent, System.IDisposable
     {
         public string Id { get; private set; } = "BM" + Guid.NewGuid().ToString().Replace("-", String.Empty);
         public string Title { get; set; }
@@ -49,7 +50,31 @@ namespace Money.Components.Bootstrap
             }
         }
 
+        protected string DialogCssClass { get; set; }
+
+        public ModalSize Size { get; set; }
+
         public Action Closed { get; set; }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+
+            DialogCssClass = "modal-dialog";
+            switch (Size)
+            {
+                case ModalSize.Small:
+                    DialogCssClass += " modal-sm";
+                    break;
+                case ModalSize.Normal:
+                    break;
+                case ModalSize.Large:
+                    DialogCssClass += " modal-lg";
+                    break;
+                default:
+                    throw Ensure.Exception.NotSupported(Size.ToString());
+            }
+        }
 
         protected void OnPrimaryButtonClick()
         {

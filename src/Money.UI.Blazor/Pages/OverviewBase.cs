@@ -3,6 +3,7 @@ using Money.Commands;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Services;
 using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -24,6 +25,8 @@ namespace Money.Pages
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>
     {
+        private CurrencyFormatter formatter;
+
         [Inject]
         public ICommandDispatcher Commands { get; set; }
 
@@ -49,7 +52,7 @@ namespace Money.Pages
         {
             BindEvents();
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
-
+            formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             await LoadDataAsync();
         }
 
@@ -70,6 +73,9 @@ namespace Money.Pages
 
         private void SortModels()
             => Models.Sort((c1, c2) => c1.When.CompareTo(c2.When));
+
+        protected string FormatPrice(Price price)
+            => formatter.Format(price);
 
         public void Dispose()
             => UnBindEvents();

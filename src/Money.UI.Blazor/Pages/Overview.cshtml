@@ -32,7 +32,7 @@
                     <tr>
                         <td>@item.Description</td>
                         <td>@item.When.ToShortDateString()</td>
-                        <td>@item.Amount</td>
+                        <td>@FormatPrice(item.Amount)</td>
                         <td>
                             <div class="actions">
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Amount" onclick="@(() => { Selected = item; IsAmountEditVisible = true; })">

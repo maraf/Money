@@ -33,6 +33,7 @@ namespace Money.Pages
 
         protected bool IsCreateVisible { get; set; }
         protected bool IsEditVisible { get; set; }
+        protected bool IsCreateExchangeRateVisible { get; set; }
 
         public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
         public CurrencyModel Selected { get; protected set; }

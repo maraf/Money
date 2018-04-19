@@ -77,20 +77,22 @@
 
     protected async override Task OnParametersSetAsync()
     {
-        Reset();
-        Currencies = await Queries.QueryAsync(new ListAllCurrency());
+        if (IsVisible)
+        {
+            Reset();
+            Currencies = await Queries.QueryAsync(new ListAllCurrency());
+        }
     }
 
     protected void Reset()
     {
         Rate = 1;
         ValidFrom = DateTime.Today;
-
     }
 
     protected bool OnSaveClick()
     {
-        if (Rate > 0 && SourceCurrency != TargetCurrency)
+        if (Rate > 0 && SourceCurrency != TargetCurrency && !String.IsNullOrEmpty(SourceCurrency))
         {
             Commands.HandleAsync(new SetExchangeRate(SourceCurrency, TargetCurrency, ValidFrom, Rate));
             Reset();

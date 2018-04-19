@@ -50,8 +50,11 @@
 
     protected async override Task OnParametersSetAsync()
     {
-        Title = $"List of Exchange Rates for {TargetCurrency}";
-        Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
+        if (IsVisible)
+        {
+            Title = $"List of Exchange Rates for {TargetCurrency}";
+            Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
+        }
     }
 
     protected void OnDeleteClick(ExchangeRateModel model)

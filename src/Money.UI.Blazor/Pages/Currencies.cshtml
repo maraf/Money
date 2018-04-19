@@ -35,8 +35,13 @@
                 @if (Models.Count > 1)
                 {
                     <li>
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Add exchange rate" onclick="@(() => { Selected = item; IsListExchangeRateVisible = true; })" >
+                            <span class="glyphicon glyphicon-transfer"></span>
+                        </button>
+                    </li>
+                    <li>
                         <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Add exchange rate" onclick="@(() => { Selected = item; IsCreateExchangeRateVisible = true; })" >
-                            <span class="glyphicon glyphicon-home"></span>
+                            <span class="glyphicon glyphicon-plus"></span>
                         </button>
                     </li>
                 }
@@ -66,4 +71,6 @@
 }
 
 <CurrencyEdit UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" bind-IsVisible="@IsEditVisible" />
+
+<ExchangeRateList TargetCurrency="@Selected?.UniqueCode" bind-IsVisible="@IsListExchangeRateVisible" />
 <ExchangeRateCreate TargetCurrency="@Selected?.UniqueCode" bind-IsVisible="@IsCreateExchangeRateVisible" />

@@ -134,11 +134,11 @@
 
 
 
-.outcomes .actions {
+.table .actions {
     float: right;
 }
 
-.outcomes .actions .btn {
+.table .actions .btn {
     padding: 0;
     margin: 0 0 0 8px;
 }

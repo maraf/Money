@@ -105,6 +105,7 @@
   <ItemGroup>
     <None Include="Components\Bootstrap\Modal.cshtml" />
     <None Include="Components\ExchangeRateCreate.cshtml" />
+    <None Include="Components\ExchangeRateList.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -113,6 +114,14 @@
 
   <ItemGroup>
     <Content Remove="Components\ExchangeRateCreate.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Components\ExchangeRateList.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Components\ExchangeRateList.cshtml" />
   </ItemGroup>
 
 </Project>

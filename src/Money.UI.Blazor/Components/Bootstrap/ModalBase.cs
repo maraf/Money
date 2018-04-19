@@ -52,7 +52,7 @@ namespace Money.Components.Bootstrap
 
         protected string DialogCssClass { get; set; }
 
-        public ModalSize Size { get; set; }
+        public ModalSize Size { get; set; } = ModalSize.Normal;
 
         public Action Closed { get; set; }
 

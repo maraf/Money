@@ -1,0 +1,10 @@
+﻿<input type="text" bind="@Name" />
+<input type="checkbox" bind="@IsActive" />
+
+@functions
+{
+    public string Name { get; set; }
+    public Action<string> NameChanged { get; set; }
+    public bool IsActive { get; set; }
+    public Action<bool> IsActiveChanged { get; set; }
+}

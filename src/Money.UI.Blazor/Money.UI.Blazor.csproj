@@ -104,6 +104,24 @@
 
   <ItemGroup>
     <None Include="Components\Bootstrap\Modal.cshtml" />
+    <None Include="Test\Test.cshtml" />
+    <None Include="Test\User.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Test\User.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Test\User.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Test\Test.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Test\Test.cshtml" />
   </ItemGroup>
 
 </Project>

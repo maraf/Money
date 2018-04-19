@@ -149,7 +149,7 @@ namespace Money
             Ensure.Positive(rate, "rate");
 
             UserModel userModel = GetUserModel(userKey);
-            CurrencyExchangeRateSet payload = new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate);
+            CurrencyExchangeRateSet payload = new CurrencyExchangeRateSet(sourceUniqueCode, targetUniqueCode, validFrom, rate) { UserKey = userKey };
             if (!userModel.ExchangeRateHashCodes.Contains(payload.GetHashCode()))
                 throw new CurrencyExchangeRateDoesNotExistException();
 
@@ -159,7 +159,7 @@ namespace Money
         Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
         {
             UserModel userModel = GetUserModel(payload.UserKey);
-            userModel.ExchangeRateHashCodes.Add(new CurrencyExchangeRateSet(payload.SourceUniqueCode, payload.TargetUniqueCode, payload.ValidFrom, payload.Rate).GetHashCode());
+            userModel.ExchangeRateHashCodes.Remove(new CurrencyExchangeRateSet(payload.SourceUniqueCode, payload.TargetUniqueCode, payload.ValidFrom, payload.Rate) { UserKey = payload.UserKey }.GetHashCode());
             return Task.CompletedTask;
         }
 

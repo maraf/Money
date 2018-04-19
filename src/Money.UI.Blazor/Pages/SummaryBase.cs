@@ -2,12 +2,14 @@
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Services;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,8 @@ namespace Money.Pages
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeWhenChanged>
     {
+        private CurrencyFormatter formatter;
+
         [Inject]
         public ICommandDispatcher Commands { get; set; }
 
@@ -80,6 +84,7 @@ namespace Money.Pages
             {
                 Categories = await Queries.QueryAsync(new ListMonthCategoryWithOutcome(SelectedMonth));
                 TotalAmout = await Queries.QueryAsync(new GetTotalMonthOutcome(SelectedMonth));
+                formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             }
         }
 
@@ -95,6 +100,9 @@ namespace Money.Pages
             decimal total = Categories.Sum(c => c.TotalAmount.Value);
             return 100 / total * category.TotalAmount.Value;
         }
+
+        protected string FormatPrice(Price price)
+            => formatter.Format(price);
 
         public void Dispose()
             => UnBindEvents();

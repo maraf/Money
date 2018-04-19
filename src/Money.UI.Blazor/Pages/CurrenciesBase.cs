@@ -22,6 +22,9 @@ namespace Money.Pages
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyDeleted>
     {
+        private bool isListExchangeRateReopened;
+        private bool isCreateExchangeRateVisible;
+
         [Inject]
         public ICommandDispatcher Commands { get; set; }
 
@@ -34,7 +37,23 @@ namespace Money.Pages
         protected bool IsCreateVisible { get; set; }
         protected bool IsEditVisible { get; set; }
         protected bool IsListExchangeRateVisible { get; set; }
-        protected bool IsCreateExchangeRateVisible { get; set; }
+        protected bool IsCreateExchangeRateVisible
+        {
+            get => isCreateExchangeRateVisible;
+            set
+            {
+                if (isCreateExchangeRateVisible != value)
+                {
+                    isCreateExchangeRateVisible = value;
+                    if (!isCreateExchangeRateVisible && isListExchangeRateReopened)
+                    {
+                        isListExchangeRateReopened = false;
+                        IsListExchangeRateVisible = true;
+                        StateHasChanged();
+                    }
+                }
+            }
+        }
 
         public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
         public CurrencyModel Selected { get; protected set; }
@@ -59,6 +78,13 @@ namespace Money.Pages
 
         protected async void OnChangeDefaultClick(CurrencyModel model)
             => await Commands.HandleAsync(new SetCurrencyAsDefault(model.UniqueCode));
+
+        protected void OnAddExchangeRateClick()
+        {
+            isListExchangeRateReopened = true;
+            IsCreateExchangeRateVisible = true;
+            StateHasChanged();
+        }
 
         public void Dispose()
             => UnBindEvents();

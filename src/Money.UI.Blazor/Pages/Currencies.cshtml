@@ -39,11 +39,6 @@
                             <span class="glyphicon glyphicon-transfer"></span>
                         </button>
                     </li>
-                    <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Add exchange rate" onclick="@(() => { Selected = item; IsCreateExchangeRateVisible = true; })" >
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                    </li>
                 }
                 <li>
                     <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" onclick="@(() => { Selected = item; IsEditVisible = true; })">
@@ -72,5 +67,5 @@
 
 <CurrencyEdit UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" bind-IsVisible="@IsEditVisible" />
 
-<ExchangeRateList TargetCurrency="@Selected?.UniqueCode" bind-IsVisible="@IsListExchangeRateVisible" />
+<ExchangeRateList TargetCurrency="@Selected?.UniqueCode" AddClick="@OnAddExchangeRateClick" bind-IsVisible="@IsListExchangeRateVisible" />
 <ExchangeRateCreate TargetCurrency="@Selected?.UniqueCode" bind-IsVisible="@IsCreateExchangeRateVisible" />

@@ -39,6 +39,7 @@ namespace Money.Pages
 
         protected MonthModel MonthModel { get; set; }
         protected IKey CategoryKey { get; set; }
+        protected string CategoryName { get; set; }
         protected List<OutcomeOverviewModel> Models { get; set; }
         protected OutcomeOverviewModel Selected { get; set; }
 
@@ -55,7 +56,7 @@ namespace Money.Pages
         {
             BindEvents();
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
-            CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, "Category") : KeyFactory.Empty(typeof(Category));
+            CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
             formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             await LoadDataAsync();
         }
@@ -69,7 +70,8 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
         {
             Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel));
-            
+            if (!CategoryKey.IsEmpty)
+                CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
         }
 
         protected async void OnDeleteClick(OutcomeOverviewModel model)

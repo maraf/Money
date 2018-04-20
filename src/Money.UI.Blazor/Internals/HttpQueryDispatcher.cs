@@ -1,4 +1,5 @@
 ﻿using Money.Models.Api;
+using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Formatters;
 using Neptuo.Queries;
@@ -24,6 +25,19 @@ namespace Money.Services
         }
 
         public async Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
+        {
+            if (query is GetCategoryName getCategoryName)
+            {
+                // TODO: Nasty composite formatter workaround.
+                var categories = await QueryInternalAsync(new ListAllCategory());
+                var category = categories.First(c => c.Key.Equals(getCategoryName.CategoryKey));
+                return (TOutput)(object)category.Name;
+            }
+
+            return await QueryInternalAsync(query);
+        }
+
+        private async Task<TOutput> QueryInternalAsync<TOutput>(IQuery<TOutput> query)
         {
             string payload = formatters.Query.Serialize(query);
             string type = query.GetType().AssemblyQualifiedName;

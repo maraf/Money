@@ -4,7 +4,23 @@
 @inherits OverviewBase
 
 <h1>
-    Outcomes in @MonthModel
+    @if (!CategoryKey.IsEmpty)
+    {
+        <span class="gray">
+            @CategoryName
+        </span>
+
+        <span>
+            outcomes in @MonthModel
+        </span>
+    }
+    else
+    {
+        <span>
+            Outcomes in @MonthModel
+        </span>
+    }
+
 
     <button type="button" class="btn btn-primary" onclick="@(() => IsCreateVisible = true)" style="float: right">
         <span class="glyphicon glyphicon-plus"></span>

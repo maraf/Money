@@ -28,6 +28,14 @@
     background: url('../images/logo.png') no-repeat left center;
 }
 
+.nav-tabs > li > a:hover {
+    cursor: pointer;
+}
+
+.nav-tabs > li.active > a:hover {
+    cursor: default;
+}
+
 .center {
     text-align: center;
 }

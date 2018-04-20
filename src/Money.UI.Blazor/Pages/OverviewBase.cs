@@ -8,6 +8,7 @@ using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace Money.Pages
         public IQueryDispatcher Queries { get; set; }
 
         protected MonthModel MonthModel { get; set; }
+        protected IKey CategoryKey { get; set; }
         protected List<OutcomeOverviewModel> Models { get; set; }
         protected OutcomeOverviewModel Selected { get; set; }
 
@@ -47,11 +49,13 @@ namespace Money.Pages
 
         public string Year { get; set; }
         public string Month { get; set; }
+        public string CategoryGuid { get; set; }
 
         protected override async Task OnInitAsync()
         {
             BindEvents();
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
+            CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, "Category") : KeyFactory.Empty(typeof(Category));
             formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             await LoadDataAsync();
         }
@@ -63,7 +67,10 @@ namespace Money.Pages
         }
 
         protected async Task LoadDataAsync()
-            => Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(KeyFactory.Empty(typeof(Category)), MonthModel));
+        {
+            Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel));
+            
+        }
 
         protected async void OnDeleteClick(OutcomeOverviewModel model)
             => await Commands.HandleAsync(new DeleteOutcome(model.Key));

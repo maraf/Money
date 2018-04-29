@@ -112,9 +112,17 @@ namespace Money.Models.Builders
             List<CategoryModel> result = new List<CategoryModel>();
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                return db.Categories
-                    .WhereUserKey(query.UserKey)
-                    .Where(c => !c.IsDeleted)
+                var sql = db.Categories.WhereUserKey(query.UserKey);
+
+                if (query.IsDeleted != null)
+                {
+                    if (query.IsDeleted.Value)
+                        sql = sql.Where(c => c.IsDeleted);
+                    else
+                        sql = sql.Where(c => !c.IsDeleted);
+                }
+
+                return sql
                     .OrderBy(c => c.Name)
                     .Select(e => e.ToModel())
                     .ToListAsync();

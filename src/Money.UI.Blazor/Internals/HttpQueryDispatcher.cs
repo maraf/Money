@@ -29,7 +29,7 @@ namespace Money.Services
             if (query is GetCategoryName getCategoryName)
             {
                 // TODO: Nasty composite formatter workaround.
-                var categories = await QueryInternalAsync(new ListAllCategory());
+                var categories = await QueryInternalAsync(new ListAllCategory(null));
                 var category = categories.First(c => c.Key.Equals(getCategoryName.CategoryKey));
                 return (TOutput)(object)category.Name;
             }
@@ -41,6 +41,8 @@ namespace Money.Services
         {
             string payload = formatters.Query.Serialize(query);
             string type = query.GetType().AssemblyQualifiedName;
+            Console.WriteLine($"Request Type: {type}");
+            Console.WriteLine($"Request Payload: {payload}");
 
             Response response = await api.QueryAsync(new Request()
             {

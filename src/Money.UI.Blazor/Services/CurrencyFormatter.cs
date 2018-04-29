@@ -12,7 +12,7 @@ namespace Money.Services
     public class CurrencyFormatter
     {
         private readonly List<CurrencyModel> models;
-        private Dictionary<string, (CultureInfo culture, RegionInfo region)> currencies;
+        private Dictionary<string, CultureInfo> currencies;
 
         public CurrencyFormatter(List<CurrencyModel> models)
         {
@@ -27,13 +27,13 @@ namespace Money.Services
                 IEnumerable<CultureInfo> cultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
                      .Where(c => !c.IsNeutralCulture);
 
-                currencies = new Dictionary<string, (CultureInfo culture, RegionInfo region)>();
+                currencies = new Dictionary<string, CultureInfo>();
                 foreach (CultureInfo culture in cultures)
                 {
                     try
                     {
                         RegionInfo region = new RegionInfo(culture.Name);
-                        currencies[region.ISOCurrencySymbol] = (culture, region);
+                        currencies[region.ISOCurrencySymbol] = culture;
                     }
                     catch
                     {
@@ -50,12 +50,14 @@ namespace Money.Services
                 return price.ToString();
 
             EnsureCurrencies();
-            if (!currencies.TryGetValue(price.Currency, out var cultureInfo))
-                cultureInfo = (CultureInfo.CurrentCulture, new RegionInfo(CultureInfo.CurrentCulture.Name));
+            if (!currencies.TryGetValue(price.Currency, out var culture))
+                culture = CultureInfo.CurrentCulture;
 
-            CultureInfo culture = cultureInfo.culture;
-            culture = (CultureInfo)culture.Clone();
-            culture.NumberFormat.CurrencySymbol = currency.Symbol;
+            if (culture.NumberFormat.CurrencySymbol != currency.Symbol)
+            {
+                culture = (CultureInfo)culture.Clone();
+                culture.NumberFormat.CurrencySymbol = currency.Symbol;
+            }
 
             return price.Value.ToString("C", culture);
         }

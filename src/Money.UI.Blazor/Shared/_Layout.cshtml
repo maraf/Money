@@ -1,4 +1,6 @@
-﻿<nav class="navbar navbar-inverse navbar-fixed-top">
+﻿@inherits BlazorLayoutComponent
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand">Money</a>
@@ -27,14 +29,8 @@
     @Body
 
     <hr />
-    
+
     <footer>
         <p>&copy; 2018 - Money</p>
     </footer>
 </div>
-
-@functions 
-{
-    [Parameter]
-    protected RenderFragment Body { get; set; }
-}

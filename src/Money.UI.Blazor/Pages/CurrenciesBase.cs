@@ -73,10 +73,10 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
             => Models = await Queries.QueryAsync(new ListAllCurrency());
 
-        protected async void OnDeleteClick(CurrencyModel model)
+        protected async Task OnDeleteClickAsync(CurrencyModel model)
            => await Commands.HandleAsync(new DeleteCurrency(model.UniqueCode));
 
-        protected async void OnChangeDefaultClick(CurrencyModel model)
+        protected async Task OnChangeDefaultClickAsync(CurrencyModel model)
             => await Commands.HandleAsync(new SetCurrencyAsDefault(model.UniqueCode));
 
         protected void OnAddExchangeRateClick()

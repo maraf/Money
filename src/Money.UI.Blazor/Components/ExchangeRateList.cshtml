@@ -23,7 +23,7 @@
                             <td>@item.ValidFrom.ToShortDateString()</td>
                             <td>
                                 <div class="actions">
-                                    <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClick(item))">
+                                    <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClickAsync(item))">
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </button>
                                 </div>

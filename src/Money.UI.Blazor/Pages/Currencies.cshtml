@@ -25,7 +25,7 @@
                 @if (!item.IsDefault)
                 {
                     <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Set as default" onclick="@(() => OnChangeDefaultClick(item))" >
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Set as default" onclick="@(() => OnChangeDefaultClickAsync(item))" >
                             <span class="glyphicon glyphicon-home"></span>
                         </button>
                     </li>
@@ -46,7 +46,7 @@
                 @if (Models.Count > 1 && !item.IsDefault)
                 {
                     <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClick(item))">
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClickAsync(item))">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
                     </li>

@@ -78,7 +78,7 @@ namespace Money.Components
             return true;
         }
 
-        protected async void OnDeleteClick(ExchangeRateModel model)
+        protected async Task OnDeleteClickAsync(ExchangeRateModel model)
             => await Commands.HandleAsync(new RemoveExchangeRate(model.SourceCurrency, TargetCurrency, model.ValidFrom, model.Rate));
 
         public void Dispose()

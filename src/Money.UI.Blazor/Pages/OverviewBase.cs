@@ -79,7 +79,7 @@ namespace Money.Pages
                 CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
         }
 
-        protected async void OnDeleteClick(OutcomeOverviewModel model)
+        protected async Task OnDeleteClickAsync(OutcomeOverviewModel model)
             => await Commands.HandleAsync(new DeleteOutcome(model.Key));
 
         protected OutcomeOverviewModel FindModel(IEvent payload)

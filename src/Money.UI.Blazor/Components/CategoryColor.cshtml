@@ -11,16 +11,16 @@
 
 @functions 
 {
-    protected string GetCategoryBarStyleValue(Color color)
-        => $"background-color: {color.ToHashCode()};";
+        protected string GetCategoryBarStyleValue(Color color)
+            => $"background-color: {color.ToHashCode()};";
 
-    private Color originalColor;
+    private Color? originalColor;
 
     [Parameter]
     protected IKey CategoryKey { get; set; }
 
     [Parameter]
-    protected Color Color { get; set; }
+    protected Color? Color { get; set; }
 
     protected ColorCollection Colors { get; set; } = new ColorCollection();
 
@@ -44,7 +44,10 @@
 
     private async void Execute()
     {
-        await Commands.HandleAsync(new ChangeCategoryColor(CategoryKey, Color));
-        originalColor = Color;
+        if (Color != null)
+        {
+            await Commands.HandleAsync(new ChangeCategoryColor(CategoryKey, Color.Value));
+            originalColor = Color;
+        }
     }
 }

@@ -116,7 +116,7 @@ namespace Money.Components.Bootstrap
 
         internal void MarkAsHidden()
         {
-            isVisible = false;
+            IsVisible = false;
         }
     }
 }

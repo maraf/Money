@@ -19,7 +19,7 @@ namespace Money.Components.Bootstrap
 
         [Parameter]
         protected RenderFragment ChildContent { get; set; }
-        
+
         [Parameter]
         protected string PrimaryButtonText { get; set; }
 
@@ -44,6 +44,7 @@ namespace Money.Components.Bootstrap
         protected Action<bool> IsVisibleChanged { get; set; }
 
         private bool isVisible;
+        private bool isVisibleChanged;
 
         [Parameter]
         protected bool IsVisible
@@ -55,9 +56,9 @@ namespace Money.Components.Bootstrap
                 if (isVisible != value)
                 {
                     isVisible = value;
-                    RegisteredFunction.Invoke<object>("Bootstrap_Modal_Toggle", Id, isVisible);
 
                     IsVisibleChanged?.Invoke(isVisible);
+                    isVisibleChanged = true;
                 }
             }
         }
@@ -103,10 +104,13 @@ namespace Money.Components.Bootstrap
                 IsVisible = false;
         }
 
-        protected override void OnInit()
+        protected override void OnAfterRender()
         {
-            base.OnInit();
+            base.OnAfterRender();
             Native.AddModal(Id, this);
+
+            if (isVisibleChanged)
+                RegisteredFunction.Invoke<object>("Bootstrap_Modal_Toggle", Id, isVisible);
         }
 
         public void Dispose()

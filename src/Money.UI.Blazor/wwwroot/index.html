@@ -62,38 +62,25 @@
                 bootstrapModalHiddenMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.Components.Bootstrap", "Native", "ModalHidden");
             }
         }
-
-        function RunOnJQuerySelector(selector, handler) {
-            var target = $(selector);
-            if (target.length == 0) {
-                setTimeout(function () {
-                    var target = $(selector);
-                    handler(target);
-                }, 100);
-            } else {
-                handler(target);
-            }
-        }
-
+        
         Blazor.registerFunction('Bootstrap_Modal_Register', function (id) {
-            RunOnJQuerySelector("#" + id, function (target) {
-                target.on('shown.bs.modal', function (e) {
-                    $(e.currentTarget).find('[data-autofocus]').select().focus();
-                });
-                target.on('hidden.bs.modal', function (e) {
-                    Blazor.platform.callMethod(bootstrapModalHiddenMethod, null, [
-                        Blazor.platform.toDotNetString(e.currentTarget.id)
-                    ]);
-                });
+            var target = $("#" + id);
+            target.on('shown.bs.modal', function (e) {
+                $(e.currentTarget).find('[data-autofocus]').select().focus();
+            });
+            target.on('hidden.bs.modal', function (e) {
+                Blazor.platform.callMethod(bootstrapModalHiddenMethod, null, [
+                    Blazor.platform.toDotNetString(e.currentTarget.id)
+                ]);
             });
 
             return true;
         });
 
         Blazor.registerFunction('Bootstrap_Modal_Toggle', function (id, isVisible) {
-            RunOnJQuerySelector("#" + id, function (target) {
-                target.modal(isVisible ? 'show' : 'hide');
-            });
+            var target = $("#" + id);
+            target.modal(isVisible ? 'show' : 'hide');
+
             return true;
         });
 

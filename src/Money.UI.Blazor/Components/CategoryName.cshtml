@@ -18,9 +18,14 @@
     private string originalName;
     private string originalDescription;
 
-    public IKey CategoryKey { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    [Parameter]
+    protected IKey CategoryKey { get; set; }
+
+    [Parameter]
+    protected string Name { get; set; }
+
+    [Parameter]
+    protected string Description { get; set; }
 
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }

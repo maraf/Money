@@ -91,7 +91,10 @@
     }
 
     protected string SourceCurrency { get; set; }
-    public string TargetCurrency { get; set; }
+
+    [Parameter]
+    protected string TargetCurrency { get; set; }
+
     protected DateTime ValidFrom { get; set; }
 
     protected async override Task OnParametersSetAsync()

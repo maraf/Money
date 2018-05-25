@@ -23,12 +23,16 @@
 
 @functions 
 {
+    [Parameter]
+    protected string Title { get; set; }
 
-    public string Title { get; set; }
-    public string Message { get; set; }
+    [Parameter]
+    protected string Message { get; set; }
 
     private bool isDismissible;
-    public bool IsDismissible
+
+    [Parameter]
+    protected bool IsDismissible
     {
         get => isDismissible;
         set
@@ -42,7 +46,9 @@
     }
 
     private AlertMode mode;
-    public AlertMode Mode
+
+    [Parameter]
+    protected AlertMode Mode
     {
         get => mode;
         set

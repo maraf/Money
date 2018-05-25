@@ -24,7 +24,7 @@ namespace Money.Components.Bootstrap
         {
             Console.WriteLine($"Modal hidden '{id}'.");
             if (modals.TryGetValue(id, out ModalBase modal))
-                modal.IsVisible = false;
+                modal.MarkAsHidden();
             else
                 Console.WriteLine($"Modal not found '{id}'.");
         }

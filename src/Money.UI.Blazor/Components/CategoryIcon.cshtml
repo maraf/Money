@@ -24,8 +24,11 @@
 {
     private string originalIcon;
 
-    public IKey CategoryKey { get; set; }
-    public string Icon { get; set; }
+    [Parameter]
+    protected IKey CategoryKey { get; set; }
+
+    [Parameter]
+    protected string Icon { get; set; }
 
     protected IconCollection Icons { get; set; } = new IconCollection();
 

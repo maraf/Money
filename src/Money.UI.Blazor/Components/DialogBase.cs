@@ -10,7 +10,9 @@ namespace Money.Components
     public class DialogBase : BlazorComponent
     {
         private bool isVisible;
-        public bool IsVisible
+
+        [Parameter]
+        protected bool IsVisible
         {
             get { return isVisible; }
             set
@@ -23,6 +25,7 @@ namespace Money.Components
             }
         }
 
-        public Action<bool> IsVisibleChanged { get; set; }
+        [Parameter]
+        protected Action<bool> IsVisibleChanged { get; set; }
     }
 }

@@ -16,8 +16,11 @@
 
     private Color originalColor;
 
-    public IKey CategoryKey { get; set; }
-    public Color Color { get; set; }
+    [Parameter]
+    protected IKey CategoryKey { get; set; }
+
+    [Parameter]
+    protected Color Color { get; set; }
 
     protected ColorCollection Colors { get; set; } = new ColorCollection();
 

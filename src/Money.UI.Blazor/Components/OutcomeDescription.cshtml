@@ -13,8 +13,11 @@
 
     private string originalDescription;
 
-    public IKey OutcomeKey { get; set; }
-    public string Description { get; set; }
+    [Parameter]
+    protected IKey OutcomeKey { get; set; }
+
+    [Parameter]
+    protected string Description { get; set; }
 
     protected override void OnParametersSet()
     {

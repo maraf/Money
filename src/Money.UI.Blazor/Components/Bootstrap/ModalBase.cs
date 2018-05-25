@@ -113,5 +113,10 @@ namespace Money.Components.Bootstrap
         {
             Native.RemoveModal(Id);
         }
+
+        internal void MarkAsHidden()
+        {
+            isVisible = false;
+        }
     }
 }

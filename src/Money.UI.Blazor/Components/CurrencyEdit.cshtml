@@ -24,8 +24,11 @@
     private string originalUniqueCode;
     private string originalSymbol;
 
-    public string UniqueCode { get; set; }
-    public string Symbol { get; set; }
+    [Parameter]
+    protected string UniqueCode { get; set; }
+
+    [Parameter]
+    protected string Symbol { get; set; }
 
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }

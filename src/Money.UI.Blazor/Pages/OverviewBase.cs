@@ -48,9 +48,14 @@ namespace Money.Pages
         protected bool IsDescriptionEditVisible { get; set; }
         protected bool IsWhenEditVisible { get; set; }
 
-        public string Year { get; set; }
-        public string Month { get; set; }
-        public string CategoryGuid { get; set; }
+        [Parameter]
+        protected string Year { get; set; }
+
+        [Parameter]
+        protected string Month { get; set; }
+
+        [Parameter]
+        protected string CategoryGuid { get; set; }
 
         protected override async Task OnInitAsync()
         {

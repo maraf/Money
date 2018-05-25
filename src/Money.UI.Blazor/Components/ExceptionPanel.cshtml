@@ -10,8 +10,11 @@
 
     public Exception LastException { get; private set; }
 
-    public string Title { get; private set; }
-    public string Message { get; private set; }
+    [Parameter]
+    protected string Title { get; private set; }
+
+    [Parameter]
+    protected string Message { get; private set; }
 
     protected override void OnInit()
     {

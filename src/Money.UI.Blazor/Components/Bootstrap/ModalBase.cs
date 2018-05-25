@@ -13,28 +13,40 @@ namespace Money.Components.Bootstrap
     public class ModalBase : BlazorComponent, System.IDisposable
     {
         public string Id { get; private set; } = "BM" + Guid.NewGuid().ToString().Replace("-", String.Empty);
-        public string Title { get; set; }
-        public RenderFragment ChildContent { get; set; }
 
-        public string PrimaryButtonText { get; set; }
+        [Parameter]
+        protected string Title { get; set; }
+
+        [Parameter]
+        protected RenderFragment ChildContent { get; set; }
+        
+        [Parameter]
+        protected string PrimaryButtonText { get; set; }
 
         /// <summary>
         /// Ivoked when user clicks on primary button.
         /// When <c>true</c> is returned, modal is closed.
         /// </summary>
-        public Func<bool> PrimaryButtonClick { get; set; }
+        [Parameter]
+        protected Func<bool> PrimaryButtonClick { get; set; }
 
-        public string CloseButtonText { get; set; } = "Close";
+        [Parameter]
+        protected string CloseButtonText { get; set; } = "Close";
 
         /// <summary>
         /// Invoken when user clicks on close button.
         /// When <c>true</c> is returned, modal is closed.
         /// </summary>
-        public Func<bool> CloseButtonClick { get; set; }
+        [Parameter]
+        protected Func<bool> CloseButtonClick { get; set; }
 
-        public Action<bool> IsVisibleChanged { get; set; }
+        [Parameter]
+        protected Action<bool> IsVisibleChanged { get; set; }
+
         private bool isVisible;
-        public bool IsVisible
+
+        [Parameter]
+        protected bool IsVisible
         {
             get { return isVisible; }
             set
@@ -52,9 +64,11 @@ namespace Money.Components.Bootstrap
 
         protected string DialogCssClass { get; set; }
 
-        public ModalSize Size { get; set; } = ModalSize.Normal;
+        [Parameter]
+        protected ModalSize Size { get; set; } = ModalSize.Normal;
 
-        public Action Closed { get; set; }
+        [Parameter]
+        protected Action Closed { get; set; }
 
         protected override void OnParametersSet()
         {

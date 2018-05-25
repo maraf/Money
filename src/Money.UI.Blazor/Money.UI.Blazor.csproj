@@ -16,14 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <BlazorGenerate Remove="Pages\Login.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Shared\_Layout.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
     <ProjectReference Include="..\Money\Money.csproj" />
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
@@ -33,96 +25,6 @@
     <Content Update="Components\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Pages\Categories.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Pages\About.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Pages\Currencies.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\CategoryName.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\LoginInfo.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\CategoryIcon.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\CategoryColor.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\CurrencyEdit.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\ExceptionPanel.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\OutcomeDescription.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\OutcomeAmount.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\OutcomeWhen.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\OutcomeCreate.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Pages\Overview.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Pages\Summary.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\Bootstrap\Modal.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Components\Bootstrap\Modal.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Components\Bootstrap\Modal.cshtml" />
-    <None Include="Components\ExchangeRateCreate.cshtml" />
-    <None Include="Components\ExchangeRateList.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\ExchangeRateCreate.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Components\ExchangeRateCreate.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Components\ExchangeRateList.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Components\ExchangeRateList.cshtml" />
   </ItemGroup>
 
 </Project>

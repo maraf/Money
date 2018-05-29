@@ -44,6 +44,10 @@ namespace Money.Bootstrap
         {
             ILogFilter logFilter = DefaultLogFilter.Debug;
 
+#if !DEBUG
+            logFilter = DefaultLogFilter.Warning;
+#endif
+
             logFactory = new DefaultLogFactory("Root")
                 .AddSerializer(new ConsoleSerializer(new SingleLineLogFormatter(), logFilter));
 

@@ -2,6 +2,7 @@
 using Money.Commands;
 using Money.Events;
 using Money.Models;
+using Money.Models.Confirmation;
 using Money.Models.Queries;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -40,10 +41,13 @@ namespace Money.Pages
 
         protected List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
         protected CategoryModel Selected { get; set; }
+        protected DeleteContext<CategoryModel> Delete { get; } = new DeleteContext<CategoryModel>();
 
         protected override async Task OnInitAsync()
         {
             BindEvents();
+            Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteCategory(model.Key));
+            Delete.MessageFormatter = model => $"Do you really want to delete category '{model.Name}'?";
             await LoadDataAsync();
         }
 
@@ -56,8 +60,8 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
             => Models = await Queries.QueryAsync(new ListAllCategory());
 
-        protected async void OnDeleteClick(CategoryModel model)
-            => await Commands.HandleAsync(new DeleteCategory(model.Key));
+        protected void OnDeleteClick(CategoryModel model)
+            => Delete.Model = model;
 
         private CategoryModel FindModel(IEvent payload)
             => Models.FirstOrDefault(c => c.Key.Equals(payload.AggregateKey));

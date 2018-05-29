@@ -1,20 +1,18 @@
-﻿@inherits DialogBase
+﻿@using Money.Models.Confirmation
+@inherits DialogBase
 
-<Modal Title="Money" PrimaryButtonText="Yes" PrimaryButtonClick="@OnPrimaryButtonClick" CloseButtonText="No" Size="@ModalSize.Small" bind-IsVisible="@IsVisible">
-    @Message
+<Modal Title="Money" PrimaryButtonText="Yes" PrimaryButtonClick="@OnPrimaryButtonClick" CloseButtonText="No" Size="@ModalSize.Small" bind-IsVisible="@Context.IsVisible">
+    @Context.Message
 </Modal>
 
 @functions
 {
     [Parameter]
-    protected string Message { get; set; }
+    protected ConfirmContext Context { get; set; }
 
-    [Parameter]
-    protected Action YesClick { get; set; }
-    
     protected bool OnPrimaryButtonClick()
     {
-        YesClick?.Invoke();
+        Context.OnConfirmed();
         return true;
     }
 }

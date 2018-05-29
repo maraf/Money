@@ -29,7 +29,7 @@
 </h1>
 
 <OutcomeCreate bind-IsVisible="@IsCreateVisible" />
-<Confirm Message="@DeleteItemMessage" YesClick="OnDeleteConfirmed" bind-IsVisible="@IsDeleteConfirmVisible" />
+<Confirm Context="@Delete" />
 
 @if (Models != null)
 {

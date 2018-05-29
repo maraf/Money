@@ -2,6 +2,7 @@
 using Money.Commands;
 using Money.Events;
 using Money.Models;
+using Money.Models.Confirmation;
 using Money.Models.Queries;
 using Money.Services;
 using Neptuo;
@@ -48,9 +49,7 @@ namespace Money.Pages
         protected bool IsDescriptionEditVisible { get; set; }
         protected bool IsWhenEditVisible { get; set; }
 
-        protected string DeleteItemMessage { get; set; }
-        protected bool IsDeleteConfirmVisible { get; set; }
-        private OutcomeOverviewModel deleteItem;
+        protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
 
         [Parameter]
         protected string Year { get; set; }
@@ -64,6 +63,9 @@ namespace Money.Pages
         protected override async Task OnInitAsync()
         {
             BindEvents();
+            Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));
+            Delete.MessageFormatter = model => $"Do you really want to delete outcome '{model.Description}'?";
+
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
             CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
             formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
@@ -84,20 +86,7 @@ namespace Money.Pages
         }
 
         protected void OnDeleteClick(OutcomeOverviewModel model)
-        {
-            deleteItem = model;
-            DeleteItemMessage = $"Do you really want to delete outcome '{model.Description}'?";
-            IsDeleteConfirmVisible = true;
-        }
-
-        protected async void OnDeleteConfirmed()
-        {
-            if (deleteItem != null)
-            {
-                await Commands.HandleAsync(new DeleteOutcome(deleteItem.Key));
-                deleteItem = null;
-            }
-        }
+            => Delete.Model = model;
 
         protected OutcomeOverviewModel FindModel(IEvent payload)
             => Models.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));

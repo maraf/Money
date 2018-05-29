@@ -54,14 +54,25 @@ namespace Money.Controllers
                 object output = task.GetType().GetProperty(nameof(Task<object>.Result)).GetValue(task);
                 if (output != null)
                 {
-                    payload = formatters.Query.Serialize(output);
+                    ResponseType responseType = ResponseType.Composite;
                     type = output.GetType();
+
+                    if (output is string || output is int || output is decimal || output is bool)
+                    {
+                        payload = output.ToString();
+                        responseType = ResponseType.Plain;
+                    }
+                    else
+                    {
+                        payload = formatters.Query.Serialize(output);
+                    }
 
                     HttpContext.Response.ContentType = "text/json";
                     return Json(new Response()
                     {
                         payload = payload,
-                        type = type.AssemblyQualifiedName
+                        type = type.AssemblyQualifiedName,
+                        responseType = responseType
                     });
                 }
             }

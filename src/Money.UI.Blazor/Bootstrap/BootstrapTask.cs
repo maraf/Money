@@ -80,6 +80,7 @@ namespace Money.Bootstrap
         {
             Converts.Repository
                 .AddStringTo<int>(Int32.TryParse)
+                .AddStringTo<decimal>(Decimal.TryParse)
                 .AddStringTo<bool>(Boolean.TryParse)
                 .AddEnumSearchHandler(false);
                 //.AddJsonEnumSearchHandler()

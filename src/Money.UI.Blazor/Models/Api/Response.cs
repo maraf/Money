@@ -10,5 +10,6 @@ namespace Money.Models.Api
     {
         public string payload { get; set; }
         public string type { get; set; }
+        public ResponseType responseType { get; set; }
     }
 }

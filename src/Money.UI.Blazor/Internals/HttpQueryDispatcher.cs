@@ -26,19 +26,6 @@ namespace Money.Services
 
         public async Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
         {
-            if (query is GetCategoryName getCategoryName)
-            {
-                // TODO: Nasty composite formatter workaround.
-                var categories = await QueryInternalAsync(new ListAllCategory(null));
-                var category = categories.First(c => c.Key.Equals(getCategoryName.CategoryKey));
-                return (TOutput)(object)category.Name;
-            }
-
-            return await QueryInternalAsync(query);
-        }
-
-        private async Task<TOutput> QueryInternalAsync<TOutput>(IQuery<TOutput> query)
-        {
             string payload = formatters.Query.Serialize(query);
             string type = query.GetType().AssemblyQualifiedName;
             Console.WriteLine($"Request Type: {type}");
@@ -54,9 +41,18 @@ namespace Money.Services
             Console.WriteLine($"Response Payload: {response.payload}");
             if (!string.IsNullOrEmpty(response.payload))
             {
-                TOutput output = formatters.Query.Deserialize<TOutput>(response.payload);
-                Console.WriteLine($"HQD: Output success: {output != null}.");
-                return output;
+                if (response.responseType == ResponseType.Plain)
+                {
+                    TOutput output = (TOutput)Converts.To(typeof(TOutput), response.payload);
+                    Console.WriteLine($"HQD: Output success (plain): {output != null}.");
+                    return output;
+                }
+                else
+                {
+                    TOutput output = formatters.Query.Deserialize<TOutput>(response.payload);
+                    Console.WriteLine($"HQD: Output success (composite): {output != null}.");
+                    return output;
+                }
             }
 
             Console.WriteLine("HQD: Fallback to default value.");

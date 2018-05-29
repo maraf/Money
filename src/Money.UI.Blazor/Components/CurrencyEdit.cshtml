@@ -2,6 +2,11 @@
 @inject ICommandDispatcher Commands
 
 <Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+    @if (!String.IsNullOrEmpty(ErrorMessage))
+    {
+        <Alert Title="Validation." Message="@ErrorMessage" Mode="@AlertMode.Error" />
+    }
+
     <div class="form-group">
         <label for="currency-unique-code">Unique Code:</label>
         @if (IsUniqueCodeEnabled)
@@ -34,12 +39,24 @@
     protected string SaveButtonText { get; set; }
     protected bool IsUniqueCodeEnabled { get; set; }
 
+    protected string ErrorMessage { get; set; }
+
+    private bool isNew;
+
+    public override void SetParameters(ParameterCollection parameters)
+    {
+        base.SetParameters(parameters);
+        isNew = parameters.GetValueOrDefault<string>(nameof(UniqueCode)) == null;
+    }
+
     protected override void OnParametersSet()
     {
+        //bool isNew = Symbol == null || originalSymbol != null;
+
         originalUniqueCode = UniqueCode;
         originalSymbol = Symbol;
 
-        if (originalSymbol == null)
+        if (isNew)
         {
             Title = "Create a new Currency";
             SaveButtonText = "Create";
@@ -55,10 +72,15 @@
 
     protected bool OnSaveClick()
     {
-        if (originalUniqueCode == null && !String.IsNullOrEmpty(UniqueCode))
+        if (isNew)
         {
-            ExecuteCreate();
-            return true;
+            if (!String.IsNullOrEmpty(UniqueCode))
+            {
+                ExecuteCreate();
+                return true;
+            }
+
+            ErrorMessage = "Unique Code is required.";
         }
         else if (originalSymbol != Symbol)
         {
@@ -66,10 +88,8 @@
             originalSymbol = Symbol;
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     private async void ExecuteCreate()

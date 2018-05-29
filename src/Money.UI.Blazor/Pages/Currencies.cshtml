@@ -11,6 +11,7 @@
 </h1>
 
 <CurrencyEdit bind-IsVisible="@IsCreateVisible" />
+<Confirm Context="@Delete" />
 
 @foreach (var item in Models)
 {
@@ -25,7 +26,7 @@
                 @if (!item.IsDefault)
                 {
                     <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Set as default" onclick="@(() => OnChangeDefaultClickAsync(item))" >
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Set as default" onclick="@(() => OnChangeDefaultClickAsync(item))">
                             <span class="glyphicon glyphicon-home"></span>
                         </button>
                     </li>
@@ -33,7 +34,7 @@
                 @if (Models.Count > 1)
                 {
                     <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Add exchange rate" onclick="@(() => { Selected = item; IsListExchangeRateVisible = true; })" >
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Add exchange rate" onclick="@(() => { Selected = item; IsListExchangeRateVisible = true; })">
                             <span class="glyphicon glyphicon-transfer"></span>
                         </button>
                     </li>
@@ -46,7 +47,7 @@
                 @if (Models.Count > 1 && !item.IsDefault)
                 {
                     <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClickAsync(item))">
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClick(item))">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
                     </li>
@@ -54,7 +55,7 @@
             </ul>
 
             <p>This currency has unique code @item.UniqueCode.</p>
-            @if(item.IsDefault)
+            @if (item.IsDefault)
             {
                 <p>This is a default currency used for displaying outcomes.</p>
             }

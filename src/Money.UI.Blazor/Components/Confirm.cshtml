@@ -1,0 +1,20 @@
+﻿@inherits DialogBase
+
+<Modal Title="Money" PrimaryButtonText="Yes" PrimaryButtonClick="@OnPrimaryButtonClick" CloseButtonText="No" Size="@ModalSize.Small" bind-IsVisible="@IsVisible">
+    @Message
+</Modal>
+
+@functions
+{
+    [Parameter]
+    protected string Message { get; set; }
+
+    [Parameter]
+    protected Action YesClick { get; set; }
+    
+    protected bool OnPrimaryButtonClick()
+    {
+        YesClick?.Invoke();
+        return true;
+    }
+}

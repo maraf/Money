@@ -48,6 +48,10 @@ namespace Money.Pages
         protected bool IsDescriptionEditVisible { get; set; }
         protected bool IsWhenEditVisible { get; set; }
 
+        protected string DeleteItemMessage { get; set; }
+        protected bool IsDeleteConfirmVisible { get; set; }
+        private OutcomeOverviewModel deleteItem;
+
         [Parameter]
         protected string Year { get; set; }
 
@@ -79,8 +83,21 @@ namespace Money.Pages
                 CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
         }
 
-        protected async Task OnDeleteClickAsync(OutcomeOverviewModel model)
-            => await Commands.HandleAsync(new DeleteOutcome(model.Key));
+        protected void OnDeleteClick(OutcomeOverviewModel model)
+        {
+            deleteItem = model;
+            DeleteItemMessage = $"Do you really want to delete outcome '{model.Description}'?";
+            IsDeleteConfirmVisible = true;
+        }
+
+        protected async void OnDeleteConfirmed()
+        {
+            if (deleteItem != null)
+            {
+                await Commands.HandleAsync(new DeleteOutcome(deleteItem.Key));
+                deleteItem = null;
+            }
+        }
 
         protected OutcomeOverviewModel FindModel(IEvent payload)
             => Models.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));

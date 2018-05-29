@@ -6,8 +6,6 @@ using Neptuo.Activators;
 using Neptuo.Bootstrap;
 using Neptuo.Commands;
 using Neptuo.Converters;
-using Neptuo.Events;
-using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Neptuo.Formatters.Metadata;
 using Neptuo.Logging;
@@ -44,14 +42,16 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
+            ILogFilter logFilter = DefaultLogFilter.Debug;
+
             logFactory = new DefaultLogFactory("Root")
-                .AddSerializer(new ConsoleSerializer(new SingleLineLogFormatter(), new AllowedLogFilter()));
+                .AddSerializer(new ConsoleSerializer(new SingleLineLogFormatter(), logFilter));
 
             Domain();
 
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
             FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter, exceptionFormatter);
-            BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters);
+            BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters, logFactory);
             BrowserExceptionHandler exceptionHandler = new BrowserExceptionHandler(formatters, logFactory);
 
             services
@@ -61,6 +61,7 @@ namespace Money.Bootstrap
                 .AddSingleton<MessageBuilder>()
                 .AddTransient<ICommandDispatcher, HttpCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()
+                .AddTransient(typeof(ILog<>), typeof(DefaultLog<>))
                 .AddSingleton(eventDispatcher)
                 .AddSingleton(eventDispatcher.Handlers)
                 .AddSingleton(exceptionHandler)

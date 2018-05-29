@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Browser.Interop;
+using Money.UI.Blazor;
+using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +24,12 @@ namespace Money.Components.Bootstrap
 
         internal static void ModalHidden(string id)
         {
-            Console.WriteLine($"Modal hidden '{id}'.");
+            ILog log = Program.Resolve<ILogFactory>().Scope("Modal.Native");
+            log.Debug($"Modal hidden '{id}'.");
             if (modals.TryGetValue(id, out ModalBase modal))
                 modal.MarkAsHidden();
             else
-                Console.WriteLine($"Modal not found '{id}'.");
+                log.Debug($"Modal not found '{id}'.");
         }
     }
 }

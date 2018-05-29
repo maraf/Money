@@ -1,5 +1,6 @@
 ﻿@using Neptuo.Models.Keys
 @inherits DialogBase
+@inject ILog<OutcomeCreate> Log
 @inject ICommandDispatcher Commands
 @inject IQueryDispatcher Queries
 
@@ -57,7 +58,7 @@
 </Modal>
 
 @functions {
-
+        
     protected string GetCategoryBarStyleValue(CategoryModel category)
         => $"background-color: {category.Color.ToHashCode()};";
 
@@ -107,7 +108,7 @@
 
     protected bool OnSaveClick()
     {
-        Console.WriteLine($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
+        Log.Debug($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
 
         if (Amount > 0 && !String.IsNullOrEmpty(Currency) && CategoryKey != null && !CategoryKey.IsEmpty)
         {

@@ -112,7 +112,7 @@ namespace Money.Bootstrap
                         }
                         else
                         {
-                            Console.WriteLine($"Item failed at index '{i}'.");
+                            log.Error($"Item failed at index '{i}'.");
                             return false;
                         }
                     }

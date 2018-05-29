@@ -29,5 +29,8 @@ namespace Money.UI.Blazor
 
         internal static void RaiseEvent(string payload) => serviceProvider.GetService<BrowserEventDispatcher>().Raise(payload);
         internal static void RaiseException(string payload) => serviceProvider.GetService<BrowserExceptionHandler>().Raise(payload);
+
+        internal static T Resolve<T>()
+            => serviceProvider.GetService<T>();
     }
 }

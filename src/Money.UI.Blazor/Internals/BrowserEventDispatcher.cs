@@ -4,6 +4,7 @@ using Money.Services;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Formatters;
+using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,14 @@ namespace Money.Internals
     {
         private readonly DefaultEventManager manager = new DefaultEventManager();
         private readonly FormatterContainer formatters;
+        private readonly ILog log;
 
-        public BrowserEventDispatcher(FormatterContainer formatters)
+        public BrowserEventDispatcher(FormatterContainer formatters, ILogFactory logFactory)
         {
             Ensure.NotNull(formatters, "formatters");
+            Ensure.NotNull(logFactory, "logFactory");
             this.formatters = formatters;
+            this.log = logFactory.Scope("BrowserEventDispatcher");
         }
 
         public IEventHandlerCollection Handlers
@@ -31,7 +35,7 @@ namespace Money.Internals
 
         public void Raise(string rawPayload)
         {
-            Console.WriteLine($"BRED: Raise: {rawPayload}");
+            log.Debug($"Raised: {rawPayload}");
 
             Response response = JsonUtil.Deserialize<Response>(rawPayload);
             Type type = Type.GetType(response.type);

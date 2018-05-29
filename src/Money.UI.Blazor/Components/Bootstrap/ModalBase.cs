@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Components;
 using Neptuo;
+using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace Money.Components.Bootstrap
 {
     public class ModalBase : BlazorComponent, System.IDisposable
     {
+        [Inject]
+        internal ILog<ModalBase> Log { get; set; }
+
         public string Id { get; private set; } = "BM" + Guid.NewGuid().ToString().Replace("-", String.Empty);
 
         [Parameter]
@@ -52,7 +56,7 @@ namespace Money.Components.Bootstrap
             get { return isVisible; }
             set
             {
-                Console.WriteLine($"Modal: IsVisible: Current: {isVisible}, New: {value}.");
+                Log.Debug($"IsVisible: Current: {isVisible}, New: {value}.");
                 if (isVisible != value)
                 {
                     isVisible = value;

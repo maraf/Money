@@ -2,6 +2,7 @@
 using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Formatters;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -15,21 +16,24 @@ namespace Money.Services
     {
         private readonly ApiClient api;
         private readonly FormatterContainer formatters;
+        private readonly ILog log;
 
-        public HttpQueryDispatcher(ApiClient api, FormatterContainer formatters)
+        public HttpQueryDispatcher(ApiClient api, FormatterContainer formatters, ILogFactory logFactory)
         {
             Ensure.NotNull(api, "api");
             Ensure.NotNull(formatters, "formatters");
+            Ensure.NotNull(logFactory, "logFactory");
             this.api = api;
             this.formatters = formatters;
+            this.log = logFactory.Scope("HttpQueryDispatcher");
         }
 
         public async Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
         {
             string payload = formatters.Query.Serialize(query);
             string type = query.GetType().AssemblyQualifiedName;
-            Console.WriteLine($"Request Type: {type}");
-            Console.WriteLine($"Request Payload: {payload}");
+            log.Debug($"Request Type: '{type}'.");
+            log.Debug($"Request Payload: '{payload}'.");
 
             Response response = await api.QueryAsync(new Request()
             {
@@ -37,25 +41,25 @@ namespace Money.Services
                 Type = type
             });
 
-            Console.WriteLine($"Response Type: {response.type}");
-            Console.WriteLine($"Response Payload: {response.payload}");
+            log.Debug($"Response Type: '{response.type}'");
+            log.Debug($"Response Payload: '{response.payload}'");
             if (!string.IsNullOrEmpty(response.payload))
             {
                 if (response.responseType == ResponseType.Plain)
                 {
                     TOutput output = (TOutput)Converts.To(typeof(TOutput), response.payload);
-                    Console.WriteLine($"HQD: Output success (plain): {output != null}.");
+                    log.Debug($"Output success (plain): '{output != null}'.");
                     return output;
                 }
                 else
                 {
                     TOutput output = formatters.Query.Deserialize<TOutput>(response.payload);
-                    Console.WriteLine($"HQD: Output success (composite): {output != null}.");
+                    log.Debug($"Output success (composite): '{output != null}'.");
                     return output;
                 }
             }
 
-            Console.WriteLine("HQD: Fallback to default value.");
+            log.Debug("Fallback to default value.");
             return Activator.CreateInstance<TOutput>();
         }
     }

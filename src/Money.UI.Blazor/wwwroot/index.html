@@ -94,7 +94,9 @@
             InitializeEventHub();
         });
 
-        var connection = new signalR.HubConnection("/api");
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/api")
+            .build();;
 
         connection.on("RaiseEvent", function (e) {
             console.log("JS: Event: " + e);

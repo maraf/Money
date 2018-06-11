@@ -8,7 +8,7 @@
         <div class="col-md-9">
             <div class="form-group">
                 <label for="outcome-amount">Amount:</label>
-                <input type="text" class="form-control" id="outcome-amount" data-autofocus bind="@AmountString" />
+                <input type="text" class="form-control" id="outcome-amount" data-autofocus bind="@Amount" />
             </div>
         </div>
         <div class="col-md-3">
@@ -42,19 +42,6 @@
 
     [Parameter]
     protected decimal Amount { get; set; }
-
-    [Parameter]
-    protected string AmountString
-    {
-        get => Amount.ToString();
-        set
-        {
-            if (Decimal.TryParse(value, out decimal target))
-                Amount = target;
-            else
-                Amount = 0;
-        }
-    }
 
     [Parameter]
     protected string Currency { get; set; }

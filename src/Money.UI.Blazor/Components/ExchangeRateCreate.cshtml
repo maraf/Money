@@ -32,7 +32,7 @@
     </div>
     <div class="form-group">
         <label for="exchangerate-rate">Rate:</label>
-        <input type="number" class="form-control" id="exchangerate-rate" bind="@RateString" />
+        <input type="number" class="form-control" id="exchangerate-rate" bind="@Rate" />
     </div>
     <div class="form-group">
         <label for="exchangerate-target">Target Currency:</label>
@@ -77,18 +77,6 @@
     protected List<CurrencyModel> Currencies { get; private set; }
 
     protected double Rate { get; set; }
-
-    protected string RateString
-    {
-        get => Rate.ToString();
-        set
-        {
-            if (Double.TryParse(value, out double target))
-                Rate = target;
-            else
-                Rate = 0;
-        }
-    }
 
     protected string SourceCurrency { get; set; }
 

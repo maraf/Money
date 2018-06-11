@@ -70,9 +70,9 @@ namespace Money.Controllers
                     HttpContext.Response.ContentType = "text/json";
                     return Json(new Response()
                     {
-                        payload = payload,
-                        type = type.AssemblyQualifiedName,
-                        responseType = responseType
+                        Payload = payload,
+                        Type = type.AssemblyQualifiedName,
+                        ResponseType = responseType
                     });
                 }
             }

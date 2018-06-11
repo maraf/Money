@@ -33,8 +33,8 @@ namespace Money.Internals
             log.Debug($"'{rawPayload}'.");
 
             Response response = JsonUtil.Deserialize<Response>(rawPayload);
-            Type type = Type.GetType(response.type);
-            rawPayload = response.payload;
+            Type type = Type.GetType(response.Type);
+            rawPayload = response.Payload;
 
             Exception exception = (Exception)formatters.Exception.Deserialize(type, rawPayload);
             Handler.Handle(exception);

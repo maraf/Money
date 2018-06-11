@@ -41,19 +41,19 @@ namespace Money.Services
                 Type = type
             });
 
-            log.Debug($"Response Type: '{response.type}'");
-            log.Debug($"Response Payload: '{response.payload}'");
-            if (!string.IsNullOrEmpty(response.payload))
+            log.Debug($"Response Type: '{response.Type}'");
+            log.Debug($"Response Payload: '{response.Payload}'");
+            if (!string.IsNullOrEmpty(response.Payload))
             {
-                if (response.responseType == ResponseType.Plain)
+                if (response.ResponseType == ResponseType.Plain)
                 {
-                    TOutput output = (TOutput)Converts.To(typeof(TOutput), response.payload);
+                    TOutput output = (TOutput)Converts.To(typeof(TOutput), response.Payload);
                     log.Debug($"Output success (plain): '{output != null}'.");
                     return output;
                 }
                 else
                 {
-                    TOutput output = formatters.Query.Deserialize<TOutput>(response.payload);
+                    TOutput output = formatters.Query.Deserialize<TOutput>(response.Payload);
                     log.Debug($"Output success (composite): '{output != null}'.");
                     return output;
                 }

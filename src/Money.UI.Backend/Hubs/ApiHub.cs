@@ -98,8 +98,8 @@ namespace Money.Hubs
 
             return target.SendAsync("RaiseEvent", JsonConvert.SerializeObject(new Response()
             {
-                type = type,
-                payload = rawPayload
+                Type = type,
+                Payload = rawPayload
             }));
         }
 
@@ -149,8 +149,8 @@ namespace Money.Hubs
 
             target.SendAsync("RaiseException", JsonConvert.SerializeObject(new Response()
             {
-                type = type,
-                payload = rawPayload
+                Type = type,
+                Payload = rawPayload
             }));
         }
 

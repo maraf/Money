@@ -38,8 +38,8 @@ namespace Money.Internals
             log.Debug($"Raised: {rawPayload}");
 
             Response response = JsonUtil.Deserialize<Response>(rawPayload);
-            Type type = Type.GetType(response.type);
-            rawPayload = response.payload;
+            Type type = Type.GetType(response.Type);
+            rawPayload = response.Payload;
 
             object payload = formatters.Event.Deserialize(type, rawPayload);
 

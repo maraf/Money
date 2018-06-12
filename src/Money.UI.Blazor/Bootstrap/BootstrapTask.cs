@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Money.Internals;
+using Money.Models.Queries;
 using Money.Services;
 using Neptuo;
 using Neptuo.Activators;
@@ -65,6 +66,7 @@ namespace Money.Bootstrap
                 .AddSingleton<MessageBuilder>()
                 .AddTransient<ICommandDispatcher, HttpCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()
+                .AddTransient<HttpQueryDispatcher.IMiddleware, CategoryNameMiddleware>()
                 .AddTransient(typeof(ILog<>), typeof(DefaultLog<>))
                 .AddSingleton(eventDispatcher)
                 .AddSingleton(eventDispatcher.Handlers)
@@ -79,6 +81,12 @@ namespace Money.Bootstrap
 
             //currencyCache.InitializeAsync(queryDispatcher);
             //priceCalculator.InitializeAsync(queryDispatcher);
+        }
+
+        private class CategoryNameMiddleware : HttpQueryDispatcher.Middleware<Models.Queries.GetCategoryName, string>
+        {
+            protected override Task<string> ExecuteAsync(GetCategoryName query, HttpQueryDispatcher.Next next)
+                => Task.FromResult("Haha!");
         }
 
         private void Domain()

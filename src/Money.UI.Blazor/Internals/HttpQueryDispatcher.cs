@@ -12,55 +12,31 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    internal class HttpQueryDispatcher : IQueryDispatcher
+    internal partial class HttpQueryDispatcher : IQueryDispatcher
     {
         private readonly ApiClient api;
         private readonly FormatterContainer formatters;
         private readonly ILog log;
+        private readonly IEnumerable<IMiddleware> middlewares;
 
-        public HttpQueryDispatcher(ApiClient api, FormatterContainer formatters, ILogFactory logFactory)
+        public HttpQueryDispatcher(ApiClient api, FormatterContainer formatters, ILogFactory logFactory, IEnumerable<IMiddleware> middlewares)
         {
             Ensure.NotNull(api, "api");
             Ensure.NotNull(formatters, "formatters");
             Ensure.NotNull(logFactory, "logFactory");
+            Ensure.NotNull(middlewares, "middlewares");
             this.api = api;
             this.formatters = formatters;
+            this.middlewares = middlewares;
             this.log = logFactory.Scope("HttpQueryDispatcher");
         }
 
         public async Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
         {
-            string payload = formatters.Query.Serialize(query);
-            string type = query.GetType().AssemblyQualifiedName;
-            log.Debug($"Request Type: '{type}'.");
-            log.Debug($"Request Payload: '{payload}'.");
-
-            Response response = await api.QueryAsync(new Request()
-            {
-                Payload = payload,
-                Type = type
-            });
-
-            log.Debug($"Response Type: '{response.Type}'");
-            log.Debug($"Response Payload: '{response.Payload}'");
-            if (!string.IsNullOrEmpty(response.Payload))
-            {
-                if (response.ResponseType == ResponseType.Plain)
-                {
-                    TOutput output = (TOutput)Converts.To(typeof(TOutput), response.Payload);
-                    log.Debug($"Output success (plain): '{output != null}'.");
-                    return output;
-                }
-                else
-                {
-                    TOutput output = formatters.Query.Deserialize<TOutput>(response.Payload);
-                    log.Debug($"Output success (composite): '{output != null}'.");
-                    return output;
-                }
-            }
-
-            log.Debug("Fallback to default value.");
-            return Activator.CreateInstance<TOutput>();
+            CollectionMiddleware middleware = new CollectionMiddleware(middlewares);
+            TOutput output = (TOutput)await middleware.ExecuteAsync(query, new DefaultMiddleware<TOutput>(api, formatters, log).ExecuteRawAsync);
+            Console.WriteLine($"HQD: Output {output}");
+            return output;
         }
     }
 }

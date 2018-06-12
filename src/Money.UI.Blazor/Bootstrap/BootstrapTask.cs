@@ -68,13 +68,14 @@ namespace Money.Bootstrap
                 .AddSingleton<MessageBuilder>()
                 .AddTransient<ICommandDispatcher, HttpCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()
-                .AddTransient<HttpQueryDispatcher.IMiddleware, CategoryNameMiddleware>()
                 .AddTransient(typeof(ILog<>), typeof(DefaultLog<>))
                 .AddSingleton(eventDispatcher)
                 .AddSingleton(eventDispatcher.Handlers)
                 .AddSingleton(exceptionHandler)
                 .AddSingleton(exceptionHandler.Handler)
                 .AddSingleton(exceptionHandler.HandlerBuilder);
+
+            QueryMiddlewares(eventDispatcher.Handlers);
 
             //CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 
@@ -83,12 +84,6 @@ namespace Money.Bootstrap
 
             //currencyCache.InitializeAsync(queryDispatcher);
             //priceCalculator.InitializeAsync(queryDispatcher);
-        }
-
-        private class CategoryNameMiddleware : HttpQueryDispatcher.Middleware<Models.Queries.GetCategoryName, string>
-        {
-            protected override Task<string> ExecuteAsync(GetCategoryName query, HttpQueryDispatcher.Next next)
-                => Task.FromResult("Haha!");
         }
 
         private void Domain()
@@ -117,6 +112,17 @@ namespace Money.Bootstrap
             eventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory, new List<ICompositeFormatterExtender> () { new UserKeyEventExtender() });
             queryFormatter = new CompositeListFormatter(typeProvider, compositeStorageFactory, logFactory);
             exceptionFormatter = new CompositeExceptionFormatter(typeProvider, compositeStorageFactory);
+        }
+
+        private void QueryMiddlewares(IEventHandlerCollection handlers)
+        {
+            CurrencyMiddleware currencyMiddleware = new CurrencyMiddleware();
+
+            handlers
+                .AddAll(currencyMiddleware);
+
+            services
+                .AddSingleton<HttpQueryDispatcher.IMiddleware>(currencyMiddleware);
         }
     }
 }

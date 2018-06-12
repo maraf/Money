@@ -66,8 +66,12 @@ namespace Money.Pages
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));
             Delete.MessageFormatter = model => $"Do you really want to delete outcome '{model.Description}'?";
 
-            MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
             CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
+            MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
+
+            if (!CategoryKey.IsEmpty)
+                CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
+
             formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             await LoadDataAsync();
         }
@@ -81,8 +85,6 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
         {
             Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel));
-            if (!CategoryKey.IsEmpty)
-                CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
         }
 
         protected void OnDeleteClick(OutcomeOverviewModel model)

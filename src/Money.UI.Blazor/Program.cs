@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Blazor.Browser.Rendering;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Money.Internals;
 using Money.Services;
+using Neptuo.Events;
+using Neptuo.Exceptions;
 using System;
 
 namespace Money.UI.Blazor

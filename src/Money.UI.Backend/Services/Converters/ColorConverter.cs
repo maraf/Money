@@ -1,4 +1,5 @@
-﻿using Neptuo.Converters;
+﻿using Money;
+using Neptuo.Converters;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money
+namespace Neptuo.Converters
 {
     public class ColorConverter : TwoWayConverter<JToken, Color>
     {

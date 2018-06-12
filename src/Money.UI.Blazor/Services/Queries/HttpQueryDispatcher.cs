@@ -1,16 +1,12 @@
-﻿using Money.Models.Api;
-using Money.Models.Queries;
-using Neptuo;
-using Neptuo.Formatters;
+﻿using Money.Services;
 using Neptuo.Logging;
-using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Services
+namespace Neptuo.Queries
 {
     internal partial class HttpQueryDispatcher : IQueryDispatcher
     {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor;
 using Money.Models.Api;
 using Money.Services;
-using Neptuo;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Neptuo.Logging;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Internals
+namespace Neptuo.Exceptions
 {
     internal class BrowserExceptionHandler
     {

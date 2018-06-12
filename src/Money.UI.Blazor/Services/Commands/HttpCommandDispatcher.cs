@@ -1,7 +1,5 @@
 ﻿using Money.Models.Api;
 using Money.Services;
-using Neptuo;
-using Neptuo.Commands;
 using Neptuo.Formatters;
 using System;
 using System.Collections.Generic;
@@ -9,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Internals
+namespace Neptuo.Commands
 {
     internal class HttpCommandDispatcher : ICommandDispatcher
     {

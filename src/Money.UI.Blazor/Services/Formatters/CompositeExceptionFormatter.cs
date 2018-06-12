@@ -1,6 +1,5 @@
 ﻿using Neptuo.Activators;
 using Neptuo.Collections.Specialized;
-using Neptuo.Formatters;
 using Neptuo.Formatters.Metadata;
 using Neptuo.Models;
 using Neptuo.Models.Keys;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Bootstrap
+namespace Neptuo.Formatters
 {
     public class CompositeExceptionFormatter : CompositeTypeFormatter
     {

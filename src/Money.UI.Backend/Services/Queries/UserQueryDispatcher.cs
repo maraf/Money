@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Money.Models.Queries;
-using Neptuo;
 using Neptuo.Models.Keys;
-using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Bootstrap
+namespace Neptuo.Queries
 {
     public class UserQueryDispatcher : IQueryDispatcher
     {

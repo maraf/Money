@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Money.Hubs;
-using Neptuo;
-using Neptuo.Commands;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -10,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Bootstrap
+namespace Neptuo.Commands
 {
     internal class UserCommandDispatcher : ICommandDispatcher
     {

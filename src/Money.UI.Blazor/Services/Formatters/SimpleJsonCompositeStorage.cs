@@ -1,6 +1,5 @@
-﻿using Neptuo;
+﻿using Money;
 using Neptuo.Collections.Specialized;
-using Neptuo.Formatters;
 using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using SimpleJson;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Internals
+namespace Neptuo.Formatters
 {
     // Worst code ever.
     public class SimpleJsonCompositeStorage : ICompositeStorage

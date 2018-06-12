@@ -1,6 +1,4 @@
-﻿using Neptuo;
-using Neptuo.Activators;
-using Neptuo.Formatters;
+﻿using Neptuo.Activators;
 using Neptuo.Formatters.Metadata;
 using Neptuo.Logging;
 using System;
@@ -11,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Bootstrap
+namespace Neptuo.Formatters
 {
     public class CompositeListFormatter : IFormatter
     {

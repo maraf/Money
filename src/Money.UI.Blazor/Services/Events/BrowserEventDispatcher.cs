@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor;
 using Money.Models.Api;
 using Money.Services;
-using Neptuo;
-using Neptuo.Events;
 using Neptuo.Formatters;
 using Neptuo.Logging;
 using System;
@@ -12,7 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Internals
+namespace Neptuo.Events
 {
     internal class BrowserEventDispatcher
     {

@@ -1,13 +1,10 @@
-﻿using Neptuo;
-using Neptuo.Logging;
-using Neptuo.Logging.Serialization.Formatters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Bootstrap
+namespace Neptuo.Logging.Serialization.Formatters
 {
     public class SingleLineLogFormatter : ILogFormatter
     {

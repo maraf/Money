@@ -33,6 +33,7 @@ namespace Money.Bootstrap
         private readonly IServiceCollection services;
 
         private ILogFactory logFactory;
+        private ILog errorLog;
         private IFactory<ReadModelContext> readModelContextFactory;
         private IFactory<EventSourcingContext> eventSourcingContextFactory;
 
@@ -61,6 +62,7 @@ namespace Money.Bootstrap
         public void Initialize()
         {
             logFactory = new DefaultLogFactory("Root").AddSerializer(new ConsoleSerializer());
+            errorLog = logFactory.Scope("Error");
 
             readModelContextFactory = Factory.Getter(() => new ReadModelContext("Filename=ReadModel.db"));
             eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext("Filename=EventSourcing.db"));
@@ -195,8 +197,6 @@ namespace Money.Bootstrap
         }
 
         public void Handle(Exception exception)
-        {
-            throw new NotImplementedException();
-        }
+            => errorLog.Error(exception);
     }
 }

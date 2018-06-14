@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Money.Bootstrap
 {
-    public class BootstrapTask : IBootstrapTask
+    internal class BootstrapTask : IBootstrapTask
     {
         private readonly IServiceCollection services;
 
@@ -116,12 +116,15 @@ namespace Money.Bootstrap
 
         private void QueryMiddlewares(IEventHandlerCollection handlers)
         {
+            CategoryMiddleware categoryMiddleware = new CategoryMiddleware();
             CurrencyMiddleware currencyMiddleware = new CurrencyMiddleware();
 
             handlers
+                .AddAll(categoryMiddleware)
                 .AddAll(currencyMiddleware);
 
             services
+                .AddSingleton<HttpQueryDispatcher.IMiddleware>(categoryMiddleware)
                 .AddSingleton<HttpQueryDispatcher.IMiddleware>(currencyMiddleware);
         }
     }

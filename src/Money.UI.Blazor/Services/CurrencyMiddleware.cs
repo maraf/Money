@@ -67,6 +67,5 @@ namespace Money.Services
 
         Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload)
             => Update(payload.UniqueCode, model => models.Remove(model));
-        }
     }
 }

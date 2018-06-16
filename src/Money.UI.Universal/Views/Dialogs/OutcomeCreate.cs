@@ -68,35 +68,29 @@ namespace Money.Views.Dialogs
             currency = amountDialog.Currency;
             if (result == ContentDialogResult.Primary)
             {
-                OutcomeDescription descriptionDialog = new OutcomeDescription();
-                descriptionDialog.PrimaryButtonText = "Next";
+                categoryDialog.PrimaryButtonText = "Next";
+                categoryDialog.SecondaryButtonText = "Create today";
+                if (!parameter.CategoryKey.IsEmpty)
+                    categoryDialog.SelectedKey = parameter.CategoryKey;
 
-                if (parameter.CategoryKey.IsEmpty)
-                    descriptionDialog.SecondaryButtonText = String.Empty;
-                else
-                    descriptionDialog.SecondaryButtonText = "Create today";
-
-                result = await descriptionDialog.ShowAsync();
-                if (result == ContentDialogResult.None && !descriptionDialog.IsEnterPressed)
+                result = await categoryDialog.ShowAsync();
+                if (result == ContentDialogResult.None)
                     return;
 
-                description = descriptionDialog.Value;
-                if (result == ContentDialogResult.Primary || descriptionDialog.IsEnterPressed)
+                categoryKey = categoryDialog.SelectedKey;
+                if (result == ContentDialogResult.Primary)
                 {
-                    if (descriptionDialog.IsEnterPressed)
-                        await Task.Delay(50);
+                    OutcomeDescription descriptionDialog = new OutcomeDescription();
+                    descriptionDialog.PrimaryButtonText = "Next";
+                    descriptionDialog.SecondaryButtonText = "Create today";
 
-                    categoryDialog.PrimaryButtonText = "Next";
-                    categoryDialog.SecondaryButtonText = "Create today";
-                    if (!parameter.CategoryKey.IsEmpty)
-                        categoryDialog.SelectedKey = parameter.CategoryKey;
-
-                    result = await categoryDialog.ShowAsync();
-                    if (result == ContentDialogResult.None)
+                    result = await descriptionDialog.ShowAsync();
+                    if (result == ContentDialogResult.None && !descriptionDialog.IsEnterPressed)
                         return;
 
-                    categoryKey = categoryDialog.SelectedKey;
-                    if (result == ContentDialogResult.Primary)
+                    description = descriptionDialog.Value;
+
+                    if (result == ContentDialogResult.Primary || descriptionDialog.IsEnterPressed)
                     {
                         OutcomeWhen whenDialog = new OutcomeWhen();
                         whenDialog.PrimaryButtonText = "Create";

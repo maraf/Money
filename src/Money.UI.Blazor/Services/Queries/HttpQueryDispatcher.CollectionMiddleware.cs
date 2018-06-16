@@ -16,8 +16,6 @@ namespace Neptuo.Queries
 
             public CollectionMiddleware(IEnumerable<IMiddleware> collection)
             {
-                Console.WriteLine($"Coll: Count {collection.Count()}");
-
                 Ensure.NotNull(collection, "collection");
                 enumerator = collection.GetEnumerator();
             }
@@ -33,15 +31,12 @@ namespace Neptuo.Queries
                 if (enumerator.MoveNext())
                     return ExecuteCurrentAsync(query);
 
-                Console.WriteLine($"Coll: Finished, next {next.Target.GetType().FullName}");
                 return next(query);
             }
 
             private async Task<object> ExecuteCurrentAsync(object query)
             {
-                Console.WriteLine($"Coll: Middleware {enumerator.Current.GetType().FullName}");
                 object output = await enumerator.Current.ExecuteAsync(query, ExecuteNextAsync);
-                Console.WriteLine($"Coll: Output {output}");
                 return output;
             }
         }

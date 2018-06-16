@@ -31,7 +31,6 @@ namespace Neptuo.Queries
         {
             CollectionMiddleware middleware = new CollectionMiddleware(middlewares);
             TOutput output = (TOutput)await middleware.ExecuteAsync(query, new DefaultMiddleware<TOutput>(api, formatters, log).ExecuteRawAsync);
-            Console.WriteLine($"HQD: Output {output}");
             return output;
         }
     }

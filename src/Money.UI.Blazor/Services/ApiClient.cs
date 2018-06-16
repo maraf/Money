@@ -20,27 +20,13 @@ namespace Money.Services
             this.http = http;
         }
 
-        public Task<string> GetUserNameAsync() => http.GetStringAsync("/api/username");
+        public Task<string> GetUserNameAsync() 
+            => http.GetStringAsync("/api/username");
 
-        public async Task<Response> QueryAsync(Request request)
-        {
-            return await http.PostJsonAsync<Response>("/api/query", request);
+        public Task<Response> QueryAsync(Request request) 
+            => http.PostJsonAsync<Response>("/api/query", request);
 
-            //var requestJson = JsonUtil.Serialize(request);
-            //var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/query")
-            //{
-            //    Content = new StringContent(requestJson, Encoding.UTF8, "application/json")
-            //};
-
-            //var responseMessage = await http.SendAsync(requestMessage);
-            //var responseJson = await responseMessage.Content.ReadAsStringAsync();
-
-            //Console.WriteLine($"API Response: {responseJson}");
-
-            //var response = JsonUtil.Deserialize<Response>(responseJson);
-            //return response;
-        }
-
-        public Task CommandAsync(Request request) => http.PostJsonAsync("/api/command", request);
+        public Task CommandAsync(Request request) 
+            => http.PostJsonAsync("/api/command", request);
     }
 }

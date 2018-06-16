@@ -16,13 +16,10 @@ namespace Neptuo.Queries
             {
                 if (query is TQuery typed)
                 {
-                    Console.WriteLine($"Typed: {typed.GetType().FullName}");
                     object output = await ExecuteAsync(typed, next);
-                    Console.WriteLine($"Typed: {output}");
                     return output;
                 }
 
-                Console.WriteLine($"Typed: Next {next.Target.GetType().FullName}");
                 return await next(query);
             }
 

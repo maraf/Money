@@ -170,24 +170,8 @@ namespace Money.Views
             dialog.Value = viewModel.Amount.Value;
             dialog.Currency = viewModel.Amount.Currency;
 
-            decimal newValue;
-            ContentDialogResult result;
-            do
-            {
-                result = await dialog.ShowAsync();
-                if (result == ContentDialogResult.None)
-                {
-                    if (dialog.Result == null)
-                        return;
-
-                    result = dialog.Result.Value;
-                }
-
-                newValue = dialog.Value;
-                if (newValue <= 0)
-                    dialog.ErrorMessage = "Amount must be greater than zero.";
-            }
-            while (newValue <= 0 && result != ContentDialogResult.Secondary);
+            ContentDialogResult result = await dialog.ShowAsync(true);
+            decimal newValue = dialog.Value;
 
             if (result == ContentDialogResult.Primary && newValue != viewModel.Amount.Value)
             {

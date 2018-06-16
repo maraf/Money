@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -145,6 +146,30 @@ namespace Money.Views.Dialogs
         private void tbxAmount_GotFocus(object sender, RoutedEventArgs e)
         {
             tbxAmount.SelectAll();
+        }
+
+        public async Task<ContentDialogResult> ShowAsync(bool isSecondaryCancel)
+        {
+            decimal amount;
+            ContentDialogResult result;
+            do
+            {
+                result = await ShowAsync();
+                if (result == ContentDialogResult.None)
+                {
+                    if (Result == null)
+                        return ContentDialogResult.None;
+
+                    result = Result.Value;
+                }
+
+                amount = Value;
+                if (amount <= 0)
+                    ErrorMessage = "Amount must be greater than zero.";
+            }
+            while (amount <= 0 && (!isSecondaryCancel || result != ContentDialogResult.Secondary));
+
+            return result;
         }
     }
 }

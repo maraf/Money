@@ -116,6 +116,7 @@ namespace Money.Pages
         Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
             Models.Add(new CurrencyModel(payload.UniqueCode, payload.Symbol, false));
+            Models.Sort((a, b) => a.Symbol.CompareTo(b.Symbol));
             StateHasChanged();
             return Task.CompletedTask;
         }

@@ -24,7 +24,7 @@ namespace Money.Services
                     models.AddRange((List<CategoryModel>)await next(listAll));
                 }
 
-                return models;
+                return models.ToList();
             }
             else if (query is GetCategoryName categoryName)
             {

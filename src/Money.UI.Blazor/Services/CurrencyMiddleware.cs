@@ -30,7 +30,7 @@ namespace Money.Services
                     models.AddRange((List<CurrencyModel>)await next(query));
                 }
 
-                return models;
+                return models.ToList();
             }
 
             return await next(query);

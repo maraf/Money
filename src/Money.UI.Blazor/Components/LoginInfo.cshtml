@@ -3,13 +3,15 @@
 <form action="/account/logout" method="post" id="logoutForm" class="navbar-right">
     <ul class="nav navbar-nav navbar-right">
         <li>
-            <button type="submit" class="btn btn-link navbar-btn navbar-link" onclick="@GoToManage">User: @UserName</button>
-        </li>
-        <li>
             <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
         </li>
     </ul>
 </form>
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <button type="submit" class="btn btn-link navbar-btn navbar-link" onclick="@GoToManage">User: @UserName</button>
+    </li>
+</ul>
 
 @functions {
 

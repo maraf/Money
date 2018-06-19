@@ -36,6 +36,18 @@ namespace Money.Services
 
                 return models.Select(c => c.Clone()).ToList();
             }
+            else if (query is GetCurrencyDefault currencyDefault)
+            {
+                CurrencyModel model = models.FirstOrDefault(c => c.IsDefault);
+                if (model != null)
+                    return model.UniqueCode;
+            }
+            else if (query is GetCurrencySymbol currencySymbol)
+            {
+                CurrencyModel model = Find(currencySymbol.UniqueCode);
+                if (model != null)
+                    return model.Symbol;
+            }
 
             return await next(query);
         }

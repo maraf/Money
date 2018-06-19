@@ -150,3 +150,42 @@
     padding: 0;
     margin: 0 0 0 8px;
 }
+
+/* ------ LOADING ------------------------------------------------------------------------------ */
+
+.loading {
+    margin-top: -50px;
+    height: 350px;
+    background: #0078D7;
+}
+
+.loading .background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 350px;
+    opacity: 0.5;
+    background: url('../images/city.png') no-repeat bottom center;
+    background-size: contain;
+}
+
+.loading .head-content {
+    position: relative;
+    padding-top: 50px;
+    text-align: center;
+    color: white;
+}
+
+.loading .head-content img {
+    width: 60px;
+    height: 60px;
+}
+
+.loading .head-content h1 {
+    font-size: 50px;
+}
+
+.loading .head-content h2 {
+    font-size: 25px;
+}

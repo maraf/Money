@@ -11,7 +11,7 @@ namespace Money.Models
     /// <summary>
     /// A model of a outcome or income category.
     /// </summary>
-    public class CategoryModel
+    public class CategoryModel : ICloneable<CategoryModel>
     {
         /// <summary>
         /// Gets a key of the category.
@@ -47,5 +47,8 @@ namespace Money.Models
             Color = color;
             Icon = icon;
         }
+
+        public CategoryModel Clone()
+            => new CategoryModel(Key, Name, Description, Color, Icon);
     }
 }

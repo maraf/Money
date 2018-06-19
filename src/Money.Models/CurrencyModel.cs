@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Neptuo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Money.Models
     /// <summary>
     /// A model of currency.
     /// </summary>
-    public class CurrencyModel
+    public class CurrencyModel : ICloneable<CurrencyModel>
     {
         /// <summary>
         /// Gets an unique currency code.
@@ -38,5 +39,8 @@ namespace Money.Models
             Symbol = symbol;
             IsDefault = isDefault;
         }
+
+        public CurrencyModel Clone()
+            => new CurrencyModel(UniqueCode, Symbol, IsDefault);
     }
 }

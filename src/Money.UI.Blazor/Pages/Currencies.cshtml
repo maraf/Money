@@ -1,14 +1,7 @@
 ﻿@page "/currencies"
 @inherits CurrenciesBase
 
-<h1>
-    Currencies
-
-    <button type="button" class="btn btn-primary" onclick="@(() => IsCreateVisible = true)" style="float: right">
-        <span class="glyphicon glyphicon-plus"></span>
-        New Currency
-    </button>
-</h1>
+<Title Main="Currencies" Sub="List of currencies you are making outcomes in" ButtonText="New Currency" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 
 <CurrencyEdit bind-IsVisible="@IsCreateVisible" />
 <Confirm Context="@Delete" />

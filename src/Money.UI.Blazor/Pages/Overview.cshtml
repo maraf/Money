@@ -3,30 +3,7 @@
 @page "/overview/{Year}/{Month}/{CategoryGuid}"
 @inherits OverviewBase
 
-<h1>
-    @if (!CategoryKey.IsEmpty)
-    {
-        <span class="gray">
-            @CategoryName
-        </span>
-
-        <span>
-            outcomes in @MonthModel
-        </span>
-    }
-    else
-    {
-        <span>
-            Outcomes in @MonthModel
-        </span>
-    }
-
-
-    <button type="button" class="btn btn-primary" onclick="@(() => IsCreateVisible = true)" style="float: right">
-        <span class="glyphicon glyphicon-plus"></span>
-        New Outcome
-    </button>
-</h1>
+<Title Main="@Title" Sub="List of each outcomes in selected month" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" IsHorizontalLine="false" />
 
 <OutcomeCreate bind-IsVisible="@IsCreateVisible" />
 <Confirm Context="@Delete" />

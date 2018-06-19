@@ -2,14 +2,7 @@
 @using Neptuo.Models.Keys
 @inherits SummaryBase
 
-<h1>
-    Summary
-
-    <button type="button" class="btn btn-primary" onclick="@(() => IsCreateVisible = true)" style="float: right">
-        <span class="glyphicon glyphicon-plus"></span>
-        New Outcome
-    </button>
-</h1>
+<Title Main="Summary" Sub="Per-month summary of outcomes in categories" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" IsHorizontalLine="false" />
 
 <OutcomeCreate bind-IsVisible="@IsCreateVisible" />
 

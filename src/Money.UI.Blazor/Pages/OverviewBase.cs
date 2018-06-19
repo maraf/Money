@@ -38,6 +38,8 @@ namespace Money.Pages
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
+        protected string Title { get; set; }
+
         protected MonthModel MonthModel { get; set; }
         protected IKey CategoryKey { get; set; }
         protected string CategoryName { get; set; }
@@ -70,7 +72,14 @@ namespace Money.Pages
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
 
             if (!CategoryKey.IsEmpty)
+            {
                 CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
+                Title = $"{CategoryName} outcomes in {MonthModel}";
+            }
+            else
+            {
+                Title = $"Outcomes in {MonthModel}";
+            }
 
             formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             await LoadDataAsync();

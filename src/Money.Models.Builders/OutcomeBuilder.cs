@@ -46,8 +46,9 @@ namespace Money.Models.Builders
             {
                 var entities = await db.Outcomes
                     .WhereUserKey(query.UserKey)
-                    .OrderByDescending(o => o.When)
                     .Select(o => new { Year = o.When.Year, Month = o.When.Month })
+                    .OrderByDescending(o => o.Year)
+                    .ThenByDescending(o => o.Month)
                     .Distinct()
                     .ToListAsync();
 

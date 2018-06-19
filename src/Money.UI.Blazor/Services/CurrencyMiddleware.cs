@@ -19,6 +19,7 @@ namespace Money.Services
         IEventHandler<CurrencyDeleted>
     {
         private readonly List<CurrencyModel> models = new List<CurrencyModel>();
+        private Task listAllTask;
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher.Next next)
         {
@@ -26,14 +27,23 @@ namespace Money.Services
             {
                 if (models.Count == 0)
                 {
-                    models.Clear();
-                    models.AddRange((List<CurrencyModel>)await next(query));
+                    if (listAllTask == null)
+                        listAllTask = LoadAllAsync(listAll, next);
+
+                    await listAllTask;
+                    listAllTask = null;
                 }
 
                 return models.Select(c => c.Clone()).ToList();
             }
 
             return await next(query);
+        }
+
+        private async Task LoadAllAsync(ListAllCurrency listAll, HttpQueryDispatcher.Next next)
+        {
+            models.Clear();
+            models.AddRange((List<CurrencyModel>)await next(listAll));
         }
 
         private CurrencyModel Find(string uniqueCode)

@@ -13,6 +13,7 @@ namespace Money.Services
     internal class CategoryMiddleware : HttpQueryDispatcher.IMiddleware
     {
         private readonly List<CategoryModel> models = new List<CategoryModel>();
+        private Task listAllTask;
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher.Next next)
         {
@@ -20,8 +21,14 @@ namespace Money.Services
             {
                 if (models.Count == 0)
                 {
-                    models.Clear();
-                    models.AddRange((List<CategoryModel>)await next(listAll));
+                    if (models.Count == 0)
+                    {
+                        if (listAllTask == null)
+                            listAllTask = LoadAllAsync(listAll, next);
+
+                        await listAllTask;
+                        listAllTask = null;
+                    }
                 }
 
                 return models.Select(c => c.Clone()).ToList();
@@ -52,6 +59,12 @@ namespace Money.Services
             }
 
             return await next(query);
+        }
+
+        private async Task LoadAllAsync(ListAllCategory listAll, HttpQueryDispatcher.Next next)
+        {
+            models.Clear();
+            models.AddRange((List<CategoryModel>)await next(listAll));
         }
 
         private CategoryModel Find(IKey key)

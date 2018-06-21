@@ -1,25 +1,27 @@
-﻿<h2>
-    @Main
-    
-    @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
-    {
-        <button type="button" class="btn btn-primary" onclick="@(() => ButtonClick?.Invoke())" style="float: right">
-            <span class="glyphicon glyphicon-plus"></span>
-            @ButtonText
-        </button>
-    }
-</h2>
-@if (!String.IsNullOrEmpty(Sub))
-{
-    <h4>
-        @Sub
-    </h4>
-}
+﻿<div class="header">
+    <div class="container">
 
-@if (IsHorizontalLine)
-{
-    <hr />
-}
+        <h2>
+            @Main
+
+            @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
+            {
+                <button type="button" class="btn btn-primary" onclick="@(() => ButtonClick?.Invoke())" style="float: right">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    @ButtonText
+                </button>
+            }
+        </h2>
+        @if (!String.IsNullOrEmpty(Sub))
+        {
+            <h4>
+                @Sub
+            </h4>
+        }
+
+    </div>
+</div>
+<div class="header-append"></div>
 
 @functions
 {
@@ -34,7 +36,4 @@
 
     [Parameter]
     protected Action ButtonClick { get; set; }
-
-    [Parameter]
-    protected bool IsHorizontalLine { get; set; } = true;
 }

@@ -36,6 +36,18 @@ h4 {
     cursor: default;
 }
 
+.header {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    background: #f5f5f5;
+    border-bottom: 1px solid #dddddd;
+}
+
+.header-append {
+    margin-bottom: 130px;
+}
+
 .center {
     text-align: center;
 }

@@ -1,7 +1,7 @@
 ﻿@page "/currencies"
 @inherits CurrenciesBase
 
-<Title Main="Currencies" Sub="List of currencies you are making outcomes in" ButtonText="New Currency" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<Title Icon="gbp" Main="Currencies" Sub="List of currencies you are making outcomes in" ButtonText="New Currency" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 
 <CurrencyEdit bind-IsVisible="@IsCreateVisible" />
 <Confirm Context="@Delete" />

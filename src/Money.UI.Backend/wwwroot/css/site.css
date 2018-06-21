@@ -44,6 +44,11 @@ h4 {
     border-bottom: 1px solid #dddddd;
 }
 
+.header .icon {
+    font-size: 26px;
+    color: #0078D7;
+}
+
 .header-append {
     margin-bottom: 130px;
 }

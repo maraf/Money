@@ -1,7 +1,7 @@
 ﻿@page "/categories"
 @inherits CategoriesBase
 
-<Title Main="Categories" Sub="List of categories you distribute outcomes into" ButtonText="New Category" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<Title Icon="tag" Main="Categories" Sub="List of categories you distribute outcomes into" ButtonText="New Category" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 
 <CategoryName bind-IsVisible="@IsCreateVisible" />
 <Confirm Context="@Delete" />

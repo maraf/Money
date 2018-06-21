@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Money.Models
 {
+    /// <remarks>
+    /// Inspiration https://emojipedia.org/.
+    /// </remarks>
     public class IconCollection : List<string>
     {
         public IconCollection()
@@ -31,9 +34,17 @@ namespace Money.Models
             Add("👻");
             Add("💣");
             Add("📱");
+            Add("☎️");
+            Add("💾");
+            Add("💿");
+            Add("📽️");
+            Add("📷");
             Add("📺");
+            Add("💡");
+            Add("🔨");
             Add("💰");
             Add("🗹");
+            Add("✔️");
             Add("🛒");
             Add("🦃");
             Add("🐈");
@@ -66,11 +77,16 @@ namespace Money.Models
             Add("🏛");
             Add("🏙");
             Add("🏒");
+            Add("⚽");
+            Add("🏀");
+            Add("⚾");
             Add("🏐");
+            Add("🏈");
             Add("🏎");
             Add("🏍");
             Add("🏊");
             Add("🏆");
+            Add("⛷️");
             Add("🏂");
             Add("🎧");
             Add("🍵");
@@ -79,6 +95,16 @@ namespace Money.Models
             Add("🍴");
             Add("🌼");
             Add("🌛");
+            Add("⛄");
+            Add("⛅");
+            Add("⛽");
+            Add("⛹");
+            Add("🎮");
+            Add("🕹️");
+            Add("🎹");
+            Add("🎸");
+            Add("🎼");
+            Add("🛀");
         }
     }
 }

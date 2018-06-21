@@ -113,6 +113,8 @@ namespace Money.Models.Builders
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 return db.Categories.WhereUserKey(query.UserKey)
+                    .WhereUserKey(query.UserKey)
+                    .Where(c => !c.IsDeleted)
                     .OrderBy(c => c.Name)
                     .Select(e => e.ToModel())
                     .ToListAsync();

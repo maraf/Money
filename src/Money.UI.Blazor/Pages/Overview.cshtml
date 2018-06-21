@@ -30,18 +30,10 @@
                         <td>@FormatPrice(item.Amount)</td>
                         <td>
                             <div class="actions">
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Amount" onclick="@(() => { Selected = item; IsAmountEditVisible = true; })">
-                                    <span class="glyphicon glyphicon-usd"></span>
-                                </button>
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change Description" onclick="@(() => { Selected = item; IsDescriptionEditVisible = true; })">
-                                    <span class="glyphicon glyphicon-comment"></span>
-                                </button>
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Change When" onclick="@(() => { Selected = item; IsWhenEditVisible = true; })">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </button>
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClick(item))">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
+                                <IconButton Icon="usd" ToolTip="Change Amount" Click="@(() => { Selected = item; IsAmountEditVisible = true; StateHasChanged(); })" />
+                                <IconButton Icon="comment" ToolTip="Change Description" Click="@(() => { Selected = item; IsDescriptionEditVisible = true; StateHasChanged(); })" />
+                                <IconButton Icon="calendar" ToolTip="Change When" Click="@(() => { Selected = item; IsWhenEditVisible = true; StateHasChanged(); })" />
+                                <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
                             </div>
                         </td>
                     </tr>

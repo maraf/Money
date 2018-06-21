@@ -23,9 +23,7 @@
                             <td>@item.ValidFrom.ToShortDateString()</td>
                             <td>
                                 <div class="actions">
-                                    <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClickAsync(item))">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                    </button>
+                                    <IconButton Icon="remove" ToolTip="Delete" Click="@(async () => { await OnDeleteClickAsync(item); StateHasChanged(); })" />
                                 </div>
                             </td>
                         </tr>

@@ -15,37 +15,24 @@
             </strong>
         </div>
         <div class="panel-body">
-            <ul class="nav navbar-nav navbar-right">
+            <div class="nav navbar-nav navbar-right">
                 @if (!item.IsDefault)
                 {
-                    <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Set as default" onclick="@(() => OnChangeDefaultClickAsync(item))">
-                            <span class="glyphicon glyphicon-home"></span>
-                        </button>
-                    </li>
+                    <IconButton Icon="home" ToolTip="Set as default" Click="@(async () => { await OnChangeDefaultClickAsync(item); StateHasChanged(); })" />
                 }
+
                 @if (Models.Count > 1)
                 {
-                    <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Add exchange rate" onclick="@(() => { Selected = item; IsListExchangeRateVisible = true; })">
-                            <span class="glyphicon glyphicon-transfer"></span>
-                        </button>
-                    </li>
+                    <IconButton Icon="transfer" ToolTip="Add exchange rate" Click="@(() => { Selected = item; IsListExchangeRateVisible = true; StateHasChanged(); })" />
                 }
-                <li>
-                    <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Rename" onclick="@(() => { Selected = item; IsEditVisible = true; })">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </button>
-                </li>
+
+                <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => { Selected = item; IsEditVisible = true; StateHasChanged(); })" />
+
                 @if (Models.Count > 1 && !item.IsDefault)
                 {
-                    <li>
-                        <button type="submit" class="btn btn-link navbar-btn navbar-link" title="Delete" onclick="@(() => OnDeleteClick(item))">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                    </li>
+                    <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
                 }
-            </ul>
+            </div>
 
             <p>This currency has unique code @item.UniqueCode.</p>
             @if (item.IsDefault)

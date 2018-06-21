@@ -1,5 +1,7 @@
-﻿using Money.Models;
+﻿using Money.Events;
+using Money.Models;
 using Money.Models.Queries;
+using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -10,7 +12,12 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    internal class CategoryMiddleware : HttpQueryDispatcher.IMiddleware
+    internal class CategoryMiddleware : HttpQueryDispatcher.IMiddleware,
+        IEventHandler<CategoryCreated>,
+        IEventHandler<CategoryDescriptionChanged>,
+        IEventHandler<CategoryIconChanged>,
+        IEventHandler<CategoryColorChanged>,
+        IEventHandler<CategoryDeleted>
     {
         private readonly List<CategoryModel> models = new List<CategoryModel>();
         private Task listAllTask;
@@ -69,5 +76,32 @@ namespace Money.Services
 
         private CategoryModel Find(IKey key)
             => models.FirstOrDefault(c => c.Key.Equals(key));
+
+        private Task Update(IKey key, Action<CategoryModel> handler)
+        {
+            CategoryModel model = Find(key);
+            if (model != null)
+                handler(model);
+
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload)
+        {
+            models.Add(new CategoryModel(payload.AggregateKey, payload.Name, null, payload.Color, null));
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<CategoryDescriptionChanged>.HandleAsync(CategoryDescriptionChanged payload)
+            => Update(payload.AggregateKey, model => model.Description = payload.Description);
+
+        Task IEventHandler<CategoryIconChanged>.HandleAsync(CategoryIconChanged payload)
+            => Update(payload.AggregateKey, model => model.Icon = payload.Icon);
+
+        Task IEventHandler<CategoryColorChanged>.HandleAsync(CategoryColorChanged payload)
+            => Update(payload.AggregateKey, model => model.Color = payload.Color);
+
+        Task IEventHandler<CategoryDeleted>.HandleAsync(CategoryDeleted payload)
+            => Update(payload.AggregateKey, model => models.Remove(model));
     }
 }

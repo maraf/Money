@@ -18,7 +18,9 @@ namespace Money.Bootstrap
         public UpgradeServiceBase(IFactory<ApplicationDataContainer> storageContainerFactory, int currentVersion)
         {
             Ensure.NotNull(storageContainerFactory, "storageContainerFactory");
+            Ensure.Positive(currentVersion, "currentVersion");
             this.storageContainerFactory = storageContainerFactory;
+            this.currentVersion = currentVersion;
         }
 
         public bool IsRequired()

@@ -67,7 +67,7 @@ namespace Money.Bootstrap
             ServiceProvider.CommandDispatcher = new UserCommandDispatcher(commandDispatcher, () => UserKey);
             ServiceProvider.EventHandlers = eventDispatcher.Handlers;
 
-            UpgradeService upgradeService = new UpgradeService(ServiceProvider.CommandDispatcher, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory, priceCalculator);
+            UpgradeService upgradeService = new UpgradeService(ServiceProvider.CommandDispatcher, EventStore, EventFormatter, storageFactory, storageFactory, storageFactory, priceCalculator, () => UserKey);
             ServiceProvider.UpgradeService = upgradeService;
 
             ServiceProvider.TileService = new TileService();

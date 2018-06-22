@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Money.Commands;
 using Money.Data;
+using Money.Events;
 using Money.Models.Builders;
 using Neptuo;
 using Neptuo.Activators;
@@ -9,6 +10,7 @@ using Neptuo.Data;
 using Neptuo.Events;
 using Neptuo.Formatters;
 using Neptuo.Migrations;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using Neptuo.ReadModels;
 using System;
@@ -18,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
+using EventEntity = Neptuo.Data.Entity.EventEntity;
 
 namespace Money.Bootstrap
 {
@@ -29,10 +32,11 @@ namespace Money.Bootstrap
         private readonly IFactory<EventSourcingContext> eventSourceContextFactory;
         private readonly IFactory<ReadModelContext> readModelContextFactory;
         private readonly IPriceConverter priceConverter;
+        private readonly Func<IKey> userKeyGetter;
 
         public const int CurrentVersion = 5;
 
-        public UpgradeService(ICommandDispatcher commandDispatcher, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory, IPriceConverter priceConverter)
+        public UpgradeService(ICommandDispatcher commandDispatcher, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory, IPriceConverter priceConverter, Func<IKey> userKeyGetter)
             : base(storageContainerFactory, CurrentVersion)
         {
             Ensure.NotNull(commandDispatcher, "commandDispatcher");
@@ -41,12 +45,14 @@ namespace Money.Bootstrap
             Ensure.NotNull(eventSourceContextFactory, "eventSourceContextFactory");
             Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
             Ensure.NotNull(priceConverter, "priceConverter");
+            Ensure.NotNull(userKeyGetter, "userKeyGetter");
             this.commandDispatcher = commandDispatcher;
             this.eventStore = eventStore;
             this.eventFormatter = eventFormatter;
             this.eventSourceContextFactory = eventSourceContextFactory;
             this.readModelContextFactory = readModelContextFactory;
             this.priceConverter = priceConverter;
+            this.userKeyGetter = userKeyGetter;
         }
 
         protected override async Task UpgradeOverrideAsync(IUpgradeContext context, int currentVersion)
@@ -115,12 +121,12 @@ namespace Money.Bootstrap
             }
         }
 
-        internal Task RecreateReadModelContextAsync()
+        internal async Task RecreateReadModelContextAsync()
         {
             using (var readModels = readModelContextFactory.Create())
             {
-                readModels.Database.EnsureDeleted();
-                readModels.Database.EnsureCreated();
+                await readModels.Database.EnsureDeletedAsync();
+                await readModels.Database.EnsureCreatedAsync();
             }
 
             // Should match with ReadModels.
@@ -130,7 +136,7 @@ namespace Money.Bootstrap
             Models.Builders.BootstrapTask bootstrapTask = new Models.Builders.BootstrapTask(queryDispatcher, rebuilder, readModelContextFactory, priceConverter);
             bootstrapTask.Initialize();
 
-            return rebuilder.RunAsync();
+            await rebuilder.RunAsync();
         }
 
         private void EnsureReadModelDatabase(ReadModelContext readModels = null)
@@ -172,9 +178,29 @@ namespace Money.Bootstrap
             await RecreateReadModelContextAsync();
         }
 
-        private Task UpgradeVersion5()
+        private async Task UpgradeVersion5()
         {
-            throw new NotImplementedException();
+            EnsureReadModelDatabase();
+
+            using (var eventSourcing = eventSourceContextFactory.Create())
+            {
+                List<EventEntity> entities = await eventSourcing.Events.ToListAsync();
+                foreach (EventEntity entity in entities)
+                {
+                    EventModel model = entity.ToModel();
+                    IEvent payload = (IEvent)eventFormatter.Deserialize(Type.GetType(model.EventKey.Type), model.Payload);
+
+                    if (payload is UserEvent userEvent && (userEvent.UserKey == null || userEvent.UserKey.IsEmpty))
+                    {
+                        userEvent.UserKey = userKeyGetter();
+                        entity.Payload = eventFormatter.Serialize(userEvent);
+                    }
+                }
+
+                await eventSourcing.SaveAsync();
+            }
+
+            await RecreateReadModelContextAsync();
         }
     }
 }

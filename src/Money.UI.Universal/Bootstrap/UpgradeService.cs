@@ -21,50 +21,36 @@ using Windows.UI;
 
 namespace Money.Bootstrap
 {
-    internal class UpgradeService : IUpgradeService
+    internal class UpgradeService : UpgradeServiceBase
     {
         private readonly ICommandDispatcher commandDispatcher;
         private readonly IEventRebuilderStore eventStore;
         private readonly IFormatter eventFormatter;
         private readonly IFactory<EventSourcingContext> eventSourceContextFactory;
         private readonly IFactory<ReadModelContext> readModelContextFactory;
-        private readonly IFactory<ApplicationDataContainer> storageContainerFactory;
         private readonly IPriceConverter priceConverter;
 
-        public const int CurrentVersion = 4;
+        public const int CurrentVersion = 5;
 
         public UpgradeService(ICommandDispatcher commandDispatcher, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory, IPriceConverter priceConverter)
+            : base(storageContainerFactory, CurrentVersion)
         {
             Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.NotNull(eventStore, "eventStore");
             Ensure.NotNull(eventFormatter, "eventFormatter");
             Ensure.NotNull(eventSourceContextFactory, "eventSourceContextFactory");
             Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
-            Ensure.NotNull(storageContainerFactory, "storageContainerFactory");
             Ensure.NotNull(priceConverter, "priceConverter");
             this.commandDispatcher = commandDispatcher;
             this.eventStore = eventStore;
             this.eventFormatter = eventFormatter;
             this.eventSourceContextFactory = eventSourceContextFactory;
             this.readModelContextFactory = readModelContextFactory;
-            this.storageContainerFactory = storageContainerFactory;
             this.priceConverter = priceConverter;
         }
 
-        public bool IsRequired()
+        protected override async Task UpgradeOverrideAsync(IUpgradeContext context, int currentVersion)
         {
-            return CurrentVersion > GetCurrentVersion();
-        }
-
-        public async Task UpgradeAsync(IUpgradeContext context)
-        {
-            int currentVersion = GetCurrentVersion();
-            if (CurrentVersion <= currentVersion)
-                return;
-
-            context.TotalSteps(CurrentVersion - currentVersion);
-            await Task.Delay(500);
-
             if (currentVersion < 1)
             {
                 context.StartingStep(0 - currentVersion, "Creating default categories.");
@@ -91,26 +77,11 @@ namespace Money.Bootstrap
                 await UpgradeVersion4();
             }
 
-            ApplicationDataContainer migrationContainer = GetMigrationContainer();
-            migrationContainer.Values["Version"] = CurrentVersion;
-        }
-
-        private ApplicationDataContainer GetMigrationContainer()
-        {
-            ApplicationDataContainer root = storageContainerFactory.Create();
-
-            ApplicationDataContainer migrationContainer;
-            if (!root.Containers.TryGetValue("Migration", out migrationContainer))
-                migrationContainer = root.CreateContainer("Migration", ApplicationDataCreateDisposition.Always);
-
-            return migrationContainer;
-        }
-
-        private int GetCurrentVersion()
-        {
-            ApplicationDataContainer migrationContainer = GetMigrationContainer();
-            int currentVersion = (int?)migrationContainer.Values["Version"] ?? 0;
-            return currentVersion;
+            if (currentVersion < 5)
+            {
+                context.StartingStep(4 - currentVersion, "Adding user info to entries.");
+                await UpgradeVersion5();
+            }
         }
 
         private async Task UpgradeVersion1()
@@ -199,6 +170,11 @@ namespace Money.Bootstrap
         private async Task UpgradeVersion4()
         {
             await RecreateReadModelContextAsync();
+        }
+
+        private Task UpgradeVersion5()
+        {
+            throw new NotImplementedException();
         }
     }
 }

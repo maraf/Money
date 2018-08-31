@@ -41,6 +41,18 @@
             </div>
         </div>
     </nav>
+
+    @if (ViewData.ContainsKey("Header"))
+    {
+        <div class="header">
+            <div class="container">
+                <h2>@ViewData["Header"]</h2>
+                <h4>@ViewData["SubHeader"]</h4>
+            </div>
+        </div>
+        <div class="header-append"></div>
+    }
+
     <div class="container body-content">
         @RenderBody()
         <hr />

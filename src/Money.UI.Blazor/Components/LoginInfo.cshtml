@@ -23,5 +23,5 @@
         UserName = await Api.GetUserNameAsync();
     }
 
-    void GoToManage() => JSRuntime.Current.InvokeAsync<bool>("NavigateTo", "/manage");
+    void GoToManage() => JSRuntime.Current.InvokeAsync<bool>("Money.NavigateTo", "/manage");
 }

@@ -1,12 +1,10 @@
 ﻿@{ 
     Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["Header"] = "Manage your account";
+    ViewData["SubHeader"] = "Change your account settings";
 }
 
-<h2>Manage your account</h2>
-
 <div>
-    <h4>Change your account settings</h4>
-    <hr />
     @if (User.IsDemo())
     {
         <div class="alert alert-warning">

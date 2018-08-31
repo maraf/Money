@@ -76,6 +76,6 @@
 
 @functions
 {
-protected string GetCategoryBarStyleValue(CategoryWithAmountModel category)
-    => $"width: {GetPercentualValue(category)}%; background-color: {category.Color.ToHashCode()};";
+    protected string GetCategoryBarStyleValue(CategoryWithAmountModel category)
+        => $"width: {GetPercentualValue(category)}%; background-color: {category.Color.ToHashCode()};";
 }

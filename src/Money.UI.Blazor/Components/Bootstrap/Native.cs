@@ -23,7 +23,7 @@ namespace Money.Components.Bootstrap
             => modals.Remove(id);
 
         [JSInvokable]
-        internal static void Bootstrap_ModalHidden(string id)
+        public static void Bootstrap_ModalHidden(string id)
         {
             ILog log = Program.Resolve<ILogFactory>().Scope("Modal.Native");
             log.Debug($"Modal hidden '{id}'.");

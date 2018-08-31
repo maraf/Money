@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using Neptuo.Events;
 using Neptuo.Exceptions;
 using System;
@@ -17,13 +18,15 @@ namespace Money.UI.Blazor
             serviceProvider = host.Services;
         }
 
-        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
-            BlazorWebAssemblyHost.CreateDefaultBuilder().UseBlazorStartup<Startup>();
+        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) 
+            => BlazorWebAssemblyHost.CreateDefaultBuilder().UseBlazorStartup<Startup>();
 
-        internal static void RaiseEvent(string payload) => serviceProvider.GetService<BrowserEventDispatcher>().Raise(payload);
-        internal static void RaiseException(string payload) => serviceProvider.GetService<BrowserExceptionHandler>().Raise(payload);
+        [JSInvokable]
+        public static void RaiseEvent(string payload) => serviceProvider.GetService<BrowserEventDispatcher>().Raise(payload);
 
-        internal static T Resolve<T>()
-            => serviceProvider.GetService<T>();
+        [JSInvokable]
+        public static void RaiseException(string payload) => serviceProvider.GetService<BrowserExceptionHandler>().Raise(payload);
+
+        internal static T Resolve<T>() => serviceProvider.GetService<T>();
     }
 }

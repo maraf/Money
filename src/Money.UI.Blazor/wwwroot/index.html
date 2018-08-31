@@ -54,7 +54,7 @@
                         $(e.currentTarget).find('[data-autofocus]').select().focus();
                     });
                     target.on('hidden.bs.modal', function (e) {
-                        DotNet.invokeMethodAsync("Money.UI.Blazor", "Bootstrap_ModalHidden", DotNet.toDotNetString(e));
+                        DotNet.invokeMethodAsync("Money.UI.Blazor", "Bootstrap_ModalHidden", e.currentTarget.id);
                     });
 
                     return true;
@@ -85,13 +85,13 @@
         connection.on("RaiseEvent", function (e) {
             console.log("JS: Event: " + e);
 
-            DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseEvent", DotNet.toDotNetString(e));
+            DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseEvent", e);
         });
 
         connection.on("RaiseException", function (e) {
             console.log("JS: Exception: " + e);
 
-            DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseException", DotNet.toDotNetString(e));
+            DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseException", e);
         });
 
         connection.onclose(function () {

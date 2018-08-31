@@ -46,48 +46,37 @@
         var isStarted = false;
         var isLoaded = false;
 
-        var eventRaiseMethod;
-        var exceptionRaiseMethod;
-        var bootstrapModalHiddenMethod;
+        window.Bootstrap = {
+            Modal: {
+                Register: function (id) {
+                    var target = $("#" + id);
+                    target.on('shown.bs.modal', function (e) {
+                        $(e.currentTarget).find('[data-autofocus]').select().focus();
+                    });
+                    target.on('hidden.bs.modal', function (e) {
+                        DotNet.invokeMethodAsync("Money.UI.Blazor", "Bootstrap_ModalHidden", DotNet.toDotNetString(e));
+                    });
 
-        function InitializeEventHub() {
-            if (isStarted && isLoaded) {
-                eventRaiseMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.UI.Blazor", "Program", "RaiseEvent");
-                exceptionRaiseMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.UI.Blazor", "Program", "RaiseException");
-                bootstrapModalHiddenMethod = Blazor.platform.findMethod("Money.UI.Blazor", "Money.Components.Bootstrap", "Native", "ModalHidden");
+                    return true;
+                },
+                Toggle: function(id, isVisible) {
+                    var target = $("#" + id);
+                    target.modal(isVisible ? 'show' : 'hide');
+
+                    return true;
+                }
             }
-        }
-        
-        Blazor.registerFunction('Bootstrap_Modal_Register', function (id) {
-            var target = $("#" + id);
-            target.on('shown.bs.modal', function (e) {
-                $(e.currentTarget).find('[data-autofocus]').select().focus();
-            });
-            target.on('hidden.bs.modal', function (e) {
-                Blazor.platform.callMethod(bootstrapModalHiddenMethod, null, [
-                    Blazor.platform.toDotNetString(e.currentTarget.id)
-                ]);
-            });
+        };
 
-            return true;
-        });
-
-        Blazor.registerFunction('Bootstrap_Modal_Toggle', function (id, isVisible) {
-            var target = $("#" + id);
-            target.modal(isVisible ? 'show' : 'hide');
-
-            return true;
-        });
-
-        Blazor.registerFunction('NavigateTo', function (href) {
-            window.location.href = href;
-            return true;
-        });
-
-        Blazor.registerFunction('ApplicationStarted', function (href) {
-            isLoaded = true;
-            InitializeEventHub();
-        });
+        window.Money = {
+            ApplicationStarted: function () {
+                isLoaded = true;
+            },
+            NavigateTo: function(href) {
+                window.location.href = href;
+                return true;
+            }
+        };
 
         var connection = new signalR.HubConnectionBuilder()
             .withUrl("/api")
@@ -96,17 +85,13 @@
         connection.on("RaiseEvent", function (e) {
             console.log("JS: Event: " + e);
 
-            Blazor.platform.callMethod(eventRaiseMethod, null, [
-                Blazor.platform.toDotNetString(e)
-            ]);
+            DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseEvent", DotNet.toDotNetString(e));
         });
 
         connection.on("RaiseException", function (e) {
             console.log("JS: Exception: " + e);
 
-            Blazor.platform.callMethod(exceptionRaiseMethod, null, [
-                Blazor.platform.toDotNetString(e)
-            ]);
+            DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseException", DotNet.toDotNetString(e));
         });
 
         connection.onclose(function () {
@@ -117,7 +102,6 @@
         });
         connection.start().then(function () {
             isStarted = true;
-            InitializeEventHub();
         });
 
     </script>

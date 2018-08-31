@@ -1,4 +1,5 @@
-﻿@inject ApiClient Api
+﻿@using Microsoft.JSInterop;
+@inject ApiClient Api
 
 <form action="/account/logout" method="post" id="logoutForm" class="navbar-right">
     <ul class="nav navbar-nav navbar-right">
@@ -22,9 +23,5 @@
         UserName = await Api.GetUserNameAsync();
     }
 
-    void GoToManage()
-    {
-        RegisteredFunction.Invoke<bool>("NavigateTo", "/manage");
-    }
-
+    void GoToManage() => JSRuntime.Current.InvokeAsync<bool>("NavigateTo", "/manage");
 }

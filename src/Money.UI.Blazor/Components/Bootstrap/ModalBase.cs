@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor;
-using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Components;
+using Microsoft.JSInterop;
 using Neptuo;
 using Neptuo.Logging;
 using System;
@@ -114,7 +114,7 @@ namespace Money.Components.Bootstrap
             Native.AddModal(Id, this);
 
             if (isVisibleChanged)
-                RegisteredFunction.Invoke<object>("Bootstrap_Modal_Toggle", Id, isVisible);
+                JSRuntime.Current.InvokeAsync<object>("Bootstrap.Modal.Toggle", Id, isVisible);
         }
 
         public void Dispose()

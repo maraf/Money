@@ -24,6 +24,8 @@ namespace Money
         public void Configure(IBlazorApplicationBuilder app)
         {
             app.AddComponent<App>("app");
+
+            JSRuntime.Current.InvokeAsync<object>("Money.ApplicationStarted");
         }
     }
 }

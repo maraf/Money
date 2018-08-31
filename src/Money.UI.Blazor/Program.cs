@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Blazor.Browser.Interop;
-using Microsoft.AspNetCore.Blazor.Browser.Rendering;
-using Microsoft.AspNetCore.Blazor.Browser.Services;
+﻿using Microsoft.AspNetCore.Blazor.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Money.Services;
 using Neptuo.Events;
 using Neptuo.Exceptions;
 using System;
@@ -13,20 +10,15 @@ namespace Money.UI.Blazor
     {
         private static IServiceProvider serviceProvider;
 
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            serviceProvider = new BrowserServiceProvider(services =>
-            {
-                services.AddTransient<ApiClient>();
-
-                Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
-                bootstrapTask.Initialize();
-            });
-
-            new BrowserRenderer(serviceProvider).AddComponent<App>("app");
-
-            RegisteredFunction.Invoke<object>("ApplicationStarted", new object[0]);
+            IWebAssemblyHost host = CreateHostBuilder(args).Build();
+            host.Run();
+            serviceProvider = host.Services;
         }
+
+        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
+            BlazorWebAssemblyHost.CreateDefaultBuilder().UseBlazorStartup<Startup>();
 
         internal static void RaiseEvent(string payload) => serviceProvider.GetService<BrowserEventDispatcher>().Raise(payload);
         internal static void RaiseException(string payload) => serviceProvider.GetService<BrowserExceptionHandler>().Raise(payload);

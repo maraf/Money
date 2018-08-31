@@ -15,10 +15,23 @@
             @Title
         </strong>
     }
+    
+    @if (Message != null)
+    {
+        <span>
+            @Message
+        </span>
+    }
 
-    <span>
-        @Message
-    </span>
+    @if (Messages != null)
+    {
+        foreach (string message in Messages)
+        {
+            <div>
+                @message
+            </div>
+        }
+    }
 </div>
 
 @functions 
@@ -28,6 +41,9 @@
 
     [Parameter]
     protected string Message { get; set; }
+
+    [Parameter]
+    protected IEnumerable<string> Messages { get; set; }
 
     private bool isDismissible;
 

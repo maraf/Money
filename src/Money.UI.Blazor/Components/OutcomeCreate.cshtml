@@ -5,9 +5,9 @@
 @inject IQueryDispatcher Queries
 
 <Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
-    @if (!String.IsNullOrEmpty(ErrorMessage))
+    @if (ErrorMessages.Count > 0)
     {
-        <Alert Title="Validation." Message="@ErrorMessage" Mode="@AlertMode.Error" />
+        <Alert Title="Validation:" Messages="@ErrorMessages" Mode="@AlertMode.Error" />
     }
     <div class="row">
         <div class="col-md-9">
@@ -58,13 +58,13 @@
 </Modal>
 
 @functions {
-        
+
     protected string GetCategoryBarStyleValue(CategoryModel category)
         => $"background-color: {category.Color.ToHashCode()};";
 
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }
-    protected string ErrorMessage { get; set; }
+    protected List<string> ErrorMessages { get; } = new List<string>();
 
     protected List<CategoryModel> Categories { get; private set; }
     protected List<CurrencyModel> Currencies { get; private set; }
@@ -96,19 +96,37 @@
 
     protected bool OnSaveClick()
     {
-        Log.Debug($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
-
-        if (Amount > 0 && !String.IsNullOrEmpty(Currency) && CategoryKey != null && !CategoryKey.IsEmpty)
+        if (Validate())
         {
-            ErrorMessage = null;
             Execute();
             return true;
         }
         else
         {
-            ErrorMessage = "Missing some required parameters!";
             return false;
         }
+    }
+
+    private bool Validate()
+    {
+        Log.Debug($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
+
+        ErrorMessages.Clear();
+        if (Amount <= 0)
+            ErrorMessages.Add("Amount must be greater than zero.");
+
+        if(String.IsNullOrEmpty(Description))
+            ErrorMessages.Add("Description must be provided.");
+
+
+        if (String.IsNullOrEmpty(Currency))
+            ErrorMessages.Add("Currency must be selected.");
+
+        if (CategoryKey == null || CategoryKey.IsEmpty)
+            ErrorMessages.Add("Category must be selected.");
+
+        Log.Debug($"Outcome Validation: {string.Join(", ", ErrorMessages)}.");
+        return ErrorMessages.Count == 0;
     }
 
     private async void Execute()

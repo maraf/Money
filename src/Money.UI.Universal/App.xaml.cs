@@ -66,7 +66,7 @@ namespace Money.UI
             //    this.DebugSettings.EnableFrameRateCounter = true;
             //}
 #endif
-            TryBootstrap();
+            TryBootstrap(e.Arguments);
 
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
@@ -129,11 +129,11 @@ namespace Money.UI
 
         public Bootstrap.BootstrapTask BootstrapTask { get; private set; }
 
-        private bool TryBootstrap()
+        private bool TryBootstrap(string launchArguments)
         {
             if (BootstrapTask == null)
             {
-                BootstrapTask = new Bootstrap.BootstrapTask();
+                BootstrapTask = new Bootstrap.BootstrapTask(launchArguments);
                 BootstrapTask.Initialize();
                 return true;
             }
@@ -146,10 +146,7 @@ namespace Money.UI
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
-        }
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e) => throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
 
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved

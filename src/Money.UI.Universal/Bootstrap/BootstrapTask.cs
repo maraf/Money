@@ -29,6 +29,7 @@ namespace Money.Bootstrap
 {
     public class BootstrapTask : IBootstrapTask, IExceptionHandler
     {
+        private readonly string launchArguments;
         private PersistentCommandDispatcher commandDispatcher;
         private PersistentEventDispatcher eventDispatcher;
         private ICompositeTypeProvider typeProvider;
@@ -44,6 +45,11 @@ namespace Money.Bootstrap
         public IFormatter EventFormatter { get; private set; }
 
         public static IKey UserKey { get; } = StringKey.Create("tmp_user", "User");
+
+        public BootstrapTask(string launchArguments)
+        {
+            this.launchArguments = launchArguments;
+        }
 
         public void Initialize()
         {
@@ -72,6 +78,7 @@ namespace Money.Bootstrap
 
             ServiceProvider.TileService = new TileService();
             ServiceProvider.DevelopmentTools = new DevelopmentService(upgradeService, storageFactory);
+            ServiceProvider.RestartService = new RestartService(launchArguments);
             ServiceProvider.UserPreferences = new ApplicationSettingsService(new CompositeTypeFormatterFactory(typeProvider), storageFactory);
 
             CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);

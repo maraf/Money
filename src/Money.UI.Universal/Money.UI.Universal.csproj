@@ -117,6 +117,7 @@
     <Compile Include="Services\MessageBuilder.cs" />
     <Compile Include="Services\PriceCalculator.cs" />
     <Compile Include="Services\PriceCalculator.ExchangeRateModelComparer.cs" />
+    <Compile Include="Services\RestartService.cs" />
     <Compile Include="Services\Settings\ApplicationDataCompositeStorage.cs" />
     <Compile Include="Services\Settings\ApplicationSettingsService.cs" />
     <Compile Include="Services\Settings\IUserPreferenceService.cs" />

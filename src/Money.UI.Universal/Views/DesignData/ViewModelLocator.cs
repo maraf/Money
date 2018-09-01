@@ -258,6 +258,7 @@ namespace Money.Views.DesignData
                 ServiceProvider.Navigator = Navigator;
                 ServiceProvider.TileService = new TileService();
                 ServiceProvider.DevelopmentTools = new MockDevelopmentService();
+                ServiceProvider.RestartService = new RestartService(null);
             }
         }
     }

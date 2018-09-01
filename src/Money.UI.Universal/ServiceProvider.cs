@@ -33,6 +33,7 @@ namespace Money
         public static ICurrencyProvider CurrencyProvider { get; set; }
 
         public static IDevelopmentService DevelopmentTools { get; set; }
+        public static RestartService RestartService { get; set; }
 
         internal static IFactory<EventSourcingContext> EventSourcingContextFactory { get; set; }
         internal static IFactory<ReadModelContext> ReadModelContextFactory { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Money.Services;
+using Money.UI;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views.Navigation;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -25,6 +27,7 @@ namespace Money.Views
     public sealed partial class About : Page
     {
         private readonly IDevelopmentService developmentTools = ServiceProvider.DevelopmentTools;
+        private readonly RestartService restartService = ServiceProvider.RestartService;
         private readonly INavigator navigator = ServiceProvider.Navigator;
 
         public About()
@@ -43,7 +46,7 @@ namespace Money.Views
 
                 navigator
                     .Message(message)
-                    .Button("Yes", new SwitchDatabaseCommand(developmentTools, DatabaseSwitch.IsOn))
+                    .Button("Yes", new SwitchDatabaseCommand(developmentTools, restartService, DatabaseSwitch.IsOn))
                     .ButtonClose("No")
                     .Show();
             }
@@ -52,12 +55,15 @@ namespace Money.Views
         private class SwitchDatabaseCommand : Neptuo.Observables.Commands.Command
         {
             private readonly IDevelopmentService developmentTools;
+            private readonly RestartService restartService;
             private readonly bool isEnabled;
 
-            public SwitchDatabaseCommand(IDevelopmentService developmentTools, bool isEnabled)
+            public SwitchDatabaseCommand(IDevelopmentService developmentTools, RestartService restartService, bool isEnabled)
             {
                 Ensure.NotNull(developmentTools, "developmentTools");
+                Ensure.NotNull(restartService, "restartService");
                 this.developmentTools = developmentTools;
+                this.restartService = restartService;
                 this.isEnabled = isEnabled;
             }
 
@@ -66,10 +72,10 @@ namespace Money.Views
                 return true;
             }
 
-            public override void Execute()
+            public override async void Execute()
             {
                 developmentTools.IsTestDatabaseEnabled(isEnabled);
-                Application.Current.Exit();
+                await restartService.RestartAsync();
             }
         }
     }

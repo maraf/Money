@@ -12,7 +12,7 @@ namespace Money.Components
         #region Outcome
 
         public static bool IsOutcomeAmount(decimal amount) => amount > 0;
-        public static bool IsOutcomeDecription(string description) => !String.IsNullOrEmpty(description);
+        public static bool IsOutcomeDescription(string description) => !String.IsNullOrEmpty(description);
         public static bool IsOutcomeCurrency(string currency) => !String.IsNullOrEmpty(currency);
         public static bool IsOutcomeCategoryKey(IKey categoryKey) => categoryKey != null && !categoryKey.IsEmpty;
 
@@ -22,9 +22,9 @@ namespace Money.Components
                 messages.Add("Amount must be greater than zero.");
         }
 
-        public static void AddOutcomeDecription(ICollection<string> messages, string description)
+        public static void AddOutcomeDescription(ICollection<string> messages, string description)
         {
-            if (!IsOutcomeDecription(description))
+            if (!IsOutcomeDescription(description))
                 messages.Add("Description must be provided.");
         }
 
@@ -49,13 +49,13 @@ namespace Money.Components
 
         public static void AddCurrencyUniqueCode(ICollection<string> messages, string uniqueCode)
         {
-            if (!IsOutcomeDecription(uniqueCode))
+            if (!IsCurrencyUniqueCode(uniqueCode))
                 messages.Add("Unique Code must be provided.");
         }
 
         public static void AddCurrencySymbol(ICollection<string> messages, string symbol)
         {
-            if (!IsOutcomeDecription(symbol))
+            if (!IsCurrencySymbol(symbol))
                 messages.Add("Symbol must be provided.");
         }
 

@@ -43,7 +43,7 @@
     private bool Validate()
     {
         ErrorMessages.Clear();
-        Validator.AddOutcomeDecription(ErrorMessages, Description);
+        Validator.AddOutcomeDescription(ErrorMessages, Description);
 
         return ErrorMessages.Count == 0;
     }

@@ -18,8 +18,8 @@
                     @foreach (var item in Models)
                     {
                         <tr>
-                            <td>1 @item.SourceCurrency</td>
-                            <td>@item.Rate @TargetCurrency</td>
+                            <td>@CurrencyFormatter.Format(new Price(1, item.SourceCurrency))</td>
+                            <td>@CurrencyFormatter.Format(new Price((decimal)item.Rate, TargetCurrency))</td>
                             <td>@item.ValidFrom.ToShortDateString()</td>
                             <td>
                                 <div class="actions">

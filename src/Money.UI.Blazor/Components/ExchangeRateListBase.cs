@@ -3,6 +3,7 @@ using Money.Commands;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Services;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -53,6 +54,7 @@ namespace Money.Components
 
         protected string Title { get; set; }
         protected List<ExchangeRateModel> Models { get; set; }
+        protected CurrencyFormatter CurrencyFormatter { get; set; }
 
         protected override void OnInit()
         {
@@ -64,13 +66,16 @@ namespace Money.Components
         {
             if (IsVisible)
             {
-                Title = $"List of Exchange Rates for {TargetCurrency}";
+                Title = $"List of Exchange Rates for {TargetCurrency}.";
                 await ReloadAsync();
             }
         }
 
         protected async Task ReloadAsync()
-            => Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
+        { 
+            Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
+            CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+        }
 
         protected bool OnAddClick()
         {

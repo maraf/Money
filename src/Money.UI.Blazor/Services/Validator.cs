@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Services
 {
     internal static class Validator
     {

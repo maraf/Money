@@ -5,10 +5,7 @@
 @inject IQueryDispatcher Queries
 
 <Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
-    @if (ErrorMessages.Count > 0)
-    {
-        <Alert Title="Validation:" Messages="@ErrorMessages" Mode="@AlertMode.Error" />
-    }
+    <ValidationSummary ErrorMessages="@ErrorMessages" />
     <div class="row">
         <div class="col-md-9">
             <div class="form-group">

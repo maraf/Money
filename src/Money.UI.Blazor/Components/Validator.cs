@@ -78,6 +78,38 @@ namespace Money.Components
                 messages.Add("Symbol must be provided.");
         }
 
+        #endregion
+
+        #region ExchangeRate
+
+        public static bool IsExchangeRate(double rate) => rate > 0;
+        public static bool IsExchangeRateCurrency(string sourceCurrency, string targetCurrency) => sourceCurrency != targetCurrency;
+        public static bool IsExchangeRateSourceCurrency(string currency) => !String.IsNullOrEmpty(currency);
+        public static bool IsExchangeRateTargetCurrency(string currency) => !String.IsNullOrEmpty(currency);
+
+        public static void AddExchangeRate(ICollection<string> messages, double rate)
+        {
+            if (!IsExchangeRate(rate))
+                messages.Add("Rate must be greater than zero.");
+        }
+
+        public static void AddExchangeRateCurrency(ICollection<string> messages, string sourceCurrency, string targetCurrency)
+        {
+            if (!IsExchangeRateCurrency(sourceCurrency, targetCurrency))
+                messages.Add("Source and target currency must be different.");
+        }
+
+        public static void AddExchangeRateSourceCurrency(ICollection<string> messages, string currency)
+        {
+            if (!IsExchangeRateSourceCurrency(currency))
+                messages.Add("Source currency must be provided.");
+        }
+
+        public static void AddExchangeRateTargetCurrency(ICollection<string> messages, string currency)
+        {
+            if (!IsExchangeRateTargetCurrency(currency))
+                messages.Add("Target currency must be provided.");
+        }
 
         #endregion
     }

@@ -4,10 +4,7 @@
 @inject ILogFactory LogFactory
 
 <Modal Title="Set Exchange Rate" Size="@ModalSize.Small" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
-    @if (!String.IsNullOrEmpty(ErrorMessage))
-    {
-        <Alert Title="Validation." Message="@ErrorMessage" Mode="@AlertMode.Error" />
-    }
+    <ValidationSummary ErrorMessages="@ErrorMessages" />
     <div class="form-group">
         <label for="exchangerate-source">Source Currency:</label>
         <select class="form-control" id="exchangerate-source" bind="@SourceCurrency" data-autofocus>
@@ -72,7 +69,7 @@
         }
     }
 
-    protected string ErrorMessage { get; set; }
+    protected List<string> ErrorMessages { get; } = new List<string>();
 
     protected List<CurrencyModel> Currencies { get; private set; }
 
@@ -96,14 +93,13 @@
 
     protected void Reset()
     {
-        ErrorMessage = null;
         Rate = 1;
         ValidFrom = DateTime.Today;
     }
 
     protected bool OnSaveClick()
     {
-        if (Rate > 0 && SourceCurrency != TargetCurrency && !String.IsNullOrEmpty(SourceCurrency))
+        if (Validate())
         {
             Commands.HandleAsync(new SetExchangeRate(SourceCurrency, TargetCurrency, ValidFrom, Rate));
             Reset();
@@ -111,11 +107,20 @@
         }
         else
         {
-            Log.Debug($"Rate: {Rate}");
-            Log.Debug($"SourceCurrency: {SourceCurrency}");
-            Log.Debug($"TargetCurrency: {TargetCurrency}");
-            ErrorMessage = "Missing some required parameters!";
             return false;
         }
+    }
+
+    private bool Validate()
+    {
+        Log.Debug($"Rate: {Rate}, SourceCurrency: {SourceCurrency}, TargetCurrency: {TargetCurrency}");
+
+        ErrorMessages.Clear();
+        Validator.AddExchangeRate(ErrorMessages, Rate);
+        Validator.AddExchangeRateSourceCurrency(ErrorMessages, SourceCurrency);
+        Validator.AddExchangeRateTargetCurrency(ErrorMessages, TargetCurrency);
+        Validator.AddExchangeRateCurrency(ErrorMessages, SourceCurrency, TargetCurrency);
+
+        return ErrorMessages.Count == 0;
     }
 }

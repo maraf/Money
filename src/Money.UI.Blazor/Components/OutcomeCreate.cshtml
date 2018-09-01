@@ -112,18 +112,10 @@
         Log.Debug($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
 
         ErrorMessages.Clear();
-        if (Amount <= 0)
-            ErrorMessages.Add("Amount must be greater than zero.");
-
-        if(String.IsNullOrEmpty(Description))
-            ErrorMessages.Add("Description must be provided.");
-
-
-        if (String.IsNullOrEmpty(Currency))
-            ErrorMessages.Add("Currency must be selected.");
-
-        if (CategoryKey == null || CategoryKey.IsEmpty)
-            ErrorMessages.Add("Category must be selected.");
+        Validator.AddOutcomeAmount(ErrorMessages, Amount);
+        Validator.AddOutcomeDecription(ErrorMessages, Description);
+        Validator.AddOutcomeCurrency(ErrorMessages, Currency);
+        Validator.AddOutcomeCategoryKey(ErrorMessages, CategoryKey);
 
         Log.Debug($"Outcome Validation: {string.Join(", ", ErrorMessages)}.");
         return ErrorMessages.Count == 0;

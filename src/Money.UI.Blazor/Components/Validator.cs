@@ -9,6 +9,8 @@ namespace Money.Components
 {
     internal static class Validator
     {
+        #region Outcome
+
         public static bool IsOutcomeAmount(decimal amount) => amount > 0;
         public static bool IsOutcomeDecription(string description) => !String.IsNullOrEmpty(description);
         public static bool IsOutcomeCurrency(string currency) => !String.IsNullOrEmpty(currency);
@@ -37,5 +39,27 @@ namespace Money.Components
             if (!IsOutcomeCategoryKey(categoryKey))
                 messages.Add("Category must be selected.");
         }
+
+        #endregion
+
+        #region Currency
+
+        public static bool IsCurrencyUniqueCode(string uniqueCode) => !String.IsNullOrEmpty(uniqueCode);
+        public static bool IsCurrencySymbol(string symbol) => !String.IsNullOrEmpty(symbol);
+
+        public static void AddCurrencyUniqueCode(ICollection<string> messages, string uniqueCode)
+        {
+            if (!IsOutcomeDecription(uniqueCode))
+                messages.Add("Unique Code must be provided.");
+        }
+
+        public static void AddCurrencySymbol(ICollection<string> messages, string symbol)
+        {
+            if (!IsOutcomeDecription(symbol))
+                messages.Add("Symbol must be provided.");
+        }
+
+
+        #endregion
     }
 }

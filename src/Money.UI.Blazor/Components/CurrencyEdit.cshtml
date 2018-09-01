@@ -2,10 +2,7 @@
 @inject ICommandDispatcher Commands
 
 <Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
-    @if (!String.IsNullOrEmpty(ErrorMessage))
-    {
-        <Alert Title="Validation." Message="@ErrorMessage" Mode="@AlertMode.Error" />
-    }
+    <ValidationSummary ErrorMessages="@ErrorMessages" />
 
     <div class="form-group">
         <label for="currency-unique-code">Unique Code:</label>
@@ -35,6 +32,7 @@
 
     private string originalUniqueCode;
     private string originalSymbol;
+    protected List<string> ErrorMessages { get; } = new List<string>();
 
     [Parameter]
     protected string UniqueCode { get; set; }
@@ -45,8 +43,6 @@
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }
     protected bool IsUniqueCodeEnabled { get; set; }
-
-    protected string ErrorMessage { get; set; }
 
     private bool isNew;
 
@@ -81,13 +77,11 @@
     {
         if (isNew)
         {
-            if (!String.IsNullOrEmpty(UniqueCode))
+            if (Validate())
             {
                 ExecuteCreate();
                 return true;
             }
-
-            ErrorMessage = "Unique Code is required.";
         }
         else if (originalSymbol != Symbol)
         {
@@ -97,6 +91,15 @@
         }
 
         return false;
+    }
+
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddCurrencyUniqueCode(ErrorMessages, UniqueCode);
+        Validator.AddCurrencySymbol(ErrorMessages, Symbol);
+
+        return ErrorMessages.Count == 0;
     }
 
     private async void ExecuteCreate()

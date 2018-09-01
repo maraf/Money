@@ -42,6 +42,25 @@ namespace Money.Components
 
         #endregion
 
+        #region Category
+
+        public static bool IsCategoryName(string name) => !String.IsNullOrEmpty(name);
+        public static bool IsCategoryDescription(string description) => !String.IsNullOrEmpty(description);
+
+        public static void AddCategoryName(ICollection<string> messages, string name)
+        {
+            if (!IsCategoryName(name))
+                messages.Add("Name must be provided.");
+        }
+
+        public static void AddCategoryDescription(ICollection<string> messages, string description)
+        {
+            if (!IsCategoryDescription(description))
+                messages.Add("Description must be provided.");
+        }
+
+        #endregion
+
         #region Currency
 
         public static bool IsCurrencyUniqueCode(string uniqueCode) => !String.IsNullOrEmpty(uniqueCode);

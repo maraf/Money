@@ -3,6 +3,7 @@
 @inject ICommandDispatcher Commands
 
 <Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+    <ValidationSummary ErrorMessages="@ErrorMessages" />
     <div class="form-group">
         <label for="category-name">Name:</label>
         <input type="text" class="form-control" id="category-name" placeholder="Category Name" data-autofocus bind="@Name" />
@@ -17,6 +18,7 @@
 {
     private string originalName;
     private string originalDescription;
+    protected List<string> ErrorMessages { get; } = new List<string>();
 
     [Parameter]
     protected IKey CategoryKey { get; set; }
@@ -51,7 +53,7 @@
     {
         if (CategoryKey == null || CategoryKey.IsEmpty)
         {
-            if (!String.IsNullOrEmpty(Name) && !String.IsNullOrEmpty(Description))
+            if (Validate())
             {
                 ExecuteCreate();
                 return true;
@@ -63,14 +65,30 @@
         }
         else
         {
-            if (originalName != Name)
-                ExecuteRename();
+            if (Validate())
+            {
+                if (originalName != Name)
+                    ExecuteRename();
 
-            if (originalDescription != Description)
-                ExecuteChangeDescription();
+                if (originalDescription != Description)
+                    ExecuteChangeDescription();
 
-            return true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
+    }
+
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddCategoryName(ErrorMessages, Name);
+        Validator.AddCategoryDescription(ErrorMessages, Description);
+
+        return ErrorMessages.Count == 0;
     }
 
     private async void ExecuteCreate()

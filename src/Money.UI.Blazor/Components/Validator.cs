@@ -12,7 +12,7 @@ namespace Money.Components
         public static bool IsOutcomeAmount(decimal amount) => amount > 0;
         public static bool IsOutcomeDecription(string description) => !String.IsNullOrEmpty(description);
         public static bool IsOutcomeCurrency(string currency) => !String.IsNullOrEmpty(currency);
-        public static bool IsOutcomeCategoryKey(IKey categoryKey) => categoryKey != null && categoryKey.IsEmpty;
+        public static bool IsOutcomeCategoryKey(IKey categoryKey) => categoryKey != null && !categoryKey.IsEmpty;
 
         public static void AddOutcomeAmount(ICollection<string> messages, decimal amount)
         {

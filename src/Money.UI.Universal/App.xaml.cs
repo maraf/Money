@@ -5,6 +5,7 @@ using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
 using Money.Views;
 using Money.Views.Navigation;
+using Neptuo.Exceptions.Handlers;
 using Neptuo.Models;
 using Neptuo.Models.Keys;
 using System;
@@ -16,6 +17,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -39,7 +41,7 @@ namespace Money.UI
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    sealed partial class App : Application, IExceptionHandler
     {
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -133,7 +135,7 @@ namespace Money.UI
         {
             if (BootstrapTask == null)
             {
-                BootstrapTask = new Bootstrap.BootstrapTask(launchArguments);
+                BootstrapTask = new Bootstrap.BootstrapTask(this, launchArguments);
                 BootstrapTask.Initialize();
                 return true;
             }
@@ -173,6 +175,9 @@ namespace Money.UI
             if (ProcessException(e.Exception))
                 e.SetObserved();
         }
+
+        void IExceptionHandler.Handle(Exception exception) 
+            => CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => ProcessException(exception));
 
         private bool ProcessException(Exception e)
         {

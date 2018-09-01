@@ -29,6 +29,7 @@ namespace Money.Bootstrap
 {
     public class BootstrapTask : IBootstrapTask, IExceptionHandler
     {
+        private readonly IExceptionHandler domainExceptionHandler;
         private readonly string launchArguments;
         private PersistentCommandDispatcher commandDispatcher;
         private PersistentEventDispatcher eventDispatcher;
@@ -46,8 +47,10 @@ namespace Money.Bootstrap
 
         public static IKey UserKey { get; } = StringKey.Create("tmp_user", "User");
 
-        public BootstrapTask(string launchArguments)
+        public BootstrapTask(IExceptionHandler domainExceptionHandler, string launchArguments)
         {
+            Ensure.NotNull(domainExceptionHandler, "domainExceptionHandler");
+            this.domainExceptionHandler = domainExceptionHandler;
             this.launchArguments = launchArguments;
         }
 
@@ -123,6 +126,7 @@ namespace Money.Bootstrap
             EventFormatter = new CompositeEventFormatter(typeProvider, compositeStorageFactory, new List<ICompositeFormatterExtender>() { new UserKeyEventExtender() });
 
             commandDispatcher = new PersistentCommandDispatcher(new SerialCommandDistributor(), new EmptyCommandStore(), CommandFormatter);
+            commandDispatcher.CommandExceptionHandlers.Add(domainExceptionHandler);
 
             OutcomeRepository = new AggregateRootRepository<Outcome>(
                 EventStore,

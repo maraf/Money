@@ -27,17 +27,7 @@ namespace Money.Views.Dialogs
 
             ContentDialogResult result = await dialog.ShowAsync();
             if ((result == ContentDialogResult.Primary || dialog.IsEnterPressed) && !String.IsNullOrEmpty(dialog.UniqueCode))
-            {
-                try
-                {
-                    // TODO: Not working after rewrite to commands.
-                    await commandDispatcher.HandleAsync(new CreateCurrency(dialog.UniqueCode, dialog.Symbol));
-                }
-                catch (CurrencyAlreadyExistsException)
-                {
-                    await ShowInternalAsync(dialog, messageBuilder.CurrencyAlreadyExists(dialog.UniqueCode));
-                }
-            }
+                await commandDispatcher.HandleAsync(new CreateCurrency(dialog.UniqueCode, dialog.Symbol));
         }
     }
 }

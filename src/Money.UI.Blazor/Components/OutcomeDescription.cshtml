@@ -3,6 +3,7 @@
 @inject ICommandDispatcher Commands
 
 <Modal Title="Change a description of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+    <ValidationSummary ErrorMessages="@ErrorMessages" />
     <div class="form-group">
         <label for="outcome-description">Description:</label>
         <input type="text" class="form-control" id="outcome-description" placeholder="Outcome Description" data-autofocus bind="@Description" />
@@ -12,6 +13,7 @@
 @functions {
 
     private string originalDescription;
+    protected List<string> ErrorMessages { get; } = new List<string>();
 
     [Parameter]
     protected IKey OutcomeKey { get; set; }
@@ -26,7 +28,7 @@
 
     protected bool OnSaveClick()
     {
-        if (originalDescription != Description)
+        if (Validate() && originalDescription != Description)
         {
             Execute();
             OnParametersSet();
@@ -36,6 +38,14 @@
         {
             return false;
         }
+    }
+
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddOutcomeDecription(ErrorMessages, Description);
+
+        return ErrorMessages.Count == 0;
     }
 
     private async void Execute()

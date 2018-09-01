@@ -36,20 +36,12 @@ namespace Money.Views.Dialogs
             ContentDialogResult result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                try
-                {
-                    // TODO: Not working after rewrite to commands.
-                    await commandDispatcher.HandleAsync(new SetExchangeRate(
-                        dialog.SourceCurrency,
-                        dialog.TargetCurrency,
-                        dialog.ValidFrom,
-                        dialog.Rate
-                    ));
-                }
-                catch (CurrencyExchangeRateAlreadyExistsException)
-                {
-                    await ShowInternalAsync(dialog, messageBuilder.CurrencyExchangeRateAlreadyExists());
-                }
+                await commandDispatcher.HandleAsync(new SetExchangeRate(
+                    dialog.SourceCurrency,
+                    dialog.TargetCurrency,
+                    dialog.ValidFrom,
+                    dialog.Rate
+                ));
             }
         }
     }

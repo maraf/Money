@@ -88,7 +88,7 @@
 
         Categories = await Queries.QueryAsync(new ListAllCategory());
         Currencies = await Queries.QueryAsync(new ListAllCurrency());
-        Currency = Currencies.FirstOrDefault()?.UniqueCode;
+        Currency = await Queries.QueryAsync(new GetCurrencyDefault());
     }
 
     protected bool OnSaveClick()

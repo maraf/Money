@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor;
+using Microsoft.JSInterop;
 using Money.Models.Api;
 using Money.Services;
 using Neptuo.Exceptions.Handlers;
@@ -31,7 +32,7 @@ namespace Neptuo.Exceptions
         {
             log.Debug($"'{rawPayload}'.");
 
-            Response response = JsonUtil.Deserialize<Response>(rawPayload);
+            Response response = Json.Deserialize<Response>(rawPayload);
             Type type = Type.GetType(response.Type);
             rawPayload = response.Payload;
 

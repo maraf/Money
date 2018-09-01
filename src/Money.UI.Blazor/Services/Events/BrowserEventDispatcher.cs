@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor;
+﻿using Microsoft.JSInterop;
 using Money.Models.Api;
 using Money.Services;
 using Neptuo.Formatters;
@@ -35,7 +35,7 @@ namespace Neptuo.Events
         {
             log.Debug($"Raised: {rawPayload}");
 
-            Response response = JsonUtil.Deserialize<Response>(rawPayload);
+            Response response = Json.Deserialize<Response>(rawPayload);
             Type type = Type.GetType(response.Type);
             rawPayload = response.Payload;
 

@@ -29,6 +29,7 @@ namespace Money.Views.Controls
         private readonly IFactory<EventSourcingContext> eventSourcingContextFactory = ServiceProvider.EventSourcingContextFactory;
         private readonly IFactory<ReadModelContext> readModelContextFactory = ServiceProvider.ReadModelContextFactory;
         private readonly IFactory<ApplicationDataContainer> storageContainerFactory = ServiceProvider.StorageContainerFactory;
+        private readonly RestartService restartService = ServiceProvider.RestartService;
 
         private bool isInitialization;
 
@@ -72,13 +73,13 @@ namespace Money.Views.Controls
 
         private async Task ShowExitDialogAsync()
         {
-            MessageDialog dialog = new MessageDialog("Do you want to exit the application?");
+            MessageDialog dialog = new MessageDialog("Do you want to restart the application now?");
             UICommand yes = new UICommand("Yes");
             dialog.Commands.Add(yes);
             dialog.Commands.Add(new UICommand("No"));
 
             if (await dialog.ShowAsync() == yes)
-                CoreApplication.Exit();
+                await restartService.RestartAsync();
         }
 
         private async void btnClearStorage_Click(object sender, RoutedEventArgs e)

@@ -4,6 +4,7 @@
 @inject IQueryDispatcher Queries
 
 <Modal Title="Change an amount of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+    <ValidationSummary ErrorMessages="@ErrorMessages" />
     <div class="row">
         <div class="col-md-9">
             <div class="form-group">
@@ -36,6 +37,7 @@
     private string originalCurrency;
 
     public List<CurrencyModel> Currencies { get; private set; }
+    protected List<string> ErrorMessages { get; } = new List<string>();
 
     [Parameter]
     protected IKey OutcomeKey { get; set; }
@@ -60,7 +62,7 @@
 
     protected bool OnSaveClick()
     {
-        if (originalAmount != Amount || originalCurrency != Currency)
+        if (Validate() && (originalAmount != Amount || originalCurrency != Currency))
         {
             Execute();
             SetOriginal();
@@ -70,6 +72,15 @@
         {
             return false;
         }
+    }
+
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddOutcomeAmount(ErrorMessages, Amount);
+        Validator.AddOutcomeCurrency(ErrorMessages, Currency);
+
+        return ErrorMessages.Count == 0;
     }
 
     private async void Execute()

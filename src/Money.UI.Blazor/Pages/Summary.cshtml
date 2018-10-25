@@ -44,7 +44,6 @@
                 <div class="panel-body">
                     <h3 class="description">
                         <span>📈</span>
-                        @*<Icon Identifier="signal" />*@
                         <a href="/overview/@SelectedMonth.Year/@SelectedMonth.Month" class="name">Summary</a>
                     </h3>
 
@@ -59,23 +58,17 @@
         {
             <div class="panel panel-default bar-graph">
                 <div class="panel-body">
-                    <div class="value">
-                        <div class="amount">@FormatPrice(category.TotalAmount)</div>
-                        <div class="bar" style="@GetCategoryBarStyleValue(category)"></div>
-                    </div>
-
                     <h3 class="description">
                         <span>@category.Icon</span>
                         <a href="/overview/@SelectedMonth.Year/@SelectedMonth.Month/@category.Key.AsGuidKey().Guid" class="name">@category.Name</a>
                     </h3>
+
+                    <div class="value">
+                        <div class="amount">@FormatPrice(category.TotalAmount)</div>
+                        <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
+                    </div>
                 </div>
             </div>
         }
     </div>
-}
-
-@functions
-{
-    protected string GetCategoryBarStyleValue(CategoryWithAmountModel category)
-        => $"width: {GetPercentualValue(category)}%; background-color: {category.Color.ToHashCode()};";
 }

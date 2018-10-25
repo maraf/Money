@@ -5,15 +5,12 @@
 <Modal Title="Pick a Color for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     @foreach (Color color in Colors)
     {
-        <button class="btn btn-link btn-color" style="@GetCategoryBarStyleValue(color)" onclick="@(() => Color = color)"></button>
+        <button class="btn btn-link btn-color" style="background-color: @color.ToHashCode();" onclick="@(() => Color = color)"></button>
     }
 </Modal>
 
 @functions 
 {
-        protected string GetCategoryBarStyleValue(Color color)
-            => $"background-color: {color.ToHashCode()};";
-
     private Color? originalColor;
 
     [Parameter]

@@ -87,20 +87,23 @@ namespace Money.Hubs
             string type = typeof(T).AssemblyQualifiedName;
             string rawPayload = formatters.Event.Serialize(payload);
 
-            IClientProxy target;
+            IClientProxy target = null;
             lock (userKeyToConnectionIdLock)
             {
                 if (payload is UserEvent userEvent && userKeyToConnectionId.TryGetValue(userEvent.UserKey, out List<string> value))
                     target = Clients.Clients(value.ToList());
-                else
-                    target = Clients.All;
             }
 
-            return target.SendAsync("RaiseEvent", JsonConvert.SerializeObject(new Response()
+            if (target != null)
             {
-                Type = type,
-                Payload = rawPayload
-            }));
+                return target.SendAsync("RaiseEvent", JsonConvert.SerializeObject(new Response()
+                {
+                    Type = type,
+                    Payload = rawPayload
+                }));
+            }
+
+            return Task.CompletedTask;
         }
 
         Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload) => RaiseEvent(payload);
@@ -128,7 +131,7 @@ namespace Money.Hubs
             string type = exception.GetType().AssemblyQualifiedName;
             string rawPayload = formatters.Exception.Serialize(exception);
 
-            IClientProxy target;
+            IClientProxy target = null;
             lock (commandKeyToUserKeyLock)
             {
                 if (commandKeyToUserKey.TryGetValue(exception.FindOriginalCommandKey(), out IKey userKey))
@@ -137,21 +140,18 @@ namespace Money.Hubs
                     {
                         if (userKeyToConnectionId.TryGetValue(userKey, out List<string> value))
                             target = Clients.Clients(value.ToList());
-                        else
-                            target = Clients.All;
                     }
-                }
-                else
-                {
-                    target = Clients.All;
                 }
             }
 
-            target.SendAsync("RaiseException", JsonConvert.SerializeObject(new Response()
+            if (target != null)
             {
-                Type = type,
-                Payload = rawPayload
-            }));
+                target.SendAsync("RaiseException", JsonConvert.SerializeObject(new Response()
+                {
+                    Type = type,
+                    Payload = rawPayload
+                }));
+            }
         }
 
         public void AddCommand(IKey commandKey, IKey userKey)

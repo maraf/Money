@@ -7,3 +7,6 @@ Also, we have experimental implementation using [Blazor](https://github.com/aspn
 
 ![Preview in web](assets/Preview-blazor.png)
 
+### Blog posts
+ - [Blazor and the booting screen](https://www.neptuo.com/blog/2018/04/blazor-boot-screen/).
+ - [Blazor and complex component parameters](https://www.neptuo.com/blog/2018/06/blazor-component-parameters/).

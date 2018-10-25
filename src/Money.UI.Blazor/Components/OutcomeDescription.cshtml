@@ -10,8 +10,8 @@
     </div>
 </Modal>
 
-@functions {
-
+@functions 
+{
     private string originalDescription;
     protected List<string> ErrorMessages { get; } = new List<string>();
 
@@ -49,7 +49,5 @@
     }
 
     private async void Execute()
-    {
-        await Commands.HandleAsync(new ChangeOutcomeDescription(OutcomeKey, Description));
-    }
+        => await Commands.HandleAsync(new ChangeOutcomeDescription(OutcomeKey, Description));
 }

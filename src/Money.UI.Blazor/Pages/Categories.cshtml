@@ -7,27 +7,34 @@
 <CategoryName bind-IsVisible="@IsCreateVisible" />
 <Confirm Context="@Delete" />
 
-@foreach (var item in Models)
+@if (Models.Count == 0)
 {
-    <div class="alert" style="background-color: @item.Color.ToHashCode()">
-        @if (item.Icon != null)
-        {
-            <span>@item.Icon</span>
-        }
-        <strong>
-            @item.Name
-        </strong>
-        <span class="gray">
-            @item.Description
-        </span>
+    <Alert Title="No data." Message="Try adding some categories." Mode="@AlertMode.Warning" />
+}
+else
+{
+    @foreach (var item in Models)
+    {
+        <div class="alert" style="background-color: @item.Color.ToHashCode()">
+            @if (item.Icon != null)
+            {
+                <span>@item.Icon</span>
+            }
+            <strong>
+                @item.Name
+            </strong>
+            <span class="gray">
+                @item.Description
+            </span>
 
-        <div class="nav navbar-nav navbar-right">
-            <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => { Selected = item; IsNameEditVisible = true; StateHasChanged(); })" />
-            <IconButton Icon="picture" ToolTip="Icon" Click="@(() => { Selected = item; IsIconEditVisible = true; StateHasChanged(); })" />
-            <IconButton Icon="tint" ToolTip="Color" Click="@(() => { Selected = item; IsColorEditVisible = true; StateHasChanged(); })" />
-            <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
+            <div class="nav navbar-nav navbar-right">
+                <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => { Selected = item; IsNameEditVisible = true; StateHasChanged(); })" />
+                <IconButton Icon="picture" ToolTip="Icon" Click="@(() => { Selected = item; IsIconEditVisible = true; StateHasChanged(); })" />
+                <IconButton Icon="tint" ToolTip="Color" Click="@(() => { Selected = item; IsColorEditVisible = true; StateHasChanged(); })" />
+                <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
+            </div>
         </div>
-    </div>
+    }
 }
 
 <CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" bind-IsVisible="@IsNameEditVisible" />

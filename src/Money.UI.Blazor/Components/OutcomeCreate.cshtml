@@ -44,7 +44,7 @@
         {
             @foreach (var category in Categories)
             {
-                <button class="btn btn-block" style="@GetCategoryBarStyleValue(category)" onclick="@(() => CategoryKey = category.Key)">
+                <button class="btn btn-block" style="background-color: @category.Color.ToHashCode();" onclick="@(() => CategoryKey = category.Key)">
                     <span>@category.Icon</span>
                     <strong>@category.Name</strong>
                     <span>@category.Description</span>
@@ -54,11 +54,8 @@
     </div>
 </Modal>
 
-@functions {
-
-    protected string GetCategoryBarStyleValue(CategoryModel category)
-        => $"background-color: {category.Color.ToHashCode()};";
-
+@functions 
+{
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }
     protected List<string> ErrorMessages { get; } = new List<string>();

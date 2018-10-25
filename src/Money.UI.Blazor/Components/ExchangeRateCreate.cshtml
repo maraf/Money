@@ -1,7 +1,7 @@
 ﻿@inherits DialogBase
 @inject ICommandDispatcher Commands
 @inject IQueryDispatcher Queries
-@inject ILogFactory LogFactory
+@inject ILog<ExchangeRateCreate> Log
 
 <Modal Title="Set Exchange Rate" Size="@ModalSize.Small" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     <ValidationSummary ErrorMessages="@ErrorMessages" />
@@ -56,19 +56,6 @@
 
 @functions
 {
-    private ILog log;
-
-    protected ILog Log
-    {
-        get
-        {
-            if (log == null)
-                log = LogFactory.Scope("ExchangeRateCreate");
-
-            return log;
-        }
-    }
-
     protected List<string> ErrorMessages { get; } = new List<string>();
 
     protected List<CurrencyModel> Currencies { get; private set; }
@@ -101,14 +88,19 @@
     {
         if (Validate())
         {
-            Commands.HandleAsync(new SetExchangeRate(SourceCurrency, TargetCurrency, ValidFrom, Rate));
-            Reset();
+            Execute();
             return true;
         }
         else
         {
             return false;
         }
+    }
+
+    protected async void Execute()
+    {
+        await Commands.HandleAsync(new SetExchangeRate(SourceCurrency, TargetCurrency, ValidFrom, Rate));
+        Reset();
     }
 
     private bool Validate()

@@ -9,8 +9,8 @@
     </div>
 </Modal>
 
-@functions {
-
+@functions 
+{
     private DateTime originalWhen;
 
     [Parameter]
@@ -39,7 +39,5 @@
     }
 
     private async void Execute()
-    {
-        await Commands.HandleAsync(new ChangeOutcomeWhen(OutcomeKey, When));
-    }
+        => await Commands.HandleAsync(new ChangeOutcomeWhen(OutcomeKey, When));
 }

@@ -6,8 +6,8 @@
     <Alert Title="@Title" Message="@Message" Mode="@AlertMode.Error" IsDismissible="true" />
 }
 
-@functions {
-
+@functions 
+{
     public Exception LastException { get; private set; }
 
     [Parameter]
@@ -61,5 +61,4 @@
 
         base.OnInit();
     }
-
 }

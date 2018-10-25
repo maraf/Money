@@ -21,21 +21,8 @@ namespace Money.Components
         IEventHandler<CurrencyExchangeRateSet>,
         IEventHandler<CurrencyExchangeRateRemoved>
     {
-        private ILog log;
-
-        protected ILog Log
-        {
-            get
-            {
-                if (log == null)
-                    log = LogFactory.Scope("ExchangeRateList");
-
-                return log;
-            }
-        }
-
         [Inject]
-        public ILogFactory LogFactory { get; set; }
+        internal ILog<UI.Blazor.Components.ExchangeRateList> Log { get; set; }
 
         [Inject]
         public ICommandDispatcher Commands { get; set; }

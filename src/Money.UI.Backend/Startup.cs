@@ -34,8 +34,10 @@ namespace Money
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionStrings = Configuration.GetSection("ConnectionStrings").Get<Bootstrap.ConnectionStrings>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite($"Filename=Application.db")
+                options.UseSqlite(connectionStrings.Application)
             );
 
             services.AddResponseCompression(options =>
@@ -69,7 +71,7 @@ namespace Money
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ApiHub>();
 
-            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
+            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings);
             bootstrapTask.Initialize();
         }
 

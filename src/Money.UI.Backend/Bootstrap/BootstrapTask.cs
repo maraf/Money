@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Money.Data;
 using Money.Hubs;
@@ -31,6 +32,7 @@ namespace Money.Bootstrap
     public class BootstrapTask : IBootstrapTask
     {
         private readonly IServiceCollection services;
+        private readonly ConnectionStrings connectionStrings;
 
         private ILogFactory logFactory;
         private ILog errorLog;
@@ -53,10 +55,12 @@ namespace Money.Bootstrap
         private IFormatter queryFormatter;
         private IFormatter exceptionFormatter;
 
-        public BootstrapTask(IServiceCollection services)
+        public BootstrapTask(IServiceCollection services, ConnectionStrings connectionStrings)
         {
             Ensure.NotNull(services, "services");
+            Ensure.NotNull(connectionStrings, "connectionStrings");
             this.services = services;
+            this.connectionStrings = connectionStrings;
         }
 
         public void Initialize()
@@ -64,8 +68,8 @@ namespace Money.Bootstrap
             logFactory = new DefaultLogFactory("Root").AddSerializer(new ConsoleSerializer());
             errorLog = logFactory.Scope("Error");
 
-            readModelContextFactory = Factory.Getter(() => new ReadModelContext("Filename=ReadModel.db"));
-            eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext("Filename=EventSourcing.db"));
+            readModelContextFactory = Factory.Getter(() => new ReadModelContext(connectionStrings.ReadModel));
+            eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext(connectionStrings.EventSourcing));
             CreateReadModelContext();
             CreateEventSourcingContext();
 

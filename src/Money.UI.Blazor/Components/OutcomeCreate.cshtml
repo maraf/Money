@@ -44,7 +44,7 @@
         {
             @foreach (var category in Categories)
             {
-                <button class="btn btn-block" style="background-color: @category.Color.ToHashCode();" onclick="@(() => CategoryKey = category.Key)">
+                <button class="btn btn-block btn-selectable @(CategoryKey == category.Key ? "btn-selectable-selected" : "")" style="background-color: @category.Color.ToHashCode();" onclick="@(() => CategoryKey = category.Key)">
                     <span>@category.Icon</span>
                     <strong>@category.Name</strong>
                     <span>@category.Description</span>

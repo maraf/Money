@@ -83,18 +83,24 @@ h4 {
     width: 40px;
     height: 40px;
     margin: 4px;
+}
+
+.btn-selectable {
+    border-radius: 0;
     border: 2px solid transparent;
 }
 
-.btn-color.btn-color-selected,
-.btn-color:hover {
+.btn-selectable.btn-selectable-selected,
+.btn-selectable:focus,
+.btn-selectable:hover {
     position: relative;
     outline: none;
     border-color: black;
 }
 
-.btn-color.btn-color-selected::before,
-.btn-color:hover::before {
+.btn-selectable.btn-selectable-selected::before,
+.btn-selectable:focus::before,
+.btn-selectable:hover::before {
     content: " ";
     content: "✓";
     padding: 2px;

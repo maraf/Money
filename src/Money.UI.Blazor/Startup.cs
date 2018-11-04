@@ -18,7 +18,8 @@ namespace Money
         {
             services
                 .AddTransient<ApiClient>()
-                .AddSingleton<ColorCollection>();
+                .AddSingleton<ColorCollection>()
+                .AddSingleton<IconCollection>();
 
             Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
             bootstrapTask.Initialize();

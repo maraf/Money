@@ -75,14 +75,15 @@ h4 {
     font-size: 2em;
 }
 
-.btn-icon:hover, .btn-icon.btn-selected {
-    background-color: #eee;
+.btn-color {
+    width: 48px;
+    height: 48px;
+    margin: 4px;
 }
 
-.btn-color {
-    width: 40px;
-    height: 40px;
-    margin: 4px;
+.btn-selectable:focus,
+.btn-selectable:hover {
+    text-decoration: none;
 }
 
 .btn-selectable {

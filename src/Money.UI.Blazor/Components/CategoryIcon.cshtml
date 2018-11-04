@@ -1,22 +1,14 @@
 ﻿@using Neptuo.Models.Keys
 @inherits DialogBase
 @inject ICommandDispatcher Commands
+@inject IconCollection Icons
 
 <Modal Title="Pick an Icon for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     @foreach (string icon in Icons)
     {
-        if (Icon == icon)
-        {
-            <a class="btn btn-icon btn-selected" onclick="@(() => Icon = icon)">
-                @icon
-            </a>
-        }
-        else
-        {
-            <a class="btn btn-icon" onclick="@(() => Icon = icon)">
-                @icon
-            </a>
-        }
+        <button class="btn btn-link btn-icon btn-selectable @(Icon == icon ? "btn-selectable-selected" : "")" onclick="@(() => Icon = icon)">
+            @icon
+        </button>
     }
 </Modal>
 
@@ -29,8 +21,6 @@
 
     [Parameter]
     protected string Icon { get; set; }
-
-    protected IconCollection Icons { get; set; } = new IconCollection();
 
     protected override void OnParametersSet()
     {

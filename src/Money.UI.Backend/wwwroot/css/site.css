@@ -70,9 +70,11 @@ h4 {
 }
 
 .btn-icon {
-    width: 67px;
-    height: 67px;
-    font-size: 2em;
+    width: 48px;
+    height: 48px;
+    font-size: 1.6em;
+    padding: 0;
+    margin: 4px;
 }
 
 .btn-color {
@@ -87,7 +89,7 @@ h4 {
 }
 
 .btn-selectable {
-    border-radius: 0;
+    border-radius: 4px;
     border: 2px solid transparent;
 }
 
@@ -106,6 +108,7 @@ h4 {
     content: "✓";
     padding: 2px;
     background: black;
+    border-radius: 0 0 4px 0;
     position: absolute;
     left: 0;
     top: 0;

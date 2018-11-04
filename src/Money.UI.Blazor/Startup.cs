@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Blazor.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
+using Money.Models;
 using Money.Services;
 using Money.UI.Blazor;
 using System;
@@ -15,7 +16,9 @@ namespace Money
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ApiClient>();
+            services
+                .AddTransient<ApiClient>()
+                .AddSingleton<ColorCollection>();
 
             Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
             bootstrapTask.Initialize();

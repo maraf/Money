@@ -343,7 +343,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Money.Models\Money.Models.csproj">
       <Project>{ca416337-12d3-4406-85c8-2717fab7a7d2}</Project>
-      <Name>Money.UI.Models</Name>
+      <Name>Money.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\Money\Money.csproj">
       <Project>{cced2dc9-b1bc-4a66-a7c3-488cf1de3616}</Project>

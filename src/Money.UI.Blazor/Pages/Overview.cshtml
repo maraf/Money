@@ -1,6 +1,8 @@
 ﻿@page "/outcomes/{Year}/{Month}"
 @page "/overview/{Year}/{Month}"
 @page "/overview/{Year}/{Month}/{CategoryGuid}"
+@page "/{Year}/{Month}/overview"
+@page "/{Year}/{Month}/overview/{CategoryGuid}"
 @inherits OverviewBase
 
 <Title Icon="calendar" Main="@Title" Sub="List of each single outcome in selected month" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />

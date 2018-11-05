@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money
 {
-    public class Startup
+    internal class Startup
     {
         public void ConfigureServices(IServiceCollection services)
         {

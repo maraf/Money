@@ -3,7 +3,7 @@
 @inject ICommandDispatcher Commands
 @inject ColorCollection Colors
 
-<Modal Title="Pick a Color for the Category" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+<Modal Title="Pick a Color for the Category" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
     @foreach (Color color in Colors)
     {
         <button class="btn btn-link btn-color btn-selectable @(Color == color ? "btn-selectable-selected" : "")" style="background-color: @color.ToHashCode();" onclick="@(() => Color = color)"></button>

@@ -97,7 +97,22 @@ namespace Money.Components.Bootstrap
 
         protected void OnPrimaryButtonClick()
         {
-            IsVisible = !PrimaryButtonClick();
+            Log.Debug("Primary button click raised.");
+            if (IsVisible)
+            {
+                Log.Debug("Visibility constraint passed.");
+                IsVisible = !PrimaryButtonClick();
+            }
+        }
+
+        protected void OnFormSubmit(UIEventArgs e)
+        {
+            Log.Debug("Form onsubmit raised.");
+            if (IsVisible)
+            {
+                Log.Debug("Visibility constraint passed.");
+                IsVisible = !PrimaryButtonClick();
+            }
         }
 
         protected void OnCloseButtonClick()

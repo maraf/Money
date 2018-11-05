@@ -2,21 +2,23 @@
 
 <div class="modal fade" id="@Id" tabindex="-1" role="dialog">
     <div class="@DialogCssClass" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" onclick="@(() => IsVisible = false)"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">@Title</h4>
+        <form onsubmit="@OnFormSubmit">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" onclick="@(() => IsVisible = false)"><span aria-hidden="true">&times;</span></a>
+                    <h4 class="modal-title" id="myModalLabel">@Title</h4>
+                </div>
+                <div class="modal-body">
+                    @ChildContent
+                </div>
+                <div class="modal-footer">
+                    @if (!String.IsNullOrEmpty(PrimaryButtonText))
+                    {
+                        <button class="btn btn-primary" onclick="@OnPrimaryButtonClick">@PrimaryButtonText</button>
+                    }
+                    <button class="btn btn-default" onclick="@OnCloseButtonClick">@CloseButtonText</button>
+                </div>
             </div>
-            <div class="modal-body">
-                @ChildContent
-            </div>
-            <div class="modal-footer">
-                @if (!String.IsNullOrEmpty(PrimaryButtonText))
-                {
-                    <button type="button" class="btn btn-primary" onclick="@OnPrimaryButtonClick">@PrimaryButtonText</button>
-                }
-                <button type="button" class="btn btn-default" onclick="@OnCloseButtonClick">@CloseButtonText</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>

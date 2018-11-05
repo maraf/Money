@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
-using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Blazor.Services;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
@@ -11,7 +11,6 @@ using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +37,9 @@ namespace Money.Pages
 
         [Inject]
         internal ILog<SummaryBase> Log { get; set; }
+
+        [Inject]
+        public IUriHelper Navigator { get; set; }
 
         [Parameter]
         protected string Year { get; set; }
@@ -79,48 +81,24 @@ namespace Money.Pages
             else
                 SelectedMonth = null;
 
-            if (Months == null)
-                await LoadMonthsAsync();
-            else if (SelectedMonth == null)
-                OnMonthSelected(Months.FirstOrDefault());
-            else
-                await LoadMonthSummaryAsync();
+            await LoadMonthsAsync(isReload: false);
         }
 
-        private async void OnEvent()
+        protected async Task LoadMonthsAsync(bool isReload = true)
         {
-            await LoadSelectedMonthSummaryAsync();
-            StateHasChanged();
-        }
+            if (isReload || Months == null)
+                Months = await Queries.QueryAsync(new ListMonthWithOutcome());
 
-        private async Task LoadSelectedMonthSummaryAsync()
-        {
+            if (SelectedMonth != null && !Months.Contains(SelectedMonth))
+            {
+                Navigator.NavigateTo("/");
+                return;
+            }
+
             if (SelectedMonth == null)
-                await LoadMonthsAsync();
-            else
-                await LoadMonthSummaryAsync();
-        }
+                SelectedMonth = Months.FirstOrDefault();
 
-        private async void OnMonthUpdatedEvent(MonthModel changed)
-        {
-            if (!Months.Contains(changed))
-                await LoadMonthsAsync(changed);
-            else if (SelectedMonth == changed)
-                await LoadMonthSummaryAsync();
-
-            StateHasChanged();
-        }
-
-        protected async Task LoadMonthsAsync(MonthModel selected = null)
-        {
-            Months = await Queries.QueryAsync(new ListMonthWithOutcome());
-
-            if (selected != null)
-                OnMonthSelected(selected);
-            else if (SelectedMonth == null)
-                OnMonthSelected(Months.FirstOrDefault());
-            else
-                await LoadMonthSummaryAsync();
+            await LoadMonthSummaryAsync();
         }
 
         protected async Task LoadMonthSummaryAsync()
@@ -131,13 +109,6 @@ namespace Money.Pages
                 TotalAmout = await Queries.QueryAsync(new GetTotalMonthOutcome(SelectedMonth));
                 formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             }
-        }
-
-        protected async void OnMonthSelected(MonthModel selectedMonth)
-        {
-            SelectedMonth = selectedMonth;
-            await LoadMonthSummaryAsync();
-            StateHasChanged();
         }
 
         protected decimal GetPercentualValue(CategoryWithAmountModel category)
@@ -180,13 +151,13 @@ namespace Money.Pages
 
         Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
         {
-            OnEvent();
+            OnOutcomeDeletedEvent();
             return Task.CompletedTask;
         }
 
         Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
         {
-            OnEvent();
+            OnOutcomeAmountChangedEvent();
             return Task.CompletedTask;
         }
 
@@ -194,6 +165,28 @@ namespace Money.Pages
         {
             OnMonthUpdatedEvent(payload.When);
             return Task.CompletedTask;
+        }
+
+        private async void OnMonthUpdatedEvent(MonthModel changed)
+        {
+            if (!Months.Contains(changed))
+                await LoadMonthsAsync();
+            else
+                await LoadMonthSummaryAsync();
+
+            StateHasChanged();
+        }
+
+        private async void OnOutcomeAmountChangedEvent()
+        {
+            await LoadMonthSummaryAsync();
+            StateHasChanged();
+        }
+
+        private async void OnOutcomeDeletedEvent()
+        {
+            await LoadMonthsAsync();
+            StateHasChanged();
         }
 
         #endregion

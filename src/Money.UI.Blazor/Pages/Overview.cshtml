@@ -3,7 +3,7 @@
 @page "/overview/{Year}/{Month}/{CategoryGuid}"
 @inherits OverviewBase
 
-<Title Icon="calendar" Main="@Title" Sub="List of each outcomes in selected month" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<Title Icon="calendar" Main="@Title" Sub="List of each single outcome in selected month" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
 
 <OutcomeCreate bind-IsVisible="@IsCreateVisible" />

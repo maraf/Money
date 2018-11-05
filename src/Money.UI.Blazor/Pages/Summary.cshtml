@@ -1,4 +1,5 @@
 ﻿@page "/"
+@page "/{Year}/{Month}"
 @using Neptuo.Models.Keys
 @inherits SummaryBase
 
@@ -23,7 +24,7 @@
                 else
                 {
                     <li role="presentation">
-                        <a onclick="@(() => OnMonthSelected(month))">@month.ToString()</a>
+                        <a href="/@month.Year/@month.Month">@month.ToString()</a>
                     </li>
                 }
             }

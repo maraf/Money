@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
+using Microsoft.JSInterop;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
@@ -6,6 +7,7 @@ using Money.Services;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -34,6 +36,15 @@ namespace Money.Pages
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
+        [Inject]
+        internal ILog<SummaryBase> Log { get; set; }
+
+        [Parameter]
+        protected string Year { get; set; }
+
+        [Parameter]
+        protected string Month { get; set; }
+
         protected List<MonthModel> Months { get; private set; }
         protected MonthModel SelectedMonth { get; private set; }
 
@@ -42,20 +53,52 @@ namespace Money.Pages
 
         protected bool IsCreateVisible { get; set; }
 
-        protected override async Task OnInitAsync()
+        protected override Task OnInitAsync()
         {
+            Log.Debug("Summary.OnInitAsync");
             BindEvents();
-            await LoadMonthsAsync();
+
+            return base.OnInitAsync();
+        }
+
+        public override void SetParameters(ParameterCollection parameters)
+        {
+            // Clear previous parameter values.
+            Year = null;
+            Month = null;
+
+            base.SetParameters(parameters);
+        }
+
+        protected async override Task OnParametersSetAsync()
+        {
+            Log.Debug($"Summary.OnParametersSetAsync(Year='{Year}', Month='{Month}')");
+
+            if (!String.IsNullOrEmpty(Year) && !String.IsNullOrEmpty(Month))
+                SelectedMonth = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
+            else
+                SelectedMonth = null;
+
+            if (Months == null)
+                await LoadMonthsAsync();
+            else if (SelectedMonth == null)
+                OnMonthSelected(Months.FirstOrDefault());
+            else
+                await LoadMonthSummaryAsync();
         }
 
         private async void OnEvent()
+        {
+            await LoadSelectedMonthSummaryAsync();
+            StateHasChanged();
+        }
+
+        private async Task LoadSelectedMonthSummaryAsync()
         {
             if (SelectedMonth == null)
                 await LoadMonthsAsync();
             else
                 await LoadMonthSummaryAsync();
-
-            StateHasChanged();
         }
 
         private async void OnMonthUpdatedEvent(MonthModel changed)
@@ -76,6 +119,8 @@ namespace Money.Pages
                 OnMonthSelected(selected);
             else if (SelectedMonth == null)
                 OnMonthSelected(Months.FirstOrDefault());
+            else
+                await LoadMonthSummaryAsync();
         }
 
         protected async Task LoadMonthSummaryAsync()

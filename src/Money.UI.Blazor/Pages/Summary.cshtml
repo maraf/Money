@@ -15,18 +15,9 @@
         <ul class="nav nav-tabs">
             @foreach (var month in Months)
             {
-                @if (month == SelectedMonth)
-                {
-                    <li role="presentation" class="active">
-                        <a onclick="@(() => OnMonthSelected(month))">@month.ToString()</a>
-                    </li>
-                }
-                else
-                {
-                    <li role="presentation">
-                        <a href="/@month.Year/@month.Month">@month.ToString()</a>
-                    </li>
-                }
+                <li role="presentation" class="@(month == SelectedMonth ? "active" : null)">
+                    <a href="/@month.Year/@month.Month">@month.ToString()</a>
+                </li>
             }
         </ul>
     }

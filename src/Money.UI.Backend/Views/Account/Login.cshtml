@@ -6,12 +6,10 @@
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Header"] = "Log in";
+    ViewData["SubHeader"] = "Use a local account to log in";
 }
 
-<h2>@ViewData["Title"]</h2>
-<h4>Use a local account to log in.</h4>
-<hr />
 <div class="alert alert-info">
     You can sign in as <strong>demo</strong> user with <strong>demo</strong> password or register your own account.
 </div>
@@ -40,7 +38,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-default">Log in</button>
+                    <button type="submit" class="btn btn-primary">Log in</button>
                 </div>
                 <div class="form-group">
                     <p>

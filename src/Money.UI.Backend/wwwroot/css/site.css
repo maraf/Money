@@ -188,6 +188,11 @@ h4 {
     font-weight: bold;
 }
 
+.bar-graph span {
+    display: inline-block;
+    width: 34px;
+    text-align: center;
+}
 
 
 .table .actions {
@@ -236,4 +241,47 @@ h4 {
 
 .loading .head-content h2 {
     font-size: 25px;
+}
+
+.loading-bar {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 84px;
+}
+
+.loading-bar div {
+    display: inline-block;
+    position: absolute;
+    left: 6px;
+    width: 13px;
+    background: #193F6F;
+    animation: loading-bar 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.loading-bar div:nth-child(1) {
+    left: 6px;
+    animation-delay: -0.24s;
+}
+
+.loading-bar div:nth-child(2) {
+    left: 26px;
+    animation-delay: -0.12s;
+}
+
+.loading-bar div:nth-child(3) {
+    left: 45px;
+    animation-delay: 0;
+}
+
+@keyframes loading-bar {
+    0% {
+        top: 6px;
+        height: 71px;
+    }
+
+    50%, 100% {
+        top: 19px;
+        height: 26px;
+    }
 }

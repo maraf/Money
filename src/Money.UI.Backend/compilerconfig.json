@@ -2,4 +2,9 @@
   {
     "outputFile": "wwwroot/js/site.min.js",
     "inputFile": "wwwroot/js/site.js"
-  },]
+  },
+  {
+    "outputFile": "wwwroot/css/site.min.css",
+    "inputFile": "wwwroot/css/site.scss"
+  }
+]

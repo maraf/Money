@@ -34,4 +34,5 @@
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>
 
+  <Import Project="$(SolutionDir)\build\Blazor.targets" />
 </Project>

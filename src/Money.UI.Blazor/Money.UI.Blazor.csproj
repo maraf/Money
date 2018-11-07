@@ -29,4 +29,5 @@
     </Content>
   </ItemGroup>
 
+  <Import Project="$(SolutionDir)\build\Blazor.targets" />
 </Project>

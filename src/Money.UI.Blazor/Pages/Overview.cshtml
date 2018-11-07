@@ -8,7 +8,7 @@
 <Title Icon="calendar" Main="@Title" Sub="List of each single outcome in selected month" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
 
-<OutcomeCreate bind-IsVisible="@IsCreateVisible" />
+<OutcomeCreate bind-IsVisible="@IsCreateVisible" CategoryKey="@CategoryKey" />
 <Confirm Context="@Delete" />
 
 @if (Models != null)

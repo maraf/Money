@@ -10,3 +10,4 @@ Also, we have experimental implementation using [Blazor](https://github.com/aspn
 ### Blog posts
  - [Blazor and the booting screen](https://www.neptuo.com/blog/2018/04/blazor-boot-screen/).
  - [Blazor and complex component parameters](https://www.neptuo.com/blog/2018/06/blazor-component-parameters/).
+ - [Blazor and page parameters](https://www.neptuo.com/blog/2018/11/blazor-page-parameters/).

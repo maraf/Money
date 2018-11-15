@@ -13,20 +13,29 @@ namespace Money.Services
     public class ApiClient
     {
         private readonly HttpClient http;
+        private readonly QueryMapper queryMapper;
 
-        public ApiClient(HttpClient http)
+        public ApiClient(HttpClient http, QueryMapper queryMapper)
         {
             Ensure.NotNull(http, "http");
+            Ensure.NotNull(queryMapper, "queryMapper");
             this.http = http;
+            this.queryMapper = queryMapper;
         }
 
-        public Task<string> GetUserNameAsync() 
+        public Task<string> GetUserNameAsync()
             => http.GetStringAsync("/api/username");
 
-        public Task<Response> QueryAsync(Request request) 
-            => http.PostJsonAsync<Response>("/api/query", request);
+        public Task<Response> QueryAsync(Type type, string payload)
+        {
+            string url = queryMapper.FindUrlByType(type);
+            if (url != null)
+                return http.PostJsonAsync<Response>($"/api/query/{url}", payload);
+            else
+                return http.PostJsonAsync<Response>($"/api/query", new Request() { Type = type.AssemblyQualifiedName, Payload = payload });
+        }
 
-        public Task CommandAsync(Request request) 
+        public Task CommandAsync(Request request)
             => http.PostJsonAsync("/api/command", request);
     }
 }

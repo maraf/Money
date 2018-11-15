@@ -30,15 +30,11 @@ namespace Neptuo.Queries
             public async Task<TOutput> ExecuteAsync(IQuery<TOutput> query)
             {
                 string payload = formatters.Query.Serialize(query);
-                string type = query.GetType().AssemblyQualifiedName;
-                log.Debug($"Request Type: '{type}'.");
+                Type type = query.GetType();
+                log.Debug($"Request Type: '{type.AssemblyQualifiedName}'.");
                 log.Debug($"Request Payload: '{payload}'.");
 
-                Response response = await api.QueryAsync(new Request()
-                {
-                    Payload = payload,
-                    Type = type
-                });
+                Response response = await api.QueryAsync(type, payload);
 
                 log.Debug($"Response Type: '{response.Type}'");
                 log.Debug($"Response Payload: '{response.Payload}'");

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using Money.Models;
+using Money.Models.Api;
 using Money.Services;
 using Money.UI.Blazor;
 using System;
@@ -18,6 +19,7 @@ namespace Money
         {
             services
                 .AddTransient<ApiClient>()
+                .AddSingleton<QueryMapper>()
                 .AddSingleton<ColorCollection>()
                 .AddSingleton<IconCollection>();
 

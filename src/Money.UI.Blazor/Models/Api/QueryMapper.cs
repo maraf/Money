@@ -21,7 +21,6 @@ namespace Money.Models.Api
             Add<GetCurrencyDefault>("currency-default");
             Add<GetCurrencySymbol>("currency-symbol");
             Add<ListTargetCurrencyExchangeRates>("currency-exchangerates");
-            Add<ListTargetCurrencyExchangeRates>("currency-exchangerates");
 
             Add<GetTotalMonthOutcome>("month-outcome-total");
             Add<ListMonthCategoryWithOutcome>("months-with-outcome");

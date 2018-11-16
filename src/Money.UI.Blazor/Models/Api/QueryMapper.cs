@@ -23,7 +23,7 @@ namespace Money.Models.Api
             Add<ListTargetCurrencyExchangeRates>("currency-exchangerates");
 
             Add<GetTotalMonthOutcome>("month-outcome-total");
-            Add<ListMonthCategoryWithOutcome>("months-with-outcome");
+            Add<ListMonthCategoryWithOutcome>("month-categories-with-outcome");
             Add<ListMonthOutcomeFromCategory>("month-outcome-from-category");
             Add<ListMonthWithOutcome>("months-with-outcome");
 

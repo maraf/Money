@@ -148,6 +148,7 @@ h4 {
     margin: 0;
     border-width: 1px 0 0 0;
     box-shadow: none;
+    cursor: pointer;
 
     .panel-body {
         position: relative;
@@ -160,10 +161,17 @@ h4 {
         font-weight: normal;
         display: inline;
         z-index: 1;
-    }
 
-    .description .name {
-        font-size: 16px;
+        .name {
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 34px;
+            text-align: center;
+        }
     }
 
     .value {
@@ -179,14 +187,7 @@ h4 {
         height: 10px;
         float: right;
         clear: both;
-
         transition: width 1s;
-    }
-
-    span {
-        display: inline-block;
-        width: 34px;
-        text-align: center;
     }
 }
 

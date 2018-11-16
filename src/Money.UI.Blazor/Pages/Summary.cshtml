@@ -35,7 +35,7 @@
                 <div class="panel panel-default bar-graph bar-graph-summary" onclick="@(() => Navigator.OpenOverview(SelectedMonth))">
                     <div class="panel-body">
                         <h3 class="description">
-                            <span>📈</span>
+                            <span class="icon">📈</span>
                             <span class="name">Summary</span>
                         </h3>
 
@@ -51,7 +51,7 @@
                 <div class="panel panel-default bar-graph" onclick="@(() => Navigator.OpenOverview(SelectedMonth, category.Key))">
                     <div class="panel-body">
                         <h3 class="description" title="@category.Description">
-                            <span>@category.Icon</span>
+                            <span class="icon">@category.Icon</span>
                             <span class="name">@category.Name</span>
                         </h3>
 

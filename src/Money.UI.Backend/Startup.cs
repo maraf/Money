@@ -15,6 +15,7 @@ using Money.Data;
 using Money.Hubs;
 using Money.Models;
 using Money.Models.Api;
+using Money.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +72,7 @@ namespace Money
 
             services
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .AddSingleton<NavigatorUrl>()
                 .AddSingleton<ApiHub>()
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>();

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject NavigatorUrl Navigator
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,16 +26,16 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="/">Summary</a>
+                        <a href="@Navigator.UrlSummary()">Summary</a>
                     </li>
                     <li>
-                        <a href="/categories">Categories</a>
+                        <a href="@Navigator.UrlCategories()">Categories</a>
                     </li>
                     <li>
-                        <a href="/currencies">Currencies</a>
+                        <a href="@Navigator.UrlCurrencies()">Currencies</a>
                     </li>
                     <li>
-                        <a href="/about">About</a>
+                        <a href="@Navigator.UrlAbout()">About</a>
                     </li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")

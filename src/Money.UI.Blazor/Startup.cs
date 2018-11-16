@@ -19,6 +19,7 @@ namespace Money
         {
             services
                 .AddTransient<ApiClient>()
+                .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>()
                 .AddSingleton<ColorCollection>()
                 .AddSingleton<IconCollection>();

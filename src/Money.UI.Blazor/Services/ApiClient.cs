@@ -13,18 +13,24 @@ namespace Money.Services
     public class ApiClient
     {
         private readonly HttpClient http;
+        private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
 
-        public ApiClient(HttpClient http, QueryMapper queryMapper)
+        public ApiClient(HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper)
         {
             Ensure.NotNull(http, "http");
+            Ensure.NotNull(commandMapper, "commandMapper");
             Ensure.NotNull(queryMapper, "queryMapper");
             this.http = http;
+            this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
         }
 
         public Task<string> GetUserNameAsync()
             => http.GetStringAsync("/api/username");
+
+        private Request CreateRequest(Type type, string payload)
+            => new Request() { Type = type.AssemblyQualifiedName, Payload = payload };
 
         public Task<Response> QueryAsync(Type type, string payload)
         {
@@ -32,10 +38,16 @@ namespace Money.Services
             if (url != null)
                 return http.PostJsonAsync<Response>($"/api/query/{url}", payload);
             else
-                return http.PostJsonAsync<Response>($"/api/query", new Request() { Type = type.AssemblyQualifiedName, Payload = payload });
+                return http.PostJsonAsync<Response>($"/api/query", CreateRequest(type, payload));
         }
 
-        public Task CommandAsync(Request request)
-            => http.PostJsonAsync("/api/command", request);
+        public Task CommandAsync(Type type, string payload)
+        {
+            string url = commandMapper.FindUrlByType(type);
+            if (url != null)
+                return http.PostJsonAsync($"/api/command/{url}", payload);
+            else
+                return http.PostJsonAsync($"/api/command", CreateRequest(type, payload));
+        }
     }
 }

@@ -69,9 +69,11 @@ namespace Money
             services.AddMvc();
             services.AddSignalR();
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<ApiHub>();
-            services.AddSingleton<QueryMapper>();
+            services
+                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .AddSingleton<ApiHub>()
+                .AddSingleton<CommandMapper>()
+                .AddSingleton<QueryMapper>();
 
             Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings);
             bootstrapTask.Initialize();

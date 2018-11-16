@@ -11,9 +11,9 @@ namespace Money.Models.Api
     {
         public QueryMapper()
         {
-            Add("currency-list", typeof(ListAllCurrency));
-            Add("category-list", typeof(ListAllCategory));
-            Add("outcome-month-total", typeof(GetTotalMonthOutcome));
+            Add<ListAllCurrency>("currency-list");
+            Add<ListAllCategory>("category-list");
+            Add<GetTotalMonthOutcome>("outcome-month-total");
         }
     }
 }

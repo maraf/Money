@@ -9,19 +9,22 @@ namespace Money.Models.Api
 {
     public abstract class TypeMapper
     {
-        private readonly List<(string Url, Type Type)> urlToType = new List<(string, Type)>();
+        private readonly List<(string Url, Type Type)> storage = new List<(string, Type)>();
 
-        protected void Add(string url, Type type)
+        protected void Add<T>(string url)
+            => Add(typeof(T), url);
+
+        protected void Add(Type type, string url)
         {
-            if (urlToType.Any(m => m.Url == url))
+            if (storage.Any(m => m.Url == url))
                 throw Ensure.Exception.Argument("url", $"URL '{url}' is already taken.");
 
-            urlToType.Add((url, type));
+            storage.Add((url, type));
         }
 
         public string FindUrlByType(Type type)
         {
-            foreach (var mapping in urlToType)
+            foreach (var mapping in storage)
             {
                 if (mapping.Type == type)
                     return mapping.Url;
@@ -32,7 +35,7 @@ namespace Money.Models.Api
 
         public Type FindTypeByUrl(string url)
         {
-            foreach (var mapping in urlToType)
+            foreach (var mapping in storage)
             {
                 if (mapping.Url == url)
                     return mapping.Type;

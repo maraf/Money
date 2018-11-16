@@ -25,13 +25,7 @@ namespace Neptuo.Commands
         public Task HandleAsync<TCommand>(TCommand command)
         {
             string payload = formatters.Command.Serialize(command);
-            string type = command.GetType().AssemblyQualifiedName;
-
-            return api.CommandAsync(new Request()
-            {
-                Payload = payload,
-                Type = type
-            });
+            return api.CommandAsync(command.GetType(), payload);
         }
     }
 }

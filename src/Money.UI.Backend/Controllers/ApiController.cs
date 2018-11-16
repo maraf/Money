@@ -24,17 +24,20 @@ namespace Money.Controllers
         private readonly FormatterContainer formatters;
         private readonly ICommandDispatcher commandDispatcher;
         private readonly IQueryDispatcher queryDispatcher;
+        private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
 
-        public ApiController(FormatterContainer formatters, ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, QueryMapper queryMapper)
+        public ApiController(FormatterContainer formatters, ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, CommandMapper commandMapper, QueryMapper queryMapper)
         {
             Ensure.NotNull(formatters, "formatters");
             Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
+            Ensure.NotNull(commandMapper, "commandMapper");
             Ensure.NotNull(queryMapper, "queryMapper");
             this.formatters = formatters;
             this.commandDispatcher = commandDispatcher;
             this.queryDispatcher = queryDispatcher;
+            this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
         }
 
@@ -55,7 +58,7 @@ namespace Money.Controllers
         [Route("{*url}")]
         public ActionResult Query(string url, [FromBody] string payload)
         {
-            Ensure.NotNullOrEmpty(url, "typeFullName");
+            Ensure.NotNullOrEmpty(url, "url");
             Ensure.NotNullOrEmpty(payload, "payload");
 
             Type type = queryMapper.FindTypeByUrl(url);
@@ -104,10 +107,28 @@ namespace Money.Controllers
             return NotFound();
         }
 
+        [HttpPost]
         public ActionResult Command([FromBody] Request request)
         {
             string payload = request.Payload;
             Type type = Type.GetType(request.Type);
+
+            return Command(payload, type);
+        }
+
+        [HttpPost]
+        [Route("{*url}")]
+        public ActionResult Command(string url, [FromBody] string payload)
+        {
+            Ensure.NotNullOrEmpty(url, "url");
+            Ensure.NotNullOrEmpty(payload, "payload");
+
+            Type type = commandMapper.FindTypeByUrl(url);
+            return Command(payload, type);
+        }
+
+        private ActionResult Command(string payload, Type type)
+        {
             object command = formatters.Command.Deserialize(type, payload);
 
             MethodInfo methodInfo = commandDispatcher.GetType().GetMethod(nameof(commandDispatcher.HandleAsync));

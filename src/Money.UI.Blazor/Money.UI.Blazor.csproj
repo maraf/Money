@@ -27,6 +27,7 @@
     <Content Update="wwwroot\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Update="**\*.cshtml.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
 
   <Import Project="$(SolutionDir)\build\Blazor.targets" />

@@ -1,5 +1,5 @@
-﻿@using Microsoft.JSInterop;
-@inject ApiClient Api
+﻿@inject ApiClient Api
+@inject Navigator Navigator
 
 <form action="/account/logout" method="post" id="logoutForm" class="navbar-right">
     <ul class="nav navbar-nav navbar-right">
@@ -11,15 +11,24 @@
 <ul class="nav navbar-nav navbar-right">
     <li>
         <button type="submit" class="btn btn-link navbar-btn navbar-link" onclick="@(() => Navigator.OpenUserManage())">
+            <Loading Context="@Loading">
+                User: @UserName
+            </Loading>
+        </button>
     </li>
 </ul>
 
-@functions {
+@functions 
+{
+    public string UserName { get; private set; }
 
-    public string UserName { get; private set; } = "---";
+    protected LoadingContext Loading { get; } = new LoadingContext();
 
     protected override async Task OnInitAsync()
     {
-        UserName = await Api.GetUserNameAsync();
+        using (Loading.Start())
+        {
+            UserName = await Api.GetUserNameAsync();
+        }
     }
 }

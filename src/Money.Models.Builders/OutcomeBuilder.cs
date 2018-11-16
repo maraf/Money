@@ -165,18 +165,23 @@ namespace Money.Models.Builders
 
         public async Task<List<OutcomeOverviewModel>> HandleAsync(ListMonthOutcomeFromCategory query)
         {
+            const int pageSize = 10;
+
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 IQueryable<OutcomeEntity> entities = db.Outcomes.WhereUserKey(query.UserKey);
                 if (!query.CategoryKey.IsEmpty)
                     entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
 
-                List<OutcomeOverviewModel> outcomes = await entities
+                var sql = entities
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
                     .OrderBy(o => o.When)
-                    .Select(o => o.ToOverviewModel())
-                    .ToListAsync();
+                    .Select(o => o.ToOverviewModel());
 
+                if (query.PageIndex != null)
+                    sql = sql.Skip(query.PageIndex.Value * pageSize).Take(pageSize);
+
+                List<OutcomeOverviewModel> outcomes = await sql.ToListAsync();
                 return outcomes;
             }
         }

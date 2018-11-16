@@ -25,16 +25,24 @@ namespace Money.Models.Queries
         public MonthModel Month { get; private set; }
 
         /// <summary>
+        /// Gets a page index to load.
+        /// If <c>null</c>, load all results.
+        /// </summary>
+        public int? PageIndex { get; private set; }
+
+        /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="categoryKey">A key of the category.</param>
         /// <param name="month">A month to find outcomes from.</param>
-        public ListMonthOutcomeFromCategory(IKey categoryKey, MonthModel month)
+        /// <param name="pageIndex">A page index to load. If <c>null</c>, load all results.</param>
+        public ListMonthOutcomeFromCategory(IKey categoryKey, MonthModel month, int? pageIndex = null)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
             Ensure.NotNull(month, "month");
             CategoryKey = categoryKey;
             Month = month;
+            PageIndex = pageIndex;
         }
     }
 }

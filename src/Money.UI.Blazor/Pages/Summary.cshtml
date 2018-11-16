@@ -1,6 +1,5 @@
 ﻿@page "/"
 @page "/{Year}/{Month}"
-@using Neptuo.Models.Keys
 @inherits SummaryBase
 
 <Title Icon="signal" Main="Summary" Sub="Per-month summary of outcomes in categories" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
@@ -8,59 +7,61 @@
 
 <OutcomeCreate bind-IsVisible="@IsCreateVisible" />
 
-@if (Months != null)
-{
-    if (Months.Count > 0)
+<Loading Context="@Loading">
+    @if (Months != null)
     {
-        <TabSet>
-            @foreach (var month in Months)
+        if (Months.Count > 0)
+        {
+            <TabSet>
+                @foreach (var month in Months)
+                {
+                    <Tab Url="@("/" + month.Year + "/" + month.Month)" CssClass="@(month == SelectedMonth ? "active" : null)">
+                        @month.ToString()
+                    </Tab>
+                }
+            </TabSet>
+        }
+        else
+        {
+            <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
+        }
+    }
+
+    @if (Categories != null)
+    {
+        <div class="outcomes">
+            @if (TotalAmout != null)
             {
-                <Tab Url="@("/" + month.Year + "/" + month.Month)" CssClass="@(month == SelectedMonth ? "active" : null)">
-                    @month.ToString()
-                </Tab>
+                <div class="panel panel-default bar-graph bar-graph-summary">
+                    <div class="panel-body">
+                        <h3 class="description">
+                            <span>📈</span>
+                            <a href="/@SelectedMonth.Year/@SelectedMonth.Month/overview" class="name">Summary</a>
+                        </h3>
+
+                        <div class="value">
+                            <div class="amount">@FormatPrice(TotalAmout)</div>
+                        </div>
+                    </div>
+                </div>
             }
-        </TabSet>
-    }
-    else
-    {
-        <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
-    }
-}
 
-@if (Categories != null)
-{
-    <div class="outcomes">
-        @if (TotalAmout != null)
-        {
-            <div class="panel panel-default bar-graph bar-graph-summary">
-                <div class="panel-body">
-                    <h3 class="description">
-                        <span>📈</span>
-                        <a href="/@SelectedMonth.Year/@SelectedMonth.Month/overview" class="name">Summary</a>
-                    </h3>
+            @foreach (var category in Categories)
+            {
+                <div class="panel panel-default bar-graph">
+                    <div class="panel-body">
+                        <h3 class="description">
+                            <span>@category.Icon</span>
+                            <a href="/@SelectedMonth.Year/@SelectedMonth.Month/overview/@category.Key.AsGuidKey().Guid" class="name">@category.Name</a>
+                        </h3>
 
-                    <div class="value">
-                        <div class="amount">@FormatPrice(TotalAmout)</div>
+                        <div class="value">
+                            <div class="amount">@FormatPrice(category.TotalAmount)</div>
+                            <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-
-        @foreach (var category in Categories)
-        {
-            <div class="panel panel-default bar-graph">
-                <div class="panel-body">
-                    <h3 class="description">
-                        <span>@category.Icon</span>
-                        <a href="/@SelectedMonth.Year/@SelectedMonth.Month/overview/@category.Key.AsGuidKey().Guid" class="name">@category.Name</a>
-                    </h3>
-
-                    <div class="value">
-                        <div class="amount">@FormatPrice(category.TotalAmount)</div>
-                        <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+</Loading>

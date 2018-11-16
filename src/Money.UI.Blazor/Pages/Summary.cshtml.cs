@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Blazor.Services;
 using Money.Events;
 using Money.Models;
+using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Services;
 using Neptuo.Commands;
@@ -53,6 +54,8 @@ namespace Money.Pages
         protected Price TotalAmout { get; private set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
 
+        protected LoadingContext Loading { get; } = new LoadingContext();
+
         protected bool IsCreateVisible { get; set; }
 
         protected override Task OnInitAsync()
@@ -87,7 +90,10 @@ namespace Money.Pages
         protected async Task LoadMonthsAsync(bool isReload = true)
         {
             if (isReload || Months == null)
-                Months = await Queries.QueryAsync(new ListMonthWithOutcome());
+            {
+                using (Loading.Start())
+                    Months = await Queries.QueryAsync(new ListMonthWithOutcome());
+            }
 
             if (SelectedMonth != null && !Months.Contains(SelectedMonth))
             {

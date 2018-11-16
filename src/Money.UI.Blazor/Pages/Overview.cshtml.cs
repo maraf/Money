@@ -89,7 +89,6 @@ namespace Money.Pages
 
         protected async void Reload()
         {
-            Models = null;
             await LoadDataAsync();
             StateHasChanged();
         }
@@ -97,9 +96,7 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
         {
             using (Loading.Start())
-            {
                 Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel));
-            }
         }
 
         protected void OnDeleteClick(OutcomeOverviewModel model)

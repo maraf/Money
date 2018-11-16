@@ -11,9 +11,24 @@ namespace Money.Models.Api
     {
         public QueryMapper()
         {
-            Add<ListAllCurrency>("currency-list");
             Add<ListAllCategory>("category-list");
-            Add<GetTotalMonthOutcome>("outcome-month-total");
+            Add<GetCategoryName>("category-name");
+            Add<GetCategoryNameDescription>("category-name-description");
+            Add<GetCategoryColor>("category-color");
+            Add<GetCategoryIcon>("category-icon");
+
+            Add<ListAllCurrency>("currency-list");
+            Add<GetCurrencyDefault>("currency-default");
+            Add<GetCurrencySymbol>("currency-symbol");
+            Add<ListTargetCurrencyExchangeRates>("currency-exchangerates");
+            Add<ListTargetCurrencyExchangeRates>("currency-exchangerates");
+
+            Add<GetTotalMonthOutcome>("month-outcome-total");
+            Add<ListMonthCategoryWithOutcome>("months-with-outcome");
+            Add<ListMonthOutcomeFromCategory>("month-outcome-from-category");
+            Add<ListMonthWithOutcome>("months-with-outcome");
+
+            Add<ListYearOutcomeFromCategory>("year-outcome-from-category");
         }
     }
 }

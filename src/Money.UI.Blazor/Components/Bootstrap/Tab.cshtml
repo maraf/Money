@@ -1,0 +1,16 @@
+﻿
+<li role="presentation" class="@CssClass">
+    <a href="@Url">@ChildContent</a>
+</li>
+
+@functions
+{
+    [Parameter]
+    protected string CssClass { get; set; }
+
+    [Parameter]
+    protected string Url { get; set; }
+
+    [Parameter]
+    protected RenderFragment ChildContent { get; set; }
+}

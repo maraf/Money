@@ -12,14 +12,14 @@
 {
     if (Months.Count > 0)
     {
-        <ul class="nav nav-tabs">
+        <TabSet>
             @foreach (var month in Months)
             {
-                <li role="presentation" class="@(month == SelectedMonth ? "active" : null)">
-                    <a href="/@month.Year/@month.Month">@month.ToString()</a>
-                </li>
+                <Tab Url="@("/" + month.Year + "/" + month.Month)" CssClass="@(month == SelectedMonth ? "active" : null)">
+                    @month.ToString()
+                </Tab>
             }
-        </ul>
+        </TabSet>
     }
     else
     {

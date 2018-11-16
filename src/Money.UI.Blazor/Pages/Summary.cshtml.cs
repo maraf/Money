@@ -40,7 +40,7 @@ namespace Money.Pages
         internal ILog<SummaryBase> Log { get; set; }
 
         [Inject]
-        public IUriHelper Navigator { get; set; }
+        internal Navigator Navigator { get; set; }
 
         [Parameter]
         protected string Year { get; set; }
@@ -97,7 +97,7 @@ namespace Money.Pages
 
             if (SelectedMonth != null && !Months.Contains(SelectedMonth))
             {
-                Navigator.NavigateTo("/");
+                Navigator.OpenSummary();
                 return;
             }
 

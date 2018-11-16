@@ -1,4 +1,5 @@
 ﻿@page "/about"
+@inject Navigator Navigator
 
 <h1>Money</h1>
 <h4>Neptuo</h4>
@@ -6,8 +7,8 @@
     v@(typeof(About).Assembly.GetName().Version.ToString(3))
 </p>
 <p>
-    <a target="_blank" href="http://github.com/maraf/Money">Documentation</a>
+    <a target="_blank" href="@Navigator.UrlMoneyProject()">Documentation</a>
 </p>
 <p>
-    <a target="_blank" href="https://github.com/maraf/Money/issues/new">Report an issue</a>
+    <a target="_blank" href="@Navigator.UrlMoneyProjectIssueNew()">Report an issue</a>
 </p>

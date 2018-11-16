@@ -18,6 +18,7 @@ namespace Money
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddTransient<Navigator>()
                 .AddTransient<ApiClient>()
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>()

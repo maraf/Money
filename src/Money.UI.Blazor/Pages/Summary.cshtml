@@ -15,7 +15,7 @@
             <TabSet>
                 @foreach (var month in Months)
                 {
-                    <Tab Url="@("/" + month.Year + "/" + month.Month)" CssClass="@(month == SelectedMonth ? "active" : null)">
+                    <Tab Url="@Navigator.UrlSummary(month)" CssClass="@(month == SelectedMonth ? "active" : null)">
                         @month.ToString()
                     </Tab>
                 }
@@ -32,11 +32,11 @@
         <div class="outcomes">
             @if (TotalAmout != null)
             {
-                <div class="panel panel-default bar-graph bar-graph-summary">
+                <div class="panel panel-default bar-graph bar-graph-summary" onclick="@(() => Navigator.OpenOverview(SelectedMonth))">
                     <div class="panel-body">
                         <h3 class="description">
                             <span>📈</span>
-                            <a href="/@SelectedMonth.Year/@SelectedMonth.Month/overview" class="name">Summary</a>
+                            <span class="name">Summary</span>
                         </h3>
 
                         <div class="value">
@@ -48,11 +48,11 @@
 
             @foreach (var category in Categories)
             {
-                <div class="panel panel-default bar-graph">
+                <div class="panel panel-default bar-graph" onclick="@(() => Navigator.OpenOverview(SelectedMonth, category.Key))">
                     <div class="panel-body">
                         <h3 class="description" title="@category.Description">
                             <span>@category.Icon</span>
-                            <a href="/@SelectedMonth.Year/@SelectedMonth.Month/overview/@category.Key.AsGuidKey().Guid" class="name">@category.Name</a>
+                            <span class="name">@category.Name</span>
                         </h3>
 
                         <div class="value">

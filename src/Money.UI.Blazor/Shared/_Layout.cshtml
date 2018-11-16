@@ -1,23 +1,24 @@
 ﻿@inherits BlazorLayoutComponent
+@inject Navigator Navigator
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand">Money</a>
+            <a class="navbar-brand" href="@Navigator.UrlSummary()">Money</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="/">Summary</a>
+                    <a href="@Navigator.UrlSummary()">Summary</a>
                 </li>
                 <li>
-                    <a href="/categories">Categories</a>
+                    <a href="@Navigator.UrlCategories()">Categories</a>
                 </li>
                 <li>
-                    <a href="/currencies">Currencies</a>
+                    <a href="@Navigator.UrlCurrencies()">Currencies</a>
                 </li>
                 <li>
-                    <a href="/about">About</a>
+                    <a href="@Navigator.UrlAbout()">About</a>
                 </li>
             </ul>
             <LoginInfo />

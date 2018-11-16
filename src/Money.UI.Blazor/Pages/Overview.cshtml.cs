@@ -3,6 +3,7 @@ using Money.Commands;
 using Money.Events;
 using Money.Models;
 using Money.Models.Confirmation;
+using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Services;
 using Neptuo;
@@ -52,6 +53,7 @@ namespace Money.Pages
         protected bool IsWhenEditVisible { get; set; }
 
         protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
+        protected LoadingContext Loading { get; } = new LoadingContext();
 
         [Parameter]
         protected string Year { get; set; }
@@ -82,18 +84,22 @@ namespace Money.Pages
             }
 
             formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
-            await LoadDataAsync();
+            Reload();
         }
 
         protected async void Reload()
         {
+            Models = null;
             await LoadDataAsync();
             StateHasChanged();
         }
 
         protected async Task LoadDataAsync()
         {
-            Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel));
+            using (Loading.Start())
+            {
+                Models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel));
+            }
         }
 
         protected void OnDeleteClick(OutcomeOverviewModel model)

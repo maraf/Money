@@ -1,6 +1,7 @@
-﻿@page "/outcomes/{Year}/{Month}" @* //Obsolete *@
-@page "/overview/{Year}/{Month}" @* //Obsolete *@
-@page "/overview/{Year}/{Month}/{CategoryGuid}" @* //Obsolete *@
+﻿@page "/outcomes/{Year}/{Month}"
+@page "/overview/{Year}/{Month}"
+@page "/overview/{Year}/{Month}/{CategoryGuid}"
+
 @page "/{Year}/{Month}/overview"
 @page "/{Year}/{Month}/overview/{CategoryGuid}"
 @inherits OverviewBase
@@ -11,44 +12,46 @@
 <OutcomeCreate bind-IsVisible="@IsCreateVisible" CategoryKey="@CategoryKey" />
 <Confirm Context="@Delete" />
 
-@if (Models != null)
-{
-    if (Models.Count > 0)
+<Loading Context="@Loading">
+    @if (Models != null)
     {
-        <table class="outcomes table table-hover">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>When</th>
-                    <th>Amount</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Models)
-                {
+        if (Models.Count > 0)
+        {
+            <table class="outcomes table table-hover">
+                <thead>
                     <tr>
-                        <td>@item.Description</td>
-                        <td>@item.When.ToShortDateString()</td>
-                        <td>@FormatPrice(item.Amount)</td>
-                        <td>
-                            <div class="actions">
-                                <IconButton Icon="usd" ToolTip="Change Amount" Click="@(() => { Selected = item; IsAmountEditVisible = true; StateHasChanged(); })" />
-                                <IconButton Icon="comment" ToolTip="Change Description" Click="@(() => { Selected = item; IsDescriptionEditVisible = true; StateHasChanged(); })" />
-                                <IconButton Icon="calendar" ToolTip="Change When" Click="@(() => { Selected = item; IsWhenEditVisible = true; StateHasChanged(); })" />
-                                <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
-                            </div>
-                        </td>
+                        <th>Description</th>
+                        <th>When</th>
+                        <th>Amount</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Models)
+                    {
+                        <tr>
+                            <td>@item.Description</td>
+                            <td>@item.When.ToShortDateString()</td>
+                            <td>@FormatPrice(item.Amount)</td>
+                            <td>
+                                <div class="actions">
+                                    <IconButton Icon="usd" ToolTip="Change Amount" Click="@(() => { Selected = item; IsAmountEditVisible = true; StateHasChanged(); })" />
+                                    <IconButton Icon="comment" ToolTip="Change Description" Click="@(() => { Selected = item; IsDescriptionEditVisible = true; StateHasChanged(); })" />
+                                    <IconButton Icon="calendar" ToolTip="Change When" Click="@(() => { Selected = item; IsWhenEditVisible = true; StateHasChanged(); })" />
+                                    <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
+        }
     }
-    else
-    {
-        <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
-    }
-}
+</Loading>
 
 @if (Selected != null)
 {

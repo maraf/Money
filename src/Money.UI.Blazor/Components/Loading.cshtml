@@ -1,0 +1,44 @@
+﻿@using Money.Models.Loading
+@inject ILog<Loading> Log
+
+@if (IsLoading)
+{
+    <i>Loading...</i>
+}
+else
+{
+    @ChildContent
+}
+
+
+@functions
+{
+    [Parameter]
+    protected LoadingContext Context { get; set; }
+
+    protected bool IsLoading { get; set; }
+
+    [Parameter]
+    protected RenderFragment ChildContent { get; set; }
+
+    public override void SetParameters(ParameterCollection parameters)
+    {
+        if (Context != null)
+            Context.LoadingChanged -= OnLoadingChanged;
+
+        base.SetParameters(parameters);
+
+        if (Context != null)
+        {
+            Context.LoadingChanged += OnLoadingChanged;
+            OnLoadingChanged(Context);
+        }
+    }
+
+    protected void OnLoadingChanged(LoadingContext context)
+    {
+        Log.Debug($"Loading changed to '{context.IsLoading}'.");
+        IsLoading = Context.IsLoading;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,23 @@
+﻿@inherits MainMenuBase
+
+<div class="navbar-header">
+    <HamburgerButton CssClass="navbar-toggle" Click="@OnMainMenuToggleClick" />
+    <a class="navbar-brand" href="@Navigator.UrlSummary()">Money</a>
+</div>
+<div id="#navbar-main" class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
+    <ul class="nav navbar-nav">
+        <li>
+            <a href="@Navigator.UrlSummary()">Summary</a>
+        </li>
+        <li>
+            <a href="@Navigator.UrlCategories()">Categories</a>
+        </li>
+        <li>
+            <a href="@Navigator.UrlCurrencies()">Currencies</a>
+        </li>
+        <li>
+            <a href="@Navigator.UrlAbout()">About</a>
+        </li>
+    </ul>
+    <LoginInfo />
+</div>

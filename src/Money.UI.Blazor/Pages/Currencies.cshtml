@@ -30,14 +30,14 @@ else
 
                     @if (Models.Count > 1)
                     {
-                        <IconButton Icon="transfer" ToolTip="Add exchange rate" Click="@(() => { Selected = item; IsListExchangeRateVisible = true; StateHasChanged(); })" />
+                        <IconButton Icon="transfer" ToolTip="Add exchange rate" Click="@(() => OnActionClick(item, ref IsListExchangeRateVisible))" />
                     }
 
-                    <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => { Selected = item; IsEditVisible = true; StateHasChanged(); })" />
+                    <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => OnActionClick(item, ref IsEditVisible))" />
 
                     @if (Models.Count > 1 && !item.IsDefault)
                     {
-                        <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
+                        <IconButton Icon="remove" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
                     }
                 </div>
 

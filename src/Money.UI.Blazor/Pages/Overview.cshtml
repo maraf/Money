@@ -35,9 +35,10 @@
                                 <td class="date">@item.When.ToShortDateString()</td>
                                 <td class="amount">@FormatPrice(item.Amount)</td>
                                 <td class="actions">
-                                    <IconButton Icon="comment" ToolTip="Change Description" Click="@(() => { Selected = item; IsDescriptionEditVisible = true; StateHasChanged(); })" />
-                                    <IconButton Icon="calendar" ToolTip="Change When" Click="@(() => { Selected = item; IsWhenEditVisible = true; StateHasChanged(); })" />
-                                    <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
+                                    <IconButton Icon="usd" ToolTip="Change Amount" Click="@(() => OnActionClick(item, ref IsAmountEditVisible))" />
+                                    <IconButton Icon="comment" ToolTip="Change Description" Click="@(() => OnActionClick(item, ref IsDescriptionEditVisible))" />
+                                    <IconButton Icon="calendar" ToolTip="Change When" Click="@(() => OnActionClick(item, ref IsWhenEditVisible))" />
+                                    <IconButton Icon="remove" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
                                 </td>
                             </tr>
                         }

@@ -36,8 +36,8 @@ namespace Money.Pages
         public IQueryDispatcher Queries { get; set; }
 
         protected bool IsCreateVisible { get; set; }
-        protected bool IsEditVisible { get; set; }
-        protected bool IsListExchangeRateVisible { get; set; }
+        protected bool IsEditVisible;
+        protected bool IsListExchangeRateVisible;
         protected bool IsCreateExchangeRateVisible
         {
             get => isCreateExchangeRateVisible;
@@ -77,8 +77,18 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
             => Models = await Queries.QueryAsync(new ListAllCurrency());
 
+        protected void OnActionClick(CurrencyModel model, ref bool isVisible)
+        {
+            Selected = model;
+            isVisible = true;
+            StateHasChanged();
+        }
+
         protected void OnDeleteClick(CurrencyModel model)
-            => Delete.Model = model;
+        {
+            Delete.Model = model;
+            StateHasChanged();
+        }
 
         protected async Task OnChangeDefaultClickAsync(CurrencyModel model)
            => await Commands.HandleAsync(new SetCurrencyAsDefault(model.UniqueCode));

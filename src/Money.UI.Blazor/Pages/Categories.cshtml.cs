@@ -35,9 +35,9 @@ namespace Money.Pages
         public IQueryDispatcher Queries { get; set; }
 
         protected bool IsCreateVisible { get; set; }
-        protected bool IsNameEditVisible { get; set; }
-        protected bool IsIconEditVisible { get; set; }
-        protected bool IsColorEditVisible { get; set; }
+        protected bool IsNameEditVisible;
+        protected bool IsIconEditVisible;
+        protected bool IsColorEditVisible;
 
         protected List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
         protected CategoryModel Selected { get; set; }
@@ -60,8 +60,18 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
             => Models = await Queries.QueryAsync(new ListAllCategory());
 
+        protected void OnActionClick(CategoryModel model, ref bool isVisible)
+        {
+            Selected = model;
+            isVisible = true;
+            StateHasChanged();
+        }
+
         protected void OnDeleteClick(CategoryModel model)
-            => Delete.Model = model;
+        {
+            Delete.Model = model;
+            StateHasChanged();
+        }
 
         private CategoryModel FindModel(IEvent payload)
             => Models.FirstOrDefault(c => c.Key.Equals(payload.AggregateKey));

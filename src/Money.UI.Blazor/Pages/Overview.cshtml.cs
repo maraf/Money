@@ -48,9 +48,9 @@ namespace Money.Pages
         protected OutcomeOverviewModel Selected { get; set; }
 
         protected bool IsCreateVisible { get; set; }
-        protected bool IsAmountEditVisible { get; set; }
-        protected bool IsDescriptionEditVisible { get; set; }
-        protected bool IsWhenEditVisible { get; set; }
+        protected bool IsAmountEditVisible;
+        protected bool IsDescriptionEditVisible;
+        protected bool IsWhenEditVisible;
 
         protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
@@ -110,7 +110,11 @@ namespace Money.Pages
             }
         }
 
+        protected void OnActionClick(OutcomeOverviewModel model, ref bool isVisible)
         {
+            Selected = model;
+            isVisible = true;
+            StateHasChanged();
         }
 
         protected void OnDeleteClick(OutcomeOverviewModel model)

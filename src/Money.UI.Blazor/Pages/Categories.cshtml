@@ -28,10 +28,10 @@ else
             </span>
 
             <div class="nav navbar-nav navbar-right">
-                <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => { Selected = item; IsNameEditVisible = true; StateHasChanged(); })" />
-                <IconButton Icon="picture" ToolTip="Icon" Click="@(() => { Selected = item; IsIconEditVisible = true; StateHasChanged(); })" />
-                <IconButton Icon="tint" ToolTip="Color" Click="@(() => { Selected = item; IsColorEditVisible = true; StateHasChanged(); })" />
-                <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
+                <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => OnActionClick(item, ref IsNameEditVisible))" />
+                <IconButton Icon="picture" ToolTip="Icon" Click="@(() => OnActionClick(item, ref IsIconEditVisible))" />
+                <IconButton Icon="tint" ToolTip="Color" Click="@(() => OnActionClick(item, ref IsColorEditVisible))" />
+                <IconButton Icon="remove" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
             </div>
         </div>
     }

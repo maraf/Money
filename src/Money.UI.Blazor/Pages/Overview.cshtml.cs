@@ -54,8 +54,6 @@ namespace Money.Pages
 
         protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
-        protected int PageIndex { get; set; }
-        protected bool HasNextPage { get; set; } = true;
 
         [Parameter]
         protected string Year { get; set; }
@@ -95,34 +93,24 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        protected async Task LoadDataAsync()
+        protected async Task<bool> LoadDataAsync(int pageIndex = 0)
         {
             using (Loading.Start())
             {
-                List<OutcomeOverviewModel> models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel, PageIndex));
-                if (models.Count > 0 || PageIndex == 0)
+                List<OutcomeOverviewModel> models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel, pageIndex));
+                if (models.Count > 0 || pageIndex == 0)
                 {
                     Models = models;
+                    return true;
                 }
                 else
                 {
-                    PageIndex--;
-                    HasNextPage = false;
+                    return false;
                 }
             }
         }
 
-        protected async Task OnNextPageClickAsync()
         {
-            PageIndex++;
-            await LoadDataAsync();
-        }
-
-        protected async Task OnPrevPageClickAsync()
-        {
-            PageIndex--;
-            HasNextPage = true;
-            await LoadDataAsync();
         }
 
         protected void OnDeleteClick(OutcomeOverviewModel model)

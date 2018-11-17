@@ -1,44 +1,20 @@
-﻿@using Money.Models.Loading
-@inject ILog<Loading> Log
+﻿@inherits LoadingBase
 
-@if (IsLoading)
+@if (IsOverlay)
 {
-    <i>Loading...</i>
+<div class="loading @(IsLoading ? "loading-active" : "")">
+    @ChildContent
+    <div class="mask"></div>
+</div>
 }
 else
 {
-    @ChildContent
-}
-
-
-@functions
-{
-    [Parameter]
-    protected LoadingContext Context { get; set; }
-
-    protected bool IsLoading { get; set; }
-
-    [Parameter]
-    protected RenderFragment ChildContent { get; set; }
-
-    public override void SetParameters(ParameterCollection parameters)
+    if (IsLoading)
     {
-        if (Context != null)
-            Context.LoadingChanged -= OnLoadingChanged;
-
-        base.SetParameters(parameters);
-
-        if (Context != null)
-        {
-            Context.LoadingChanged += OnLoadingChanged;
-            OnLoadingChanged(Context);
-        }
+        <i>Loading...</i>
     }
-
-    protected void OnLoadingChanged(LoadingContext context)
+    else
     {
-        Log.Debug($"Loading changed to '{context.IsLoading}'.");
-        IsLoading = Context.IsLoading;
-        StateHasChanged();
+        @ChildContent
     }
 }

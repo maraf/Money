@@ -1,0 +1,47 @@
+﻿@inherits PagingBase
+
+<nav>
+    <ul class="pager">
+        @if (CurrentIndex == 0)
+        {
+            <li class="disabled">
+                <span>
+                    <span aria-hidden="true">&larr;</span>
+                    Previous
+                </span>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a onclick="@OnPrevPageClickAsync">
+                    <span aria-hidden="true">&larr;</span>
+                    Previous
+                </a>
+            </li>
+        }
+
+        <li class="current">
+            @(CurrentIndex + 1)
+        </li>
+
+        @if (HasNextPage)
+        {
+            <li>
+                <a onclick="@OnNextPageClickAsync">
+                    Next
+                    <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="disabled">
+                <span>
+                    Next
+                    <span aria-hidden="true">&rarr;</span>
+                </span>
+            </li>
+        }
+    </ul>
+</nav>

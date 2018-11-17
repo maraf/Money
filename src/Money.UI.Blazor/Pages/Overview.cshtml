@@ -13,7 +13,7 @@
 <Confirm Context="@Delete" />
 
 <div class="overview">
-    <Loading Context="@Loading">
+    <Loading Context="@Loading" IsOverlay="true">
         @if (Models != null)
         {
             if (Models.Count > 0)
@@ -44,51 +44,7 @@
                     </tbody>
                 </table>
 
-                <nav>
-                    <ul class="pager">
-                        @if (PageIndex == 0)
-                        {
-                            <li class="disabled">
-                                <span>
-                                    <span aria-hidden="true">&larr;</span>
-                                    Previous
-                                </span>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a onclick="@OnPrevPageClickAsync">
-                                    <span aria-hidden="true">&larr;</span>
-                                    Previous
-                                </a>
-                            </li>
-                        }
-
-                        <li class="current">
-                            @(PageIndex + 1)
-                        </li>
-
-                        @if (HasNextPage)
-                        {
-                            <li>
-                                <a onclick="@OnNextPageClickAsync">
-                                    Next
-                                    <span aria-hidden="true">&rarr;</span>
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="disabled">
-                                <span>
-                                    Next
-                                    <span aria-hidden="true">&rarr;</span>
-                                </span>
-                            </li>
-                        }
-                    </ul>
-                </nav>
+                <Paging LoadPageAsync="@LoadDataAsync" />
             }
             else
             {

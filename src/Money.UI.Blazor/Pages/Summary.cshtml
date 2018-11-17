@@ -9,11 +9,25 @@
 
 <div class="summary">
     <Loading Context="@Loading">
+
+        <div class="sort dropdown">
+            <button  class="btn btn-default" data-toggle="dropdown">
+                Sort
+                <span class="caret"></span>
+            </button>
+
+            <ul class="dropdown-menu">
+                <li><a href="#">By Amount</a></li>
+                <li><a href="#">By Category</a></li>
+            </ul>
+        </div>
+
+
         @if (Months != null)
         {
             if (Months.Count > 0)
             {
-                <TabSet>
+                <TabSet CssClass="months">
                     @foreach (var month in Months)
                     {
                         <Tab Url="@Navigator.UrlSummary(month)" CssClass="@(month == SelectedMonth ? "active" : null)">

@@ -1,5 +1,5 @@
 ﻿
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs @CssClass">
     @ChildContent
 </ul>
 
@@ -7,4 +7,7 @@
 {
     [Parameter]
     protected RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    protected string CssClass { get; set; }
 }

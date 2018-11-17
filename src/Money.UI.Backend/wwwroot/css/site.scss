@@ -140,7 +140,7 @@ h4 {
 }
 
 
-.outcomes {
+.summary {
     margin-bottom: -20px;
 }
 
@@ -212,12 +212,22 @@ h4 {
 }
 
 
-.table .actions {
-    float: right;
+.table {
+    .actions {
+        width: 130px;
 
-    .btn {
-        padding: 0;
-        margin: 0 0 0 8px;
+        .btn {
+            padding: 0;
+            margin: 0 0 0 8px;
+        }
+    }
+
+    .date {
+        width: 130px;
+    }
+
+    .amount {
+        width: 130px;
     }
 }
 
@@ -300,5 +310,23 @@ h4 {
             top: 19px;
             height: 26px;
         }
+    }
+}
+
+/* ------ PAGING ------------------------------------------------------------------------------- */
+
+.pager {
+    margin: 20px 0 40px 0;
+
+    a {
+        cursor: pointer;
+    }
+
+    li {
+        display: inline-block;
+    }
+
+    .current {
+        margin: 0 16px;
     }
 }

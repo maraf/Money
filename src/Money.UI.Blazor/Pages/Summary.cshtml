@@ -7,29 +7,29 @@
 
 <OutcomeCreate bind-IsVisible="@IsCreateVisible" />
 
-<Loading Context="@Loading">
-    @if (Months != null)
-    {
-        if (Months.Count > 0)
+<div class="summary">
+    <Loading Context="@Loading">
+        @if (Months != null)
         {
-            <TabSet>
-                @foreach (var month in Months)
-                {
-                    <Tab Url="@Navigator.UrlSummary(month)" CssClass="@(month == SelectedMonth ? "active" : null)">
-                        @month.ToString()
-                    </Tab>
-                }
-            </TabSet>
+            if (Months.Count > 0)
+            {
+                <TabSet>
+                    @foreach (var month in Months)
+                    {
+                        <Tab Url="@Navigator.UrlSummary(month)" CssClass="@(month == SelectedMonth ? "active" : null)">
+                            @month.ToString()
+                        </Tab>
+                    }
+                </TabSet>
+            }
+            else
+            {
+                <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
+            }
         }
-        else
-        {
-            <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
-        }
-    }
 
-    @if (Categories != null)
-    {
-        <div class="outcomes">
+        @if (Categories != null)
+        {
             @if (TotalAmout != null)
             {
                 <div class="panel panel-default bar-graph bar-graph-summary" onclick="@(() => Navigator.OpenOverview(SelectedMonth))">
@@ -62,6 +62,6 @@
                     </div>
                 </div>
             }
-        </div>
-    }
-</Loading>
+        }
+    </Loading>
+</div>

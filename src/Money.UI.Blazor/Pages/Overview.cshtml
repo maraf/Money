@@ -12,46 +12,91 @@
 <OutcomeCreate bind-IsVisible="@IsCreateVisible" CategoryKey="@CategoryKey" />
 <Confirm Context="@Delete" />
 
-<Loading Context="@Loading">
-    @if (Models != null)
-    {
-        if (Models.Count > 0)
+<div class="overview">
+    <Loading Context="@Loading">
+        @if (Models != null)
         {
-            <table class="outcomes table table-hover">
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>When</th>
-                        <th>Amount</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Models)
-                    {
+            if (Models.Count > 0)
+            {
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td>@item.Description</td>
-                            <td>@item.When.ToShortDateString()</td>
-                            <td>@FormatPrice(item.Amount)</td>
-                            <td>
-                                <div class="actions">
-                                    <IconButton Icon="usd" ToolTip="Change Amount" Click="@(() => { Selected = item; IsAmountEditVisible = true; StateHasChanged(); })" />
+                            <th>Description</th>
+                            <th>When</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Models)
+                        {
+                            <tr>
+                                <td>@item.Description</td>
+                                <td class="date">@item.When.ToShortDateString()</td>
+                                <td class="amount">@FormatPrice(item.Amount)</td>
+                                <td class="actions">
                                     <IconButton Icon="comment" ToolTip="Change Description" Click="@(() => { Selected = item; IsDescriptionEditVisible = true; StateHasChanged(); })" />
                                     <IconButton Icon="calendar" ToolTip="Change When" Click="@(() => { Selected = item; IsWhenEditVisible = true; StateHasChanged(); })" />
                                     <IconButton Icon="remove" ToolTip="Delete" Click="@(() => { OnDeleteClick(item); StateHasChanged(); })" />
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <nav>
+                    <ul class="pager">
+                        @if (PageIndex == 0)
+                        {
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&larr;</span>
+                                    Previous
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a onclick="@OnPrevPageClickAsync">
+                                    <span aria-hidden="true">&larr;</span>
+                                    Previous
+                                </a>
+                            </li>
+                        }
+
+                        <li class="current">
+                            @(PageIndex + 1)
+                        </li>
+
+                        @if (HasNextPage)
+                        {
+                            <li>
+                                <a onclick="@OnNextPageClickAsync">
+                                    Next
+                                    <span aria-hidden="true">&rarr;</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="disabled">
+                                <span>
+                                    Next
+                                    <span aria-hidden="true">&rarr;</span>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+            else
+            {
+                <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
+            }
         }
-        else
-        {
-            <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
-        }
-    }
-</Loading>
+    </Loading>
+</div>
 
 @if (Selected != null)
 {

@@ -33,38 +33,40 @@
 
         @if (Categories != null)
         {
-            @if (TotalAmout != null)
-            {
-                <div class="panel panel-default bar-graph bar-graph-summary" onclick="@(() => Navigator.OpenOverview(SelectedMonth))">
-                    <div class="panel-body">
-                        <h3 class="description">
-                            <span class="icon">📈</span>
-                            <span class="name">Summary</span>
-                        </h3>
+            <div class="graph">
+                @if (TotalAmout != null)
+                {
+                    <div class="panel panel-default bar-graph bar-graph-summary" onclick="@(() => Navigator.OpenOverview(SelectedMonth))">
+                        <div class="panel-body">
+                            <h3 class="description">
+                                <span class="icon">📈</span>
+                                <span class="name">Summary</span>
+                            </h3>
 
-                        <div class="value">
-                            <div class="amount">@FormatPrice(TotalAmout)</div>
+                            <div class="value">
+                                <div class="amount">@FormatPrice(TotalAmout)</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
 
-            @foreach (var category in Categories)
-            {
-                <div class="panel panel-default bar-graph" onclick="@(() => Navigator.OpenOverview(SelectedMonth, category.Key))">
-                    <div class="panel-body">
-                        <h3 class="description" title="@category.Description">
-                            <span class="icon">@category.Icon</span>
-                            <span class="name">@category.Name</span>
-                        </h3>
+                @foreach (var category in Categories)
+                {
+                    <div class="panel panel-default bar-graph" onclick="@(() => Navigator.OpenOverview(SelectedMonth, category.Key))">
+                        <div class="panel-body">
+                            <h3 class="description" title="@category.Description">
+                                <span class="icon">@category.Icon</span>
+                                <span class="name">@category.Name</span>
+                            </h3>
 
-                        <div class="value">
-                            <div class="amount">@FormatPrice(category.TotalAmount)</div>
-                            <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
+                            <div class="value">
+                                <div class="amount">@FormatPrice(category.TotalAmount)</div>
+                                <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         }
     </Loading>
 </div>

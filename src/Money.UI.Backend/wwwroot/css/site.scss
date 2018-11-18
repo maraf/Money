@@ -141,8 +141,6 @@ h4 {
 
 
 .summary {
-    margin-bottom: -20px;
-
     .sort {
         float: right;
 
@@ -157,6 +155,10 @@ h4 {
 
     .months {
         padding-right: 70px;
+    }
+
+    .graph {
+        margin-bottom: -20px;
     }
 }
 

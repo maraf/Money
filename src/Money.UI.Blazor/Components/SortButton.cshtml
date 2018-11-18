@@ -1,0 +1,33 @@
+﻿@using Money.Models.Sorting
+@inherits SortButtonBase<TType>
+@typeparam TType
+
+<div class="sort dropdown">
+    <button class="btn btn-default" data-toggle="dropdown">
+        Sort
+        <span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu">
+        @foreach (var item in Items)
+        {
+            <li>
+                <a onclick="@(() => OnItemClick(item.Value))">
+                    @item.Name
+
+                    @if (Current.Type.Equals(item.Value))
+                    {
+                        if (Current.Direction == SortDirection.Ascending)
+                        {
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        }
+                    }
+                </a>
+            </li>
+        }
+    </ul>
+</div>

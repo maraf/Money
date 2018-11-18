@@ -10,18 +10,7 @@
 <div class="summary">
     <Loading Context="@Loading">
 
-        <div class="sort dropdown">
-            <button  class="btn btn-default" data-toggle="dropdown">
-                Sort
-                <span class="caret"></span>
-            </button>
-
-            <ul class="dropdown-menu">
-                <li><a href="#">By Amount</a></li>
-                <li><a href="#">By Category</a></li>
-            </ul>
-        </div>
-
+        <SortButton TType="SummarySortType" bind-Current="@SortDescriptor" Changed="@OnSorted" />
 
         @if (Months != null)
         {

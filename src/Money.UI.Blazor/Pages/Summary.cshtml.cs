@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
-using Microsoft.AspNetCore.Blazor.Services;
 using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Money.Services;
+using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -19,7 +20,7 @@ using System.Threading.Tasks;
 namespace Money.Pages
 {
     public class SummaryBase : BlazorComponent,
-        IDisposable,
+        System.IDisposable,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
@@ -55,6 +56,7 @@ namespace Money.Pages
         protected List<CategoryWithAmountModel> Categories { get; private set; }
 
         protected LoadingContext Loading { get; } = new LoadingContext();
+        protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
         protected bool IsCreateVisible { get; set; }
 
@@ -62,6 +64,7 @@ namespace Money.Pages
         {
             Log.Debug("Summary.OnInitAsync");
             BindEvents();
+            SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, SortDirection.Ascending);
 
             return base.OnInitAsync();
         }
@@ -114,6 +117,42 @@ namespace Money.Pages
                 Categories = await Queries.QueryAsync(new ListMonthCategoryWithOutcome(SelectedMonth));
                 TotalAmout = await Queries.QueryAsync(new GetTotalMonthOutcome(SelectedMonth));
                 formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+                Sort();
+            }
+        }
+
+        protected void OnSorted()
+        {
+            Sort();
+            StateHasChanged();
+        }
+
+        private void Sort()
+        {
+            Log.Debug($"Sorting: Type='{SortDescriptor.Type}', Direction='{SortDescriptor.Direction}'.");
+
+            switch (SortDescriptor.Type)
+            {
+                case SummarySortType.ByAmount:
+                    Categories.Sort((x, y) =>
+                    {
+                        if (SortDescriptor.Direction == SortDirection.Ascending)
+                            return x.TotalAmount.Value.CompareTo(y.TotalAmount.Value);
+                        else
+                            return y.TotalAmount.Value.CompareTo(x.TotalAmount.Value);
+                    });
+                    break;
+                case SummarySortType.ByCategory:
+                    Categories.Sort((x, y) =>
+                    {
+                        if (SortDescriptor.Direction == SortDirection.Ascending)
+                            return x.Name.CompareTo(y.Name);
+                        else
+                            return y.Name.CompareTo(x.Name);
+                    });
+                    break;
+                default:
+                    throw Ensure.Exception.NotSupported(SortDescriptor.Type.ToString());
             }
         }
 

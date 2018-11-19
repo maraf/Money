@@ -118,7 +118,10 @@ namespace Money.Pages
         }
 
         protected void OnDeleteClick(OutcomeOverviewModel model)
-            => Delete.Model = model;
+        {
+            Delete.Model = model;
+            StateHasChanged();
+        }
 
         protected OutcomeOverviewModel FindModel(IEvent payload)
             => Models.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));

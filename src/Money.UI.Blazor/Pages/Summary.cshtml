@@ -10,12 +10,12 @@
 <div class="summary">
     <Loading Context="@Loading">
 
-        <SortButton TType="SummarySortType" bind-Current="@SortDescriptor" Changed="@OnSorted" />
-
         @if (Months != null)
         {
             if (Months.Count > 0)
             {
+                <SortButton TType="SummarySortType" bind-Current="@SortDescriptor" Changed="@OnSorted" />
+
                 <TabSet CssClass="months">
                     @foreach (var month in Months)
                     {

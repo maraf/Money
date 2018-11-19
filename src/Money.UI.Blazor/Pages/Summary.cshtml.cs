@@ -134,22 +134,10 @@ namespace Money.Pages
             switch (SortDescriptor.Type)
             {
                 case SummarySortType.ByAmount:
-                    Categories.Sort((x, y) =>
-                    {
-                        if (SortDescriptor.Direction == SortDirection.Ascending)
-                            return x.TotalAmount.Value.CompareTo(y.TotalAmount.Value);
-                        else
-                            return y.TotalAmount.Value.CompareTo(x.TotalAmount.Value);
-                    });
+                    Categories.Sort(SortDescriptor.Direction, x => x.TotalAmount.Value);
                     break;
                 case SummarySortType.ByCategory:
-                    Categories.Sort((x, y) =>
-                    {
-                        if (SortDescriptor.Direction == SortDirection.Ascending)
-                            return x.Name.CompareTo(y.Name);
-                        else
-                            return y.Name.CompareTo(x.Name);
-                    });
+                    Categories.Sort(SortDescriptor.Direction, x => x.Name);
                     break;
                 default:
                     throw Ensure.Exception.NotSupported(SortDescriptor.Type.ToString());

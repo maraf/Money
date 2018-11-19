@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Neptuo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,6 +51,25 @@ namespace Money.Models.Sorting
                 return new SortDescriptor<T>(type, SortDirection.Descending);
 
             return new SortDescriptor<T>(type, SortDirection.Ascending);
+        }
+
+        public static void Sort<TModel, TProperty>(this List<TModel> models, SortDirection sortDirection, Func<TModel, TProperty> selector)
+            where TProperty : IComparable<TProperty>
+        {
+            Ensure.NotNull(models, "models");
+            Ensure.NotNull(selector, "selector");
+            models.Sort((x, y) =>
+            {
+                switch (sortDirection)
+                {
+                    case SortDirection.Ascending:
+                        return selector(x).CompareTo(selector(y));
+                    case SortDirection.Descending:
+                        return selector(y).CompareTo(selector(x));
+                    default:
+                        throw Ensure.Exception.NotSupported(sortDirection.ToString());
+                }
+            });
         }
     }
 }

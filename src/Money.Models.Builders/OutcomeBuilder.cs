@@ -27,8 +27,11 @@ namespace Money.Models.Builders
         IQueryHandler<GetCategoryName, string>,
         IQueryHandler<GetCategoryColor, Color>,
         IQueryHandler<ListMonthOutcomeFromCategory, List<OutcomeOverviewModel>>,
-        IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>
+        IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>,
+        IQueryHandler<SearchOutcomes, List<OutcomeSearchModel>>
     {
+        const int PageSize = 10;
+
         private readonly IFactory<ReadModelContext> readModelContextFactory;
         private readonly IPriceConverter priceConverter;
 
@@ -165,8 +168,6 @@ namespace Money.Models.Builders
 
         public async Task<List<OutcomeOverviewModel>> HandleAsync(ListMonthOutcomeFromCategory query)
         {
-            const int pageSize = 10;
-
             using (ReadModelContext db = readModelContextFactory.Create())
             {
                 IQueryable<OutcomeEntity> entities = db.Outcomes.WhereUserKey(query.UserKey);
@@ -179,7 +180,7 @@ namespace Money.Models.Builders
                     .Select(o => o.ToOverviewModel());
 
                 if (query.PageIndex != null)
-                    sql = sql.Skip(query.PageIndex.Value * pageSize).Take(pageSize);
+                    sql = sql.Skip(query.PageIndex.Value * PageSize).Take(PageSize);
 
                 List<OutcomeOverviewModel> outcomes = await sql.ToListAsync();
                 return outcomes;
@@ -282,6 +283,25 @@ namespace Money.Models.Builders
                     db.Outcomes.Remove(entity);
                     await db.SaveChangesAsync();
                 }
+            }
+        }
+
+        public async Task<List<OutcomeSearchModel>> HandleAsync(SearchOutcomes query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                List<OutcomeEntity> entities = await db.Outcomes
+                    .Include(o => o.Categories)
+                    .WhereUserKey(query.UserKey)
+                    .Where(o => o.Description.Contains(query.Text))
+                    .TakePage(query.PageIndex, PageSize)
+                    .ToListAsync();
+
+                List<OutcomeSearchModel> models = entities
+                    .Select(e => e.ToSearchModel())
+                    .ToList();
+
+                return models;
             }
         }
     }

@@ -4,10 +4,53 @@
 <Title Icon="search" Main="Search" Sub="Searching in outcomes" />
 
 <div class="search">
-    <form>
-        <div class="form-group">
-            <input class="form-control" placeholder="Search...">
+    <form onsubmit="@(() => OnSearchAsync())">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="form-group">
+                    <input class="form-control" placeholder="Search..." bind="@Text" />
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">
+                        <Icon Identifier="search" />
+                    </button>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-default">Search</button>
     </form>
+
+    <Loading Context="@Loading">
+        @if (Models == null || Models.Count == 0)
+        {
+            <Alert Message="No matching outcome found." Mode="@AlertMode.Warning" />
+        }
+        else
+        {
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>When</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Models)
+                    {
+                        <tr>
+                            <td>@item.Description</td>
+                            <td>@Categories.FirstOrDefault(c => c.Key.Equals(item.CategoryKey))?.Name</td>
+                            <td class="date">@item.When.ToShortDateString()</td>
+                            <td class="amount">@FormatPrice(item.Amount)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <Paging LoadPageAsync="@OnSearchAsync" />
+        }
+    </Loading>
 </div>

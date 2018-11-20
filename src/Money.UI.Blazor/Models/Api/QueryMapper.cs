@@ -28,6 +28,8 @@ namespace Money.Models.Api
             Add<ListMonthWithOutcome>("months-with-outcome");
 
             Add<ListYearOutcomeFromCategory>("year-outcome-from-category");
+
+            Add<SearchOutcomes>("search-outcomes");
         }
     }
 }

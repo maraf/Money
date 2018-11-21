@@ -293,7 +293,7 @@ namespace Money.Models.Builders
                 List<OutcomeEntity> entities = await db.Outcomes
                     .Include(o => o.Categories)
                     .WhereUserKey(query.UserKey)
-                    .Where(o => o.Description.Contains(query.Text))
+                    .Where(o => EF.Functions.Like(o.Description, $"%{query.Text}%"))
                     .TakePage(query.PageIndex, PageSize)
                     .ToListAsync();
 

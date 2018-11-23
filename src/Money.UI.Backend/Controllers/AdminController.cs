@@ -35,7 +35,7 @@ namespace Money.Controllers
 
         public async Task<IActionResult> RecreateDemo()
         {
-            if (Request.Host.Host != "localhost" || Request.Host.Host != "127.0.0.1")
+            if (Request.Host.Host != "localhost" && Request.Host.Host != "127.0.0.1")
                 return NotFound();
 
             ApplicationUser demoUser = await userManager.FindByNameAsync(ClaimsPrincipalExtensions.DemoUserName);
@@ -65,10 +65,10 @@ namespace Money.Controllers
 
                     await eventSourcing.SaveChangesAsync();
                 }
-
-                // Recreate
-                await ApplicationDataSeeder.InitializeAsync(userManager, commands);
             }
+
+            // Recreate
+            await ApplicationDataSeeder.InitializeAsync(userManager, commands);
 
             return Ok("Recreated.");
         }

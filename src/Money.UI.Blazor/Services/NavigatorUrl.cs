@@ -27,6 +27,9 @@ namespace Money.Services
                 return $"/{month.Year}/{month.Month}/overview/{categoryKey.AsGuidKey().Guid}";
         }
 
+        public string UrlSearch()
+            => $"/search";
+
         public string UrlCategories()
             => "/categories";
 

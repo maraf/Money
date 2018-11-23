@@ -6,8 +6,20 @@
 </div>
 <div id="#navbar-main" class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
     <ul class="nav navbar-nav">
-        <li>
-            <a href="@Navigator.UrlSummary()">Summary</a>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">
+                Outcomes
+                <span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="@Navigator.UrlSummary()">Summary</a>
+                </li>
+                <li>
+                    <a href="@Navigator.UrlSearch()">Search</a>
+                </li>
+            </ul>
         </li>
         <li>
             <a href="@Navigator.UrlCategories()">Categories</a>

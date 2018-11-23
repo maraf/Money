@@ -48,6 +48,9 @@ namespace Money.Services
         public void OpenOverview(MonthModel month, IKey categoryKey)
             => uri.NavigateTo(UrlOverview(month, categoryKey));
 
+        public void OpenSearch()
+            => uri.NavigateTo(UrlSearch());
+
         public void OpenCategories()
             => uri.NavigateTo(UrlCategories());
 

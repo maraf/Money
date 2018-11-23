@@ -9,6 +9,9 @@ namespace Money.Models
 {
     public static class ClaimsPrincipalExtensions
     {
-        public static bool IsDemo(this ClaimsPrincipal user) => user.Identity.Name == "demo";
+        public const string DemoUserName = "demo";
+        public const string DemoUserPassword = "demo";
+
+        public static bool IsDemo(this ClaimsPrincipal user) => user.Identity.Name == DemoUserName;
     }
 }

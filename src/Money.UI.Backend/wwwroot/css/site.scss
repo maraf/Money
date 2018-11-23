@@ -1,4 +1,8 @@
-﻿body {
+﻿.clear {
+    clear: both;
+}
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -145,6 +149,12 @@ h4 {
     }
 }
 
+.sort {
+    a {
+        cursor: pointer;
+    }
+}
+
 
 .summary {
     .sort {
@@ -152,10 +162,6 @@ h4 {
 
         .btn {
             border-color: transparent;
-        }
-
-        a {
-            cursor: pointer;
         }
     }
 
@@ -252,6 +258,49 @@ h4 {
 
     .amount {
         width: 130px;
+    }
+}
+
+.overview {
+    max-width: 900px;
+    margin: 0 auto;
+
+    .sort {
+        float: right;
+        margin-right: 35px;
+    }
+}
+
+.cards {
+    margin: 20px 0;
+}
+
+.card {
+    padding: 30px;
+    border-bottom: 1px solid #eee;
+
+    &:first-child {
+        border-top: 1px solid #eee;
+    }
+
+    &:hover {
+        background: #fcfcfc;
+    }
+
+    .data {
+        float: left;
+    }
+
+    .controls {
+        float: right;
+    }
+
+    .amount {
+        margin-top: 0;
+    }
+
+    .description {
+        margin-bottom: 0;
     }
 }
 

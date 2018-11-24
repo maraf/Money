@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Money.Models.Sorting;
+using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -25,6 +26,11 @@ namespace Money.Models.Queries
         public MonthModel Month { get; private set; }
 
         /// <summary>
+        /// Gets a sorting descriptor.
+        /// </summary>
+        public SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; private set; }
+
+        /// <summary>
         /// Gets a page index to load.
         /// If <c>null</c>, load all results.
         /// </summary>
@@ -35,13 +41,15 @@ namespace Money.Models.Queries
         /// </summary>
         /// <param name="categoryKey">A key of the category.</param>
         /// <param name="month">A month to find outcomes from.</param>
+        /// <param name="sortDescriptor">A sorting descriptor.</param>
         /// <param name="pageIndex">A page index to load. If <c>null</c>, load all results.</param>
-        public ListMonthOutcomeFromCategory(IKey categoryKey, MonthModel month, int? pageIndex = null)
+        public ListMonthOutcomeFromCategory(IKey categoryKey, MonthModel month, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
             Ensure.NotNull(month, "month");
             CategoryKey = categoryKey;
             Month = month;
+            SortDescriptor = sortDescriptor;
             PageIndex = pageIndex;
         }
     }

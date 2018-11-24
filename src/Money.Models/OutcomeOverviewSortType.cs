@@ -6,18 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
+namespace Money.Models
 {
     /// <summary>
     /// An enumeration of supported sorting of overview items.
     /// </summary>
-    public enum OverviewSortType
+    public enum OutcomeOverviewSortType
     {
         /// <summary>
         /// Sort items by amount.
         /// </summary>
         [Description("By Amount")]
-        [DefaultValue(ListSortDirection.Descending)]
+        [DefaultValue(SortDirection.Descending)]
         ByAmount,
 
         /// <summary>

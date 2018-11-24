@@ -13,7 +13,7 @@ namespace Money.Components
 {
     public class SortButtonBase<TType> : BlazorComponent
     {
-        private readonly Dictionary<TType, ListSortDirection> defaultSortDirection = new Dictionary<TType, ListSortDirection>();
+        private readonly Dictionary<TType, SortDirection> defaultSortDirection = new Dictionary<TType, SortDirection>();
 
         [Inject]
         internal ILog<SortButtonBase<TType>> Log { get; set; }
@@ -49,7 +49,7 @@ namespace Money.Components
 
                 DefaultValueAttribute defaultValue = itemInfo.GetCustomAttribute<DefaultValueAttribute>();
                 if (defaultValue != null)
-                    defaultSortDirection[type] = (ListSortDirection)defaultValue.Value;
+                    defaultSortDirection[type] = (SortDirection)defaultValue.Value;
 
                 Items.Add((text, type));
             }
@@ -63,17 +63,17 @@ namespace Money.Components
                 UpdateCurrent(Items.First().Value);
         }
 
-        private ListSortDirection GetDefaultDirection(TType type)
+        private SortDirection GetDefaultDirection(TType type)
         {
-            if (defaultSortDirection.TryGetValue(type, out ListSortDirection direction))
+            if (defaultSortDirection.TryGetValue(type, out SortDirection direction))
                 return direction;
 
-            return ListSortDirection.Ascending;
+            return SortDirection.Ascending;
         }
 
         private void UpdateCurrent(TType type)
         {
-            ListSortDirection direction = GetDefaultDirection(type);
+            SortDirection direction = GetDefaultDirection(type);
             Log.Debug($"Default direction='{direction}'.");
 
             if (Current != null)

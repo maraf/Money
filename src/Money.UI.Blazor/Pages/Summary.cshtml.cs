@@ -65,7 +65,7 @@ namespace Money.Pages
         {
             Log.Debug("Summary.OnInitAsync");
             BindEvents();
-            SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, ListSortDirection.Ascending);
+            SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, SortDirection.Ascending);
 
             return base.OnInitAsync();
         }

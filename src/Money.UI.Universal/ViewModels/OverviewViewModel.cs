@@ -86,21 +86,21 @@ namespace Money.ViewModels
                 switch (sortDescriptor.Type)
                 {
                     case OverviewSortType.ByDate:
-                        if (sortDescriptor.Direction == ListSortDirection.Ascending)
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
                             Items.Sort(i => i.When);
                         else
                             Items.SortDescending(i => i.When);
                         break;
 
                     case OverviewSortType.ByAmount:
-                        if (sortDescriptor.Direction == ListSortDirection.Ascending)
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
                             Items.Sort(i => i.Amount.Value);
                         else
                             Items.SortDescending(i => i.Amount.Value);
                         break;
 
                     case OverviewSortType.ByDescription:
-                        if (sortDescriptor.Direction == ListSortDirection.Ascending)
+                        if (sortDescriptor.Direction == SortDirection.Ascending)
                             Items.Sort(i => i.Description);
                         else
                             Items.SortDescending(i => i.Description);

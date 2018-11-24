@@ -2,6 +2,7 @@
 using Money.Data;
 using Money.Events;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Events.Handlers;
@@ -177,15 +178,18 @@ namespace Money.Models.Builders
 
                 var sql = entities
                     .Include(o => o.Categories)
-                    .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
-                    .OrderBy(o => o.When)
-                    .Select(o => o.ToOverviewModel());
+                    .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year);
+
+                sql = SortOverviewOutcomes(sql, query.SortDescriptor);
 
                 if (query.PageIndex != null)
                     sql = sql.Skip(query.PageIndex.Value * PageSize).Take(PageSize);
 
-                List<OutcomeOverviewModel> outcomes = await sql.ToListAsync();
-                return outcomes;
+                List<OutcomeOverviewModel> models = await sql
+                    .Select(o => o.ToOverviewModel())
+                    .ToListAsync();
+
+                return models;
             }
         }
 
@@ -305,6 +309,32 @@ namespace Money.Models.Builders
 
                 return models;
             }
+        }
+
+        private IQueryable<OutcomeEntity> SortOverviewOutcomes(IQueryable<OutcomeEntity> entities, SortDescriptor<OutcomeOverviewSortType> sortDescriptor)
+        {
+            if (sortDescriptor == null)
+                sortDescriptor = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen);
+
+            switch (sortDescriptor.Type)
+            {
+                case OutcomeOverviewSortType.ByAmount:
+                    entities = entities.OrderBy(sortDescriptor.Direction, o => o.Amount);
+                    break;
+                case OutcomeOverviewSortType.ByCategory:
+                    entities = entities.OrderBy(sortDescriptor.Direction, o => o.Categories.FirstOrDefault().Category.Name);
+                    break;
+                case OutcomeOverviewSortType.ByDescription:
+                    entities = entities.OrderBy(sortDescriptor.Direction, o => o.Description);
+                    break;
+                case OutcomeOverviewSortType.ByWhen:
+                    entities = entities.OrderBy(sortDescriptor.Direction, o => o.When);
+                    break;
+                default:
+                    throw Ensure.Exception.NotSupported(sortDescriptor.Type.ToString());
+            }
+
+            return entities;
         }
     }
 }

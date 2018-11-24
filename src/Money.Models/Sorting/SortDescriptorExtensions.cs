@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace Money.Models.Sorting
     /// </summary>
     public static class SortDescriptorExtensions
     {
-        public static SortDescriptor<T> Update<T>(this SortDescriptor<T> source, T type, ListSortDirection defaultDirection = ListSortDirection.Ascending)
+        public static SortDescriptor<T> Update<T>(this SortDescriptor<T> source, T type, SortDirection defaultDirection = SortDirection.Ascending)
             //where T : struct
         {
             if (source == null)
@@ -22,13 +23,13 @@ namespace Money.Models.Sorting
             if (!source.Type.Equals(type))
                 return new SortDescriptor<T>(type, defaultDirection);
 
-            if (source.Direction == ListSortDirection.Ascending)
-                return new SortDescriptor<T>(type, ListSortDirection.Descending);
+            if (source.Direction == SortDirection.Ascending)
+                return new SortDescriptor<T>(type, SortDirection.Descending);
 
-            return new SortDescriptor<T>(type, ListSortDirection.Ascending);
+            return new SortDescriptor<T>(type, SortDirection.Ascending);
         }
 
-        public static void Sort<TModel, TProperty>(this List<TModel> models, ListSortDirection sortDirection, Func<TModel, TProperty> selector)
+        public static void Sort<TModel, TProperty>(this List<TModel> models, SortDirection sortDirection, Func<TModel, TProperty> selector)
             where TProperty : IComparable<TProperty>
         {
             Ensure.NotNull(models, "models");
@@ -37,14 +38,31 @@ namespace Money.Models.Sorting
             {
                 switch (sortDirection)
                 {
-                    case ListSortDirection.Ascending:
+                    case SortDirection.Ascending:
                         return selector(x).CompareTo(selector(y));
-                    case ListSortDirection.Descending:
+                    case SortDirection.Descending:
                         return selector(y).CompareTo(selector(x));
                     default:
                         throw Ensure.Exception.NotSupported(sortDirection.ToString());
                 }
             });
+        }
+
+        public static IQueryable<TModel> OrderBy<TModel, TProperty>(this IQueryable<TModel> models, SortDirection sortDirection, Expression<Func<TModel, TProperty>> selector)
+            where TProperty : IComparable<TProperty>
+        {
+            Ensure.NotNull(models, "models");
+            Ensure.NotNull(selector, "selector");
+
+            switch (sortDirection)
+            {
+                case SortDirection.Ascending:
+                    return models.OrderBy(selector);
+                case SortDirection.Descending:
+                    return models.OrderByDescending(selector);
+                default:
+                    throw Ensure.Exception.NotSupported(sortDirection.ToString());
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Money.Pages
         /// Sort items by amount.
         /// </summary>
         [Description("By Amount")]
-        [DefaultValue(ListSortDirection.Descending)]
+        [DefaultValue(SortDirection.Descending)]
         ByAmount,
 
         /// <summary>

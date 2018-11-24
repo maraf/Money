@@ -112,7 +112,7 @@ namespace Money.Views
             else if (userPreferences.TryLoad("Summary.SortDescriptor", out SortDescriptor<SummarySortType> sortDescriptor))
                 ViewModel.SortDescriptor = sortDescriptor;
             else
-                ViewModel.SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, ListSortDirection.Ascending);
+                ViewModel.SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, SortDirection.Ascending);
 
             ViewModel.PropertyChanged += OnViewModelChanged;
             ContentLoaded?.Invoke(this, EventArgs.Empty);

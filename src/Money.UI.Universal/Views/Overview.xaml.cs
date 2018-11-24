@@ -111,7 +111,7 @@ namespace Money.Views
             if (userPreferences.TryLoad("Overview.SortDescriptor", out SortDescriptor<OverviewSortType> sortDescriptor))
                 SortDescriptor = sortDescriptor;
             else
-                SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByDate, ListSortDirection.Ascending);
+                SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByDate, SortDirection.Ascending);
 
             await ReloadAsync();
             ContentLoaded?.Invoke(this, EventArgs.Empty);

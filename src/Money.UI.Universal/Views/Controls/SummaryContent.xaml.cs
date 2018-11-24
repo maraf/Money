@@ -195,14 +195,14 @@ namespace Money.Views.Controls
                 switch (SortDescriptor.Type)
                 {
                     case SummarySortType.ByAmount:
-                        if (SortDescriptor.Direction == ListSortDirection.Ascending)
+                        if (SortDescriptor.Direction == SortDirection.Ascending)
                             ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderBy(i => i.AmountValue));
                         else
                             ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderByDescending(i => i.AmountValue));
 
                         break;
                     case SummarySortType.ByCategory:
-                        if (SortDescriptor.Direction == ListSortDirection.Ascending)
+                        if (SortDescriptor.Direction == SortDirection.Ascending)
                             ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderBy(i => i.Name));
                         else
                             ViewModel.Items.Sort(items => items.OfType<SummaryCategoryViewModel>().OrderByDescending(i => i.Name));

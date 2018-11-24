@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Money.Models.Sorting;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Money.ViewModels
         /// Sort items by amount.
         /// </summary>
         [Description("By Amount")]
-        [DefaultValue(ListSortDirection.Descending)]
+        [DefaultValue(SortDirection.Descending)]
         ByAmount,
 
         /// <summary>

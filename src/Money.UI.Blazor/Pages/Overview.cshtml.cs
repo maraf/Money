@@ -58,7 +58,8 @@ namespace Money.Pages
 
         protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
-        protected SortDescriptor<OverviewSortType> SortDescriptor { get; set; }
+        protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; }
+        protected int CurrentPageIndex { get; set; } = 0;
 
         [Parameter]
         protected string Year { get; set; }
@@ -75,7 +76,7 @@ namespace Money.Pages
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));
             Delete.MessageFormatter = model => $"Do you really want to delete outcome '{model.Description}'?";
 
-            SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByWhen, ListSortDirection.Descending);
+            SortDescriptor = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
 
             CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
@@ -102,9 +103,12 @@ namespace Money.Pages
 
         protected async Task<bool> LoadDataAsync(int pageIndex = 0)
         {
+            int prevPageIndex = CurrentPageIndex;
+
+            CurrentPageIndex = pageIndex;
             using (Loading.Start())
             {
-                List<OutcomeOverviewModel> models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel, pageIndex));
+                List<OutcomeOverviewModel> models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel, SortDescriptor, pageIndex));
                 if (models.Count > 0 || pageIndex == 0)
                 {
                     Models = models;
@@ -112,14 +116,16 @@ namespace Money.Pages
                 }
                 else
                 {
+                    CurrentPageIndex = prevPageIndex;
                     return false;
                 }
             }
         }
 
-        protected void OnSortChanged()
+        protected async void OnSortChanged()
         {
-
+            await LoadDataAsync(CurrentPageIndex);
+            StateHasChanged();
         }
 
         protected void OnActionClick(OutcomeOverviewModel model, ref bool isVisible)
@@ -192,7 +198,7 @@ namespace Money.Pages
 
         Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
         {
-            if (SortDescriptor.Type == OverviewSortType.ByAmount)
+            if (SortDescriptor.Type == OutcomeOverviewSortType.ByAmount)
                 Reload();
             else
                 UpdateModel(payload, model => model.Amount = payload.NewValue);
@@ -202,7 +208,7 @@ namespace Money.Pages
 
         Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
         {
-            if (SortDescriptor.Type == OverviewSortType.ByDescription)
+            if (SortDescriptor.Type == OutcomeOverviewSortType.ByDescription)
                 Reload();
             else
                 UpdateModel(payload, model => model.Description = payload.Description);
@@ -212,7 +218,7 @@ namespace Money.Pages
 
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
         {
-            if (SortDescriptor.Type != OverviewSortType.ByWhen)
+            if (SortDescriptor.Type != OutcomeOverviewSortType.ByWhen)
             {
                 OutcomeOverviewModel model = FindModel(payload);
                 if (model != null && model.When.Year == payload.When.Year && model.When.Month == payload.When.Month)

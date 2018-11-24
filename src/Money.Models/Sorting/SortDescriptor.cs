@@ -22,14 +22,14 @@ namespace Money.Models.Sorting
         /// <summary>
         /// Gets a direction of sorting.
         /// </summary>
-        public ListSortDirection Direction { get; private set; }
+        public SortDirection Direction { get; private set; }
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="type">A selected sorting type.</param>
         /// <param name="direction">A direction of sorting.</param>
-        public SortDescriptor(T type, ListSortDirection direction)
+        public SortDescriptor(T type, SortDirection direction = SortDirection.Ascending)
         {
             Type = type;
             Direction = direction;

@@ -22,30 +22,19 @@
                 <div class="clear"></div>
 
                 <div class="cards">
-                    @foreach (var item in Models)
-                    {
-                        <div class="card">
-                            <div class="data">
-                                <h2 class="amount">@FormatPrice(item.Amount)</h2>
-                                <p class="when">@item.When.ToShortDateString()</p>
-                                <p class="description">@item.Description</p>
-                            </div>
-                            <div class="controls">
-                                <IconButton Icon="usd" ToolTip="Change Amount" Click="@(() => OnActionClick(item, ref IsAmountEditVisible))" />
-                                <IconButton Icon="comment" ToolTip="Change Description" Click="@(() => OnActionClick(item, ref IsDescriptionEditVisible))" />
-                                <IconButton Icon="calendar" ToolTip="Change When" Click="@(() => OnActionClick(item, ref IsWhenEditVisible))" />
-                                <IconButton Icon="remove" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    }
+                    <CascadingValue Value="@this">
+                        @foreach (var item in Models)
+                        {
+                            <OutcomeCard Model="@item" />
+                        }
+                    </CascadingValue>
                 </div>
 
                 <Paging LoadPageAsync="@LoadDataAsync" />
             }
             else
             {
-                < Alert Title = "No data." Message = "Try adding some outcomes." Mode = "@AlertMode.Warning" />
+                <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
             }
         }
     </Loading>

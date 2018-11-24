@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
 using Money.Commands;
+using Money.Components;
 using Money.Events;
 using Money.Models;
 using Money.Models.Confirmation;
@@ -22,13 +23,14 @@ namespace Money.Pages
 {
     public class OverviewBase : BlazorComponent,
         System.IDisposable,
+        OutcomeCardBase.IContext,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>
     {
-        private CurrencyFormatter formatter;
+        public CurrencyFormatter CurrencyFormatter { get; private set; }
 
         [Inject]
         public ICommandDispatcher Commands { get; set; }
@@ -83,7 +85,7 @@ namespace Money.Pages
                 Title = $"Outcomes in {MonthModel}";
             }
 
-            formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+            CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             Reload();
         }
 
@@ -130,7 +132,7 @@ namespace Money.Pages
             => Models.Sort((c1, c2) => c1.When.CompareTo(c2.When));
 
         protected string FormatPrice(Price price)
-            => formatter.Format(price);
+            => CurrencyFormatter.Format(price);
 
         public void Dispose()
             => UnBindEvents();
@@ -203,6 +205,22 @@ namespace Money.Pages
 
             return Task.CompletedTask;
         }
+
+        #endregion
+
+        #region OutcomeCardBase.IContext
+
+        void OutcomeCardBase.IContext.EditAmount(OutcomeOverviewModel model)
+            => OnActionClick(model, ref IsAmountEditVisible);
+
+        void OutcomeCardBase.IContext.EditDescription(OutcomeOverviewModel model)
+            => OnActionClick(model, ref IsDescriptionEditVisible);
+
+        void OutcomeCardBase.IContext.EditWhen(OutcomeOverviewModel model)
+            => OnActionClick(model, ref IsWhenEditVisible);
+
+        void OutcomeCardBase.IContext.Delete(OutcomeOverviewModel model)
+            => OnDeleteClick(model); 
 
         #endregion
     }

@@ -3,6 +3,7 @@ using Money.Models.Sorting;
 using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Money.Components
 {
     public class SortButtonBase<TType> : BlazorComponent
     {
-        private readonly Dictionary<TType, SortDirection> defaultSortDirection = new Dictionary<TType, SortDirection>();
+        private readonly Dictionary<TType, ListSortDirection> defaultSortDirection = new Dictionary<TType, ListSortDirection>();
 
         [Inject]
         internal ILog<SortButtonBase<TType>> Log { get; set; }
@@ -42,13 +43,13 @@ namespace Money.Components
                     .GetMember(text)
                     .First();
 
-                DisplayNameAttribute attribute = itemInfo.GetCustomAttribute<DisplayNameAttribute>();
+                DescriptionAttribute attribute = itemInfo.GetCustomAttribute<DescriptionAttribute>();
                 if (attribute != null)
-                    text = attribute.Name;
+                    text = attribute.Description;
 
                 DefaultValueAttribute defaultValue = itemInfo.GetCustomAttribute<DefaultValueAttribute>();
                 if (defaultValue != null)
-                    defaultSortDirection[type] = (SortDirection)defaultValue.Value;
+                    defaultSortDirection[type] = (ListSortDirection)defaultValue.Value;
 
                 Items.Add((text, type));
             }
@@ -62,17 +63,17 @@ namespace Money.Components
                 UpdateCurrent(Items.First().Value);
         }
 
-        private SortDirection GetDefaultDirection(TType type)
+        private ListSortDirection GetDefaultDirection(TType type)
         {
-            if (defaultSortDirection.TryGetValue(type, out SortDirection direction))
+            if (defaultSortDirection.TryGetValue(type, out ListSortDirection direction))
                 return direction;
 
-            return SortDirection.Ascending;
+            return ListSortDirection.Ascending;
         }
 
         private void UpdateCurrent(TType type)
         {
-            SortDirection direction = GetDefaultDirection(type);
+            ListSortDirection direction = GetDefaultDirection(type);
             Log.Debug($"Default direction='{direction}'.");
 
             if (Current != null)

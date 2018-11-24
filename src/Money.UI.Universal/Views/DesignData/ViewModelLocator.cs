@@ -132,10 +132,10 @@ namespace Money.Views.DesignData
                 if (overview == null)
                 {
                     overview = new OverviewViewModel(ServiceProvider.Navigator, KeyFactory.Create(typeof(Category)), "Food", new MonthModel(2016, 11));
-                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market")));
-                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese")));
-                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine")));
-                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta")));
+                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(1250, "CZK"), new DateTime(2016, 11, 05), "Saturday's buy on market", KeyFactory.Create(typeof(Category)))));
+                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(350, "CZK"), new DateTime(2016, 11, 14), "Cheese", KeyFactory.Create(typeof(Category)))));
+                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(400, "CZK"), new DateTime(2016, 11, 15), "Vine", KeyFactory.Create(typeof(Category)))));
+                    overview.Items.Add(new OutcomeOverviewViewModel(new OutcomeOverviewModel(KeyFactory.Create(typeof(Outcome)), new Price(550, "CZK"), new DateTime(2016, 11, 15), "Pasta, pasta, pasta", KeyFactory.Create(typeof(Category)))));
                     overview.Items[2].IsSelected = true;
                 }
 

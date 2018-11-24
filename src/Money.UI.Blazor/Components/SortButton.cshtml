@@ -1,4 +1,4 @@
-﻿@using Money.Models.Sorting
+﻿@using System.ComponentModel
 @inherits SortButtonBase<TType>
 @typeparam TType
 
@@ -17,7 +17,7 @@
 
                     @if (Current.Type.Equals(item.Value))
                     {
-                        if (Current.Direction == SortDirection.Ascending)
+                        if (Current.Direction == ListSortDirection.Ascending)
                         {
                             <span class="glyphicon glyphicon-arrow-down"></span>
                         }

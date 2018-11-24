@@ -1,5 +1,6 @@
 ﻿using Money.Events;
 using Money.Models;
+using Money.Models.Sorting;
 using Money.ViewModels.Commands;
 using Money.ViewModels.Navigation;
 using Money.ViewModels.Parameters;
@@ -9,6 +10,7 @@ using Neptuo.Models.Keys;
 using Neptuo.Observables.Collections;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,21 +86,21 @@ namespace Money.ViewModels
                 switch (sortDescriptor.Type)
                 {
                     case OverviewSortType.ByDate:
-                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                        if (sortDescriptor.Direction == ListSortDirection.Ascending)
                             Items.Sort(i => i.When);
                         else
                             Items.SortDescending(i => i.When);
                         break;
 
                     case OverviewSortType.ByAmount:
-                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                        if (sortDescriptor.Direction == ListSortDirection.Ascending)
                             Items.Sort(i => i.Amount.Value);
                         else
                             Items.SortDescending(i => i.Amount.Value);
                         break;
 
                     case OverviewSortType.ByDescription:
-                        if (sortDescriptor.Direction == SortDirection.Ascending)
+                        if (sortDescriptor.Direction == ListSortDirection.Ascending)
                             Items.Sort(i => i.Description);
                         else
                             Items.SortDescending(i => i.Description);

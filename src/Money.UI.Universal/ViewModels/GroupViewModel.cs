@@ -1,4 +1,5 @@
-﻿using Money.ViewModels.Navigation;
+﻿using Money.Models.Sorting;
+using Money.ViewModels.Navigation;
 using Neptuo;
 using Neptuo.Observables.Collections;
 using System;

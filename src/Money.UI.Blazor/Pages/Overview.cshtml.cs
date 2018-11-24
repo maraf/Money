@@ -16,6 +16,7 @@ using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,7 +75,7 @@ namespace Money.Pages
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));
             Delete.MessageFormatter = model => $"Do you really want to delete outcome '{model.Description}'?";
 
-            SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByWhen, SortDirection.Descending);
+            SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByWhen, ListSortDirection.Descending);
 
             CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));

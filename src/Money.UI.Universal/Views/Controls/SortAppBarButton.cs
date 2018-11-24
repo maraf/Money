@@ -1,4 +1,5 @@
-﻿using Money.ViewModels;
+﻿using Money.Models.Sorting;
+using Money.ViewModels;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Money.Views.Controls
 {
     public class SortAppBarButton : AppBarButton
     {
-        private readonly Dictionary<object, SortDirection> defaultSortDirection = new Dictionary<object, SortDirection>();
+        private readonly Dictionary<object, ListSortDirection> defaultSortDirection = new Dictionary<object, ListSortDirection>();
 
         private Type parameterType;
         private MethodInfo updateMethod;
@@ -76,11 +77,11 @@ namespace Money.Views.Controls
 
             typeProperty = typeof(SortDescriptor<>)
                 .MakeGenericType(newParameterType)
-                .GetProperty(nameof(SortDescriptor<SortDirection>.Type));
+                .GetProperty(nameof(SortDescriptor<ListSortDirection>.Type));
 
             directionProperty = typeof(SortDescriptor<>)
                 .MakeGenericType(newParameterType)
-                .GetProperty(nameof(SortDescriptor<SortDirection>.Direction));
+                .GetProperty(nameof(SortDescriptor<ListSortDirection>.Direction));
 
             defaultSortDirection.Clear();
 
@@ -93,13 +94,13 @@ namespace Money.Views.Controls
                     .GetMember(text)
                     .First();
 
-                DisplayNameAttribute attribute = itemInfo.GetCustomAttribute<DisplayNameAttribute>();
+                DescriptionAttribute attribute = itemInfo.GetCustomAttribute<DescriptionAttribute>();
                 if (attribute != null)
-                    text = attribute.DisplayName;
+                    text = attribute.Description;
 
                 DefaultValueAttribute defaultValue = itemInfo.GetCustomAttribute<DefaultValueAttribute>();
                 if (defaultValue != null)
-                    defaultSortDirection[value] = (SortDirection)defaultValue.Value;
+                    defaultSortDirection[value] = (ListSortDirection)defaultValue.Value;
 
                 MenuFlyoutItem item = new MenuFlyoutItem()
                 {
@@ -117,21 +118,21 @@ namespace Money.Views.Controls
         private void UpdateIcon()
         {
             object value = typeProperty.GetValue(SortDescriptor);
-            SortDirection direction = (SortDirection)directionProperty.GetValue(SortDescriptor);
+            ListSortDirection direction = (ListSortDirection)directionProperty.GetValue(SortDescriptor);
 
             foreach (MenuFlyoutItem item in ((MenuFlyout)Flyout).Items)
             {
                 if (item.Tag.Equals(value))
-                    item.Icon = new FontIcon() { Glyph = direction == SortDirection.Ascending ? "\uE74A" : "\uE74B" };
+                    item.Icon = new FontIcon() { Glyph = direction == ListSortDirection.Ascending ? "\uE74A" : "\uE74B" };
                 else
                     item.Icon = null;
             }
         }
 
-        private SortDirection GetSortDirection(object value)
+        private ListSortDirection GetSortDirection(object value)
         {
-            if (!defaultSortDirection.TryGetValue(value, out SortDirection direction))
-                direction = SortDirection.Ascending;
+            if (!defaultSortDirection.TryGetValue(value, out ListSortDirection direction))
+                direction = ListSortDirection.Ascending;
 
             return direction;
         }
@@ -145,7 +146,7 @@ namespace Money.Views.Controls
                 MenuFlyoutItem item = (MenuFlyoutItem)sender;
                 object value = item.Tag;
 
-                SortDirection direction = GetSortDirection(value);
+                ListSortDirection direction = GetSortDirection(value);
                 SortDescriptor = updateMethod.Invoke(null, new[] { SortDescriptor, value, direction });
                 UpdateIcon();
             }

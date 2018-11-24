@@ -13,6 +13,7 @@ using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace Money.Pages
         {
             Log.Debug("Summary.OnInitAsync");
             BindEvents();
-            SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, SortDirection.Ascending);
+            SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, ListSortDirection.Ascending);
 
             return base.OnInitAsync();
         }

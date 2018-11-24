@@ -1,6 +1,7 @@
 ﻿using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Money.Services.Settings;
 using Money.Services.Tiles;
 using Money.ViewModels;
@@ -111,7 +112,7 @@ namespace Money.Views
             else if (userPreferences.TryLoad("Summary.SortDescriptor", out SortDescriptor<SummarySortType> sortDescriptor))
                 ViewModel.SortDescriptor = sortDescriptor;
             else
-                ViewModel.SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, SortDirection.Ascending);
+                ViewModel.SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, ListSortDirection.Ascending);
 
             ViewModel.PropertyChanged += OnViewModelChanged;
             ContentLoaded?.Invoke(this, EventArgs.Empty);

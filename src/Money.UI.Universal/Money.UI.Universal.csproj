@@ -169,8 +169,6 @@
     <Compile Include="ViewModels\Parameters\OutcomeParameter.cs" />
     <Compile Include="ViewModels\Parameters\OverviewParameter.cs" />
     <Compile Include="ViewModels\Parameters\SummaryParameter.cs" />
-    <Compile Include="ViewModels\SortDescriptor.cs" />
-    <Compile Include="ViewModels\SortDirection.cs" />
     <Compile Include="ViewModels\SummaryCategoryViewModel.cs" />
     <Compile Include="ViewModels\SummaryPeriodType.cs" />
     <Compile Include="ViewModels\SummarySortType.cs" />
@@ -499,9 +497,6 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
-      <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.14393.0%29</Name>
-    </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
       <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.16299.0%29</Name>
     </SDKReference>

@@ -2,6 +2,7 @@
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Money.Services.Settings;
 using Money.ViewModels;
 using Money.ViewModels.Commands;
@@ -15,6 +16,7 @@ using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -109,7 +111,7 @@ namespace Money.Views
             if (userPreferences.TryLoad("Overview.SortDescriptor", out SortDescriptor<OverviewSortType> sortDescriptor))
                 SortDescriptor = sortDescriptor;
             else
-                SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByDate, SortDirection.Ascending);
+                SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByDate, ListSortDirection.Ascending);
 
             await ReloadAsync();
             ContentLoaded?.Invoke(this, EventArgs.Empty);

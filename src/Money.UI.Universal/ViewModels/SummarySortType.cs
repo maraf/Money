@@ -15,14 +15,14 @@ namespace Money.ViewModels
         /// <summary>
         /// Sort items by amount.
         /// </summary>
-        [DisplayName("By Amount")]
-        [DefaultValue(SortDirection.Descending)]
+        [Description("By Amount")]
+        [DefaultValue(ListSortDirection.Descending)]
         ByAmount,
 
         /// <summary>
         /// Sort items by category name.
         /// </summary>
-        [DisplayName("By Category")]
+        [Description("By Category")]
         ByCategory
     }
 }

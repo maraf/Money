@@ -15,20 +15,20 @@ namespace Money.ViewModels
         /// <summary>
         /// Sort items by creation date.
         /// </summary>
-        [DisplayName("By Date")]
+        [Description("By Date")]
         ByDate,
 
         /// <summary>
         /// Sort items by amount.
         /// </summary>
-        [DisplayName("By Amount")]
-        [DefaultValue(SortDirection.Descending)]
+        [Description("By Amount")]
+        [DefaultValue(ListSortDirection.Descending)]
         ByAmount,
 
         /// <summary>
         /// Sort items by description.
         /// </summary>
-        [DisplayName("By Description")]
+        [Description("By Description")]
         ByDescription
     }
 }

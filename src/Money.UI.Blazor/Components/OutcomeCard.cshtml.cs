@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
 using Money.Models;
+using Money.Models.Queries;
 using Money.Services;
+using Neptuo.Models.Keys;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +24,24 @@ namespace Money.Components
             void Delete(OutcomeOverviewModel model);
         }
 
+        [Inject]
+        internal IQueryDispatcher Queries { get; set; }
+
         [Parameter]
         [CascadingParameter]
         protected IContext Context { get; set; }
 
         [Parameter]
         protected OutcomeOverviewModel Model { get; set; }
+
+        protected string CategoryName { get; private set; }
+        protected Color CategoryColor { get; private set; }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            CategoryName = await Queries.QueryAsync(new GetCategoryName(Model.CategoryKey));
+            CategoryColor = await Queries.QueryAsync(new GetCategoryColor(Model.CategoryKey));
+        }
 
         protected void OnEditAmount() 
             => Context.EditAmount(Model);

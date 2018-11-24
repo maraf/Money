@@ -5,6 +5,9 @@
         <h2 class="amount">@Context.CurrencyFormatter.Format(Model.Amount)</h2>
         <p class="when">@Model.When.ToShortDateString()</p>
         <p class="description">@Model.Description</p>
+        <p class="category">
+            <span class="label" style="background-color: @CategoryColor.ToHashCode()">@CategoryName</span>
+        </p>
     </div>
     <div class="controls">
         <IconButton Icon="usd" ToolTip="Change Amount" Click="@OnEditAmount" />

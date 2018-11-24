@@ -28,7 +28,7 @@ namespace Money.Models.Builders
         IQueryHandler<GetCategoryColor, Color>,
         IQueryHandler<ListMonthOutcomeFromCategory, List<OutcomeOverviewModel>>,
         IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>,
-        IQueryHandler<SearchOutcomes, List<OutcomeSearchModel>>
+        IQueryHandler<SearchOutcomes, List<OutcomeOverviewModel>>
     {
         const int PageSize = 10;
 
@@ -156,6 +156,7 @@ namespace Money.Models.Builders
                     entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
 
                 List<OutcomeOverviewModel> outcomes = await entities
+                    .Include(o => o.Categories)
                     .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Year == query.Year.Year)
                     .OrderBy(o => o.When)
@@ -175,6 +176,7 @@ namespace Money.Models.Builders
                     entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
 
                 var sql = entities
+                    .Include(o => o.Categories)
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
                     .OrderBy(o => o.When)
                     .Select(o => o.ToOverviewModel());
@@ -286,7 +288,7 @@ namespace Money.Models.Builders
             }
         }
 
-        public async Task<List<OutcomeSearchModel>> HandleAsync(SearchOutcomes query)
+        public async Task<List<OutcomeOverviewModel>> HandleAsync(SearchOutcomes query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
@@ -297,8 +299,8 @@ namespace Money.Models.Builders
                     .TakePage(query.PageIndex, PageSize)
                     .ToListAsync();
 
-                List<OutcomeSearchModel> models = entities
-                    .Select(e => e.ToSearchModel())
+                List<OutcomeOverviewModel> models = entities
+                    .Select(e => e.ToOverviewModel())
                     .ToList();
 
                 return models;

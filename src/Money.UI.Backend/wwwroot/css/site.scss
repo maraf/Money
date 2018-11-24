@@ -241,26 +241,6 @@ h4 {
     }
 }
 
-
-.table {
-    .actions {
-        width: 130px;
-
-        .btn {
-            padding: 0;
-            margin: 0 0 0 8px;
-        }
-    }
-
-    .date {
-        width: 130px;
-    }
-
-    .amount {
-        width: 130px;
-    }
-}
-
 .overview {
     max-width: 900px;
     margin: 0 auto;
@@ -269,6 +249,11 @@ h4 {
         float: right;
         margin-right: 35px;
     }
+}
+
+.search {
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .cards {
@@ -299,7 +284,7 @@ h4 {
         margin-top: 0;
     }
 
-    .description {
+    .category {
         margin-bottom: 0;
     }
 }

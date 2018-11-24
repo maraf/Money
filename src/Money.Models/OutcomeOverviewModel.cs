@@ -34,20 +34,28 @@ namespace Money.Models
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets a key of a category.
+        /// </summary>
+        public IKey CategoryKey { get; private set; }
+
+        /// <summary>
         /// Create a new instance.
         /// </summary>
         /// <param name="key">A key of the outcome.</param>
         /// <param name="amount">An amount of the outcome.</param>
         /// <param name="when">A date when the outcome ocured.</param>
-        /// <param name="description">A description of the outcome.</param>
-        public OutcomeOverviewModel(IKey key, Price amount, DateTime when, string description)
+        /// <param name="description">A description of the outcome.</param> 
+        /// <param name="categoryKey">A key of a category.</param>
+        public OutcomeOverviewModel(IKey key, Price amount, DateTime when, string description, IKey categoryKey)
         {
             Ensure.Condition.NotEmptyKey(key);
             Ensure.NotNull(amount, "amount");
+            Ensure.Condition.NotEmptyKey(categoryKey);
             Key = key;
             Amount = amount;
             When = when;
             Description = description;
+            CategoryKey = categoryKey;
         }
     }
 }

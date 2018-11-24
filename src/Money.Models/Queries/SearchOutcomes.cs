@@ -11,7 +11,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for searching in outcomes.
     /// </summary>
-    public class SearchOutcomes : UserQuery, IQuery<List<OutcomeSearchModel>>
+    public class SearchOutcomes : UserQuery, IQuery<List<OutcomeOverviewModel>>
     {
         /// <summary>
         /// Gets a phrase to search.

@@ -62,16 +62,6 @@ namespace Money.Data
                 GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type),
                 new Price(Amount, Currency),
                 When,
-                Description
-            );
-        }
-
-        public OutcomeSearchModel ToSearchModel()
-        {
-            return new OutcomeSearchModel(
-                GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type),
-                new Price(Amount, Currency),
-                When,
                 Description,
                 GuidKey.Create(Categories.First().CategoryId, KeyFactory.Empty(typeof(Category)).Type)
             );

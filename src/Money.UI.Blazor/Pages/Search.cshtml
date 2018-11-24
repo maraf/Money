@@ -28,27 +28,14 @@
         }
         else
         {
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>When</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="cards">
+                <CascadingValue Value="@this">
                     @foreach (var item in Models)
                     {
-                        <tr>
-                            <td>@item.Description</td>
-                            <td>@Categories.FirstOrDefault(c => c.Key.Equals(item.CategoryKey))?.Name</td>
-                            <td class="date">@item.When.ToShortDateString()</td>
-                            <td class="amount">@FormatPrice(item.Amount)</td>
-                        </tr>
+                        <OutcomeCard Model="@item" />
                     }
-                </tbody>
-            </table>
+                </CascadingValue>
+            </div>
 
             <Paging LoadPageAsync="@OnSearchAsync" />
         }

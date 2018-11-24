@@ -183,7 +183,7 @@ namespace Money.Models.Builders
                 sql = SortOverviewOutcomes(sql, query.SortDescriptor);
 
                 if (query.PageIndex != null)
-                    sql = sql.Skip(query.PageIndex.Value * PageSize).Take(PageSize);
+                    sql = sql.TakePage(query.PageIndex.Value, PageSize);
 
                 List<OutcomeOverviewModel> models = await sql
                     .Select(o => o.ToOverviewModel())
@@ -296,12 +296,15 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                List<OutcomeEntity> entities = await db.Outcomes
+                var sql = db.Outcomes
                     .Include(o => o.Categories)
                     .WhereUserKey(query.UserKey)
                     .Where(o => EF.Functions.Like(o.Description, $"%{query.Text}%"))
-                    .TakePage(query.PageIndex, PageSize)
-                    .ToListAsync();
+                    .TakePage(query.PageIndex, PageSize);
+
+                sql = SortOverviewOutcomes(sql, query.SortDescriptor);
+
+                List<OutcomeEntity> entities = await sql.ToListAsync();
 
                 List<OutcomeOverviewModel> models = entities
                     .Select(e => e.ToOverviewModel())

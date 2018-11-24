@@ -58,8 +58,8 @@ namespace Money.Pages
 
         protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
-        protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; }
-        protected int CurrentPageIndex { get; set; } = 0;
+        protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
+        protected int CurrentPageIndex { get; set; }
 
         [Parameter]
         protected string Year { get; set; }
@@ -75,8 +75,6 @@ namespace Money.Pages
             BindEvents();
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));
             Delete.MessageFormatter = model => $"Do you really want to delete outcome '{model.Description}'?";
-
-            SortDescriptor = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
 
             CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
@@ -104,7 +102,6 @@ namespace Money.Pages
         protected async Task<bool> LoadDataAsync(int pageIndex = 0)
         {
             int prevPageIndex = CurrentPageIndex;
-
             CurrentPageIndex = pageIndex;
             using (Loading.Start())
             {

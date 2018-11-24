@@ -6,7 +6,7 @@
 <div class="search">
     <form onsubmit="@(() => OnSearchAsync())">
         <div class="row">
-            <div class="col-md-11">
+            <div class="col-md-9">
                 <div class="form-group">
                     <input class="form-control" placeholder="Search..." bind="@Text" />
                 </div>
@@ -16,6 +16,11 @@
                     <button type="submit" class="btn btn-default">
                         <Icon Identifier="search" />
                     </button>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <SortButton TType="@OutcomeOverviewSortType" bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
                 </div>
             </div>
         </div>
@@ -41,3 +46,10 @@
         }
     </Loading>
 </div>
+
+@if (Selected != null)
+{
+    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" bind-IsVisible="@IsAmountEditVisible" />
+    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" bind-IsVisible="@IsDescriptionEditVisible" />
+    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" bind-IsVisible="@IsWhenEditVisible" />
+}

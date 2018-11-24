@@ -18,7 +18,7 @@
         {
             if (Models.Count > 0)
             {
-                <SortButton TType="@OverviewSortType" />
+                <SortButton TType="@OverviewSortType" bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
                 <div class="clear"></div>
 
                 <div class="cards">

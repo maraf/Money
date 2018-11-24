@@ -6,6 +6,7 @@ using Money.Models;
 using Money.Models.Confirmation;
 using Money.Models.Loading;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Money.Services;
 using Neptuo;
 using Neptuo.Commands;
@@ -56,6 +57,7 @@ namespace Money.Pages
 
         protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
+        protected SortDescriptor<OverviewSortType> SortDescriptor { get; set; }
 
         [Parameter]
         protected string Year { get; set; }
@@ -71,6 +73,8 @@ namespace Money.Pages
             BindEvents();
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));
             Delete.MessageFormatter = model => $"Do you really want to delete outcome '{model.Description}'?";
+
+            SortDescriptor = new SortDescriptor<OverviewSortType>(OverviewSortType.ByWhen, SortDirection.Descending);
 
             CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
             MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
@@ -112,6 +116,11 @@ namespace Money.Pages
             }
         }
 
+        protected void OnSortChanged()
+        {
+
+        }
+
         protected void OnActionClick(OutcomeOverviewModel model, ref bool isVisible)
         {
             Selected = model;
@@ -127,12 +136,6 @@ namespace Money.Pages
 
         protected OutcomeOverviewModel FindModel(IEvent payload)
             => Models.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));
-
-        private void SortModels()
-            => Models.Sort((c1, c2) => c1.When.CompareTo(c2.When));
-
-        protected string FormatPrice(Price price)
-            => CurrencyFormatter.Format(price);
 
         public void Dispose()
             => UnBindEvents();
@@ -181,28 +184,45 @@ namespace Money.Pages
         }
 
         Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
-            => UpdateModel(payload, model => Models.Remove(model));
+        {
+            Reload();
+            return Task.CompletedTask;
+        }
 
         Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
-            => UpdateModel(payload, model => model.Amount = payload.NewValue);
+        {
+            if (SortDescriptor.Type == OverviewSortType.ByAmount)
+                Reload();
+            else
+                UpdateModel(payload, model => model.Amount = payload.NewValue);
+
+            return Task.CompletedTask;
+        }
 
         Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
-            => UpdateModel(payload, model => model.Description = payload.Description);
+        {
+            if (SortDescriptor.Type == OverviewSortType.ByDescription)
+                Reload();
+            else
+                UpdateModel(payload, model => model.Description = payload.Description);
+
+            return Task.CompletedTask;
+        }
 
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
         {
-            OutcomeOverviewModel model = FindModel(payload);
-            if (model != null && model.When.Year == payload.When.Year && model.When.Month == payload.When.Month)
+            if (SortDescriptor.Type != OverviewSortType.ByWhen)
             {
-                model.When = payload.When;
-                SortModels();
-                StateHasChanged();
-            }
-            else
-            {
-                Reload();
+                OutcomeOverviewModel model = FindModel(payload);
+                if (model != null && model.When.Year == payload.When.Year && model.When.Month == payload.When.Month)
+                {
+                    model.When = payload.When;
+                    StateHasChanged();
+                    return Task.CompletedTask;
+                }
             }
 
+            Reload();
             return Task.CompletedTask;
         }
 
@@ -220,7 +240,7 @@ namespace Money.Pages
             => OnActionClick(model, ref IsWhenEditVisible);
 
         void OutcomeCardBase.IContext.Delete(OutcomeOverviewModel model)
-            => OnDeleteClick(model); 
+            => OnDeleteClick(model);
 
         #endregion
     }

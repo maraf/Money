@@ -6,6 +6,7 @@ using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Services;
+using Neptuo;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -23,18 +24,12 @@ namespace Money.Pages
         [Inject]
         internal IQueryDispatcher Queries { get; set; }
 
-        protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
         protected int CurrentPageIndex { get; set; }
 
         protected List<OutcomeOverviewModel> Models { get; set; }
-        protected OutcomeOverviewModel Selected { get; set; }
         protected string Text { get; set; }
-
-        protected bool IsAmountEditVisible;
-        protected bool IsDescriptionEditVisible;
-        protected bool IsWhenEditVisible;
 
         protected async override Task OnInitAsync()
         {
@@ -73,33 +68,20 @@ namespace Money.Pages
             await OnSearchAsync(CurrentPageIndex);
             StateHasChanged();
         }
-
-        protected void OnActionClick(OutcomeOverviewModel model, ref bool isVisible)
-        {
-            Selected = model;
-            isVisible = true;
-            StateHasChanged();
-        }
-
-        protected void OnDeleteClick(OutcomeOverviewModel model)
-        {
-            Delete.Model = model;
-            StateHasChanged();
-        }
-
+        
         #region OutcomeCardBase.IContext
 
         void OutcomeCardBase.IContext.EditAmount(OutcomeOverviewModel model)
-            => OnActionClick(model, ref IsAmountEditVisible);
+            => throw Ensure.Exception.NotSupported();
 
         void OutcomeCardBase.IContext.EditDescription(OutcomeOverviewModel model)
-            => OnActionClick(model, ref IsDescriptionEditVisible);
+            => throw Ensure.Exception.NotSupported();
 
         void OutcomeCardBase.IContext.EditWhen(OutcomeOverviewModel model)
-            => OnActionClick(model, ref IsWhenEditVisible);
+            => throw Ensure.Exception.NotSupported();
 
         void OutcomeCardBase.IContext.Delete(OutcomeOverviewModel model)
-            => OnDeleteClick(model);
+            => throw Ensure.Exception.NotSupported();
 
         #endregion
     }

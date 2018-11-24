@@ -46,10 +46,3 @@
         }
     </Loading>
 </div>
-
-@if (Selected != null)
-{
-    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" bind-IsVisible="@IsAmountEditVisible" />
-    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" bind-IsVisible="@IsDescriptionEditVisible" />
-    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" bind-IsVisible="@IsWhenEditVisible" />
-}

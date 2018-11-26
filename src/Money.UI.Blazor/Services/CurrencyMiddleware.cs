@@ -21,7 +21,7 @@ namespace Money.Services
         private readonly List<CurrencyModel> models = new List<CurrencyModel>();
         private Task listAllTask;
 
-        public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher.Next next)
+        public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
         {
             if (query is ListAllCurrency listAll)
             {

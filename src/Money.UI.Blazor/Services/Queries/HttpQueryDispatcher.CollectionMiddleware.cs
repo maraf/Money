@@ -12,6 +12,7 @@ namespace Neptuo.Queries
         private class CollectionMiddleware : IMiddleware
         {
             private readonly IEnumerator<IMiddleware> enumerator;
+            private HttpQueryDispatcher dispatcher;
             private Next next;
 
             public CollectionMiddleware(IEnumerable<IMiddleware> collection)
@@ -20,23 +21,24 @@ namespace Neptuo.Queries
                 enumerator = collection.GetEnumerator();
             }
 
-            public Task<object> ExecuteAsync(object query, Next next)
+            public Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, Next next)
             {
                 this.next = next;
+                this.dispatcher = dispatcher;
                 return ExecuteNextAsync(query);
             }
 
             private Task<object> ExecuteNextAsync(object query)
             {
                 if (enumerator.MoveNext())
-                    return ExecuteCurrentAsync(query);
+                    return ExecuteCurrentAsync(query, dispatcher);
 
                 return next(query);
             }
 
-            private async Task<object> ExecuteCurrentAsync(object query)
+            private async Task<object> ExecuteCurrentAsync(object query, HttpQueryDispatcher dispatcher)
             {
-                object output = await enumerator.Current.ExecuteAsync(query, ExecuteNextAsync);
+                object output = await enumerator.Current.ExecuteAsync(query, dispatcher, ExecuteNextAsync);
                 return output;
             }
         }

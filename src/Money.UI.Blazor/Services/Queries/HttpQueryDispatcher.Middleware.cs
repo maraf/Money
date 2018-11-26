@@ -12,7 +12,7 @@ namespace Neptuo.Queries
         public abstract class Middleware<TQuery, TOutput> : IMiddleware
             where TQuery : IQuery<TOutput>
         {
-            public async Task<object> ExecuteAsync(object query, Next next)
+            public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, Next next)
             {
                 if (query is TQuery typed)
                 {

@@ -12,7 +12,7 @@ namespace Neptuo.Queries
 
         public interface IMiddleware
         {
-            Task<object> ExecuteAsync(object query, Next next);
+            Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, Next next);
         }
     }
 }

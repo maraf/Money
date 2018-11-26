@@ -30,7 +30,7 @@ namespace Neptuo.Queries
         public async Task<TOutput> QueryAsync<TOutput>(IQuery<TOutput> query)
         {
             CollectionMiddleware middleware = new CollectionMiddleware(middlewares);
-            TOutput output = (TOutput)await middleware.ExecuteAsync(query, new DefaultMiddleware<TOutput>(api, formatters, log).ExecuteRawAsync);
+            TOutput output = (TOutput)await middleware.ExecuteAsync(query, this, new DefaultMiddleware<TOutput>(api, formatters, log).ExecuteRawAsync);
             return output;
         }
     }

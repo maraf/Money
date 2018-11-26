@@ -22,20 +22,17 @@ namespace Money.Services
         private readonly List<CategoryModel> models = new List<CategoryModel>();
         private Task listAllTask;
 
-        public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher.Next next)
+        public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
         {
             if (query is ListAllCategory listAll)
             {
                 if (models.Count == 0)
                 {
-                    if (models.Count == 0)
-                    {
-                        if (listAllTask == null)
-                            listAllTask = LoadAllAsync(listAll, next);
+                    if (listAllTask == null)
+                        listAllTask = LoadAllAsync(listAll, next);
 
-                        await listAllTask;
-                        listAllTask = null;
-                    }
+                    await listAllTask;
+                    listAllTask = null;
                 }
 
                 return models.Select(c => c.Clone()).ToList();
@@ -55,8 +52,17 @@ namespace Money.Services
             else if (query is GetCategoryColor categoryColor)
             {
                 CategoryModel model = Find(categoryColor.CategoryKey);
-                if (model != null)
-                    return model.Color;
+                if (model == null)
+                {
+                    var models = await dispatcher.QueryAsync(new ListAllCategory());
+                    model = models.FirstOrDefault(c => c.Key.Equals(categoryColor.CategoryKey));
+                }
+
+                model = Find(categoryColor.CategoryKey);
+                if (model == null)
+                    return Color.FromArgb(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
+
+                return model.Color;
             }
             else if (query is GetCategoryNameDescription categoryNameDescription)
             {

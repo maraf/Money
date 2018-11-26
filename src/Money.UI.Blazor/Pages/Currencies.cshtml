@@ -22,6 +22,12 @@ else
                 </strong>
             </div>
             <div class="panel-body">
+                <p>This currency has unique code @item.UniqueCode.</p>
+                @if (item.IsDefault)
+                {
+                    <p>This is a default currency used for displaying outcomes.</p>
+                }
+
                 <div class="nav navbar-nav navbar-right">
                     @if (!item.IsDefault)
                     {
@@ -40,12 +46,6 @@ else
                         <IconButton Icon="remove" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
                     }
                 </div>
-
-                <p>This currency has unique code @item.UniqueCode.</p>
-                @if (item.IsDefault)
-                {
-                    <p>This is a default currency used for displaying outcomes.</p>
-                }
             </div>
         </div>
 

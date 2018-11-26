@@ -1,8 +1,11 @@
-﻿.clear {
+﻿$bodyMinWidth: 380px;
+
+.clear {
     clear: both;
 }
 
 body {
+    min-width: $bodyMinWidth;
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -15,10 +18,25 @@ h4 {
     background-color: #0078D7;
     border-color: #398BF5;
 
+    .navbar-collapse {
+        border-color: #398BF5;
+    }
+
+    .navbar-toggle, .navbar-toggle:focus, .navbar-toggle:hover {
+        background-color: #0078D7;
+        border-color: #398BF5;
+    }
+
     .navbar-nav > li > a,
     .navbar-nav > li > button {
         color: #bcdbff;
         cursor: pointer;
+    }
+
+    @media (max-width: 767px) {
+        .navbar-nav > .open ul.dropdown-menu > li > a {
+            color: #bcdbff;
+        }
     }
 
     .navbar-nav > .open > a,
@@ -52,6 +70,7 @@ h4 {
 .header {
     position: absolute;
     width: 100%;
+    min-width: $bodyMinWidth;
     left: 0;
     background: #f5f5f5;
     border-bottom: 1px solid #dddddd;
@@ -59,6 +78,31 @@ h4 {
     .icon {
         font-size: 26px;
         color: #0078D7;
+    }
+    /*h2 {
+        position: relative;
+        height: 40px;
+        overflow: hidden;
+
+        button {
+            position: absolute;
+            right: 0;
+        }
+    }*/
+    h2 {
+        span.text {
+            position: relative;
+            top: 3px;
+            display: inline-block;
+            overflow: hidden;
+            max-width: calc(100% - 177px);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        button {
+            float: right;
+        }
     }
 
     h4 {
@@ -84,9 +128,15 @@ h4 {
 
 .alert .navbar-nav {
     margin-top: -15px;
-    
+
     .btn-link {
         color: #333;
+    }
+}
+
+@media (max-width: 768px) {
+    .alert .navbar-right {
+        margin: 0 -10px;
     }
 }
 
@@ -107,7 +157,6 @@ h4 {
 .btn-selectable {
     border-radius: 4px;
     border: 2px solid transparent;
-
 }
 
 .btn-selectable:focus,
@@ -227,7 +276,7 @@ h4 {
 
 .bar-graph-summary {
     border: none;
-    
+
     .glyphicon {
         margin: 0 4px;
     }

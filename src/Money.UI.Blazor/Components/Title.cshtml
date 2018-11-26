@@ -7,11 +7,11 @@
                 <span class="icon glyphicon glyphicon-@Icon" aria-hidden="true"></span>
             }
 
-            @Main
+            <span class="text">@Main</span>
 
             @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
             {
-                <button type="button" class="btn btn-primary" onclick="@(() => ButtonClick?.Invoke())" style="float: right">
+                <button type="button" class="btn btn-primary" onclick="@(() => ButtonClick?.Invoke())">
                     <span class="glyphicon glyphicon-plus"></span>
                     @ButtonText
                 </button>

@@ -34,7 +34,7 @@ namespace Money.Bootstrap
         private readonly IPriceConverter priceConverter;
         private readonly Func<IKey> userKeyGetter;
 
-        public const int CurrentVersion = 5;
+        public const int CurrentVersion = 6;
 
         public UpgradeService(ICommandDispatcher commandDispatcher, IEventRebuilderStore eventStore, IFormatter eventFormatter, IFactory<EventSourcingContext> eventSourceContextFactory, IFactory<ReadModelContext> readModelContextFactory, IFactory<ApplicationDataContainer> storageContainerFactory, IPriceConverter priceConverter, Func<IKey> userKeyGetter)
             : base(storageContainerFactory, CurrentVersion)
@@ -87,6 +87,12 @@ namespace Money.Bootstrap
             {
                 context.StartingStep(4 - currentVersion, "Adding user info to entries.");
                 await UpgradeVersion5();
+            }
+
+            if (currentVersion < 6)
+            {
+                context.StartingStep(1 - currentVersion, "Rebuilding internal database.");
+                await UpgradeVersion6();
             }
         }
 
@@ -200,6 +206,11 @@ namespace Money.Bootstrap
                 await eventSourcing.SaveAsync();
             }
 
+            await RecreateReadModelContextAsync();
+        }
+
+        private async Task UpgradeVersion6()
+        {
             await RecreateReadModelContextAsync();
         }
     }

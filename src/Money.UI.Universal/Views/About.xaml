@@ -31,7 +31,7 @@
             </Button>
 
             <TextBlock Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
-            <controls:DevelopmentTools x:Name="DevelopmentTools" Orientation="Horizontal" Visibility="Visible" />
+            <controls:DevelopmentTools x:Name="DevelopmentTools" Orientation="Horizontal" />
             <controls:LastException Margin="0,20,0,0" />
         </StackPanel>
     </ScrollViewer>

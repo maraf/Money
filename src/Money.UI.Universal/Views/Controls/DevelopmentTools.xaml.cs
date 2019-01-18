@@ -125,24 +125,26 @@ namespace Money.Views.Controls
 
         private async void btnDownloadStorage_Click(object sender, RoutedEventArgs e)
         {
-            await ExecuteActionAsync(sender, async () =>
-            {
-                foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
-                {
-                    FileSavePicker picker = new FileSavePicker();
-                    picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                    picker.FileTypeChoices.Add(source.DisplayName, new List<string>() { ".db" });
-                    picker.SuggestedFileName = source.Name;
+            await ExecuteActionAsync(sender, ExportDataAsync);
+        }
 
-                    StorageFile target = await picker.PickSaveFileAsync();
-                    if (target != null)
-                    {
-                        using (Stream sourceContent = await source.OpenStreamForReadAsync())
-                        using (Stream targetContent = await target.OpenStreamForWriteAsync())
-                            sourceContent.CopyTo(targetContent);
-                    }
+        public async Task ExportDataAsync()
+        {
+            foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
+            {
+                FileSavePicker picker = new FileSavePicker();
+                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                picker.FileTypeChoices.Add(source.DisplayName, new List<string>() { ".db" });
+                picker.SuggestedFileName = source.Name;
+
+                StorageFile target = await picker.PickSaveFileAsync();
+                if (target != null)
+                {
+                    using (Stream sourceContent = await source.OpenStreamForReadAsync())
+                    using (Stream targetContent = await target.OpenStreamForWriteAsync())
+                        sourceContent.CopyTo(targetContent);
                 }
-            });
+            }
         }
 
         private async void btnSetRevisionStorage_Click(object sender, RoutedEventArgs e)

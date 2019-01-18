@@ -22,8 +22,16 @@
             <TextBlock Text="Test database" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
             <ToggleSwitch x:Name="DatabaseSwitch" Toggled="DatabaseSwitch_Toggled" />
 
+            <TextBlock Text="Backup data" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
+            <Button x:Name="ExportButton" Click="ExportButton_Click">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Download" />
+                    <TextBlock Text="Export" />
+                </StackPanel>
+            </Button>
+
             <TextBlock Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
-            <controls:DevelopmentTools Orientation="Horizontal" Visibility="Visible" />
+            <controls:DevelopmentTools x:Name="DevelopmentTools" Orientation="Horizontal" Visibility="Visible" />
             <controls:LastException Margin="0,20,0,0" />
         </StackPanel>
     </ScrollViewer>

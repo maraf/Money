@@ -13,6 +13,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -52,7 +53,10 @@ namespace Money.Views
             }
         }
 
-        private class SwitchDatabaseCommand : Neptuo.Observables.Commands.Command
+        private async void ExportButton_Click(object sender, RoutedEventArgs e)
+            => await DevelopmentTools.ExportDataAsync();
+
+        private class SwitchDatabaseCommand : Command
         {
             private readonly IDevelopmentService developmentTools;
             private readonly RestartService restartService;

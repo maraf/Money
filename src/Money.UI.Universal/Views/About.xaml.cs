@@ -36,6 +36,7 @@ namespace Money.Views
             InitializeComponent();
 
             DatabaseSwitch.IsOn = developmentTools.IsTestDatabaseEnabled();
+            DevelopmentToolsTitle.Visibility = DevelopmentTools.Visibility;
         }
 
         private void DatabaseSwitch_Toggled(object sender, RoutedEventArgs e)

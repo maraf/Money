@@ -30,7 +30,7 @@
                 </StackPanel>
             </Button>
 
-            <TextBlock Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
+            <TextBlock x:Name="DevelopmentToolsTitle" Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
             <controls:DevelopmentTools x:Name="DevelopmentTools" Orientation="Horizontal" />
             <controls:LastException Margin="0,20,0,0" />
         </StackPanel>

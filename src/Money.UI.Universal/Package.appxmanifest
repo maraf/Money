@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Money.UI.App">
-      <uap:VisualElements DisplayName="Neptuo Money" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Money spending helper. This app helps you manage your monthly expences. These are distributed to your defined categories and you can quickly see how much you spend in each category each month. The application also supports different currencies with exchange rates and helps you manage expences when you are abroad." BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="Neptuo Money" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Money spending helper. This app helps you manage your monthly expenses. These are distributed to your defined categories and you can quickly see how much you spend in each category each month. The application also supports different currencies with exchange rates and helps you manage expenses when you are abroad." BackgroundColor="transparent">
         <uap:LockScreen Notification="badge" BadgeLogo="Assets\BadgeLogo.png" />
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Money" Square71x71Logo="Assets\Square71x71Logo.png">
           <uap:ShowNameOnTiles>

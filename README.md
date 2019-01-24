@@ -1,5 +1,7 @@
 # Money
-Money is an outcome logging application written as UAP (UWP) to target both desktop and mobile Windows devices.
+Money is an outcome logging application written as UAP (UWP) to target both desktop and mobile Windows devices. 
+<br />
+<a href='//www.microsoft.com/store/apps/9n50xhgw891s?ocid=badge'>Get it from Microsoft Store</a>.
 
 ![Preview in large window size](assets/Preview-large.png)
 

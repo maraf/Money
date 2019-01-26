@@ -287,6 +287,11 @@ namespace Money.Views
                 if (!ViewModel.Items.Any(g => g.Parameter.Equals(other)))
                     isReloadRequired = true;
             }
+            else
+            {
+                if (!ViewModel.Items.Any())
+                    isReloadRequired = true;
+            }
 
             if (isReloadRequired)
                 ReloadAsync();

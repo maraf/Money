@@ -29,6 +29,7 @@ namespace Money.Views
     {
         private readonly IDevelopmentService developmentTools = ServiceProvider.DevelopmentTools;
         private readonly RestartService restartService = ServiceProvider.RestartService;
+        private readonly AppDataService appDataService = ServiceProvider.AppDataService;
         private readonly INavigator navigator = ServiceProvider.Navigator;
 
         public About()
@@ -55,14 +56,26 @@ namespace Money.Views
         }
 
         private async void ExportButton_Click(object sender, RoutedEventArgs e)
-            => await DevelopmentTools.ExportDataAsync();
+        {
+            FileSavePicker picker = new FileSavePicker();
+            picker.SuggestedStartLocation = PickerLocationId.Downloads;
+            picker.FileTypeChoices.Add("Zip Archive", new List<string>() { ".zip" });
+            picker.SuggestedFileName = $"NeptuoMoney_AppData_{DateTime.Now.ToString("yyyy-MM-dd")}.zip";
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+            StorageFile target = await picker.PickSaveFileAsync();
+            if (target != null)
+            {
+                using (Stream targetContent = await target.OpenStreamForWriteAsync())
+                    await appDataService.ExportAsync(targetContent);
+            }
+        }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
 
         }

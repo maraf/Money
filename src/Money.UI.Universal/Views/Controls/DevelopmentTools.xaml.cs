@@ -5,6 +5,7 @@ using Neptuo.Activators;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -125,28 +126,26 @@ namespace Money.Views.Controls
 
         private async void btnDownloadStorage_Click(object sender, RoutedEventArgs e)
         {
-            await ExecuteActionAsync(sender, ExportDataAsync);
-        }
-
-        public async Task ExportDataAsync()
-        {
-            foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
+            await ExecuteActionAsync(sender, async () =>
             {
-                FileSavePicker picker = new FileSavePicker();
-                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                picker.FileTypeChoices.Add(source.DisplayName, new List<string>() { ".db" });
-                picker.SuggestedFileName = source.Name;
-
-                StorageFile target = await picker.PickSaveFileAsync();
-                if (target != null)
+                foreach (StorageFile source in await ApplicationData.Current.LocalFolder.GetFilesAsync())
                 {
-                    using (Stream sourceContent = await source.OpenStreamForReadAsync())
-                    using (Stream targetContent = await target.OpenStreamForWriteAsync())
-                        sourceContent.CopyTo(targetContent);
-                }
-            }
-        }
+                    FileSavePicker picker = new FileSavePicker();
+                    picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                    picker.FileTypeChoices.Add(source.DisplayName, new List<string>() { ".db" });
+                    picker.SuggestedFileName = source.Name;
 
+                    StorageFile target = await picker.PickSaveFileAsync();
+                    if (target != null)
+                    {
+                        using (Stream sourceContent = await source.OpenStreamForReadAsync())
+                        using (Stream targetContent = await target.OpenStreamForWriteAsync())
+                            sourceContent.CopyTo(targetContent);
+                    }
+                }
+            });
+        }
+        
         private async void btnSetRevisionStorage_Click(object sender, RoutedEventArgs e)
         {
             await ExecuteActionAsync(sender, async () =>

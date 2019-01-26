@@ -56,7 +56,7 @@ namespace Money.Bootstrap
             return migrationContainer;
         }
 
-        private int GetCurrentVersion()
+        public int GetCurrentVersion()
         {
             ApplicationDataContainer migrationContainer = GetMigrationContainer();
             int currentVersion = (int?)migrationContainer.Values["Version"] ?? 0;

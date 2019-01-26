@@ -29,14 +29,16 @@ namespace Money.Bootstrap
         }
 
         EventSourcingContext IFactory<EventSourcingContext>.Create()
-        {
-            return new EventSourcingContext($"Filename={GetStorageFolderPath()}EventSourcing.db");
-        }
+            => new EventSourcingContext($"Filename={GetEventSourcingFilePath()}");
+
+        public string GetEventSourcingFilePath()
+            => $"{GetStorageFolderPath()}EventSourcing.db";
 
         ReadModelContext IFactory<ReadModelContext>.Create()
-        {
-            return new ReadModelContext($"Filename={GetStorageFolderPath()}ReadModel.db");
-        }
+            => new ReadModelContext($"Filename={GetReadModelFilePath()}");
+
+        public string GetReadModelFilePath()
+            => $"{GetStorageFolderPath()}ReadModel.db";
 
         ApplicationDataContainer IFactory<ApplicationDataContainer>.Create()
         {

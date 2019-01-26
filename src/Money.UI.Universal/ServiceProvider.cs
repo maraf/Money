@@ -35,6 +35,8 @@ namespace Money
         public static IDevelopmentService DevelopmentTools { get; set; }
         public static RestartService RestartService { get; set; }
 
+        internal static AppDataService AppDataService { get; set; }
+
         internal static IFactory<EventSourcingContext> EventSourcingContextFactory { get; set; }
         internal static IFactory<ReadModelContext> ReadModelContextFactory { get; set; }
         internal static IFactory<ApplicationDataContainer> StorageContainerFactory { get; set; }

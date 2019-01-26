@@ -57,6 +57,16 @@ namespace Money.Views
         private async void ExportButton_Click(object sender, RoutedEventArgs e)
             => await DevelopmentTools.ExportDataAsync();
 
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private class SwitchDatabaseCommand : Command
         {
             private readonly IDevelopmentService developmentTools;

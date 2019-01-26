@@ -11,28 +11,42 @@
     </Page.BottomAppBar>
 
     <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
-        <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="20">
+        <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="16">
             <TextBlock Text="Money" Style="{ThemeResource TitleTextBlockStyle}" />
             <TextBlock Text="Neptuo" />
             <TextBlock Text="v1.0.0" Opacity=".5" />
 
-            <HyperlinkButton Content="Documentation" NavigateUri="http://www.neptuo.com/project/universal/money" Margin="0,20,0,0" />
+            <HyperlinkButton Content="Documentation" NavigateUri="http://www.neptuo.com/project/universal/money" Margin="0,16,0,0" />
             <HyperlinkButton Content="Report an issue" NavigateUri="https://github.com/maraf/Money/issues/new" />
 
-            <TextBlock Text="Test database" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
+            <TextBlock Text="Test database" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,16,0,0" />
             <ToggleSwitch x:Name="DatabaseSwitch" Toggled="DatabaseSwitch_Toggled" />
 
-            <TextBlock Text="Backup data" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
-            <Button x:Name="ExportButton" Click="ExportButton_Click">
-                <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Symbol="Download" />
-                    <TextBlock Text="Export" />
-                </StackPanel>
-            </Button>
+            <TextBlock Text="Your data" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,16,0,8" />
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="ExportButton" Click="ExportButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="Download" />
+                        <TextBlock Text="Export" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="ImportButton" Click="ImportButton_Click" Margin="16,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="Upload" />
+                        <TextBlock Text="Import" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="DeleteButton" Click="DeleteButton_Click" Margin="16,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="Delete" />
+                        <TextBlock Text="Delete all your data" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
 
-            <TextBlock x:Name="DevelopmentToolsTitle" Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,20,0,0" />
+            <TextBlock x:Name="DevelopmentToolsTitle" Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,16,0,0" />
             <controls:DevelopmentTools x:Name="DevelopmentTools" Orientation="Horizontal" />
-            <controls:LastException Margin="0,20,0,0" />
+            <controls:LastException Margin="0,16,0,0" />
         </StackPanel>
     </ScrollViewer>
 </Page>

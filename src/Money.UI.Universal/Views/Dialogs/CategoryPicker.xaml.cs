@@ -81,7 +81,7 @@ namespace Money.Views.Dialogs
             if (!SelectedKey.IsEmpty)
                 OnSelectedKeyChanged();
         }
-        
+
         private bool isCategoriesViewChangedAttached = true;
 
         private void gvwCategories_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -93,6 +93,36 @@ namespace Money.Views.Dialogs
                 SelectedKey = ((CategoryModel)e.AddedItems[0]).Key;
             else
                 SelectedKey = KeyFactory.Empty(typeof(Category));
+        }
+
+        protected override void OnKeyUp(KeyRoutedEventArgs e)
+        {
+            base.OnKeyUp(e);
+
+            if (e.Key == VirtualKey.Number1)
+                SetSelectedCategoryIndex(0);
+            else if (e.Key == VirtualKey.Number2)
+                SetSelectedCategoryIndex(1);
+            else if (e.Key == VirtualKey.Number3)
+                SetSelectedCategoryIndex(2);
+            else if (e.Key == VirtualKey.Number4)
+                SetSelectedCategoryIndex(3);
+            else if (e.Key == VirtualKey.Number5)
+                SetSelectedCategoryIndex(4);
+            else if (e.Key == VirtualKey.Number6)
+                SetSelectedCategoryIndex(5);
+            else if (e.Key == VirtualKey.Number7)
+                SetSelectedCategoryIndex(6);
+            else if (e.Key == VirtualKey.Number8)
+                SetSelectedCategoryIndex(7);
+            else if (e.Key == VirtualKey.Number9)
+                SetSelectedCategoryIndex(8);
+        }
+
+        private void SetSelectedCategoryIndex(int index)
+        {
+            if (gvwCategories.Items.Count > index)
+                gvwCategories.SelectedIndex = index;
         }
     }
 }

@@ -101,9 +101,10 @@ namespace Money.Bootstrap
             RecreateEventSourcingContext();
             await RecreateReadModelContextAsync();
 
-            await commandDispatcher.HandleAsync(new CreateCategory("Home", "DIY", ColorConverter.Map(Colors.SandyBrown)));
-            await commandDispatcher.HandleAsync(new CreateCategory("Food", "Home boilt stuff", ColorConverter.Map(Colors.OrangeRed)));
-            await commandDispatcher.HandleAsync(new CreateCategory("Eating Out", "Outsourced", ColorConverter.Map(Colors.DarkRed)));
+            await commandDispatcher.HandleAsync(new CreateCategory("Bills", "Regular expenses", ColorConverter.Map(Colors.SandyBrown)));
+            await commandDispatcher.HandleAsync(new CreateCategory("Home", "Do it yourself", ColorConverter.Map(Colors.SandyBrown)));
+            await commandDispatcher.HandleAsync(new CreateCategory("Food", "Home cooked meals", ColorConverter.Map(Colors.OrangeRed)));
+            await commandDispatcher.HandleAsync(new CreateCategory("Eating Out", "Outsourcing food creation", ColorConverter.Map(Colors.DarkRed)));
         }
 
         private Task UpgradeVersion2()

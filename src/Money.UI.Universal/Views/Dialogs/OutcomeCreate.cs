@@ -51,7 +51,11 @@ namespace Money.Views.Dialogs
             ContentDialogResult result = await amountDialog.ShowAsync(false);
             amount = amountDialog.Value;
             currency = amountDialog.Currency;
-            if (result == ContentDialogResult.Primary)
+            if (result == ContentDialogResult.None)
+            {
+                return;
+            }
+            else if (result == ContentDialogResult.Primary)
             {
                 categoryDialog.PrimaryButtonText = "Next";
                 categoryDialog.SecondaryButtonText = "Create today";
@@ -97,9 +101,6 @@ namespace Money.Views.Dialogs
                 when,
                 categoryKey
             ));
-
-            //OutcomeCreatedGuidePost nextDialog = new OutcomeCreatedGuidePost();
-            //await nextDialog.ShowAsync();
         }
     }
 }

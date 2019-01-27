@@ -58,16 +58,28 @@
                             <controls:Currency Price="{x:Bind Amount, Mode=OneWay}" Style="{ThemeResource PriceStyle}" FontSize="24" Grid.RowSpan="2" Grid.Column="1" />
                         </Grid>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button x:Name="btnAmount" Click="btnAmount_Click" ToolTipService.ToolTip="Amount">
+                            <Button x:Name="btnAmount" Click="btnAmount_Click" ToolTipService.ToolTip="Amount (Ctrl+A)">
+                                <Button.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Control" Key="A" />
+                                </Button.KeyboardAccelerators>
                                 <TextBlock Text="$" Margin="4,0" />
                             </Button>
-                            <Button x:Name="btnDescription" Click="btnDescription_Click" ToolTipService.ToolTip="Description">
+                            <Button x:Name="btnDescription" Click="btnDescription_Click" ToolTipService.ToolTip="Description (Ctrl+E)">
+                                <Button.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Control" Key="E" />
+                                </Button.KeyboardAccelerators>
                                 <SymbolIcon Symbol="Message" />
                             </Button>
-                            <Button x:Name="btnWhen" Click="btnWhen_Click" ToolTipService.ToolTip="When">
+                            <Button x:Name="btnWhen" Click="btnWhen_Click" ToolTipService.ToolTip="When (Ctrl+W)">
+                                <Button.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Control" Key="W" />
+                                </Button.KeyboardAccelerators>
                                 <SymbolIcon Symbol="Calendar" />
                             </Button>
-                            <Button x:Name="btnDelete" Click="btnDelete_Click" ToolTipService.ToolTip="Delete">
+                            <Button x:Name="btnDelete" Click="btnDelete_Click" ToolTipService.ToolTip="Delete (Del)">
+                                <Button.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="Delete" />
+                                </Button.KeyboardAccelerators>
                                 <SymbolIcon Symbol="Delete" />
                             </Button>
                         </StackPanel>

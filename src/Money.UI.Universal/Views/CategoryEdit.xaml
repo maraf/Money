@@ -25,7 +25,10 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Name="s2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding IsSelected, Converter={StaticResource TrueToVisibleConverter}}">
-            <Button Command="{Binding Rename}" ToolTipService.ToolTip="Rename category">
+            <Button Command="{Binding Rename}" ToolTipService.ToolTip="Rename category (Ctrl+E)">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="E" />
+                </Button.KeyboardAccelerators>
                 <SymbolIcon Symbol="Rename" />
             </Button>
             <Button Command="{Binding ChangeColor}" ToolTipService.ToolTip="Change category background color">
@@ -34,7 +37,10 @@
             <Button Command="{Binding ChangeIcon}" ToolTipService.ToolTip="Change category icon">
                 <SymbolIcon Symbol="Emoji2" />
             </Button>
-            <Button Command="{Binding Delete}" ToolTipService.ToolTip="Delete category">
+            <Button Command="{Binding Delete}" ToolTipService.ToolTip="Delete category (Del)">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="Delete" />
+                </Button.KeyboardAccelerators>
                 <SymbolIcon Symbol="Delete" />
             </Button>
         </StackPanel>

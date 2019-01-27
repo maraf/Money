@@ -99,7 +99,10 @@
             <Button x:Name="btnEdit" Click="btnEdit_Click" ToolTipService.ToolTip="Edit symbol">
                 <SymbolIcon Symbol="Edit" />
             </Button>
-            <Button Command="{Binding Delete}" IsEnabled="{Binding IsDefault, Converter={StaticResource FalseToTrueConverter}}" ToolTipService.ToolTip="Delete currency">
+            <Button Command="{Binding Delete}" IsEnabled="{Binding IsDefault, Converter={StaticResource FalseToTrueConverter}}" ToolTipService.ToolTip="Delete currency (Del)">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="Delete" />
+                </Button.KeyboardAccelerators>
                 <SymbolIcon Symbol="Delete" />
             </Button>
         </StackPanel>

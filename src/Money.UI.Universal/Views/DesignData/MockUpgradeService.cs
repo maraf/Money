@@ -10,6 +10,8 @@ namespace Money.Views.DesignData
 {
     internal class MockUpgradeService : IUpgradeService
     {
+        public event Action Completed;
+
         public bool IsRequired()
         {
             return true;

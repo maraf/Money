@@ -9,6 +9,8 @@ namespace Money.Views.DesignData
 {
     internal class TestUpgradeService : IUpgradeService
     {
+        public event Action Completed;
+
         public bool IsRequired()
         {
             return true;

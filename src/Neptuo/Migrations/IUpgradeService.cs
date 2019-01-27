@@ -9,6 +9,11 @@ namespace Neptuo.Migrations
     public interface IUpgradeService
     {
         /// <summary>
+        /// An event raised when upgrade is completed.
+        /// </summary>
+        event Action Completed;
+
+        /// <summary>
         /// Returns a <c>true</c> if upgrade is required.
         /// </summary>
         /// <returns><c>true</c> if upgrade is required; <c>false</c> otherwise.</returns>

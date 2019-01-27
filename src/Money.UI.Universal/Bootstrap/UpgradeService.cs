@@ -55,6 +55,15 @@ namespace Money.Bootstrap
             this.userKeyGetter = userKeyGetter;
         }
 
+        protected override async Task FirstRunAsync(IUpgradeContext context, int currentVersion)
+        {
+            context.StartingStep(0 - currentVersion, "Creating initial data.");
+            EnsureReadModelDatabase();
+            EnsureEventSourcingDatabase();
+            await CreateDefaultCategoriesAsync();
+            await CreateDefaultCurrenciesAsync();
+        }
+
         protected override async Task UpgradeOverrideAsync(IUpgradeContext context, int currentVersion)
         {
             if (currentVersion < 1)
@@ -100,7 +109,11 @@ namespace Money.Bootstrap
         {
             RecreateEventSourcingContext();
             await RecreateReadModelContextAsync();
+            await CreateDefaultCategoriesAsync();
+        }
 
+        private async Task CreateDefaultCategoriesAsync()
+        {
             await commandDispatcher.HandleAsync(new CreateCategory("Bills", "Regular expenses", ColorConverter.Map(Colors.DarkGreen)));
             await commandDispatcher.HandleAsync(new CreateCategory("Home", "Do it yourself", ColorConverter.Map(Colors.SandyBrown)));
             await commandDispatcher.HandleAsync(new CreateCategory("Food", "Home cooked meals", ColorConverter.Map(Colors.OrangeRed)));
@@ -115,6 +128,11 @@ namespace Money.Bootstrap
         private async Task UpgradeVersion3()
         {
             await RecreateReadModelContextAsync();
+            await CreateDefaultCurrenciesAsync();
+        }
+
+        private async Task CreateDefaultCurrenciesAsync()
+        {
             await commandDispatcher.HandleAsync(new CreateCurrency("USD", "$"));
         }
 

@@ -15,6 +15,8 @@ namespace Money.Bootstrap
         private readonly IFactory<ApplicationDataContainer> storageContainerFactory;
         private readonly int currentVersion;
 
+        public event Action Completed;
+
         public UpgradeServiceBase(IFactory<ApplicationDataContainer> storageContainerFactory, int currentVersion)
         {
             Ensure.NotNull(storageContainerFactory, "storageContainerFactory");
@@ -34,14 +36,33 @@ namespace Money.Bootstrap
             if (this.currentVersion <= currentVersion)
                 return;
 
-            context.TotalSteps(this.currentVersion - currentVersion);
-            await Task.Delay(500);
+            if (currentVersion == 0)
+            {
+                context.TotalSteps(1);
+                await DelayAsync();
 
-            await UpgradeOverrideAsync(context, currentVersion);
+                await FirstRunAsync(context, currentVersion);
+            }
+            else
+            {
+                context.TotalSteps(this.currentVersion - currentVersion);
+                await DelayAsync();
+
+                await UpgradeOverrideAsync(context, currentVersion);
+            }
 
             SetCurrentVersion(this.currentVersion);
+
+            Completed?.Invoke();
+            Completed = null;
+
+            await DelayAsync();
         }
 
+        private static Task DelayAsync()
+            => Task.Delay(300);
+
+        protected abstract Task FirstRunAsync(IUpgradeContext context, int currentVersion);
         protected abstract Task UpgradeOverrideAsync(IUpgradeContext context, int currentVersion);
 
         private ApplicationDataContainer GetMigrationContainer()

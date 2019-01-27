@@ -88,6 +88,7 @@ namespace Money.ViewModels
         IUpgradeContext IUpgradeContext.TotalSteps(int count)
         {
             Total = count;
+            Caption = "Preparing.";
             return this;
         }
 

@@ -93,10 +93,18 @@ namespace Money.Bootstrap
             using (var readModels = ServiceProvider.ReadModelContextFactory.Create())
                 readModels.Database.EnsureCreated();
 
+            if (ServiceProvider.UpgradeService.IsRequired())
+                ServiceProvider.UpgradeService.Completed += () => InitializeCache(priceCalculator, currencyCache);
+            else
+                InitializeCache(priceCalculator, currencyCache);
+        }
+
+        private void InitializeCache(PriceCalculator priceCalculator, CurrencyCache currencyCache)
+        {
             currencyCache.InitializeAsync(ServiceProvider.QueryDispatcher);
             priceCalculator.InitializeAsync(ServiceProvider.QueryDispatcher);
         }
-        
+
         private void Domain()
         {
             Converts.Repository
@@ -155,11 +163,11 @@ namespace Money.Bootstrap
                 new NoSnapshotProvider(),
                 new EmptySnapshotStore()
             );
-            
+
             Money.BootstrapTask bootstrapTask = new Money.BootstrapTask(
-                commandDispatcher.Handlers, 
-                Factory.Instance(OutcomeRepository), 
-                Factory.Instance(CategoryRepository), 
+                commandDispatcher.Handlers,
+                Factory.Instance(OutcomeRepository),
+                Factory.Instance(CategoryRepository),
                 Factory.Instance(CurrencyListRepository)
             );
             bootstrapTask.Initialize();

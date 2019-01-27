@@ -15,7 +15,7 @@
                 <TextBlock Text="/" Margin="5,0" Style="{StaticResource HeaderTextBlockStyle}" />
                 <TextBlock Text="{Binding Total}" Style="{StaticResource HeaderTextBlockStyle}" />
             </StackPanel>
-            <TextBlock Text="{Binding Caption}" />
+            <TextBlock Text="{Binding Caption}" HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>
 </Page>

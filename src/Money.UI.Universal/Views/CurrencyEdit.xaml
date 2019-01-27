@@ -94,7 +94,7 @@
                         </StackPanel>
                     </Flyout>
                 </Button.Flyout>
-                <FontIcon Glyph="&#xE877;" />
+                <FontIcon Glyph="&#xE8AB;" />
             </Button>
             <Button x:Name="btnEdit" Click="btnEdit_Click" ToolTipService.ToolTip="Edit symbol">
                 <SymbolIcon Symbol="Edit" />

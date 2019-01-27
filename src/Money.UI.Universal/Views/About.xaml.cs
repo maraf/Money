@@ -104,7 +104,11 @@ namespace Money.Views
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-
+            navigator
+                .Message("Do you realy want to delete all your data?")
+                .Button("Yes", new DeleteAllDataCommand(appDataService, restartService))
+                .ButtonClose("No")
+                .Show();
         }
 
         private class SwitchDatabaseCommand : AsyncCommand
@@ -144,6 +148,28 @@ namespace Money.Views
             protected override bool CanExecuteOverride() => true;
 
             protected override Task ExecuteAsync(CancellationToken cancellationToken) => restartService.RestartAsync();
+        }
+
+        private class DeleteAllDataCommand : AsyncCommand
+        {
+            private readonly AppDataService appDataService;
+            private readonly RestartService restartService;
+
+            public DeleteAllDataCommand(AppDataService appDataService, RestartService restartService)
+            {
+                Ensure.NotNull(appDataService, "appDataService");
+                Ensure.NotNull(restartService, "restartService");
+                this.appDataService = appDataService;
+                this.restartService = restartService;
+            }
+
+            protected override bool CanExecuteOverride() => true;
+
+            protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+            {
+                await appDataService.DeleteAllAsync();
+                await restartService.RestartAsync();
+            }
         }
     }
 }

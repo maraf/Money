@@ -97,5 +97,18 @@ namespace Money.Services
 
             return false;
         }
+
+        public async Task DeleteAllAsync()
+        {
+            await DeleteFileAsync(storageFactory.GetEventSourcingFilePath());
+            await DeleteFileAsync(storageFactory.GetReadModelFilePath());
+            upgradeService.SetCurrentVersion(0);
+        }
+
+        private static async Task DeleteFileAsync(string relativePath)
+        {
+            StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync(relativePath);
+            await file.DeleteAsync();
+        }
     }
 }

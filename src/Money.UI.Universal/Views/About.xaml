@@ -10,8 +10,8 @@
         <CommandBar />
     </Page.BottomAppBar>
 
-    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
-        <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="16">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Auto">
+        <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="16" MaxWidth="800" HorizontalAlignment="Left">
             <TextBlock Text="Money" Style="{ThemeResource TitleTextBlockStyle}" />
             <TextBlock Text="Neptuo" />
             <TextBlock Text="v1.0.0" Opacity=".5" />
@@ -23,6 +23,7 @@
             <ToggleSwitch x:Name="DatabaseSwitch" Toggled="DatabaseSwitch_Toggled" />
 
             <TextBlock Text="Your data" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,16,0,8" />
+            <TextBlock Text="With these tools you can export all your data as zip archive. Than you can use this zip to import them on other device. You should not modify the archive if you want everything to go smooth." Opacity=".5" TextWrapping="Wrap" Margin="0,0,0,8" />
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="ExportButton" Click="ExportButton_Click">
                     <StackPanel Orientation="Horizontal">
@@ -36,13 +37,15 @@
                         <TextBlock Text="Import" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="DeleteButton" Click="DeleteButton_Click" Margin="16,0,0,0">
-                    <StackPanel Orientation="Horizontal">
-                        <SymbolIcon Symbol="Delete" />
-                        <TextBlock Text="Delete all your data" />
-                    </StackPanel>
-                </Button>
             </StackPanel>
+            
+            <TextBlock Text="This enables you to drop everthing you added here. This operation is irreversible!" Opacity=".5" TextWrapping="Wrap" Margin="0,8" />
+            <Button x:Name="DeleteButton" Click="DeleteButton_Click">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Delete" />
+                    <TextBlock Text="Delete all your data" />
+                </StackPanel>
+            </Button>
 
             <TextBlock x:Name="DevelopmentToolsTitle" Text="Development Tools" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,16,0,0" />
             <controls:DevelopmentTools x:Name="DevelopmentTools" Orientation="Horizontal" />

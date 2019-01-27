@@ -101,7 +101,7 @@ namespace Money.Bootstrap
             RecreateEventSourcingContext();
             await RecreateReadModelContextAsync();
 
-            await commandDispatcher.HandleAsync(new CreateCategory("Bills", "Regular expenses", ColorConverter.Map(Colors.SandyBrown)));
+            await commandDispatcher.HandleAsync(new CreateCategory("Bills", "Regular expenses", ColorConverter.Map(Colors.DarkGreen)));
             await commandDispatcher.HandleAsync(new CreateCategory("Home", "Do it yourself", ColorConverter.Map(Colors.SandyBrown)));
             await commandDispatcher.HandleAsync(new CreateCategory("Food", "Home cooked meals", ColorConverter.Map(Colors.OrangeRed)));
             await commandDispatcher.HandleAsync(new CreateCategory("Eating Out", "Outsourcing food creation", ColorConverter.Map(Colors.DarkRed)));
@@ -115,7 +115,7 @@ namespace Money.Bootstrap
         private async Task UpgradeVersion3()
         {
             await RecreateReadModelContextAsync();
-            await commandDispatcher.HandleAsync(new CreateCurrency("CZK", "Kč"));
+            await commandDispatcher.HandleAsync(new CreateCurrency("USD", "$"));
         }
 
         private void RecreateEventSourcingContext()

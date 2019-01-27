@@ -22,7 +22,11 @@
                 <AppBarButton Icon="Edit" Label="Edit Category" Command="{Binding EditCategory}" Visibility="{Binding EditCategory, Converter={StaticResource NullToCollapsedConverter}}" />
             </CommandBar.SecondaryCommands>
             <controls:SortAppBarButton SortDescriptor="{x:Bind SortDescriptor, Mode=TwoWay}" />
-            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" />
+            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" ToolTipService.ToolTip="Create outcome (Ctrl+N)">
+                <AppBarButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="N" />
+                </AppBarButton.KeyboardAccelerators>
+            </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
 

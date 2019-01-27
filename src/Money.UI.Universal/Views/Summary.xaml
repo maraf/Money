@@ -35,7 +35,7 @@
             <controls:SortAppBarButton SortDescriptor="{Binding SortDescriptor, Mode=TwoWay}" />
             <!--<AppBarSeparator />-->
             <!--<AppBarButton Icon="Add" Label="Income" Command="{Binding CreateIncome}" IsEnabled="False" />-->
-            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" ToolTipService.ToolTip="Create Outcome (Ctrl+N)">
+            <AppBarButton Icon="Remove" Label="Outcome" Command="{Binding CreateOutcome}" ToolTipService.ToolTip="Create outcome (Ctrl+N)">
                 <AppBarButton.KeyboardAccelerators>
                     <KeyboardAccelerator Modifiers="Control" Key="N" />
                 </AppBarButton.KeyboardAccelerators>

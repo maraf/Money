@@ -9,7 +9,11 @@
     mc:Ignorable="d" d:DataContext="{Binding CategoryList, Source={StaticResource ViewModelLocator}}">
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Add" Label="New category" Command="{Binding New}" />
+            <AppBarButton Icon="Add" Label="New category" Command="{Binding New}" ToolTipService.ToolTip="New category (Ctrl+N)">
+                <AppBarButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="N" />
+                </AppBarButton.KeyboardAccelerators>
+            </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

@@ -9,7 +9,11 @@
     mc:Ignorable="d" d:DataContext="{Binding CurrencyList, Source={StaticResource ViewModelLocator}}">
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Add" Label="New currency" Command="{Binding New}" />
+            <AppBarButton Icon="Add" Label="New currency" Command="{Binding New}" ToolTipService.ToolTip="New currency (Ctrl+N)">
+                <AppBarButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="N" />
+                </AppBarButton.KeyboardAccelerators>
+            </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

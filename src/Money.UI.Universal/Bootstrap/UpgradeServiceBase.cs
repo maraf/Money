@@ -39,8 +39,7 @@ namespace Money.Bootstrap
 
             await UpgradeOverrideAsync(context, currentVersion);
 
-            ApplicationDataContainer migrationContainer = GetMigrationContainer();
-            migrationContainer.Values["Version"] = this.currentVersion;
+            SetCurrentVersion(this.currentVersion);
         }
 
         protected abstract Task UpgradeOverrideAsync(IUpgradeContext context, int currentVersion);
@@ -63,5 +62,10 @@ namespace Money.Bootstrap
             return currentVersion;
         }
 
+        public void SetCurrentVersion(int currentVersion)
+        {
+            ApplicationDataContainer migrationContainer = GetMigrationContainer();
+            migrationContainer.Values["Version"] = currentVersion;
+        }
     }
 }

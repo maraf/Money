@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -70,9 +72,34 @@ namespace Money.Views
             }
         }
 
-        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        private async void ImportButton_Click(object sender, RoutedEventArgs e)
         {
+            FileOpenPicker picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".zip");
 
+            StorageFile source = await picker.PickSingleFileAsync();
+            if (source != null)
+            {
+                using (Stream sourceContent = await source.OpenStreamForReadAsync())
+                {
+                    bool isSuccess = await appDataService.ImportAsync(sourceContent);
+                    if (isSuccess)
+                    {
+                        navigator
+                            .Message("Import was successful. We need to restart the application to reload data.")
+                            .Button("OK", new RestartCommand(restartService))
+                            .ButtonClose("Cancel")
+                            .Show();
+                    }
+                    else
+                    {
+                        navigator
+                            .Message("Someting went wrong and import for was not successful.")
+                            .ButtonClose("OK")
+                            .Show();
+                    }
+                }
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -80,7 +107,7 @@ namespace Money.Views
 
         }
 
-        private class SwitchDatabaseCommand : Command
+        private class SwitchDatabaseCommand : AsyncCommand
         {
             private readonly IDevelopmentService developmentTools;
             private readonly RestartService restartService;
@@ -95,16 +122,28 @@ namespace Money.Views
                 this.isEnabled = isEnabled;
             }
 
-            public override bool CanExecute()
-            {
-                return true;
-            }
+            protected override bool CanExecuteOverride() => true;
 
-            public override async void Execute()
+            protected override async Task ExecuteAsync(CancellationToken cancellationToken)
             {
                 developmentTools.IsTestDatabaseEnabled(isEnabled);
                 await restartService.RestartAsync();
             }
+        }
+
+        private class RestartCommand : AsyncCommand
+        {
+            private readonly RestartService restartService;
+
+            public RestartCommand(RestartService restartService)
+            {
+                Ensure.NotNull(restartService, "restartService");
+                this.restartService = restartService;
+            }
+            
+            protected override bool CanExecuteOverride() => true;
+
+            protected override Task ExecuteAsync(CancellationToken cancellationToken) => restartService.RestartAsync();
         }
     }
 }

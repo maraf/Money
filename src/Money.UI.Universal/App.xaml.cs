@@ -215,7 +215,7 @@ namespace Money.UI
                     message = messageBuilder.OutcomeAlreadyHasCategory();
                 else if (e is CantDeleteDefaultCurrencyException)
                     message = messageBuilder.CantDeleteDefaultCurrency();
-                else if(e is CantDeleteLastCurrencyException)
+                else if (e is CantDeleteLastCurrencyException)
                     message = messageBuilder.CantDeleteLastCurrency();
 
 
@@ -233,8 +233,8 @@ namespace Money.UI
                 .CreateContainer("Exception", ApplicationDataCreateDisposition.Always);
 
             container.Values["Type"] = e.GetType().FullName;
-            container.Values["Message"] = e.Message;
-            container.Values["Callstack"] = e.StackTrace;
+            container.Values["Message"] = SubstringValueForContainer(e.Message);
+            container.Values["Callstack"] = SubstringValueForContainer(e.StackTrace + e.InnerException?.StackTrace);
             container.Values["DateTime"] = DateTime.Now.ToString();
 
 #if DEBUG
@@ -262,6 +262,19 @@ namespace Money.UI
 #endif
 
             return false;
+        }
+
+        private static string SubstringValueForContainer(string value)
+        {
+            const int maxLength = 255;
+
+            if (String.IsNullOrEmpty(value))
+                return value;
+
+            if (value.Length > maxLength)
+                return value.Substring(0, maxLength);
+
+            return value;
         }
     }
 }

@@ -103,6 +103,7 @@ namespace Money.Bootstrap
                     Task currencyCreated = eventDispatcher.Handlers.Await<CurrencyCreated>();
 
                     await Task.WhenAny(delay, currencyCreated);
+                    await Task.Delay(1000);
                     await InitializeCacheAsync(priceCalculator, currencyCache);
                 };
             }

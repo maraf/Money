@@ -1,4 +1,5 @@
-﻿using Money.Services;
+﻿using Money.Events;
+using Money.Services;
 using Money.Services.Globalization;
 using Money.Services.Settings;
 using Money.Services.Tiles;
@@ -10,6 +11,7 @@ using Neptuo.Commands;
 using Neptuo.Converters;
 using Neptuo.Data;
 using Neptuo.Events;
+using Neptuo.Events.Handlers;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
 using Neptuo.Formatters.Converters;
@@ -94,15 +96,26 @@ namespace Money.Bootstrap
                 readModels.Database.EnsureCreated();
 
             if (ServiceProvider.UpgradeService.IsRequired())
-                ServiceProvider.UpgradeService.Completed += () => InitializeCache(priceCalculator, currencyCache);
+            {
+                ServiceProvider.UpgradeService.Completed += async () =>
+                {
+                    Task delay = Task.Delay(5000);
+                    Task currencyCreated = eventDispatcher.Handlers.Await<CurrencyCreated>();
+
+                    await Task.WhenAny(delay, currencyCreated);
+                    await InitializeCacheAsync(priceCalculator, currencyCache);
+                };
+            }
             else
-                InitializeCache(priceCalculator, currencyCache);
+            {
+               _ = InitializeCacheAsync(priceCalculator, currencyCache);
+            }
         }
 
-        private void InitializeCache(PriceCalculator priceCalculator, CurrencyCache currencyCache)
+        private async Task InitializeCacheAsync(PriceCalculator priceCalculator, CurrencyCache currencyCache)
         {
-            currencyCache.InitializeAsync(ServiceProvider.QueryDispatcher);
-            priceCalculator.InitializeAsync(ServiceProvider.QueryDispatcher);
+            await currencyCache.InitializeAsync(ServiceProvider.QueryDispatcher);
+            await priceCalculator.InitializeAsync(ServiceProvider.QueryDispatcher);
         }
 
         private void Domain()

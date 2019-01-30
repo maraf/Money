@@ -14,8 +14,13 @@ namespace Money.Bootstrap
     {
         private readonly IFactory<ApplicationDataContainer> storageContainerFactory;
         private readonly int currentVersion;
+        private readonly List<Func<Task>> completed = new List<Func<Task>>();
 
-        public event Action Completed;
+        public event Func<Task> Completed
+        {
+            add => completed.Add(value);
+            remove => completed.Remove(value);
+        }
 
         public UpgradeServiceBase(IFactory<ApplicationDataContainer> storageContainerFactory, int currentVersion)
         {
@@ -53,8 +58,8 @@ namespace Money.Bootstrap
 
             SetCurrentVersion(this.currentVersion);
 
-            Completed?.Invoke();
-            Completed = null;
+            foreach (var item in completed)
+                await item();
 
             await DelayAsync();
         }

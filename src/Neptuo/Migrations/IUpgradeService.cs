@@ -11,7 +11,7 @@ namespace Neptuo.Migrations
         /// <summary>
         /// An event raised when upgrade is completed.
         /// </summary>
-        event Action Completed;
+        event Func<Task> Completed;
 
         /// <summary>
         /// Returns a <c>true</c> if upgrade is required.

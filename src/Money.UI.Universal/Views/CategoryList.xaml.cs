@@ -53,7 +53,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            CategoryListParameter parameter = (CategoryListParameter)e.Parameter;
+            CategoryListParameter parameter = e.GetParameterOrDefault<CategoryListParameter>();
 
             ViewModel = new CategoryListViewModel(commandDispatcher, navigator);
 

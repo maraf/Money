@@ -68,7 +68,7 @@ namespace Money.Views
                 .Add<CurrencySymbolChanged>(this)
                 .Add<CurrencyDeleted>(this);
 
-            CurrencyParameter parameter = (CurrencyParameter)e.Parameter;
+            CurrencyParameter parameter = e.GetParameterOrDefault<CurrencyParameter>();
 
             IEnumerable<CurrencyModel> models = await queryDispatcher.QueryAsync(new ListAllCurrency());
 

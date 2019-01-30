@@ -80,7 +80,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            OverviewParameter parameter = (OverviewParameter)e.Parameter;
+            OverviewParameter parameter = e.GetParameter<OverviewParameter>();
 
             string categoryName = parameter.CategoryKey.IsEmpty
                 ? "All"

@@ -295,6 +295,7 @@
     <Compile Include="Views\Migrate.xaml.cs">
       <DependentUpon>Migrate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NavigationEventArgsExtensions.cs" />
     <Compile Include="Views\Navigation\AppNavigator.cs" />
     <Compile Include="Views\Navigation\AppNavigatorForm.cs" />
     <Compile Include="Views\Navigation\ContentDialogMessageForm.cs" />

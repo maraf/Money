@@ -74,7 +74,7 @@ namespace Money.Views
         {
             base.OnNavigatedTo(e);
 
-            parameter = (SummaryParameter)e.Parameter;
+            parameter = e.GetParameterOrDefault<SummaryParameter>();
             await LoadAsync();
 
             handlers.Add(eventHandlers.AddUiThread(this, Dispatcher));

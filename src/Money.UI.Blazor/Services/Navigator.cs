@@ -61,6 +61,6 @@ namespace Money.Services
             => uri.NavigateTo(UrlAbout());
 
         public void OpenUserManage()
-            => OpenExternal(UrlUserManage());
+            => uri.NavigateTo(UrlUserManage());
     }
 }

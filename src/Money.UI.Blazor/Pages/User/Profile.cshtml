@@ -1,0 +1,25 @@
+﻿@page "/user"
+
+<UserHead />
+
+<div class="user">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post">
+                <div class="form-group">
+                    <label for="UserName">UserName</label>
+                    <input class="form-control" disabled="" type="text" id="UserName" name="UserName" value="maraf">
+                </div>
+                <div class="form-group">
+                    <label for="Email">Email</label>
+                    <div class="input-group">
+                        <input class="form-control" autofocus="" type="email" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Email" name="Email" value="">
+                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                    </div>
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                </div>
+                <button type="submit" class="btn btn-default">Save</button>
+            </form>
+        </div>
+    </div>
+</div>

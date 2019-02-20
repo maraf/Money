@@ -40,7 +40,10 @@ namespace Money.Services
             => "/about";
 
         public string UrlUserManage()
-            => "/manage";
+            => "/user";
+
+        public string UrlUserPassword()
+            => "/user/changepassword";
 
         #region External
 

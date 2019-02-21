@@ -62,5 +62,8 @@ namespace Money.Services
 
         public void OpenUserManage()
             => uri.NavigateTo(UrlUserManage());
+
+        public void OpenUserPassword()
+            => uri.NavigateTo(UrlUserPassword());
     }
 }

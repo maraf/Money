@@ -29,6 +29,12 @@ namespace Money.Services
         public Task<string> GetUserNameAsync()
             => http.GetStringAsync("/api/username");
 
+        public Task ChangeEmail(string email)
+            => http.PostJsonAsync("/api/user/changeemail", email);
+
+        public Task ChangePassword(string currentPassword, string newPassword)
+            => http.PostJsonAsync("/api/user/changeemail", new { Current = currentPassword, New = newPassword });
+
         private Request CreateRequest(Type type, string payload)
             => new Request() { Type = type.AssemblyQualifiedName, Payload = payload };
 

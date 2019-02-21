@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Money.Commands;
+using Money.Commands.Handlers;
 using Money.Data;
 using Money.Hubs;
+using Money.Models;
 using Money.Services;
 using Neptuo;
 using Neptuo.Activators;
@@ -174,6 +178,8 @@ namespace Money.Bootstrap
             );
 
             bootstrapTask.Initialize();
+
+            commandDispatcher.Handlers.AddAll(new UserHandler(services.BuildServiceProvider().GetRequiredService<UserManager<ApplicationUser>>()));
         }
 
         private void ReadModels()

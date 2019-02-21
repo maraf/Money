@@ -30,6 +30,8 @@ namespace Money.Models.Api
             Add<SetExchangeRate>("currency-exchangerate-set");
             Add<RemoveExchangeRate>("currency-exchangerate-remove");
             Add<DeleteCurrency>("currency-delete");
+
+            Add<ChangePassword>("user-change-password");
         }
     }
 }

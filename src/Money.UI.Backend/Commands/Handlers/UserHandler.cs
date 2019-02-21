@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Money.Events;
 using Money.Models;
 using Neptuo;
 using Neptuo.Collections.Specialized;
 using Neptuo.Commands.Handlers;
+using Neptuo.Events;
+using Neptuo.Models;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -15,11 +18,14 @@ namespace Money.Commands.Handlers
     public class UserHandler : ICommandHandler<Envelope<ChangePassword>>
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IEventDispatcher eventDispatcher;
 
-        public UserHandler(UserManager<ApplicationUser> userManager)
+        public UserHandler(UserManager<ApplicationUser> userManager, IEventDispatcher eventDispatcher)
         {
             Ensure.NotNull(userManager, "userManager");
+            Ensure.NotNull(eventDispatcher, "eventDispatcher");
             this.userManager = userManager;
+            this.eventDispatcher = eventDispatcher;
         }
 
         public async Task HandleAsync(Envelope<ChangePassword> command)
@@ -31,7 +37,16 @@ namespace Money.Commands.Handlers
 
             IdentityResult result = await userManager.ChangePasswordAsync(user, command.Body.Current, command.Body.New);
             if (!result.Succeeded)
-                throw new InvalidOperationException($"Password change failed for ID '{userKey.Identifier}'.");
+            {
+                var ex = new PasswordChangeFailedException();
+                AggregateRootExceptionDecorator decorator = new AggregateRootExceptionDecorator(ex);
+                decorator.SetCommandKey(command.Body.Key);
+                decorator.SetSourceCommandKey(command.Body.Key);
+                decorator.SetKey(userKey);
+                throw ex;
+            }
+
+            await eventDispatcher.PublishAsync(new PasswordChanged(GuidKey.Create(Guid.NewGuid(), "PasswordChanged"), userKey));
         }
     }
 }

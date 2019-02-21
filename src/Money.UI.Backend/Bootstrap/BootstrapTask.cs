@@ -179,7 +179,7 @@ namespace Money.Bootstrap
 
             bootstrapTask.Initialize();
 
-            commandDispatcher.Handlers.AddAll(new UserHandler(services.BuildServiceProvider().GetRequiredService<UserManager<ApplicationUser>>()));
+            commandDispatcher.Handlers.AddAll(new UserHandler(services.BuildServiceProvider().GetRequiredService<UserManager<ApplicationUser>>(), eventDispatcher));
         }
 
         private void ReadModels()

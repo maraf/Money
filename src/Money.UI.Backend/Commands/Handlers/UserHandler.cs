@@ -38,7 +38,7 @@ namespace Money.Commands.Handlers
             IdentityResult result = await userManager.ChangePasswordAsync(user, command.Body.Current, command.Body.New);
             if (!result.Succeeded)
             {
-                var ex = new PasswordChangeFailedException();
+                var ex = new PasswordChangeFailedException(String.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
                 AggregateRootExceptionDecorator decorator = new AggregateRootExceptionDecorator(ex);
                 decorator.SetCommandKey(command.Body.Key);
                 decorator.SetSourceCommandKey(command.Body.Key);

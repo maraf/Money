@@ -23,6 +23,8 @@ namespace Money.Pages
         public string New { get; set; }
         public string Confirm { get; set; }
 
+        public bool IsSuccess { get; set; }
+
         protected override Task OnInitAsync()
         {
             BindEvents();
@@ -31,6 +33,8 @@ namespace Money.Pages
 
         protected async Task OnFormSubmit()
         {
+            IsSuccess = false;
+
             if (!String.IsNullOrEmpty(Current) && !String.IsNullOrEmpty(New) && New == Confirm)
                 await Commands.HandleAsync(new Commands.ChangePassword(Current, New));
         }
@@ -59,6 +63,8 @@ namespace Money.Pages
             Current = null;
             New = null;
             Confirm = null;
+            IsSuccess = true;
+            StateHasChanged();
             return Task.CompletedTask;
         }
 

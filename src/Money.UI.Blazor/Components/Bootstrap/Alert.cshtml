@@ -80,6 +80,12 @@
 
     protected string ModeCssClass { get; set; }
 
+    protected override void OnInit()
+    {
+        base.OnInit();
+        UpdateModeCssClass();
+    }
+
     protected void UpdateModeCssClass()
     {
         switch (mode)

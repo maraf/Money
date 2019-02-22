@@ -18,5 +18,7 @@ namespace Money.Services
         public string CurrencyExchangeRateAlreadyExists() => "Such currency exchange rate already exists.";
         public string OutcomeAlreadyDeleted() => "The outcome is already deleted.";
         public string OutcomeAlreadyHasCategory() => "The outcome already has this category.";
+
+        public string PasswordChangeFailed(string error) => error.Replace(Environment.NewLine, "<br />");
     }
 }

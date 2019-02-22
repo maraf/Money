@@ -17,5 +17,12 @@ namespace Money.Events
         /// Gets a key of the user.
         /// </summary>
         public IKey UserKey { get; /*internal*/ set; }
+
+        public UserEvent()
+        { }
+
+        public UserEvent(IKey key, IKey aggregateKey, int version) 
+            : base(key, aggregateKey, version)
+        { }
     }
 }

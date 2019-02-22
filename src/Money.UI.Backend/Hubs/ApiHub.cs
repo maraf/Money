@@ -26,7 +26,7 @@ namespace Money.Hubs
         IEventHandler<CurrencyCreated>, IEventHandler<CurrencyDeleted>, IEventHandler<CurrencyDefaultChanged>, IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyExchangeRateSet>, IEventHandler<CurrencyExchangeRateRemoved>,
         IEventHandler<OutcomeCreated>, IEventHandler<OutcomeDeleted>, IEventHandler<OutcomeAmountChanged>, IEventHandler<OutcomeDescriptionChanged>, IEventHandler<OutcomeWhenChanged>,
-        IEventHandler<PasswordChanged>
+        IEventHandler<PasswordChanged>, IEventHandler<EmailChanged>
     {
         private readonly FormatterContainer formatters;
 
@@ -128,6 +128,7 @@ namespace Money.Hubs
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload) => RaiseEvent(payload);
 
         Task IEventHandler<PasswordChanged>.HandleAsync(PasswordChanged payload) => RaiseEvent(payload);
+        Task IEventHandler<EmailChanged>.HandleAsync(EmailChanged payload) => RaiseEvent(payload);
 
         public void Handle(AggregateRootException exception)
         {

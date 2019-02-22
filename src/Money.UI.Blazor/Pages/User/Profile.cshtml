@@ -1,33 +1,29 @@
 ﻿@page "/user"
+@inherits ProfileBase
 
 <UserHead />
 
 <div class="user">
+    <ExceptionPanel />
+
+    @if (IsSuccess)
+    {
+        <Alert Message="Your email has been changed." Mode="AlertMode.Success" IsDismissible="true" />
+    }
+
     <div class="row">
         <div class="col-md-6">
-            <form method="post" onsubmit="OnFormSubmit">
+            <form method="post" onsubmit="@OnFormSubmit">
                 <div class="form-group">
                     <label for="UserName">UserName</label>
-                    <input class="form-control" disabled="" type="text" id="UserName" name="UserName" value="maraf">
+                    <input class="form-control" disabled type="text" id="UserName" value="@UserName" />
                 </div>
                 <div class="form-group">
                     <label for="Email">Email</label>
-                    <div class="input-group">
-                        <input class="form-control" autofocus type="email" id="Email" name="Email" value="">
-                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                    </div>
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                    <input class="form-control" autofocus type="email" id="Email" bind="@Email" />
                 </div>
                 <button type="submit" class="btn btn-default">Save</button>
             </form>
         </div>
     </div>
 </div>
-
-@functions
-{
-    private async Task OnFormSubmit()
-    {
-
-    }
-}

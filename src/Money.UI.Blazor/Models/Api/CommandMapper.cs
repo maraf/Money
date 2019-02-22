@@ -32,6 +32,7 @@ namespace Money.Models.Api
             Add<DeleteCurrency>("currency-delete");
 
             Add<ChangePassword>("user-change-password");
+            Add<ChangeEmail>("user-change-email");
         }
     }
 }

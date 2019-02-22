@@ -42,8 +42,12 @@
                     message = MessageBuilder.CantDeleteDefaultCurrency();
                 else if (e is CantDeleteLastCurrencyException)
                     message = MessageBuilder.CantDeleteLastCurrency();
+                else if (e is DemoUserCantBeChangedException)
+                    message = MessageBuilder.DemoUserCantBeChanged();
                 else if (e is PasswordChangeFailedException passwordChangeFailed)
                     message = MessageBuilder.PasswordChangeFailed(passwordChangeFailed.ErrorDescription);
+                else if (e is EmailChangeFailedException)
+                    message = MessageBuilder.EmailChangeFailed();
 
                 Message = message;
             }

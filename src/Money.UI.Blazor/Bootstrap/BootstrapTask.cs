@@ -116,16 +116,16 @@ namespace Money.Bootstrap
 
         private void QueryMiddlewares(IEventHandlerCollection handlers)
         {
-            CategoryMiddleware categoryMiddleware = new CategoryMiddleware();
-            CurrencyMiddleware currencyMiddleware = new CurrencyMiddleware();
+            void AddMiddlewareAndEventHandler<T>(T handler)
+                where T : HttpQueryDispatcher.IMiddleware
+            {
+                handlers.AddAll(handler);
+                services.AddSingleton<HttpQueryDispatcher.IMiddleware>(handler);
+            }
 
-            handlers
-                .AddAll(categoryMiddleware)
-                .AddAll(currencyMiddleware);
-
-            services
-                .AddSingleton<HttpQueryDispatcher.IMiddleware>(categoryMiddleware)
-                .AddSingleton<HttpQueryDispatcher.IMiddleware>(currencyMiddleware);
+            AddMiddlewareAndEventHandler(new CategoryMiddleware());
+            AddMiddlewareAndEventHandler(new CurrencyMiddleware());
+            AddMiddlewareAndEventHandler(new UserMiddleware());
         }
     }
 }

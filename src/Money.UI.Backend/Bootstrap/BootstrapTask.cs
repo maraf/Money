@@ -179,7 +179,9 @@ namespace Money.Bootstrap
 
             bootstrapTask.Initialize();
 
-            commandDispatcher.Handlers.AddAll(new UserHandler(services.BuildServiceProvider().GetRequiredService<UserManager<ApplicationUser>>(), eventDispatcher));
+            UserHandler userHandler = new UserHandler(services.BuildServiceProvider().GetRequiredService<UserManager<ApplicationUser>>(), eventDispatcher);
+            commandDispatcher.Handlers.AddAll(userHandler);
+            queryDispatcher.AddAll(userHandler);
         }
 
         private void ReadModels()

@@ -13,5 +13,6 @@ namespace Money.Models
         public const string DemoUserPassword = "demo";
 
         public static bool IsDemo(this ClaimsPrincipal user) => user.Identity.Name == DemoUserName;
+        public static bool IsDemo(this ApplicationUser user) => user.UserName == DemoUserName;
     }
 }

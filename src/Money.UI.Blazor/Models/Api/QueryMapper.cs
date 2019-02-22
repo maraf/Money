@@ -1,4 +1,5 @@
 ﻿using Money.Models.Queries;
+using Money.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,8 @@ namespace Money.Models.Api
             Add<ListYearOutcomeFromCategory>("year-outcome-from-category");
 
             Add<SearchOutcomes>("search-outcomes");
+
+            Add<GetProfile>("user-profile");
         }
     }
 }

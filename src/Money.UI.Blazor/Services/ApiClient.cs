@@ -26,9 +26,6 @@ namespace Money.Services
             this.queryMapper = queryMapper;
         }
 
-        public Task<string> GetUserNameAsync()
-            => http.GetStringAsync("/api/username");
-
         public Task ChangeEmail(string email)
             => http.PostJsonAsync("/api/user/changeemail", email);
 

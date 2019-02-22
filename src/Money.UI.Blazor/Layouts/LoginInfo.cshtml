@@ -1,4 +1,4 @@
-﻿@inject ApiClient Api
+﻿@inject IQueryDispatcher Queries
 @inject Navigator Navigator
 
 <form action="/account/logout" method="post" id="logoutForm" class="navbar-right">
@@ -6,7 +6,7 @@
         <li>
             <a href="@Navigator.UrlUserManage()" onclick="@(() => Navigator.OpenUserManage())">
                 <Loading Context="@Loading">
-                    User: @UserName
+                    User: @Profile.UserName
                 </Loading>
             </a>
         </li>
@@ -18,15 +18,13 @@
 
 @functions 
 {
-    public string UserName { get; private set; }
+    public ProfileModel Profile { get; private set; }
 
     protected LoadingContext Loading { get; } = new LoadingContext();
 
     protected override async Task OnInitAsync()
     {
         using (Loading.Start())
-        {
-            UserName = await Api.GetUserNameAsync();
-        }
+            Profile = await Queries.QueryAsync(new GetProfile());
     }
 }

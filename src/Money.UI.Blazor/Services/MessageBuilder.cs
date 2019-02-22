@@ -19,7 +19,7 @@ namespace Money.Services
         public string OutcomeAlreadyDeleted() => "The outcome is already deleted.";
         public string OutcomeAlreadyHasCategory() => "The outcome already has this category.";
 
-        public string DemoUserCantBeChanged() => "A demo user can't modified.";
+        public string DemoUserCantBeChanged() => "A demo user can't be modified.";
         public string PasswordChangeFailed(string error) => error.Replace(Environment.NewLine, "<br />");
         public string EmailChangeFailed() => "A user email change failed.";
     }

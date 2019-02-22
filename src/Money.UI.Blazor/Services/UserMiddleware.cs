@@ -15,18 +15,30 @@ namespace Money.Services
         IEventHandler<EmailChanged>
     {
         private ProfileModel profile;
+        private Task getProfileTask;
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
         {
-            if (query is GetProfile)
+            if (query is GetProfile getProfile)
             {
                 if (profile == null)
-                    profile = (ProfileModel)await next(query);
+                {
+                    if (getProfileTask == null)
+                        getProfileTask = LoadProfileAsync(getProfile, next);
+
+                    await getProfileTask;
+                    getProfileTask = null;
+                }
 
                 return profile;
             }
 
             return await next(query);
+        }
+
+        private async Task LoadProfileAsync(GetProfile query, HttpQueryDispatcher.Next next)
+        {
+            profile = (ProfileModel)await next(query);
         }
 
         Task IEventHandler<EmailChanged>.HandleAsync(EmailChanged payload)

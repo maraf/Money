@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Blazor.Server;
@@ -51,13 +52,26 @@ namespace Money
                 });
             });
 
-            services.AddAuthentication().AddCookie();
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => options.Events = new JwtBearerEvents()
+                {
+                    OnAuthenticationFailed = c =>
+                    {
+                        c.NoResult();
+
+                        c.Response.StatusCode = 401;
+                        c.Response.ContentType = "text/plain";
+
+                        return c.Response.WriteAsync("There was an issue authorizing you.");
+                    }
+                });
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Api", policy =>
                 {
-                    policy.AuthenticationSchemes.Add(CookieAuthenticationDefaults.AuthenticationScheme);
+                    policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
                     policy.RequireAuthenticatedUser();
                 });
             });
@@ -95,7 +109,9 @@ namespace Money
                 app.UseExceptionHandler("/error");
             }
 
-            app.UseStaticFiles();
+            app.UseStatusCodePages();
+
+            //app.UseStaticFiles();
 
             app.UseAuthentication();
 

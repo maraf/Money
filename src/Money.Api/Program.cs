@@ -5,16 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Money.Data;
 
-namespace Money.Api
+namespace Money
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build().SeedData().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

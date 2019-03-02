@@ -5,6 +5,7 @@
     <RunCommand>dotnet</RunCommand>
     <RunArguments>blazor serve</RunArguments>
     <RootNamespace>Money</RootNamespace>
+    <VersionPrefix>1.7.0.0</VersionPrefix>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -29,6 +30,4 @@
     </Content>
     <Compile Update="**\*.cshtml.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
-
-  <!--<Import Project="$(SolutionDir)\build\Blazor.targets" />-->
 </Project>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Money.Controllers
+namespace Money.Domain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

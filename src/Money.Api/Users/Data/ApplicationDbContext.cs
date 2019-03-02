@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Money.Models;
+using Money.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Money.Data
+namespace Money.Users.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

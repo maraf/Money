@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Money.Commands;
-using Money.Models;
+using Money.Users.Models;
 using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Models.Keys;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Data
+namespace Money.Users.Data
 {
     public static class ApplicationDataSeeder
     {

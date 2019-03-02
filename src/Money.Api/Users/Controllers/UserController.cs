@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Money.Models;
+using Money.Users.Models;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Controllers
+namespace Money.Users.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase

@@ -17,6 +17,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Money.Data;
 using Money.Models;
+using Money.Users.Data;
+using Money.Users.Models;
 
 namespace Money
 {

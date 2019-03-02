@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Models
+namespace Money.Users.Models
 {
     public static class ClaimsPrincipalExtensions
     {

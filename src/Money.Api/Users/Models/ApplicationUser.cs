@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace Money.Models
+namespace Money.Users.Models
 {
     public class ApplicationUser : IdentityUser
     {

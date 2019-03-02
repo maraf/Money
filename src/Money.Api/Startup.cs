@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,6 +66,22 @@ namespace Money
                         IssuerSigningKey = configuration.GetSecurityKey()
                     };
 
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var path = context.HttpContext.Request.Path;
+                            if (path.StartsWithSegments("/api"))
+                            {
+                                var accessToken = context.HttpContext.Request.Query["access_token"];
+                                if (!string.IsNullOrEmpty(accessToken))
+                                    context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
+
                     options.SaveToken = true;
                 });
 
@@ -75,7 +92,7 @@ namespace Money
                         .RequireAuthenticatedUser()
                         .Build();
                 });
-            
+
             services
                 .AddIdentityCore<ApplicationUser>(options => Configuration.GetSection("Identity").GetSection("Password").Bind(options.Password))
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -93,6 +110,7 @@ namespace Money
 
             services
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .AddSingleton<IUserIdProvider>(new DefaultUserIdProvider())
                 .AddSingleton<ApiHub>()
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>();
@@ -108,12 +126,22 @@ namespace Money
             else
                 app.UseStatusCodePages();
 
+            app.UseCors(p =>
+            {
+                p.WithOrigins("http://localhost:48613");
+                p.AllowAnyMethod();
+                p.AllowCredentials();
+                p.AllowAnyHeader();
+                p.SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+            });
+
+            app.UseAuthentication();
+
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ApiHub>("/api");
             });
 
-            app.UseAuthentication();
             app.UseMvc();
         }
     }

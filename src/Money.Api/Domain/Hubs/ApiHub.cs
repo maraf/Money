@@ -49,6 +49,9 @@ namespace Money.Hubs
         {
             string connectionId = Context.ConnectionId;
             string userId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                throw new UnauthorizedAccessException();
+
             IKey userKey = StringKey.Create(userId, "User");
             return (connectionId, userKey);
         }

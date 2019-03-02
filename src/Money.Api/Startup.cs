@@ -23,14 +23,25 @@ namespace Money
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration) => Configuration = configuration;
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
+        {
+            Configuration = configuration;
+            Environment = environment;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
             ConnectionStrings connectionStrings = Configuration
                 .GetSection("ConnectionStrings")
                 .Get<ConnectionStrings>();
+
+            string ApplyBasePath(string value) => value.Replace("{BasePath}", Environment.ContentRootPath);
+
+            connectionStrings.Application = ApplyBasePath(connectionStrings.Application);
+            connectionStrings.EventSourcing = ApplyBasePath(connectionStrings.EventSourcing);
+            connectionStrings.ReadModel = ApplyBasePath(connectionStrings.ReadModel);
 
             services
                 .AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionStrings.Application));
@@ -71,7 +82,9 @@ namespace Money
                 .AddRouting(options => options.LowercaseUrls = true)
                 .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddTransient<JwtSecurityTokenHandler>();
+            services
+                .AddTransient<JwtSecurityTokenHandler>()
+                .Configure<JwtOptions>(Configuration.GetSection("Jwt"));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

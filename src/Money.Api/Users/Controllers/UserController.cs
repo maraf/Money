@@ -41,7 +41,8 @@ namespace Money.Users.Controllers
                 {
                     var claims = new[]
                     {
-                        new Claim(ClaimTypes.Name, model.UserName)
+                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(ClaimTypes.NameIdentifier, user.Id)
                     };
 
                     var credentials = new SigningCredentials(configuration.GetSecurityKey(), SecurityAlgorithms.HmacSha256);

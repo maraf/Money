@@ -30,5 +30,5 @@
     <Compile Update="**\*.cshtml.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
 
-  <Import Project="$(SolutionDir)\build\Blazor.targets" />
+  <!--<Import Project="$(SolutionDir)\build\Blazor.targets" />-->
 </Project>

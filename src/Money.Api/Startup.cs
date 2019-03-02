@@ -8,15 +8,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
-using Money.Data;
+using Money.Hubs;
 using Money.Models;
+using Money.Models.Api;
 using Money.Users.Data;
 using Money.Users.Models;
 
@@ -85,16 +85,33 @@ namespace Money
                 .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services
+                .AddSignalR();
+
+            services
                 .AddTransient<JwtSecurityTokenHandler>()
                 .Configure<JwtOptions>(Configuration.GetSection("Jwt"));
+
+            services
+                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .AddSingleton<ApiHub>()
+                .AddSingleton<CommandMapper>()
+                .AddSingleton<QueryMapper>();
+
+            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings);
+            bootstrapTask.Initialize();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
+            else
+                app.UseStatusCodePages();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ApiHub>("/api");
+            });
 
             app.UseAuthentication();
             app.UseMvc();

@@ -31,13 +31,10 @@ namespace Money.Pages
         private async Task LoginAsync(string userName, string password, bool isPermanent)
         {
             IsError = false;
-
-            string token = await ApiClient.LoginAsync(userName, password, isPermanent);
-            if (string.IsNullOrEmpty(token))
-            {
+            if (!await ApiClient.LoginAsync(userName, password, isPermanent))
                 IsError = true;
-                return;
-            }
+            else
+                Navigator.OpenSummary();
         }
     }
 }

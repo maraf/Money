@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor;
 using Money.Models.Api;
+using Money.Users.Models;
 using Neptuo;
 using Neptuo.Exceptions.Handlers;
 using System;
@@ -15,6 +16,8 @@ namespace Money.Services
 {
     public class ApiClient
     {
+        private static string token;
+
         private readonly HttpClient http;
         private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
@@ -31,12 +34,41 @@ namespace Money.Services
             this.queryMapper = queryMapper;
             this.exceptionHandler = exceptionHandler;
             http.BaseAddress = new Uri("http://localhost:63803");
-            //http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZGVtbyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMjhmNGQxNzYtNjg5ZS00ZDRkLTlhMzgtYTg3MGQ5NzFhZDc5IiwiZXhwIjoxNTUyNzI2NDU2LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0In0.4tSJlngLynld3Ul_HuicpO4zUERjYZ4FFjTrJxfE8Po");
+
+            EnsureAuthorization();
         }
 
-        public Task<string> LoginAsync(string userName, string password, bool isPermanent)
+        private void ClearAuthorization()
         {
-            throw new NotImplementedException();
+            token = null;
+            http.DefaultRequestHeaders.Authorization = null;
+        }
+
+        private void EnsureAuthorization()
+        {
+            if (token != null)
+                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        public async Task<bool> LoginAsync(string userName, string password, bool isPermanent)
+        {
+            LoginResponse response = await http.PostJsonAsync<LoginResponse>(
+                "/api/user/login",
+                new LoginRequest()
+                {
+                    UserName = userName,
+                    Password = password
+                }
+            );
+
+            if (!String.IsNullOrEmpty(response.Token))
+            {
+                token = response.Token;
+                EnsureAuthorization();
+                return true;
+            }
+
+            return false;
         }
 
         private Request CreateRequest(Type type, string payload)
@@ -50,6 +82,7 @@ namespace Money.Services
                 HttpResponseMessage response = await http.PostAsync($"/api/query/{url}", new StringContent(payload, Encoding.UTF8, "text/json"));
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
+                    ClearAuthorization();
                     UnauthorizedAccessException exception = new UnauthorizedAccessException();
                     exceptionHandler.Handle(exception);
                     throw exception;

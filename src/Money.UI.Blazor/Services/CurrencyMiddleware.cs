@@ -28,10 +28,9 @@ namespace Money.Services
                 if (models.Count == 0)
                 {
                     if (listAllTask == null)
-                        listAllTask = LoadAllAsync(listAll, next);
+                        listAllTask = LoadAllAsync(listAll, next).ContinueWith(t => listAllTask = null);
 
                     await listAllTask;
-                    listAllTask = null;
                 }
 
                 return models.Select(c => c.Clone()).ToList();

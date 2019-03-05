@@ -6,13 +6,10 @@
         You can sign in as <strong>demo</strong> user with <strong>demo</strong> password or register your own account.
     </div>
 
+    <ValidationSummary ErrorMessages="@ErrorMessages" />
     <div class="row">
         <div class="col-md-4">
             <section>
-                @if (IsError)
-                {
-                    <Alert Title="Error" Message="User name and password don't match." Mode="AlertMode.Error" />
-                }
 
                 <form onsubmit="@OnSubmitAsync">
                     <div asp-validation-summary="All" class="text-danger"></div>

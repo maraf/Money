@@ -1,7 +1,8 @@
 ﻿@inject IQueryDispatcher Queries
 @inject Navigator Navigator
+@inject ApiClient ApiClient
 
-<form action="/account/logout" method="post" id="logoutForm" class="navbar-right">
+<form class="navbar-right" onsubmit="@OnLogoutAsync">
     <ul class="nav navbar-nav navbar-right">
         <li>
             <a href="@Navigator.UrlUserManage()" onclick="@(() => Navigator.OpenUserManage())">
@@ -26,5 +27,11 @@
     {
         using (Loading.Start())
             Profile = await Queries.QueryAsync(new GetProfile());
+    }
+
+    protected async Task OnLogoutAsync()
+    {
+        await ApiClient.LogoutAsync();
+        Navigator.OpenLogin();
     }
 }

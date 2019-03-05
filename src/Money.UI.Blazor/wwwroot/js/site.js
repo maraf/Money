@@ -73,5 +73,20 @@ window.Money = {
         return true;
     },
     StartSignalR: StartSignalR,
-    StopSignalR: StopSignalR
+    StopSignalR: StopSignalR,
+    SaveToken: function (token) {
+        if ("localStorage" in window) {
+            if (token == null)
+                window.localStorage.removeItem("token");
+            else
+                window.localStorage.setItem("token", token);
+        }
+    },
+    LoadToken: function () {
+        if ("localStorage" in window) {
+            return window.localStorage.getItem("token");
+        }
+
+        return null;
+    }
 };

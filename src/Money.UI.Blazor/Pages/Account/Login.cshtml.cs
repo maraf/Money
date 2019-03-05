@@ -20,7 +20,7 @@ namespace Money.Pages
         protected string Password { get; set; }
         protected bool IsPermanent { get; set; }
 
-        protected bool IsError { get; set; }
+        protected List<string> ErrorMessages { get; } = new List<string>();
 
         protected Task OnSubmitAsync()
             => LoginAsync(UserName, Password, IsPermanent);
@@ -30,11 +30,26 @@ namespace Money.Pages
 
         private async Task LoginAsync(string userName, string password, bool isPermanent)
         {
-            IsError = false;
-            if (!await ApiClient.LoginAsync(userName, password, isPermanent))
-                IsError = true;
-            else
-                Navigator.OpenSummary();
+            ErrorMessages.Clear();
+
+            if (Validate(userName, password))
+            {
+                if (!await ApiClient.LoginAsync(userName, password, isPermanent))
+                    ErrorMessages.Add("User name and password don't match.");
+                else
+                    Navigator.OpenSummary();
+            }
+        }
+
+        private bool Validate(string userName, string password)
+        {
+            if (String.IsNullOrEmpty(userName))
+                ErrorMessages.Add("Please, fill user name.");
+
+            if (String.IsNullOrEmpty(password))
+                ErrorMessages.Add("Please, fill password.");
+
+            return ErrorMessages.Count == 0;
         }
     }
 }

@@ -43,6 +43,7 @@ namespace Money.Services
         {
             token = null;
             http.DefaultRequestHeaders.Authorization = null;
+            Interop.SaveToken(null);
             Interop.StopSignalR();
         }
 
@@ -70,10 +71,19 @@ namespace Money.Services
             {
                 token = response.Token;
                 EnsureAuthorization();
+
+                if (isPermanent)
+                    Interop.SaveToken(token);
+
                 return true;
             }
 
             return false;
+        }
+
+        public async Task LogoutAsync()
+        {
+            ClearAuthorization();
         }
 
         private Request CreateRequest(Type type, string payload)
@@ -81,6 +91,12 @@ namespace Money.Services
 
         public async Task<Response> QueryAsync(Type type, string payload)
         {
+            if (token == null)
+            {
+                token = await Interop.LoadTokenAsync();
+                EnsureAuthorization();
+            }
+
             string url = queryMapper.FindUrlByType(type);
             if (url != null)
             {

@@ -20,5 +20,11 @@ namespace Money
 
         public static void StopSignalR()
             => JSRuntime.Current.InvokeAsync<bool>("Money.StopSignalR");
+
+        public static void SaveToken(string token)
+            => JSRuntime.Current.InvokeAsync<bool>("Money.SaveToken", token);
+
+        public static Task<string> LoadTokenAsync()
+            => JSRuntime.Current.InvokeAsync<string>("Money.LoadToken");
     }
 }

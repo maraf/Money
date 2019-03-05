@@ -34,8 +34,8 @@ window.Money = {
 };
 
 var connection = new signalR.HubConnectionBuilder()
-    .withUrl("/api")
-    .build();;
+    .withUrl("http://localhost:63803/api", { accessTokenFactory: function () { return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZGVtbyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMjhmNGQxNzYtNjg5ZS00ZDRkLTlhMzgtYTg3MGQ5NzFhZDc5IiwiZXhwIjoxNTUyNzI2NDU2LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0In0.4tSJlngLynld3Ul_HuicpO4zUERjYZ4FFjTrJxfE8Po" }})
+    .build();
 
 connection.on("RaiseEvent", function (e) {
     console.log("JS: Event: " + e);
@@ -54,9 +54,9 @@ connection.onclose(function () {
         alert('Underlaying connection to the server has closed. Reloading the page...');
     }
 
-    setTimeout(function () {
-        window.location.reload();
-    }, 2000);
+    //setTimeout(function () {
+    //    window.location.reload();
+    //}, 2000);
 });
 connection.start().then(function () {
     isStarted = true;

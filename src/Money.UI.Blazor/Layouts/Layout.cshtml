@@ -1,4 +1,7 @@
-﻿@inherits BlazorLayoutComponent
+﻿@using Neptuo.Exceptions.Handlers
+@inherits BlazorLayoutComponent
+@inject ExceptionHandlerBuilder ExceptionHandlerBuilder
+@inject Navigator Navigator
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -14,3 +17,13 @@
         <p>&copy; 2018 - Neptuo</p>
     </footer>
 </div>
+
+@functions
+{ 
+    protected override void OnInit()
+    {
+        base.OnInit();
+
+        ExceptionHandlerBuilder.Handler<UnauthorizedAccessException>(e => Navigator.OpenLogin());
+    }
+}

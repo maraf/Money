@@ -6,6 +6,7 @@ using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Formatters;
 using Neptuo.Queries;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,6 +19,7 @@ using System.Threading.Tasks;
 namespace Money.Controllers
 {
     [Authorize]
+    [ApiController]
     [Route("[controller]/[action]")]
     public class ApiController : Controller
     {
@@ -56,13 +58,13 @@ namespace Money.Controllers
 
         [HttpPost]
         [Route("{*url}")]
-        public ActionResult Query(string url, [FromBody] string payload)
+        public ActionResult Query(string url, JObject rawQuery)
         {
             Ensure.NotNullOrEmpty(url, "url");
-            Ensure.NotNullOrEmpty(payload, "payload");
+            Ensure.NotNull(rawQuery, "rawQuery");
 
             Type type = queryMapper.FindTypeByUrl(url);
-            return Query(payload, type);
+            return Query(rawQuery.ToString(), type);
         }
 
         private ActionResult Query(string payload, Type type)

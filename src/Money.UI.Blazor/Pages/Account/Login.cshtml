@@ -1,1 +1,48 @@
 ﻿@page "/account/login"
+@inherits LoginBase
+
+<div class="login">
+    <div class="alert alert-info">
+        You can sign in as <strong>demo</strong> user with <strong>demo</strong> password or register your own account.
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <section>
+                @if (IsError)
+                {
+                    <Alert Title="Error" Message="User name and password don't match." Mode="AlertMode.Error" />
+                }
+
+                <form onsubmit="@OnSubmitAsync">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label for="UserName">User name</label>
+                        <input id="UserName" class="form-control" type="text" autofocus bind="@UserName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <input id="Password" class="form-control" type="password" bind="@Password" />
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label for="RememberMe">
+                                <input id="RememberMe" type="checkbox" bind="@IsPermanent" />
+                                Remember me?
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Log in</button>
+                        <button type="submit" class="btn btn-default" onclick="@OnDemoSubmitAsync">Login with <strong>demo</strong> user</button>
+                    </div>
+                    <div class="form-group">
+                        <p>
+                            <a href="@Navigator.UrlAccountRegister()">Register as a new user?</a>
+                        </p>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>

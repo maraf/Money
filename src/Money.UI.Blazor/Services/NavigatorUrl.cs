@@ -45,6 +45,12 @@ namespace Money.Services
         public string UrlUserPassword()
             => "/user/changepassword";
 
+        public string UrlAccountLogin()
+            => "/account/login";
+
+        public string UrlAccountRegister()
+            => "/account/register";
+
         #region External
 
         public string UrlMoneyProject()

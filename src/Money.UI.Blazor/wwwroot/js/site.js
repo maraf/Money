@@ -23,6 +23,47 @@ window.Bootstrap = {
     }
 };
 
+var connection = null;
+function StartSignalR(url, token) {
+    StopSignalR();
+
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl(url, { accessTokenFactory: function () { return token; } })
+        .build();
+
+    connection.on("RaiseEvent", function (e) {
+        console.log("JS: Event: " + e);
+
+        DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseEvent", e);
+    });
+
+    connection.on("RaiseException", function (e) {
+        console.log("JS: Exception: " + e);
+
+        DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseException", e);
+    });
+
+    connection.onclose(function () {
+        if (window.location.hostname != "localhost") {
+            alert('Underlaying connection to the server has closed. Reloading the page...');
+        }
+
+        //setTimeout(function () {
+        //    window.location.reload();
+        //}, 2000);
+    });
+    connection.start().then(function () {
+        isStarted = true;
+    });
+}
+
+function StopSignalR() {
+    if (connection != null) {
+        connection.stop();
+        connection = null;
+    }
+}
+
 window.Money = {
     ApplicationStarted: function () {
         isLoaded = true;
@@ -30,34 +71,7 @@ window.Money = {
     NavigateTo: function (href) {
         window.location.href = href;
         return true;
-    }
+    },
+    StartSignalR: StartSignalR,
+    StopSignalR: StopSignalR
 };
-
-var connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:63803/api", { accessTokenFactory: function () { return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZGVtbyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMjhmNGQxNzYtNjg5ZS00ZDRkLTlhMzgtYTg3MGQ5NzFhZDc5IiwiZXhwIjoxNTUyNzI2NDU2LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0In0.4tSJlngLynld3Ul_HuicpO4zUERjYZ4FFjTrJxfE8Po" }})
-    .build();
-
-connection.on("RaiseEvent", function (e) {
-    console.log("JS: Event: " + e);
-
-    DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseEvent", e);
-});
-
-connection.on("RaiseException", function (e) {
-    console.log("JS: Exception: " + e);
-
-    DotNet.invokeMethodAsync("Money.UI.Blazor", "RaiseException", e);
-});
-
-connection.onclose(function () {
-    if (window.location.hostname != "localhost") {
-        alert('Underlaying connection to the server has closed. Reloading the page...');
-    }
-
-    //setTimeout(function () {
-    //    window.location.reload();
-    //}, 2000);
-});
-connection.start().then(function () {
-    isStarted = true;
-});

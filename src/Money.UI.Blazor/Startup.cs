@@ -33,7 +33,7 @@ namespace Money
         {
             app.AddComponent<App>("app");
 
-            JSRuntime.Current.InvokeAsync<object>("Money.ApplicationStarted");
+            Interop.ApplicationStarted();
         }
     }
 }

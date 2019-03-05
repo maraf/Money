@@ -16,6 +16,7 @@ namespace Money.Services
 {
     public class ApiClient
     {
+        private const string rootUrl = "http://localhost:63803";
         private static string token;
 
         private readonly HttpClient http;
@@ -33,7 +34,7 @@ namespace Money.Services
             this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
             this.exceptionHandler = exceptionHandler;
-            http.BaseAddress = new Uri("http://localhost:63803");
+            http.BaseAddress = new Uri(rootUrl);
 
             EnsureAuthorization();
         }
@@ -42,12 +43,16 @@ namespace Money.Services
         {
             token = null;
             http.DefaultRequestHeaders.Authorization = null;
+            Interop.StopSignalR();
         }
 
         private void EnsureAuthorization()
         {
-            if (token != null)
+            if (token != null && http.DefaultRequestHeaders.Authorization?.Parameter != token)
+            {
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                Interop.StartSignalR(rootUrl + "/api", token);
+            }
         }
 
         public async Task<bool> LoginAsync(string userName, string password, bool isPermanent)

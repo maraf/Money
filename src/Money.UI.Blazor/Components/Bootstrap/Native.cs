@@ -19,6 +19,9 @@ namespace Money.Components.Bootstrap
             JSRuntime.Current.InvokeAsync<object>("Bootstrap.Modal.Register", id);
         }
 
+        internal static void ToggleModal(string id, bool isVisible) 
+            => JSRuntime.Current.InvokeAsync<object>("Bootstrap.Modal.Toggle", id, isVisible);
+
         internal static void RemoveModal(string id)
             => modals.Remove(id);
 

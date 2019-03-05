@@ -129,7 +129,7 @@ namespace Money.Components.Bootstrap
             Native.AddModal(Id, this);
 
             if (isVisibleChanged)
-                JSRuntime.Current.InvokeAsync<object>("Bootstrap.Modal.Toggle", Id, isVisible);
+                Native.ToggleModal(Id, isVisible);
         }
 
         public void Dispose()

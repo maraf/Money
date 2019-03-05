@@ -34,7 +34,7 @@ namespace Money.Services
             => LocationChanged?.Invoke(e);
 
         private void OpenExternal(string url)
-            => JSRuntime.Current.InvokeAsync<bool>("Money.NavigateTo", url);
+            => Interop.NavigateTo(url);
 
         public void OpenSummary()
             => uri.NavigateTo(UrlSummary());

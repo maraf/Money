@@ -1,37 +1,17 @@
-﻿@inject IQueryDispatcher Queries
-@inject Navigator Navigator
-@inject ApiClient ApiClient
+﻿@using Money.Layouts
+@inherits LoginInfoBase
 
 <form class="navbar-right" onsubmit="@OnLogoutAsync">
     <ul class="nav navbar-nav navbar-right">
         <li>
-            <a href="@Navigator.UrlUserManage()" onclick="@(() => Navigator.OpenUserManage())">
+            <a href="@Navigator.UrlUserManage()">
                 <Loading Context="@Loading">
-                    User: @Profile.UserName
+                    User: @(Profile?.UserName ?? "---")
                 </Loading>
             </a>
         </li>
         <li>
-            <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+            <button type="button" class="btn btn-link navbar-btn navbar-link" onclick="@OnLogoutAsync">Log out</button>
         </li>
     </ul>
 </form>
-
-@functions 
-{
-    public ProfileModel Profile { get; private set; }
-
-    protected LoadingContext Loading { get; } = new LoadingContext();
-
-    protected override async Task OnInitAsync()
-    {
-        using (Loading.Start())
-            Profile = await Queries.QueryAsync(new GetProfile());
-    }
-
-    protected async Task OnLogoutAsync()
-    {
-        await ApiClient.LogoutAsync();
-        Navigator.OpenLogin();
-    }
-}

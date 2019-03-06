@@ -17,7 +17,8 @@ namespace Money.Services
         IEventHandler<CategoryDescriptionChanged>,
         IEventHandler<CategoryIconChanged>,
         IEventHandler<CategoryColorChanged>,
-        IEventHandler<CategoryDeleted>
+        IEventHandler<CategoryDeleted>,
+        IEventHandler<UserSignedOut>
     {
         private readonly List<CategoryModel> models = new List<CategoryModel>();
         private Task listAllTask;
@@ -108,5 +109,11 @@ namespace Money.Services
 
         Task IEventHandler<CategoryDeleted>.HandleAsync(CategoryDeleted payload)
             => Update(payload.AggregateKey, model => models.Remove(model));
+
+        Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
+        {
+            models.Clear();
+            return Task.CompletedTask;
+        }
     }
 }

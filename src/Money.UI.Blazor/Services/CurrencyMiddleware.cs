@@ -16,7 +16,8 @@ namespace Money.Services
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencySymbolChanged>,
-        IEventHandler<CurrencyDeleted>
+        IEventHandler<CurrencyDeleted>,
+        IEventHandler<UserSignedOut>
     {
         private readonly List<CurrencyModel> models = new List<CurrencyModel>();
         private Task listAllTask;
@@ -88,5 +89,11 @@ namespace Money.Services
 
         Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload)
             => Update(payload.UniqueCode, model => models.Remove(model));
+
+        Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
+        {
+            models.Clear();
+            return Task.CompletedTask;
+        }
     }
 }

@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 namespace Money.Services
 {
     internal class UserMiddleware : HttpQueryDispatcher.IMiddleware,
-        IEventHandler<EmailChanged>
+        IEventHandler<EmailChanged>,
+        IEventHandler<UserSignedOut>
     {
         private ProfileModel profile;
         private Task getProfileTask;
@@ -44,6 +45,13 @@ namespace Money.Services
         {
             if (profile != null)
                 profile.Email = payload.Email;
+
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
+        {
+            profile = null;
 
             return Task.CompletedTask;
         }

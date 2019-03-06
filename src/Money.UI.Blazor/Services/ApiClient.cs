@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Blazor;
+using Money.Events;
 using Money.Models.Api;
 using Money.Users.Models;
 using Neptuo;
+using Neptuo.Events;
 using Neptuo.Exceptions.Handlers;
 using System;
 using System.Collections.Generic;
@@ -23,17 +25,20 @@ namespace Money.Services
         private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
         private readonly IExceptionHandler exceptionHandler;
+        private readonly IEventDispatcher eventDispatcher;
 
-        public ApiClient(HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler)
+        public ApiClient(HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher)
         {
             Ensure.NotNull(http, "http");
             Ensure.NotNull(commandMapper, "commandMapper");
             Ensure.NotNull(queryMapper, "queryMapper");
             Ensure.NotNull(exceptionHandler, "exceptionHandler");
+            Ensure.NotNull(eventDispatcher, "eventDispatcher");
             this.http = http;
             this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
             this.exceptionHandler = exceptionHandler;
+            this.eventDispatcher = eventDispatcher;
             http.BaseAddress = new Uri(rootUrl);
 
             EnsureAuthorization();
@@ -41,10 +46,15 @@ namespace Money.Services
 
         private void ClearAuthorization()
         {
-            token = null;
-            http.DefaultRequestHeaders.Authorization = null;
-            Interop.SaveToken(null);
-            Interop.StopSignalR();
+            if (token != null)
+            {
+                token = null;
+                http.DefaultRequestHeaders.Authorization = null;
+                Interop.SaveToken(null);
+                Interop.StopSignalR();
+
+                eventDispatcher.PublishAsync(new UserSignedOut());
+            }
         }
 
         private void EnsureAuthorization()
@@ -53,6 +63,8 @@ namespace Money.Services
             {
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 Interop.StartSignalR(rootUrl + "/api", token);
+
+                eventDispatcher.PublishAsync(new UserSignedIn());
             }
         }
 

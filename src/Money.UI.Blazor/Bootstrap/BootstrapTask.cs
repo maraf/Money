@@ -71,6 +71,7 @@ namespace Money.Bootstrap
                 .AddTransient(typeof(ILog<>), typeof(DefaultLog<>))
                 .AddSingleton(eventDispatcher)
                 .AddSingleton(eventDispatcher.Handlers)
+                .AddSingleton(eventDispatcher.Dispatcher)
                 .AddSingleton(exceptionHandler)
                 .AddSingleton(exceptionHandler.Handler)
                 .AddSingleton(exceptionHandler.HandlerBuilder);

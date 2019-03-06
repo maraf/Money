@@ -26,10 +26,8 @@ namespace Neptuo.Events
             this.log = logFactory.Scope("BrowserEventDispatcher");
         }
 
-        public IEventHandlerCollection Handlers
-        {
-            get => manager;
-        }
+        public IEventHandlerCollection Handlers => manager;
+        public IEventDispatcher Dispatcher => manager;
 
         public void Raise(string rawPayload)
         {

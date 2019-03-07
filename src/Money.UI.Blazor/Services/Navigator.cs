@@ -36,6 +36,9 @@ namespace Money.Services
         private void OpenExternal(string url)
             => Interop.NavigateTo(url);
 
+        public void Open(string url)
+            => uri.NavigateTo(url);
+
         public void OpenSummary()
             => uri.NavigateTo(UrlSummary());
 

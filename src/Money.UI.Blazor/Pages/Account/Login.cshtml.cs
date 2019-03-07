@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.AspNetCore.Blazor.Services;
 using Money.Services;
+using Neptuo.Collections.Specialized;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Money.Pages
         internal ApiClient ApiClient { get; set; }
 
         [Inject]
-        internal IUriHelper Uri { get; set; }
+        internal QueryString QueryString { get; set; }
 
         [Parameter]
         protected string ReturnUrl { get; set; }
@@ -32,29 +33,7 @@ namespace Money.Pages
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            SetReturnUrl();
-        }
-
-        private void SetReturnUrl()
-        {
-            string url = Uri.GetAbsoluteUri();
-            int indexOfQuery = url.IndexOf('?');
-            if (indexOfQuery >= 0)
-            {
-                string query = url.Substring(indexOfQuery + 1).ToLowerInvariant();
-                string[] parameters = query.Split('&');
-                foreach (string parameter in parameters)
-                {
-                    string[] keyValue = parameter.Split('=');
-                    if (keyValue[0] == "returnurl")
-                    {
-                        if (keyValue.Length == 2)
-                            ReturnUrl = keyValue[1];
-
-                        break;
-                    }
-                }
-            }
+            ReturnUrl = QueryString.Find<string>("returnUrl");
         }
 
         protected Task OnSubmitAsync()
@@ -71,8 +50,8 @@ namespace Money.Pages
             {
                 if (!await ApiClient.LoginAsync(userName, password, isPermanent))
                     ErrorMessages.Add("User name and password don't match.");
-                else if (ReturnUrl != null)
-                    Uri.NavigateTo(ReturnUrl);
+                else if (!String.IsNullOrEmpty(ReturnUrl))
+                    Navigator.Open(ReturnUrl);
                 else
                     Navigator.OpenSummary();
             }

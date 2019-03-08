@@ -3,6 +3,7 @@ using Money.Commands;
 using Money.Events;
 using Money.Models;
 using Money.Models.Confirmation;
+using Money.Models.Loading;
 using Money.Models.Queries;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -42,13 +43,16 @@ namespace Money.Pages
         protected List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
         protected CategoryModel Selected { get; set; }
         protected DeleteContext<CategoryModel> Delete { get; } = new DeleteContext<CategoryModel>();
+        protected LoadingContext Loading { get; } = new LoadingContext();
 
         protected override async Task OnInitAsync()
         {
             BindEvents();
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteCategory(model.Key));
             Delete.MessageFormatter = model => $"Do you really want to delete category '{model.Name}'?";
-            await LoadDataAsync();
+
+            using (Loading.Start())
+                await LoadDataAsync();
         }
 
         protected async void Reload()

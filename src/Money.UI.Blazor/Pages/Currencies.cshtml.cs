@@ -3,6 +3,7 @@ using Money.Commands;
 using Money.Events;
 using Money.Models;
 using Money.Models.Confirmation;
+using Money.Models.Loading;
 using Money.Models.Queries;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -59,13 +60,16 @@ namespace Money.Pages
         public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
         public CurrencyModel Selected { get; protected set; }
         protected DeleteContext<CurrencyModel> Delete { get; } = new DeleteContext<CurrencyModel>();
+        protected LoadingContext Loading { get; } = new LoadingContext();
 
         protected override async Task OnInitAsync()
         {
             BindEvents();
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteCurrency(model.UniqueCode));
             Delete.MessageFormatter = model => $"Do you really want to delete currency '{model.Symbol}'?";
-            await LoadDataAsync();
+
+            using (Loading.Start())
+                await LoadDataAsync();
         }
 
         protected async void OnEvent()

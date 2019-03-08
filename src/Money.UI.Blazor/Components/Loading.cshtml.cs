@@ -26,6 +26,9 @@ namespace Money.Components
         [Parameter]
         protected RenderFragment ChildContent { get; set; }
 
+        [Parameter]
+        protected RenderFragment LoadingContent { get; set; } = r => r.AddMarkupContent(1, "<i>Loading...</i>");
+
         public override void SetParameters(ParameterCollection parameters)
         {
             if (Context != null)

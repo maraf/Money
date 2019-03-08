@@ -2,16 +2,16 @@
 
 @if (IsOverlay)
 {
-<div class="loading @(IsLoading ? "loading-active" : "")">
-    @ChildContent
-    <div class="mask"></div>
-</div>
+    <div class="loading @(IsLoading ? "loading-active" : "")">
+        @ChildContent
+        <div class="mask"></div>
+    </div>
 }
 else
 {
     if (IsLoading)
     {
-        <i>Loading...</i>
+        @LoadingContent
     }
     else
     {

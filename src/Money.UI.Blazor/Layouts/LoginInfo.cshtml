@@ -1,17 +1,33 @@
 ﻿@using Money.Layouts
 @inherits LoginInfoBase
 
-<form class="navbar-right" onsubmit="@OnLogoutAsync">
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <a href="@Navigator.UrlUserManage()">
-                <Loading Context="@Loading">
-                    User: @(Profile?.UserName ?? "---")
-                </Loading>
-            </a>
-        </li>
-        <li>
-            <button type="button" class="btn btn-link navbar-btn navbar-link" onclick="@OnLogoutAsync">Log out</button>
-        </li>
-    </ul>
-</form>
+@if (IsAuthenticated || Loading.IsLoading)
+{
+    <form class="navbar-right" onsubmit="@OnLogoutAsync">
+        <ul class="nav navbar-nav navbar-right">
+            <Loading Context="@Loading">
+                <LoadingContent>
+                    <li>
+                        <span class="navbar-text">
+                            Loading...
+                        </span>
+                    </li>
+                </LoadingContent>
+                <ChildContent>
+                    @if (Profile != null)
+                    {
+                        <li>
+                            <a href="@Navigator.UrlUserManage()">
+                                <Icon Identifier="user" />
+                                @Profile.UserName
+                            </a>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-link navbar-btn navbar-link" onclick="@OnLogoutAsync">Log out</button>
+                        </li>
+                    }
+                </ChildContent>
+            </Loading>
+        </ul>
+    </form>
+}

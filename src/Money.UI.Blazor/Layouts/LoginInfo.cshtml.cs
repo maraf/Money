@@ -29,7 +29,9 @@ namespace Money.Layouts
         [Inject]
         public ApiClient ApiClient { get; set; }
 
-        public ProfileModel Profile { get; private set; }
+        protected ProfileModel Profile { get; private set; }
+        protected bool IsAuthenticated => Profile != null;
+
         protected LoadingContext Loading { get; } = new LoadingContext();
 
         protected async override Task OnInitAsync()

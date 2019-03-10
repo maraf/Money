@@ -32,5 +32,9 @@
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>
 
-  <Import Project="$(SolutionDir)\build\Blazor.targets" />
+  <PropertyGroup>
+    <AssemblyVersion>1.7.0.0</AssemblyVersion>
+    <FileVersion>1.7.0.0</FileVersion>
+    <Version>1.7.0</Version>
+  </PropertyGroup>
 </Project>

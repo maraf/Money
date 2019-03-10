@@ -20,7 +20,6 @@ namespace Money
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://0.0.0.0:5003")
                 .UseStartup<Startup>()
                 .Build();
     }

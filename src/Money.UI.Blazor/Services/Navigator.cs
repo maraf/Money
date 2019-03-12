@@ -72,15 +72,20 @@ namespace Money.Services
         public void OpenLogin()
         {
             string loginUrl = UrlAccountLogin();
+            string currentUrl = GetCurrentUrl();
+
+            if (loginUrl != currentUrl && currentUrl != UrlAccountRegister())
+                uri.NavigateTo($"{loginUrl}?returnUrl={currentUrl}");
+        }
+
+        private string GetCurrentUrl()
+        {
             string currentUrl = "/" + uri.ToBaseRelativePath(uri.GetBaseUri(), uri.GetAbsoluteUri());
             int indexOfReturnUrl = currentUrl.IndexOf("?returnUrl");
             if (indexOfReturnUrl >= 0)
                 currentUrl = currentUrl.Substring(0, indexOfReturnUrl);
 
-            if (loginUrl != currentUrl)
-            {
-                uri.NavigateTo($"{loginUrl}?returnUrl={currentUrl}");
-            }
+            return currentUrl;
         }
 
         public void OpenRegister()

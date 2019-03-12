@@ -25,6 +25,7 @@ namespace Money.Services
         private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
         private readonly IExceptionHandler exceptionHandler;
+
         private readonly IEventDispatcher eventDispatcher;
 
         public ApiClient(HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher)
@@ -93,9 +94,24 @@ namespace Money.Services
             return false;
         }
 
-        public async Task LogoutAsync()
+        public Task LogoutAsync()
         {
             ClearAuthorization();
+            return Task.CompletedTask;
+        }
+
+        public async Task<RegisterResponse> RegisterAsync(string userName, string password)
+        {
+            RegisterResponse response = await http.PostJsonAsync<RegisterResponse>(
+                "/api/user/register",
+                new RegisterRequest()
+                {
+                    UserName = userName,
+                    Password = password
+                }
+            );
+
+            return response;
         }
 
         private Request CreateRequest(Type type, string payload)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
+using Money.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +10,43 @@ namespace Money.Pages
 {
     public class RegisterBase : BlazorComponent
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
+        [Inject]
+        internal ApiClient ApiClient { get; set; }
+
+        [Inject]
+        internal Navigator Navigator { get; set; }
+
+        protected string UserName { get; set; }
+        protected string Password { get; set; }
+        protected string ConfirmPassword { get; set; }
 
         public List<string> ErrorMessages { get; } = new List<string>();
 
-        protected Task OnSubmitAsync()
+        protected async Task OnSubmitAsync()
         {
             if (Validate())
             {
-                UserName = null;
-                Password = null;
-                ConfirmPassword = null;
+                var response = await ApiClient.RegisterAsync(UserName, Password);
+                if (response.IsSuccess)
+                {
+                    if (await ApiClient.LoginAsync(UserName, Password, false))
+                    {
+                        Navigator.OpenSummary();
+                    }
+                    else
+                    {
+                        UserName = null;
+                        Password = null;
+                        ConfirmPassword = null;
 
-                ErrorMessages.Add("Passed ;-)");
+                        Navigator.OpenLogin();
+                    }
+                }
+                else
+                {
+                    ErrorMessages.AddRange(response.ErrorMessages);
+                }
             }
-
-            return Task.CompletedTask;
         }
 
         protected bool Validate()
@@ -42,7 +62,7 @@ namespace Money.Pages
             if (String.IsNullOrEmpty(ConfirmPassword))
                 ErrorMessages.Add("Please, fill password confirmation.");
             else if (Password != ConfirmPassword)
-                ErrorMessages.Add("Password must match password confirmation.");
+                ErrorMessages.Add("Passwords must match.");
 
             return ErrorMessages.Count == 0;
         }

@@ -16,11 +16,20 @@ namespace Money.Pages
         [Inject]
         internal Navigator Navigator { get; set; }
 
+        [Inject]
+        internal TokenContainer Token { get; set; }
+
         protected string UserName { get; set; }
         protected string Password { get; set; }
         protected string ConfirmPassword { get; set; }
 
-        public List<string> ErrorMessages { get; } = new List<string>();
+        protected List<string> ErrorMessages { get; } = new List<string>();
+
+        protected override void OnInit()
+        {
+            if (Token.HasValue)
+                Navigator.OpenSummary();
+        }
 
         protected async Task OnSubmitAsync()
         {

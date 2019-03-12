@@ -19,8 +19,8 @@ namespace Money.Services
     public class ApiClient
     {
         private const string rootUrl = "http://localhost:63803";
-        private static string token;
 
+        private readonly TokenContainer token;
         private readonly HttpClient http;
         private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
@@ -28,13 +28,15 @@ namespace Money.Services
 
         private readonly IEventDispatcher eventDispatcher;
 
-        public ApiClient(HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher)
+        public ApiClient(TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher)
         {
+            Ensure.NotNull(token, "token");
             Ensure.NotNull(http, "http");
             Ensure.NotNull(commandMapper, "commandMapper");
             Ensure.NotNull(queryMapper, "queryMapper");
             Ensure.NotNull(exceptionHandler, "exceptionHandler");
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
+            this.token = token;
             this.http = http;
             this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
@@ -47,9 +49,9 @@ namespace Money.Services
 
         private void ClearAuthorization()
         {
-            if (token != null)
+            if (token.HasValue)
             {
-                token = null;
+                token.Value = null;
                 http.DefaultRequestHeaders.Authorization = null;
                 Interop.SaveToken(null);
                 Interop.StopSignalR();
@@ -60,10 +62,10 @@ namespace Money.Services
 
         private void EnsureAuthorization()
         {
-            if (token != null && http.DefaultRequestHeaders.Authorization?.Parameter != token)
+            if (token.HasValue && http.DefaultRequestHeaders.Authorization?.Parameter != token.Value)
             {
-                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                Interop.StartSignalR(rootUrl + "/api", token);
+                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
+                Interop.StartSignalR(rootUrl + "/api", token.Value);
 
                 eventDispatcher.PublishAsync(new UserSignedIn());
             }
@@ -82,11 +84,11 @@ namespace Money.Services
 
             if (!String.IsNullOrEmpty(response.Token))
             {
-                token = response.Token;
+                token.Value = response.Token;
                 EnsureAuthorization();
 
                 if (isPermanent)
-                    Interop.SaveToken(token);
+                    Interop.SaveToken(token.Value);
 
                 return true;
             }
@@ -119,9 +121,9 @@ namespace Money.Services
 
         public async Task<Response> QueryAsync(Type type, string payload)
         {
-            if (token == null)
+            if (!token.HasValue)
             {
-                token = await Interop.LoadTokenAsync();
+                token.Value = await Interop.LoadTokenAsync();
                 EnsureAuthorization();
             }
 

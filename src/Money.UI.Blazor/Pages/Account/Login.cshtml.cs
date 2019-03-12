@@ -20,6 +20,9 @@ namespace Money.Pages
         [Inject]
         internal QueryString QueryString { get; set; }
 
+        [Inject]
+        internal TokenContainer Token { get; set; }
+
         [Parameter]
         protected string ReturnUrl { get; set; }
 
@@ -28,6 +31,12 @@ namespace Money.Pages
         protected bool IsPermanent { get; set; }
 
         protected List<string> ErrorMessages { get; } = new List<string>();
+
+        protected override void OnInit()
+        {
+            if (Token.HasValue)
+                NavigateAway();
+        }
 
         protected override void OnParametersSet()
         {
@@ -49,11 +58,17 @@ namespace Money.Pages
             {
                 if (!await ApiClient.LoginAsync(userName, password, isPermanent))
                     ErrorMessages.Add("User name and password don't match.");
-                else if (!String.IsNullOrEmpty(ReturnUrl))
-                    Navigator.Open(ReturnUrl);
                 else
-                    Navigator.OpenSummary();
+                    NavigateAway();
             }
+        }
+
+        private void NavigateAway()
+        {
+            if (!String.IsNullOrEmpty(ReturnUrl))
+                Navigator.Open(ReturnUrl);
+            else
+                Navigator.OpenSummary();
         }
 
         private bool Validate(string userName, string password)

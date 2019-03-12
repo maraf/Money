@@ -20,6 +20,7 @@ namespace Money
             services
                 .AddTransient<Navigator>()
                 .AddTransient<ApiClient>()
+                .AddSingleton<TokenContainer>()
                 .AddSingleton<QueryString>()
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>()

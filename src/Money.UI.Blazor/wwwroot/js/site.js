@@ -48,9 +48,9 @@ function StartSignalR(url, token) {
             alert('Underlaying connection to the server has closed. Reloading the page...');
         }
 
-        //setTimeout(function () {
-        //    window.location.reload();
-        //}, 2000);
+        setTimeout(function () {
+            window.location.reload();
+        }, 2000);
     });
     connection.start().then(function () {
         isStarted = true;

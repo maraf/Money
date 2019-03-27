@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Services;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class OutcomeCardBase : BlazorComponent
+    public class OutcomeCardBase : ComponentBase
     {
         public interface IContext
         {

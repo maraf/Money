@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Blazor.Builder;
+﻿using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
+using Money.Components.Bootstrap;
 using Money.Models;
 using Money.Models.Api;
 using Money.Services;
@@ -20,6 +21,7 @@ namespace Money
             services
                 .AddTransient<Navigator>()
                 .AddTransient<ApiClient>()
+                .AddSingleton<Native>()
                 .AddSingleton<TokenContainer>()
                 .AddSingleton<QueryString>()
                 .AddSingleton<CommandMapper>()
@@ -31,11 +33,11 @@ namespace Money
             bootstrapTask.Initialize();
         }
 
-        public void Configure(IBlazorApplicationBuilder app)
+        public void Configure(IComponentsApplicationBuilder app, Interop interop)
         {
             app.AddComponent<App>("app");
 
-            Interop.ApplicationStarted();
+            interop.ApplicationStarted();
         }
     }
 }

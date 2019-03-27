@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Money.Layouts
 {
-    public class LoginInfoBase : BlazorComponent, IDisposable, IEventHandler<UserSignedIn>, IEventHandler<UserSignedOut>
+    public class LoginInfoBase : ComponentBase, IDisposable, IEventHandler<UserSignedIn>, IEventHandler<UserSignedOut>
     {
         [Inject]
         public IQueryDispatcher Queries { get; set; }

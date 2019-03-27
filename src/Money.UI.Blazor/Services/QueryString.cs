@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Services;
+﻿using Microsoft.AspNetCore.Components.Services;
 using Neptuo;
 using Neptuo.Collections.Specialized;
 using System;

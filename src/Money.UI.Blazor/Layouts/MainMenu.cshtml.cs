@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Services;
 using Neptuo.Logging;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class MainMenuBase : BlazorComponent, IDisposable
+    public class MainMenuBase : ComponentBase, IDisposable
     {
         [Inject]
         internal Navigator Navigator {get;set;}

@@ -46,9 +46,9 @@
 
     private bool isNew;
 
-    public override void SetParameters(ParameterCollection parameters)
+    public override async Task SetParametersAsync(ParameterCollection parameters)
     {
-        base.SetParameters(parameters);
+        await base.SetParametersAsync(parameters);
         isNew = parameters.GetValueOrDefault<string>(nameof(UniqueCode)) == null;
     }
 

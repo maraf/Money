@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Services;
 using Neptuo.Collections.Specialized;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class LoginBase : BlazorComponent
+    public class LoginBase : ComponentBase
     {
         [Inject]
         internal Navigator Navigator { get; set; }

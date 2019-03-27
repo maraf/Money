@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Components;
 using Money.Models;
 using Money.Models.Confirmation;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class SearchBase : BlazorComponent,
+    public class SearchBase : ComponentBase,
         OutcomeCardBase.IContext
     {
         public CurrencyFormatter CurrencyFormatter { get; private set; }

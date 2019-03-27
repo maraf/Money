@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
 using Money.Components;
 using Money.Events;
@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class OverviewBase : BlazorComponent,
+    public class OverviewBase : ComponentBase,
         System.IDisposable,
         OutcomeCardBase.IContext,
         IEventHandler<OutcomeCreated>,

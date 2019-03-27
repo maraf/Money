@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor;
-using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Neptuo;
 using Neptuo.Logging;
@@ -11,10 +10,13 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap
 {
-    public class ModalBase : BlazorComponent, System.IDisposable
+    public class ModalBase : ComponentBase, System.IDisposable
     {
         [Inject]
         internal ILog<ModalBase> Log { get; set; }
+
+        [Inject]
+        internal Native NativeHelper { get; set;}
 
         public string Id { get; private set; } = "BM" + Guid.NewGuid().ToString().Replace("-", String.Empty);
 
@@ -126,15 +128,15 @@ namespace Money.Components.Bootstrap
         protected override void OnAfterRender()
         {
             base.OnAfterRender();
-            Native.AddModal(Id, this);
+            NativeHelper.AddModal(Id, this);
 
             if (isVisibleChanged)
-                Native.ToggleModal(Id, isVisible);
+                NativeHelper.ToggleModal(Id, isVisible);
         }
 
         public void Dispose()
         {
-            Native.RemoveModal(Id);
+            NativeHelper.RemoveModal(Id);
         }
 
         internal void MarkAsHidden()

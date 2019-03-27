@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Money.UI.Blazor;
 using Neptuo.Logging;
 using System;
@@ -11,22 +12,25 @@ namespace Money.Components.Bootstrap
 {
     public class Native
     {
-        private static Dictionary<string, ModalBase> modals = new Dictionary<string, ModalBase>();
+        [Inject]
+        internal IJSRuntime JSRuntime { get; set; }
 
-        internal static void AddModal(string id, ModalBase component)
+        private Dictionary<string, ModalBase> modals = new Dictionary<string, ModalBase>();
+
+        internal void AddModal(string id, ModalBase component)
         {
             modals[id] = component;
-            JSRuntime.Current.InvokeAsync<object>("Bootstrap.Modal.Register", id);
+            JSRuntime.InvokeAsync<object>("Bootstrap.Modal.Register", id);
         }
 
-        internal static void ToggleModal(string id, bool isVisible) 
-            => JSRuntime.Current.InvokeAsync<object>("Bootstrap.Modal.Toggle", id, isVisible);
+        internal void ToggleModal(string id, bool isVisible) 
+            => JSRuntime.InvokeAsync<object>("Bootstrap.Modal.Toggle", id, isVisible);
 
-        internal static void RemoveModal(string id)
+        internal void RemoveModal(string id)
             => modals.Remove(id);
 
         [JSInvokable]
-        public static void Bootstrap_ModalHidden(string id)
+        public void Bootstrap_ModalHidden(string id)
         {
             ILog log = Program.Resolve<ILogFactory>().Scope("Modal.Native");
             log.Debug($"Modal hidden '{id}'.");

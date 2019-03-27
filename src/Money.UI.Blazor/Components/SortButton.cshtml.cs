@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Models.Sorting;
 using Neptuo.Logging;
 using System;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class SortButtonBase<TType> : BlazorComponent
+    public class SortButtonBase<TType> : ComponentBase
     {
         private readonly Dictionary<TType, SortDirection> defaultSortDirection = new Dictionary<TType, SortDirection>();
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using Money.Models.Api;
 using Money.Services;
 using Neptuo.Exceptions.Handlers;

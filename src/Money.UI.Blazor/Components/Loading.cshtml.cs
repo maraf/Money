@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor;
-using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Models.Loading;
 using Neptuo.Logging;
 using System;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class LoadingBase : BlazorComponent
+    public class LoadingBase : ComponentBase
     {
         [Inject]
         internal ILog<LoadingBase> Log { get; set; }
@@ -29,12 +28,12 @@ namespace Money.Components
         [Parameter]
         protected RenderFragment LoadingContent { get; set; } = r => r.AddMarkupContent(1, "<i>Loading...</i>");
 
-        public override void SetParameters(ParameterCollection parameters)
+        public override async Task SetParametersAsync(ParameterCollection parameters)
         {
             if (Context != null)
                 Context.LoadingChanged -= OnLoadingChanged;
 
-            base.SetParameters(parameters);
+            await base.SetParametersAsync(parameters);
 
             if (Context != null)
             {

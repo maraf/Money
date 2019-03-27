@@ -1,5 +1,5 @@
 ﻿@using Neptuo.Exceptions.Handlers
-@inherits BlazorLayoutComponent
+@inherits LayoutComponentBase
 @inject ExceptionHandlerBuilder ExceptionHandlerBuilder
 @inject Navigator Navigator
 
@@ -20,9 +20,9 @@
 
 @functions
 { 
-    protected override void OnInit()
+    protected async override Task OnInitAsync()
     {
-        base.OnInit();
+        await base.OnInitAsync();
 
         ExceptionHandlerBuilder.Handler<UnauthorizedAccessException>(e => Navigator.OpenLogin());
     }

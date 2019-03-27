@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Events;
 using Money.Models.Api;
 using Money.Users.Models;
@@ -27,6 +27,9 @@ namespace Money.Services
         private readonly IExceptionHandler exceptionHandler;
 
         private readonly IEventDispatcher eventDispatcher;
+        
+        [Inject]
+        internal Interop Interop { get; set; }
 
         public ApiClient(TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher)
         {

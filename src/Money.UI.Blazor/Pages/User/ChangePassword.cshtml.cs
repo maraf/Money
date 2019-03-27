@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Events;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class ChangePasswordBase : BlazorComponent, IEventHandler<PasswordChanged>, IDisposable
+    public class ChangePasswordBase : ComponentBase, IEventHandler<PasswordChanged>, IDisposable
     {
         [Inject]
         public ICommandDispatcher Commands { get; set; }

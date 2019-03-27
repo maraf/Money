@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
 using Money.Events;
 using Money.Models;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class ProfileBase : BlazorComponent, IEventHandler<EmailChanged>, IDisposable
+    public class ProfileBase : ComponentBase, IEventHandler<EmailChanged>, IDisposable
     {
         private ProfileModel model;
 

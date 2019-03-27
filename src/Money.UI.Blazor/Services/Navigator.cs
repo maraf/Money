@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Services;
+﻿using Microsoft.AspNetCore.Components.Services;
 using Microsoft.JSInterop;
 using Money.Models;
 using Neptuo;
@@ -14,13 +14,16 @@ namespace Money.Services
     internal class Navigator : NavigatorUrl, System.IDisposable
     {
         private readonly IUriHelper uri;
+        private readonly Interop interop;
 
         public event Action<string> LocationChanged;
 
-        public Navigator(IUriHelper uri)
+        public Navigator(IUriHelper uri, Interop interop)
         {
             Ensure.NotNull(uri, "uri");
+            Ensure.NotNull(interop, "interop");
             this.uri = uri;
+            this.interop = interop;
 
             uri.OnLocationChanged += OnLocationChanged;
         }
@@ -34,7 +37,7 @@ namespace Money.Services
             => LocationChanged?.Invoke(e);
 
         private void OpenExternal(string url)
-            => Interop.NavigateTo(url);
+            => interop.NavigateTo(url);
 
         public void Open(string url)
             => uri.NavigateTo(url);

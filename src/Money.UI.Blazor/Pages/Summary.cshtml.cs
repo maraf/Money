@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class SummaryBase : BlazorComponent,
+    public class SummaryBase : ComponentBase,
         System.IDisposable,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
@@ -70,13 +70,13 @@ namespace Money.Pages
             return base.OnInitAsync();
         }
 
-        public override void SetParameters(ParameterCollection parameters)
+        public override Task SetParametersAsync(ParameterCollection parameters)
         {
             // Clear previous parameter values.
             Year = null;
             Month = null;
 
-            base.SetParameters(parameters);
+            return base.SetParametersAsync(parameters);
         }
 
         protected async override Task OnParametersSetAsync()

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class DialogBase : BlazorComponent
+    public class DialogBase : ComponentBase
     {
         private bool isVisible;
 

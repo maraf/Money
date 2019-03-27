@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Services;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class RegisterBase : BlazorComponent
+    public class RegisterBase : ComponentBase
     {
         [Inject]
         internal ApiClient ApiClient { get; set; }

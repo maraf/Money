@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
 using Money.Events;
 using Money.Models;
@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class CategoriesBase : BlazorComponent,
+    public class CategoriesBase : ComponentBase,
         IDisposable,
         IEventHandler<CategoryCreated>,
         IEventHandler<CategoryRenamed>,

@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +10,25 @@ namespace Money
 {
     internal class Interop
     {
-        public static void ApplicationStarted() 
-            => JSRuntime.Current.InvokeAsync<object>("Money.ApplicationStarted");
+        [Inject]
+        internal IJSRuntime JSRuntime { get; set; }
 
-        public static void NavigateTo(string url)
-            => JSRuntime.Current.InvokeAsync<bool>("Money.NavigateTo", url);
+        public void ApplicationStarted() 
+            => JSRuntime.InvokeAsync<object>("Money.ApplicationStarted");
 
-        public static void StartSignalR(string url, string token)
-            => JSRuntime.Current.InvokeAsync<bool>("Money.StartSignalR", url, token);
+        public void NavigateTo(string url)
+            => JSRuntime.InvokeAsync<bool>("Money.NavigateTo", url);
 
-        public static void StopSignalR()
-            => JSRuntime.Current.InvokeAsync<bool>("Money.StopSignalR");
+        public void StartSignalR(string url, string token)
+            => JSRuntime.InvokeAsync<bool>("Money.StartSignalR", url, token);
 
-        public static void SaveToken(string token)
-            => JSRuntime.Current.InvokeAsync<bool>("Money.SaveToken", token);
+        public void StopSignalR()
+            => JSRuntime.InvokeAsync<bool>("Money.StopSignalR");
 
-        public static Task<string> LoadTokenAsync()
-            => JSRuntime.Current.InvokeAsync<string>("Money.LoadToken");
+        public void SaveToken(string token)
+            => JSRuntime.InvokeAsync<bool>("Money.SaveToken", token);
+
+        public Task<string> LoadTokenAsync()
+            => JSRuntime.InvokeAsync<string>("Money.LoadToken");
     }
 }

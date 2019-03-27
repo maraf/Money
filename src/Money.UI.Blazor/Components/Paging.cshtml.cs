@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Neptuo;
 using Neptuo.Logging;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class PagingBase : BlazorComponent, System.IDisposable
+    public class PagingBase : ComponentBase, System.IDisposable
     {
         [Inject]
         internal ILog<PagingBase> Log { get; set; }

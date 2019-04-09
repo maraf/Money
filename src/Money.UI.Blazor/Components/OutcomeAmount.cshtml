@@ -4,7 +4,7 @@
 @inject IQueryDispatcher Queries
 
 <Modal Title="Change an amount of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
-    <ValidationSummary ErrorMessages="@ErrorMessages" />
+    <Validation ErrorMessages="@ErrorMessages" />
     <div class="row">
         <div class="col-md-9">
             <div class="form-group">

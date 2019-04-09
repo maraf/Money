@@ -4,7 +4,7 @@
 @inject ILog<ExchangeRateCreate> Log
 
 <Modal Title="Set Exchange Rate" Size="@ModalSize.Small" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
-    <ValidationSummary ErrorMessages="@ErrorMessages" />
+    <Validation ErrorMessages="@ErrorMessages" />
     <div class="form-group">
         <label for="exchangerate-source">Source Currency:</label>
         <select class="form-control" id="exchangerate-source" bind="@SourceCurrency" data-autofocus>

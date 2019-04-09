@@ -25,13 +25,10 @@ namespace Money.Services
         private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
         private readonly IExceptionHandler exceptionHandler;
-
         private readonly IEventDispatcher eventDispatcher;
-        
-        [Inject]
-        internal Interop Interop { get; set; }
+        private readonly Interop interop;
 
-        public ApiClient(TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher)
+        public ApiClient(TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop)
         {
             Ensure.NotNull(token, "token");
             Ensure.NotNull(http, "http");
@@ -39,12 +36,14 @@ namespace Money.Services
             Ensure.NotNull(queryMapper, "queryMapper");
             Ensure.NotNull(exceptionHandler, "exceptionHandler");
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
+            Ensure.NotNull(interop, "interop");
             this.token = token;
             this.http = http;
             this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
             this.exceptionHandler = exceptionHandler;
             this.eventDispatcher = eventDispatcher;
+            this.interop = interop;
             http.BaseAddress = new Uri(rootUrl);
 
             EnsureAuthorization();
@@ -56,8 +55,8 @@ namespace Money.Services
             {
                 token.Value = null;
                 http.DefaultRequestHeaders.Authorization = null;
-                Interop.SaveToken(null);
-                Interop.StopSignalR();
+                interop.SaveToken(null);
+                interop.StopSignalR();
 
                 eventDispatcher.PublishAsync(new UserSignedOut());
             }
@@ -68,7 +67,7 @@ namespace Money.Services
             if (token.HasValue && http.DefaultRequestHeaders.Authorization?.Parameter != token.Value)
             {
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-                Interop.StartSignalR(rootUrl + "/api", token.Value);
+                interop.StartSignalR(rootUrl + "/api", token.Value);
 
                 eventDispatcher.PublishAsync(new UserSignedIn());
             }
@@ -91,7 +90,7 @@ namespace Money.Services
                 EnsureAuthorization();
 
                 if (isPermanent)
-                    Interop.SaveToken(token.Value);
+                    interop.SaveToken(token.Value);
 
                 return true;
             }
@@ -126,7 +125,7 @@ namespace Money.Services
         {
             if (!token.HasValue)
             {
-                token.Value = await Interop.LoadTokenAsync();
+                token.Value = await interop.LoadTokenAsync();
                 EnsureAuthorization();
             }
 

@@ -3,7 +3,7 @@
 @inject ICommandDispatcher Commands
 
 <Modal Title="Change a description of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
-    <ValidationSummary ErrorMessages="@ErrorMessages" />
+    <Validation ErrorMessages="@ErrorMessages" />
     <div class="form-group">
         <label for="outcome-description">Description:</label>
         <input type="text" class="form-control" id="outcome-description" placeholder="Outcome Description" data-autofocus bind="@Description" />

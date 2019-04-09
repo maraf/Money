@@ -19,6 +19,7 @@ namespace Money
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddTransient<Interop>()
                 .AddTransient<Navigator>()
                 .AddTransient<ApiClient>()
                 .AddSingleton<Native>()

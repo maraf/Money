@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Money.UI.Blazor;
+using Neptuo;
 using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,23 @@ namespace Money.Components.Bootstrap
 {
     public class Native
     {
-        [Inject]
-        internal IJSRuntime JSRuntime { get; set; }
-
+        private readonly IJSRuntime jsRuntime;
         private Dictionary<string, ModalBase> modals = new Dictionary<string, ModalBase>();
+
+        public Native(IJSRuntime jsRuntime)
+        {
+            Ensure.NotNull(jsRuntime, "jsRuntime");
+            this.jsRuntime = jsRuntime;
+        }
 
         internal void AddModal(string id, ModalBase component)
         {
             modals[id] = component;
-            JSRuntime.InvokeAsync<object>("Bootstrap.Modal.Register", id);
+            jsRuntime.InvokeAsync<object>("Bootstrap.Modal.Register", id);
         }
 
         internal void ToggleModal(string id, bool isVisible) 
-            => JSRuntime.InvokeAsync<object>("Bootstrap.Modal.Toggle", id, isVisible);
+            => jsRuntime.InvokeAsync<object>("Bootstrap.Modal.Toggle", id, isVisible);
 
         internal void RemoveModal(string id)
             => modals.Remove(id);

@@ -3,7 +3,7 @@
 @inject ICommandDispatcher Commands
 
 <Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
-    <ValidationSummary ErrorMessages="@ErrorMessages" />
+    <Validation ErrorMessages="@ErrorMessages" />
     <div class="form-group">
         <label for="category-name">Name:</label>
         <input type="text" class="form-control" id="category-name" placeholder="Category Name" data-autofocus bind="@Name" />

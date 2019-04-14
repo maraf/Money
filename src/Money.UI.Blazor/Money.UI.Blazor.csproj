@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Money.Api.Shared\Money.Api.Shared.csproj" />
     <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
     <ProjectReference Include="..\Money\Money.csproj" />
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />

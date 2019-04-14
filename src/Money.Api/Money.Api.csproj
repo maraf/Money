@@ -13,10 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Money.Api.Shared\Money.Api.Shared.csproj" />
     <ProjectReference Include="..\Money.Data\Money.Data.csproj" />
     <ProjectReference Include="..\Money.Models.Builders\Money.Models.Builders.csproj" />
     <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
-    <ProjectReference Include="..\Money.UI.Blazor\Money.UI.Blazor.csproj" />
     <ProjectReference Include="..\Money\Money.csproj" />
     <ProjectReference Include="..\Neptuo.EntityFrameworkCore\Neptuo.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Neptuo.Json\Neptuo.Json.csproj" />

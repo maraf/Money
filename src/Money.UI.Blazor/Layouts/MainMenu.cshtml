@@ -2,7 +2,7 @@
 
 <div class="navbar-header">
     <HamburgerButton CssClass="navbar-toggle" Click="@OnMainMenuToggleClick" />
-    <a class="navbar-brand" href="@Navigator.UrlSummary()">Money</a>
+    <NavLink class="navbar-brand" href="@Navigator.UrlSummary()">Money</NavLink>
 </div>
 <div id="#navbar-main" class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
     <ul class="nav navbar-nav">
@@ -14,21 +14,21 @@
 
             <ul class="dropdown-menu">
                 <li>
-                    <a href="@Navigator.UrlSummary()">Summary</a>
+                    <NavLink href="@Navigator.UrlSummary()">Summary</NavLink>
                 </li>
                 <li>
-                    <a href="@Navigator.UrlSearch()">Search</a>
+                    <NavLink href="@Navigator.UrlSearch()">Search</NavLink>
                 </li>
             </ul>
         </li>
         <li>
-            <a href="@Navigator.UrlCategories()">Categories</a>
+            <NavLink href="@Navigator.UrlCategories()">Categories</NavLink>
         </li>
         <li>
-            <a href="@Navigator.UrlCurrencies()">Currencies</a>
+            <NavLink href="@Navigator.UrlCurrencies()">Currencies</NavLink>
         </li>
         <li>
-            <a href="@Navigator.UrlAbout()">About</a>
+            <NavLink href="@Navigator.UrlAbout()">About</NavLink>
         </li>
     </ul>
     <LoginInfo />

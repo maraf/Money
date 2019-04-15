@@ -17,10 +17,10 @@
                     @if (Profile != null)
                     {
                         <li>
-                            <a href="@Navigator.UrlUserManage()">
+                            <NavLink href="@Navigator.UrlUserManage()">
                                 <Icon Identifier="user" />
                                 @Profile.UserName
-                            </a>
+                            </NavLink>
                         </li>
                         <li>
                             <button type="button" class="btn btn-link navbar-btn navbar-link" onclick="@OnLogoutAsync">Log out</button>

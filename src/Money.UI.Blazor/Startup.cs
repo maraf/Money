@@ -20,6 +20,7 @@ namespace Money
         {
             services
                 .AddTransient<Interop>()
+                .AddTransient<NavigatorUrl>()
                 .AddTransient<Navigator>()
                 .AddTransient<ApiClient>()
                 .AddSingleton<Native>()

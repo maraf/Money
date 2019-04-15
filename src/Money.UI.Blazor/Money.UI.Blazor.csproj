@@ -26,6 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Watch Include="**\*.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Components\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

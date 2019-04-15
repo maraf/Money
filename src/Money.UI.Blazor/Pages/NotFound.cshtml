@@ -1,3 +1,14 @@
-﻿@layout Layouts.EmptyLayout
+﻿@inject NavigatorUrl Navigator
 
-<h1>Page not found</h1>
+<Title Icon="remove" Main="Not Found" Sub="We are sorry, but the page you are requesting doesn't exist anymore" />
+
+<p>
+    On the top you can find links to all locations we currently support. <br />
+    If you feel this URL should work, you can fill an issue and we will take a look.
+</p>
+<p>
+    <a target="_blank" href="@Navigator.UrlMoneyProjectIssueNew()">Report an issue</a> (and please don't forget to include the URL).
+</p>
+<p>
+    <strong>Once again, we are sorry for breaking your link.</strong>
+</p>

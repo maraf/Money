@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RunCommand>dotnet</RunCommand>
-    <RunArguments>blazor serve</RunArguments>
     <RootNamespace>Money</RootNamespace>
     <VersionPrefix>1.8.0.0</VersionPrefix>
     <LangVersion>latest</LangVersion>
+    <RunCommand>dotnet</RunCommand>
+    <RunArguments>blazor serve</RunArguments>
   </PropertyGroup>
 
   <ItemGroup>

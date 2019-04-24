@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Money
 {
-    internal class Startup
+    public class Startup
     {
         public void ConfigureServices(IServiceCollection services)
         {

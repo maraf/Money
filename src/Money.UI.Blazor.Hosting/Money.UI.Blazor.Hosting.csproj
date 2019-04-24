@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="0.9.0-preview3-19154-02" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Server" Version="3.0.0-preview3-19153-02" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview3-19153-02" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Money.Api.Shared\Money.Api.Shared.csproj" />
+    <ProjectReference Include="..\Money.UI.Blazor\Money.UI.Blazor.csproj" />
+    <ProjectReference Include="..\Money\Money.csproj" />
+  </ItemGroup>
+
+</Project>

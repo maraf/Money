@@ -128,7 +128,7 @@ namespace Money
 
             app.UseCors(p =>
             {
-                p.WithOrigins("http://localhost:48613");
+                p.AllowAnyOrigin();
                 p.AllowAnyMethod();
                 p.AllowCredentials();
                 p.AllowAnyHeader();

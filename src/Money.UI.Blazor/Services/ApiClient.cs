@@ -18,7 +18,11 @@ namespace Money.Services
 {
     public class ApiClient
     {
+#if DEBUG
         private const string rootUrl = "http://localhost:63803";
+#else
+        private const string rootUrl = "https://api.money.neptuo.com";
+#endif
 
         private readonly TokenContainer token;
         private readonly HttpClient http;

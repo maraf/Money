@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using Money.Events;
 using Money.Models.Api;
 using Money.Users.Models;
@@ -18,12 +19,7 @@ namespace Money.Services
 {
     public class ApiClient
     {
-#if DEBUG
-        private const string rootUrl = "http://localhost:63803";
-#else
-        private const string rootUrl = "https://api.money.neptuo.com";
-#endif
-
+        private readonly ApiClientConfiguration configuration;
         private readonly TokenContainer token;
         private readonly HttpClient http;
         private readonly CommandMapper commandMapper;
@@ -32,8 +28,9 @@ namespace Money.Services
         private readonly IEventDispatcher eventDispatcher;
         private readonly Interop interop;
 
-        public ApiClient(TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop)
+        public ApiClient(IOptions<ApiClientConfiguration> configuration, TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop)
         {
+            Ensure.NotNull(configuration, "configuration");
             Ensure.NotNull(token, "token");
             Ensure.NotNull(http, "http");
             Ensure.NotNull(commandMapper, "commandMapper");
@@ -41,6 +38,7 @@ namespace Money.Services
             Ensure.NotNull(exceptionHandler, "exceptionHandler");
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
             Ensure.NotNull(interop, "interop");
+            this.configuration = configuration.Value;
             this.token = token;
             this.http = http;
             this.commandMapper = commandMapper;
@@ -48,8 +46,8 @@ namespace Money.Services
             this.exceptionHandler = exceptionHandler;
             this.eventDispatcher = eventDispatcher;
             this.interop = interop;
-            http.BaseAddress = new Uri(rootUrl);
 
+            http.BaseAddress = this.configuration.ApiUrl;
             EnsureAuthorization();
         }
 
@@ -71,7 +69,7 @@ namespace Money.Services
             if (token.HasValue && http.DefaultRequestHeaders.Authorization?.Parameter != token.Value)
             {
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-                interop.StartSignalR(rootUrl + "/api", token.Value);
+                interop.StartSignalR(configuration.ApiUrl.ToString() + "/api", token.Value);
 
                 eventDispatcher.PublishAsync(new UserSignedIn());
             }

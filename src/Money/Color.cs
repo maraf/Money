@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Money
 {
-    public struct Color
+    public struct Color : IEquatable<Color>
     {
         public byte A { get; set; }
         public byte B { get; set; }
@@ -24,24 +24,22 @@ namespace Money
             };
         }
 
-        public static bool operator ==(Color a, Color b)
-        {
-            return a.A == b.A && a.R == b.R && a.G == b.G && a.B == b.B;
-        }
+        public override bool Equals(object obj) => obj is Color && Equals((Color)obj);
 
-        public static bool operator !=(Color a, Color b)
-        {
-            return a.A != b.A || a.R != b.R || a.G != b.G || a.B != b.B;
-        }
+        public bool Equals(Color other) => A == other.A && B == other.B && G == other.G && R == other.R;
 
         public override int GetHashCode()
         {
-            int hashCode = 7;
-            hashCode += hashCode * 3 * A;
-            hashCode += hashCode * 3 * R;
-            hashCode += hashCode * 3 * G;
-            hashCode += hashCode * 3 * B;
+            var hashCode = 146518540;
+            hashCode = hashCode * -1521134295 + A.GetHashCode();
+            hashCode = hashCode * -1521134295 + B.GetHashCode();
+            hashCode = hashCode * -1521134295 + G.GetHashCode();
+            hashCode = hashCode * -1521134295 + R.GetHashCode();
             return hashCode;
         }
+
+        public static bool operator ==(Color color1, Color color2) => color1.Equals(color2);
+
+        public static bool operator !=(Color color1, Color color2) => !(color1 == color2);
     }
 }

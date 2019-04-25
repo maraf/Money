@@ -11,17 +11,17 @@ namespace Money.Models
     /// <summary>
     /// A model for a month of a year.
     /// </summary>
-    public class MonthModel
+    public class MonthModel : IEquatable<MonthModel>
     {
         /// <summary>
         /// Gets a year.
         /// </summary>
-        public int Year { get; private set; }
+        public int Year { get; }
 
         /// <summary>
         /// Gets a month number.
         /// </summary>
-        public int Month { get; private set; }
+        public int Month { get; }
 
         /// <summary>
         /// Creates a new instance.
@@ -40,15 +40,6 @@ namespace Money.Models
             Month = month;
         }
 
-        public override bool Equals(object obj)
-        {
-            MonthModel other = obj as MonthModel;
-            if (other == null)
-                return false;
-
-            return Year == other.Year && Month == other.Month;
-        }
-
         public override string ToString()
         {
             string monthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[Month - 1];
@@ -58,29 +49,26 @@ namespace Money.Models
             return $"{monthName} {Year}";
         }
 
+        public override bool Equals(object obj) => Equals(obj as MonthModel);
+
+        public bool Equals(MonthModel other) => other != null && Year == other.Year && Month == other.Month;
+
+        public override int GetHashCode()
+        {
+            var hashCode = 173839681;
+            hashCode = hashCode * -1521134295 + Year.GetHashCode();
+            hashCode = hashCode * -1521134295 + Month.GetHashCode();
+            return hashCode;
+        }
+
         /// <summary>
         /// Creates an instalce of <see cref="MonthModel"/> from <paramref name="dateTime"/>.
         /// </summary>
         /// <param name="dateTime">A source date and time.</param>
-        public static implicit operator MonthModel(DateTime dateTime)
-        {
-            return new MonthModel(dateTime.Year, dateTime.Month);
-        }
+        public static implicit operator MonthModel(DateTime dateTime) => new MonthModel(dateTime.Year, dateTime.Month);
 
-        public static bool operator ==(MonthModel a, MonthModel b)
-        {
-            if (ReferenceEquals(a, b))
-                return true;
+        public static bool operator ==(MonthModel model1, MonthModel model2) => EqualityComparer<MonthModel>.Default.Equals(model1, model2);
 
-            if ((object)a == null || (object)b == null)
-                return false;
-
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(MonthModel a, MonthModel b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(MonthModel model1, MonthModel model2) => !(model1 == model2);
     }
 }

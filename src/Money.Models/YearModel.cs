@@ -10,12 +10,12 @@ namespace Money.Models
     /// <summary>
     /// A model for a whole year.
     /// </summary>
-    public class YearModel
+    public class YearModel : IEquatable<YearModel>
     {
         /// <summary>
         /// Gets a year.
         /// </summary>
-        public int Year { get; private set; }
+        public int Year { get; }
 
         /// <summary>
         /// Creates a new instance.
@@ -27,34 +27,16 @@ namespace Money.Models
             Year = year;
         }
 
-        public override bool Equals(object obj)
-        {
-            YearModel other = obj as YearModel;
-            if (other == null)
-                return false;
+        public override string ToString() => Year.ToString();
 
-            return Year == other.Year;
-        }
+        public override bool Equals(object obj) => Equals(obj as YearModel);
 
-        public override string ToString()
-        {
-            return Year.ToString();
-        }
+        public bool Equals(YearModel other) => other != null && Year == other.Year;
 
-        public static bool operator ==(YearModel a, YearModel b)
-        {
-            if (ReferenceEquals(a, b))
-                return true;
+        public override int GetHashCode() => 1642494364 + Year.GetHashCode();
 
-            if ((object)a == null || (object)b == null)
-                return false;
+        public static bool operator ==(YearModel model1, YearModel model2) => EqualityComparer<YearModel>.Default.Equals(model1, model2);
 
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(YearModel a, YearModel b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(YearModel model1, YearModel model2) => !(model1 == model2);
     }
 }

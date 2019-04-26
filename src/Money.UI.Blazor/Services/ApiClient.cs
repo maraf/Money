@@ -69,7 +69,7 @@ namespace Money.Services
             if (token.HasValue && http.DefaultRequestHeaders.Authorization?.Parameter != token.Value)
             {
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-                interop.StartSignalR(configuration.ApiUrl.ToString() + "/api", token.Value);
+                interop.StartSignalR(configuration.ApiUrl.ToString() + "api", token.Value);
 
                 eventDispatcher.PublishAsync(new UserSignedIn());
             }

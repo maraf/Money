@@ -131,7 +131,7 @@ namespace Money
 #if DEBUG
                 p.WithOrigins("http://localhost:48613");
 #else
-                p.WithOrigins("https://api.money.neptuo.com");
+                p.WithOrigins("https://app.money.neptuo.com");
 #endif
                 p.AllowAnyMethod();
                 p.AllowCredentials();

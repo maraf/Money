@@ -128,7 +128,11 @@ namespace Money
 
             app.UseCors(p =>
             {
-                p.AllowAnyOrigin();
+#if DEBUG
+                p.WithOrigins("http://localhost:48613");
+#else
+                p.WithOrigins("https://api.money.neptuo.com");
+#endif
                 p.AllowAnyMethod();
                 p.AllowCredentials();
                 p.AllowAnyHeader();

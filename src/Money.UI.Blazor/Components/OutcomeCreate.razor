@@ -4,19 +4,19 @@
 @inject ICommandDispatcher Commands
 @inject IQueryDispatcher Queries
 
-<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" @bind-IsVisible="@IsVisible">
     <Validation ErrorMessages="@ErrorMessages" />
     <div class="row">
         <div class="col-md-9">
             <div class="form-group">
                 <label for="outcome-amount">Amount:</label>
-                <input type="text" class="form-control" id="outcome-amount" bind="@Amount" data-autofocus />
+                <input type="text" class="form-control" id="outcome-amount" @bind="@Amount" data-autofocus />
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label for="outcome-currency">Currency:</label>
-                <select class="form-control" id="outcome-currency" bind="@Currency">
+                <select class="form-control" id="outcome-currency" @bind="@Currency">
                     @if (Currencies != null)
                     {
                         @foreach (var currency in Currencies)
@@ -32,11 +32,11 @@
     </div>
     <div class="form-group">
         <label for="outcome-description">Description:</label>
-        <input type="text" class="form-control" id="outcome-description" bind="@Description" />
+        <input type="text" class="form-control" id="outcome-description" @bind="@Description" />
     </div>
     <div class="form-group">
         <label for="outcome-when">When:</label>
-        <input type="date" class="form-control" id="outcome-when" bind="@When" format-value="yyyy-MM-dd" />
+        <input type="date" class="form-control" id="outcome-when" @bind="@When" @bind:format="yyyy-MM-dd" />
     </div>
     <div class="form-group">
         <label>Category:</label>
@@ -44,7 +44,7 @@
         {
             @foreach (var category in Categories)
             {
-                <button type="button" class="btn btn-block btn-selectable @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "")" style="background-color: @category.Color.ToHashCode();" onclick="@(() => CategoryKey = category.Key)">
+                <button type="button" class="btn btn-block btn-selectable @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
                     <span>@category.Icon</span>
                     <strong>@category.Name</strong>
                     <span>@category.Description</span>

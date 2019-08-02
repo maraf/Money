@@ -4,11 +4,11 @@
 <Money.Components.Title Icon="search" Main="Search" Sub="Searching in outcomes" />
 
 <div class="search">
-    <form onsubmit="@(() => OnSearchAsync())">
+    <form @onsubmit="@(() => OnSearchAsync())">
         <div class="row">
             <div class="col-sm-9 col-xs-12">
                 <div class="form-group">
-                    <input class="form-control" placeholder="Search..." bind="@Text" />
+                    <input class="form-control" placeholder="Search..." @bind="@Text" />
                 </div>
             </div>
             <div class="col-sm-1 col-xs-8">
@@ -20,7 +20,7 @@
             </div>
             <div class="col-sm-2 col-xs-4">
                 <div class="form-group">
-                    <SortButton TType="@OutcomeOverviewSortType" bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+                    <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@
         else
         {
             <li>
-                <a onclick="@OnPrevPageClickAsync">
+                <a @onclick="@OnPrevPageClickAsync">
                     <span aria-hidden="true">&larr;</span>
                     Previous
                 </a>
@@ -28,7 +28,7 @@
         @if (HasNextPage)
         {
             <li>
-                <a onclick="@OnNextPageClickAsync">
+                <a @onclick="@OnNextPageClickAsync">
                     Next
                     <span aria-hidden="true">&rarr;</span>
                 </a>

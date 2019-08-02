@@ -12,7 +12,7 @@
         @foreach (var item in Items)
         {
             <li>
-                <a onclick="@(() => OnItemClick(item.Value))">
+                <a @onclick="@(() => OnItemClick(item.Value))">
                     @item.Name
 
                     @if (Current.Type.Equals(item.Value))

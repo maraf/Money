@@ -4,7 +4,7 @@
 <Money.Components.Title Icon="tag" Main="Categories" Sub="List of categories you distribute outcomes into" ButtonText="New Category" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
 
-<CategoryName bind-IsVisible="@IsCreateVisible" />
+<CategoryName @bind-IsVisible="@IsCreateVisible" />
 <Confirm Context="@Delete" />
 
 <Loading Context="@Loading">
@@ -39,6 +39,6 @@
     }
 </Loading>
 
-<CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" bind-IsVisible="@IsNameEditVisible" />
-<CategoryIcon CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" bind-IsVisible="@IsIconEditVisible" />
-<CategoryColor CategoryKey="@Selected?.Key" Color="@Selected?.Color" bind-IsVisible="@IsColorEditVisible" />
+<CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" @bind-IsVisible="@IsNameEditVisible" />
+<CategoryIcon CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" @bind-IsVisible="@IsIconEditVisible" />
+<CategoryColor CategoryKey="@Selected?.Key" Color="@Selected?.Color" @bind-IsVisible="@IsColorEditVisible" />

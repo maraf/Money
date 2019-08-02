@@ -3,11 +3,11 @@
 @inject IQueryDispatcher Queries
 @inject ILog<ExchangeRateCreate> Log
 
-<Modal Title="Set Exchange Rate" Size="@ModalSize.Small" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+<Modal Title="Set Exchange Rate" Size="@ModalSize.Small" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" @bind-IsVisible="@IsVisible">
     <Validation ErrorMessages="@ErrorMessages" />
     <div class="form-group">
         <label for="exchangerate-source">Source Currency:</label>
-        <select class="form-control" id="exchangerate-source" bind="@SourceCurrency" data-autofocus>
+        <select class="form-control" id="exchangerate-source" @bind="@SourceCurrency" data-autofocus>
             @if (Currencies != null)
             {
                 @foreach (var currency in Currencies)
@@ -29,7 +29,7 @@
     </div>
     <div class="form-group">
         <label for="exchangerate-rate">Rate:</label>
-        <input type="number" class="form-control" id="exchangerate-rate" bind="@Rate" />
+        <input type="number" class="form-control" id="exchangerate-rate" @bind="@Rate" />
     </div>
     <div class="form-group">
         <label for="exchangerate-target">Target Currency:</label>
@@ -50,7 +50,7 @@
     </div>
     <div class="form-group">
         <label for="exchangevalidfrom-validfrom">Valid from:</label>
-        <input type="date" class="form-control" id="exchangevalidfrom-validfrom" bind="@ValidFrom" format-value="yyy-MM-dd" />
+        <input type="date" class="form-control" id="exchangevalidfrom-validfrom" @bind="@ValidFrom" @bind:format="yyy-MM-dd" />
     </div>
 </Modal>
 

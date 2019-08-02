@@ -1,29 +1,29 @@
 ﻿@inherits DialogBase
 @inject ICommandDispatcher Commands
 
-<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" @bind-IsVisible="@IsVisible">
     <Validation ErrorMessages="@ErrorMessages" />
 
     <div class="form-group">
         <label for="currency-unique-code">Unique Code:</label>
         @if (IsUniqueCodeEnabled)
         {
-            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" data-autofocus bind="@UniqueCode" />
+            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" data-autofocus @bind="@UniqueCode" />
         }
         else
         {
-            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" bind="@UniqueCode" disabled="disabled" />
+            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" @bind="@UniqueCode" disabled="disabled" />
         }
     </div>
     <div class="form-group">
         <label for="currency-symbol">Symbol:</label>
         @if (IsUniqueCodeEnabled)
         {
-            <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" bind="@Symbol" />
+            <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" @bind="@Symbol" />
         }
         else
         {
-            <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" data-autofocus bind="@Symbol" />
+            <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" data-autofocus @bind="@Symbol" />
         }
     </div>
 </Modal>

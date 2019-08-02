@@ -1,6 +1,6 @@
 ﻿@inherits ExchangeRateListBase
 
-<Modal Title="@Title" PrimaryButtonText="Add" PrimaryButtonClick="@OnAddClick" bind-IsVisible="@IsVisible">
+<Modal Title="@Title" PrimaryButtonText="Add" PrimaryButtonClick="@OnAddClick" @bind-IsVisible="@IsVisible">
     @if (Models != null)
     {
         if (Models.Count > 0)

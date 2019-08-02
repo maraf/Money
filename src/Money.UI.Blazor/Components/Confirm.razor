@@ -1,7 +1,7 @@
 ﻿@using Money.Models.Confirmation
 @inherits DialogBase
 
-<Modal Title="Money" PrimaryButtonText="Yes" PrimaryButtonClick="@OnPrimaryButtonClick" CloseButtonText="No" Size="@ModalSize.Small" bind-IsVisible="@Context.IsVisible">
+<Modal Title="Money" PrimaryButtonText="Yes" PrimaryButtonClick="@OnPrimaryButtonClick" CloseButtonText="No" Size="@ModalSize.Small" @bind-IsVisible="@Context.IsVisible">
     @Context.Message
 </Modal>
 

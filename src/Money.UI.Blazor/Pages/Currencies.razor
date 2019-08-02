@@ -4,7 +4,7 @@
 <Money.Components.Title Icon="gbp" Main="Currencies" Sub="List of currencies you are making outcomes in" ButtonText="New Currency" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
 
-<CurrencyEdit bind-IsVisible="@IsCreateVisible" />
+<CurrencyEdit @bind-IsVisible="@IsCreateVisible" />
 <Confirm Context="@Delete" />
 
 <Loading Context="@Loading">
@@ -54,7 +54,7 @@
     }
 </Loading>
 
-<CurrencyEdit UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" bind-IsVisible="@IsEditVisible" />
+<CurrencyEdit UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" @bind-IsVisible="@IsEditVisible" />
 
-<ExchangeRateList TargetCurrency="@Selected?.UniqueCode" AddClick="@OnAddExchangeRateClick" bind-IsVisible="@IsListExchangeRateVisible" />
-<ExchangeRateCreate TargetCurrency="@Selected?.UniqueCode" bind-IsVisible="@IsCreateExchangeRateVisible" />
+<ExchangeRateList TargetCurrency="@Selected?.UniqueCode" AddClick="@OnAddExchangeRateClick" @bind-IsVisible="@IsListExchangeRateVisible" />
+<ExchangeRateCreate TargetCurrency="@Selected?.UniqueCode" @bind-IsVisible="@IsCreateExchangeRateVisible" />

@@ -9,7 +9,7 @@
 <Money.Components.Title Icon="calendar" Main="@Title" Sub="List of each single outcome in selected month" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
 
-<OutcomeCreate bind-IsVisible="@IsCreateVisible" CategoryKey="@CategoryKey" />
+<OutcomeCreate @bind-IsVisible="@IsCreateVisible" CategoryKey="@CategoryKey" />
 <Confirm Context="@Delete" />
 
 <div class="overview">
@@ -18,7 +18,7 @@
         {
             if (Models.Count > 0)
             {
-                <SortButton TType="@OutcomeOverviewSortType" bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+                <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
                 <div class="clear"></div>
 
                 <div class="cards">
@@ -42,7 +42,7 @@
 
 @if (Selected != null)
 {
-    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" bind-IsVisible="@IsAmountEditVisible" />
-    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" bind-IsVisible="@IsDescriptionEditVisible" />
-    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" bind-IsVisible="@IsWhenEditVisible" />
+    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" @bind-IsVisible="@IsAmountEditVisible" />
+    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" @bind-IsVisible="@IsDescriptionEditVisible" />
+    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" @bind-IsVisible="@IsWhenEditVisible" />
 }

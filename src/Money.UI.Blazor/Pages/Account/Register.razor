@@ -1,0 +1,37 @@
+﻿@page "/account/register"
+@inherits RegisterBase
+
+<Money.Components.Title Main="Register" Sub="Create a new account" />
+
+<div class="login">
+
+    <Validation ErrorMessages="@ErrorMessages" />
+    <div class="row">
+        <div class="col-md-4">
+            <section>
+                <form onsubmit="@OnSubmitAsync">
+                    <div class="form-group">
+                        <label for="UserName">User name</label>
+                        <input id="UserName" class="form-control" type="text" autofocus bind="@UserName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <input id="Password" class="form-control" type="password" bind="@Password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ConfirmPassword">Confirm password</label>
+                        <input id="ConfirmPassword" class="form-control" type="password" bind="@ConfirmPassword" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                    <div class="form-group">
+                        <p>
+                            <a href="@Navigator.UrlAccountLogin()">Login using existing account?</a>
+                        </p>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>

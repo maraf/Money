@@ -1,0 +1,14 @@
+﻿@page "/about"
+@inject Navigator Navigator
+
+<Money.Components.Title Main="Money" Sub="Nepuo" />
+
+<p class="gray">
+    v@(typeof(About).Assembly.GetName().Version.ToString(3))
+</p>
+<p>
+    <a target="_blank" href="@Navigator.UrlMoneyProject()">Documentation</a>
+</p>
+<p>
+    <a target="_blank" href="@Navigator.UrlMoneyProjectIssueNew()">Report an issue</a>
+</p>

@@ -1,0 +1,60 @@
+﻿@page "/currencies"
+@inherits CurrenciesBase
+
+<Money.Components.Title Icon="gbp" Main="Currencies" Sub="List of currencies you are making outcomes in" ButtonText="New Currency" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<ExceptionPanel />
+
+<CurrencyEdit bind-IsVisible="@IsCreateVisible" />
+<Confirm Context="@Delete" />
+
+<Loading Context="@Loading">
+    @if (Models.Count == 0)
+    {
+        <Alert Title="No data." Message="Try adding some currencies." Mode="@AlertMode.Warning" />
+    }
+    else
+    {
+        @foreach (var item in Models)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>
+                        @item.Symbol
+                    </strong>
+                </div>
+                <div class="panel-body">
+                    <p>This currency has unique code @item.UniqueCode.</p>
+                    @if (item.IsDefault)
+                    {
+                        <p>This is a default currency used for displaying outcomes.</p>
+                    }
+
+                    <div class="nav navbar-nav navbar-right">
+                        @if (!item.IsDefault)
+                        {
+                            <IconButton Icon="home" ToolTip="Set as default" Click="@(async () => { await OnChangeDefaultClickAsync(item); StateHasChanged(); })" />
+                        }
+
+                        @if (Models.Count > 1)
+                        {
+                            <IconButton Icon="transfer" ToolTip="Add exchange rate" Click="@(() => OnActionClick(item, ref IsListExchangeRateVisible))" />
+                        }
+
+                        <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => OnActionClick(item, ref IsEditVisible))" />
+
+                        @if (Models.Count > 1 && !item.IsDefault)
+                        {
+                            <IconButton Icon="remove" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
+                        }
+                    </div>
+                </div>
+            </div>
+
+        }
+    }
+</Loading>
+
+<CurrencyEdit UniqueCode="@Selected?.UniqueCode" Symbol="@Selected?.Symbol" bind-IsVisible="@IsEditVisible" />
+
+<ExchangeRateList TargetCurrency="@Selected?.UniqueCode" AddClick="@OnAddExchangeRateClick" bind-IsVisible="@IsListExchangeRateVisible" />
+<ExchangeRateCreate TargetCurrency="@Selected?.UniqueCode" bind-IsVisible="@IsCreateExchangeRateVisible" />

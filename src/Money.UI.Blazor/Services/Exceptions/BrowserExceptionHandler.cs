@@ -1,5 +1,4 @@
-﻿using Microsoft.JSInterop;
-using Money.Models.Api;
+﻿using Money.Models.Api;
 using Money.Services;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
@@ -31,7 +30,7 @@ namespace Neptuo.Exceptions
         {
             log.Debug($"'{rawPayload}'.");
 
-            Response response = Json.Deserialize<Response>(rawPayload);
+            Response response = SimpleJson.SimpleJson.DeserializeObject<Response>(rawPayload);
             Type type = Type.GetType(response.Type);
             rawPayload = response.Payload;
 

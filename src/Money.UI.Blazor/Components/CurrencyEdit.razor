@@ -1,0 +1,116 @@
+﻿@inherits DialogBase
+@inject ICommandDispatcher Commands
+
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+    <Validation ErrorMessages="@ErrorMessages" />
+
+    <div class="form-group">
+        <label for="currency-unique-code">Unique Code:</label>
+        @if (IsUniqueCodeEnabled)
+        {
+            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" data-autofocus bind="@UniqueCode" />
+        }
+        else
+        {
+            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" bind="@UniqueCode" disabled="disabled" />
+        }
+    </div>
+    <div class="form-group">
+        <label for="currency-symbol">Symbol:</label>
+        @if (IsUniqueCodeEnabled)
+        {
+            <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" bind="@Symbol" />
+        }
+        else
+        {
+            <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" data-autofocus bind="@Symbol" />
+        }
+    </div>
+</Modal>
+
+@code 
+{
+    private string originalUniqueCode;
+    private string originalSymbol;
+    protected List<string> ErrorMessages { get; } = new List<string>();
+
+    [Parameter]
+    protected string UniqueCode { get; set; }
+
+    [Parameter]
+    protected string Symbol { get; set; }
+
+    protected string Title { get; set; }
+    protected string SaveButtonText { get; set; }
+    protected bool IsUniqueCodeEnabled { get; set; }
+
+    private bool isNew;
+
+    public override async Task SetParametersAsync(ParameterCollection parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        isNew = parameters.GetValueOrDefault<string>(nameof(UniqueCode)) == null;
+    }
+
+    protected override void OnParametersSet()
+    {
+        //bool isNew = Symbol == null || originalSymbol != null;
+
+        originalUniqueCode = UniqueCode;
+        originalSymbol = Symbol;
+
+        if (isNew)
+        {
+            Title = "Create a new Currency";
+            SaveButtonText = "Create";
+            IsUniqueCodeEnabled = true;
+        }
+        else
+        {
+            Title = "Change Currency";
+            SaveButtonText = "Save";
+            IsUniqueCodeEnabled = false;
+        }
+    }
+
+    protected bool OnSaveClick()
+    {
+        if (isNew)
+        {
+            if (Validate())
+            {
+                ExecuteCreate();
+                return true;
+            }
+        }
+        else if (originalSymbol != Symbol)
+        {
+            ExecuteChange();
+            originalSymbol = Symbol;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddCurrencyUniqueCode(ErrorMessages, UniqueCode);
+        Validator.AddCurrencySymbol(ErrorMessages, Symbol);
+
+        return ErrorMessages.Count == 0;
+    }
+
+    private async void ExecuteCreate()
+    {
+        await Commands.HandleAsync(new CreateCurrency(UniqueCode, Symbol));
+        UniqueCode = Symbol = String.Empty;
+        StateHasChanged();
+    }
+
+    private async void ExecuteChange()
+    {
+        await Commands.HandleAsync(new ChangeCurrencySymbol(UniqueCode, Symbol));
+    }
+}

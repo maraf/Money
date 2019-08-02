@@ -1,0 +1,43 @@
+﻿@using Neptuo.Models.Keys
+@inherits DialogBase
+@inject ICommandDispatcher Commands
+
+<Modal Title="Change when the outcome occured" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+    <div class="form-group">
+        <label for="outcome-when">When:</label>
+        <input type="date" class="form-control" id="outcome-when" placeholder="Outcome Description" data-autofocus bind="@When" format-value="yyyy-MM-dd" />
+    </div>
+</Modal>
+
+@code 
+{
+    private DateTime originalWhen;
+
+    [Parameter]
+    protected IKey OutcomeKey { get; set; }
+
+    [Parameter]
+    protected DateTime When { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        originalWhen = When;
+    }
+
+    protected bool OnSaveClick()
+    {
+        if (originalWhen != When)
+        {
+            Execute();
+            OnParametersSet();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private async void Execute()
+        => await Commands.HandleAsync(new ChangeOutcomeWhen(OutcomeKey, When));
+}

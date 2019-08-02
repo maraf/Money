@@ -1,0 +1,13 @@
+﻿
+<ul class="nav nav-tabs @CssClass">
+    @ChildContent
+</ul>
+
+@code
+{
+    [Parameter]
+    protected RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    protected string CssClass { get; set; }
+}

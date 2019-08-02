@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Services;
-using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using Money.Models;
 using Neptuo;
 using Neptuo.Models.Keys;
@@ -33,8 +33,8 @@ namespace Money.Services
             uri.OnLocationChanged -= OnLocationChanged;
         }
 
-        private void OnLocationChanged(object sender, string e)
-            => LocationChanged?.Invoke(e);
+        private void OnLocationChanged(object sender, LocationChangedEventArgs e)
+            => LocationChanged?.Invoke(e.Location);
 
         private void OpenExternal(string url)
             => interop.NavigateTo(url);

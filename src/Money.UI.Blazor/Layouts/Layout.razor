@@ -1,0 +1,29 @@
+﻿@using Neptuo.Exceptions.Handlers
+@inherits LayoutComponentBase
+@inject ExceptionHandlerBuilder ExceptionHandlerBuilder
+@inject Navigator Navigator
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <MainMenu />
+    </div>
+</nav>
+<div class="container body-content">
+    @Body
+
+    <hr />
+
+    <footer>
+        <p>&copy; 2018 - Neptuo</p>
+    </footer>
+</div>
+
+@code
+{ 
+    protected async override Task OnInitAsync()
+    {
+        await base.OnInitAsync();
+
+        ExceptionHandlerBuilder.Handler<UnauthorizedAccessException>(e => Navigator.OpenLogin());
+    }
+}

@@ -33,7 +33,7 @@ namespace Neptuo.Events
         {
             log.Debug($"Raised: {rawPayload}");
 
-            Response response = Json.Deserialize<Response>(rawPayload);
+            Response response = SimpleJson.SimpleJson.DeserializeObject<Response>(rawPayload);
             Type type = Type.GetType(response.Type);
             rawPayload = response.Payload;
 

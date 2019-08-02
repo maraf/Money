@@ -1,0 +1,16 @@
+﻿
+<button type="button" class="@CssClass" onclick="@Click">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+</button>
+
+@code
+{
+    [Parameter]
+    protected string CssClass { get; set; }
+
+    [Parameter]
+    protected Action Click { get; set; }
+}

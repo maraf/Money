@@ -14,12 +14,13 @@ namespace Money.UI.Blazor
         public static void Main(string[] args)
         {
             IWebAssemblyHost host = CreateHostBuilder(args).Build();
-            host.Run();
             serviceProvider = host.Services;
+            host.Run();
         }
 
-        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) 
-            => BlazorWebAssemblyHost.CreateDefaultBuilder().UseBlazorStartup<Startup>();
+        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
+            BlazorWebAssemblyHost.CreateDefaultBuilder()
+                .UseBlazorStartup<Startup>();
 
         [JSInvokable]
         public static void RaiseEvent(string payload) => serviceProvider.GetService<BrowserEventDispatcher>().Raise(payload);

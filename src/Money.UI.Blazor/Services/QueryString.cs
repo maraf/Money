@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Services;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using Neptuo;
 using Neptuo.Collections.Specialized;
 using System;
@@ -25,7 +26,7 @@ namespace Money.Services
             uri.OnLocationChanged += OnLocationChanged;
         }
 
-        private void OnLocationChanged(object sender, string e)
+        private void OnLocationChanged(object sender, LocationChangedEventArgs e)
             => parameters = null;
 
         private void EnsureParameters()

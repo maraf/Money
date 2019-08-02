@@ -1,0 +1,23 @@
+﻿@inject Navigator Navigator
+@inject IUriHelper UriHelper
+
+<Money.Components.Title Icon="user" Main="User Account" Sub="Change your account settings" />
+
+<TabSet>
+    <Tab Url="@Navigator.UrlUserManage()" CssClass="@GetActiveCssClass(Navigator.UrlUserManage())">
+        Profile
+    </Tab>
+    <Tab Url="@Navigator.UrlUserPassword()" CssClass="@GetActiveCssClass(Navigator.UrlUserPassword())">
+        Password
+    </Tab>
+</TabSet>
+
+@code
+{
+    string GetActiveCssClass(string url)
+    {
+        string absolute = UriHelper.GetAbsoluteUri();
+        string relative = "/" + UriHelper.ToBaseRelativePath(UriHelper.GetBaseUri(), absolute);
+        return relative == url ? "active" : null;
+    }
+}

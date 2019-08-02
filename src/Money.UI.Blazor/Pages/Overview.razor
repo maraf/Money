@@ -1,0 +1,48 @@
+﻿@page "/outcomes/{Year}/{Month}"
+@page "/overview/{Year}/{Month}"
+@page "/overview/{Year}/{Month}/{CategoryGuid}"
+
+@page "/{Year}/{Month}/overview"
+@page "/{Year}/{Month}/overview/{CategoryGuid}"
+@inherits OverviewBase
+
+<Money.Components.Title Icon="calendar" Main="@Title" Sub="List of each single outcome in selected month" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<ExceptionPanel />
+
+<OutcomeCreate bind-IsVisible="@IsCreateVisible" CategoryKey="@CategoryKey" />
+<Confirm Context="@Delete" />
+
+<div class="overview">
+    <Loading Context="@Loading" IsOverlay="true">
+        @if (Models != null)
+        {
+            if (Models.Count > 0)
+            {
+                <SortButton TType="@OutcomeOverviewSortType" bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+                <div class="clear"></div>
+
+                <div class="cards">
+                    <CascadingValue Value="@this">
+                        @foreach (var item in Models)
+                        {
+                            <OutcomeCard Model="@item" />
+                        }
+                    </CascadingValue>
+                </div>
+
+                <Paging LoadPageAsync="@LoadDataAsync" />
+            }
+            else
+            {
+                <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
+            }
+        }
+    </Loading>
+</div>
+
+@if (Selected != null)
+{
+    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" bind-IsVisible="@IsAmountEditVisible" />
+    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" bind-IsVisible="@IsDescriptionEditVisible" />
+    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" bind-IsVisible="@IsWhenEditVisible" />
+}

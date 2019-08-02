@@ -1,0 +1,127 @@
+﻿@using Neptuo.Models.Keys
+@inherits DialogBase
+@inject ILog<OutcomeCreate> Log
+@inject ICommandDispatcher Commands
+@inject IQueryDispatcher Queries
+
+<Modal Title="@Title" PrimaryButtonText="@SaveButtonText" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+    <Validation ErrorMessages="@ErrorMessages" />
+    <div class="row">
+        <div class="col-md-9">
+            <div class="form-group">
+                <label for="outcome-amount">Amount:</label>
+                <input type="text" class="form-control" id="outcome-amount" bind="@Amount" data-autofocus />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="outcome-currency">Currency:</label>
+                <select class="form-control" id="outcome-currency" bind="@Currency">
+                    @if (Currencies != null)
+                    {
+                        @foreach (var currency in Currencies)
+                        {
+                            <option value="@currency.UniqueCode">
+                                @currency.Symbol
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="outcome-description">Description:</label>
+        <input type="text" class="form-control" id="outcome-description" bind="@Description" />
+    </div>
+    <div class="form-group">
+        <label for="outcome-when">When:</label>
+        <input type="date" class="form-control" id="outcome-when" bind="@When" format-value="yyyy-MM-dd" />
+    </div>
+    <div class="form-group">
+        <label>Category:</label>
+        @if (Categories != null)
+        {
+            @foreach (var category in Categories)
+            {
+                <button type="button" class="btn btn-block btn-selectable @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "")" style="background-color: @category.Color.ToHashCode();" onclick="@(() => CategoryKey = category.Key)">
+                    <span>@category.Icon</span>
+                    <strong>@category.Name</strong>
+                    <span>@category.Description</span>
+                </button>
+            }
+        }
+    </div>
+</Modal>
+
+@code 
+{
+    protected string Title { get; set; }
+    protected string SaveButtonText { get; set; }
+    protected List<string> ErrorMessages { get; } = new List<string>();
+
+    protected List<CategoryModel> Categories { get; private set; }
+    protected List<CurrencyModel> Currencies { get; private set; }
+
+    [Parameter]
+    protected decimal Amount { get; set; }
+
+    [Parameter]
+    protected string Currency { get; set; }
+
+    [Parameter]
+    protected string Description { get; set; }
+
+    [Parameter]
+    protected DateTime When { get; set; } = DateTime.Today;
+
+    [Parameter]
+    protected IKey CategoryKey { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Title = "Create a new Outcome";
+        SaveButtonText = "Create";
+
+        Categories = await Queries.QueryAsync(new ListAllCategory());
+        Currencies = await Queries.QueryAsync(new ListAllCurrency());
+        Currency = await Queries.QueryAsync(new GetCurrencyDefault());
+    }
+
+    protected bool OnSaveClick()
+    {
+        if (Validate())
+        {
+            Execute();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool Validate()
+    {
+        Log.Debug($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
+
+        ErrorMessages.Clear();
+        Validator.AddOutcomeAmount(ErrorMessages, Amount);
+        Validator.AddOutcomeDescription(ErrorMessages, Description);
+        Validator.AddOutcomeCurrency(ErrorMessages, Currency);
+        Validator.AddOutcomeCategoryKey(ErrorMessages, CategoryKey);
+
+        Log.Debug($"Outcome Validation: {string.Join(", ", ErrorMessages)}.");
+        return ErrorMessages.Count == 0;
+    }
+
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new CreateOutcome(new Price(Amount, Currency), Description, When, CategoryKey));
+
+        Amount = 0;
+        CategoryKey = null;
+        Description = null;
+        StateHasChanged();
+    }
+}

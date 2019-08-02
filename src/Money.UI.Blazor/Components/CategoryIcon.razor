@@ -1,0 +1,48 @@
+﻿@using Neptuo.Models.Keys
+@inherits DialogBase
+@inject ICommandDispatcher Commands
+@inject IconCollection Icons
+
+<Modal Title="Pick an Icon for the Category" PrimaryButtonClick="@OnSaveClick" bind-IsVisible="@IsVisible">
+    @foreach (string icon in Icons)
+    {
+        <button class="btn btn-link btn-icon btn-selectable @(Icon == icon ? "btn-selectable-selected" : "")" onclick="@(() => Icon = icon)">
+            @icon
+        </button>
+    }
+</Modal>
+
+@code 
+{
+    private string originalIcon;
+
+    [Parameter]
+    protected IKey CategoryKey { get; set; }
+
+    [Parameter]
+    protected string Icon { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        originalIcon = Icon;
+    }
+
+    protected bool OnSaveClick()
+    {
+        if (originalIcon != Icon)
+        {
+            Execute();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new ChangeCategoryIcon(CategoryKey, Icon));
+        originalIcon = Icon;
+    }
+}

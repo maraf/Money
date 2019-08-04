@@ -14,7 +14,7 @@ namespace Money.Components.Bootstrap
     public class Native
     {
         private readonly IJSRuntime jsRuntime;
-        private Dictionary<string, ModalBase> modals = new Dictionary<string, ModalBase>();
+        private static Dictionary<string, ModalBase> modals = new Dictionary<string, ModalBase>();
 
         public Native(IJSRuntime jsRuntime)
         {
@@ -35,7 +35,7 @@ namespace Money.Components.Bootstrap
             => modals.Remove(id);
 
         [JSInvokable]
-        public void Bootstrap_ModalHidden(string id)
+        public static void Bootstrap_ModalHidden(string id)
         {
             ILog log = Program.Resolve<ILogFactory>().Scope("Modal.Native");
             log.Debug($"Modal hidden '{id}'.");

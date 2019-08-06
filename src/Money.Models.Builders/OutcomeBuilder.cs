@@ -87,11 +87,7 @@ namespace Money.Models.Builders
 
             foreach (OutcomeEntity outcome in outcomes)
             {
-                var categories = await db.OutcomeCategories
-                    .Where(oc => oc.OutcomeId == outcome.Id)
-                    .ToListAsync();
-
-                foreach (OutcomeCategoryEntity category in categories)
+                foreach (OutcomeCategoryEntity category in outcome.Categories)
                 {
                     Price price;
                     if (totals.TryGetValue(category.CategoryId, out price))

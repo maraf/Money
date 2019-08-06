@@ -28,7 +28,10 @@ namespace Money.Models.Api
             Add<ListMonthOutcomeFromCategory>("month-outcome-from-category");
             Add<ListMonthWithOutcome>("months-with-outcome");
 
+            Add<GetTotalYearOutcome>("year-outcome-total");
+            Add<ListYearCategoryWithOutcome>("year-categories-with-outcome");
             Add<ListYearOutcomeFromCategory>("year-outcome-from-category");
+            Add<ListYearWithOutcome>("years-with-outcome");
 
             Add<SearchOutcomes>("search-outcomes");
 

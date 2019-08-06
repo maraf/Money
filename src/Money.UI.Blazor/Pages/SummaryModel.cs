@@ -13,19 +13,21 @@ using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class SummaryBase : ComponentBase,
+    public abstract class SummaryModel<T, TItemsQuery> : ComponentBase,
         System.IDisposable,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeWhenChanged>
+        where T: class
+        where TItemsQuery : IQuery<List<T>>, new()
     {
         private CurrencyFormatter formatter;
 
@@ -39,19 +41,13 @@ namespace Money.Pages
         public IQueryDispatcher Queries { get; set; }
 
         [Inject]
-        internal ILog<SummaryBase> Log { get; set; }
+        internal ILog<SummaryModel<T, TItemsQuery>> Log { get; set; }
 
         [Inject]
         internal Navigator Navigator { get; set; }
 
-        [Parameter]
-        protected string Year { get; set; }
-
-        [Parameter]
-        protected string Month { get; set; }
-
-        protected List<MonthModel> Months { get; private set; }
-        protected MonthModel SelectedMonth { get; private set; }
+        protected List<T> Items { get; private set; }
+        protected T SelectedItem { get; set; }
 
         protected Price TotalAmout { get; private set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
@@ -72,55 +68,54 @@ namespace Money.Pages
 
         public override Task SetParametersAsync(ParameterCollection parameters)
         {
-            // Clear previous parameter values.
-            Year = null;
-            Month = null;
-
+            ClearPreviousParameters();
             return base.SetParametersAsync(parameters);
         }
 
+        protected abstract void ClearPreviousParameters();
+
+        protected abstract T CreateSelectedItemFromParameters();
+
         protected async override Task OnParametersSetAsync()
         {
-            Log.Debug($"Summary.OnParametersSetAsync(Year='{Year}', Month='{Month}')");
-
-            if (!String.IsNullOrEmpty(Year) && !String.IsNullOrEmpty(Month))
-                SelectedMonth = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
-            else
-                SelectedMonth = null;
-
-            await LoadMonthsAsync(isReload: false);
+            SelectedItem = CreateSelectedItemFromParameters();
+            await LoadItemsAsync(isReload: false);
         }
 
-        protected async Task LoadMonthsAsync(bool isReload = true)
+        protected async Task LoadItemsAsync(bool isReload = true)
         {
-            if (isReload || Months == null)
+            if (isReload || Items == null)
             {
                 using (Loading.Start())
-                    Months = await Queries.QueryAsync(new ListMonthWithOutcome());
+                    Items = await Queries.QueryAsync(new TItemsQuery());
             }
 
-            if (SelectedMonth != null && !Months.Contains(SelectedMonth))
+            if (SelectedItem != null && !Items.Contains(SelectedItem))
             {
                 Navigator.OpenSummary();
                 return;
             }
 
-            if (SelectedMonth == null)
-                SelectedMonth = Months.FirstOrDefault();
+            if (SelectedItem == null)
+                SelectedItem = Items.FirstOrDefault();
 
-            await LoadMonthSummaryAsync();
+            await LoadItemSummaryAsync();
         }
 
-        protected async Task LoadMonthSummaryAsync()
+        protected async Task LoadItemSummaryAsync()
         {
-            if (SelectedMonth != null)
+            if (SelectedItem != null)
             {
-                Categories = await Queries.QueryAsync(new ListMonthCategoryWithOutcome(SelectedMonth));
-                TotalAmout = await Queries.QueryAsync(new GetTotalMonthOutcome(SelectedMonth));
+                Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedItem));
+                TotalAmout = await Queries.QueryAsync(CreateTotalQuery(SelectedItem));
                 formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
                 Sort();
             }
         }
+
+        protected abstract IQuery<Price> CreateTotalQuery(T item);
+
+        protected abstract IQuery<List<CategoryWithAmountModel>> CreateCategoriesQuery(T item);
 
         protected void OnSorted()
         {
@@ -201,25 +196,27 @@ namespace Money.Pages
             return Task.CompletedTask;
         }
 
-        private async void OnMonthUpdatedEvent(MonthModel changed)
+        private async void OnMonthUpdatedEvent(DateTime changed)
         {
-            if (!Months.Contains(changed))
-                await LoadMonthsAsync();
+            if (!IsContained(changed))
+                await LoadItemsAsync();
             else
-                await LoadMonthSummaryAsync();
+                await LoadItemSummaryAsync();
 
             StateHasChanged();
         }
 
+        protected abstract bool IsContained(DateTime changed);
+
         private async void OnOutcomeAmountChangedEvent()
         {
-            await LoadMonthSummaryAsync();
+            await LoadItemSummaryAsync();
             StateHasChanged();
         }
 
         private async void OnOutcomeDeletedEvent()
         {
-            await LoadMonthsAsync();
+            await LoadItemsAsync();
             StateHasChanged();
         }
 

@@ -1,6 +1,6 @@
 ﻿@page "/"
 @page "/{Year}/{Month}"
-@inherits SummaryBase
+@inherits SummaryMonthModel
 
 <Money.Components.Title Icon="signal" Main="Summary" Sub="Per-month summary of outcomes in categories" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
@@ -10,16 +10,16 @@
 <div class="summary">
     <Loading Context="@Loading">
 
-        @if (Months != null)
+        @if (Items != null)
         {
-            if (Months.Count > 0)
+            if (Items.Count > 0)
             {
                 <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
 
                 <TabSet CssClass="months">
-                    @foreach (var month in Months)
+                    @foreach (var month in Items)
                     {
-                        <Tab Url="@Navigator.UrlSummary(month)" CssClass="@(month == SelectedMonth ? "active" : null)">
+                        <Tab Url="@Navigator.UrlSummary(month)" CssClass="@(month == SelectedItem ? "active" : null)">
                             @month.ToString()
                         </Tab>
                     }
@@ -36,7 +36,7 @@
             <div class="graph">
                 @if (TotalAmout != null)
                 {
-                    <div class="panel panel-default bar-graph bar-graph-summary" @onclick="@(() => Navigator.OpenOverview(SelectedMonth))">
+                    <div class="panel panel-default bar-graph bar-graph-summary" @onclick="@(() => Navigator.OpenOverview(SelectedItem))">
                         <div class="panel-body">
                             <h3 class="description">
                                 <span class="icon">📈</span>
@@ -52,7 +52,7 @@
 
                 @foreach (var category in Categories)
                 {
-                    <div class="panel panel-default bar-graph" @onclick="@(() => Navigator.OpenOverview(SelectedMonth, category.Key))">
+                    <div class="panel panel-default bar-graph" @onclick="@(() => Navigator.OpenOverview(SelectedItem, category.Key))">
                         <div class="panel-body">
                             <h3 class="description" title="@category.Description">
                                 <span class="icon">@category.Icon</span>

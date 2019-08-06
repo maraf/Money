@@ -62,7 +62,7 @@ namespace Money.Models
         }
 
         /// <summary>
-        /// Creates an instalce of <see cref="MonthModel"/> from <paramref name="dateTime"/>.
+        /// Creates an instance of <see cref="MonthModel"/> from <paramref name="dateTime"/>.
         /// </summary>
         /// <param name="dateTime">A source date and time.</param>
         public static implicit operator MonthModel(DateTime dateTime) => new MonthModel(dateTime.Year, dateTime.Month);

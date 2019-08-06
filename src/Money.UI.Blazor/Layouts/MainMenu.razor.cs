@@ -22,6 +22,7 @@ namespace Money.Components
         protected override void OnInit()
         {
             base.OnInit();
+
             Navigator.LocationChanged += OnLocationChanged;
         }
 

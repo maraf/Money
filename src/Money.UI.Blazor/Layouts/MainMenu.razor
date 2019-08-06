@@ -14,8 +14,12 @@
 
             <ul class="dropdown-menu">
                 <li>
-                    <NavLink href="@Navigator.UrlSummary()">Summary</NavLink>
+                    <NavLink href="@Navigator.UrlSummary()">Monthly</NavLink>
                 </li>
+                <li>
+                    <NavLink href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">Yearly</NavLink>
+                </li>
+                <li role="separator" class="divider"></li>
                 <li>
                     <NavLink href="@Navigator.UrlSearch()">Search</NavLink>
                 </li>

@@ -27,6 +27,7 @@ namespace Money.Models.Builders
         IQueryHandler<ListMonthCategoryWithOutcome, List<CategoryWithAmountModel>>,
         IQueryHandler<ListYearCategoryWithOutcome, List<CategoryWithAmountModel>>,
         IQueryHandler<GetTotalMonthOutcome, Price>,
+        IQueryHandler<GetTotalYearOutcome, Price>,
         IQueryHandler<GetCategoryName, string>,
         IQueryHandler<GetCategoryColor, Color>,
         IQueryHandler<ListMonthOutcomeFromCategory, List<OutcomeOverviewModel>>,
@@ -168,6 +169,15 @@ namespace Money.Models.Builders
             }
         }
 
+        private Price SumPriceInDefaultCurrency(IKey userKey, IEnumerable<PriceFixed> outcomes)
+        {
+            Price price = priceConverter.ZeroDefault(userKey);
+            foreach (PriceFixed outcome in outcomes)
+                price += priceConverter.ToDefault(userKey, outcome);
+
+            return price;
+        }
+
         public async Task<Price> HandleAsync(GetTotalMonthOutcome query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
@@ -178,11 +188,21 @@ namespace Money.Models.Builders
                     .Select(o => new PriceFixed(new Price(o.Amount, o.Currency), o.When))
                     .ToListAsync();
 
-                Price price = priceConverter.ZeroDefault(query.UserKey);
-                foreach (PriceFixed outcome in outcomes)
-                    price += priceConverter.ToDefault(query.UserKey, outcome);
+                return SumPriceInDefaultCurrency(query.UserKey, outcomes);
+            }
+        }
 
-                return price;
+        public async Task<Price> HandleAsync(GetTotalYearOutcome query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                List<PriceFixed> outcomes = await db.Outcomes
+                    .WhereUserKey(query.UserKey)
+                    .Where(o => o.When.Year == query.Year.Year)
+                    .Select(o => new PriceFixed(new Price(o.Amount, o.Currency), o.When))
+                    .ToListAsync();
+
+                return SumPriceInDefaultCurrency(query.UserKey, outcomes);
             }
         }
 

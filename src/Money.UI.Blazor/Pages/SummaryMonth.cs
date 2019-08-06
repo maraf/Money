@@ -23,6 +23,9 @@ namespace Money.Pages
         [Parameter]
         protected string Month { get; set; }
 
+        public SummaryMonth() 
+            => SubTitle = "Per-month summary of outcomes in categories";
+
         protected override void ClearPreviousParameters()
         {
             Year = null;

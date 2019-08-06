@@ -45,6 +45,8 @@ namespace Money.Pages
         [Inject]
         internal Navigator Navigator { get; set; }
 
+        protected string SubTitle { get; set; }
+
         protected List<T> Items { get; private set; }
         protected T SelectedItem { get; set; }
 

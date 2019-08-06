@@ -19,10 +19,11 @@ namespace Money.Pages
         [Parameter]
         protected string Year { get; set; }
 
-        protected override void ClearPreviousParameters()
-        {
-            Year = null;
-        }
+        public SummaryYear() 
+            => SubTitle = "Per-year summary of outcomes in categories";
+
+        protected override void ClearPreviousParameters() 
+            => Year = null;
 
         protected override YearModel CreateSelectedItemFromParameters()
         {

@@ -35,6 +35,12 @@ namespace Money.Models
 
         public override int GetHashCode() => 1642494364 + Year.GetHashCode();
 
+        /// <summary>
+        /// Creates an instance of <see cref="YearModel"/> from <paramref name="dateTime"/>.
+        /// </summary>
+        /// <param name="dateTime">A source date and time.</param>
+        public static implicit operator YearModel(DateTime dateTime) => new YearModel(dateTime.Year);
+
         public static bool operator ==(YearModel model1, YearModel model2) => EqualityComparer<YearModel>.Default.Equals(model1, model2);
 
         public static bool operator !=(YearModel model1, YearModel model2) => !(model1 == model2);

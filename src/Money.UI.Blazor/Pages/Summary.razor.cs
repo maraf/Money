@@ -10,6 +10,7 @@ using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Logging;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,12 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public abstract class SummaryModel<T, TItemsQuery> : ComponentBase,
+    public abstract class SummaryModel<T> : ComponentBase,
         System.IDisposable,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeWhenChanged>
-        where T: class
-        where TItemsQuery : IQuery<List<T>>, new()
     {
         private CurrencyFormatter formatter;
 
@@ -41,7 +40,7 @@ namespace Money.Pages
         public IQueryDispatcher Queries { get; set; }
 
         [Inject]
-        internal ILog<SummaryModel<T, TItemsQuery>> Log { get; set; }
+        internal ILog<SummaryModel<T>> Log { get; set; }
 
         [Inject]
         internal Navigator Navigator { get; set; }
@@ -72,9 +71,11 @@ namespace Money.Pages
             return base.SetParametersAsync(parameters);
         }
 
-        protected abstract void ClearPreviousParameters();
+        protected virtual void ClearPreviousParameters() 
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(ClearPreviousParameters)}'.");
 
-        protected abstract T CreateSelectedItemFromParameters();
+        protected virtual T CreateSelectedItemFromParameters()
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedItemFromParameters)}'.");
 
         protected async override Task OnParametersSetAsync()
         {
@@ -82,12 +83,15 @@ namespace Money.Pages
             await LoadItemsAsync(isReload: false);
         }
 
+        protected virtual IQuery<List<T>> CreateItemsQuery()
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateItemsQuery)}'.");
+
         protected async Task LoadItemsAsync(bool isReload = true)
         {
             if (isReload || Items == null)
             {
                 using (Loading.Start())
-                    Items = await Queries.QueryAsync(new TItemsQuery());
+                    Items = await Queries.QueryAsync(CreateItemsQuery());
             }
 
             if (SelectedItem != null && !Items.Contains(SelectedItem))
@@ -113,9 +117,11 @@ namespace Money.Pages
             }
         }
 
-        protected abstract IQuery<Price> CreateTotalQuery(T item);
+        protected virtual IQuery<Price> CreateTotalQuery(T item)
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateTotalQuery)}'.");
 
-        protected abstract IQuery<List<CategoryWithAmountModel>> CreateCategoriesQuery(T item);
+        protected virtual IQuery<List<CategoryWithAmountModel>> CreateCategoriesQuery(T item)
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateCategoriesQuery)}'.");
 
         protected void OnSorted()
         {
@@ -151,6 +157,18 @@ namespace Money.Pages
 
         public void Dispose()
             => UnBindEvents();
+
+        #region Navigations
+
+        protected virtual string UrlSummary(T item) => null;
+
+        protected virtual void OpenOverview(T item)
+        { }
+
+        protected virtual void OpenOverview(T item, IKey categorykey)
+        { }
+
+        #endregion
 
         #region Events
 
@@ -206,7 +224,8 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        protected abstract bool IsContained(DateTime changed);
+        protected virtual bool IsContained(DateTime changed)
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(IsContained)}'.");
 
         private async void OnOutcomeAmountChangedEvent()
         {

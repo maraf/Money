@@ -13,6 +13,9 @@ namespace Money.Services
         public string UrlSummary()
             => "/";
 
+        public string UrlSummary(YearModel year)
+            => $"/{year.Year}";
+
         public string UrlSummary(MonthModel month)
             => $"/{month.Year}/{month.Month}";
 

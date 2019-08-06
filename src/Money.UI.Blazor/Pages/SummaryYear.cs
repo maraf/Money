@@ -2,6 +2,7 @@
 using Money.Models;
 using Money.Models.Queries;
 using Neptuo.Logging;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class SummaryYearModel : SummaryModel<YearModel, ListYearWithOutcome>
+    [Route("/{Year}")]
+    public class SummaryYear : Summary<YearModel>
     {
         [Parameter]
         protected string Year { get; set; }
@@ -32,6 +34,9 @@ namespace Money.Pages
                 return null;
         }
 
+        protected override IQuery<List<YearModel>> CreateItemsQuery()
+            => new ListYearWithOutcome();
+
         protected override IQuery<Price> CreateTotalQuery(YearModel item)
             => new GetTotalYearOutcome(item);
 
@@ -40,5 +45,18 @@ namespace Money.Pages
 
         protected override bool IsContained(DateTime changed)
             => Items.Contains(changed);
+
+        protected override string UrlSummary(YearModel item)
+            => Navigator.UrlSummary(item);
+
+        protected override void OpenOverview(YearModel item)
+        {
+            base.OpenOverview(item);
+        }
+
+        protected override void OpenOverview(YearModel item, IKey categorykey)
+        {
+            base.OpenOverview(item, categorykey);
+        }
     }
 }

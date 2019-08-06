@@ -1,6 +1,5 @@
-﻿@page "/"
-@page "/{Year}/{Month}"
-@inherits SummaryMonthModel
+﻿@typeparam T
+@inherits SummaryModel<T>
 
 <Money.Components.Title Icon="signal" Main="Summary" Sub="Per-month summary of outcomes in categories" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
@@ -17,10 +16,10 @@
                 <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
 
                 <TabSet CssClass="months">
-                    @foreach (var month in Items)
+                    @foreach (var item in Items)
                     {
-                        <Tab Url="@Navigator.UrlSummary(month)" CssClass="@(month == SelectedItem ? "active" : null)">
-                            @month.ToString()
+                        <Tab Url="@UrlSummary(item)" CssClass="@(item.Equals(SelectedItem) ? "active" : null)">
+                            @item.ToString()
                         </Tab>
                     }
                 </TabSet>
@@ -36,7 +35,7 @@
             <div class="graph">
                 @if (TotalAmout != null)
                 {
-                    <div class="panel panel-default bar-graph bar-graph-summary" @onclick="@(() => Navigator.OpenOverview(SelectedItem))">
+                    <div class="panel panel-default bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedItem))">
                         <div class="panel-body">
                             <h3 class="description">
                                 <span class="icon">📈</span>
@@ -52,7 +51,7 @@
 
                 @foreach (var category in Categories)
                 {
-                    <div class="panel panel-default bar-graph" @onclick="@(() => Navigator.OpenOverview(SelectedItem, category.Key))">
+                    <div class="panel panel-default bar-graph" @onclick="@(() => OpenOverview(SelectedItem, category.Key))">
                         <div class="panel-body">
                             <h3 class="description" title="@category.Description">
                                 <span class="icon">@category.Icon</span>

@@ -1,6 +1,7 @@
-﻿ using Neptuo.Queries;
+﻿using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +9,8 @@ using System.Threading.Tasks;
 namespace Money.Models.Queries
 {
     /// <summary>
-    /// A query for getting list of months with outcome.
+    /// A query for getting list of years with outcome.
     /// </summary>
-    public class ListMonthWithOutcome : UserQuery, IQuery<List<MonthModel>>
+    public class ListYearWithOutcome : UserQuery, IQuery<List<YearModel>>
     { }
 }

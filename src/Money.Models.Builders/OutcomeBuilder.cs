@@ -23,7 +23,9 @@ namespace Money.Models.Builders
         IEventHandler<OutcomeWhenChanged>,
         IEventHandler<OutcomeDeleted>,
         IQueryHandler<ListMonthWithOutcome, List<MonthModel>>,
+        IQueryHandler<ListYearWithOutcome, List<YearModel>>,
         IQueryHandler<ListMonthCategoryWithOutcome, List<CategoryWithAmountModel>>,
+        IQueryHandler<ListYearCategoryWithOutcome, List<CategoryWithAmountModel>>,
         IQueryHandler<GetTotalMonthOutcome, Price>,
         IQueryHandler<GetCategoryName, string>,
         IQueryHandler<GetCategoryColor, Color>,
@@ -62,47 +64,87 @@ namespace Money.Models.Builders
             }
         }
 
+        public async Task<List<YearModel>> HandleAsync(ListYearWithOutcome query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                var entities = await db.Outcomes
+                    .WhereUserKey(query.UserKey)
+                    .Select(o => o.When.Year)
+                    .OrderByDescending(o => o)
+                    .Distinct()
+                    .ToListAsync();
+
+                return entities
+                    .Select(o => new YearModel(o))
+                    .ToList();
+            }
+        }
+
+        private async Task<List<CategoryWithAmountModel>> GetCategoryWithAmounts(ReadModelContext db, IKey userKey, List<OutcomeEntity> outcomes)
+        {
+            Dictionary<Guid, Price> totals = new Dictionary<Guid, Price>();
+
+            foreach (OutcomeEntity outcome in outcomes)
+            {
+                var categories = await db.OutcomeCategories
+                    .Where(oc => oc.OutcomeId == outcome.Id)
+                    .ToListAsync();
+
+                foreach (OutcomeCategoryEntity category in categories)
+                {
+                    Price price;
+                    if (totals.TryGetValue(category.CategoryId, out price))
+                        price = price + priceConverter.ToDefault(userKey, outcome);
+                    else
+                        price = priceConverter.ToDefault(userKey, outcome);
+
+                    totals[category.CategoryId] = price;
+                }
+            }
+
+            List<CategoryWithAmountModel> result = new List<CategoryWithAmountModel>();
+            foreach (var item in totals)
+            {
+                CategoryModel model = (await db.Categories.FindAsync(item.Key)).ToModel();
+                result.Add(new CategoryWithAmountModel(
+                    model.Key,
+                    model.Name,
+                    model.Description,
+                    model.Color,
+                    model.Icon,
+                    item.Value
+                ));
+            }
+
+            return result.OrderBy(m => m.Name).ToList();
+        }
+
         public async Task<List<CategoryWithAmountModel>> HandleAsync(ListMonthCategoryWithOutcome query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                Dictionary<Guid, Price> totals = new Dictionary<Guid, Price>();
-
                 List<OutcomeEntity> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
                     .Include(o => o.Categories)
                     .ToListAsync();
 
-                foreach (OutcomeEntity outcome in outcomes)
-                {
-                    foreach (OutcomeCategoryEntity category in db.OutcomeCategories.Where(oc => oc.OutcomeId == outcome.Id))
-                    {
-                        Price price;
-                        if (totals.TryGetValue(category.CategoryId, out price))
-                            price = price + priceConverter.ToDefault(query.UserKey, outcome);
-                        else
-                            price = priceConverter.ToDefault(query.UserKey, outcome);
+                return await GetCategoryWithAmounts(db, query.UserKey, outcomes);
+            }
+        }
 
-                        totals[category.CategoryId] = price;
-                    }
-                }
+        public async Task<List<CategoryWithAmountModel>> HandleAsync(ListYearCategoryWithOutcome query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                List<OutcomeEntity> outcomes = await db.Outcomes
+                    .WhereUserKey(query.UserKey)
+                    .Where(o => o.When.Year == query.Year.Year)
+                    .Include(o => o.Categories)
+                    .ToListAsync();
 
-                List<CategoryWithAmountModel> result = new List<CategoryWithAmountModel>();
-                foreach (var item in totals)
-                {
-                    CategoryModel model = (await db.Categories.FindAsync(item.Key)).ToModel();
-                    result.Add(new CategoryWithAmountModel(
-                        model.Key,
-                        model.Name,
-                        model.Description,
-                        model.Color,
-                        model.Icon,
-                        item.Value
-                    ));
-                }
-
-                return result.OrderBy(m => m.Name).ToList();
+                return await GetCategoryWithAmounts(db, query.UserKey, outcomes);
             }
         }
 

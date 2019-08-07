@@ -3,31 +3,29 @@
 @typeparam TType
 
 <div class="sort dropdown">
-    <button class="btn btn-default" data-toggle="dropdown">
+    <a class="btn btn-sm btn-light dropdown-toggle">
         Sort
         <span class="caret"></span>
-    </button>
+    </a>
 
-    <ul class="dropdown-menu">
+    <div class="dropdown-menu">
         @foreach (var item in Items)
         {
-            <li>
-                <a @onclick="@(() => OnItemClick(item.Value))">
-                    @item.Name
+            <a @onclick="@(() => OnItemClick(item.Value))">
+                @item.Name
 
-                    @if (Current.Type.Equals(item.Value))
+                @if (Current.Type.Equals(item.Value))
+                {
+                    if (Current.Direction == SortDirection.Ascending)
                     {
-                        if (Current.Direction == SortDirection.Ascending)
-                        {
-                            <span class="glyphicon glyphicon-arrow-down"></span>
-                        }
-                        else
-                        {
-                            <span class="glyphicon glyphicon-arrow-up"></span>
-                        }
+                        <span class="glyphicon glyphicon-arrow-down"></span>
                     }
-                </a>
-            </li>
+                    else
+                    {
+                        <span class="glyphicon glyphicon-arrow-up"></span>
+                    }
+                }
+            </a>
         }
-    </ul>
+    </div>
 </div>

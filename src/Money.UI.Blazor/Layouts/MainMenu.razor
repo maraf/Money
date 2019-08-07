@@ -1,38 +1,30 @@
 ﻿@inherits MainMenuBase
 
-<div class="navbar-header">
-    <HamburgerButton CssClass="navbar-toggle" Click="@OnMainMenuToggleClick" />
-    <NavLink class="navbar-brand" href="@Navigator.UrlSummary()">Money</NavLink>
-</div>
-<div id="#navbar-main" class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
-    <ul class="nav navbar-nav">
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">
+<NavLink class="navbar-brand" href="@Navigator.UrlSummary()">Money</NavLink>
+<HamburgerButton CssClass="navbar-toggler" Click="@OnMainMenuToggleClick" />
+<div class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
+    <ul class="nav navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown">
                 Outcomes
                 <span class="caret"></span>
             </a>
 
-            <ul class="dropdown-menu">
-                <li>
-                    <NavLink href="@Navigator.UrlSummary()">Monthly</NavLink>
-                </li>
-                <li>
-                    <NavLink href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">Yearly</NavLink>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li>
-                    <NavLink href="@Navigator.UrlSearch()">Search</NavLink>
-                </li>
-            </ul>
+            <div class="dropdown-menu">
+                <NavLink class="dropdown-item" href="@Navigator.UrlSummary()">Monthly</NavLink>
+                <NavLink class="dropdown-item" href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">Yearly</NavLink>
+                <div class="dropdown-divider"></div>
+                <NavLink class="dropdown-item" href="@Navigator.UrlSearch()">Search</NavLink>
+            </div>
         </li>
-        <li>
-            <NavLink href="@Navigator.UrlCategories()">Categories</NavLink>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="@Navigator.UrlCategories()">Categories</NavLink>
         </li>
-        <li>
-            <NavLink href="@Navigator.UrlCurrencies()">Currencies</NavLink>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="@Navigator.UrlCurrencies()">Currencies</NavLink>
         </li>
-        <li>
-            <NavLink href="@Navigator.UrlAbout()">About</NavLink>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="@Navigator.UrlAbout()">About</NavLink>
         </li>
     </ul>
     <LoginInfo />

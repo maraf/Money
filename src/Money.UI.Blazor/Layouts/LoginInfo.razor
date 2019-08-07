@@ -7,7 +7,7 @@
         <ul class="nav navbar-nav navbar-right">
             <Loading Context="@Loading">
                 <LoadingContent>
-                    <li>
+                    <li class="nav-item">
                         <span class="navbar-text">
                             Loading...
                         </span>
@@ -16,12 +16,12 @@
                 <ChildContent>
                     @if (Profile != null)
                     {
-                        <li>
-                            <NavLink href="@Navigator.UrlUserManage()">
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="@Navigator.UrlUserManage()">
                                 <Icon Identifier="user" />
                                 @Profile.UserName
                             </NavLink>
-                        </li>
+                        </li class="nav-item">
                         <li>
                             <button type="button" class="btn btn-link navbar-btn navbar-link" @onclick="@OnLogoutAsync">Log out</button>
                         </li>

@@ -40,4 +40,8 @@
     <Compile Update="**\*.razor.cs" DependentUpon="%(Filename)" />
     <Watch Include="**\*.razor" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\bootstrap\dist\" />
+  </ItemGroup>
 </Project>

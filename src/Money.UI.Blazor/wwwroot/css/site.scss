@@ -80,6 +80,8 @@ h4 {
     width: 100%;
     min-width: $bodyMinWidth;
     left: 0;
+    top: 56px;
+    padding: 14px 0 4px 0;
     background: #f5f5f5;
     border-bottom: 1px solid #dddddd;
 
@@ -97,7 +99,7 @@ h4 {
             right: 0;
         }
     }*/
-    h2 {
+    h3 {
         span.text {
             position: relative;
             top: 3px;
@@ -113,7 +115,7 @@ h4 {
         }
     }
 
-    h4 {
+    h6 {
         width: 100%;
         margin-bottom: 20px;
         text-overflow: ellipsis;
@@ -123,7 +125,7 @@ h4 {
 }
 
 .header-append {
-    margin-bottom: 130px;
+    margin-bottom: 140px;
 }
 
 .center {
@@ -214,8 +216,11 @@ h4 {
 
 
 .summary {
+    position: relative;
+
     .sort {
-        float: right;
+        position: absolute;
+        right: 0;
 
         .btn {
             border-color: transparent;

@@ -1,7 +1,7 @@
 ﻿<div class="header">
     <div class="container">
 
-        <h2>
+        <h3>
             @if (!String.IsNullOrEmpty(Icon))
             {
                 <Icon Identifier="@Icon" />
@@ -16,12 +16,12 @@
                     @ButtonText
                 </button>
             }
-        </h2>
+        </h3>
         @if (!String.IsNullOrEmpty(Sub))
         {
-            <h4>
+            <h6>
                 @Sub
-            </h4>
+            </h6>
         }
 
     </div>

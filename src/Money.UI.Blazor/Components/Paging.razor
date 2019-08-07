@@ -1,11 +1,11 @@
 ﻿@inherits PagingBase
 
 <nav>
-    <ul class="pager">
+    <ul class="pagination justify-content-center">
         @if (CurrentIndex == 0)
         {
-            <li class="disabled">
-                <span>
+            <li class="page-item disabled">
+                <span class="page-link">
                     <span aria-hidden="true">&larr;</span>
                     Previous
                 </span>
@@ -13,22 +13,24 @@
         }
         else
         {
-            <li>
-                <a @onclick="@OnPrevPageClickAsync">
+            <li class="page-item">
+                <a class="page-link" @onclick="@OnPrevPageClickAsync">
                     <span aria-hidden="true">&larr;</span>
                     Previous
                 </a>
             </li>
         }
 
-        <li class="current">
-            @(CurrentIndex + 1)
+        <li class="page-item active">
+            <span class="page-link">
+                @(CurrentIndex + 1)
+            </span>
         </li>
 
         @if (HasNextPage)
         {
-            <li>
-                <a @onclick="@OnNextPageClickAsync">
+            <li class="page-item">
+                <a class="page-link" @onclick="@OnNextPageClickAsync">
                     Next
                     <span aria-hidden="true">&rarr;</span>
                 </a>
@@ -36,8 +38,8 @@
         }
         else
         {
-            <li class="disabled">
-                <span>
+            <li class="page-item disabled">
+                <span class="page-link">
                     Next
                     <span aria-hidden="true">&rarr;</span>
                 </span>

@@ -365,6 +365,10 @@ h4 {
 
     .controls {
         float: right;
+
+        .btn-link {
+            color: $actionButtonColor;
+        }
     }
 
     .amount {

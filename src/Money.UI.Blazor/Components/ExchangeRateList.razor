@@ -23,7 +23,7 @@
                             <td>@item.ValidFrom.ToShortDateString()</td>
                             <td>
                                 <div class="actions">
-                                    <IconButton Icon="remove" ToolTip="Delete" Click="@(async () => { await OnDeleteClickAsync(item); StateHasChanged(); })" />
+                                    <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(async () => { await OnDeleteClickAsync(item); StateHasChanged(); })" />
                                 </div>
                             </td>
                         </tr>

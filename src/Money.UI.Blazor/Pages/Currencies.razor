@@ -37,14 +37,14 @@
 
                         @if (Models.Count > 1)
                         {
-                            <IconButton Icon="transfer" ToolTip="Add exchange rate" Click="@(() => OnActionClick(item, ref IsListExchangeRateVisible))" />
+                            <IconButton Icon="exchange-alt" ToolTip="Add exchange rate" Click="@(() => OnActionClick(item, ref IsListExchangeRateVisible))" />
                         }
 
-                        <IconButton Icon="pencil" ToolTip="Rename" Click="@(() => OnActionClick(item, ref IsEditVisible))" />
+                        <IconButton Icon="pen" ToolTip="Rename" Click="@(() => OnActionClick(item, ref IsEditVisible))" />
 
                         @if (Models.Count > 1 && !item.IsDefault)
                         {
-                            <IconButton Icon="remove" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
+                            <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
                         }
                     </div>
                 </div>

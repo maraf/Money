@@ -51,13 +51,9 @@ namespace Money.Pages
             => Navigator.UrlSummary(item);
 
         protected override void OpenOverview(YearModel item)
-        {
-            base.OpenOverview(item);
-        }
+            => Navigator.OpenOverview(item);
 
         protected override void OpenOverview(YearModel item, IKey categorykey)
-        {
-            base.OpenOverview(item, categorykey);
-        }
+            => Navigator.OpenOverview(item, categorykey);
     }
 }

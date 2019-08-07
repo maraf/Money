@@ -22,12 +22,23 @@ namespace Money.Services
         public string UrlOverview(MonthModel month)
             => $"/{month.Year}/{month.Month}/overview";
 
+        public string UrlOverview(YearModel year)
+            => $"/{year.Year}/overview";
+
         public string UrlOverview(MonthModel month, IKey categoryKey)
         {
             if (categoryKey.IsEmpty)
                 return UrlOverview(month);
             else
                 return $"/{month.Year}/{month.Month}/overview/{categoryKey.AsGuidKey().Guid}";
+        }
+
+        public string UrlOverview(YearModel year, IKey categoryKey)
+        {
+            if (categoryKey.IsEmpty)
+                return UrlOverview(year);
+            else
+                return $"/{year.Year}/overview/{categoryKey.AsGuidKey().Guid}";
         }
 
         public string UrlSearch()

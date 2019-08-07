@@ -35,8 +35,8 @@
             <div class="graph">
                 @if (TotalAmout != null)
                 {
-                    <div class="panel panel-default bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedItem))">
-                        <div class="panel-body">
+                    <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedItem))">
+                        <div class="card-body">
                             <h3 class="description">
                                 <span class="icon">📈</span>
                                 <span class="name">Summary</span>
@@ -51,8 +51,8 @@
 
                 @foreach (var category in Categories)
                 {
-                    <div class="panel panel-default bar-graph" @onclick="@(() => OpenOverview(SelectedItem, category.Key))">
-                        <div class="panel-body">
+                    <div class="card bar-graph" @onclick="@(() => OpenOverview(SelectedItem, category.Key))">
+                        <div class="card-body">
                             <h3 class="description" title="@category.Description">
                                 <span class="icon">@category.Icon</span>
                                 <span class="name">@category.Name</span>

@@ -125,7 +125,7 @@ h4 {
 }
 
 .header-append {
-    margin-bottom: 140px;
+    margin-bottom: 150px;
 }
 
 .center {
@@ -197,7 +197,7 @@ h4 {
     font-size: 11px;
 }
 
-.panel-body {
+.card-body {
     .navbar-nav {
         margin-top: -15px;
         margin-bottom: -15px;
@@ -242,15 +242,18 @@ h4 {
     box-shadow: none;
     cursor: pointer;
 
-    .panel-body {
+    .card-body {
         position: relative;
         height: 60px;
+        padding: 15px;
     }
 
     .description {
         position: absolute;
         margin: 0;
+        font-size: 24px;
         font-weight: normal;
+        line-height: 1.1;
         display: inline;
         z-index: 1;
 
@@ -326,7 +329,7 @@ h4 {
     margin: 20px 0;
 }
 
-.card {
+.outcome-card {
     padding: 30px;
     border-bottom: 1px solid #eee;
 

@@ -16,13 +16,13 @@
     {
         @foreach (var item in Models)
         {
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-header">
                     <strong>
                         @item.Symbol
                     </strong>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>This currency has unique code @item.UniqueCode.</p>
                     @if (item.IsDefault)
                     {

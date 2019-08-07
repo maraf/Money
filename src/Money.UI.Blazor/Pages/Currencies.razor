@@ -1,7 +1,7 @@
 ﻿@page "/currencies"
 @inherits CurrenciesBase
 
-<Money.Components.Title Icon="gbp" Main="Currencies" Sub="List of currencies you are making outcomes in" ButtonText="New Currency" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<Money.Components.Title Icon="pound-sign" Main="Currencies" Sub="List of currencies you are making outcomes in" ButtonText="New Currency" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
 
 <CurrencyEdit @bind-IsVisible="@IsCreateVisible" />
@@ -21,15 +21,8 @@
                     <strong>
                         @item.Symbol
                     </strong>
-                </div>
-                <div class="card-body">
-                    <p>This currency has unique code @item.UniqueCode.</p>
-                    @if (item.IsDefault)
-                    {
-                        <p>This is a default currency used for displaying outcomes.</p>
-                    }
 
-                    <div class="nav navbar-nav navbar-right">
+                    <div class="nav navbar-right">
                         @if (!item.IsDefault)
                         {
                             <IconButton Icon="home" ToolTip="Set as default" Click="@(async () => { await OnChangeDefaultClickAsync(item); StateHasChanged(); })" />
@@ -47,6 +40,13 @@
                             <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
                         }
                     </div>
+                </div>
+                <div class="card-body">
+                    <p>This currency has unique code @item.UniqueCode.</p>
+                    @if (item.IsDefault)
+                    {
+                        <p>This is a default currency used for displaying outcomes.</p>
+                    }
                 </div>
             </div>
 

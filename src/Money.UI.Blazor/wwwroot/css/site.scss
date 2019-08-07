@@ -1,4 +1,5 @@
 ﻿$bodyMinWidth: 380px;
+$actionButtonColor: #333;
 
 .clear {
     clear: both;
@@ -16,6 +17,10 @@ body {
 
 h4 {
     margin-bottom: 20px;
+}
+
+.fas.fa-trash-alt {
+    color: #D85A5A;
 }
 
 .navbar {
@@ -136,11 +141,18 @@ h4 {
     opacity: 0.7;
 }
 
-.alert .navbar-nav {
-    margin-top: -15px;
+.navbar-right {
+    float: right;
+}
 
-    .btn-link {
-        color: #333;
+.alert {
+    .nav {
+        margin-top: -7px;
+        margin-bottom: -7px;
+
+        .btn-link {
+            color: $actionButtonColor;
+        }
     }
 }
 
@@ -197,10 +209,16 @@ h4 {
     font-size: 11px;
 }
 
-.card-body {
-    .navbar-nav {
-        margin-top: -15px;
-        margin-bottom: -15px;
+.card {
+    margin-bottom: 15px;
+
+    .nav {
+        margin-top: -7px;
+        margin-bottom: -7px;
+
+        .btn-link {
+            color: $actionButtonColor;
+        }
     }
 
     p:last-child {
@@ -232,7 +250,7 @@ h4 {
     }
 
     .graph {
-        margin-bottom: -20px;
+        margin-bottom: -15px;
     }
 }
 

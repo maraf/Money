@@ -31,7 +31,7 @@ namespace Money.Models.Builders
         IQueryHandler<GetCategoryName, string>,
         IQueryHandler<GetCategoryColor, Color>,
         IQueryHandler<ListMonthOutcomeFromCategory, List<OutcomeOverviewModel>>,
-        IQueryHandler<ListYearOutcomeFromCategory, IEnumerable<OutcomeOverviewModel>>,
+        IQueryHandler<ListYearOutcomeFromCategory, List<OutcomeOverviewModel>>,
         IQueryHandler<SearchOutcomes, List<OutcomeOverviewModel>>
     {
         const int PageSize = 10;
@@ -206,19 +206,28 @@ namespace Money.Models.Builders
             }
         }
 
-        public async Task<IEnumerable<OutcomeOverviewModel>> HandleAsync(ListYearOutcomeFromCategory query)
+        private IQueryable<OutcomeEntity> ApplyPaging(IQueryable<OutcomeEntity> sql, IPageableQuery query)
+        {
+            if (query.PageIndex != null)
+                sql = sql.TakePage(query.PageIndex.Value, PageSize);
+
+            return sql;
+        }
+
+        public async Task<List<OutcomeOverviewModel>> HandleAsync(ListYearOutcomeFromCategory query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                IQueryable<OutcomeEntity> entities = db.Outcomes;
-                if (!query.CategoryKey.IsEmpty)
-                    entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
-
-                List<OutcomeOverviewModel> outcomes = await entities
+                var sql = db.Outcomes
                     .Include(o => o.Categories)
-                    .WhereUserKey(query.UserKey)
-                    .Where(o => o.When.Year == query.Year.Year)
-                    .OrderBy(o => o.When)
+                    .WhereUserKey(query)
+                    .Where(o => o.When.Year == query.Year.Year);
+
+                sql = ApplyCategoryKey(sql, query.CategoryKey);
+                sql = ApplySorting(sql, query);
+                sql = ApplyPaging(sql, query);
+
+                List<OutcomeOverviewModel> outcomes = await sql
                     .Select(o => o.ToOverviewModel())
                     .ToListAsync();
 
@@ -230,18 +239,14 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                IQueryable<OutcomeEntity> entities = db.Outcomes.WhereUserKey(query.UserKey);
-                if (!query.CategoryKey.IsEmpty)
-                    entities = entities.Where(o => o.Categories.Select(c => c.CategoryId).Contains(query.CategoryKey.AsGuidKey().Guid));
-
-                var sql = entities
+                var sql = db.Outcomes
                     .Include(o => o.Categories)
+                    .WhereUserKey(query)
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year);
 
-                sql = SortOverviewOutcomes(sql, query.SortDescriptor);
-
-                if (query.PageIndex != null)
-                    sql = sql.TakePage(query.PageIndex.Value, PageSize);
+                sql = ApplyCategoryKey(sql, query.CategoryKey);
+                sql = ApplySorting(sql, query);
+                sql = ApplyPaging(sql, query);
 
                 List<OutcomeOverviewModel> models = await sql
                     .Select(o => o.ToOverviewModel())
@@ -249,6 +254,14 @@ namespace Money.Models.Builders
 
                 return models;
             }
+        }
+
+        private static IQueryable<OutcomeEntity> ApplyCategoryKey(IQueryable<OutcomeEntity> sql, IKey categoryKey)
+        {
+            if (!categoryKey.IsEmpty)
+                sql = sql.Where(o => o.Categories.Any(c => c.CategoryId == categoryKey.AsGuidKey().Guid));
+
+            return sql;
         }
 
         public async Task HandleAsync(OutcomeCreated payload)
@@ -360,7 +373,7 @@ namespace Money.Models.Builders
                     .Where(o => EF.Functions.Like(o.Description, $"%{query.Text}%"))
                     .TakePage(query.PageIndex, PageSize);
 
-                sql = SortOverviewOutcomes(sql, query.SortDescriptor);
+                sql = ApplySorting(sql, query);
 
                 List<OutcomeEntity> entities = await sql.ToListAsync();
 
@@ -372,30 +385,31 @@ namespace Money.Models.Builders
             }
         }
 
-        private IQueryable<OutcomeEntity> SortOverviewOutcomes(IQueryable<OutcomeEntity> entities, SortDescriptor<OutcomeOverviewSortType> sortDescriptor)
+        private IQueryable<OutcomeEntity> ApplySorting(IQueryable<OutcomeEntity> sql, ISortableQuery<OutcomeOverviewSortType> query)
         {
+            var sortDescriptor = query.SortDescriptor;
             if (sortDescriptor == null)
                 sortDescriptor = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen);
 
             switch (sortDescriptor.Type)
             {
                 case OutcomeOverviewSortType.ByAmount:
-                    entities = entities.OrderBy(sortDescriptor.Direction, o => o.Amount);
+                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.Amount);
                     break;
                 case OutcomeOverviewSortType.ByCategory:
-                    entities = entities.OrderBy(sortDescriptor.Direction, o => o.Categories.FirstOrDefault().Category.Name);
+                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.Categories.FirstOrDefault().Category.Name);
                     break;
                 case OutcomeOverviewSortType.ByDescription:
-                    entities = entities.OrderBy(sortDescriptor.Direction, o => o.Description);
+                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.Description);
                     break;
                 case OutcomeOverviewSortType.ByWhen:
-                    entities = entities.OrderBy(sortDescriptor.Direction, o => o.When);
+                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.When);
                     break;
                 default:
                     throw Ensure.Exception.NotSupported(sortDescriptor.Type.ToString());
             }
 
-            return entities;
+            return sql;
         }
     }
 }

@@ -1,12 +1,7 @@
-﻿@page "/outcomes/{Year}/{Month}"
-@page "/overview/{Year}/{Month}"
-@page "/overview/{Year}/{Month}/{CategoryGuid}"
+﻿@typeparam T
+@inherits OverviewModel<T>
 
-@page "/{Year}/{Month}/overview"
-@page "/{Year}/{Month}/overview/{CategoryGuid}"
-@inherits OverviewBase
-
-<Money.Components.Title Icon="calendar" Main="@Title" Sub="List of each single outcome in selected month" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<Money.Components.Title Icon="calendar" Main="@Title" Sub="@SubTitle" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
 <ExceptionPanel />
 
 <OutcomeCreate @bind-IsVisible="@IsCreateVisible" CategoryKey="@CategoryKey" />
@@ -14,16 +9,16 @@
 
 <div class="overview">
     <Loading Context="@Loading" IsOverlay="true">
-        @if (Models != null)
+        @if (Items != null)
         {
-            if (Models.Count > 0)
+            if (Items.Count > 0)
             {
                 <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
                 <div class="clear"></div>
 
                 <div class="cards">
                     <CascadingValue Value="@this">
-                        @foreach (var item in Models)
+                        @foreach (var item in Items)
                         {
                             <OutcomeCard Model="@item" />
                         }
@@ -40,9 +35,9 @@
     </Loading>
 </div>
 
-@if (Selected != null)
+@if (SelectedItem != null)
 {
-    <OutcomeAmount OutcomeKey="@Selected.Key" Amount="@Selected.Amount.Value" Currency="@Selected.Amount.Currency" @bind-IsVisible="@IsAmountEditVisible" />
-    <OutcomeDescription OutcomeKey="@Selected.Key" Description="@Selected.Description" @bind-IsVisible="@IsDescriptionEditVisible" />
-    <OutcomeWhen OutcomeKey="@Selected.Key" When="@Selected.When" @bind-IsVisible="@IsWhenEditVisible" />
+    <OutcomeAmount OutcomeKey="@SelectedItem.Key" Amount="@SelectedItem.Amount.Value" Currency="@SelectedItem.Amount.Currency" @bind-IsVisible="@IsAmountEditVisible" />
+    <OutcomeDescription OutcomeKey="@SelectedItem.Key" Description="@SelectedItem.Description" @bind-IsVisible="@IsDescriptionEditVisible" />
+    <OutcomeWhen OutcomeKey="@SelectedItem.Key" When="@SelectedItem.When" @bind-IsVisible="@IsWhenEditVisible" />
 }

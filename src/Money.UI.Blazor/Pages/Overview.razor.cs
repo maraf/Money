@@ -16,14 +16,13 @@ using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class OverviewBase : ComponentBase,
+    public class OverviewModel<T> : ComponentBase,
         System.IDisposable,
         OutcomeCardBase.IContext,
         IEventHandler<OutcomeCreated>,
@@ -44,12 +43,13 @@ namespace Money.Pages
         public IQueryDispatcher Queries { get; set; }
 
         protected string Title { get; set; }
+        protected string SubTitle { get; set; }
 
-        protected MonthModel MonthModel { get; set; }
+        protected T SelectedPeriod { get; set; }
         protected IKey CategoryKey { get; set; }
         protected string CategoryName { get; set; }
-        protected List<OutcomeOverviewModel> Models { get; set; }
-        protected OutcomeOverviewModel Selected { get; set; }
+        protected List<OutcomeOverviewModel> Items { get; set; }
+        protected OutcomeOverviewModel SelectedItem { get; set; }
 
         protected bool IsCreateVisible { get; set; }
         protected bool IsAmountEditVisible;
@@ -61,37 +61,34 @@ namespace Money.Pages
         protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
         protected int CurrentPageIndex { get; set; }
 
-        [Parameter]
-        protected string Year { get; set; }
-
-        [Parameter]
-        protected string Month { get; set; }
-
-        [Parameter]
-        protected string CategoryGuid { get; set; }
-
         protected override async Task OnInitAsync()
         {
             BindEvents();
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));
             Delete.MessageFormatter = model => $"Do you really want to delete outcome '{model.Description}'?";
 
-            CategoryKey = Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
-            MonthModel = new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
+            CategoryKey = CreateSelectedCategoryFromParameters();
+            SelectedPeriod = CreateSelectedItemFromParameters();
 
             if (!CategoryKey.IsEmpty)
             {
                 CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
-                Title = $"{CategoryName} outcomes in {MonthModel}";
+                Title = $"{CategoryName} outcomes in {SelectedPeriod}";
             }
             else
             {
-                Title = $"Outcomes in {MonthModel}";
+                Title = $"Outcomes in {SelectedPeriod}";
             }
 
             CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
             Reload();
         }
+
+        protected virtual IKey CreateSelectedCategoryFromParameters()
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedCategoryFromParameters)}'.");
+
+        protected virtual T CreateSelectedItemFromParameters()
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedItemFromParameters)}'.");
 
         protected async void Reload()
         {
@@ -105,10 +102,10 @@ namespace Money.Pages
             CurrentPageIndex = pageIndex;
             using (Loading.Start())
             {
-                List<OutcomeOverviewModel> models = await Queries.QueryAsync(new ListMonthOutcomeFromCategory(CategoryKey, MonthModel, SortDescriptor, pageIndex));
+                List<OutcomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(pageIndex));
                 if (models.Count > 0 || pageIndex == 0)
                 {
-                    Models = models;
+                    Items = models;
                     return true;
                 }
                 else
@@ -119,6 +116,9 @@ namespace Money.Pages
             }
         }
 
+        protected virtual IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateItemsQuery)}'.");
+
         protected async void OnSortChanged()
         {
             await LoadDataAsync(CurrentPageIndex);
@@ -127,7 +127,7 @@ namespace Money.Pages
 
         protected void OnActionClick(OutcomeOverviewModel model, ref bool isVisible)
         {
-            Selected = model;
+            SelectedItem = model;
             isVisible = true;
             StateHasChanged();
         }
@@ -139,7 +139,7 @@ namespace Money.Pages
         }
 
         protected OutcomeOverviewModel FindModel(IEvent payload)
-            => Models.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));
+            => Items.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));
 
         public void Dispose()
             => UnBindEvents();
@@ -180,12 +180,14 @@ namespace Money.Pages
 
         Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
         {
-            MonthModel payloadMonth = payload.When;
-            if (MonthModel == payloadMonth)
+            if (IsContained(payload.When))
                 Reload();
 
             return Task.CompletedTask;
         }
+
+        protected virtual bool IsContained(DateTime when)
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(IsContained)}'.");
 
         Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
         {

@@ -13,7 +13,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for getting all out comes from a category within a month.
     /// </summary>
-    public class ListMonthOutcomeFromCategory : UserQuery, IQuery<List<OutcomeOverviewModel>>
+    public class ListMonthOutcomeFromCategory : UserQuery, IQuery<List<OutcomeOverviewModel>>, ISortableQuery<OutcomeOverviewSortType>, IPageableQuery
     {
         /// <summary>
         /// Gets a key of the category.

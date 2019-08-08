@@ -22,38 +22,6 @@
     {
         ExceptionHandlerBuilder.Handler(e =>
         {
-            LastException = e;
-
-            if (e is Neptuo.Models.AggregateRootException)
-            {
-                string message = null;
-
-                if (e is CurrencyAlreadyAsDefaultException)
-                    message = MessageBuilder.CurrencyAlreadyAsDefault();
-                else if (e is CurrencyAlreadyExistsException)
-                    message = MessageBuilder.CurrencyAlreadyExists();
-                else if (e is CurrencyDoesNotExistException)
-                    message = MessageBuilder.CurrencyDoesNotExist();
-                else if (e is CurrencyExchangeRateDoesNotExistException)
-                    message = MessageBuilder.CurrencyExchangeRateDoesNotExist();
-                else if (e is OutcomeAlreadyDeletedException)
-                    message = MessageBuilder.OutcomeAlreadyDeleted();
-                else if (e is OutcomeAlreadyHasCategoryException)
-                    message = MessageBuilder.OutcomeAlreadyHasCategory();
-                else if (e is CantDeleteDefaultCurrencyException)
-                    message = MessageBuilder.CantDeleteDefaultCurrency();
-                else if (e is CantDeleteLastCurrencyException)
-                    message = MessageBuilder.CantDeleteLastCurrency();
-                else if (e is DemoUserCantBeChangedException)
-                    message = MessageBuilder.DemoUserCantBeChanged();
-                else if (e is PasswordChangeFailedException passwordChangeFailed)
-                    message = MessageBuilder.PasswordChangeFailed(passwordChangeFailed.ErrorDescription);
-                else if (e is EmailChangeFailedException)
-                    message = MessageBuilder.EmailChangeFailed();
-
-                Message = message;
-            }
-
             bool isSkipped = false;
             Type exceptionType = e.GetType();
             foreach (Type type in SkippedExceptions)
@@ -62,6 +30,49 @@
                 {
                     isSkipped = true;
                     break;
+                }
+            }
+
+            if (!isSkipped)
+            {
+                LastException = e;
+
+                if (e is Neptuo.Models.AggregateRootException)
+                {
+                    string message = null;
+
+                    if (e is CurrencyAlreadyAsDefaultException)
+                        message = MessageBuilder.CurrencyAlreadyAsDefault();
+                    else if (e is CurrencyAlreadyExistsException)
+                        message = MessageBuilder.CurrencyAlreadyExists();
+                    else if (e is CurrencyDoesNotExistException)
+                        message = MessageBuilder.CurrencyDoesNotExist();
+                    else if (e is CurrencyExchangeRateDoesNotExistException)
+                        message = MessageBuilder.CurrencyExchangeRateDoesNotExist();
+                    else if (e is OutcomeAlreadyDeletedException)
+                        message = MessageBuilder.OutcomeAlreadyDeleted();
+                    else if (e is OutcomeAlreadyHasCategoryException)
+                        message = MessageBuilder.OutcomeAlreadyHasCategory();
+                    else if (e is CantDeleteDefaultCurrencyException)
+                        message = MessageBuilder.CantDeleteDefaultCurrency();
+                    else if (e is CantDeleteLastCurrencyException)
+                        message = MessageBuilder.CantDeleteLastCurrency();
+                    else if (e is DemoUserCantBeChangedException)
+                        message = MessageBuilder.DemoUserCantBeChanged();
+                    else if (e is PasswordChangeFailedException passwordChangeFailed)
+                        message = MessageBuilder.PasswordChangeFailed(passwordChangeFailed.ErrorDescription);
+                    else if (e is EmailChangeFailedException)
+                        message = MessageBuilder.EmailChangeFailed();
+
+                    Message = message;
+                }
+                else if (e is ServerNotRespondingException)
+                {
+                    Message = MessageBuilder.ServerNotResponding();
+                }
+                else if (e is InternalServerException)
+                {
+                    Message = MessageBuilder.InternalServerError();
                 }
             }
 

@@ -159,7 +159,7 @@ namespace Money.Services
                 catch (Exception e)
                 {
                     if (e is HttpRequestException)
-                        e = new ServerNotResponsingException(e);
+                        e = new ServerNotRespondingException(e);
 
                     exceptionHandler.Handle(e);
                     throw;

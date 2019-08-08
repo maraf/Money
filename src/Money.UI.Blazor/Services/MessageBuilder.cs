@@ -22,5 +22,8 @@ namespace Money.Services
         public string DemoUserCantBeChanged() => "A demo user can't be modified.";
         public string PasswordChangeFailed(string error) => error.Replace(Environment.NewLine, "<br />");
         public string EmailChangeFailed() => "A user email change failed.";
+
+        public string ServerNotResponding() => "The remote server is not responding. Please try it again later.";
+        public string InternalServerError() => "The remote server responded with unexpected error. Please report this issue back to us.";
     }
 }

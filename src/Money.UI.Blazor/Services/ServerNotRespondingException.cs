@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace Money.Services
 {
     [Serializable]
-    public class ServerNotResponsingException : Exception
+    public class ServerNotRespondingException : Exception
     {
-        public ServerNotResponsingException(Exception inner)
+        public ServerNotRespondingException(Exception inner)
             : base("Remote server is not responding.", inner)
         { }
 
@@ -20,7 +20,7 @@ namespace Money.Services
         /// </summary>
         /// <param name="info">A serialization info.</param>
         /// <param name="context">A streaming context.</param>
-        protected ServerNotResponsingException(SerializationInfo info, StreamingContext context)
+        protected ServerNotRespondingException(SerializationInfo info, StreamingContext context)
             : base(info, context) 
         { }
     }

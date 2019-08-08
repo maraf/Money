@@ -23,6 +23,8 @@ using Neptuo.Formatters.Converters;
 using Neptuo.Formatters.Metadata;
 using Neptuo.Logging;
 using Neptuo.Logging.Serialization;
+using Neptuo.Logging.Serialization.Filters;
+using Neptuo.Logging.Serialization.Formatters;
 using Neptuo.Models.Repositories;
 using Neptuo.Models.Snapshots;
 using Neptuo.Queries;
@@ -71,8 +73,7 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
-            logFactory = new DefaultLogFactory("Root").AddSerializer(new ConsoleSerializer());
-            errorLog = logFactory.Scope("Error");
+            Logging();
 
             readModelContextFactory = Factory.Getter(() => new ReadModelContext(connectionStrings.ReadModel));
             eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext(connectionStrings.EventSourcing));
@@ -80,6 +81,7 @@ namespace Money.Bootstrap
             CreateEventSourcingContext();
 
             exceptionHandlerBuilder = new ExceptionHandlerBuilder();
+            exceptionHandlerBuilder.Handler(Handle);
 
             services
                 .AddSingleton(readModelContextFactory)
@@ -106,6 +108,20 @@ namespace Money.Bootstrap
 
             services
                 .AddSingleton(currencyCache);
+        }
+
+        private void Logging()
+        {
+            ILogFilter logFilter = DefaultLogFilter.Debug;
+
+#if !DEBUG
+            logFilter = DefaultLogFilter.Warning;
+#endif
+
+            logFactory = new DefaultLogFactory("Root")
+                .AddSerializer(new ConsoleSerializer(new DefaultLogFormatter(), logFilter));
+
+            errorLog = logFactory.Scope("Error");
         }
 
         private void Domain()

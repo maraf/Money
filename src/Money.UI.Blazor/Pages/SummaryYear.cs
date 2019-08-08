@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    [Route("/{Year}")]
+    [Route("/{Year:int}")]
     public class SummaryYear : Summary<YearModel>
     {
         [Parameter]
-        protected string Year { get; set; }
+        protected int? Year { get; set; }
 
         public SummaryYear() 
             => SubTitle = "Per-year summary of outcomes in categories";
@@ -29,8 +29,8 @@ namespace Money.Pages
         {
             Log.Debug($"CreateSelectedItemFromParameters(Year='{Year}')");
 
-            if (!String.IsNullOrEmpty(Year))
-                return new YearModel(Int32.Parse(Year));
+            if (Year != null)
+                return new YearModel(Year.Value);
             else
                 return null;
         }

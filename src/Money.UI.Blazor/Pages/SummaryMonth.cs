@@ -14,14 +14,14 @@ using System.Threading.Tasks;
 namespace Money.Pages
 {
     [Route("/")]
-    [Route("/{Year}/{Month}")]
+    [Route("/{Year:int}/{Month:int}")]
     public class SummaryMonth : Summary<MonthModel>
     {
         [Parameter]
-        protected string Year { get; set; }
+        protected int? Year { get; set; }
 
         [Parameter]
-        protected string Month { get; set; }
+        protected int? Month { get; set; }
 
         public SummaryMonth() 
             => SubTitle = "Per-month summary of outcomes in categories";
@@ -36,8 +36,8 @@ namespace Money.Pages
         {
             Log.Debug($"CreateSelectedItemFromParameters(Year='{Year}', Month='{Month}')");
 
-            if (!String.IsNullOrEmpty(Year) && !String.IsNullOrEmpty(Month))
-                return new MonthModel(Int32.Parse(Year), Int32.Parse(Month));
+            if (Year != null && Month != null)
+                return new MonthModel(Year.Value, Month.Value);
             else
                 return null;
         }

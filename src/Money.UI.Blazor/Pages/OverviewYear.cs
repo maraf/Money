@@ -13,24 +13,24 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    [Route("/{Year}/overview")]
-    [Route("/{Year}/overview/{CategoryGuid}")]
+    [Route("/{Year:int}/overview")]
+    [Route("/{Year:int}/overview/{CategoryGuid:guid}")]
     public class OverviewYear : Overview<YearModel>
     {
         [Parameter]
-        protected string Year { get; set; }
+        protected int Year { get; set; }
 
         [Parameter]
-        protected string CategoryGuid { get; set; }
+        protected Guid? CategoryGuid { get; set; }
 
         public OverviewYear() 
             => SubTitle = "List of each single outcome in selected year";
 
         protected override YearModel CreateSelectedItemFromParameters()
-            => new YearModel(Int32.Parse(Year));
+            => new YearModel(Year);
 
         protected override IKey CreateSelectedCategoryFromParameters()
-            => Guid.TryParse(CategoryGuid, out var categoryGuid) ? GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
+            => CategoryGuid != null ? GuidKey.Create(CategoryGuid.Value, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
 
         protected override IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
             => new ListYearOutcomeFromCategory(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);

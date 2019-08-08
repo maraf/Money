@@ -6,8 +6,10 @@
     <Alert Title="@Title" Message="@Message" Mode="@AlertMode.Error" IsDismissible="true" />
 }
 
-@code 
+@code
 {
+    public static IReadOnlyCollection<Type> SkippedExceptions { get; } = new[] { typeof(UnauthorizedAccessException) };
+
     public Exception LastException { get; private set; }
 
     [Parameter]
@@ -52,7 +54,24 @@
                 Message = message;
             }
 
-            if (Message == null)
+            bool isSkipped = false;
+            Type exceptionType = e.GetType();
+            foreach (Type type in SkippedExceptions)
+            {
+                if (type.IsAssignableFrom(exceptionType))
+                {
+                    isSkipped = true;
+                    break;
+                }
+            }
+
+            if (isSkipped)
+            {
+                Title = null;
+                Message = null;
+                LastException = null;
+            }
+            else if (Message == null)
             {
                 Title = LastException.GetType().FullName;
                 Message = LastException.Message;

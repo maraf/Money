@@ -119,6 +119,7 @@ namespace Money
             services
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddSingleton<IUserIdProvider>(new DefaultUserIdProvider())
+                .AddTransient<ExceptionMiddleware>()
                 .AddSingleton<ApiHub>()
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>();
@@ -130,9 +131,15 @@ namespace Money
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
+            }
             else
+            {
                 app.UseStatusCodePages();
+                app.UseErrorHandler();
+            }
+
 
             app.UseCors(p =>
             {

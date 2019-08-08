@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Money.Common.Diagnostics;
+using Money.Data;
 using Money.Hubs;
 using Money.Models;
 using Money.Models.Api;
@@ -105,6 +107,12 @@ namespace Money
                 .AddSignalR();
 
             services
+                .AddHealthChecks()
+                .AddDbContextCheck<ApplicationDbContext>()
+                .AddFactoryDbContextCheck<ReadModelContext>()
+                .AddFactoryDbContextCheck<EventSourcingContext>();
+
+            services
                 .AddTransient<JwtSecurityTokenHandler>()
                 .Configure<JwtOptions>(Configuration.GetSection("Jwt"));
 
@@ -138,6 +146,8 @@ namespace Money
                 p.AllowAnyHeader();
                 p.SetPreflightMaxAge(TimeSpan.FromMinutes(10));
             });
+
+            app.UseHealthChecks("/health");
 
             app.UseAuthentication();
 

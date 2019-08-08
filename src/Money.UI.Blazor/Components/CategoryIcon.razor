@@ -3,7 +3,7 @@
 @inject ICommandDispatcher Commands
 @inject IconCollection Icons
 
-<Modal Title="Pick an Icon for the Category" PrimaryButtonClick="@OnSaveClick" @bind-IsVisible="@IsVisible">
+<Modal Title="Pick an Icon for the Category" PrimaryButtonClick="@OnSaveClick" Size="@ModalSize.Large" @bind-IsVisible="@IsVisible">
     @foreach (string icon in Icons)
     {
         <button class="btn btn-link btn-icon btn-selectable @(Icon == icon ? "btn-selectable-selected" : "")" @onclick="@(() => Icon = icon)">

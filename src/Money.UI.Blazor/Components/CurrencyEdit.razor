@@ -6,25 +6,11 @@
 
     <div class="form-group">
         <label for="currency-unique-code">Unique Code:</label>
-        @if (IsUniqueCodeEnabled)
-        {
-            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" data-autofocus @bind="@UniqueCode" />
-        }
-        else
-        {
-            <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" @bind="@UniqueCode" disabled="disabled" />
-        }
+        <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" data-autofocus="@IsUniqueCodeEnabled" disabled="@(!IsUniqueCodeEnabled)" @bind="@UniqueCode" />
     </div>
     <div class="form-group">
         <label for="currency-symbol">Symbol:</label>
-        @if (IsUniqueCodeEnabled)
-        {
-            <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" @bind="@Symbol" />
-        }
-        else
-        {
-            <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" data-autofocus @bind="@Symbol" />
-        }
+        <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Symbol" data-autofocus="@(!IsUniqueCodeEnabled)" @bind="@Symbol" />
     </div>
 </Modal>
 
@@ -33,6 +19,9 @@
     private string originalUniqueCode;
     private string originalSymbol;
     protected List<string> ErrorMessages { get; } = new List<string>();
+
+    [Inject]
+    internal ILog<CurrencyEdit> Log { get; set; }
 
     [Parameter]
     protected string UniqueCode { get; set; }
@@ -46,16 +35,15 @@
 
     private bool isNew;
 
-    public override async Task SetParametersAsync(ParameterCollection parameters)
+    public override Task SetParametersAsync(ParameterCollection parameters)
     {
-        await base.SetParametersAsync(parameters);
         isNew = parameters.GetValueOrDefault<string>(nameof(UniqueCode)) == null;
+
+        return base.SetParametersAsync(parameters);
     }
 
-    protected override void OnParametersSet()
+    protected override Task OnParametersSetAsync()
     {
-        //bool isNew = Symbol == null || originalSymbol != null;
-
         originalUniqueCode = UniqueCode;
         originalSymbol = Symbol;
 
@@ -71,6 +59,8 @@
             SaveButtonText = "Save";
             IsUniqueCodeEnabled = false;
         }
+
+        return base.OnParametersSetAsync();
     }
 
     protected bool OnSaveClick()

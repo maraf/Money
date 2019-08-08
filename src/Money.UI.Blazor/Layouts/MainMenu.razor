@@ -11,10 +11,10 @@
             </a>
 
             <div class="dropdown-menu">
-                <NavLink class="dropdown-item" href="@Navigator.UrlSummary()">Monthly</NavLink>
-                <NavLink class="dropdown-item" href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">Yearly</NavLink>
+                <a class="dropdown-item" href="@Navigator.UrlSummary()">Monthly</a>
+                <a class="dropdown-item" href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">Yearly</a>
                 <div class="dropdown-divider"></div>
-                <NavLink class="dropdown-item" href="@Navigator.UrlSearch()">Search</NavLink>
+                <a class="dropdown-item" href="@Navigator.UrlSearch()">Search</a>
             </div>
         </li>
         <li class="nav-item">

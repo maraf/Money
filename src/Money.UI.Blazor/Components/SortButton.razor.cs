@@ -92,5 +92,13 @@ namespace Money.Components
             UpdateCurrent(type);
             Changed?.Invoke();
         }
+
+        protected string DirectionToIcon(SortDirection sortDirection)
+        {
+            if (sortDirection == SortDirection.Ascending)
+                return "caret-down";
+
+            return "caret-up";
+        }
     }
 }

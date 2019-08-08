@@ -1,5 +1,4 @@
-﻿@using Money.Layouts
-@inherits LoginInfoBase
+﻿@inherits UserInfoModel
 
 @if (IsAuthenticated || Loading.IsLoading)
 {
@@ -23,7 +22,10 @@
                             </NavLink>
                         </li class="nav-item">
                         <li>
-                            <button type="button" class="btn btn-link navbar-btn nav-link" @onclick="@OnLogoutAsync">Log out</button>
+                            <button type="button" class="btn btn-link navbar-btn nav-link" @onclick="@OnLogoutAsync">
+                                <Icon Identifier="sign-out-alt" />
+                                Log out
+                            </button>
                         </li>
                     }
                 </ChildContent>

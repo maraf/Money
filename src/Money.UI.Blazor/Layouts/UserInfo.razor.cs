@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Money.Layouts
 {
-    public class LoginInfoBase : ComponentBase, IDisposable, IEventHandler<UserSignedIn>, IEventHandler<UserSignedOut>
+    public abstract class UserInfoModel : ComponentBase, IDisposable, IEventHandler<UserSignedIn>, IEventHandler<UserSignedOut>
     {
         [Inject]
         public IQueryDispatcher Queries { get; set; }

@@ -134,20 +134,41 @@ namespace Money.Services
             string url = queryMapper.FindUrlByType(type);
             if (url != null)
             {
-                HttpResponseMessage response = await http.PostAsync($"/api/query/{url}", new StringContent(payload, Encoding.UTF8, "text/json"));
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                try
                 {
-                    ClearAuthorization();
-                    UnauthorizedAccessException exception = new UnauthorizedAccessException();
-                    exceptionHandler.Handle(exception);
-                    throw exception;
+                    HttpResponseMessage response = await http.PostAsync($"/api/query/{url}", new StringContent(payload, Encoding.UTF8, "text/json"));
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        return SimpleJson.SimpleJson.DeserializeObject<JsResponse>(responseContent);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ClearAuthorization();
+                        throw new UnauthorizedAccessException();
+                    }
+                    else if(response.StatusCode == HttpStatusCode.InternalServerError)
+                    {
+                        throw new InternalServerException();
+                    }
+                    else
+                    {
+                        throw Ensure.Exception.InvalidOperation($"Generic HTTP error: {response.StatusCode}.");
+                    }
                 }
+                catch (Exception e)
+                {
+                    if (e is HttpRequestException)
+                        e = new ServerNotResponsingException(e);
 
-                string responseContent = await response.Content.ReadAsStringAsync();
-                return SimpleJson.SimpleJson.DeserializeObject<JsResponse>(responseContent);
+                    exceptionHandler.Handle(e);
+                    throw;
+                }
             }
             else
+            {
                 return await http.PostJsonAsync<Response>($"/api/query", CreateRequest(type, payload));
+            }
         }
 
         public Task CommandAsync(Type type, string payload)

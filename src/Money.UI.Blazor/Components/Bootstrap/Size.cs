@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap
 {
-    public enum ModalSize
+    public enum Size
     {
         Small,
         Normal,

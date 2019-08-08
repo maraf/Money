@@ -3,7 +3,7 @@
 @inject IQueryDispatcher Queries
 @inject ILog<ExchangeRateCreate> Log
 
-<Modal Title="Set Exchange Rate" Size="@ModalSize.Small" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" @bind-IsVisible="@IsVisible">
+<Modal Title="Set Exchange Rate" Size="@Size.Small" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" @bind-IsVisible="@IsVisible">
     <Validation ErrorMessages="@ErrorMessages" />
     <div class="form-group">
         <label for="exchangerate-source">Source Currency:</label>

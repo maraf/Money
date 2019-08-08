@@ -145,6 +145,12 @@ h4 {
     float: right;
 }
 
+@media (max-width: 768px) {
+    .navbar-collapse .navbar-right {
+        float: none;
+    }
+}
+
 .alert {
     .nav {
         margin-top: -7px;
@@ -153,12 +159,6 @@ h4 {
         .btn-link {
             color: $actionButtonColor;
         }
-    }
-}
-
-@media (max-width: 768px) {
-    .alert .navbar-right {
-        margin: 0 -10px;
     }
 }
 

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Money.Components.Bootstrap;
 using Money.Models.Sorting;
+using Neptuo;
 using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
@@ -27,7 +29,11 @@ namespace Money.Components
         [Parameter]
         protected Action Changed { get; set; }
 
+        [Parameter]
+        protected Size Size { get; set; } = Size.Normal;
+
         protected List<(string Name, TType Value)> Items { get; } = new List<(string, TType)>();
+        protected string ButtonCssClass { get; private set; }
 
         protected override void OnInit()
         {
@@ -61,6 +67,21 @@ namespace Money.Components
 
             if (Current == null)
                 UpdateCurrent(Items.First().Value);
+
+            ButtonCssClass = "btn btn-light dropdown-toggle";
+            switch (Size)
+            {
+                case Size.Small:
+                    ButtonCssClass += " btn-sm";
+                    break;
+                case Size.Normal:
+                    break;
+                case Size.Large:
+                    ButtonCssClass += " btn-lg";
+                    break;
+                default:
+                    throw Ensure.Exception.NotSupported(Size.ToString());
+            }
         }
 
         private SortDirection GetDefaultDirection(TType type)

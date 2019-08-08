@@ -72,7 +72,7 @@ namespace Money.Components.Bootstrap
         protected string DialogCssClass { get; set; }
 
         [Parameter]
-        protected ModalSize Size { get; set; } = ModalSize.Normal;
+        protected Size Size { get; set; } = Size.Normal;
 
         [Parameter]
         protected Action Closed { get; set; }
@@ -84,12 +84,12 @@ namespace Money.Components.Bootstrap
             DialogCssClass = "modal-dialog";
             switch (Size)
             {
-                case ModalSize.Small:
+                case Size.Small:
                     DialogCssClass += " modal-sm";
                     break;
-                case ModalSize.Normal:
+                case Size.Normal:
                     break;
-                case ModalSize.Large:
+                case Size.Large:
                     DialogCssClass += " modal-lg";
                     break;
                 default:

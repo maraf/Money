@@ -6,19 +6,20 @@
 <div class="search">
     <form @onsubmit="@(() => OnSearchAsync())">
         <div class="row">
-            <div class="col-sm-9 col-xs-12">
+            <div class="col-md col-sm-12">
                 <div class="form-group">
                     <input class="form-control" placeholder="Search..." @bind="@Text" />
                 </div>
             </div>
-            <div class="col-sm-1 col-xs-8">
+            <div class="col-md-auto col-sm">
                 <div class="form-group">
                     <button type="submit" class="btn btn-secondary">
                         <Icon Identifier="search" />
+                        Search
                     </button>
                 </div>
             </div>
-            <div class="col-sm-2 col-xs-4">
+            <div class="col-md-auto col-sm-auto">
                 <div class="form-group">
                     <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
                 </div>

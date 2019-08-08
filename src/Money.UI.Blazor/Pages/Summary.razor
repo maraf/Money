@@ -13,7 +13,7 @@
         {
             if (Items.Count > 0)
             {
-                <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
+                <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" Size="@Size.Small" />
 
                 <TabSet CssClass="months">
                     @foreach (var item in Items)

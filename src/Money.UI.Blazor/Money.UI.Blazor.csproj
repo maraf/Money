@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>Money</RootNamespace>
-    <VersionPrefix>1.8.0.0</VersionPrefix>
+    <VersionPrefix>1.9.0.0</VersionPrefix>
     
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
@@ -31,17 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Components\_ViewImports.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="wwwroot\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Update="**\*.razor.cs" DependentUpon="%(Filename)" />
     <Watch Include="**\*.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\bootstrap\dist\" />
   </ItemGroup>
 </Project>

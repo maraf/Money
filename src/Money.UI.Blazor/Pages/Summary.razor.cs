@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public abstract class SummaryModel<T> : ComponentBase,
+    public partial class Summary<T> : 
         System.IDisposable,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
@@ -40,7 +40,7 @@ namespace Money.Pages
         public IQueryDispatcher Queries { get; set; }
 
         [Inject]
-        internal ILog<SummaryModel<T>> Log { get; set; }
+        internal ILog<Summary<T>> Log { get; set; }
 
         [Inject]
         internal Navigator Navigator { get; set; }

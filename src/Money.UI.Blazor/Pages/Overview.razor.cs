@@ -22,9 +22,9 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class OverviewModel<T> : ComponentBase,
+    public partial class Overview<T> :
         System.IDisposable,
-        OutcomeCardBase.IContext,
+        OutcomeCard.IContext,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
@@ -234,18 +234,18 @@ namespace Money.Pages
 
         #endregion
 
-        #region OutcomeCardBase.IContext
+        #region OutcomeCard.IContext
 
-        void OutcomeCardBase.IContext.EditAmount(OutcomeOverviewModel model)
+        void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
             => OnActionClick(model, ref IsAmountEditVisible);
 
-        void OutcomeCardBase.IContext.EditDescription(OutcomeOverviewModel model)
+        void OutcomeCard.IContext.EditDescription(OutcomeOverviewModel model)
             => OnActionClick(model, ref IsDescriptionEditVisible);
 
-        void OutcomeCardBase.IContext.EditWhen(OutcomeOverviewModel model)
+        void OutcomeCard.IContext.EditWhen(OutcomeOverviewModel model)
             => OnActionClick(model, ref IsWhenEditVisible);
 
-        void OutcomeCardBase.IContext.Delete(OutcomeOverviewModel model)
+        void OutcomeCard.IContext.Delete(OutcomeOverviewModel model)
             => OnDeleteClick(model);
 
         #endregion

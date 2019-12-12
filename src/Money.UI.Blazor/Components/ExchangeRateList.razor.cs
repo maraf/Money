@@ -17,12 +17,12 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class ExchangeRateListBase : DialogBase, IDisposable,
+    public partial class ExchangeRateList : IDisposable,
         IEventHandler<CurrencyExchangeRateSet>,
         IEventHandler<CurrencyExchangeRateRemoved>
     {
         [Inject]
-        internal ILog<ExchangeRateListBase> Log { get; set; }
+        internal ILog<ExchangeRateList> Log { get; set; }
 
         [Inject]
         public ICommandDispatcher Commands { get; set; }

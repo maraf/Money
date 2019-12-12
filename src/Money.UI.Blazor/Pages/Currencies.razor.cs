@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class CurrenciesBase : ComponentBase,
+    public partial class Currencies : 
         IDisposable,
         IEventHandler<CurrencyCreated>,
         IEventHandler<CurrencySymbolChanged>,

@@ -14,7 +14,7 @@ namespace Money.Components.Bootstrap
     public class Native
     {
         private readonly IJSRuntime jsRuntime;
-        private static Dictionary<string, ModalBase> modals = new Dictionary<string, ModalBase>();
+        private static Dictionary<string, Modal> modals = new Dictionary<string, Modal>();
 
         public Native(IJSRuntime jsRuntime)
         {
@@ -22,7 +22,7 @@ namespace Money.Components.Bootstrap
             this.jsRuntime = jsRuntime;
         }
 
-        internal void AddModal(string id, ModalBase component)
+        internal void AddModal(string id, Modal component)
         {
             modals[id] = component;
             jsRuntime.InvokeAsync<object>("Bootstrap.Modal.Register", id);
@@ -39,7 +39,7 @@ namespace Money.Components.Bootstrap
         {
             ILog log = Program.Resolve<ILogFactory>().Scope("Modal.Native");
             log.Debug($"Modal hidden '{id}'.");
-            if (modals.TryGetValue(id, out ModalBase modal))
+            if (modals.TryGetValue(id, out Modal modal))
                 modal.MarkAsHidden();
             else
                 log.Debug($"Modal not found '{id}'.");

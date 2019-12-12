@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class OutcomeCardBase : ComponentBase
+    public partial class OutcomeCard
     {
         public interface IContext
         {
@@ -39,6 +39,7 @@ namespace Money.Components
 
         protected override async Task OnParametersSetAsync()
         {
+            await base.OnParametersSetAsync();
             CategoryName = await Queries.QueryAsync(new GetCategoryName(Model.CategoryKey));
             CategoryColor = await Queries.QueryAsync(new GetCategoryColor(Model.CategoryKey));
         }

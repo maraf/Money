@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap
 {
-    public class ModalBase : ComponentBase, System.IDisposable
+    public partial class Modal : System.IDisposable
     {
         [Inject]
-        internal ILog<ModalBase> Log { get; set; }
+        internal ILog<Modal> Log { get; set; }
 
         [Inject]
         internal Native NativeHelper { get; set;}

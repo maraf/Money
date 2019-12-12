@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class PagingBase : ComponentBase, System.IDisposable
+    public partial class Paging : System.IDisposable
     {
         [Inject]
-        internal ILog<PagingBase> Log { get; set; }
+        internal ILog<Paging> Log { get; set; }
 
         protected int CurrentIndex { get; set; }
         protected bool HasNextPage { get; set; } = true;

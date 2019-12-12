@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class SortButtonBase<TType> : ComponentBase
+    public partial class SortButton<TType> : ComponentBase
     {
         private readonly Dictionary<TType, SortDirection> defaultSortDirection = new Dictionary<TType, SortDirection>();
 
         [Inject]
-        internal ILog<SortButtonBase<TType>> Log { get; set; }
+        internal ILog<SortButton<TType>> Log { get; set; }
 
         [Parameter]
         public SortDescriptor<TType> Current { get; set; }

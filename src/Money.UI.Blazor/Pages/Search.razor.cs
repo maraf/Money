@@ -16,8 +16,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class SearchBase : ComponentBase,
-        OutcomeCardBase.IContext
+    public partial class Search : OutcomeCard.IContext
     {
         public CurrencyFormatter CurrencyFormatter { get; private set; }
 
@@ -69,18 +68,18 @@ namespace Money.Pages
             StateHasChanged();
         }
         
-        #region OutcomeCardBase.IContext
+        #region OutcomeCard.IContext
 
-        void OutcomeCardBase.IContext.EditAmount(OutcomeOverviewModel model)
+        void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
             => throw Ensure.Exception.NotSupported();
 
-        void OutcomeCardBase.IContext.EditDescription(OutcomeOverviewModel model)
+        void OutcomeCard.IContext.EditDescription(OutcomeOverviewModel model)
             => throw Ensure.Exception.NotSupported();
 
-        void OutcomeCardBase.IContext.EditWhen(OutcomeOverviewModel model)
+        void OutcomeCard.IContext.EditWhen(OutcomeOverviewModel model)
             => throw Ensure.Exception.NotSupported();
 
-        void OutcomeCardBase.IContext.Delete(OutcomeOverviewModel model)
+        void OutcomeCard.IContext.Delete(OutcomeOverviewModel model)
             => throw Ensure.Exception.NotSupported();
 
         #endregion

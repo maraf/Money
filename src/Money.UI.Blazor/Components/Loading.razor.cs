@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class LoadingBase : ComponentBase
+    public partial class Loading
     {
         [Inject]
-        internal ILog<LoadingBase> Log { get; set; }
+        internal ILog<Loading> Log { get; set; }
 
         [Parameter]
         public LoadingContext Context { get; set; }

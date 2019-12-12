@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public class CategoriesBase : ComponentBase,
+    public partial class Categories : 
         IDisposable,
         IEventHandler<CategoryCreated>,
         IEventHandler<CategoryRenamed>,

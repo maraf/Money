@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
+namespace Money.Pages.Accounts
 {
-    public class LoginBase : ComponentBase
+    public partial class Login
     {
         [Inject]
         internal Navigator Navigator { get; set; }
@@ -34,6 +34,8 @@ namespace Money.Pages
 
         protected override void OnInitialized()
         {
+            base.OnInitialized();
+
             if (Token.HasValue)
                 NavigateAway();
         }

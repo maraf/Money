@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
+namespace Money.Pages.Accounts
 {
-    public class RegisterBase : ComponentBase
+    public partial class Register
     {
         [Inject]
         internal ApiClient ApiClient { get; set; }
@@ -27,6 +27,8 @@ namespace Money.Pages
 
         protected override void OnInitialized()
         {
+            base.OnInitialized();
+
             if (Token.HasValue)
                 Navigator.OpenSummary();
         }

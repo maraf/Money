@@ -2,7 +2,6 @@
 using Money.Commands;
 using Money.Events;
 using Money.Models;
-using Money.Models.Loading;
 using Money.Queries;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -14,9 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
+namespace Money.Pages.Users
 {
-    public class ProfileBase : ComponentBase, IEventHandler<EmailChanged>, IDisposable
+    public partial class Profile : IEventHandler<EmailChanged>, IDisposable
     {
         private ProfileModel model;
 
@@ -36,6 +35,8 @@ namespace Money.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            await base.OnInitializedAsync();
+
             BindEvents();
             await ReloadAsync();
         }

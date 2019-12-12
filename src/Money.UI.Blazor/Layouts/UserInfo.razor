@@ -1,6 +1,4 @@
-﻿@inherits UserInfoModel
-
-@if (IsAuthenticated || Loading.IsLoading)
+﻿@if (IsAuthenticated || Loading.IsLoading)
 {
     <form class="navbar-right" @onsubmit="@OnLogoutAsync">
         <ul class="nav navbar-nav navbar-right">

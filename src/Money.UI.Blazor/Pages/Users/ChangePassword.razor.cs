@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
+namespace Money.Pages.Users
 {
-    public class ChangePasswordBase : ComponentBase, IEventHandler<PasswordChanged>, IDisposable
+    public partial class ChangePassword : IEventHandler<PasswordChanged>, IDisposable
     {
         [Inject]
         public ICommandDispatcher Commands { get; set; }

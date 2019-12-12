@@ -101,7 +101,8 @@ namespace Money
 
             services
                 .AddRouting(options => options.LowercaseUrls = true)
-                .AddControllers();
+                .AddControllers()
+                .AddNewtonsoftJson();
 
             services
                 .AddSignalR();

@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Money.Common.Diagnostics;
 using Money.Data;
@@ -28,9 +28,9 @@ namespace Money
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment environment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
             Environment = environment;
@@ -101,7 +101,7 @@ namespace Money
 
             services
                 .AddRouting(options => options.LowercaseUrls = true)
-                .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddControllers();
 
             services
                 .AddSignalR();
@@ -128,7 +128,7 @@ namespace Money
             bootstrapTask.Initialize();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -140,6 +140,7 @@ namespace Money
                 app.UseErrorHandler();
             }
 
+            app.UseRouting();
 
             app.UseCors(p =>
             {
@@ -154,16 +155,14 @@ namespace Money
                 p.SetPreflightMaxAge(TimeSpan.FromMinutes(10));
             });
 
-            app.UseHealthChecks("/health");
-
             app.UseAuthentication();
 
-            app.UseSignalR(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<ApiHub>("/api");
+                endpoints.MapHealthChecks("/health");
+                endpoints.MapHub<ApiHub>("/api");
+                endpoints.MapControllers();
             });
-
-            app.UseMvc();
         }
     }
 }

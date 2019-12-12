@@ -18,10 +18,10 @@ namespace Money.Pages
     public class OverviewYear : Overview<YearModel>
     {
         [Parameter]
-        protected int Year { get; set; }
+        public int Year { get; set; }
 
         [Parameter]
-        protected Guid? CategoryGuid { get; set; }
+        public Guid? CategoryGuid { get; set; }
 
         public OverviewYear() 
             => SubTitle = "List of each single outcome in selected year";

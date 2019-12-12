@@ -24,7 +24,7 @@ namespace Money.Pages
         internal TokenContainer Token { get; set; }
 
         [Parameter]
-        protected string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; }
 
         protected string UserName { get; set; }
         protected string Password { get; set; }
@@ -32,7 +32,7 @@ namespace Money.Pages
 
         protected List<string> ErrorMessages { get; } = new List<string>();
 
-        protected override void OnInit()
+        protected override void OnInitialized()
         {
             if (Token.HasValue)
                 NavigateAway();

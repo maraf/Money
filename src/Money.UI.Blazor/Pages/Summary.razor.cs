@@ -58,16 +58,16 @@ namespace Money.Pages
 
         protected bool IsCreateVisible { get; set; }
 
-        protected override Task OnInitAsync()
+        protected override Task OnInitializedAsync()
         {
-            Log.Debug("Summary.OnInitAsync");
+            Log.Debug("Summary.OnInitializedAsync");
             BindEvents();
             SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, SortDirection.Ascending);
 
-            return base.OnInitAsync();
+            return base.OnInitializedAsync();
         }
 
-        public override Task SetParametersAsync(ParameterCollection parameters)
+        public override Task SetParametersAsync(ParameterView parameters)
         {
             ClearPreviousParameters();
             return base.SetParametersAsync(parameters);

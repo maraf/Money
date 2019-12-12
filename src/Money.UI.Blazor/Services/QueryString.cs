@@ -15,15 +15,15 @@ namespace Money.Services
     /// </summary>
     public class QueryString : DisposableBase, IReadOnlyKeyValueCollection
     {
-        private readonly IUriHelper uri;
+        private readonly NavigationManager manager;
         private KeyValueCollection parameters;
 
-        public QueryString(IUriHelper uri)
+        public QueryString(NavigationManager manager)
         {
-            Ensure.NotNull(uri, "uri");
-            this.uri = uri;
+            Ensure.NotNull(manager, "manager");
+            this.manager = manager;
 
-            uri.OnLocationChanged += OnLocationChanged;
+            manager.LocationChanged += OnLocationChanged;
         }
 
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
@@ -35,7 +35,7 @@ namespace Money.Services
             {
                 parameters = new KeyValueCollection();
 
-                string url = uri.GetAbsoluteUri();
+                string url = manager.Uri;
                 int indexOfQuery = url.IndexOf('?');
                 if (indexOfQuery >= 0)
                 {
@@ -71,7 +71,7 @@ namespace Money.Services
         protected override void DisposeManagedResources()
         {
             base.DisposeManagedResources();
-            uri.OnLocationChanged -= OnLocationChanged;
+            manager.LocationChanged -= OnLocationChanged;
         }
     }
 }

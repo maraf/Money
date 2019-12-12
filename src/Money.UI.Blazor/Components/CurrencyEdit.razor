@@ -24,10 +24,10 @@
     internal ILog<CurrencyEdit> Log { get; set; }
 
     [Parameter]
-    protected string UniqueCode { get; set; }
+    public string UniqueCode { get; set; }
 
     [Parameter]
-    protected string Symbol { get; set; }
+    public string Symbol { get; set; }
 
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }
@@ -35,7 +35,7 @@
 
     private bool isNew;
 
-    public override Task SetParametersAsync(ParameterCollection parameters)
+    public override Task SetParametersAsync(ParameterView parameters)
     {
         isNew = parameters.GetValueOrDefault<string>(nameof(UniqueCode)) == null;
 

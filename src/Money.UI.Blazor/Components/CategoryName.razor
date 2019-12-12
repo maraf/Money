@@ -21,13 +21,13 @@
     protected List<string> ErrorMessages { get; } = new List<string>();
 
     [Parameter]
-    protected IKey CategoryKey { get; set; }
+    public IKey CategoryKey { get; set; }
 
     [Parameter]
-    protected string Name { get; set; }
+    public string Name { get; set; }
 
     [Parameter]
-    protected string Description { get; set; }
+    public string Description { get; set; }
 
     protected string Title { get; set; }
     protected string SaveButtonText { get; set; }

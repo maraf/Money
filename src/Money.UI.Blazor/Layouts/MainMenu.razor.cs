@@ -19,9 +19,9 @@ namespace Money.Components
 
         protected bool IsMainMenuVisible { get; set; } = false;
 
-        protected override void OnInit()
+        protected override void OnInitialized()
         {
-            base.OnInit();
+            base.OnInitialized();
 
             Navigator.LocationChanged += OnLocationChanged;
         }

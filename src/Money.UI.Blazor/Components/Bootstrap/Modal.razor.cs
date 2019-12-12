@@ -21,39 +21,39 @@ namespace Money.Components.Bootstrap
         public string Id { get; private set; } = "BM" + Guid.NewGuid().ToString().Replace("-", String.Empty);
 
         [Parameter]
-        protected string Title { get; set; }
+        public string Title { get; set; }
 
         [Parameter]
-        protected RenderFragment ChildContent { get; set; }
+        public RenderFragment ChildContent { get; set; }
 
         [Parameter]
-        protected string PrimaryButtonText { get; set; }
+        public string PrimaryButtonText { get; set; }
 
         /// <summary>
         /// Ivoked when user clicks on primary button.
         /// When <c>true</c> is returned, modal is closed.
         /// </summary>
         [Parameter]
-        protected Func<bool> PrimaryButtonClick { get; set; }
+        public Func<bool> PrimaryButtonClick { get; set; }
 
         [Parameter]
-        protected string CloseButtonText { get; set; } = "Close";
+        public string CloseButtonText { get; set; } = "Close";
 
         /// <summary>
         /// Invoken when user clicks on close button.
         /// When <c>true</c> is returned, modal is closed.
         /// </summary>
         [Parameter]
-        protected Func<bool> CloseButtonClick { get; set; }
+        public Func<bool> CloseButtonClick { get; set; }
 
         [Parameter]
-        protected Action<bool> IsVisibleChanged { get; set; }
+        public Action<bool> IsVisibleChanged { get; set; }
 
         private bool isVisible;
         private bool isVisibleChanged;
 
         [Parameter]
-        protected bool IsVisible
+        public bool IsVisible
         {
             get { return isVisible; }
             set
@@ -72,10 +72,10 @@ namespace Money.Components.Bootstrap
         protected string DialogCssClass { get; set; }
 
         [Parameter]
-        protected Size Size { get; set; } = Size.Normal;
+        public Size Size { get; set; } = Size.Normal;
 
         [Parameter]
-        protected Action Closed { get; set; }
+        public Action Closed { get; set; }
 
         protected override void OnParametersSet()
         {
@@ -107,7 +107,7 @@ namespace Money.Components.Bootstrap
             }
         }
 
-        protected void OnFormSubmit(UIEventArgs e)
+        protected void OnFormSubmit(EventArgs e)
         {
             Log.Debug("Form onsubmit raised.");
             if (IsVisible)
@@ -125,9 +125,9 @@ namespace Money.Components.Bootstrap
                 IsVisible = false;
         }
 
-        protected override void OnAfterRender()
+        protected override void OnAfterRender(bool firstRender)
         {
-            base.OnAfterRender();
+            base.OnAfterRender(firstRender);
             NativeHelper.AddModal(Id, this);
 
             if (isVisibleChanged)

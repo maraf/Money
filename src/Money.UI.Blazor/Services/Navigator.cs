@@ -13,24 +13,24 @@ namespace Money.Services
 {
     internal class Navigator : NavigatorUrl, System.IDisposable
     {
-        private readonly IUriHelper uri;
+        private readonly NavigationManager manager;
         private readonly Interop interop;
 
         public event Action<string> LocationChanged;
 
-        public Navigator(IUriHelper uri, Interop interop)
+        public Navigator(NavigationManager manager, Interop interop)
         {
-            Ensure.NotNull(uri, "uri");
+            Ensure.NotNull(manager, "manager");
             Ensure.NotNull(interop, "interop");
-            this.uri = uri;
+            this.manager = manager;
             this.interop = interop;
 
-            uri.OnLocationChanged += OnLocationChanged;
+            manager.LocationChanged += OnLocationChanged;
         }
 
         public void Dispose()
         {
-            uri.OnLocationChanged -= OnLocationChanged;
+            manager.LocationChanged -= OnLocationChanged;
         }
 
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
@@ -40,43 +40,43 @@ namespace Money.Services
             => interop.NavigateTo(url);
 
         public void Open(string url)
-            => uri.NavigateTo(url);
+            => manager.NavigateTo(url);
 
         public void OpenSummary()
-            => uri.NavigateTo(UrlSummary());
+            => manager.NavigateTo(UrlSummary());
 
         public void OpenSummary(MonthModel month)
-            => uri.NavigateTo(UrlSummary(month));
+            => manager.NavigateTo(UrlSummary(month));
 
         public void OpenOverview(MonthModel month)
-            => uri.NavigateTo(UrlOverview(month));
+            => manager.NavigateTo(UrlOverview(month));
 
         public void OpenOverview(MonthModel month, IKey categoryKey)
-            => uri.NavigateTo(UrlOverview(month, categoryKey));
+            => manager.NavigateTo(UrlOverview(month, categoryKey));
 
         public void OpenOverview(YearModel Year)
-            => uri.NavigateTo(UrlOverview(Year));
+            => manager.NavigateTo(UrlOverview(Year));
 
         public void OpenOverview(YearModel Year, IKey categoryKey)
-            => uri.NavigateTo(UrlOverview(Year, categoryKey));
+            => manager.NavigateTo(UrlOverview(Year, categoryKey));
 
         public void OpenSearch()
-            => uri.NavigateTo(UrlSearch());
+            => manager.NavigateTo(UrlSearch());
 
         public void OpenCategories()
-            => uri.NavigateTo(UrlCategories());
+            => manager.NavigateTo(UrlCategories());
 
         public void OpenCurrencies()
-            => uri.NavigateTo(UrlCurrencies());
+            => manager.NavigateTo(UrlCurrencies());
 
         public void OpenAbout()
-            => uri.NavigateTo(UrlAbout());
+            => manager.NavigateTo(UrlAbout());
 
         public void OpenUserManage()
-            => uri.NavigateTo(UrlUserManage());
+            => manager.NavigateTo(UrlUserManage());
 
         public void OpenUserPassword()
-            => uri.NavigateTo(UrlUserPassword());
+            => manager.NavigateTo(UrlUserPassword());
 
         public void OpenLogin()
         {
@@ -84,12 +84,12 @@ namespace Money.Services
             string currentUrl = GetCurrentUrl();
 
             if (loginUrl != currentUrl && currentUrl != UrlAccountRegister())
-                uri.NavigateTo($"{loginUrl}?returnUrl={currentUrl}");
+                manager.NavigateTo($"{loginUrl}?returnUrl={currentUrl}");
         }
 
         private string GetCurrentUrl()
         {
-            string currentUrl = "/" + uri.ToBaseRelativePath(uri.GetBaseUri(), uri.GetAbsoluteUri());
+            string currentUrl = "/" + manager.ToBaseRelativePath(manager.BaseUri);
             int indexOfReturnUrl = currentUrl.IndexOf("?returnUrl");
             if (indexOfReturnUrl >= 0)
                 currentUrl = currentUrl.Substring(0, indexOfReturnUrl);
@@ -98,6 +98,6 @@ namespace Money.Services
         }
 
         public void OpenRegister()
-            => uri.NavigateTo(UrlAccountRegister());
+            => manager.NavigateTo(UrlAccountRegister());
     }
 }

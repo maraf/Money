@@ -45,7 +45,7 @@ namespace Money.Pages
         protected DeleteContext<CategoryModel> Delete { get; } = new DeleteContext<CategoryModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
 
-        protected override async Task OnInitAsync()
+        protected override async Task OnInitializedAsync()
         {
             BindEvents();
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteCategory(model.Key));

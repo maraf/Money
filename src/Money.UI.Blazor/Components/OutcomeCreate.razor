@@ -64,19 +64,19 @@
     protected List<CurrencyModel> Currencies { get; private set; }
 
     [Parameter]
-    protected decimal Amount { get; set; }
+    public decimal Amount { get; set; }
 
     [Parameter]
-    protected string Currency { get; set; }
+    public string Currency { get; set; }
 
     [Parameter]
-    protected string Description { get; set; }
+    public string Description { get; set; }
 
     [Parameter]
-    protected DateTime When { get; set; } = DateTime.Today;
+    public DateTime When { get; set; } = DateTime.Today;
 
     [Parameter]
-    protected IKey CategoryKey { get; set; }
+    public IKey CategoryKey { get; set; }
 
     protected async override Task OnParametersSetAsync()
     {

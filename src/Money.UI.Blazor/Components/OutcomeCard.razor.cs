@@ -29,10 +29,10 @@ namespace Money.Components
 
         [Parameter]
         [CascadingParameter]
-        protected IContext Context { get; set; }
+        public IContext Context { get; set; }
 
         [Parameter]
-        protected OutcomeOverviewModel Model { get; set; }
+        public OutcomeOverviewModel Model { get; set; }
 
         protected string CategoryName { get; private set; }
         protected Color CategoryColor { get; private set; }

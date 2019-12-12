@@ -34,7 +34,7 @@ namespace Money.Layouts
 
         protected LoadingContext Loading { get; } = new LoadingContext();
 
-        protected async override Task OnInitAsync()
+        protected async override Task OnInitializedAsync()
         {
             BindEvents();
 

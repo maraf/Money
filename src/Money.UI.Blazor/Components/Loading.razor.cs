@@ -15,20 +15,20 @@ namespace Money.Components
         internal ILog<LoadingBase> Log { get; set; }
 
         [Parameter]
-        protected LoadingContext Context { get; set; }
+        public LoadingContext Context { get; set; }
 
         [Parameter]
-        protected bool IsOverlay { get; set; }
+        public bool IsOverlay { get; set; }
 
         protected bool IsLoading { get; set; }
 
         [Parameter]
-        protected RenderFragment ChildContent { get; set; }
+        public RenderFragment ChildContent { get; set; }
 
         [Parameter]
-        protected RenderFragment LoadingContent { get; set; } = r => r.AddMarkupContent(1, "<i>Loading...</i>");
+        public RenderFragment LoadingContent { get; set; } = r => r.AddMarkupContent(1, "<i>Loading...</i>");
 
-        public override async Task SetParametersAsync(ParameterCollection parameters)
+        public override async Task SetParametersAsync(ParameterView parameters)
         {
             if (Context != null)
                 Context.LoadingChanged -= OnLoadingChanged;

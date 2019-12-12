@@ -25,7 +25,7 @@ namespace Money.Pages
 
         protected List<string> ErrorMessages { get; } = new List<string>();
 
-        protected override void OnInit()
+        protected override void OnInitialized()
         {
             if (Token.HasValue)
                 Navigator.OpenSummary();

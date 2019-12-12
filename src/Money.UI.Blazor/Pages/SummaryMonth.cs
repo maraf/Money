@@ -18,10 +18,10 @@ namespace Money.Pages
     public class SummaryMonth : Summary<MonthModel>
     {
         [Parameter]
-        protected int? Year { get; set; }
+        public int? Year { get; set; }
 
         [Parameter]
-        protected int? Month { get; set; }
+        public int? Month { get; set; }
 
         public SummaryMonth() 
             => SubTitle = "Per-month summary of outcomes in categories";

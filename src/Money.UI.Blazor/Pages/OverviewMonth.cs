@@ -21,13 +21,13 @@ namespace Money.Pages
     public class OverviewMonth : Overview<MonthModel>
     {
         [Parameter]
-        protected int Year { get; set; }
+        public int Year { get; set; }
 
         [Parameter]
-        protected int Month { get; set; }
+        public int Month { get; set; }
 
         [Parameter]
-        protected Guid? CategoryGuid { get; set; }
+        public Guid? CategoryGuid { get; set; }
 
         public OverviewMonth() 
             => SubTitle = "List of each single outcome in selected month";

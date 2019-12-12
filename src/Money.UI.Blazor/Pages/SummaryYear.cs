@@ -17,7 +17,7 @@ namespace Money.Pages
     public class SummaryYear : Summary<YearModel>
     {
         [Parameter]
-        protected int? Year { get; set; }
+        public int? Year { get; set; }
 
         public SummaryYear() 
             => SubTitle = "Per-year summary of outcomes in categories";

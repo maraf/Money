@@ -37,18 +37,18 @@
 @code 
 {
     [Parameter]
-    protected string Title { get; set; }
+    public string Title { get; set; }
 
     [Parameter]
-    protected string Message { get; set; }
+    public string Message { get; set; }
 
     [Parameter]
-    protected IEnumerable<string> Messages { get; set; }
+    public IEnumerable<string> Messages { get; set; }
 
     private bool isDismissible;
 
     [Parameter]
-    protected bool IsDismissible
+    public bool IsDismissible
     {
         get => isDismissible;
         set
@@ -64,7 +64,7 @@
     private AlertMode mode;
 
     [Parameter]
-    protected AlertMode Mode
+    public AlertMode Mode
     {
         get => mode;
         set
@@ -80,9 +80,9 @@
 
     protected string ModeCssClass { get; set; }
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
-        base.OnInit();
+        base.OnInitialized();
         UpdateModeCssClass();
     }
 

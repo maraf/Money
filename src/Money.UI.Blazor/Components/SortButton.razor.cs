@@ -21,23 +21,23 @@ namespace Money.Components
         internal ILog<SortButtonBase<TType>> Log { get; set; }
 
         [Parameter]
-        protected SortDescriptor<TType> Current { get; set; }
+        public SortDescriptor<TType> Current { get; set; }
 
         [Parameter]
-        protected Action<SortDescriptor<TType>> CurrentChanged { get; set; }
+        public Action<SortDescriptor<TType>> CurrentChanged { get; set; }
 
         [Parameter]
-        protected Action Changed { get; set; }
+        public Action Changed { get; set; }
 
         [Parameter]
-        protected Size Size { get; set; } = Size.Normal;
+        public Size Size { get; set; } = Size.Normal;
 
         protected List<(string Name, TType Value)> Items { get; } = new List<(string, TType)>();
         protected string ButtonCssClass { get; private set; }
 
-        protected override void OnInit()
+        protected override void OnInitialized()
         {
-            base.OnInit();
+            base.OnInitialized();
 
             Type parameterType = typeof(TType);
             foreach (object value in Enum.GetValues(parameterType))

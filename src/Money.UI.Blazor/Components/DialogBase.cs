@@ -12,7 +12,7 @@ namespace Money.Components
         private bool isVisible;
 
         [Parameter]
-        protected bool IsVisible
+        public bool IsVisible
         {
             get { return isVisible; }
             set
@@ -26,6 +26,6 @@ namespace Money.Components
         }
 
         [Parameter]
-        protected Action<bool> IsVisibleChanged { get; set; }
+        public Action<bool> IsVisibleChanged { get; set; }
     }
 }

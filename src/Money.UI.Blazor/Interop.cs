@@ -34,7 +34,7 @@ namespace Money
         public void SaveToken(string token)
             => jsRuntime.InvokeAsync<bool>("Money.SaveToken", token);
 
-        public Task<string> LoadTokenAsync()
+        public ValueTask<string> LoadTokenAsync()
             => jsRuntime.InvokeAsync<string>("Money.LoadToken");
     }
 }

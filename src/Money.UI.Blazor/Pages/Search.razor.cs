@@ -31,7 +31,7 @@ namespace Money.Pages
         protected List<OutcomeOverviewModel> Models { get; set; }
         protected string Text { get; set; }
 
-        protected async override Task OnInitAsync()
+        protected async override Task OnInitializedAsync()
         {
             CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
         }

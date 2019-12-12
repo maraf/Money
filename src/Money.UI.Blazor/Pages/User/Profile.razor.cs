@@ -34,7 +34,7 @@ namespace Money.Pages
 
         public bool IsSuccess { get; set; }
 
-        protected override async Task OnInitAsync()
+        protected override async Task OnInitializedAsync()
         {
             BindEvents();
             await ReloadAsync();

@@ -18,7 +18,7 @@ namespace Money.Components
         protected bool HasNextPage { get; set; } = true;
 
         [Parameter]
-        protected Func<int, Task<bool>> LoadPageAsync { get; set; }
+        public Func<int, Task<bool>> LoadPageAsync { get; set; }
 
         protected override void OnParametersSet()
         {

@@ -34,18 +34,18 @@ namespace Money.Components
         public IQueryDispatcher Queries { get; set; }
 
         [Parameter]
-        protected string TargetCurrency { get; set; }
+        public string TargetCurrency { get; set; }
 
         [Parameter]
-        protected Action AddClick { get; set; }
+        public Action AddClick { get; set; }
 
         protected string Title { get; set; }
         protected List<ExchangeRateModel> Models { get; set; }
         protected CurrencyFormatter CurrencyFormatter { get; set; }
 
-        protected override void OnInit()
+        protected override void OnInitialized()
         {
-            base.OnInit();
+            base.OnInitialized();
             BindEvents();
         }
 

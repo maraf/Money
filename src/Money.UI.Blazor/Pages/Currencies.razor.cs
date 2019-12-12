@@ -62,7 +62,7 @@ namespace Money.Pages
         protected DeleteContext<CurrencyModel> Delete { get; } = new DeleteContext<CurrencyModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
 
-        protected override async Task OnInitAsync()
+        protected override async Task OnInitializedAsync()
         {
             BindEvents();
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteCurrency(model.UniqueCode));

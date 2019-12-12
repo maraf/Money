@@ -20,9 +20,9 @@
 
 @code
 { 
-    protected async override Task OnInitAsync()
+    protected async override Task OnInitializedAsync()
     {
-        await base.OnInitAsync();
+        await base.OnInitializedAsync();
 
         ExceptionHandlerBuilder.Handler<UnauthorizedAccessException>(e => Navigator.OpenLogin());
     }

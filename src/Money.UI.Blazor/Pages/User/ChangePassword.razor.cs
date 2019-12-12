@@ -25,10 +25,10 @@ namespace Money.Pages
 
         public bool IsSuccess { get; set; }
 
-        protected override Task OnInitAsync()
+        protected override Task OnInitializedAsync()
         {
             BindEvents();
-            return base.OnInitAsync();
+            return base.OnInitializedAsync();
         }
 
         protected async Task OnFormSubmit()

@@ -13,12 +13,12 @@
     public Exception LastException { get; private set; }
 
     [Parameter]
-    protected string Title { get; private set; }
+    public string Title { get; set; }
 
     [Parameter]
-    protected string Message { get; private set; }
+    public string Message { get; set; }
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
         ExceptionHandlerBuilder.Handler(e =>
         {
@@ -95,6 +95,6 @@
             StateHasChanged();
         });
 
-        base.OnInit();
+        base.OnInitialized();
     }
 }

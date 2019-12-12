@@ -61,7 +61,7 @@ namespace Money.Pages
         protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
         protected int CurrentPageIndex { get; set; }
 
-        protected override async Task OnInitAsync()
+        protected override async Task OnInitializedAsync()
         {
             BindEvents();
             Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));

@@ -103,7 +103,11 @@ namespace Money.Models.Builders
             List<CategoryWithAmountModel> result = new List<CategoryWithAmountModel>();
             foreach (var item in totals)
             {
-                CategoryModel model = (await db.Categories.FindAsync(item.Key)).ToModel();
+                CategoryEntity entity = await db.Categories.FirstOrDefaultAsync(c => c.Id == item.Key);
+                if (entity == null)
+                    throw Ensure.Exception.InvalidOperation($"Missing category with id '{item.Key}'.");
+
+                CategoryModel model = entity.ToModel();
                 result.Add(new CategoryWithAmountModel(
                     model.Key,
                     model.Name,

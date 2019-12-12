@@ -1,10 +1,10 @@
 ﻿<Router AppAssembly="@typeof(Program).Assembly">
-    <NotFoundContent>
-        <Money.Layouts.Layout>
-            <Body>
-                <NotFound />
-            </Body>
-        </Money.Layouts.Layout>
-            
-    </NotFoundContent>
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(Layouts.Layout)">
+            <NotFound />
+        </LayoutView>
+    </NotFound>
 </Router>

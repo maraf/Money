@@ -1,39 +1,44 @@
-﻿@inherits DialogBase
+﻿@inherits ModalDialog
 
-<Modal Title="@Title" PrimaryButtonText="Add" PrimaryButtonClick="@OnAddClick" @bind-IsVisible="@IsVisible">
-    @if (Models != null)
-    {
-        if (Models.Count > 0)
+<Modal @ref="Modal" Title="@Title">
+    <ChildContent>
+        @if (Models != null)
         {
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Valid from</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Models)
-                    {
+            if (Models.Count > 0)
+            {
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td>@CurrencyFormatter.Format(new Price(1, item.SourceCurrency))</td>
-                            <td>@CurrencyFormatter.Format(new Price((decimal)item.Rate, TargetCurrency))</td>
-                            <td>@item.ValidFrom.ToShortDateString()</td>
-                            <td>
-                                <div class="actions">
-                                    <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(async () => { await OnDeleteClickAsync(item); StateHasChanged(); })" />
-                                </div>
-                            </td>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Valid from</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Models)
+                        {
+                            <tr>
+                                <td>@CurrencyFormatter.Format(new Price(1, item.SourceCurrency))</td>
+                                <td>@CurrencyFormatter.Format(new Price((decimal)item.Rate, TargetCurrency))</td>
+                                <td>@item.ValidFrom.ToShortDateString()</td>
+                                <td>
+                                    <div class="actions">
+                                        <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(async () => { await OnDeleteClickAsync(item); StateHasChanged(); })" />
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <Alert Title="No data." Message="Try adding some exchange rates." Mode="@AlertMode.Warning" />
+            }
         }
-        else
-        {
-            <Alert Title="No data." Message="Try adding some exchange rates." Mode="@AlertMode.Warning" />
-        }
-    }
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary btn-sm" @onclick="@OnAddClick">Add</button>
+    </Buttons>
 </Modal>

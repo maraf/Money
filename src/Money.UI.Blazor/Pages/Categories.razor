@@ -1,10 +1,10 @@
 ﻿@page "/categories"
 
-<Money.Components.Title Icon="tag" Main="Categories" Sub="List of categories you distribute outcomes into" ButtonText="New Category" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<Money.Components.Title Icon="tag" Main="Categories" Sub="List of categories you distribute outcomes into" ButtonText="New Category" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
 <ExceptionPanel />
 
-<CategoryName @bind-IsVisible="@IsCreateVisible" />
-<Confirm Context="@Delete" />
+<CategoryName @ref="CreateModal" />
+<Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@OnDeleteConfirmed" />
 
 <Loading Context="@Loading">
     @if (Models.Count == 0)
@@ -28,9 +28,9 @@
                 </span>
 
                 <div class="nav navbar-right">
-                    <IconButton Icon="pen" ToolTip="Rename" Click="@(() => OnActionClick(item, ref IsNameEditVisible))" />
-                    <IconButton Icon="image" ToolTip="Icon" Click="@(() => OnActionClick(item, ref IsIconEditVisible))" />
-                    <IconButton Icon="tint" ToolTip="Color" Click="@(() => OnActionClick(item, ref IsColorEditVisible))" />
+                    <IconButton Icon="pen" ToolTip="Rename" Click="@(() => OnActionClick(item, NameModal))" />
+                    <IconButton Icon="image" ToolTip="Icon" Click="@(() => OnActionClick(item, IconModal))" />
+                    <IconButton Icon="tint" ToolTip="Color" Click="@(() => OnActionClick(item, ColorModal))" />
                     <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
                 </div>
             </div>
@@ -38,6 +38,6 @@
     }
 </Loading>
 
-<CategoryName CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" @bind-IsVisible="@IsNameEditVisible" />
-<CategoryIcon CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" @bind-IsVisible="@IsIconEditVisible" />
-<CategoryColor CategoryKey="@Selected?.Key" Color="@Selected?.Color" @bind-IsVisible="@IsColorEditVisible" />
+<CategoryName @ref="NameModal" CategoryKey="@Selected?.Key" Name="@Selected?.Name" Description="@Selected?.Description" />
+<CategoryIcon @ref="IconModal" CategoryKey="@Selected?.Key" Icon="@Selected?.Icon" />
+<CategoryColor @ref="ColorModal" CategoryKey="@Selected?.Key" Color="@Selected?.Color" />

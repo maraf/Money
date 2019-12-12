@@ -1,18 +1,10 @@
-﻿@using Money.Models.Confirmation
-@inherits DialogBase
+﻿@inherits ModalDialog
 
-<Modal Title="Money" PrimaryButtonText="Yes" PrimaryButtonClick="@OnPrimaryButtonClick" CloseButtonText="No" Size="@Size.Small" @bind-IsVisible="@Context.IsVisible">
-    @Context.Message
+<Modal @ref="Modal" Title="Money" CloseButtonText="No" Size="@Size.Small">
+    <ChildContent>
+        @Message
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary btn-sm" @onclick="@OnPrimaryButtonClick">Yes</button>
+    </Buttons>
 </Modal>
-
-@code
-{
-    [Parameter]
-    public ConfirmContext Context { get; set; }
-
-    protected bool OnPrimaryButtonClick()
-    {
-        Context.OnConfirmed();
-        return true;
-    }
-}

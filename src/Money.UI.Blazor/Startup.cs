@@ -23,7 +23,7 @@ namespace Money
                 .AddTransient<NavigatorUrl>()
                 .AddTransient<Navigator>()
                 .AddSingleton<ApiClient>()
-                .AddSingleton<Native>()
+                .AddSingleton<ModalInterop>()
                 .AddSingleton<TokenContainer>()
                 .AddSingleton<QueryString>()
                 .AddSingleton<CommandMapper>()

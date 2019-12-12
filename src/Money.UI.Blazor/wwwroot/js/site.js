@@ -3,22 +3,16 @@ var isLoaded = false;
 
 window.Bootstrap = {
     Modal: {
-        Register: function (id) {
-            var target = $("#" + id);
-            target.on('shown.bs.modal', function (e) {
-                $(e.currentTarget).find('[data-autofocus]').select().focus();
+        Show: function (container) {
+            $(container).modal({
+                "show": true,
+                "focus": true
+            }).on('shown.bs.modal', function () {
+                $(container).find('[data-autofocus]').first().trigger('focus');
             });
-            target.on('hidden.bs.modal', function (e) {
-                DotNet.invokeMethodAsync("Money.UI.Blazor", "Bootstrap_ModalHidden", e.currentTarget.id);
-            });
-
-            return true;
         },
-        Toggle: function (id, isVisible) {
-            var target = $("#" + id);
-            target.modal(isVisible ? 'show' : 'hide');
-
-            return true;
+        Hide: function (container) {
+            $(container).modal('hide');
         }
     }
 };

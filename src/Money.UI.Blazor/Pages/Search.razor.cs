@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Components;
 using Money.Models;
-using Money.Models.Confirmation;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;

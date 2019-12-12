@@ -3,7 +3,6 @@ using Money.Commands;
 using Money.Components;
 using Money.Events;
 using Money.Models;
-using Money.Models.Confirmation;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
@@ -51,21 +50,22 @@ namespace Money.Pages
         protected List<OutcomeOverviewModel> Items { get; set; }
         protected OutcomeOverviewModel SelectedItem { get; set; }
 
-        protected bool IsCreateVisible { get; set; }
-        protected bool IsAmountEditVisible;
-        protected bool IsDescriptionEditVisible;
-        protected bool IsWhenEditVisible;
+        protected ModalDialog CreateModal { get; set; }
+        protected ModalDialog AmountEditModal { get; set; }
+        protected ModalDialog DescriptionEditModal { get; set; }
+        protected ModalDialog WhenEditModal { get; set; }
 
-        protected DeleteContext<OutcomeOverviewModel> Delete { get; } = new DeleteContext<OutcomeOverviewModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
         protected int CurrentPageIndex { get; set; }
 
+        protected OutcomeOverviewModel Selected { get; set; }
+        protected string DeleteMessage { get; set; }
+        protected Confirm DeleteConfirm { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             BindEvents();
-            Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteOutcome(model.Key));
-            Delete.MessageFormatter = model => $"Do you really want to delete outcome '{model.Description}'?";
 
             CategoryKey = CreateSelectedCategoryFromParameters();
             SelectedPeriod = CreateSelectedItemFromParameters();
@@ -125,16 +125,24 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        protected void OnActionClick(OutcomeOverviewModel model, ref bool isVisible)
+        protected void OnActionClick(OutcomeOverviewModel model, ModalDialog modal)
         {
             SelectedItem = model;
-            isVisible = true;
+            modal.Show();
             StateHasChanged();
         }
 
         protected void OnDeleteClick(OutcomeOverviewModel model)
         {
-            Delete.Model = model;
+            Selected = model;
+            DeleteMessage = $"Do you really want to delete outcome '{model.Description}'?";
+            DeleteConfirm.Show();
+            StateHasChanged();
+        }
+
+        protected async void OnDeleteConfirmed()
+        {
+            await Commands.HandleAsync(new DeleteOutcome(Selected.Key));
             StateHasChanged();
         }
 
@@ -237,13 +245,13 @@ namespace Money.Pages
         #region OutcomeCard.IContext
 
         void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
-            => OnActionClick(model, ref IsAmountEditVisible);
+            => OnActionClick(model, AmountEditModal);
 
         void OutcomeCard.IContext.EditDescription(OutcomeOverviewModel model)
-            => OnActionClick(model, ref IsDescriptionEditVisible);
+            => OnActionClick(model, DescriptionEditModal);
 
         void OutcomeCard.IContext.EditWhen(OutcomeOverviewModel model)
-            => OnActionClick(model, ref IsWhenEditVisible);
+            => OnActionClick(model, WhenEditModal);
 
         void OutcomeCard.IContext.Delete(OutcomeOverviewModel model)
             => OnDeleteClick(model);

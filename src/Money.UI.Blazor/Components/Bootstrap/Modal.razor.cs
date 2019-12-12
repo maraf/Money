@@ -10,15 +10,13 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap
 {
-    public partial class Modal : System.IDisposable
+    public partial class Modal
     {
         [Inject]
-        internal ILog<Modal> Log { get; set; }
+        internal ModalInterop Interop { get; set; }
 
         [Inject]
-        internal Native NativeHelper { get; set;}
-
-        public string Id { get; private set; } = "BM" + Guid.NewGuid().ToString().Replace("-", String.Empty);
+        internal ILog<Modal> Log { get; set; }
 
         [Parameter]
         public string Title { get; set; }
@@ -27,47 +25,16 @@ namespace Money.Components.Bootstrap
         public RenderFragment ChildContent { get; set; }
 
         [Parameter]
-        public string PrimaryButtonText { get; set; }
-
-        /// <summary>
-        /// Ivoked when user clicks on primary button.
-        /// When <c>true</c> is returned, modal is closed.
-        /// </summary>
-        [Parameter]
-        public Func<bool> PrimaryButtonClick { get; set; }
+        public RenderFragment Buttons { get; set; }
 
         [Parameter]
         public string CloseButtonText { get; set; } = "Close";
 
-        /// <summary>
-        /// Invoken when user clicks on close button.
-        /// When <c>true</c> is returned, modal is closed.
-        /// </summary>
         [Parameter]
-        public Func<bool> CloseButtonClick { get; set; }
+        public Action FormSubmit { get; set; }
 
         [Parameter]
-        public Action<bool> IsVisibleChanged { get; set; }
-
-        private bool isVisible;
-        private bool isVisibleChanged;
-
-        [Parameter]
-        public bool IsVisible
-        {
-            get { return isVisible; }
-            set
-            {
-                Log.Debug($"IsVisible: Current: {isVisible}, New: {value}.");
-                if (isVisible != value)
-                {
-                    isVisible = value;
-
-                    IsVisibleChanged?.Invoke(isVisible);
-                    isVisibleChanged = true;
-                }
-            }
-        }
+        public Action CloseButtonClick { get; set; }
 
         protected string DialogCssClass { get; set; }
 
@@ -76,6 +43,8 @@ namespace Money.Components.Bootstrap
 
         [Parameter]
         public Action Closed { get; set; }
+
+        protected ElementReference Container { get; set; }
 
         protected override void OnParametersSet()
         {
@@ -97,51 +66,20 @@ namespace Money.Components.Bootstrap
             }
         }
 
-        protected void OnPrimaryButtonClick()
-        {
-            Log.Debug("Primary button click raised.");
-            if (IsVisible)
-            {
-                Log.Debug("Visibility constraint passed.");
-                IsVisible = !PrimaryButtonClick();
-            }
-        }
-
-        protected void OnFormSubmit(EventArgs e)
-        {
-            Log.Debug("Form onsubmit raised.");
-            if (IsVisible)
-            {
-                Log.Debug("Visibility constraint passed.");
-                IsVisible = !PrimaryButtonClick();
-            }
-        }
+        protected void OnFormSubmit(EventArgs e) => FormSubmit?.Invoke();
 
         protected void OnCloseButtonClick()
         {
+            Log.Debug("Modal.OnCloseButtonClick");
+
             if (CloseButtonClick != null)
-                IsVisible = !CloseButtonClick();
+                CloseButtonClick();
             else
-                IsVisible = false;
+                Hide();
         }
 
-        protected override void OnAfterRender(bool firstRender)
-        {
-            base.OnAfterRender(firstRender);
-            NativeHelper.AddModal(Id, this);
+        public void Show() => Interop.Show(Container);
 
-            if (isVisibleChanged)
-                NativeHelper.ToggleModal(Id, isVisible);
-        }
-
-        public void Dispose()
-        {
-            NativeHelper.RemoveModal(Id);
-        }
-
-        internal void MarkAsHidden()
-        {
-            IsVisible = false;
-        }
+        public void Hide() => Interop.Hide(Container);
     }
 }

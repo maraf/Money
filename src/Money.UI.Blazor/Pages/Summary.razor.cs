@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Money.Components;
 using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
@@ -56,7 +57,7 @@ namespace Money.Pages
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
-        protected bool IsCreateVisible { get; set; }
+        protected ModalDialog CreateModal { get; set; }
 
         protected override Task OnInitializedAsync()
         {

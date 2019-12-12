@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
+using Money.Components;
 using Money.Events;
 using Money.Models;
-using Money.Models.Confirmation;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Neptuo.Commands;
@@ -24,9 +24,6 @@ namespace Money.Pages
         IEventHandler<CurrencyDefaultChanged>,
         IEventHandler<CurrencyDeleted>
     {
-        private bool isListExchangeRateReopened;
-        private bool isCreateExchangeRateVisible;
-
         [Inject]
         public ICommandDispatcher Commands { get; set; }
 
@@ -36,37 +33,21 @@ namespace Money.Pages
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
-        protected bool IsCreateVisible { get; set; }
-        protected bool IsEditVisible;
-        protected bool IsListExchangeRateVisible;
-        protected bool IsCreateExchangeRateVisible
-        {
-            get => isCreateExchangeRateVisible;
-            set
-            {
-                if (isCreateExchangeRateVisible != value)
-                {
-                    isCreateExchangeRateVisible = value;
-                    if (!isCreateExchangeRateVisible && isListExchangeRateReopened)
-                    {
-                        isListExchangeRateReopened = false;
-                        IsListExchangeRateVisible = true;
-                        StateHasChanged();
-                    }
-                }
-            }
-        }
+        protected ModalDialog CreateModal { get; set; }
+        protected ModalDialog EditModal { get; set; }
+        protected ModalDialog ListExchangeRateModal { get; set; }
+        protected ModalDialog CreateExchangeRateModal { get; set; }
 
         public List<CurrencyModel> Models { get; private set; } = new List<CurrencyModel>();
         public CurrencyModel Selected { get; protected set; }
-        protected DeleteContext<CurrencyModel> Delete { get; } = new DeleteContext<CurrencyModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
+
+        protected string DeleteMessage { get; set; }
+        protected Confirm DeleteConfirm { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             BindEvents();
-            Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteCurrency(model.UniqueCode));
-            Delete.MessageFormatter = model => $"Do you really want to delete currency '{model.Symbol}'?";
 
             using (Loading.Start())
                 await LoadDataAsync();
@@ -81,16 +62,24 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
             => Models = await Queries.QueryAsync(new ListAllCurrency());
 
-        protected void OnActionClick(CurrencyModel model, ref bool isVisible)
+        protected void OnActionClick(CurrencyModel model, ModalDialog modal)
         {
             Selected = model;
-            isVisible = true;
+            modal.Show();
             StateHasChanged();
         }
 
         protected void OnDeleteClick(CurrencyModel model)
         {
-            Delete.Model = model;
+            Selected = model;
+            DeleteMessage = $"Do you really want to delete currency '{model.Symbol}'?";
+            DeleteConfirm.Show();
+            StateHasChanged();
+        }
+
+        protected async void OnDeleteConfirmed()
+        {
+            await Commands.HandleAsync(new DeleteCurrency(Selected.UniqueCode));
             StateHasChanged();
         }
 
@@ -99,8 +88,7 @@ namespace Money.Pages
 
         protected void OnAddExchangeRateClick()
         {
-            isListExchangeRateReopened = true;
-            IsCreateExchangeRateVisible = true;
+            CreateExchangeRateModal.Show();
             StateHasChanged();
         }
 

@@ -1,49 +1,13 @@
-﻿@using Neptuo.Models.Keys
-@inherits DialogBase
-@inject ICommandDispatcher Commands
-@inject ColorCollection Colors
+﻿@inherits ModalDialog
 
-<Modal Title="Pick a Color for the Category" PrimaryButtonClick="@OnSaveClick" Size="@Size.Large" @bind-IsVisible="@IsVisible">
-    @foreach (Color color in Colors)
-    {
-        <button class="btn btn-link btn-color btn-selectable @(Color == color ? "btn-selectable-selected" : "")" style="background-color: @color.ToHashCode();" @onclick="@(() => Color = color)" />
-    }
+<Modal @ref="Modal" Title="Pick a Color for the Category" Size="@Size.Large">
+    <ChildContent>
+        @foreach (Color color in Colors)
+        {
+            <button class="btn btn-link btn-color btn-selectable @(Color == color ? "btn-selectable-selected" : "")" style="background-color: @color.ToHashCode();" @onclick="@(() => Color = color)" />
+        }
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary btn-sm" @onclick="@OnSaveClick">Save</button>
+    </Buttons>
 </Modal>
-
-@code 
-{
-    private Color? originalColor;
-
-    [Parameter]
-    public IKey CategoryKey { get; set; }
-
-    [Parameter]
-    public Color? Color { get; set; }
-
-    protected override void OnParametersSet()
-    {
-        originalColor = Color;
-    }
-
-    protected bool OnSaveClick()
-    {
-        if (originalColor != Color)
-        {
-            Execute();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    private async void Execute()
-    {
-        if (Color != null)
-        {
-            await Commands.HandleAsync(new ChangeCategoryColor(CategoryKey, Color.Value));
-            originalColor = Color;
-        }
-    }
-}

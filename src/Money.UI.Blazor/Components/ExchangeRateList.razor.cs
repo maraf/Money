@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
+using Money.Components.Bootstrap;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
@@ -43,6 +44,8 @@ namespace Money.Components
         protected List<ExchangeRateModel> Models { get; set; }
         protected CurrencyFormatter CurrencyFormatter { get; set; }
 
+        private bool isShown;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -51,23 +54,27 @@ namespace Money.Components
 
         protected async override Task OnParametersSetAsync()
         {
-            if (IsVisible)
+            await base.OnParametersSetAsync();
+
+            Title = $"List of Exchange Rates for {TargetCurrency}.";
+            if (isShown)
             {
-                Title = $"List of Exchange Rates for {TargetCurrency}.";
-                await ReloadAsync();
+                Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
+                CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+                isShown = false;
             }
         }
 
-        protected async Task ReloadAsync()
-        { 
-            Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
-            CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+        public override void Show()
+        {
+            base.Show();
+            isShown = true;
         }
 
-        protected bool OnAddClick()
+        protected void OnAddClick()
         {
             AddClick?.Invoke();
-            return true;
+            Modal.Hide();
         }
 
         protected async Task OnDeleteClickAsync(ExchangeRateModel model)

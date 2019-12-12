@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
+using Money.Components;
 using Money.Events;
 using Money.Models;
-using Money.Models.Confirmation;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Neptuo.Commands;
@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class Categories : 
+    public partial class Categories :
         IDisposable,
         IEventHandler<CategoryCreated>,
         IEventHandler<CategoryRenamed>,
@@ -35,21 +35,21 @@ namespace Money.Pages
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
-        protected bool IsCreateVisible { get; set; }
-        protected bool IsNameEditVisible;
-        protected bool IsIconEditVisible;
-        protected bool IsColorEditVisible;
+        protected CategoryName CreateModal { get; set; }
+        protected CategoryName NameModal { get; set; }
+        protected CategoryIcon IconModal { get; set; }
+        protected CategoryColor ColorModal { get; set; }
 
         protected List<CategoryModel> Models { get; private set; } = new List<CategoryModel>();
         protected CategoryModel Selected { get; set; }
-        protected DeleteContext<CategoryModel> Delete { get; } = new DeleteContext<CategoryModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
+
+        protected string DeleteMessage { get; set; }
+        protected Confirm DeleteConfirm { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             BindEvents();
-            Delete.Confirmed += async model => await Commands.HandleAsync(new DeleteCategory(model.Key));
-            Delete.MessageFormatter = model => $"Do you really want to delete category '{model.Name}'?";
 
             using (Loading.Start())
                 await LoadDataAsync();
@@ -64,16 +64,24 @@ namespace Money.Pages
         protected async Task LoadDataAsync()
             => Models = await Queries.QueryAsync(new ListAllCategory());
 
-        protected void OnActionClick(CategoryModel model, ref bool isVisible)
+        protected void OnActionClick(CategoryModel model, ModalDialog modal)
         {
             Selected = model;
-            isVisible = true;
+            modal.Show();
             StateHasChanged();
         }
 
         protected void OnDeleteClick(CategoryModel model)
         {
-            Delete.Model = model;
+            Selected = model;
+            DeleteMessage = $"Do you really want to delete category '{model.Name}'?";
+            DeleteConfirm.Show();
+            StateHasChanged();
+        }
+
+        protected async void OnDeleteConfirmed()
+        {
+            await Commands.HandleAsync(new DeleteCategory(Selected.Key));
             StateHasChanged();
         }
 

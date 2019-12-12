@@ -1,53 +1,14 @@
-﻿@using Neptuo.Models.Keys
-@inherits DialogBase
-@inject ICommandDispatcher Commands
+﻿@inherits ModalDialog
 
-<Modal Title="Change a description of the outcome" PrimaryButtonText="Save" PrimaryButtonClick="@OnSaveClick" @bind-IsVisible="@IsVisible">
-    <Validation ErrorMessages="@ErrorMessages" />
-    <div class="form-group">
-        <label for="outcome-description">Description:</label>
-        <input type="text" class="form-control" id="outcome-description" placeholder="Outcome Description" data-autofocus @bind="@Description" />
-    </div>
+<Modal @ref="Modal" Title="Change a description of the outcome">
+    <ChildContent>
+        <Validation ErrorMessages="@ErrorMessages" />
+        <div class="form-group">
+            <label for="outcome-description">Description:</label>
+            <input type="text" class="form-control" id="outcome-description" placeholder="Outcome Description" data-autofocus @bind="@Description" />
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary btn-sm" @onclick="@OnSaveClick">Save</button>
+    </Buttons>
 </Modal>
-
-@code 
-{
-    private string originalDescription;
-    protected List<string> ErrorMessages { get; } = new List<string>();
-
-    [Parameter]
-    public IKey OutcomeKey { get; set; }
-
-    [Parameter]
-    public string Description { get; set; }
-
-    protected override void OnParametersSet()
-    {
-        originalDescription = Description;
-    }
-
-    protected bool OnSaveClick()
-    {
-        if (Validate() && originalDescription != Description)
-        {
-            Execute();
-            OnParametersSet();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    private bool Validate()
-    {
-        ErrorMessages.Clear();
-        Validator.AddOutcomeDescription(ErrorMessages, Description);
-
-        return ErrorMessages.Count == 0;
-    }
-
-    private async void Execute()
-        => await Commands.HandleAsync(new ChangeOutcomeDescription(OutcomeKey, Description));
-}

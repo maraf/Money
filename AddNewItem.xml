@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Templates xmlns="http://schemas.neptuo.com/xsd/productivity/vsix/AddNewItem.xsd">
+  <Template>
+    <Selector FileName="*.razor.cs" />
+    <Content>
+      <![CDATA[using Microsoft.AspNetCore.Components;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace $namespace$
+{
+    public partial class $itemcontainername$
+    {
+        $end$
+    }
+}
+]]>
+    </Content>
+  </Template>
+</Templates>

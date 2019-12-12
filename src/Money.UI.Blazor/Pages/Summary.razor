@@ -1,9 +1,9 @@
 ﻿@typeparam T
 
-<Money.Components.Title Icon="signal" Main="Summary" Sub="@SubTitle" ButtonText="New Outcome" ButtonClick="@(() => { IsCreateVisible = true; StateHasChanged(); })" />
+<Money.Components.Title Icon="signal" Main="Summary" Sub="@SubTitle" ButtonText="New Outcome" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
 <ExceptionPanel />
 
-<OutcomeCreate @bind-IsVisible="@IsCreateVisible" />
+<OutcomeCreate @ref="CreateModal" />
 
 <div class="summary">
     <Loading Context="@Loading">

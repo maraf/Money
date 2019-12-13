@@ -1,6 +1,6 @@
 ﻿@page "/categories"
 
-<Money.Components.Title Icon="tag" Main="Categories" Sub="List of categories you distribute outcomes into" ButtonText="New Category" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
+<Money.Components.Title Icon="tag" Main="Categories" Sub="List of categories you distribute expenses into" ButtonText="New Category" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
 <ExceptionPanel />
 
 <CategoryName @ref="CreateModal" />
@@ -9,7 +9,7 @@
 <Loading Context="@Loading">
     @if (Models.Count == 0)
     {
-        <Alert Title="No data." Message="Try adding some categories." Mode="@AlertMode.Warning" />
+        <Alert Title="No data." Message="Let's add some categories." Mode="@AlertMode.Warning" />
     }
     else
     {

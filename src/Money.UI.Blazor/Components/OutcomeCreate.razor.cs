@@ -54,7 +54,7 @@ namespace Money.Components
         {
             await base.OnParametersSetAsync();
 
-            Title = "Create a new Outcome";
+            Title = "Create a new Expense";
             SaveButtonText = "Create";
 
             Categories = await Queries.QueryAsync(new ListAllCategory());
@@ -73,7 +73,7 @@ namespace Money.Components
 
         private bool Validate()
         {
-            Log.Debug($"Outcome: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
+            Log.Debug($"Expense: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
 
             ErrorMessages.Clear();
             Validator.AddOutcomeAmount(ErrorMessages, Amount);
@@ -81,7 +81,7 @@ namespace Money.Components
             Validator.AddOutcomeCurrency(ErrorMessages, Currency);
             Validator.AddOutcomeCategoryKey(ErrorMessages, CategoryKey);
 
-            Log.Debug($"Outcome Validation: {string.Join(", ", ErrorMessages)}.");
+            Log.Debug($"Expense: Validation: {string.Join(", ", ErrorMessages)}.");
             return ErrorMessages.Count == 0;
         }
 

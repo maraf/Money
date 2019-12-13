@@ -1,6 +1,6 @@
 ﻿@typeparam T
 
-<Money.Components.Title Icon="calendar" Main="@Title" Sub="@SubTitle" ButtonText="New Outcome" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
+<Money.Components.Title Icon="calendar" Main="@Title" Sub="@SubTitle" ButtonText="New Expense" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
 <ExceptionPanel />
 
 <OutcomeCreate @ref="CreateModal" CategoryKey="@CategoryKey" />
@@ -28,7 +28,7 @@
             }
             else
             {
-                <Alert Title="No data." Message="Try adding some outcomes." Mode="@AlertMode.Warning" />
+                <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
             }
         }
     </Loading>

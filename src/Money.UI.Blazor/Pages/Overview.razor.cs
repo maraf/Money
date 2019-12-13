@@ -73,11 +73,11 @@ namespace Money.Pages
             if (!CategoryKey.IsEmpty)
             {
                 CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
-                Title = $"{CategoryName} outcomes in {SelectedPeriod}";
+                Title = $"{CategoryName} expenses in {SelectedPeriod}";
             }
             else
             {
-                Title = $"Outcomes in {SelectedPeriod}";
+                Title = $"Expenses in {SelectedPeriod}";
             }
 
             CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
@@ -135,7 +135,7 @@ namespace Money.Pages
         protected void OnDeleteClick(OutcomeOverviewModel model)
         {
             Selected = model;
-            DeleteMessage = $"Do you really want to delete outcome '{model.Description}'?";
+            DeleteMessage = $"Do you really want to delete expense '{model.Description}'?";
             DeleteConfirm.Show();
             StateHasChanged();
         }

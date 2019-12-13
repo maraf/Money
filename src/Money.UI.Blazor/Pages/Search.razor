@@ -1,6 +1,6 @@
 ﻿@page "/search"
 
-<Money.Components.Title Icon="search" Main="Search" Sub="Searching in outcomes" />
+<Money.Components.Title Icon="search" Main="Search" Sub="Search for expenses" />
 <ExceptionPanel />
 
 <div class="search">
@@ -30,7 +30,7 @@
     <Loading Context="@Loading">
         @if (Models == null || Models.Count == 0)
         {
-            <Alert Message="No matching outcome found." Mode="@AlertMode.Warning" />
+            <Alert Message="No matching expense found." Mode="@AlertMode.Warning" />
         }
         else
         {

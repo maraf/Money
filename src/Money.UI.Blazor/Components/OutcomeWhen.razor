@@ -1,10 +1,10 @@
 ﻿@inherits ModalDialog
 
-<Modal @ref="Modal" Title="Change when the outcome occured">
+<Modal @ref="Modal" Title="Change when the expense occured">
     <ChildContent>
         <div class="form-group">
-            <label for="outcome-when">When:</label>
-            <input type="date" class="form-control" id="outcome-when" placeholder="Outcome Description" data-autofocus @bind="@When" @bind:format="yyyy-MM-dd" />
+            <label for="expense-when">When:</label>
+            <input type="date" class="form-control" id="expense-when" placeholder="Expense Description" data-autofocus @bind="@When" @bind:format="yyyy-MM-dd" />
         </div>
     </ChildContent>
     <Buttons>

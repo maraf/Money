@@ -1,19 +1,19 @@
 ﻿@inherits ModalDialog
 
-<Modal @ref="Modal" Title="Change an amount of the outcome">
+<Modal @ref="Modal" Title="Change an amount of the expense">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
         <div class="row">
             <div class="col-md-9">
                 <div class="form-group">
-                    <label for="outcome-amount">Amount:</label>
-                    <input type="text" class="form-control" id="outcome-amount" data-autofocus @bind="@Amount" />
+                    <label for="expense-amount">Amount:</label>
+                    <input type="text" class="form-control" id="expense-amount" data-autofocus @bind="@Amount" />
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="outcome-currency">Currency:</label>
-                    <select class="form-control" id="outcome-currency" @bind="@Currency">
+                    <label for="expense-currency">Currency:</label>
+                    <select class="form-control" id="expense-currency" @bind="@Currency">
                         @if (Currencies != null)
                         {
                             @foreach (var currency in Currencies)

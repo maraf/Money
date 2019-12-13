@@ -1,6 +1,6 @@
 ﻿@page "/currencies"
 
-<Money.Components.Title Icon="pound-sign" Main="Currencies" Sub="List of currencies you are making outcomes in" ButtonText="New Currency" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
+<Money.Components.Title Icon="pound-sign" Main="Currencies" Sub="List of currencies you are making expenses in" ButtonText="New Currency" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
 <ExceptionPanel />
 
 <CurrencyEdit @ref="CreateModal" />
@@ -9,7 +9,7 @@
 <Loading Context="@Loading">
     @if (Models.Count == 0)
     {
-        <Alert Title="No data." Message="Try adding some currencies." Mode="@AlertMode.Warning" />
+        <Alert Title="No data." Message="Let's add some currencies." Mode="@AlertMode.Warning" />
     }
     else
     {
@@ -44,7 +44,7 @@
                     <p>This currency has unique code @item.UniqueCode.</p>
                     @if (item.IsDefault)
                     {
-                        <p>This is a default currency used for displaying outcomes.</p>
+                        <p>This is a default currency used for displaying expenses.</p>
                     }
                 </div>
             </div>

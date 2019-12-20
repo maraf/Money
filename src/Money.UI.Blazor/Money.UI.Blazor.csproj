@@ -31,10 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Watch Include="**\*.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="wwwroot\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -6,6 +6,7 @@ using Money.Users.Models;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Exceptions.Handlers;
+using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Money.Services
@@ -27,8 +29,9 @@ namespace Money.Services
         private readonly IExceptionHandler exceptionHandler;
         private readonly IEventDispatcher eventDispatcher;
         private readonly Interop interop;
+        private readonly ILog log;
 
-        public ApiClient(IOptions<ApiClientConfiguration> configuration, TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop)
+        public ApiClient(IOptions<ApiClientConfiguration> configuration, TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop, ILogFactory logFactory)
         {
             Ensure.NotNull(configuration, "configuration");
             Ensure.NotNull(token, "token");
@@ -38,6 +41,7 @@ namespace Money.Services
             Ensure.NotNull(exceptionHandler, "exceptionHandler");
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
             Ensure.NotNull(interop, "interop");
+            Ensure.NotNull(logFactory, "logFactory");
             this.configuration = configuration.Value;
             this.token = token;
             this.http = http;
@@ -46,6 +50,7 @@ namespace Money.Services
             this.exceptionHandler = exceptionHandler;
             this.eventDispatcher = eventDispatcher;
             this.interop = interop;
+            this.log = logFactory.Scope("ApiClient");
 
             http.BaseAddress = this.configuration.ApiUrl;
             EnsureAuthorization();
@@ -140,7 +145,8 @@ namespace Money.Services
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         string responseContent = await response.Content.ReadAsStringAsync();
-                        return SimpleJson.SimpleJson.DeserializeObject<JsResponse>(responseContent);
+                        log.Debug($"Response: '{responseContent}'.");
+                        return JsonSerializer.Deserialize<Response>(responseContent, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
                     }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
@@ -178,24 +184,6 @@ namespace Money.Services
                 return http.PostJsonAsync($"/api/command/{url}", payload);
             else
                 return http.PostJsonAsync($"/api/command", CreateRequest(type, payload));
-        }
-
-        public class JsResponse : Response
-        {
-            public string payload
-            {
-                set => Payload = value;
-            }
-
-            public string type
-            {
-                set => Type = value;
-            }
-
-            public ResponseType responseType
-            {
-                set => ResponseType = value;
-            }
         }
     }
 }

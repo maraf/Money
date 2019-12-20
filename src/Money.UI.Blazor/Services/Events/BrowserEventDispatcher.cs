@@ -1,5 +1,4 @@
-﻿using Microsoft.JSInterop;
-using Money.Models.Api;
+﻿using Money.Models.Api;
 using Money.Services;
 using Neptuo.Formatters;
 using Neptuo.Logging;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Neptuo.Events
@@ -33,7 +33,7 @@ namespace Neptuo.Events
         {
             log.Debug($"Raised: {rawPayload}");
 
-            Response response = SimpleJson.SimpleJson.DeserializeObject<Response>(rawPayload);
+            Response response = JsonSerializer.Deserialize<Response>(rawPayload);
             Type type = Type.GetType(response.Type);
             rawPayload = response.Payload;
 

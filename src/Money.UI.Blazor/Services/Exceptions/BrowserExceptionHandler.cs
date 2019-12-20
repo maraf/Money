@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Neptuo.Exceptions
@@ -30,7 +31,7 @@ namespace Neptuo.Exceptions
         {
             log.Debug($"'{rawPayload}'.");
 
-            Response response = SimpleJson.SimpleJson.DeserializeObject<Response>(rawPayload);
+            Response response = JsonSerializer.Deserialize<Response>(rawPayload);
             Type type = Type.GetType(response.Type);
             rawPayload = response.Payload;
 

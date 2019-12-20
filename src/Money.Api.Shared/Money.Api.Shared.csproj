@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
     <ProjectReference Include="..\Money\Money.csproj" />
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />

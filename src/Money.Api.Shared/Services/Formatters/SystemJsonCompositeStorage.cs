@@ -2,27 +2,27 @@
 using Neptuo.Collections.Specialized;
 using Neptuo.Logging;
 using Neptuo.Models.Keys;
-using SimpleJson;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Neptuo.Formatters
 {
     // Worst code ever.
-    public class SimpleJsonCompositeStorage : ICompositeStorage
+    public class SystemJsonCompositeStorage : ICompositeStorage
     {
         private readonly ILog log;
         private IDictionary<string, object> storage;
 
-        public SimpleJsonCompositeStorage(ILogFactory logFactory)
+        public SystemJsonCompositeStorage(ILogFactory logFactory)
             : this(new Dictionary<string, object>(), logFactory?.Scope("Json"))
         { }
 
-        private SimpleJsonCompositeStorage(IDictionary<string, object> storage, ILog log)
+        private SystemJsonCompositeStorage(IDictionary<string, object> storage, ILog log)
         {
             Ensure.NotNull(storage, "storage");
             this.storage = storage;
@@ -36,7 +36,8 @@ namespace Neptuo.Formatters
             using (StreamReader reader = new StreamReader(input))
             {
                 string value = reader.ReadToEnd();
-                storage = SimpleJson.SimpleJson.DeserializeObject<JsonObject>(value);
+                storage = JsonSerializer.Deserialize<Dictionary<string, object>>(value);
+                log.Debug($"Load: '{value}' => '{JsonSerializer.Serialize(storage)}'.");
             }
         }
 
@@ -48,7 +49,7 @@ namespace Neptuo.Formatters
 
         public void Store(Stream output)
         {
-            string value = SimpleJson.SimpleJson.SerializeObject(storage);
+            string value = JsonSerializer.Serialize(storage);
             using (MemoryStream valueStream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
                 valueStream.CopyTo(output);
 
@@ -114,9 +115,9 @@ namespace Neptuo.Formatters
         public ICompositeStorage Add(string key)
         {
             log.Debug($"Add: Key: '{key}', SubStorage.");
-            JsonObject innerStorage = new JsonObject();
+            Dictionary<string, object> innerStorage = new Dictionary<string, object>();
             storage[key] = innerStorage;
-            SimpleJsonCompositeStorage inner = new SimpleJsonCompositeStorage(innerStorage, log);
+            SystemJsonCompositeStorage inner = new SystemJsonCompositeStorage(innerStorage, log);
             return inner;
         }
 
@@ -125,9 +126,22 @@ namespace Neptuo.Formatters
             if (this.storage.TryGetValue(key, out object target))
             {
                 log.Debug($"Get: Key: '{key}', RequiredType: '{typeof(ICompositeStorage).FullName}', ActualType: '{target.GetType().FullName}'.");
-                if (target is JsonObject inner)
+
+                if (target is Dictionary<string, object> inner)
                 {
-                    storage = new SimpleJsonCompositeStorage(inner, log);
+                    storage = new SystemJsonCompositeStorage(inner, log);
+                    return true;
+                }
+
+                if (target is JsonElement element)
+                {
+                    inner = new Dictionary<string, object>();
+                    foreach (JsonProperty property in element.EnumerateObject())
+                    {
+                        inner[property.Name] = property.Value;
+                    }
+
+                    storage = new SystemJsonCompositeStorage(inner, log);
                     return true;
                 }
             }
@@ -147,66 +161,96 @@ namespace Neptuo.Formatters
                 }
 
                 log.Debug($"Get: Key: '{key}', RequiredType: '{typeof(T).FullName}', ActualType: '{target.GetType().FullName}'.");
+
                 if (target is T targetValue)
                 {
                     value = targetValue;
                     return true;
                 }
 
-                if (typeof(T) == typeof(int) && target.GetType() == typeof(long))
+                JsonElement element = (JsonElement)target;
+
+                if (typeof(T) == typeof(string))
                 {
-                    value = (T)(object)(int)(long)target;
+                    value = (T)(object)element.GetString();
                     return true;
                 }
 
-                if (typeof(T) == typeof(decimal) && target.GetType() == typeof(double))
+                if (typeof(T) == typeof(int))
                 {
-                    value = (T)(object)(decimal)(double)target;
+                    value = (T)(object)element.GetInt32();
                     return true;
                 }
 
-                if (typeof(T) == typeof(IKey) && target is JsonObject json)
+                if (typeof(T) == typeof(long))
                 {
-                    string type = (string)json["Type"];
-                    if (json.TryGetValue("Guid", out object rawGuid))
+                    value = (T)(object)element.GetInt64();
+                    return true;
+                }
+
+                if (typeof(T) == typeof(decimal))
+                {
+                    value = (T)(object)element.GetDecimal();
+                    return true;
+                }
+
+                if (typeof(T) == typeof(double))
+                {
+                    value = (T)(object)element.GetDouble();
+                    return true;
+                }
+
+                if (typeof(T) == typeof(bool))
+                {
+                    value = (T)(object)element.GetBoolean();
+                    return true;
+                }
+
+                if (typeof(T) == typeof(IKey))
+                {
+                    string type = element.GetProperty("Type").GetString();
+                    if (element.TryGetProperty("Guid", out JsonElement rawGuid))
                     {
-                        if (rawGuid == null)
+                        string rawGuidValue = rawGuid.GetString();
+                        if (rawGuidValue == null)
                             value = (T)(object)GuidKey.Empty(type);
                         else
-                            value = (T)(object)GuidKey.Create(Guid.Parse((string)rawGuid), type);
+                            value = (T)(object)GuidKey.Create(Guid.Parse(rawGuidValue), type);
 
                         return true;
                     }
-                    else if (json.TryGetValue("Identifier", out object rawIdentifier))
+                    else if (element.TryGetProperty("Identifier", out JsonElement rawIdentifier))
                     {
-                        if (rawIdentifier == null)
+                        string rawIdentifierValue = rawIdentifier.GetString();
+                        if (rawIdentifierValue == null)
                             value = (T)(object)StringKey.Empty(type);
                         else
-                            value = (T)(object)StringKey.Create((string)rawIdentifier, type);
+                            value = (T)(object)StringKey.Create(rawIdentifierValue, type);
 
                         return true;
                     }
                 }
 
-                if (typeof(T) == typeof(Color) && target is string rawColor)
+                if (typeof(T) == typeof(Color))
                 {
-                    byte[] parts = rawColor.Split(new char[] { ';' }).Select(p => Byte.Parse(p)).ToArray();
+                    byte[] parts = element.GetString().Split(new char[] { ';' }).Select(p => Byte.Parse(p)).ToArray();
                     value = (T)(object)Color.FromArgb(parts[0], parts[1], parts[2], parts[3]);
                     log.Debug($"Get: Color: '{value}'.");
                     return true;
                 }
 
-                if (typeof(T) == typeof(Price) && target is JsonObject priceJson)
+                if (typeof(T) == typeof(Price))
                 {
-                    log.Debug($"Get: Price value type: '{priceJson["Value"].GetType().FullName}'.");
-                    decimal priceValue = (decimal)(double)priceJson["Value"];
-                    string priceCurrency = (string)priceJson["Currency"];
+                    log.Debug($"Get: Price value type: '{element.GetProperty("Value").GetType().FullName}'.");
+                    decimal priceValue = element.GetProperty("Value").GetDecimal();
+                    string priceCurrency = element.GetProperty("Currency").GetString();
                     value = (T)(object)new Price(priceValue, priceCurrency);
                     return true;
                 }
 
-                if (typeof(T) == typeof(DateTime) && target is string rawDateTime)
+                if (typeof(T) == typeof(DateTime))
                 {
+                    string rawDateTime = element.GetString();
                     if (DateTime.TryParse(rawDateTime, out DateTime dateTime))
                     {
                         value = (T)(object)dateTime;

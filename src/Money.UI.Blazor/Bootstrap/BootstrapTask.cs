@@ -102,7 +102,7 @@ namespace Money.Bootstrap
                 //.Add(new ColorConverter())
                 //.AddToStringSearchHandler();
 
-            IFactory<ICompositeStorage> compositeStorageFactory = Factory.Getter(() => new SimpleJsonCompositeStorage(logFactory));
+            IFactory<ICompositeStorage> compositeStorageFactory = Factory.Getter(() => new SystemJsonCompositeStorage(logFactory));
 
             typeProvider = new ReflectionCompositeTypeProvider(
                 new ReflectionCompositeDelegateFactory(),

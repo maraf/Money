@@ -1,5 +1,6 @@
 ﻿@inject Navigator Navigator
 @inject NavigationManager UrlManager
+@inject ILogFactory LogFactory
 
 <Money.Components.Title Icon="user" Main="User Account" Sub="Change your account settings" />
 
@@ -16,7 +17,10 @@
 {
     string GetActiveCssClass(string url)
     {
-        string relative = "/" + UrlManager.ToBaseRelativePath(UrlManager.BaseUri);
+        string relative = "/" + UrlManager.ToBaseRelativePath(UrlManager.Uri);
+
+        LogFactory.Scope("UserHead").Debug($"GetActiveCssClass: '{url}' == '{relative}'.");
+
         return relative == url ? "active" : null;
     }
 }

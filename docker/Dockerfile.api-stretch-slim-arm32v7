@@ -9,4 +9,4 @@ RUN dotnet publish -c Release -r linux-arm -o /app
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim-arm32v7
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["dotnet", "Money.Api.dll"]
+ENTRYPOINT ["./Money.Api"]

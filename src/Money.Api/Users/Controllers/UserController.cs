@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Money.Services;
 using Money.Users.Models;
 using Neptuo;
 using System;
@@ -20,15 +21,18 @@ namespace Money.Users.Controllers
         private readonly JwtOptions configuration;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly JwtSecurityTokenHandler tokenHandler;
+        private readonly Json json;
 
-        public UserController(IOptions<JwtOptions> configuration, UserManager<ApplicationUser> userManager, JwtSecurityTokenHandler tokenHandler)
+        public UserController(IOptions<JwtOptions> configuration, UserManager<ApplicationUser> userManager, JwtSecurityTokenHandler tokenHandler, Json json)
         {
             Ensure.NotNull(configuration, "configuration");
             Ensure.NotNull(userManager, "userManager");
             Ensure.NotNull(tokenHandler, "tokenHandler");
+            Ensure.NotNull(json, "json");
             this.configuration = configuration.Value;
             this.userManager = userManager;
             this.tokenHandler = tokenHandler;
+            this.json = json;
         }
 
         [HttpPost]
@@ -61,7 +65,7 @@ namespace Money.Users.Controllers
                         Token = tokenHandler.WriteToken(token)
                     };
 
-                    return Ok(response);
+                    return Content(json.Serialize(response), "text/json");
                 }
             }
 
@@ -78,7 +82,7 @@ namespace Money.Users.Controllers
             if (!result.Succeeded)
                 response.ErrorMessages.AddRange(result.Errors.Select(e => e.Description));
 
-            return Ok(response);
+            return Content(json.Serialize(response), "text/json");
         }
     }
 }

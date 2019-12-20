@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Neptuo.Events
@@ -17,13 +16,16 @@ namespace Neptuo.Events
         private readonly DefaultEventManager manager = new DefaultEventManager();
         private readonly FormatterContainer formatters;
         private readonly ILog log;
+        private readonly Json json;
 
-        public BrowserEventDispatcher(FormatterContainer formatters, ILogFactory logFactory)
+        public BrowserEventDispatcher(FormatterContainer formatters, ILogFactory logFactory, Json json)
         {
             Ensure.NotNull(formatters, "formatters");
             Ensure.NotNull(logFactory, "logFactory");
+            Ensure.NotNull(json, "json");
             this.formatters = formatters;
             this.log = logFactory.Scope("BrowserEventDispatcher");
+            this.json = json;
         }
 
         public IEventHandlerCollection Handlers => manager;
@@ -33,7 +35,10 @@ namespace Neptuo.Events
         {
             log.Debug($"Raised: {rawPayload}");
 
-            Response response = JsonSerializer.Deserialize<Response>(rawPayload);
+            Response response = json.Deserialize<Response>(rawPayload);
+
+            log.Debug($"Response: '{response.ResponseType}', '{response.Payload}'.");
+
             Type type = Type.GetType(response.Type);
             rawPayload = response.Payload;
 

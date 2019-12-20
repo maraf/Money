@@ -28,19 +28,22 @@ namespace Money.Controllers
         private readonly IQueryDispatcher queryDispatcher;
         private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
+        private readonly Json json;
 
-        public ApiController(FormatterContainer formatters, ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, CommandMapper commandMapper, QueryMapper queryMapper)
+        public ApiController(FormatterContainer formatters, ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, CommandMapper commandMapper, QueryMapper queryMapper, Json json)
         {
             Ensure.NotNull(formatters, "formatters");
             Ensure.NotNull(commandDispatcher, "commandDispatcher");
             Ensure.NotNull(queryDispatcher, "queryDispatcher");
             Ensure.NotNull(commandMapper, "commandMapper");
             Ensure.NotNull(queryMapper, "queryMapper");
+            Ensure.NotNull(json, "json");
             this.formatters = formatters;
             this.commandDispatcher = commandDispatcher;
             this.queryDispatcher = queryDispatcher;
             this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
+            this.json = json;
         }
 
         public string UserName() => HttpContext.User.Identity.Name;
@@ -97,12 +100,17 @@ namespace Money.Controllers
                     }
 
                     HttpContext.Response.ContentType = "text/json";
-                    return Json(new Response()
-                    {
-                        Payload = payload,
-                        Type = type.AssemblyQualifiedName,
-                        ResponseType = responseType
-                    });
+                    
+                    return Content(
+                        json.Serialize(
+                            new Response()
+                            {
+                                Payload = payload,
+                                Type = type.AssemblyQualifiedName,
+                                ResponseType = responseType
+                            }
+                        )
+                    );
                 }
             }
 

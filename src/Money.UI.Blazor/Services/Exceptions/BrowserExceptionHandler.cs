@@ -19,19 +19,23 @@ namespace Neptuo.Exceptions
 
         private readonly FormatterContainer formatters;
         private readonly ILog log;
+        private readonly Json json;
 
-        public BrowserExceptionHandler(FormatterContainer formatters, ILogFactory logFactory)
+        public BrowserExceptionHandler(FormatterContainer formatters, ILogFactory logFactory, Json json)
         {
             Ensure.NotNull(formatters, "formatters");
+            Ensure.NotNull(logFactory, "logFactory");
+            Ensure.NotNull(json, "json");
             this.formatters = formatters;
             this.log = logFactory.Scope("ExceptionHandler");
+            this.json = json;
         }
 
         internal void Raise(string rawPayload)
         {
             log.Debug($"'{rawPayload}'.");
 
-            Response response = JsonSerializer.Deserialize<Response>(rawPayload);
+            Response response = json.Deserialize<Response>(rawPayload);
             Type type = Type.GetType(response.Type);
             rawPayload = response.Payload;
 

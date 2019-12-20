@@ -20,6 +20,7 @@ using Money.Data;
 using Money.Hubs;
 using Money.Models;
 using Money.Models.Api;
+using Money.Services;
 using Money.Users.Data;
 using Money.Users.Models;
 
@@ -118,6 +119,7 @@ namespace Money
                 .Configure<JwtOptions>(Configuration.GetSection("Jwt"));
 
             services
+                .AddSingleton<Json>()
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddSingleton<IUserIdProvider>(new DefaultUserIdProvider())
                 .AddTransient<ExceptionMiddleware>()

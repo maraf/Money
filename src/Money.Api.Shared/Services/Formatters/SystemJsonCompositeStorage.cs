@@ -1,4 +1,5 @@
 ﻿using Money;
+using Money.Services;
 using Neptuo.Collections.Specialized;
 using Neptuo.Logging;
 using Neptuo.Models.Keys;
@@ -7,8 +8,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
+using JsonElement = System.Text.Json.JsonElement;
+using JsonProperty = System.Text.Json.JsonProperty;
 
 namespace Neptuo.Formatters
 {
@@ -16,17 +18,21 @@ namespace Neptuo.Formatters
     public class SystemJsonCompositeStorage : ICompositeStorage
     {
         private readonly ILog log;
+        private readonly Json json;
         private IDictionary<string, object> storage;
 
-        public SystemJsonCompositeStorage(ILogFactory logFactory)
-            : this(new Dictionary<string, object>(), logFactory?.Scope("Json"))
-        { }
+        public SystemJsonCompositeStorage(ILogFactory logFactory, Json json)
+            : this(new Dictionary<string, object>(), logFactory?.Scope("Json"), json)
+        {
+        }
 
-        private SystemJsonCompositeStorage(IDictionary<string, object> storage, ILog log)
+        private SystemJsonCompositeStorage(IDictionary<string, object> storage, ILog log, Json json)
         {
             Ensure.NotNull(storage, "storage");
+            Ensure.NotNull(json, "json");
             this.storage = storage;
             this.log = log;
+            this.json = json;
         }
 
         public IEnumerable<string> Keys => storage.Keys;
@@ -36,8 +42,8 @@ namespace Neptuo.Formatters
             using (StreamReader reader = new StreamReader(input))
             {
                 string value = reader.ReadToEnd();
-                storage = JsonSerializer.Deserialize<Dictionary<string, object>>(value);
-                log.Debug($"Load: '{value}' => '{JsonSerializer.Serialize(storage)}'.");
+                storage = json.Deserialize<Dictionary<string, object>>(value);
+                log.Debug($"Load: '{value}'.");
             }
         }
 
@@ -49,7 +55,7 @@ namespace Neptuo.Formatters
 
         public void Store(Stream output)
         {
-            string value = JsonSerializer.Serialize(storage);
+            string value = json.Serialize(storage);
             using (MemoryStream valueStream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
                 valueStream.CopyTo(output);
 
@@ -117,7 +123,7 @@ namespace Neptuo.Formatters
             log.Debug($"Add: Key: '{key}', SubStorage.");
             Dictionary<string, object> innerStorage = new Dictionary<string, object>();
             storage[key] = innerStorage;
-            SystemJsonCompositeStorage inner = new SystemJsonCompositeStorage(innerStorage, log);
+            SystemJsonCompositeStorage inner = new SystemJsonCompositeStorage(innerStorage, log, json);
             return inner;
         }
 
@@ -129,7 +135,7 @@ namespace Neptuo.Formatters
 
                 if (target is Dictionary<string, object> inner)
                 {
-                    storage = new SystemJsonCompositeStorage(inner, log);
+                    storage = new SystemJsonCompositeStorage(inner, log, json);
                     return true;
                 }
 
@@ -141,7 +147,7 @@ namespace Neptuo.Formatters
                         inner[property.Name] = property.Value;
                     }
 
-                    storage = new SystemJsonCompositeStorage(inner, log);
+                    storage = new SystemJsonCompositeStorage(inner, log, json);
                     return true;
                 }
             }

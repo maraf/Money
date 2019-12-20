@@ -14,7 +14,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Money.Services
@@ -30,8 +29,9 @@ namespace Money.Services
         private readonly IEventDispatcher eventDispatcher;
         private readonly Interop interop;
         private readonly ILog log;
+        private readonly Json json;
 
-        public ApiClient(IOptions<ApiClientConfiguration> configuration, TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop, ILogFactory logFactory)
+        public ApiClient(IOptions<ApiClientConfiguration> configuration, TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop, ILogFactory logFactory, Json json)
         {
             Ensure.NotNull(configuration, "configuration");
             Ensure.NotNull(token, "token");
@@ -42,6 +42,7 @@ namespace Money.Services
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
             Ensure.NotNull(interop, "interop");
             Ensure.NotNull(logFactory, "logFactory");
+            Ensure.NotNull(json, "json");
             this.configuration = configuration.Value;
             this.token = token;
             this.http = http;
@@ -51,10 +52,13 @@ namespace Money.Services
             this.eventDispatcher = eventDispatcher;
             this.interop = interop;
             this.log = logFactory.Scope("ApiClient");
+            this.json = json;
 
             http.BaseAddress = this.configuration.ApiUrl;
             EnsureAuthorization();
         }
+
+
 
         private void ClearAuthorization()
         {
@@ -82,24 +86,30 @@ namespace Money.Services
 
         public async Task<bool> LoginAsync(string userName, string password, bool isPermanent)
         {
-            LoginResponse response = await http.PostJsonAsync<LoginResponse>(
-                "/api/user/login",
-                new LoginRequest()
-                {
-                    UserName = userName,
-                    Password = password
-                }
-            );
-
-            if (!String.IsNullOrEmpty(response.Token))
+            string requestContent = json.Serialize(new LoginRequest()
             {
-                token.Value = response.Token;
-                EnsureAuthorization();
+                UserName = userName,
+                Password = password
+            });
 
-                if (isPermanent)
-                    interop.SaveToken(token.Value);
+            HttpResponseMessage responseMessage = await http.PostAsync("/api/user/login", new StringContent(requestContent, Encoding.UTF8, "text/json"));
+            if (responseMessage.StatusCode == HttpStatusCode.OK)
+            {
+                string responseContent = await responseMessage.Content.ReadAsStringAsync();
+                LoginResponse response = json.Deserialize<LoginResponse>(responseContent);
+                Console.WriteLine(responseContent);
+                Console.WriteLine(response.Token);
 
-                return true;
+                if (!String.IsNullOrEmpty(response.Token))
+                {
+                    token.Value = response.Token;
+                    EnsureAuthorization();
+
+                    if (isPermanent)
+                        interop.SaveToken(token.Value);
+
+                    return true;
+                }
             }
 
             return false;
@@ -146,14 +156,14 @@ namespace Money.Services
                     {
                         string responseContent = await response.Content.ReadAsStringAsync();
                         log.Debug($"Response: '{responseContent}'.");
-                        return JsonSerializer.Deserialize<Response>(responseContent, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+                        return json.Deserialize<Response>(responseContent);
                     }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ClearAuthorization();
                         throw new UnauthorizedAccessException();
                     }
-                    else if(response.StatusCode == HttpStatusCode.InternalServerError)
+                    else if (response.StatusCode == HttpStatusCode.InternalServerError)
                     {
                         throw new InternalServerException();
                     }

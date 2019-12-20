@@ -54,15 +54,18 @@ namespace Money.Bootstrap
             logFactory = new DefaultLogFactory("Root")
                 .AddSerializer(new ConsoleSerializer(new SingleLineLogFormatter(), logFilter));
 
-            Domain();
+            Json json = new Json();
+
+            Domain(json);
 
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
             FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter, exceptionFormatter);
-            BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters, logFactory);
-            BrowserExceptionHandler exceptionHandler = new BrowserExceptionHandler(formatters, logFactory);
+            BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters, logFactory, json);
+            BrowserExceptionHandler exceptionHandler = new BrowserExceptionHandler(formatters, logFactory, json);
 
             services
                 //.AddSingleton(priceCalculator)
+                .AddSingleton(json)
                 .AddSingleton(formatters)
                 .AddSingleton(logFactory)
                 .AddSingleton<MessageBuilder>()
@@ -87,7 +90,7 @@ namespace Money.Bootstrap
             //priceCalculator.InitializeAsync(queryDispatcher);
         }
 
-        private void Domain()
+        private void Domain(Json json)
         {
             Converts.Repository
                 .AddStringTo<int>(Int32.TryParse)
@@ -102,7 +105,7 @@ namespace Money.Bootstrap
                 //.Add(new ColorConverter())
                 //.AddToStringSearchHandler();
 
-            IFactory<ICompositeStorage> compositeStorageFactory = Factory.Getter(() => new SystemJsonCompositeStorage(logFactory));
+            IFactory<ICompositeStorage> compositeStorageFactory = Factory.Getter(() => new SystemJsonCompositeStorage(logFactory, json));
 
             typeProvider = new ReflectionCompositeTypeProvider(
                 new ReflectionCompositeDelegateFactory(),

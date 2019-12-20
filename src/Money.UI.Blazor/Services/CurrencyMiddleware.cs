@@ -81,7 +81,7 @@ namespace Money.Services
             foreach (CurrencyModel model in models)
                 model.IsDefault = false;
 
-            return Update(payload.UniqueCode, model => model.IsDefault = false);
+            return Update(payload.UniqueCode, model => model.IsDefault = true);
         }
 
         Task IEventHandler<CurrencySymbolChanged>.HandleAsync(CurrencySymbolChanged payload)

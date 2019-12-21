@@ -27,7 +27,8 @@ namespace Money.Models.Builders
         IEventHandler<CurrencyDeleted>,
         IQueryHandler<ListAllCurrency, List<CurrencyModel>>,
         IQueryHandler<ListTargetCurrencyExchangeRates, List<ExchangeRateModel>>,
-        IQueryHandler<GetCurrencyDefault, string>
+        IQueryHandler<GetCurrencyDefault, string>,
+        IQueryHandler<FindCurrencyDefault, string>
     {
         private readonly IFactory<ReadModelContext> readModelContextFactory;
 
@@ -153,6 +154,15 @@ namespace Money.Models.Builders
             {
                 CurrencyEntity currency = await db.Currencies.WhereUserKey(query.UserKey).FirstAsync(c => c.IsDefault);
                 return currency.UniqueCode;
+            }
+        }
+
+        public async Task<string> HandleAsync(FindCurrencyDefault query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                CurrencyEntity currency = await db.Currencies.WhereUserKey(query.UserKey).FirstOrDefaultAsync(c => c.IsDefault);
+                return currency?.UniqueCode;
             }
         }
     }

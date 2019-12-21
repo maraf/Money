@@ -20,6 +20,7 @@ namespace Money.Models.Api
 
             Add<ListAllCurrency>("currency-list");
             Add<GetCurrencyDefault>("currency-default");
+            Add<FindCurrencyDefault>("currency-default-nullable");
             Add<GetCurrencySymbol>("currency-symbol");
             Add<ListTargetCurrencyExchangeRates>("currency-exchangerates");
 

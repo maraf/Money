@@ -42,6 +42,12 @@ namespace Money.Services
                 if (model != null)
                     return model.UniqueCode;
             }
+            else if (query is FindCurrencyDefault currencyDefaultNullable)
+            {
+                CurrencyModel model = models.FirstOrDefault(c => c.IsDefault);
+                if (model != null)
+                    return model.UniqueCode;
+            }
             else if (query is GetCurrencySymbol currencySymbol)
             {
                 CurrencyModel model = Find(currencySymbol.UniqueCode);

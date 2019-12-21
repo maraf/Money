@@ -6,13 +6,21 @@ $actionButtonColor: #333;
 }
 
 body {
+    position: relative;
     min-width: $bodyMinWidth;
+    min-height: 100vh;
     padding-top: 30px;
     padding-bottom: 20px;
 }
 
 .body-content {
     margin-top: 20px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 h4 {

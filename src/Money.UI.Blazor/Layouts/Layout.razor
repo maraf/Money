@@ -10,16 +10,17 @@
 </nav>
 <div class="container body-content">
     @Body
-
-    <hr />
-
-    <footer>
-        <p>&copy; 2019 - Neptuo</p>
-    </footer>
 </div>
 
+<footer>
+    <div class="container">
+        <hr />
+        <p>&copy; 2019 - Neptuo</p>
+    </div>
+</footer>
+
 @code
-{ 
+{
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

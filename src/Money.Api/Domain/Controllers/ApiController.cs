@@ -23,6 +23,8 @@ namespace Money.Controllers
     [Route("[controller]/[action]")]
     public class ApiController : Controller
     {
+        private static Type[] plainTypes = new[] { typeof(string), typeof(int), typeof(decimal), typeof(bool) };
+
         private readonly FormatterContainer formatters;
         private readonly ICommandDispatcher commandDispatcher;
         private readonly IQueryDispatcher queryDispatcher;
@@ -84,12 +86,13 @@ namespace Money.Controllers
                 task.Wait();
 
                 object output = task.GetType().GetProperty(nameof(Task<object>.Result)).GetValue(task);
+
+                ResponseType responseType = ResponseType.Composite;
                 if (output != null)
                 {
-                    ResponseType responseType = ResponseType.Composite;
                     type = output.GetType();
-                    
-                    if (output is string || output is int || output is decimal || output is bool)
+
+                    if (plainTypes.Contains(type))
                     {
                         payload = output.ToString();
                         responseType = ResponseType.Plain;
@@ -98,20 +101,27 @@ namespace Money.Controllers
                     {
                         payload = formatters.Query.Serialize(output);
                     }
-
-                    HttpContext.Response.ContentType = "text/json";
-                    
-                    return Content(
-                        json.Serialize(
-                            new Response()
-                            {
-                                Payload = payload,
-                                Type = type.AssemblyQualifiedName,
-                                ResponseType = responseType
-                            }
-                        )
-                    );
                 }
+                else
+                {
+                    type = type.GetInterfaces().First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQuery<>)).GetGenericArguments()[0];
+                    payload = null;
+                    if (plainTypes.Contains(type))
+                        responseType = ResponseType.Plain;
+                }
+
+                HttpContext.Response.ContentType = "text/json";
+
+                return Content(
+                    json.Serialize(
+                        new Response()
+                        {
+                            Payload = payload,
+                            Type = type.AssemblyQualifiedName,
+                            ResponseType = responseType
+                        }
+                    )
+                );
             }
 
             return NotFound();

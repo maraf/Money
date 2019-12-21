@@ -54,8 +54,8 @@ namespace Neptuo.Queries
                     }
                 }
 
-                log.Debug("Fallback to default value.");
-                return Activator.CreateInstance<TOutput>();
+                log.Debug("Fallback to null value.");
+                return (TOutput)(object)null;
             }
 
             public async Task<object> ExecuteRawAsync(object query)

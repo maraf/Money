@@ -242,6 +242,12 @@ namespace Money.Pages
             StateHasChanged();
         }
 
+        protected void CreateNewExpense()
+        {
+            CreateModal.Show();
+            StateHasChanged();
+        }
+
         #endregion
     }
 }

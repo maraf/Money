@@ -28,12 +28,17 @@ namespace Money.Components
         [Inject]
         internal ILog<OutcomeCreate> Log { get; set; }
 
+        [Inject]
+        internal Navigator Navigator { get; set; }
+
         protected string Title { get; set; }
         protected string SaveButtonText { get; set; }
         protected List<string> ErrorMessages { get; } = new List<string>();
 
         protected List<CategoryModel> Categories { get; private set; }
         protected List<CurrencyModel> Currencies { get; private set; }
+
+        protected Confirm PrerequisitesConfirm { get; set; }
 
         [Parameter]
         public decimal Amount { get; set; }
@@ -59,7 +64,7 @@ namespace Money.Components
 
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
-            Currency = await Queries.QueryAsync(new GetCurrencyDefault());
+            Currency = await Queries.QueryAsync(new FindCurrencyDefault());
         }
 
         protected void OnSaveClick()
@@ -93,6 +98,22 @@ namespace Money.Components
             CategoryKey = null;
             Description = null;
             StateHasChanged();
+        }
+
+        public override void Show()
+        {
+            if (Currencies.Count == 0 || Categories.Count == 0)
+                PrerequisitesConfirm.Show();
+            else
+                base.Show();
+        }
+
+        protected void OnPrerequisitesConfirmed()
+        {
+            if (Currencies.Count == 0)
+                Navigator.OpenCurrencies();
+            else if (Categories.Count == 0)
+                Navigator.OpenCategories();
         }
     }
 }

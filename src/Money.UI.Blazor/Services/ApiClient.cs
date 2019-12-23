@@ -21,67 +21,34 @@ namespace Money.Services
     public class ApiClient
     {
         private readonly ApiClientConfiguration configuration;
-        private readonly TokenContainer token;
         private readonly HttpClient http;
         private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
         private readonly IExceptionHandler exceptionHandler;
-        private readonly IEventDispatcher eventDispatcher;
-        private readonly Interop interop;
+        private readonly ApiAuthenticationStateProvider authenticationState;
         private readonly ILog log;
         private readonly Json json;
 
-        public ApiClient(IOptions<ApiClientConfiguration> configuration, TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop, ILogFactory logFactory, Json json)
+        public ApiClient(IOptions<ApiClientConfiguration> configuration, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, ApiAuthenticationStateProvider authenticationState, ILogFactory logFactory, Json json)
         {
             Ensure.NotNull(configuration, "configuration");
-            Ensure.NotNull(token, "token");
             Ensure.NotNull(http, "http");
             Ensure.NotNull(commandMapper, "commandMapper");
             Ensure.NotNull(queryMapper, "queryMapper");
             Ensure.NotNull(exceptionHandler, "exceptionHandler");
-            Ensure.NotNull(eventDispatcher, "eventDispatcher");
-            Ensure.NotNull(interop, "interop");
+            Ensure.NotNull(authenticationState, "authenticationState");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNull(json, "json");
             this.configuration = configuration.Value;
-            this.token = token;
             this.http = http;
             this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
             this.exceptionHandler = exceptionHandler;
-            this.eventDispatcher = eventDispatcher;
-            this.interop = interop;
+            this.authenticationState = authenticationState;
             this.log = logFactory.Scope("ApiClient");
             this.json = json;
 
             http.BaseAddress = this.configuration.ApiUrl;
-            EnsureAuthorization();
-        }
-
-
-
-        private void ClearAuthorization()
-        {
-            if (token.HasValue)
-            {
-                token.Value = null;
-                http.DefaultRequestHeaders.Authorization = null;
-                interop.SaveToken(null);
-                interop.StopSignalR();
-
-                eventDispatcher.PublishAsync(new UserSignedOut());
-            }
-        }
-
-        private void EnsureAuthorization()
-        {
-            if (token.HasValue && http.DefaultRequestHeaders.Authorization?.Parameter != token.Value)
-            {
-                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-                interop.StartSignalR(configuration.ApiUrl.ToString() + "api", token.Value);
-
-                eventDispatcher.PublishAsync(new UserSignedIn());
-            }
         }
 
         public async Task<bool> LoginAsync(string userName, string password, bool isPermanent)
@@ -102,12 +69,7 @@ namespace Money.Services
 
                 if (!String.IsNullOrEmpty(response.Token))
                 {
-                    token.Value = response.Token;
-                    EnsureAuthorization();
-
-                    if (isPermanent)
-                        interop.SaveToken(token.Value);
-
+                    await authenticationState.SetTokenAsync(response.Token, isPermanent);
                     return true;
                 }
             }
@@ -115,11 +77,8 @@ namespace Money.Services
             return false;
         }
 
-        public Task LogoutAsync()
-        {
-            ClearAuthorization();
-            return Task.CompletedTask;
-        }
+        public Task LogoutAsync() 
+            => authenticationState.SetTokenAsync(null);
 
         public async Task<RegisterResponse> RegisterAsync(string userName, string password)
         {
@@ -140,12 +99,6 @@ namespace Money.Services
 
         public async Task<Response> QueryAsync(Type type, string payload)
         {
-            if (!token.HasValue)
-            {
-                token.Value = await interop.LoadTokenAsync();
-                EnsureAuthorization();
-            }
-
             string url = queryMapper.FindUrlByType(type);
             if (url != null)
             {
@@ -160,7 +113,7 @@ namespace Money.Services
                     }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ClearAuthorization();
+                        await authenticationState.SetTokenAsync(null);
                         throw new UnauthorizedAccessException();
                     }
                     else if (response.StatusCode == HttpStatusCode.InternalServerError)

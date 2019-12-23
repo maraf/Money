@@ -1,10 +1,20 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="routeData" />
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(Layouts.Layout)">
-            <NotFound />
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layouts.Layout)">
+                <NotAuthorized>
+                    <h1>Access denied</h1>
+                    <p>Only logged-in mission commanders may access this area.</p>
+                </NotAuthorized>
+                <Authorizing>
+                    Wait...
+                </Authorizing>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(Layouts.Layout)">
+                <NotFound />
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

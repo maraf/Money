@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Money.Components;
 using Money.Components.Bootstrap;
 using Money.Models;
 using Money.Models.Api;
@@ -20,6 +21,7 @@ namespace Money
             services
                 .Configure<ApiClientConfiguration>(BindApiClientConfiguration)
                 .AddTransient<Interop>()
+                .AddSingleton<PwaInstallInterop>()
                 .AddTransient<NavigatorUrl>()
                 .AddTransient<Navigator>()
                 .AddSingleton<ApiClient>()

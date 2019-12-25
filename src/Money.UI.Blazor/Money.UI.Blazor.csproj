@@ -60,4 +60,8 @@
     <Compile Update="**\*.razor.cs" DependentUpon="%(Filename)" />
     <Watch Include="**\*.razor" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\PwaInstall.razor" />
+  </ItemGroup>
 </Project>

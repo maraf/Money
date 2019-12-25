@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.JSInterop;
 using Money.Models;
 using Neptuo;
 using Neptuo.Models.Keys;
@@ -15,15 +16,18 @@ namespace Money.Services
     {
         private readonly NavigationManager manager;
         private readonly Interop interop;
+        private readonly IJSRuntime jsRuntime;
 
         public event Action<string> LocationChanged;
 
-        public Navigator(NavigationManager manager, Interop interop)
+        public Navigator(NavigationManager manager, Interop interop, IJSRuntime jsRuntime)
         {
             Ensure.NotNull(manager, "manager");
             Ensure.NotNull(interop, "interop");
+            Ensure.NotNull(jsRuntime, "jsRuntime");
             this.manager = manager;
             this.interop = interop;
+            this.jsRuntime = jsRuntime;
 
             manager.LocationChanged += OnLocationChanged;
         }
@@ -35,6 +39,9 @@ namespace Money.Services
 
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
             => LocationChanged?.Invoke(e.Location);
+
+        public ValueTask ReloadAsync()
+            => jsRuntime.InvokeVoidAsync("window.location.reload");
 
         private void OpenExternal(string url)
             => interop.NavigateTo(url);

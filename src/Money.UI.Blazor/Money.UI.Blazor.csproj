@@ -16,7 +16,31 @@
     <BlazorLinkOnBuild>false</BlazorLinkOnBuild>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <ManifestShortName>Money</ManifestShortName>
+    <ManifestLongName>Money by Neptuo</ManifestLongName>
+
+    <ServiceWorkerFileName>service-worker.js</ServiceWorkerFileName>
+    <ServiceWorkerRegisterFileName>service-worker-register.js</ServiceWorkerRegisterFileName>
+    <ServiceWorkerForce>true</ServiceWorkerForce>
+    <ServiceWorkerCacheVersion Condition="'$(Configuration)' == 'Debug'">0.0.$([System.DateTime]::Now.Ticks)</ServiceWorkerCacheVersion>
+    <ServiceWorkerCacheVersion Condition="'$(Configuration)' == 'Release'">$(Version)</ServiceWorkerCacheVersion>
+    <ServiceWorkerRegisterInstallableType>installable-blazor</ServiceWorkerRegisterInstallableType>
+    <ServiceWorkerBlazorInstallMethod>Pwa.Installable</ServiceWorkerBlazorInstallMethod>
+    <ServiceWorkerRegisterUpdateType>update-blazor</ServiceWorkerRegisterUpdateType>
+  </PropertyGroup>
+
+  <Target Name="PWACustomise" BeforeTargets="CreatePWA">
+    <PropertyGroup>
+      <ServiceWorkerPreCacheExcludeFiles>
+        $(WWWRoot)**\*.scss;
+      </ServiceWorkerPreCacheExcludeFiles>
+    </PropertyGroup>
+    <Message Importance="high" Text="Removing: $(ServiceWorkerPreCacheExcludeFiles)" />
+  </Target>
+
   <ItemGroup>
+    <PackageReference Include="BlazorPWA.MSBuild" Version="1.0.2" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview4.19579.2" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="3.1.0-preview4.19579.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview4.19579.2" />
@@ -31,9 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\index.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Update="wwwroot\index.html" CopyToOutputDirectory="PreserveNewest" />
     <Compile Update="**\*.razor.cs" DependentUpon="%(Filename)" />
     <Watch Include="**\*.razor" />
   </ItemGroup>

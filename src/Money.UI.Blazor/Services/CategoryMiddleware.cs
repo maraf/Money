@@ -23,6 +23,7 @@ namespace Money.Services
     {
         private readonly NetworkState network;
         private readonly CategoryStorage localStorage;
+
         private readonly List<CategoryModel> models = new List<CategoryModel>();
         private Task listAllTask;
 

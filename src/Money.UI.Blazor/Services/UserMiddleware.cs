@@ -1,6 +1,7 @@
 ﻿using Money.Events;
 using Money.Models;
 using Money.Queries;
+using Neptuo;
 using Neptuo.Events.Handlers;
 using Neptuo.Queries;
 using System;
@@ -15,8 +16,19 @@ namespace Money.Services
         IEventHandler<EmailChanged>,
         IEventHandler<UserSignedOut>
     {
+        private readonly NetworkState network;
+        private readonly ProfileStorage localStorage;
+
         private ProfileModel profile;
         private Task getProfileTask;
+
+        public UserMiddleware(NetworkState network, ProfileStorage localStorage)
+        {
+            Ensure.NotNull(network, "network");
+            Ensure.NotNull(localStorage, "localStorage");
+            this.network = network;
+            this.localStorage = localStorage;
+        }
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
         {
@@ -38,7 +50,15 @@ namespace Money.Services
 
         private async Task LoadProfileAsync(GetProfile query, HttpQueryDispatcher.Next next)
         {
+            if (!network.IsOnline)
+            {
+                profile = await localStorage.LoadAsync();
+                if (profile != null)
+                    return;
+            }
+
             profile = (ProfileModel)await next(query);
+            await localStorage.SaveAsync(profile);
         }
 
         Task IEventHandler<EmailChanged>.HandleAsync(EmailChanged payload)

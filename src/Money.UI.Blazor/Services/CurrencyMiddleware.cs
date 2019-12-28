@@ -22,6 +22,7 @@ namespace Money.Services
     {
         private readonly NetworkState network;
         private readonly CurrencyStorage localStorage;
+
         private readonly List<CurrencyModel> models = new List<CurrencyModel>();
         private Task listAllTask;
 

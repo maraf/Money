@@ -13,3 +13,4 @@ Also, we have experimental implementation using [Blazor](https://github.com/aspn
  - [Blazor and the booting screen](https://www.neptuo.com/blog/2018/04/blazor-boot-screen/).
  - [Blazor and complex component parameters](https://www.neptuo.com/blog/2018/06/blazor-component-parameters/).
  - [Blazor and page parameters](https://www.neptuo.com/blog/2018/11/blazor-page-parameters/).
+ - [Blazor and network](https://www.neptuo.com/blog/2019/12/blazor-network-status/).

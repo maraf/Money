@@ -27,6 +27,7 @@ namespace Money
                 .AddTransient<NetworkStateInterop>()
                 .AddSingleton<NetworkState>()
                 .AddTransient<CurrencyStorage>()
+                .AddTransient<CategoryStorage>()
                 .AddTransient<NavigatorUrl>()
                 .AddSingleton<Navigator>()
                 .AddSingleton<ApiClient>()

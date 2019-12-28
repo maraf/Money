@@ -16,7 +16,7 @@ namespace Money.Models
         /// <summary>
         /// Gets a key of the category.
         /// </summary>
-        public virtual IKey Key { get; private set; }
+        public virtual IKey Key { get; set; }
 
         /// <summary>
         /// Gets a name of the category.
@@ -37,6 +37,10 @@ namespace Money.Models
         /// Gets a font icon of the category.
         /// </summary>
         public virtual string Icon { get; set; }
+
+        [Obsolete("Only for deserialization.")]
+        public CategoryModel()
+        { }
 
         public CategoryModel(IKey key, string name, string description, Color color, string icon)
         {

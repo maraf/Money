@@ -1,6 +1,7 @@
 ﻿using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Neptuo;
 using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
@@ -20,8 +21,18 @@ namespace Money.Services
         IEventHandler<CategoryDeleted>,
         IEventHandler<UserSignedOut>
     {
+        private readonly NetworkState network;
+        private readonly CategoryStorage localStorage;
         private readonly List<CategoryModel> models = new List<CategoryModel>();
         private Task listAllTask;
+
+        public CategoryMiddleware(NetworkState network, CategoryStorage localStorage)
+        {
+            Ensure.NotNull(network, "network");
+            Ensure.NotNull(localStorage, "localStorage");
+            this.network = network;
+            this.localStorage = localStorage;
+        }
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
         {
@@ -77,7 +88,18 @@ namespace Money.Services
         private async Task LoadAllAsync(ListAllCategory listAll, HttpQueryDispatcher.Next next)
         {
             models.Clear();
+            if (!network.IsOnline)
+            {
+                var items = await localStorage.LoadAsync();
+                if (items != null)
+                {
+                    models.AddRange(items);
+                    return;
+                }
+            }
+
             models.AddRange((List<CategoryModel>)await next(listAll));
+            await localStorage.SaveAsync(models);
         }
 
         private CategoryModel Find(IKey key)

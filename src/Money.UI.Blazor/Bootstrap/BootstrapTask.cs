@@ -37,6 +37,8 @@ namespace Money.Bootstrap
         private IFormatter queryFormatter;
         private IFormatter exceptionFormatter;
 
+        private BrowserEventDispatcher eventDispatcher;
+
         public BootstrapTask(IServiceCollection services)
         {
             Ensure.NotNull(services, "services");
@@ -60,7 +62,7 @@ namespace Money.Bootstrap
 
             //priceCalculator = new PriceCalculator(eventDispatcher.Handlers);
             FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter, exceptionFormatter);
-            BrowserEventDispatcher eventDispatcher = new BrowserEventDispatcher(formatters, logFactory, json);
+            eventDispatcher = new BrowserEventDispatcher(formatters, logFactory, json);
             BrowserExceptionHandler exceptionHandler = new BrowserExceptionHandler(formatters, logFactory, json);
 
             services
@@ -79,7 +81,17 @@ namespace Money.Bootstrap
                 .AddSingleton(exceptionHandler.Handler)
                 .AddSingleton(exceptionHandler.HandlerBuilder);
 
-            QueryMiddlewares(eventDispatcher.Handlers);
+            void AddMiddleware<T>(IServiceCollection services)
+                where T : class, HttpQueryDispatcher.IMiddleware
+            {
+                services
+                    .AddSingleton<T>()
+                    .AddTransient<HttpQueryDispatcher.IMiddleware>(sp => sp.GetService<T>());
+            }
+
+            AddMiddleware<CategoryMiddleware>(services);
+            AddMiddleware<CurrencyMiddleware>(services);
+            AddMiddleware<UserMiddleware>(services);
 
             //CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 
@@ -118,18 +130,11 @@ namespace Money.Bootstrap
             exceptionFormatter = new CompositeExceptionFormatter(typeProvider, compositeStorageFactory);
         }
 
-        private void QueryMiddlewares(IEventHandlerCollection handlers)
+        internal void RegisterHandlers(IServiceProvider serviceProvider)
         {
-            void AddMiddlewareAndEventHandler<T>(T handler)
-                where T : HttpQueryDispatcher.IMiddleware
-            {
-                handlers.AddAll(handler);
-                services.AddSingleton<HttpQueryDispatcher.IMiddleware>(handler);
-            }
-
-            AddMiddlewareAndEventHandler(new CategoryMiddleware());
-            AddMiddlewareAndEventHandler(new CurrencyMiddleware());
-            AddMiddlewareAndEventHandler(new UserMiddleware());
+            eventDispatcher.Handlers.AddAll(serviceProvider.GetService<CategoryMiddleware>());
+            eventDispatcher.Handlers.AddAll(serviceProvider.GetService<CurrencyMiddleware>());
+            eventDispatcher.Handlers.AddAll(serviceProvider.GetService<UserMiddleware>());
         }
     }
 }

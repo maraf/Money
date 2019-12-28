@@ -16,6 +16,8 @@ namespace Money
 {
     internal class Startup
     {
+        private Bootstrap.BootstrapTask bootstrapTask;
+
         public void ConfigureServices(IServiceCollection services)
         {
             services
@@ -24,6 +26,7 @@ namespace Money
                 .AddSingleton<PwaInstallInterop>()
                 .AddTransient<NetworkStateInterop>()
                 .AddSingleton<NetworkState>()
+                .AddTransient<CurrencyStorage>()
                 .AddTransient<NavigatorUrl>()
                 .AddSingleton<Navigator>()
                 .AddSingleton<ApiClient>()
@@ -35,7 +38,7 @@ namespace Money
                 .AddSingleton<ColorCollection>()
                 .AddSingleton<IconCollection>();
 
-            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services);
+            bootstrapTask = new Bootstrap.BootstrapTask(services);
             bootstrapTask.Initialize();
         }
 
@@ -51,6 +54,8 @@ namespace Money
         public void Configure(IComponentsApplicationBuilder app, Interop interop)
         {
             app.AddComponent<App>("app");
+
+            bootstrapTask.RegisterHandlers(app.Services);
 
             interop.ApplicationStarted();
         }

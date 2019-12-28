@@ -1,6 +1,7 @@
 ﻿using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Neptuo;
 using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
@@ -19,8 +20,18 @@ namespace Money.Services
         IEventHandler<CurrencyDeleted>,
         IEventHandler<UserSignedOut>
     {
+        private readonly NetworkState network;
+        private readonly CurrencyStorage localStorage;
         private readonly List<CurrencyModel> models = new List<CurrencyModel>();
         private Task listAllTask;
+
+        public CurrencyMiddleware(NetworkState network, CurrencyStorage localStorage)
+        {
+            Ensure.NotNull(network, "network");
+            Ensure.NotNull(localStorage, "localStorage");
+            this.network = network;
+            this.localStorage = localStorage;
+        }
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
         {
@@ -61,7 +72,18 @@ namespace Money.Services
         private async Task LoadAllAsync(ListAllCurrency listAll, HttpQueryDispatcher.Next next)
         {
             models.Clear();
+            if (!network.IsOnline)
+            {
+                var items = await localStorage.LoadAsync();
+                if (items != null)
+                {
+                    models.AddRange(items);
+                    return;
+                }
+            }
+
             models.AddRange((List<CurrencyModel>)await next(listAll));
+            await localStorage.SaveAsync(models);
         }
 
         private CurrencyModel Find(string uniqueCode)

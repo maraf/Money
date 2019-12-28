@@ -15,7 +15,7 @@ namespace Money.Models
         /// <summary>
         /// Gets an unique currency code.
         /// </summary>
-        public string UniqueCode { get; private set; }
+        public string UniqueCode { get; set; }
 
         /// <summary>
         /// Gets a currency symbol.
@@ -26,6 +26,10 @@ namespace Money.Models
         /// Gets a <c>true</c> if a currency is the default one.
         /// </summary>
         public bool IsDefault { get; set; }
+
+        [Obsolete("Only for deserialization.")]
+        public CurrencyModel()
+        { }
 
         /// <summary>
         /// Creates a new instance.

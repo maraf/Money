@@ -14,8 +14,8 @@ namespace Money.Services
 {
     public class CurrencyStorage : JsonLocalStorage<List<CurrencyModel>>
     {
-        public CurrencyStorage(Json json, IJSRuntime jsRuntime, ILogFactory logFactory)
-            : base(json, jsRuntime, logFactory, "currencies")
+        public CurrencyStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory)
+            : base(formatters, jsRuntime, logFactory, "currencies")
         { }
     }
 }

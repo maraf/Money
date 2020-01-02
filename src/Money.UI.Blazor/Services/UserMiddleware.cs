@@ -61,19 +61,18 @@ namespace Money.Services
             await localStorage.SaveAsync(profile);
         }
 
-        Task IEventHandler<EmailChanged>.HandleAsync(EmailChanged payload)
+        async Task IEventHandler<EmailChanged>.HandleAsync(EmailChanged payload)
         {
             if (profile != null)
                 profile.Email = payload.Email;
 
-            return Task.CompletedTask;
+            await localStorage.SaveAsync(profile);
         }
 
-        Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
+        async Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
         {
             profile = null;
-
-            return Task.CompletedTask;
+            await localStorage.DeleteAsync();
         }
     }
 }

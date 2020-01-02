@@ -243,7 +243,7 @@ namespace Neptuo.Formatters.Metadata
                 }
             }
 
-            if (defaultConstructor != null)
+            if (defaultConstructor != null && !constructors.ContainsKey(1))
                 constructors[1] = defaultConstructor;
 
             return constructors;

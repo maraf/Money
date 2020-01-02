@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using JsonElement = System.Text.Json.JsonElement;
 using JsonProperty = System.Text.Json.JsonProperty;
@@ -59,8 +60,12 @@ namespace Neptuo.Formatters
             using (MemoryStream valueStream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
                 valueStream.CopyTo(output);
 
-            log.Debug($"Store: Keys: '{String.Join(", ", storage.Keys)}'.");
-            log.Debug($"Store: Payload-Keys: '{String.Join(", ", ((IDictionary<string, object>)storage["Payload"]).Keys)}'.");
+            if (log.IsDebugEnabled())
+            {
+                log.Debug($"Store: Keys: '{String.Join(", ", storage.Keys)}'.");
+                if (storage.ContainsKey("Payload"))
+                    log.Debug($"Store: Payload-Keys: '{String.Join(", ", ((IDictionary<string, object>)storage["Payload"]).Keys)}'.");
+            }
         }
 
         public Task StoreAsync(Stream output)
@@ -131,7 +136,7 @@ namespace Neptuo.Formatters
         {
             if (this.storage.TryGetValue(key, out object target))
             {
-                log.Debug($"Get: Key: '{key}', RequiredType: '{typeof(ICompositeStorage).FullName}', ActualType: '{target.GetType().FullName}'.");
+                log.Debug($"GetStorage: Key: '{key}', RequiredType: '{typeof(ICompositeStorage).FullName}', ActualType: '{target.GetType().FullName}'.");
 
                 if (target is Dictionary<string, object> inner)
                 {
@@ -141,9 +146,12 @@ namespace Neptuo.Formatters
 
                 if (target is JsonElement element)
                 {
+                    log.Debug($"JsonElement: '{element}'.");
+
                     inner = new Dictionary<string, object>();
                     foreach (JsonProperty property in element.EnumerateObject())
                     {
+                        log.Debug($"Adding key '{property.Name}': '{property.Value}'.");
                         inner[property.Name] = property.Value;
                     }
 
@@ -271,7 +279,7 @@ namespace Neptuo.Formatters
                 }
             }
 
-            log.Debug($"Get: Key: '{key}' NOT FOUND.");
+            log.Debug($"Get: Key: '{key}' NOT FOUND. Storage: '{JsonSerializer.Serialize(storage)}'.");
             value = default(T);
             return false;
         }

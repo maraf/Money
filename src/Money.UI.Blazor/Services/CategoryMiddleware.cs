@@ -106,19 +106,19 @@ namespace Money.Services
         private CategoryModel Find(IKey key)
             => models.FirstOrDefault(c => c.Key.Equals(key));
 
-        private Task Update(IKey key, Action<CategoryModel> handler)
+        private async Task Update(IKey key, Action<CategoryModel> handler)
         {
             CategoryModel model = Find(key);
             if (model != null)
                 handler(model);
 
-            return Task.CompletedTask;
+            await localStorage.SaveAsync(models);
         }
 
-        Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload)
+        async Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload)
         {
             models.Add(new CategoryModel(payload.AggregateKey, payload.Name, null, payload.Color, null));
-            return Task.CompletedTask;
+            await localStorage.SaveAsync(models);
         }
 
         Task IEventHandler<CategoryDescriptionChanged>.HandleAsync(CategoryDescriptionChanged payload)
@@ -133,10 +133,10 @@ namespace Money.Services
         Task IEventHandler<CategoryDeleted>.HandleAsync(CategoryDeleted payload)
             => Update(payload.AggregateKey, model => models.Remove(model));
 
-        Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
+        async Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
         {
             models.Clear();
-            return Task.CompletedTask;
+            await localStorage.DeleteAsync();
         }
     }
 }

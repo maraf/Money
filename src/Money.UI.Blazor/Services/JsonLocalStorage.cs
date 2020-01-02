@@ -1,6 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using Money.Models;
 using Neptuo;
+using Neptuo.Formatters;
 using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,18 @@ namespace Money.Services
     public abstract class JsonLocalStorage<T>
         where T : class
     {
-        private readonly Json json;
+        private readonly FormatterContainer formatters;
         private readonly IJSRuntime jsRuntime;
         private readonly ILog log;
         private readonly string key;
 
-        public JsonLocalStorage(Json json, IJSRuntime jsRuntime, ILogFactory logFactory, string key)
+        public JsonLocalStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory, string key)
         {
-            Ensure.NotNull(json, "json");
+            Ensure.NotNull(formatters, "formatters");
             Ensure.NotNull(jsRuntime, "jsRuntime");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNullOrEmpty(key, "key");
-            this.json = json;
+            this.formatters = formatters;
             this.jsRuntime = jsRuntime;
             this.log = logFactory.Scope(GetType().Name);
             this.key = key;
@@ -40,7 +41,7 @@ namespace Money.Services
                 if (String.IsNullOrEmpty(raw))
                     return null;
 
-                T model = json.Deserialize<T>(raw);
+                T model = formatters.Query.Deserialize<T>(raw);
                 return model;
             }
             catch (Exception e)
@@ -52,9 +53,15 @@ namespace Money.Services
 
         public async Task SaveAsync(T model)
         {
-            string raw = json.Serialize(model);
+            string raw = formatters.Query.Serialize(model);
             await jsRuntime.InvokeVoidAsync("window.localStorage.setItem", key, raw);
             log.Debug($"Saved '{raw}'.");
+        }
+
+        public async Task DeleteAsync()
+        {
+            await jsRuntime.InvokeVoidAsync("window.localStorage.removeItem", key);
+            log.Debug($"Deleted.");
         }
     }
 }

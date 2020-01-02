@@ -12,8 +12,8 @@ namespace Money.Services
 {
     public class ProfileStorage : JsonLocalStorage<ProfileModel>
     {
-        public ProfileStorage(Json json, IJSRuntime jsRuntime, ILogFactory logFactory) 
-            : base(json, jsRuntime, logFactory, "profile")
+        public ProfileStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory) 
+            : base(formatters, jsRuntime, logFactory, "profile")
         { }
     }
 }

@@ -90,19 +90,19 @@ namespace Money.Services
         private CurrencyModel Find(string uniqueCode)
             => models.FirstOrDefault(c => c.UniqueCode.Equals(uniqueCode));
 
-        private Task Update(string uniqueCode, Action<CurrencyModel> handler)
+        private async Task Update(string uniqueCode, Action<CurrencyModel> handler)
         {
             CurrencyModel model = Find(uniqueCode);
             if (model != null)
                 handler(model);
 
-            return Task.CompletedTask;
+            await localStorage.SaveAsync(models);
         }
 
-        Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
+        async Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
         {
             models.Add(new CurrencyModel(payload.UniqueCode, payload.Symbol, false));
-            return Task.CompletedTask;
+            await localStorage.SaveAsync(models);
         }
 
         Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
@@ -119,10 +119,10 @@ namespace Money.Services
         Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload)
             => Update(payload.UniqueCode, model => models.Remove(model));
 
-        Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
+        async Task IEventHandler<UserSignedOut>.HandleAsync(UserSignedOut payload)
         {
             models.Clear();
-            return Task.CompletedTask;
+            await localStorage.DeleteAsync();
         }
     }
 }

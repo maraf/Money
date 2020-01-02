@@ -13,8 +13,8 @@ namespace Money.Services
 {
     public class CategoryStorage : JsonLocalStorage<List<CategoryModel>>
     {
-        public CategoryStorage(Json json, IJSRuntime jsRuntime, ILogFactory logFactory)
-            : base(json, jsRuntime, logFactory, "categories")
+        public CategoryStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory)
+            : base(formatters, jsRuntime, logFactory, "categories")
         { }
     }
 }

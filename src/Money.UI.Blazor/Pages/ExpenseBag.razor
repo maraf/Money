@@ -1,0 +1,21 @@
+﻿@page "/expenses"
+
+<Money.Components.Title Icon="signal" Main="Offline mode" ButtonText="New Expense" ButtonClick="@CreateNewExpense" />
+<ExceptionPanel />
+
+<OutcomeCreate @ref="CreateModal" />
+
+<Loading Context="@Loading">
+    @if (Models.Count == 0)
+    {
+        <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
+    }
+    else
+    {
+        foreach (var model in Models)
+        {
+            @model.Amount
+            <br />
+        }
+    }
+</Loading>

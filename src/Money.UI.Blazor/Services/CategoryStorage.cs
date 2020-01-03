@@ -14,7 +14,7 @@ namespace Money.Services
     public class CategoryStorage : JsonLocalStorage<List<CategoryModel>>
     {
         public CategoryStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory)
-            : base(formatters, jsRuntime, logFactory, "categories")
+            : base(formatters.Query, jsRuntime, logFactory, "categories")
         { }
     }
 }

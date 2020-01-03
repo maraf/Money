@@ -13,7 +13,7 @@ namespace Money.Services
     public class ProfileStorage : JsonLocalStorage<ProfileModel>
     {
         public ProfileStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory) 
-            : base(formatters, jsRuntime, logFactory, "profile")
+            : base(formatters.Query, jsRuntime, logFactory, "profile")
         { }
     }
 }

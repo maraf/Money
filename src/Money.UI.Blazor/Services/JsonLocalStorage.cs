@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using Money.Models;
 using Neptuo;
 using Neptuo.Formatters;
 using Neptuo.Logging;
@@ -15,18 +14,18 @@ namespace Money.Services
     public abstract class JsonLocalStorage<T>
         where T : class
     {
-        private readonly FormatterContainer formatters;
+        private readonly IFormatter formatter;
         private readonly IJSRuntime jsRuntime;
         private readonly ILog log;
         private readonly string key;
 
-        public JsonLocalStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory, string key)
+        public JsonLocalStorage(IFormatter formatter, IJSRuntime jsRuntime, ILogFactory logFactory, string key)
         {
-            Ensure.NotNull(formatters, "formatters");
+            Ensure.NotNull(formatter, "formatter");
             Ensure.NotNull(jsRuntime, "jsRuntime");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNullOrEmpty(key, "key");
-            this.formatters = formatters;
+            this.formatter = formatter;
             this.jsRuntime = jsRuntime;
             this.log = logFactory.Scope(GetType().Name);
             this.key = key;
@@ -41,7 +40,7 @@ namespace Money.Services
                 if (String.IsNullOrEmpty(raw))
                     return null;
 
-                T model = formatters.Query.Deserialize<T>(raw);
+                T model = formatter.Deserialize<T>(raw);
                 return model;
             }
             catch (Exception e)
@@ -53,7 +52,7 @@ namespace Money.Services
 
         public async Task SaveAsync(T model)
         {
-            string raw = formatters.Query.Serialize(model);
+            string raw = formatter.Serialize(model);
             await jsRuntime.InvokeVoidAsync("window.localStorage.setItem", key, raw);
             log.Debug($"Saved '{raw}'.");
         }

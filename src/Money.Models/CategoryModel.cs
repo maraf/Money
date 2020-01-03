@@ -38,10 +38,6 @@ namespace Money.Models
         /// </summary>
         public virtual string Icon { get; set; }
 
-        [Obsolete("Only for deserialization.")]
-        public CategoryModel()
-        { }
-
         public CategoryModel(IKey key, string name, string description, Color color, string icon)
         {
             Ensure.Condition.NotEmptyKey(key);

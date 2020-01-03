@@ -27,10 +27,6 @@ namespace Money.Models
         /// </summary>
         public bool IsDefault { get; set; }
 
-        [Obsolete("Only for deserialization.")]
-        public CurrencyModel()
-        { }
-
         /// <summary>
         /// Creates a new instance.
         /// </summary>

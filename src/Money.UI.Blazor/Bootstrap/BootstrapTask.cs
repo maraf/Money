@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Money.Commands;
 using Money.Models.Queries;
 using Money.Services;
 using Neptuo;
@@ -71,7 +72,10 @@ namespace Money.Bootstrap
                 .AddSingleton(formatters)
                 .AddSingleton(logFactory)
                 .AddSingleton<MessageBuilder>()
-                .AddTransient<ICommandDispatcher, HttpCommandDispatcher>()
+                .AddTransient<HttpCommandDispatcher>()
+                .AddTransient<CommandStorage>()
+                .AddTransient<CreateExpenseStorage>()
+                .AddTransient<ICommandDispatcher, OfflineCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()
                 .AddTransient(typeof(ILog<>), typeof(DefaultLog<>))
                 .AddSingleton(eventDispatcher)

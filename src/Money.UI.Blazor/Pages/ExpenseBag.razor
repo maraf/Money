@@ -12,6 +12,14 @@
     }
     else
     {
+        <Network>
+            <Online>
+                <button class="btn btn-secondary" @onclick="PublishAsync">You are online, upload your expenses</button>
+            </Online>
+        </Network>
+
+        <hr />
+
         foreach (var model in Models)
         {
             @model.Amount

@@ -72,6 +72,7 @@ namespace Money.Bootstrap
                 .AddSingleton(formatters)
                 .AddSingleton(logFactory)
                 .AddSingleton<MessageBuilder>()
+                .AddSingleton<LocalExpenseOnlineRunner>()
                 .AddTransient<HttpCommandDispatcher>()
                 .AddTransient<CommandStorage>()
                 .AddTransient<CreateExpenseStorage>()
@@ -139,6 +140,8 @@ namespace Money.Bootstrap
             eventDispatcher.Handlers.AddAll(serviceProvider.GetService<CategoryMiddleware>());
             eventDispatcher.Handlers.AddAll(serviceProvider.GetService<CurrencyMiddleware>());
             eventDispatcher.Handlers.AddAll(serviceProvider.GetService<UserMiddleware>());
+
+            serviceProvider.GetService<LocalExpenseOnlineRunner>().Initialize();
         }
     }
 }

@@ -1,29 +1,32 @@
 ﻿@page "/expenses"
 
-<Money.Components.Title Icon="signal" Main="Offline mode" ButtonText="New Expense" ButtonClick="@CreateNewExpense" />
+<Money.Components.Title Icon="signal" Main="Offline mode" Sub="You can create expenses even without the internet" ButtonText="New Expense" ButtonClick="@CreateNewExpense" />
 <ExceptionPanel />
 
 <OutcomeCreate @ref="CreateModal" />
 
-<Loading Context="@Loading">
-    @if (Models.Count == 0)
-    {
-        <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
-    }
-    else
-    {
-        <Network>
-            <Online>
-                <button class="btn btn-secondary" @onclick="PublishAsync">You are online, upload your expenses</button>
-            </Online>
-        </Network>
-
-        <hr />
-
-        foreach (var model in Models)
+<div class="expenses-bag">
+    <Loading Context="@Loading">
+        @if (Models.Count == 0)
         {
-            @model.Amount
-            <br />
+            <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
         }
-    }
-</Loading>
+        else
+        {
+            <Network>
+                <Online>
+                    <button class="btn btn-secondary" @onclick="PublishAsync">You are online, upload your expenses</button>
+                </Online>
+            </Network>
+
+            <div class="cards">
+                <CascadingValue Value="@this">
+                    @foreach (var model in Models)
+                    {
+                        <OutcomeCard Model="@model" />
+                    }
+                </CascadingValue>
+            </div>
+        }
+    </Loading>
+</div>

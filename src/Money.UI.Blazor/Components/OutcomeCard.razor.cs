@@ -2,6 +2,7 @@
 using Money.Models;
 using Money.Models.Queries;
 using Money.Services;
+using Neptuo;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,8 @@ namespace Money.Components
 
         protected override async Task OnParametersSetAsync()
         {
+            Ensure.NotNull(Context, "Context");
+
             await base.OnParametersSetAsync();
             CategoryName = await Queries.QueryAsync(new GetCategoryName(Model.CategoryKey));
             CategoryColor = await Queries.QueryAsync(new GetCategoryColor(Model.CategoryKey));

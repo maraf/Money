@@ -15,27 +15,34 @@ namespace Money.UI.Blazor
 {
     public class Program
     {
-        private static IServiceProvider serviceProvider;
         private static Bootstrap.BootstrapTask bootstrapTask;
 
         public async static Task Main(string[] args)
         {
-            // Create builder.
+            // Configure.
             WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault();
-            builder.RootComponents.Add<App>("app");
             ConfigureServices(builder.Services);
+            ConfigureComponents(builder.RootComponents);
 
-            // Run application.
+            // Startup.
             WebAssemblyHost host = builder.Build();
-            serviceProvider = host.Services;
-            bootstrapTask.RegisterHandlers(serviceProvider);
+            StartupServices(host.Services);
+
+            // Run.
             await host.RunAsync();
         }
 
-        public static void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(IServiceCollection services)
         {
             services
-                .Configure<ApiClientConfiguration>(BindApiClientConfiguration)
+                .Configure<ApiClientConfiguration>(configuration =>
+                {
+#if DEBUG
+                    configuration.ApiUrl = new Uri("http://localhost:63803", UriKind.Absolute);
+#else
+                    configuration.ApiUrl = new Uri("https://api.money.neptuo.com", UriKind.Absolute);
+#endif
+                })
                 .AddSingleton<ApiHubService>()
                 .AddTransient<Interop>()
                 .AddSingleton<PwaInstallInterop>()
@@ -59,21 +66,14 @@ namespace Money.UI.Blazor
             bootstrapTask.Initialize();
         }
 
-        private static void BindApiClientConfiguration(ApiClientConfiguration configuration)
+        private static void ConfigureComponents(RootComponentMappingCollection rootComponents)
         {
-#if DEBUG
-            configuration.ApiUrl = new Uri("http://localhost:63803", UriKind.Absolute);
-#else
-            configuration.ApiUrl = new Uri("https://api.money.neptuo.com", UriKind.Absolute);
-#endif
+            rootComponents.Add<App>("app");
         }
 
-        [JSInvokable]
-        public static void RaiseEvent(string payload) => serviceProvider.GetService<BrowserEventDispatcher>().Raise(payload);
-
-        [JSInvokable]
-        public static void RaiseException(string payload) => serviceProvider.GetService<BrowserExceptionHandler>().Raise(payload);
-
-        internal static T Resolve<T>() => serviceProvider.GetService<T>();
+        private static void StartupServices(IServiceProvider services)
+        {
+            bootstrapTask.RegisterHandlers(services);
+        }
     }
 }

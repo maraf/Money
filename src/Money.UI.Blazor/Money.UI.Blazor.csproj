@@ -59,6 +59,7 @@
   <ItemGroup>
     <Content Update="wwwroot\index.html" CopyToOutputDirectory="PreserveNewest" />
     <Compile Update="**\*.razor.cs" DependentUpon="%(Filename)" />
+    <None Update="**\*.json.defaults" DependentUpon="%(Filename)" />
     <Watch Include="**\*.razor" />
   </ItemGroup>
 

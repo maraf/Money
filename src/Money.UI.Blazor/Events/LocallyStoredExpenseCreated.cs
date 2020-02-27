@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace Money.Events
 {
-    public class CreateExpenseStoredLocally : UserEvent
+    public class LocallyStoredExpenseCreated : UserEvent
     { }
 }

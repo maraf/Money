@@ -5,7 +5,7 @@ const swInstallEvent = 'install';
 const swInstalledEvent = 'installed';
 const swActivateEvent = 'activate';
 const staticCachePrefix = 'blazor-cache-v';
-const staticCacheName = 'blazor-cache-v0.0.637183151796853134';
+const staticCacheName = 'blazor-cache-v0.0.637183260655917130';
 const requiredFiles = [
 "/_framework/blazor.boot.json",
 "/_framework/blazor.webassembly.js",

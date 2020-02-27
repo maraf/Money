@@ -1,4 +1,5 @@
 ﻿using Neptuo;
+using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +23,8 @@ namespace Money.Services
         {
             if (IsOnline != isOnline)
             {
+                Console.WriteLine($"NetworkState: IsOnline changed {IsOnline} => '{isOnline}'.");
+
                 IsOnline = isOnline;
                 StatusChanged?.Invoke();
             }

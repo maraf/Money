@@ -13,11 +13,7 @@
         }
         else
         {
-            <Network>
-                <Online>
-                    <button class="btn btn-secondary" @onclick="PublishAsync">You are online, upload your expenses</button>
-                </Online>
-            </Network>
+            <ExpenseBagPublishButton />
 
             <div class="cards">
                 <CascadingValue Value="@this">

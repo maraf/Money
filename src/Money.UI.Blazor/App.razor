@@ -1,6 +1,15 @@
 ﻿<Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="routeData" />
+        <Network>
+            <Online>
+                <RouteView RouteData="routeData" />
+            </Online>
+            <Offline>
+                <LayoutView Layout="@typeof(Layouts.Layout)">
+                    <ExpenseBag />
+                </LayoutView>
+            </Offline>
+        </Network>
     </Found>
     <NotFound>
         <LayoutView Layout="@typeof(Layouts.Layout)">

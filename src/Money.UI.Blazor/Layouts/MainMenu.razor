@@ -3,34 +3,40 @@
 <NavLink class="navbar-brand" href="@Navigator.UrlSummary()">Money</NavLink>
 <HamburgerButton CssClass="navbar-toggler" Click="@OnMainMenuToggleClick" />
 <div class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
-    <ul class="nav navbar-nav mr-auto">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown">
-                Expenses
-                <span class="caret"></span>
-            </a>
+    <Network>
+        <Online>
 
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="@Navigator.UrlSummary()">Monthly</a>
-                <a class="dropdown-item" href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">Yearly</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="@Navigator.UrlSearch()">Search</a>
-            </div>
-        </li>
-        <li class="nav-item">
-            <NavLink class="nav-link" href="@Navigator.UrlCategories()">Categories</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink class="nav-link" href="@Navigator.UrlCurrencies()">Currencies</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink class="nav-link" href="@Navigator.UrlAbout()">About</NavLink>
-        </li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <PwaInstall />
-        </li>
-    </ul>
-    <UserInfo />
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        Expenses
+                        <span class="caret"></span>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="@Navigator.UrlSummary()">Monthly</a>
+                        <a class="dropdown-item" href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">Yearly</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="@Navigator.UrlSearch()">Search</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="@Navigator.UrlCategories()">Categories</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="@Navigator.UrlCurrencies()">Currencies</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="@Navigator.UrlAbout()">About</NavLink>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <PwaInstall />
+                </li>
+            </ul>
+            <UserInfo />
+
+        </Online>
+    </Network>
 </div> 

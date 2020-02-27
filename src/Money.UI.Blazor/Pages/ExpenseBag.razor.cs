@@ -21,7 +21,7 @@ namespace Money.Pages
 {
     public partial class ExpenseBag : IDisposable, 
         OutcomeCard.IContext,
-        IEventHandler<CreateExpenseStoredLocally>, 
+        IEventHandler<LocallyStoredExpenseCreated>, 
         IEventHandler<LocallyStoredExpensesPublished>
     {
         [Inject]
@@ -49,7 +49,7 @@ namespace Money.Pages
 
         protected async override Task OnInitializedAsync()
         {
-            EventHandlers.Add<CreateExpenseStoredLocally>(this);
+            EventHandlers.Add<LocallyStoredExpenseCreated>(this);
             EventHandlers.Add<LocallyStoredExpensesPublished>(this);
 
             CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
@@ -60,7 +60,7 @@ namespace Money.Pages
 
         public void Dispose()
         {
-            EventHandlers.Remove<CreateExpenseStoredLocally>(this);
+            EventHandlers.Remove<LocallyStoredExpenseCreated>(this);
             EventHandlers.Remove<LocallyStoredExpensesPublished>(this);
         }
 
@@ -82,12 +82,7 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        protected async Task PublishAsync()
-        {
-            await Runner.PublishAsync();
-        }
-
-        async Task IEventHandler<CreateExpenseStoredLocally>.HandleAsync(CreateExpenseStoredLocally payload)
+        async Task IEventHandler<LocallyStoredExpenseCreated>.HandleAsync(LocallyStoredExpenseCreated payload)
         {
             await LoadAsync();
             StateHasChanged();

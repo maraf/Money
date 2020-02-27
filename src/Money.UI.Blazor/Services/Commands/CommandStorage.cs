@@ -30,7 +30,7 @@ namespace Money.Commands
                 var expenses = await expenseStorage.LoadAsync() ?? new List<CreateOutcome>();
                 expenses.Add(expense);
                 await expenseStorage.SaveAsync(expenses);
-                await eventDispatcher.PublishAsync(new CreateExpenseStoredLocally());
+                await eventDispatcher.PublishAsync(new LocallyStoredExpenseCreated());
             }
             else
             {

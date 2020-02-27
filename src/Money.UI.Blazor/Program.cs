@@ -9,6 +9,8 @@ using Money.Services;
 using Neptuo.Events;
 using Neptuo.Exceptions;
 using System;
+using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Money.UI.Blazor
@@ -19,6 +21,7 @@ namespace Money.UI.Blazor
 
         public async static Task Main(string[] args)
         {
+
             // Configure.
             WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault();
             ConfigureServices(builder.Services);

@@ -6,6 +6,8 @@
 <OutcomeCreate @ref="CreateModal" />
 
 <div class="summary">
+    <ExpenseBagPublishButton Text="You have expenses created when offline. Upload them now..." class="mb-4" />
+
     <Loading Context="@Loading">
 
         @if (Items != null)

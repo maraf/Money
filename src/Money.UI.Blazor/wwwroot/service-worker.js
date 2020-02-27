@@ -5,18 +5,20 @@ const swInstallEvent = 'install';
 const swInstalledEvent = 'installed';
 const swActivateEvent = 'activate';
 const staticCachePrefix = 'blazor-cache-v';
-const staticCacheName = 'blazor-cache-v0.0.637128710575909641';
+const staticCacheName = 'blazor-cache-v0.0.637181529069255726';
 const requiredFiles = [
 "/_framework/blazor.boot.json",
 "/_framework/blazor.webassembly.js",
-"/_framework/wasm/mono.js",
-"/_framework/wasm/mono.wasm",
+"/_framework/wasm/dotnet.js",
+"/_framework/wasm/dotnet.wasm",
 "/_framework/_bin/Microsoft.AspNetCore.Blazor.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Blazor.HttpClient.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Components.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Components.Forms.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Components.Web.dll",
 "/_framework/_bin/Microsoft.Bcl.AsyncInterfaces.dll",
+"/_framework/_bin/Microsoft.Extensions.Configuration.Abstractions.dll",
+"/_framework/_bin/Microsoft.Extensions.Configuration.dll",
 "/_framework/_bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
 "/_framework/_bin/Microsoft.Extensions.DependencyInjection.dll",
 "/_framework/_bin/Microsoft.Extensions.Logging.Abstractions.dll",
@@ -63,6 +65,7 @@ const requiredFiles = [
 "/_framework/_bin/System.Xml.Linq.dll",
 "/_framework/_bin/WebAssembly.Bindings.dll",
 "/_framework/_bin/WebAssembly.Net.Http.dll",
+"/_framework/_bin/WebAssembly.Net.WebSockets.dll",
 "/css/site.min.css",
 "/favicon.ico",
 "/images/city.png",

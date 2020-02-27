@@ -15,6 +15,7 @@ using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -149,10 +150,12 @@ namespace Money.Pages
             }
         }
 
-        protected decimal GetPercentualValue(CategoryWithAmountModel category)
+        protected string GetPercentualValue(CategoryWithAmountModel category)
         {
             decimal total = Categories.Sum(c => c.TotalAmount.Value);
-            return 100 / total * category.TotalAmount.Value;
+            decimal percentage = 100 / total * category.TotalAmount.Value;
+
+            return percentage.ToString("0.##", CultureInfo.InvariantCulture);
         }
 
         protected string FormatPrice(Price price)

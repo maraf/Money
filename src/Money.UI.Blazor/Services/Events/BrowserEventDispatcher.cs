@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Neptuo.Events
 {
-    internal class BrowserEventDispatcher
+    public class BrowserEventDispatcher
     {
         private readonly DefaultEventManager manager = new DefaultEventManager();
         private readonly FormatterContainer formatters;

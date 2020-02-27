@@ -25,12 +25,6 @@ namespace Money
         public void NavigateTo(string url)
             => jsRuntime.InvokeAsync<bool>("Money.NavigateTo", url);
 
-        public void StartSignalR(string url, string token)
-            => jsRuntime.InvokeAsync<bool>("Money.StartSignalR", url, token);
-
-        public void StopSignalR()
-            => jsRuntime.InvokeAsync<bool>("Money.StopSignalR");
-
         public void SaveToken(string token)
             => jsRuntime.InvokeAsync<bool>("Money.SaveToken", token);
 

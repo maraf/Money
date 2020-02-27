@@ -28,10 +28,11 @@ namespace Money.Services
         private readonly IExceptionHandler exceptionHandler;
         private readonly IEventDispatcher eventDispatcher;
         private readonly Interop interop;
+        private readonly ApiHubService apiHub;
         private readonly ILog log;
         private readonly Json json;
 
-        public ApiClient(IOptions<ApiClientConfiguration> configuration, TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop, ILogFactory logFactory, Json json)
+        public ApiClient(IOptions<ApiClientConfiguration> configuration, TokenContainer token, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, IEventDispatcher eventDispatcher, Interop interop, ApiHubService apiHub, ILogFactory logFactory, Json json)
         {
             Ensure.NotNull(configuration, "configuration");
             Ensure.NotNull(token, "token");
@@ -41,6 +42,7 @@ namespace Money.Services
             Ensure.NotNull(exceptionHandler, "exceptionHandler");
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
             Ensure.NotNull(interop, "interop");
+            Ensure.NotNull(apiHub, "apiHub");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNull(json, "json");
             this.configuration = configuration.Value;
@@ -51,6 +53,7 @@ namespace Money.Services
             this.exceptionHandler = exceptionHandler;
             this.eventDispatcher = eventDispatcher;
             this.interop = interop;
+            this.apiHub = apiHub;
             this.log = logFactory.Scope("ApiClient");
             this.json = json;
 
@@ -67,9 +70,8 @@ namespace Money.Services
                 token.Value = null;
                 http.DefaultRequestHeaders.Authorization = null;
                 interop.SaveToken(null);
-                interop.StopSignalR();
-
-                eventDispatcher.PublishAsync(new UserSignedOut());
+                _ = apiHub.StopAsync();
+                _ = eventDispatcher.PublishAsync(new UserSignedOut());
             }
         }
 
@@ -78,9 +80,8 @@ namespace Money.Services
             if (token.HasValue && http.DefaultRequestHeaders.Authorization?.Parameter != token.Value)
             {
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-                interop.StartSignalR(configuration.ApiUrl.ToString() + "api", token.Value);
-
-                eventDispatcher.PublishAsync(new UserSignedIn());
+                _ = apiHub.StartAsync(configuration.ApiUrl.ToString() + "api", token.Value);
+                _ = eventDispatcher.PublishAsync(new UserSignedIn());
             }
         }
 

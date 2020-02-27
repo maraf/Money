@@ -36,6 +36,7 @@ namespace Money.UI.Blazor
         {
             services
                 .Configure<ApiClientConfiguration>(BindApiClientConfiguration)
+                .AddSingleton<ApiHubService>()
                 .AddTransient<Interop>()
                 .AddSingleton<PwaInstallInterop>()
                 .AddTransient<NetworkStateInterop>()

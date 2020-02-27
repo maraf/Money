@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    internal class Navigator : NavigatorUrl, System.IDisposable
+    public class Navigator : NavigatorUrl, System.IDisposable
     {
         private readonly NavigationManager manager;
         private readonly Interop interop;
@@ -40,8 +40,11 @@ namespace Money.Services
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
             => LocationChanged?.Invoke(e.Location);
 
-        public ValueTask ReloadAsync()
-            => jsRuntime.InvokeVoidAsync("window.location.reload");
+        public async Task ReloadAsync()
+            => await jsRuntime.InvokeVoidAsync("window.location.reload");
+
+        public async Task AlertAsync(string message)
+            => await jsRuntime.InvokeVoidAsync("window.alert", message);
 
         private void OpenExternal(string url)
             => interop.NavigateTo(url);

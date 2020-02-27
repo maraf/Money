@@ -5,7 +5,7 @@ const swInstallEvent = 'install';
 const swInstalledEvent = 'installed';
 const swActivateEvent = 'activate';
 const staticCachePrefix = 'blazor-cache-v';
-const staticCacheName = 'blazor-cache-v0.0.637181529069255726';
+const staticCacheName = 'blazor-cache-v0.0.637183151796853134';
 const requiredFiles = [
 "/_framework/blazor.boot.json",
 "/_framework/blazor.webassembly.js",
@@ -16,12 +16,21 @@ const requiredFiles = [
 "/_framework/_bin/Microsoft.AspNetCore.Components.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Components.Forms.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Components.Web.dll",
+"/_framework/_bin/Microsoft.AspNetCore.Connections.Abstractions.dll",
+"/_framework/_bin/Microsoft.AspNetCore.Http.Connections.Client.dll",
+"/_framework/_bin/Microsoft.AspNetCore.Http.Connections.Common.dll",
+"/_framework/_bin/Microsoft.AspNetCore.Http.Features.dll",
+"/_framework/_bin/Microsoft.AspNetCore.SignalR.Client.Core.dll",
+"/_framework/_bin/Microsoft.AspNetCore.SignalR.Client.dll",
+"/_framework/_bin/Microsoft.AspNetCore.SignalR.Common.dll",
+"/_framework/_bin/Microsoft.AspNetCore.SignalR.Protocols.Json.dll",
 "/_framework/_bin/Microsoft.Bcl.AsyncInterfaces.dll",
 "/_framework/_bin/Microsoft.Extensions.Configuration.Abstractions.dll",
 "/_framework/_bin/Microsoft.Extensions.Configuration.dll",
 "/_framework/_bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
 "/_framework/_bin/Microsoft.Extensions.DependencyInjection.dll",
 "/_framework/_bin/Microsoft.Extensions.Logging.Abstractions.dll",
+"/_framework/_bin/Microsoft.Extensions.Logging.dll",
 "/_framework/_bin/Microsoft.Extensions.Options.dll",
 "/_framework/_bin/Microsoft.Extensions.Primitives.dll",
 "/_framework/_bin/Microsoft.JSInterop.dll",
@@ -50,6 +59,7 @@ const requiredFiles = [
 "/_framework/_bin/System.Drawing.Common.dll",
 "/_framework/_bin/System.IO.Compression.dll",
 "/_framework/_bin/System.IO.Compression.FileSystem.dll",
+"/_framework/_bin/System.IO.Pipelines.dll",
 "/_framework/_bin/System.Memory.dll",
 "/_framework/_bin/System.Net.Http.dll",
 "/_framework/_bin/System.Numerics.dll",
@@ -59,6 +69,7 @@ const requiredFiles = [
 "/_framework/_bin/System.ServiceModel.Internals.dll",
 "/_framework/_bin/System.Text.Encodings.Web.dll",
 "/_framework/_bin/System.Text.Json.dll",
+"/_framework/_bin/System.Threading.Channels.dll",
 "/_framework/_bin/System.Threading.Tasks.Extensions.dll",
 "/_framework/_bin/System.Transactions.dll",
 "/_framework/_bin/System.Xml.dll",

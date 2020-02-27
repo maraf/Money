@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Neptuo.Exceptions
 {
-    internal class BrowserExceptionHandler
+    public class BrowserExceptionHandler
     {
         public ExceptionHandlerBuilder HandlerBuilder { get; private set; } = new ExceptionHandlerBuilder();
         public IExceptionHandler Handler { get => HandlerBuilder; }

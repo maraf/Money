@@ -69,7 +69,7 @@ namespace Money.Pages.Accounts
         {
             if (!String.IsNullOrEmpty(ReturnUrl))
                 Navigator.Open(ReturnUrl);
-            else
+            else if (Navigator.IsLoginUrl())
                 Navigator.OpenSummary();
         }
 

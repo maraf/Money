@@ -1,4 +1,5 @@
 ﻿@page "/categories"
+@attribute [Authorize]
 
 <Money.Components.Title Icon="tag" Main="Categories" Sub="List of categories you distribute expenses into" ButtonText="New Category" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
 <ExceptionPanel />

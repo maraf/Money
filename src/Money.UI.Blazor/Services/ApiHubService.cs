@@ -59,24 +59,26 @@ namespace Money.Services
                 exceptions.Raise(payload);
             });
 
-            connection.Closed += async e =>
-            {
-                log.Debug("Connection closed.");
+            connection.Closed += OnConnectionClosed;
 
-                if (e != null)
-                    log.Fatal($"Connection error {Environment.NewLine}{e.ToString()}");
+            await connection.StartAsync();
+
+            IsStarted = true;
+        }
+
+        private async Task OnConnectionClosed(Exception e)
+        {
+            log.Debug("Connection closed.");
+
+            if (e != null)
+                log.Fatal($"Connection error {Environment.NewLine}{e.ToString()}");
 
 #if !DEBUG
                 await navigator.AlertAsync("Underlaying connection to the server has closed. Reloading the page...");
 #endif
 
-                await Task.Delay(2000);
-                await navigator.ReloadAsync();
-            };
-
-            await connection.StartAsync();
-
-            IsStarted = true;
+            await Task.Delay(2000);
+            await navigator.ReloadAsync();
         }
 
         public async Task StopAsync()
@@ -84,6 +86,8 @@ namespace Money.Services
             if (connection != null)
             {
                 log.Debug($"Disconnecting.");
+                connection.Closed -= OnConnectionClosed;
+
                 await connection.StopAsync();
                 await connection.DisposeAsync();
                 connection = null;

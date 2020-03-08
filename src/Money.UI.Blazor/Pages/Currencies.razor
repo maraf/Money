@@ -1,4 +1,5 @@
 ﻿@page "/currencies"
+@attribute [Authorize]
 
 <Money.Components.Title Icon="pound-sign" Main="Currencies" Sub="List of currencies you are making expenses in" ButtonText="New Currency" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
 <ExceptionPanel />

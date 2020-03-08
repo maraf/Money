@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Money.Models;
 using Money.Models.Queries;
 using Neptuo;
@@ -15,6 +16,7 @@ namespace Money.Pages
 {
     [Route("/{Year:int}/overview")]
     [Route("/{Year:int}/overview/{CategoryGuid:guid}")]
+    [Authorize]
     public class OverviewYear : Overview<YearModel>
     {
         [Parameter]

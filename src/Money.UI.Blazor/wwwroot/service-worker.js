@@ -5,14 +5,16 @@ const swInstallEvent = 'install';
 const swInstalledEvent = 'installed';
 const swActivateEvent = 'activate';
 const staticCachePrefix = 'blazor-cache-v';
-const staticCacheName = 'blazor-cache-v0.0.637183260655917130';
+const staticCacheName = 'blazor-cache-v0.0.637192688633953132';
 const requiredFiles = [
 "/_framework/blazor.boot.json",
 "/_framework/blazor.webassembly.js",
 "/_framework/wasm/dotnet.js",
 "/_framework/wasm/dotnet.wasm",
+"/_framework/_bin/Microsoft.AspNetCore.Authorization.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Blazor.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Blazor.HttpClient.dll",
+"/_framework/_bin/Microsoft.AspNetCore.Components.Authorization.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Components.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Components.Forms.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Components.Web.dll",
@@ -20,6 +22,7 @@ const requiredFiles = [
 "/_framework/_bin/Microsoft.AspNetCore.Http.Connections.Client.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Http.Connections.Common.dll",
 "/_framework/_bin/Microsoft.AspNetCore.Http.Features.dll",
+"/_framework/_bin/Microsoft.AspNetCore.Metadata.dll",
 "/_framework/_bin/Microsoft.AspNetCore.SignalR.Client.Core.dll",
 "/_framework/_bin/Microsoft.AspNetCore.SignalR.Client.dll",
 "/_framework/_bin/Microsoft.AspNetCore.SignalR.Common.dll",

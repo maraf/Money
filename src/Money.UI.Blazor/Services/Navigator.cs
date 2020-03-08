@@ -97,6 +97,9 @@ namespace Money.Services
                 manager.NavigateTo($"{loginUrl}?returnUrl={currentUrl}");
         }
 
+        public bool IsLoginUrl()
+            => GetCurrentUrl() == UrlAccountLogin();
+
         private string GetCurrentUrl()
         {
             string currentUrl = "/" + manager.ToBaseRelativePath(manager.BaseUri);

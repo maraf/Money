@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Money.Models;
 using Money.Models.Queries;
 using Neptuo.Logging;
@@ -15,6 +16,7 @@ namespace Money.Pages
 {
     [Route("/")]
     [Route("/{Year:int}/{Month:int}")]
+    [Authorize]
     public class SummaryMonth : Summary<MonthModel>
     {
         [Parameter]

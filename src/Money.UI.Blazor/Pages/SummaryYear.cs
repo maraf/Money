@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Money.Models;
 using Money.Models.Queries;
 using Neptuo.Logging;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace Money.Pages
 {
     [Route("/{Year:int}")]
+    [Authorize]
     public class SummaryYear : Summary<YearModel>
     {
         [Parameter]

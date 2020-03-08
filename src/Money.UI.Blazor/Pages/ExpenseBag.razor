@@ -1,4 +1,5 @@
 ﻿@page "/expenses"
+@attribute [Authorize]
 
 <Money.Components.Title Icon="signal" Main="Offline mode" Sub="You can create expenses even without the internet" ButtonText="New Expense" ButtonClick="@CreateNewExpense" />
 <ExceptionPanel />

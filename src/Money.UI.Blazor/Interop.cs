@@ -25,8 +25,8 @@ namespace Money
         public void NavigateTo(string url)
             => jsRuntime.InvokeAsync<bool>("Money.NavigateTo", url);
 
-        public void SaveToken(string token)
-            => jsRuntime.InvokeAsync<bool>("Money.SaveToken", token);
+        public ValueTask SaveTokenAsync(string token)
+            => jsRuntime.InvokeVoidAsync("Money.SaveToken", token);
 
         public ValueTask<string> LoadTokenAsync()
             => jsRuntime.InvokeAsync<string>("Money.LoadToken");

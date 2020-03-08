@@ -1,19 +1,31 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly">
-    <Found Context="routeData">
-        <Network>
-            <Online>
-                <RouteView RouteData="routeData" />
-            </Online>
-            <Offline>
-                <LayoutView Layout="@typeof(Layouts.Layout)">
-                    <ExpenseBag />
-                </LayoutView>
-            </Offline>
-        </Network>
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(Layouts.Layout)">
-            <NotFound />
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿@using Money.Layouts;
+@using Money.Pages.Accounts;
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <Network>
+                <Online>
+                    <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
+                        <NotAuthorized>
+                            <Login />
+                        </NotAuthorized>
+                        <Authorizing>
+                            Loading, please wait...
+                        </Authorizing>
+                    </AuthorizeRouteView>
+                </Online>
+                <Offline>
+                    <LayoutView Layout="@typeof(Layout)">
+                        <ExpenseBag />
+                    </LayoutView>
+                </Offline>
+            </Network>
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(Layout)">
+                <NotFound />
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

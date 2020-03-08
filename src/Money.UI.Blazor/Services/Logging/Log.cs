@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace Neptuo.Logging
 {
-    internal interface ILog<T> : ILog
+    public interface ILog<T> : ILog
     { }
 }

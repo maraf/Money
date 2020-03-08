@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
@@ -29,6 +30,9 @@ namespace Money.Layouts
         [Inject]
         public ApiClient ApiClient { get; set; }
 
+        [Inject]
+        public AuthenticationStateProvider AuthenticationState { get; set; }
+
         protected ProfileModel Profile { get; private set; }
         protected bool IsAuthenticated => Profile != null;
 
@@ -38,20 +42,22 @@ namespace Money.Layouts
         {
             BindEvents();
 
+            await base.OnInitializedAsync();
             await LoadProfileAsync();
         }
 
         private async Task LoadProfileAsync()
         {
-            using (Loading.Start())
-                Profile = await Queries.QueryAsync(new GetProfile());
+            var state = await AuthenticationState.GetAuthenticationStateAsync();
+            if (state.User.Identity.IsAuthenticated)
+            {
+                using (Loading.Start())
+                    Profile = await Queries.QueryAsync(new GetProfile());
+            }
         }
 
-        protected async Task OnLogoutAsync()
-        {
-            await ApiClient.LogoutAsync();
-            Navigator.OpenLogin();
-        }
+        protected Task OnLogoutAsync()
+            => ApiClient.LogoutAsync();
 
         public void Dispose()
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor.Hosting;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using Money.Components;
@@ -46,6 +47,10 @@ namespace Money.UI.Blazor
                     configuration.ApiUrl = new Uri("https://api.money.neptuo.com", UriKind.Absolute);
 #endif
                 })
+                .AddAuthorizationCore()
+                .AddSingleton<ApiAuthenticationStateProvider>()
+                .AddSingleton<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())
+                .AddSingleton<SignalRListener>()
                 .AddSingleton<ApiHubService>()
                 .AddTransient<Interop>()
                 .AddSingleton<PwaInstallInterop>()
@@ -77,6 +82,9 @@ namespace Money.UI.Blazor
         private static void StartupServices(IServiceProvider services)
         {
             bootstrapTask.RegisterHandlers(services);
+
+            services.GetService<IEventHandlerCollection>()
+                .AddAll(services.GetService<SignalRListener>());
         }
     }
 }

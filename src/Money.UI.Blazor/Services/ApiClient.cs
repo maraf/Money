@@ -113,7 +113,7 @@ namespace Money.Services
                     }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        await authenticationState.SetTokenAsync(null);
+                        await authenticationState.ClearTokenAsync();
                         throw new UnauthorizedAccessException();
                     }
                     else if (response.StatusCode == HttpStatusCode.InternalServerError)

@@ -53,6 +53,7 @@ namespace Money.UI.Blazor
                 .AddSingleton<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())
                 .AddSingleton<SignalRListener>()
                 .AddSingleton<ApiHubService>()
+                .AddSingleton<ApiVersionChecker>()
                 .AddTransient<Interop>()
                 .AddSingleton<PwaInstallInterop>()
                 .AddTransient<NetworkStateInterop>()

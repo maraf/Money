@@ -21,6 +21,7 @@ namespace Money.Services
     public class ApiClient
     {
         private readonly ApiClientConfiguration configuration;
+        private readonly ApiVersionChecker versionChecker;
         private readonly HttpClient http;
         private readonly CommandMapper commandMapper;
         private readonly QueryMapper queryMapper;
@@ -29,9 +30,10 @@ namespace Money.Services
         private readonly ILog log;
         private readonly Json json;
 
-        public ApiClient(IOptions<ApiClientConfiguration> configuration, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, ApiAuthenticationStateProvider authenticationState, ILogFactory logFactory, Json json)
+        public ApiClient(IOptions<ApiClientConfiguration> configuration, ApiVersionChecker versionChecker, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, ApiAuthenticationStateProvider authenticationState, ILogFactory logFactory, Json json)
         {
             Ensure.NotNull(configuration, "configuration");
+            Ensure.NotNull(versionChecker, "versionChecker");
             Ensure.NotNull(http, "http");
             Ensure.NotNull(commandMapper, "commandMapper");
             Ensure.NotNull(queryMapper, "queryMapper");
@@ -40,6 +42,7 @@ namespace Money.Services
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNull(json, "json");
             this.configuration = configuration.Value;
+            this.versionChecker = versionChecker;
             this.http = http;
             this.commandMapper = commandMapper;
             this.queryMapper = queryMapper;
@@ -61,8 +64,20 @@ namespace Money.Services
         private static StringContent CreateStringContent(string requestContent)
             => new StringContent(requestContent, Encoding.UTF8, "text/json");
 
-        private async Task EnsureStatusCodeAsync(HttpResponseMessage responseMessage)
+        private async Task EnsureSuccessResponseAsync(HttpResponseMessage responseMessage)
         {
+            log.Debug($"Api headers: '{responseMessage.Headers}'.");
+
+            if (responseMessage.Headers.TryGetValues(VersionHeader.Name, out var versions))
+            {
+                var rawVersion = versions.FirstOrDefault();
+
+                log.Debug($"ApiVersion is '{rawVersion}'.");
+
+                if (!String.IsNullOrEmpty(rawVersion) && Version.TryParse(rawVersion, out var version))
+                    versionChecker.Ensure(version);
+            }
+
             if (responseMessage.StatusCode == HttpStatusCode.OK)
             {
                 return;
@@ -84,10 +99,10 @@ namespace Money.Services
 
         private async Task<T> ReadJsonResponseAsync<T>(HttpResponseMessage responseMessage)
         {
+            await EnsureSuccessResponseAsync(responseMessage);
+
             string responseContent = await responseMessage.Content.ReadAsStringAsync();
             log.Debug($"Response: '{responseContent}'.");
-
-            await EnsureStatusCodeAsync(responseMessage);
 
             T response = json.Deserialize<T>(responseContent);
             return response;
@@ -159,7 +174,7 @@ namespace Money.Services
             try
             {
                 HttpResponseMessage responseMessage = await PostToUniformApiAsync(commandMapper, "/api/command", type, payload);
-                await EnsureStatusCodeAsync(responseMessage);
+                await EnsureSuccessResponseAsync(responseMessage);
             }
             catch (Exception e)
             {

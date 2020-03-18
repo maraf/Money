@@ -160,6 +160,7 @@ namespace Money
                 p.AllowCredentials();
                 p.AllowAnyHeader();
                 p.SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+                p.WithExposedHeaders(VersionHeader.Name);
             });
 
             app.UseAuthentication();

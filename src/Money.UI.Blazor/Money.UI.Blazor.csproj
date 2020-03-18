@@ -28,8 +28,19 @@
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>
 
+  <!-- PWA -->
+  <PropertyGroup>
+    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(DesignTimeBuild)' != 'true'">
+    <!-- When publishing, swap service-worker.published.js in place of service-worker.js -->
+    <Content Remove="wwwroot\service-worker.js" />
+    <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
+  </ItemGroup>
+
   <ItemGroup>
     <Content Update="wwwroot\index.html" CopyToOutputDirectory="PreserveNewest" />
+    <Content Remove="**\*.svg" />
     <Compile Update="**\*.razor.cs" DependentUpon="%(Filename)" />
     <None Update="**\*.json.defaults" DependentUpon="%(Filename)" />
     <Watch Include="**\*.razor" />

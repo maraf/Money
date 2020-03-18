@@ -47,6 +47,6 @@ namespace Money.Components
         }
 
         public ValueTask InstallAsync() 
-            => jSRuntime.InvokeVoidAsync("BlazorPWA.installPWA");
+            => jSRuntime.InvokeVoidAsync("Pwa.install");
     }
 }

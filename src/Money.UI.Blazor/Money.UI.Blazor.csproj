@@ -13,32 +13,7 @@
     </RestoreAdditionalProjectSources>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <ManifestShortName>Money</ManifestShortName>
-    <ManifestLongName>Money by Neptuo</ManifestLongName>
-
-    <ServiceWorkerFileName>service-worker.js</ServiceWorkerFileName>
-    <ServiceWorkerRegisterFileName>service-worker-register.js</ServiceWorkerRegisterFileName>
-    <ServiceWorkerForce>true</ServiceWorkerForce>
-    <ServiceWorkerCacheVersion Condition="'$(Configuration)' == 'Debug'">0.0.$([System.DateTime]::Now.Ticks)</ServiceWorkerCacheVersion>
-    <ServiceWorkerCacheVersion Condition="'$(Configuration)' == 'Release'">$(Version)</ServiceWorkerCacheVersion>
-    <ServiceWorkerRegisterInstallableType>installable-blazor</ServiceWorkerRegisterInstallableType>
-    <ServiceWorkerBlazorInstallMethod>Pwa.Installable</ServiceWorkerBlazorInstallMethod>
-    <ServiceWorkerRegisterUpdateType>update-blazor</ServiceWorkerRegisterUpdateType>
-  </PropertyGroup>
-
-  <Target Name="PWACustomise" BeforeTargets="CreatePWA">
-    <PropertyGroup>
-      <ServiceWorkerPreCacheExcludeFiles>
-        $(WWWRoot)**\*.scss;
-        $(WWWRoot)**\*.svg;
-      </ServiceWorkerPreCacheExcludeFiles>
-    </PropertyGroup>
-    <Message Importance="high" Text="Removing: $(ServiceWorkerPreCacheExcludeFiles)" />
-  </Target>
-
   <ItemGroup>
-    <PackageReference Include="BlazorPWA.MSBuild" Version="1.0.2" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview2.20160.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview2.20160.5" />

@@ -48,6 +48,7 @@ namespace Money.UI.Blazor
 #endif
                 })
                 .AddAuthorizationCore()
+                .AddBaseAddressHttpClient()
                 .AddSingleton<ApiAuthenticationStateProvider>()
                 .AddSingleton<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())
                 .AddSingleton<SignalRListener>()

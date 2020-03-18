@@ -138,13 +138,13 @@ namespace Money.Controllers
 
         [HttpPost]
         [Route("{*url}")]
-        public ActionResult Command(string url, [FromBody] string payload)
+        public ActionResult Command(string url, JObject rawCommand)
         {
             Ensure.NotNullOrEmpty(url, "url");
-            Ensure.NotNullOrEmpty(payload, "payload");
+            Ensure.NotNull(rawCommand, "rawCommand");
 
             Type type = commandMapper.FindTypeByUrl(url);
-            return Command(payload, type);
+            return Command(rawCommand.ToString(), type);
         }
 
         private ActionResult Command(string payload, Type type)

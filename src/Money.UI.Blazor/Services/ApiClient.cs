@@ -51,21 +51,61 @@ namespace Money.Services
             http.BaseAddress = this.configuration.ApiUrl;
         }
 
+        private HttpContent CreateJsonContent<T>(T request)
+        {
+            Ensure.NotNull(request, "request");
+            string requestContent = json.Serialize(request);
+            return CreateStringContent(requestContent);
+        }
+
+        private static StringContent CreateStringContent(string requestContent)
+            => new StringContent(requestContent, Encoding.UTF8, "text/json");
+
+        private async Task EnsureStatusCodeAsync(HttpResponseMessage responseMessage)
+        {
+            if (responseMessage.StatusCode == HttpStatusCode.OK)
+            {
+                return;
+            }
+            else if (responseMessage.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await authenticationState.ClearTokenAsync();
+                throw new UnauthorizedAccessException();
+            }
+            else if (responseMessage.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new InternalServerException();
+            }
+            else
+            {
+                throw Ensure.Exception.InvalidOperation($"Generic HTTP error: {responseMessage.StatusCode}.");
+            }
+        }
+
+        private async Task<T> ReadJsonResponseAsync<T>(HttpResponseMessage responseMessage)
+        {
+            string responseContent = await responseMessage.Content.ReadAsStringAsync();
+            log.Debug($"Response: '{responseContent}'.");
+
+            await EnsureStatusCodeAsync(responseMessage);
+
+            T response = json.Deserialize<T>(responseContent);
+            return response;
+        }
+
         public async Task<bool> LoginAsync(string userName, string password, bool isPermanent)
         {
-            string requestContent = json.Serialize(new LoginRequest()
+            HttpContent requestContent = CreateJsonContent(new LoginRequest()
             {
                 UserName = userName,
                 Password = password
             });
 
-            HttpResponseMessage responseMessage = await http.PostAsync("/api/user/login", new StringContent(requestContent, Encoding.UTF8, "text/json"));
+            HttpResponseMessage responseMessage = await http.PostAsync("/api/user/login", requestContent);
             if (responseMessage.StatusCode == HttpStatusCode.OK)
             {
-                string responseContent = await responseMessage.Content.ReadAsStringAsync();
-                LoginResponse response = json.Deserialize<LoginResponse>(responseContent);
-                Console.WriteLine(responseContent);
-                Console.WriteLine(response.Token);
+                LoginResponse response = await ReadJsonResponseAsync<LoginResponse>(responseMessage);
+                log.Debug($"Login success, token '{response.Token}'.");
 
                 if (!String.IsNullOrEmpty(response.Token))
                 {
@@ -74,23 +114,23 @@ namespace Money.Services
                 }
             }
 
+            log.Debug($"Login failed, status code '{responseMessage.StatusCode}'.");
             return false;
         }
 
-        public Task LogoutAsync() 
+        public Task LogoutAsync()
             => authenticationState.ClearTokenAsync();
 
         public async Task<RegisterResponse> RegisterAsync(string userName, string password)
         {
-            RegisterResponse response = await http.PostJsonAsync<RegisterResponse>(
-                "/api/user/register",
-                new RegisterRequest()
-                {
-                    UserName = userName,
-                    Password = password
-                }
-            );
+            HttpContent requestContent = CreateJsonContent(new RegisterRequest()
+            {
+                UserName = userName,
+                Password = password
+            });
 
+            HttpResponseMessage responseMessage = await http.PostAsync("/api/user/register", requestContent);
+            RegisterResponse response = await ReadJsonResponseAsync<RegisterResponse>(responseMessage);
             return response;
         }
 
@@ -99,54 +139,45 @@ namespace Money.Services
 
         public async Task<Response> QueryAsync(Type type, string payload)
         {
-            string url = queryMapper.FindUrlByType(type);
-            if (url != null)
+            try
             {
-                try
-                {
-                    HttpResponseMessage response = await http.PostAsync($"/api/query/{url}", new StringContent(payload, Encoding.UTF8, "text/json"));
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        log.Debug($"Response: '{responseContent}'.");
-                        return json.Deserialize<Response>(responseContent);
-                    }
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        await authenticationState.ClearTokenAsync();
-                        throw new UnauthorizedAccessException();
-                    }
-                    else if (response.StatusCode == HttpStatusCode.InternalServerError)
-                    {
-                        throw new InternalServerException();
-                    }
-                    else
-                    {
-                        throw Ensure.Exception.InvalidOperation($"Generic HTTP error: {response.StatusCode}.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (e is HttpRequestException)
-                        e = new ServerNotRespondingException(e);
-
-                    exceptionHandler.Handle(e);
-                    throw;
-                }
+                HttpResponseMessage responseMessage = await PostToUniformApiAsync(queryMapper, "/api/query", type, payload);
+                return await ReadJsonResponseAsync<Response>(responseMessage);
             }
-            else
+            catch (Exception e)
             {
-                return await http.PostJsonAsync<Response>($"/api/query", CreateRequest(type, payload));
+                if (e is HttpRequestException)
+                    e = new ServerNotRespondingException(e);
+
+                exceptionHandler.Handle(e);
+                throw;
             }
         }
 
-        public Task CommandAsync(Type type, string payload)
+        public async Task CommandAsync(Type type, string payload)
         {
-            string url = commandMapper.FindUrlByType(type);
+            try
+            {
+                HttpResponseMessage responseMessage = await PostToUniformApiAsync(commandMapper, "/api/command", type, payload);
+                await EnsureStatusCodeAsync(responseMessage);
+            }
+            catch (Exception e)
+            {
+                if (e is HttpRequestException)
+                    e = new ServerNotRespondingException(e);
+
+                exceptionHandler.Handle(e);
+                throw;
+            }
+        }
+
+        private Task<HttpResponseMessage> PostToUniformApiAsync(TypeMapper mapper, string baseUrl, Type type, string payload)
+        {
+            string url = mapper.FindUrlByType(type);
             if (url != null)
-                return http.PostJsonAsync($"/api/command/{url}", payload);
+                return http.PostAsync($"{baseUrl}/{url}", CreateStringContent(payload));
             else
-                return http.PostJsonAsync($"/api/command", CreateRequest(type, payload));
+                return http.PostAsync(baseUrl, CreateJsonContent(CreateRequest(type, payload)));
         }
     }
 }

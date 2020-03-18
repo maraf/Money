@@ -1,0 +1,53 @@
+﻿@if (ApiVersion == null)
+{
+    @ChildContent
+}
+else
+{
+    <LayoutView Layout="@typeof(Layouts.Layout)">
+        <Title Icon="exclamation-circle"
+               Main="Your client is too old"
+               Sub="Server version is not supported by this client version"
+               ButtonIcon="sync-alt"
+               ButtonText="Reload the page to update"
+               ButtonClick="@(async () => await ReloadAsync())" />
+
+        <p>
+            The problem you are facing might be caused by us.
+            <br />
+            It's possible that we installed a newer version on the server and your client application is not compatible with it.
+        </p>
+        <p>
+            If this is the case, please, reload the page (or application) and this problem may disappear.
+            <br />
+            Otherwise, we will be glad if you <a target="_blank" href="@Navigator.UrlMoneyProjectIssueNew()">report the problem</a>.
+        </p>
+        <p>
+            <strong>We are sorry for this inconvenience.</strong>
+        </p>
+        <p>
+            <table class="text-muted">
+                <tr>
+                    <td>
+                        Server version
+                    </td>
+                    <td>
+                        @ApiVersion
+                    </td>
+                </tr>
+
+                @if (ClientVersion != null)
+                {
+                    <tr>
+                        <td>
+                            Client version
+                        </td>
+                        <td>
+                            @ClientVersion
+                        </td>
+                    </tr>
+                }
+            </table>
+        </p>
+    </LayoutView>
+}

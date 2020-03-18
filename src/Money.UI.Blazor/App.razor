@@ -6,14 +6,16 @@
         <Found Context="routeData">
             <Network>
                 <Online>
-                    <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
-                        <NotAuthorized>
-                            <Login />
-                        </NotAuthorized>
-                        <Authorizing>
-                            Loading, please wait...
-                        </Authorizing>
-                    </AuthorizeRouteView>
+                    <VersionSupport>
+                        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
+                            <NotAuthorized>
+                                <Login />
+                            </NotAuthorized>
+                            <Authorizing>
+                                Loading, please wait...
+                            </Authorizing>
+                        </AuthorizeRouteView>
+                    </VersionSupport>
                 </Online>
                 <Offline>
                     <LayoutView Layout="@typeof(Layout)">

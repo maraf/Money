@@ -20,6 +20,9 @@ namespace Money.Components
         public string Sub { get; set; }
 
         [Parameter]
+        public string ButtonIcon { get; set; } = "plus";
+
+        [Parameter]
         public string ButtonText { get; set; }
 
         [Parameter]

@@ -12,7 +12,11 @@
             @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
             {
                 <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
-                    <Icon Identifier="plus" />
+                    @if (!String.IsNullOrEmpty(ButtonIcon))
+                    {
+                        <Icon Identifier="@ButtonIcon" />
+                    }
+
                     @ButtonText
                 </button>
             }

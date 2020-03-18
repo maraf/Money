@@ -28,11 +28,16 @@ else
         <p>
             <table class="text-muted">
                 <tr>
+                    <th colspan="2">
+                        Versions
+                    </th>
+                </tr>
+                <tr>
                     <td>
-                        Server version
+                        Server (API)
                     </td>
                     <td>
-                        @ApiVersion
+                        <Version Value="@ApiVersion" />
                     </td>
                 </tr>
 
@@ -40,10 +45,10 @@ else
                 {
                     <tr>
                         <td>
-                            Client version
+                            Client
                         </td>
                         <td>
-                            @ClientVersion
+                            <Version Value="@ClientVersion" />
                         </td>
                     </tr>
                 }

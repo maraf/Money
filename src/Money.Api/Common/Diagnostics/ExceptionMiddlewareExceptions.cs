@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Money.Common.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Common.Diagnostics
+namespace Microsoft.AspNetCore.Builder
 {
     public static class ExceptionMiddlewareExceptions
     {

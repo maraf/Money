@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Money.Common.Diagnostics;
+using Money.Common.Middlewares;
 using Money.Data;
 using Money.Hubs;
 using Money.Models;
@@ -106,6 +107,9 @@ namespace Money
                 .AddNewtonsoftJson();
 
             services
+                .AddVersionHeader();
+
+            services
                 .AddSignalR();
 
             services
@@ -150,7 +154,7 @@ namespace Money
 #if DEBUG
                 p.WithOrigins("http://localhost:48613");
 #else
-                p.WithOrigins("https://app.money.neptuo.com");
+                p.WithOrigins("https://app.money.neptuo.com", "https://beta.app.money.neptuo.com");
 #endif
                 p.AllowAnyMethod();
                 p.AllowCredentials();
@@ -160,6 +164,8 @@ namespace Money
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseVersionHeader();
 
             app.UseEndpoints(endpoints =>
             {

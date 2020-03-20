@@ -70,8 +70,19 @@ namespace Money.Services
         public string UrlMoneyProject()
             => "http://github.com/maraf/Money";
 
-        public string UrlMoneyProjectIssueNew()
-            => "https://github.com/maraf/Money/issues/new";
+        public string UrlMoneyProjectIssueNew(string title = null)
+            => AddOptionalParameter("https://github.com/maraf/Money/issues/new", "title", title);
+
+        public string AddOptionalParameter(string url, string name, string value)
+        {
+            if (String.IsNullOrEmpty(value))
+                return url;
+
+            value = Uri.EscapeUriString(value);
+
+            char separator = url.Contains('?') ? '&' : '?';
+            return $"{url}{separator}{name}={value}";
+        }
 
         #endregion
     }

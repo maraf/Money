@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Services;
+using Neptuo;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
 using System;
@@ -28,6 +29,8 @@ namespace Money.Pages
         protected Version ApiVersion { get; set; }
         protected Version ClientVersion { get; set; }
 
+        protected string NewIssueTitle { get; set; }
+
         protected override void OnInitialized()
         {
             Log.Debug("Initialize VersionSupport");
@@ -36,6 +39,7 @@ namespace Money.Pages
 
             ExceptionHandlerBuilder.Handler<NotSupportedApiVersionException>(this);
             ClientVersion = typeof(VersionSupport).Assembly.GetName().Version;
+            NewIssueTitle = $"Client '{Converts.To<Version, string>(ClientVersion)}' is too old";
         }
 
         protected Task ReloadAsync() 

@@ -15,7 +15,6 @@ namespace Money.Services
 {
     public class ApiClient
     {
-        private readonly ApiClientConfiguration configuration;
         private readonly ApiVersionChecker versionChecker;
         private readonly HttpClient http;
         private readonly CommandMapper commandMapper;
@@ -36,7 +35,6 @@ namespace Money.Services
             Ensure.NotNull(authenticationState, "authenticationState");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNull(json, "json");
-            this.configuration = configuration.Value;
             this.versionChecker = versionChecker;
             this.http = http;
             this.commandMapper = commandMapper;
@@ -46,7 +44,7 @@ namespace Money.Services
             this.log = logFactory.Scope("ApiClient");
             this.json = json;
 
-            http.BaseAddress = this.configuration.ApiUrl;
+            this.http.BaseAddress = configuration.Value.ApiUrl;
         }
 
         private HttpContent CreateJsonContent<T>(T request)

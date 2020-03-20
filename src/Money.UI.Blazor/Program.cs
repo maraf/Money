@@ -51,6 +51,7 @@ namespace Money.UI.Blazor
                 .AddBaseAddressHttpClient()
                 .AddSingleton<ApiAuthenticationStateProvider>()
                 .AddSingleton<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())
+                .AddTransient<ApiTokenValidator>()
                 .AddSingleton<SignalRListener>()
                 .AddSingleton<ApiHubService>()
                 .AddSingleton<ApiVersionChecker>()
@@ -85,8 +86,11 @@ namespace Money.UI.Blazor
         {
             bootstrapTask.RegisterHandlers(services);
 
-            services.GetService<IEventHandlerCollection>()
-                .AddAll(services.GetService<SignalRListener>());
+            services.GetRequiredService<IEventHandlerCollection>()
+                .AddAll(services.GetRequiredService<SignalRListener>());
+
+            services.GetRequiredService<ApiAuthenticationStateProvider>()
+                .AddValidator(services.GetRequiredService<ApiTokenValidator>());
         }
     }
 }

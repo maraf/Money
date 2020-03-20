@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Money.Events;
+using Money.Queries;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Logging;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,26 +18,37 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    public class ApiAuthenticationStateProvider : AuthenticationStateProvider
+    public partial class ApiAuthenticationStateProvider : AuthenticationStateProvider
     {
-        private readonly IEventDispatcher eventDispatcher;
+        private readonly IEventDispatcher events;
         private readonly HttpClient http;
         private readonly TokenContainer token;
         private readonly Interop interop;
         private readonly ILog log;
 
-        public ApiAuthenticationStateProvider(IEventDispatcher eventDispatcher, HttpClient http, TokenContainer token, Interop interop, ILogFactory logFactory)
+        private readonly List<ITokenValidator> validators = new List<ITokenValidator>();
+
+        public ApiAuthenticationStateProvider(IEventDispatcher events, HttpClient http, TokenContainer token, Interop interop, ILogFactory logFactory, IEnumerable<ITokenValidator> validators)
         {
-            Ensure.NotNull(eventDispatcher, "eventDispatcher");
+            Ensure.NotNull(events, "eventDispatcher");
             Ensure.NotNull(http, "http");
             Ensure.NotNull(token, "token");
             Ensure.NotNull(interop, "interop");
             Ensure.NotNull(logFactory, "logFactory");
-            this.eventDispatcher = eventDispatcher;
+            Ensure.NotNull(validators, "validators");
+            this.events = events;
             this.http = http;
             this.token = token;
             this.interop = interop;
             this.log = logFactory.Scope("ApiAuthenticationState");
+            this.validators.AddRange(validators);
+        }
+
+        public ApiAuthenticationStateProvider AddValidator(ITokenValidator validator)
+        {
+            Ensure.NotNull(validator, "validator");
+            validators.Add(validator);
+            return this;
         }
 
         public async Task<string> GetTokenAsync()
@@ -58,18 +71,40 @@ namespace Money.Services
             token.Value = value;
             if (!String.IsNullOrEmpty(token.Value))
             {
-                log.Debug("Token found in the storage.");
+                log.Debug("Applying token.");
 
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-                await eventDispatcher.PublishAsync(new UserSignedIn());
-            }
-            else
-            {
-                log.Debug("Token not found in the storage.");
 
-                http.DefaultRequestHeaders.Authorization = null;
-                await eventDispatcher.PublishAsync(new UserSignedOut());
+                bool isValid = true;
+                if (!await ValidateTokenAsync(token.Value))
+                {
+                    log.Debug("Token isn't valid.");
+                    isValid = false;
+                }
+
+                if (isValid)
+                {
+                    log.Debug("Token validation succeeded.");
+                    await events.PublishAsync(new UserSignedIn());
+                    return;
+                }
             }
+
+            log.Debug("Clearing token.");
+
+            http.DefaultRequestHeaders.Authorization = null;
+            await events.PublishAsync(new UserSignedOut());
+        }
+
+        private async Task<bool> ValidateTokenAsync(string token)
+        {
+            foreach (var validator in validators)
+            {
+                if (!await validator.ValidateAsync(token))
+                    return false;
+            }
+
+            return true;
         }
 
         public async Task SetTokenAsync(string value, bool isPersistent = false)

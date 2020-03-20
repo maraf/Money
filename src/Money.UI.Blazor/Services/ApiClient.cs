@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Options;
-using Money.Events;
+﻿using Microsoft.Extensions.Options;
 using Money.Models.Api;
 using Money.Users.Models;
 using Neptuo;
-using Neptuo.Events;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -116,21 +111,28 @@ namespace Money.Services
                 Password = password
             });
 
-            HttpResponseMessage responseMessage = await http.PostAsync("/api/user/login", requestContent);
-            if (responseMessage.StatusCode == HttpStatusCode.OK)
+            try
             {
-                LoginResponse response = await ReadJsonResponseAsync<LoginResponse>(responseMessage);
-                log.Debug($"Login success, token '{response.Token}'.");
-
-                if (!String.IsNullOrEmpty(response.Token))
+                HttpResponseMessage responseMessage = await http.PostAsync("/api/user/login", requestContent);
+                if (responseMessage.StatusCode == HttpStatusCode.OK)
                 {
-                    await authenticationState.SetTokenAsync(response.Token, isPermanent);
-                    return true;
-                }
-            }
+                    LoginResponse response = await ReadJsonResponseAsync<LoginResponse>(responseMessage);
+                    log.Debug($"Login success, token '{response.Token}'.");
 
-            log.Debug($"Login failed, status code '{responseMessage.StatusCode}'.");
-            return false;
+                    if (!String.IsNullOrEmpty(response.Token))
+                    {
+                        await authenticationState.SetTokenAsync(response.Token, isPermanent);
+                        return true;
+                    }
+                }
+
+                log.Debug($"Login failed, status code '{responseMessage.StatusCode}'.");
+                return false;
+            }
+            catch (Exception e)
+            {
+                throw ProcessHttpException(e);
+            }
         }
 
         public Task LogoutAsync()
@@ -144,9 +146,16 @@ namespace Money.Services
                 Password = password
             });
 
-            HttpResponseMessage responseMessage = await http.PostAsync("/api/user/register", requestContent);
-            RegisterResponse response = await ReadJsonResponseAsync<RegisterResponse>(responseMessage);
-            return response;
+            try
+            {
+                HttpResponseMessage responseMessage = await http.PostAsync("/api/user/register", requestContent);
+                RegisterResponse response = await ReadJsonResponseAsync<RegisterResponse>(responseMessage);
+                return response;
+            }
+            catch (Exception e)
+            {
+                throw ProcessHttpException(e);
+            }
         }
 
         private Request CreateRequest(Type type, string payload)
@@ -161,11 +170,7 @@ namespace Money.Services
             }
             catch (Exception e)
             {
-                if (e is HttpRequestException)
-                    e = new ServerNotRespondingException(e);
-
-                exceptionHandler.Handle(e);
-                throw;
+                throw ProcessHttpException(e);
             }
         }
 
@@ -178,11 +183,7 @@ namespace Money.Services
             }
             catch (Exception e)
             {
-                if (e is HttpRequestException)
-                    e = new ServerNotRespondingException(e);
-
-                exceptionHandler.Handle(e);
-                throw;
+                throw ProcessHttpException(e);
             }
         }
 
@@ -193,6 +194,17 @@ namespace Money.Services
                 return http.PostAsync($"{baseUrl}/{url}", CreateStringContent(payload));
             else
                 return http.PostAsync(baseUrl, CreateJsonContent(CreateRequest(type, payload)));
+        }
+
+        private Exception ProcessHttpException(Exception e)
+        {
+            log.Debug($"Exception while invoking HTTP request, type: '{e.GetType().FullName}', message: '{e.Message}'.");
+
+            if (e.Message == "TypeError: Failed to fetch" || e is HttpRequestException)
+                e = new ServerNotRespondingException(e);
+
+            exceptionHandler.Handle(e);
+            return e;
         }
     }
 }

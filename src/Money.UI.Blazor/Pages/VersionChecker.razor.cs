@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class VersionSupport : IExceptionHandler<NotSupportedApiVersionException>
+    public partial class VersionChecker : IExceptionHandler<NotSupportedApiVersionException>
     {
         [Inject]
         public ExceptionHandlerBuilder ExceptionHandlerBuilder { get; set; }
@@ -21,7 +21,7 @@ namespace Money.Pages
         public Navigator Navigator { get; set; }
 
         [Inject]
-        public ILog<VersionSupport> Log { get; set; }
+        public ILog<VersionChecker> Log { get; set; }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -38,7 +38,7 @@ namespace Money.Pages
             base.OnInitialized();
 
             ExceptionHandlerBuilder.Handler<NotSupportedApiVersionException>(this);
-            ClientVersion = typeof(VersionSupport).Assembly.GetName().Version;
+            ClientVersion = typeof(VersionChecker).Assembly.GetName().Version;
             NewIssueTitle = $"Client '{Converts.To<Version, string>(ClientVersion)}' is too old";
         }
 

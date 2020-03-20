@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    public class ApiHubService
+    public class ApiHubService : IApiHubState
     {
         private readonly BrowserEventDispatcher events;
         private readonly BrowserExceptionHandler exceptions;
@@ -23,7 +23,9 @@ namespace Money.Services
         private readonly ILog log;
         private HubConnection connection;
 
-        public bool IsStarted { get; private set; }
+        public bool IsActive { get; private set; }
+        public bool IsError { get; private set; }
+        public event Action Changed;
 
         public ApiHubService(BrowserEventDispatcher events, BrowserExceptionHandler exceptions, Navigator navigator, IOptions<ApiClientConfiguration> apiConfiguration, TokenContainer token, ILogFactory logFactory)
         {
@@ -69,22 +71,22 @@ namespace Money.Services
 
             await connection.StartAsync();
 
-            IsStarted = true;
+            ChangeState(true);
         }
 
-        private async Task OnConnectionClosed(Exception e)
+        private Task OnConnectionClosed(Exception e)
         {
             log.Debug("Connection closed.");
 
+            bool isError = false;
             if (e != null)
+            {
                 log.Fatal($"Connection error {Environment.NewLine}{e.ToString()}");
+                isError = true;
+            }
 
-#if !DEBUG
-                await navigator.AlertAsync("Underlaying connection to the server has closed. Reloading the page...");
-#endif
-
-            await Task.Delay(2000);
-            await navigator.ReloadAsync();
+            ChangeState(false, isError);
+            return Task.CompletedTask;
         }
 
         public async Task StopAsync()
@@ -98,6 +100,18 @@ namespace Money.Services
                 await connection.DisposeAsync();
                 connection = null;
             }
+
+            ChangeState(false);
+        }
+
+        private void ChangeState(bool isActive, bool isError = false)
+        {
+            IsActive = isActive;
+
+            if (isError)
+                IsError = true;
+
+            Changed?.Invoke();
         }
     }
 }

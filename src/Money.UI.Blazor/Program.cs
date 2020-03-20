@@ -54,6 +54,7 @@ namespace Money.UI.Blazor
                 .AddTransient<ApiTokenValidator>()
                 .AddSingleton<SignalRListener>()
                 .AddSingleton<ApiHubService>()
+                .AddTransient<IApiHubState>(provider => provider.GetRequiredService<ApiHubService>())
                 .AddSingleton<ApiVersionChecker>()
                 .AddTransient<Interop>()
                 .AddSingleton<PwaInstallInterop>()

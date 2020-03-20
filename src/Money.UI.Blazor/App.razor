@@ -6,16 +6,18 @@
         <Found Context="routeData">
             <Network>
                 <Online>
-                    <VersionSupport>
-                        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
-                            <NotAuthorized>
-                                <Login />
-                            </NotAuthorized>
-                            <Authorizing>
-                                <AuthorizationProgress />
-                            </Authorizing>
-                        </AuthorizeRouteView>
-                    </VersionSupport>
+                    <VersionChecker>
+                        <ApiHubConnectionChecker>
+                            <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
+                                <NotAuthorized>
+                                    <Login />
+                                </NotAuthorized>
+                                <Authorizing>
+                                    <AuthorizationProgress />
+                                </Authorizing>
+                            </AuthorizeRouteView>
+                        </ApiHubConnectionChecker>
+                    </VersionChecker>
                 </Online>
                 <Offline>
                     <LayoutView Layout="@typeof(Layout)">

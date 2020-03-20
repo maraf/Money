@@ -2,6 +2,7 @@
 using Money.Commands;
 using Money.Models.Queries;
 using Money.Services;
+using Money.Services.Converters;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Bootstrap;
@@ -113,6 +114,7 @@ namespace Money.Bootstrap
                 .AddStringTo<int>(Int32.TryParse)
                 .AddStringTo<decimal>(Decimal.TryParse)
                 .AddStringTo<bool>(Boolean.TryParse)
+                .Add(new VersionConverter())
                 .AddEnumSearchHandler(false);
                 //.AddJsonEnumSearchHandler()
                 //.AddJsonPrimitivesSearchHandler()

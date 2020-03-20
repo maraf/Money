@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,21 +10,15 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public class Version : ComponentBase
+    public class ConvertToString<T> : ComponentBase
     {
         [Parameter]
-        public System.Version Value { get; set; }
+        public T Value { get; set; }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            if (Value != null)
-            {
-                string text = Value.Revision == 0 
-                    ? Value.ToString(3) 
-                    : Value.ToString(4);
-
-                builder.AddContent(0, $"v{text}");
-            }
+            if (Converts.Try(Value, out string stringValue))
+                builder.AddContent(0, stringValue);
         }
     }
 }

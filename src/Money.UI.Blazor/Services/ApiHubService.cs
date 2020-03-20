@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.JSInterop;
+using Microsoft.Extensions.Options;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Exceptions;
@@ -18,33 +18,39 @@ namespace Money.Services
         private readonly BrowserEventDispatcher events;
         private readonly BrowserExceptionHandler exceptions;
         private readonly Navigator navigator;
+        private readonly ApiClientConfiguration apiConfiguration;
+        private readonly TokenContainer token;
         private readonly ILog log;
         private HubConnection connection;
 
         public bool IsStarted { get; private set; }
 
-        public ApiHubService(BrowserEventDispatcher events, BrowserExceptionHandler exceptions, Navigator navigator, ILogFactory logFactory)
+        public ApiHubService(BrowserEventDispatcher events, BrowserExceptionHandler exceptions, Navigator navigator, IOptions<ApiClientConfiguration> apiConfiguration, TokenContainer token, ILogFactory logFactory)
         {
             Ensure.NotNull(events, "events");
             Ensure.NotNull(exceptions, "exceptions");
             Ensure.NotNull(navigator, "navigator");
+            Ensure.NotNull(apiConfiguration, "apiConfiguration");
+            Ensure.NotNull(token, "token");
             Ensure.NotNull(logFactory, "logFactory");
             this.events = events;
             this.exceptions = exceptions;
             this.navigator = navigator;
+            this.apiConfiguration = apiConfiguration.Value;
+            this.token = token;
             this.log = logFactory.Scope("ApiHub");
         }
 
-        public async Task StartAsync(string url, string token)
+        public async Task StartAsync()
         {
             await StopAsync();
 
-            log.Debug($"Connecting with token '{token}'.");
+            log.Debug($"Connecting with token '{token.Value}'.");
 
-            url = $"{url}?access_token={token}";
+            string url = $"{apiConfiguration.ApiUrl}api?access_token={token.Value}";
 
             connection = new HubConnectionBuilder()
-                .WithUrl(url, o => o.AccessTokenProvider = () => Task.FromResult(token))
+                .WithUrl(url, o => o.AccessTokenProvider = () => Task.FromResult(token.Value))
                 .Build();
 
             connection.On<string>("RaiseEvent", payload =>

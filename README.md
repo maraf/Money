@@ -14,3 +14,4 @@ Also, we have experimental implementation using [Blazor](https://github.com/aspn
  - [Blazor and complex component parameters](https://www.neptuo.com/blog/2018/06/blazor-component-parameters/).
  - [Blazor and page parameters](https://www.neptuo.com/blog/2018/11/blazor-page-parameters/).
  - [Blazor and network](https://www.neptuo.com/blog/2019/12/blazor-network-status/).
+ - [Blazor and the magic of App.razor](https://www.neptuo.com/blog/2020/03/blazor-app-razor).

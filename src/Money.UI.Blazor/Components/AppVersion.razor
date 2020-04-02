@@ -1,14 +1,8 @@
 ﻿<small class="text-muted">
-    <span>Client</span>
-    <span>
-        <ConvertToString Value="@Client" />
-    </span>
+    <span>Client-<ConvertToString Value="@Client" /></span>
 
     @if (Api != null)
     {
-        <span>Api</span>
-        <span>
-            <ConvertToString Value="@Api" />
-        </span>
+        <span>Api-<ConvertToString Value="@Api" /></span>
     }
 </small>

@@ -4,12 +4,21 @@
 <Money.Components.Title Main="Money" Sub="Neptuo" />
 <ExceptionPanel />
 
-<p class="gray">
-    v@(typeof(About).Assembly.GetName().Version.ToString(3))
+<p class="text-muted">
+    <ConvertToString Value="@(typeof(About).Assembly.GetName().Version)" />
 </p>
 <p>
-    <a target="_blank" href="@Navigator.UrlMoneyProject()">Documentation</a>
+    <a target="_blank" href="@Navigator.UrlMoneyProject()"> 
+        <Icon Identifier="book" />
+        Documentation</a>
 </p>
 <p>
-    <a target="_blank" href="@Navigator.UrlMoneyProjectIssueNew()">Report an issue</a>
+    <a target="_blank" href="@Navigator.UrlMoneyRepository()"> 
+        <Icon Identifier="github" Prefix="fab" />
+        Source Code</a>
+</p>
+<p>
+    <a target="_blank" href="@Navigator.UrlMoneyRepositoryIssueNew()">
+        <Icon Identifier="bug" />
+        Report an Issue</a>
 </p>

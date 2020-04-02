@@ -68,9 +68,12 @@ namespace Money.Services
         #region External
 
         public string UrlMoneyProject()
+            => "http://money.neptuo.com";
+        
+        public string UrlMoneyRepository()
             => "http://github.com/maraf/Money";
 
-        public string UrlMoneyProjectIssueNew(string title = null)
+        public string UrlMoneyRepositoryIssueNew(string title = null)
             => AddOptionalParameter("https://github.com/maraf/Money/issues/new", "title", title);
 
         public string AddOptionalParameter(string url, string name, string value)

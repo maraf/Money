@@ -49,10 +49,15 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
-            ILogFilter logFilter = DefaultLogFilter.Debug;
+            ILogFilter logFilter = DefaultLogFilter.Warning;
 
-#if !DEBUG
-            logFilter = DefaultLogFilter.Warning;
+#if DEBUG
+            logFilter = new PrefixLogFilter(new[] {
+                "Root.Json",
+                "Root.CompositeListFormatter",
+                "Root.ApiClient",
+                "Root.ApiAuthenticationState"
+            });
 #endif
 
             logFactory = new DefaultLogFactory("Root")

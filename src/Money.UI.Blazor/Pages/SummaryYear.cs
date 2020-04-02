@@ -22,7 +22,7 @@ namespace Money.Pages
         public int? Year { get; set; }
 
         public SummaryYear() 
-            => SubTitle = "Per-year summary of outcomes in categories";
+            => SubTitle = "Per-year summary of expenses in categories";
 
         protected override void ClearPreviousParameters() 
             => Year = null;

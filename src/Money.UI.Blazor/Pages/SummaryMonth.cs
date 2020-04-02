@@ -26,7 +26,7 @@ namespace Money.Pages
         public int? Month { get; set; }
 
         public SummaryMonth() 
-            => SubTitle = "Per-month summary of outcomes in categories";
+            => SubTitle = "Per-month summary of expenses in categories";
 
         protected override void ClearPreviousParameters()
         {

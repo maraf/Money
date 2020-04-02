@@ -45,15 +45,4 @@
     <None Update="**\*.json.defaults" DependentUpon="%(Filename)" />
     <Watch Include="**\*.razor" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Watch Remove="Pages\VersionChecker.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Pages\VersionChecker.razor.cs">
-      <DependentUpon>VersionChecker.razor</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
 </Project>

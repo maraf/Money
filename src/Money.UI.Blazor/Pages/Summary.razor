@@ -67,24 +67,33 @@
 
     <Modal @ref="PeriodSelectorModal" Title="Select a period" BodyCssClass="p-0">
         <Loading Context="@PeriodsLoading">
-            @if (Periods != null)
-            {
-                if (Periods.Count > 0)
+            <LoadingContent>
+                <div class="p-3">
+                    <i>Loading...</i>
+                </div>
+            </LoadingContent>
+            <ChildContent>
+                @if (Periods != null)
                 {
-                    <div class="list-group list-group-flush">
-                        @foreach (var item in Periods)
-                        {
-                            <a @onclick="@(() => PeriodSelectorModal.Hide())" href="@UrlSummary(item)" class="list-group-item @(item.Equals(SelectedPeriod) ? "active" : null)">
-                                @item.ToString()
-                            </a>
-                        }
-                    </div>
+                    if (Periods.Count > 0)
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var item in Periods)
+                            {
+                                <a @onclick="@(() => PeriodSelectorModal.Hide())" href="@UrlSummary(item)" class="list-group-item @(item.Equals(SelectedPeriod) ? "active" : null)">
+                                    @item.ToString()
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3">
+                            <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
+                        </div>
+                    }
                 }
-                else
-                {
-                    <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
-                }
-            }
+            </ChildContent>
         </Loading>
     </Modal>
 </div>

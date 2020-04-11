@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class Summary<T> : 
+    public partial class Summary<T> :
         System.IDisposable,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
@@ -50,25 +50,28 @@ namespace Money.Pages
 
         protected string SubTitle { get; set; }
 
+        protected LoadingContext PeriodsLoading { get; } = new LoadingContext();
         protected List<T> Periods { get; private set; }
         protected T SelectedPeriod { get; set; }
 
+        protected LoadingContext CategoriesLoading { get; } = new LoadingContext();
         protected Price TotalAmout { get; private set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
 
-        protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
         protected Modal PeriodSelectorModal { get; set; }
         protected ModalDialog CreateModal { get; set; }
 
-        protected override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             Log.Debug("Summary.OnInitializedAsync");
             BindEvents();
             SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, SortDirection.Ascending);
 
-            return base.OnInitializedAsync();
+            await base.OnInitializedAsync();
+
+            formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
         }
 
         public override Task SetParametersAsync(ParameterView parameters)
@@ -77,7 +80,7 @@ namespace Money.Pages
             return base.SetParametersAsync(parameters);
         }
 
-        protected virtual void ClearPreviousParameters() 
+        protected virtual void ClearPreviousParameters()
             => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(ClearPreviousParameters)}'.");
 
         protected virtual T CreateSelectedItemFromParameters()
@@ -86,7 +89,7 @@ namespace Money.Pages
         protected async override Task OnParametersSetAsync()
         {
             SelectedPeriod = CreateSelectedItemFromParameters();
-            await LoadPeriodsAsync(isReload: false);
+            await LoadSelectedPeriodAsync();
         }
 
         protected virtual IQuery<List<T>> CreatePeriodsQuery()
@@ -94,22 +97,24 @@ namespace Money.Pages
 
         protected async Task LoadPeriodsAsync(bool isReload = true)
         {
-            if (isReload || Periods == null)
+            using (PeriodsLoading.Start())
             {
-                using (Loading.Start())
+                if (isReload || Periods == null)
                     Periods = await Queries.QueryAsync(CreatePeriodsQuery());
             }
-
-            await LoadPeriodAsync();
         }
 
-        protected async Task LoadPeriodAsync()
+        protected async Task LoadSelectedPeriodAsync()
         {
             if (SelectedPeriod != null)
             {
-                Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedPeriod));
-                TotalAmout = await Queries.QueryAsync(CreateTotalQuery(SelectedPeriod));
-                formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+                using (CategoriesLoading.Start())
+                {
+                    Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedPeriod));
+                    TotalAmout = await Queries.QueryAsync(CreateTotalQuery(SelectedPeriod));
+
+                }
+
                 Sort();
             }
         }
@@ -215,11 +220,10 @@ namespace Money.Pages
 
         private async void OnMonthUpdatedEvent(DateTime changed)
         {
-            if (!IsContained(changed))
+            if (!IsContained(changed) && Periods != null)
                 await LoadPeriodsAsync();
-            else
-                await LoadPeriodAsync();
 
+            await LoadSelectedPeriodAsync();
             StateHasChanged();
         }
 
@@ -228,13 +232,16 @@ namespace Money.Pages
 
         private async void OnOutcomeAmountChangedEvent()
         {
-            await LoadPeriodAsync();
+            await LoadSelectedPeriodAsync();
             StateHasChanged();
         }
 
         private async void OnOutcomeDeletedEvent()
         {
-            await LoadPeriodsAsync();
+            if (Periods != null)
+                await LoadPeriodsAsync();
+
+            await LoadSelectedPeriodAsync();
             StateHasChanged();
         }
 
@@ -242,6 +249,12 @@ namespace Money.Pages
         {
             CreateModal.Show();
             StateHasChanged();
+        }
+
+        protected async Task OpenPeriodSelectorAsync()
+        {
+            PeriodSelectorModal.Show();
+            await LoadPeriodsAsync(isReload: false);
         }
 
         #endregion

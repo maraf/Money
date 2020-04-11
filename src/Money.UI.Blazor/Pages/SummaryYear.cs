@@ -34,7 +34,7 @@ namespace Money.Pages
             if (Year != null)
                 return new YearModel(Year.Value);
             else
-                return null;
+                return DateTime.Now;
         }
 
         protected override IQuery<List<YearModel>> CreatePeriodsQuery()

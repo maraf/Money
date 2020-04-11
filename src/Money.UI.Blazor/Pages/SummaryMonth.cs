@@ -41,7 +41,7 @@ namespace Money.Pages
             if (Year != null && Month != null)
                 return new MonthModel(Year.Value, Month.Value);
             else
-                return null;
+                return DateTime.Now;
         }
 
         protected override IQuery<List<MonthModel>> CreatePeriodsQuery()

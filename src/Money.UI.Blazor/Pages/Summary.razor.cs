@@ -100,15 +100,6 @@ namespace Money.Pages
                     Periods = await Queries.QueryAsync(CreatePeriodsQuery());
             }
 
-            if (SelectedPeriod != null && !Periods.Contains(SelectedPeriod))
-            {
-                Navigator.OpenSummary();
-                return;
-            }
-
-            if (SelectedPeriod == null)
-                SelectedPeriod = Periods.FirstOrDefault();
-
             await LoadPeriodAsync();
         }
 

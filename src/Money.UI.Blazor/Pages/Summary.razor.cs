@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Components;
+using Money.Components.Bootstrap;
 using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
@@ -49,8 +50,8 @@ namespace Money.Pages
 
         protected string SubTitle { get; set; }
 
-        protected List<T> Items { get; private set; }
-        protected T SelectedItem { get; set; }
+        protected List<T> Periods { get; private set; }
+        protected T SelectedPeriod { get; set; }
 
         protected Price TotalAmout { get; private set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
@@ -58,6 +59,7 @@ namespace Money.Pages
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
+        protected Modal PeriodSelectorModal { get; set; }
         protected ModalDialog CreateModal { get; set; }
 
         protected override Task OnInitializedAsync()
@@ -83,39 +85,39 @@ namespace Money.Pages
 
         protected async override Task OnParametersSetAsync()
         {
-            SelectedItem = CreateSelectedItemFromParameters();
-            await LoadItemsAsync(isReload: false);
+            SelectedPeriod = CreateSelectedItemFromParameters();
+            await LoadPeriodsAsync(isReload: false);
         }
 
-        protected virtual IQuery<List<T>> CreateItemsQuery()
-            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateItemsQuery)}'.");
+        protected virtual IQuery<List<T>> CreatePeriodsQuery()
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreatePeriodsQuery)}'.");
 
-        protected async Task LoadItemsAsync(bool isReload = true)
+        protected async Task LoadPeriodsAsync(bool isReload = true)
         {
-            if (isReload || Items == null)
+            if (isReload || Periods == null)
             {
                 using (Loading.Start())
-                    Items = await Queries.QueryAsync(CreateItemsQuery());
+                    Periods = await Queries.QueryAsync(CreatePeriodsQuery());
             }
 
-            if (SelectedItem != null && !Items.Contains(SelectedItem))
+            if (SelectedPeriod != null && !Periods.Contains(SelectedPeriod))
             {
                 Navigator.OpenSummary();
                 return;
             }
 
-            if (SelectedItem == null)
-                SelectedItem = Items.FirstOrDefault();
+            if (SelectedPeriod == null)
+                SelectedPeriod = Periods.FirstOrDefault();
 
-            await LoadItemSummaryAsync();
+            await LoadPeriodAsync();
         }
 
-        protected async Task LoadItemSummaryAsync()
+        protected async Task LoadPeriodAsync()
         {
-            if (SelectedItem != null)
+            if (SelectedPeriod != null)
             {
-                Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedItem));
-                TotalAmout = await Queries.QueryAsync(CreateTotalQuery(SelectedItem));
+                Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedPeriod));
+                TotalAmout = await Queries.QueryAsync(CreateTotalQuery(SelectedPeriod));
                 formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
                 Sort();
             }
@@ -223,9 +225,9 @@ namespace Money.Pages
         private async void OnMonthUpdatedEvent(DateTime changed)
         {
             if (!IsContained(changed))
-                await LoadItemsAsync();
+                await LoadPeriodsAsync();
             else
-                await LoadItemSummaryAsync();
+                await LoadPeriodAsync();
 
             StateHasChanged();
         }
@@ -235,13 +237,13 @@ namespace Money.Pages
 
         private async void OnOutcomeAmountChangedEvent()
         {
-            await LoadItemSummaryAsync();
+            await LoadPeriodAsync();
             StateHasChanged();
         }
 
         private async void OnOutcomeDeletedEvent()
         {
-            await LoadItemsAsync();
+            await LoadPeriodsAsync();
             StateHasChanged();
         }
 

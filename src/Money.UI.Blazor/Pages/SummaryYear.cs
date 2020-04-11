@@ -37,7 +37,7 @@ namespace Money.Pages
                 return null;
         }
 
-        protected override IQuery<List<YearModel>> CreateItemsQuery()
+        protected override IQuery<List<YearModel>> CreatePeriodsQuery()
             => new ListYearWithOutcome();
 
         protected override IQuery<Price> CreateTotalQuery(YearModel item)
@@ -47,7 +47,7 @@ namespace Money.Pages
             => new ListYearCategoryWithOutcome(item);
 
         protected override bool IsContained(DateTime changed)
-            => Items.Contains(changed);
+            => Periods.Contains(changed);
 
         protected override string UrlSummary(YearModel item)
             => Navigator.UrlSummary(item);

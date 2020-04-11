@@ -36,6 +36,9 @@ namespace Money.Components.Bootstrap
         [Parameter]
         public Action CloseButtonClick { get; set; }
 
+        [Parameter]
+        public string BodyCssClass { get; set; }
+
         protected string DialogCssClass { get; set; }
 
         [Parameter]

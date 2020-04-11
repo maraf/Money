@@ -10,63 +10,80 @@
 
     <Loading Context="@Loading">
 
-        @if (Items != null)
+        @if (Periods != null)
         {
-            if (Items.Count > 0)
-            {
-                <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" Size="@Size.Small" />
-
-                <TabSet CssClass="months">
-                    @foreach (var item in Items)
-                    {
-                        <Tab Url="@UrlSummary(item)" CssClass="@(item.Equals(SelectedItem) ? "active" : null)">
-                            @item.ToString()
-                        </Tab>
-                    }
-                </TabSet>
-            }
-            else
+            @if (Periods.Count == 0)
             {
                 <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
             }
-        }
-
-        @if (Categories != null)
-        {
-            <div class="graph">
-                @if (TotalAmout != null)
+            else
+            {
+                @if (SelectedPeriod != null)
                 {
-                    <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedItem))">
-                        <div class="card-body">
-                            <h3 class="description">
-                                <span class="icon">📈</span>
-                                <span class="name">Summary</span>
-                            </h3>
+                    <div class="mb-1">
+                        <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
 
-                            <div class="value">
-                                <div class="amount">@FormatPrice(TotalAmout)</div>
-                            </div>
-                        </div>
+                        <button type="button" class="btn btn-primary" @onclick="@(() => PeriodSelectorModal.Show())">
+                            @SelectedPeriod.ToString()
+                        </button>
                     </div>
                 }
 
-                @foreach (var category in Categories)
+                @if (Categories != null)
                 {
-                    <div class="card bar-graph" @onclick="@(() => OpenOverview(SelectedItem, category.Key))">
-                        <div class="card-body">
-                            <h3 class="description" title="@category.Description">
-                                <span class="icon">@category.Icon</span>
-                                <span class="name">@category.Name</span>
-                            </h3>
+                    <div class="graph">
+                        @if (TotalAmout != null)
+                        {
+                            <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
+                                <div class="card-body">
+                                    <h3 class="description">
+                                        <span class="icon">📈</span>
+                                        <span class="name">Summary</span>
+                                    </h3>
 
-                            <div class="value">
-                                <div class="amount">@FormatPrice(category.TotalAmount)</div>
-                                <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
+                                    <div class="value">
+                                        <div class="amount">@FormatPrice(TotalAmout)</div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        }
+
+                        @foreach (var category in Categories)
+                        {
+                            <div class="card bar-graph" @onclick="@(() => OpenOverview(SelectedPeriod, category.Key))">
+                                <div class="card-body">
+                                    <h3 class="description" title="@category.Description">
+                                        <span class="icon">@category.Icon</span>
+                                        <span class="name">@category.Name</span>
+                                    </h3>
+
+                                    <div class="value">
+                                        <div class="amount">@FormatPrice(category.TotalAmount)</div>
+                                        <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
-            </div>
+
+                <Modal @ref="PeriodSelectorModal" Title="Select a period" BodyCssClass="p-0">
+                    @if (Periods != null)
+                    {
+                        if (Periods.Count > 0)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var item in Periods)
+                                {
+                                    <a @onclick="@(() => PeriodSelectorModal.Hide())" href="@UrlSummary(item)" class="list-group-item @(item.Equals(SelectedPeriod) ? "active" : null)">
+                                        @item.ToString()
+                                    </a>
+                                }
+                            </div>
+                        }
+                    }
+                </Modal>
+            }
         }
     </Loading>
 </div>

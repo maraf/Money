@@ -15,7 +15,20 @@
 
             <button type="button" class="btn btn-primary" @onclick="@OpenPeriodSelectorAsync">
                 @SelectedPeriod.ToString()
+                <Icon Identifier="caret-down" />
             </button>
+
+            @if (PeriodGuesses != null && PeriodGuesses.Count > 0)
+            {
+                <span class="d-none d-md-inline">
+                    @foreach (var guess in PeriodGuesses)
+                    {
+                        <a class="btn btn-link" href="@UrlSummary(guess)">
+                            @guess
+                        </a>
+                    }
+                </span>
+            }
 
             <span class="pl-2">
                 <Loading Context="@CategoriesLoading" />

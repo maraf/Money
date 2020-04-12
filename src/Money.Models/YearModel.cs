@@ -44,5 +44,7 @@ namespace Money.Models
         public static bool operator ==(YearModel model1, YearModel model2) => EqualityComparer<YearModel>.Default.Equals(model1, model2);
 
         public static bool operator !=(YearModel model1, YearModel model2) => !(model1 == model2);
+
+        public static YearModel operator -(YearModel model, int amount) => new YearModel(Math.Max(model.Year - amount, 0));
     }
 }

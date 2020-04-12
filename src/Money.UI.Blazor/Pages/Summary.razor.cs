@@ -53,6 +53,7 @@ namespace Money.Pages
         protected LoadingContext PeriodsLoading { get; } = new LoadingContext();
         protected List<T> Periods { get; private set; }
         protected T SelectedPeriod { get; set; }
+        protected IReadOnlyCollection<T> PeriodGuesses { get; set; }
 
         protected LoadingContext CategoriesLoading { get; } = new LoadingContext();
         protected Price TotalAmout { get; private set; }
@@ -74,21 +75,21 @@ namespace Money.Pages
             formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
         }
 
+        protected virtual void ClearPreviousParameters()
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(ClearPreviousParameters)}'.");
+
+        protected virtual (T, IReadOnlyCollection<T>) CreateSelectedPeriodFromParameters()
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedPeriodFromParameters)}'.");
+
         public override Task SetParametersAsync(ParameterView parameters)
         {
             ClearPreviousParameters();
             return base.SetParametersAsync(parameters);
         }
 
-        protected virtual void ClearPreviousParameters()
-            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(ClearPreviousParameters)}'.");
-
-        protected virtual T CreateSelectedItemFromParameters()
-            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedItemFromParameters)}'.");
-
         protected async override Task OnParametersSetAsync()
         {
-            SelectedPeriod = CreateSelectedItemFromParameters();
+            (SelectedPeriod, PeriodGuesses) = CreateSelectedPeriodFromParameters();
             await LoadSelectedPeriodAsync();
         }
 

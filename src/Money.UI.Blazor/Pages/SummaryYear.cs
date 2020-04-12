@@ -27,14 +27,17 @@ namespace Money.Pages
         protected override void ClearPreviousParameters() 
             => Year = null;
 
-        protected override YearModel CreateSelectedItemFromParameters()
+        protected override (YearModel, IReadOnlyCollection<YearModel>) CreateSelectedPeriodFromParameters()
         {
             Log.Debug($"CreateSelectedItemFromParameters(Year='{Year}')");
 
+            YearModel period;
             if (Year != null)
-                return new YearModel(Year.Value);
+                period = new YearModel(Year.Value);
             else
-                return DateTime.Now;
+                period = DateTime.Now;
+
+            return (period, new[] { period - 1, period - 2 });
         }
 
         protected override IQuery<List<YearModel>> CreatePeriodsQuery()

@@ -34,14 +34,17 @@ namespace Money.Pages
             Month = null;
         }
 
-        protected override MonthModel CreateSelectedItemFromParameters()
+        protected override (MonthModel, IReadOnlyCollection<MonthModel>) CreateSelectedPeriodFromParameters()
         {
             Log.Debug($"CreateSelectedItemFromParameters(Year='{Year}', Month='{Month}')");
 
+            MonthModel period;
             if (Year != null && Month != null)
-                return new MonthModel(Year.Value, Month.Value);
+                period = new MonthModel(Year.Value, Month.Value);
             else
-                return DateTime.Now;
+                period = DateTime.Now;
+
+            return (period, new[] { period - 1, period - 2 });
         }
 
         protected override IQuery<List<MonthModel>> CreatePeriodsQuery()

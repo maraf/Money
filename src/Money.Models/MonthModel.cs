@@ -70,5 +70,18 @@ namespace Money.Models
         public static bool operator ==(MonthModel model1, MonthModel model2) => EqualityComparer<MonthModel>.Default.Equals(model1, model2);
 
         public static bool operator !=(MonthModel model1, MonthModel model2) => !(model1 == model2);
+
+        public static MonthModel operator -(MonthModel model, int amount)
+        {
+            int year = model.Year;
+            int month = model.Month - amount;
+            if (month <= 0)
+            {
+                month = 12 + month;
+                year = Math.Max(year - 1, 0);
+            }
+
+            return new MonthModel(year, month);
+        }
     }
 }

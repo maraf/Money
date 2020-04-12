@@ -17,12 +17,12 @@
         @foreach (var item in Models)
         {
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex">
                     <strong>
                         @item.Symbol
                     </strong>
 
-                    <div class="nav navbar-right">
+                    <div class="nav ml-auto">
                         @if (!item.IsDefault)
                         {
                             <IconButton Icon="home" ToolTip="Set as default" Click="@(async () => { await OnChangeDefaultClickAsync(item); StateHasChanged(); })" />

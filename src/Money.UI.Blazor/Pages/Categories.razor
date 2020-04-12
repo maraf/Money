@@ -16,19 +16,19 @@
     {
         @foreach (var item in Models)
         {
-            <div class="alert" style="background-color: @item.Color.ToHashCode()">
+            <div class="alert d-flex" style="background-color: @item.Color.ToHashCode()">
                 @if (item.Icon != null)
                 {
-                    <span>@item.Icon</span>
+                    <span class="mr-1">@item.Icon</span>
                 }
-                <strong>
+                <strong class="mr-1">
                     @item.Name
                 </strong>
                 <span class="gray">
                     @item.Description
                 </span>
 
-                <div class="nav navbar-right">
+                <div class="nav ml-auto">
                     <IconButton Icon="pen" ToolTip="Rename" Click="@(() => OnActionClick(item, NameModal))" />
                     <IconButton Icon="image" ToolTip="Icon" Click="@(() => OnActionClick(item, IconModal))" />
                     <IconButton Icon="tint" ToolTip="Color" Click="@(() => OnActionClick(item, ColorModal))" />

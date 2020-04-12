@@ -157,16 +157,6 @@ h4 {
     opacity: 0.7;
 }
 
-.navbar-right {
-    float: right;
-}
-
-@media (max-width: 768px) {
-    .navbar-collapse .navbar-right {
-        float: none;
-    }
-}
-
 .table {
     .btn-link {
         padding: 0;

@@ -13,13 +13,11 @@
                 <ChildContent>
                     @if (Profile != null)
                     {
+                        <MainMenuLink Href="@Navigator.UrlUserManage()" HrefMatch="@MainMenuLinkMatch.StartsWith">
+                            <Icon Identifier="user" />
+                            @Profile.UserName
+                        </MainMenuLink>
                         <li class="nav-item">
-                            <NavLink class="nav-link" href="@Navigator.UrlUserManage()">
-                                <Icon Identifier="user" />
-                                @Profile.UserName
-                            </NavLink>
-                        </li class="nav-item">
-                        <li>
                             <button type="button" class="btn btn-link navbar-btn nav-link" @onclick="@OnLogoutAsync">
                                 <Icon Identifier="sign-out-alt" />
                                 <span class="d-lg-none d-xl-inline">

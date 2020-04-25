@@ -33,6 +33,9 @@ namespace Money.Layouts
         [Inject]
         public AuthenticationStateProvider AuthenticationState { get; set; }
 
+        [Parameter]
+        public string ListCssClass { get; set; }
+
         protected ProfileModel Profile { get; private set; }
         protected bool IsAuthenticated => Profile != null;
 

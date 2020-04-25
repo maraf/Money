@@ -11,6 +11,8 @@ namespace Money.Components
 {
     public class MainMenuBase : ComponentBase, IDisposable
     {
+        protected const string MenuLeftMarginCssClass = "ml-2 ml-lg-0";
+
         [Inject]
         internal Navigator Navigator {get;set;}
 

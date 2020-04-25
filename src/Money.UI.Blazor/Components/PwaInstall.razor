@@ -2,13 +2,17 @@
 {
     <button @ref="Button" class="btn btn-link navbar-btn nav-link" @onclick="InstallAsync" title="Install as application to your device" data-toggle="tooltip" data-placement="bottom">
         <Icon Identifier="download" />
-        Install
+        <span class="d-lg-none d-xl-inline">
+            Install
+        </span>
     </button>
 }
-else if(IsUpdateable)
+else if (IsUpdateable)
 {
     <button @ref="Button" class="btn btn-link navbar-btn nav-link" @onclick="UpdateAsync" title="Application update is ready. Reload page to complete." data-toggle="tooltip" data-placement="bottom">
         <Icon Identifier="download" />
-        Update
+        <span class="d-lg-none d-xl-inline">
+            Update
+        </span>
     </button>
 }

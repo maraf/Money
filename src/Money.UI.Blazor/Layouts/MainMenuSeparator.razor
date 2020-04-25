@@ -1,0 +1,15 @@
+﻿<li class="nav-item">
+    @if (IsVisibleOnDesktop)
+    {
+        <span class="navbar-text mr-2 ml-2 d-none d-lg-inline-block">
+            —
+        </span>
+    }
+
+    @if (IsVisibleOnMobile)
+    {
+        <div class="d-block d-lg-none">
+            <hr />
+        </div>
+    }
+</li>

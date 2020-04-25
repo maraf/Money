@@ -6,37 +6,56 @@
     <Network>
         <Online>
 
-            <ul class="nav navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown">
-                        Expenses
-                        <span class="caret"></span>
-                    </a>
-
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="@Navigator.UrlSummary()">Monthly</a>
-                        <a class="dropdown-item" href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">Yearly</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="@Navigator.UrlSearch()">Search</a>
-                    </div>
+            <ul class="nav navbar-nav mr-auto mt-3 mt-lg-0 @MenuLeftMarginCssClass">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="@Navigator.UrlSummary()" Match="@NavLinkMatch.All">
+                        <Icon Identifier="chart-pie" />
+                        Monthly
+                    </NavLink>
                 </li>
                 <li class="nav-item">
-                    <NavLink class="nav-link" href="@Navigator.UrlCategories()">Categories</NavLink>
+                    <NavLink class="nav-link" href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))">
+                        <Icon Identifier="circle" />
+                        Yearly
+                    </NavLink>
                 </li>
                 <li class="nav-item">
-                    <NavLink class="nav-link" href="@Navigator.UrlCurrencies()">Currencies</NavLink>
+                    <NavLink class="nav-link" href="@Navigator.UrlSearch()">
+                        <Icon Identifier="search" />
+                        Search
+                    </NavLink>
+                </li>
+                <MainMenuSeparator />
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="@Navigator.UrlCategories()">
+                        <Icon Identifier="tags" />
+                        Categories
+                    </NavLink>
                 </li>
                 <li class="nav-item">
-                    <NavLink class="nav-link" href="@Navigator.UrlAbout()">About</NavLink>
+                    <NavLink class="nav-link" href="@Navigator.UrlCurrencies()">
+                        <Icon Identifier="dollar-sign" />
+                        Currencies
+                    </NavLink>
                 </li>
-            </ul>
-            <ul class="nav navbar-nav">
-                <li>
+                <MainMenuSeparator />
+                <li class="nav-item">
                     <PwaInstall />
                 </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="@Navigator.UrlAbout()">
+                        <Icon Identifier="info-circle" />
+                        <span class="d-lg-none d-xl-inline">
+                            About
+                        </span>
+                    </NavLink>
+                </li>
             </ul>
-            <UserInfo />
+            <ul class="nav navbar-nav @MenuLeftMarginCssClass">
+                <MainMenuSeparator IsVisibleOnDesktop="false" />
+            </ul>
+            <UserInfo ListCssClass="@MenuLeftMarginCssClass" />
 
         </Online>
     </Network>
-</div> 
+</div>

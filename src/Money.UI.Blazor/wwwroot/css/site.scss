@@ -83,6 +83,17 @@ h4 {
             margin-left: 10px;
         }
     }
+
+    .nav-item hr {
+        border-color: rgba(255,255,255,.5);
+    }
+
+    @media (max-width: 992px) {
+        .fas, .fa {
+            width: 30px;
+            text-align: center;
+        }
+    }
 }
 
 .nav-tabs > li > a:hover {

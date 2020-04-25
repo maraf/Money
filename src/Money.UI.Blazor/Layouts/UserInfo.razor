@@ -1,7 +1,7 @@
 ﻿@if (IsAuthenticated || Loading.IsLoading)
 {
     <form class="form-inline" @onsubmit="@OnLogoutAsync">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav @ListCssClass">
             <Loading Context="@Loading">
                 <LoadingContent>
                     <li class="nav-item">
@@ -22,7 +22,9 @@
                         <li>
                             <button type="button" class="btn btn-link navbar-btn nav-link" @onclick="@OnLogoutAsync">
                                 <Icon Identifier="sign-out-alt" />
-                                Log out
+                                <span class="d-lg-none d-xl-inline">
+                                    Log out
+                                </span>
                             </button>
                         </li>
                     }

@@ -81,8 +81,11 @@ namespace Money.Services
             bool isError = false;
             if (e != null)
             {
-                log.Fatal($"Connection error {Environment.NewLine}{e.ToString()}");
+                log.Fatal($"Connection error {Environment.NewLine}{e}");
                 isError = true;
+
+                connection.Closed -= OnConnectionClosed;
+                connection = null;
             }
 
             ChangeState(false, isError);

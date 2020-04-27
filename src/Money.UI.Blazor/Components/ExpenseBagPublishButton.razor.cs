@@ -54,7 +54,7 @@ namespace Money.Components
 
         private void SetCssClass()
         {
-            const string defaultCssClass = "btn btn-secondary";
+            const string defaultCssClass = "btn btn-secondary text-truncate mw-100";
 
             object cssClass;
             if (Attributes.TryGetValue("class", out cssClass))

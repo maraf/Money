@@ -100,7 +100,7 @@ namespace Money.Hubs
 
             if (target != null)
             {
-                return target.SendAsync("RaiseEvent", JsonConvert.SerializeObject(new Response()
+                return target.SendAsync(ApiHubMethod.RaiseEvent, JsonConvert.SerializeObject(new Response()
                 {
                     Type = type,
                     Payload = rawPayload
@@ -153,7 +153,7 @@ namespace Money.Hubs
 
             if (target != null)
             {
-                target.SendAsync("RaiseException", JsonConvert.SerializeObject(new Response()
+                target.SendAsync(ApiHubMethod.RaiseException, JsonConvert.SerializeObject(new Response()
                 {
                     Type = type,
                     Payload = rawPayload

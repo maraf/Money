@@ -55,13 +55,13 @@ namespace Money.Services
                 .WithUrl(url, o => o.AccessTokenProvider = () => Task.FromResult(token.Value))
                 .Build();
 
-            connection.On<string>("RaiseEvent", payload =>
+            connection.On<string>(ApiHubMethod.RaiseEvent, payload =>
             {
                 log.Debug($"Event: {payload}");
                 events.Raise(payload);
             });
 
-            connection.On<string>("RaiseException", payload =>
+            connection.On<string>(ApiHubMethod.RaiseException, payload =>
             {
                 log.Debug($"Exception: {payload}");
                 exceptions.Raise(payload);

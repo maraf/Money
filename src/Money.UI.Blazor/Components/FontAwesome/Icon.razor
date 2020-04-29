@@ -1,4 +1,4 @@
-﻿<span class="@Prefix fa-@Identifier" aria-hidden="true"></span>
+﻿<span aria-hidden="true" @attributes="Attributes"></span>
 
 @code
 {
@@ -7,4 +7,19 @@
 
     [Parameter]
     public string Prefix { get; set; } = "fas";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (Attributes == null)
+            Attributes = new Dictionary<string, object>();
+
+        Attributes.TryGetValue("class", out var cssClass);
+        cssClass += $" {Prefix} fa-{Identifier}";
+        Attributes["class"] = cssClass;
+    }
 }

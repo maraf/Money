@@ -1,4 +1,4 @@
-﻿@if (State.IsError)
+﻿@if (LastException != null)
 {
     <LayoutView Layout="@typeof(Layouts.Layout)">
         <Title Icon="exclamation-circle"

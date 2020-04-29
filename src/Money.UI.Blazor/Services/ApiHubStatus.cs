@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    public interface IApiHubState
+    public enum ApiHubStatus
     {
-        ApiHubStatus Status { get; }
-
-        event Action<ApiHubStatus, Exception> Changed;
+        Disconnected,
+        Connecting,
+        Connected
     }
 }

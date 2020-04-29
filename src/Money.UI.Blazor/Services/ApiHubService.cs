@@ -21,11 +21,12 @@ namespace Money.Services
         private readonly ApiClientConfiguration apiConfiguration;
         private readonly TokenContainer token;
         private readonly ILog log;
+        private readonly ILog eventLog;
+        private readonly ILog exceptionLog;
         private HubConnection connection;
 
-        public bool IsActive { get; private set; }
-        public bool IsError { get; private set; }
-        public event Action Changed;
+        public ApiHubStatus Status { get; private set; }
+        public event Action<ApiHubStatus, Exception> Changed;
 
         public ApiHubService(BrowserEventDispatcher events, BrowserExceptionHandler exceptions, Navigator navigator, IOptions<ApiClientConfiguration> apiConfiguration, TokenContainer token, ILogFactory logFactory)
         {
@@ -41,11 +42,15 @@ namespace Money.Services
             this.apiConfiguration = apiConfiguration.Value;
             this.token = token;
             this.log = logFactory.Scope("ApiHub");
+            this.eventLog = log.Factory.Scope("Events");
+            this.exceptionLog = log.Factory.Scope("Exceptions");
         }
 
         public async Task StartAsync()
         {
             await StopAsync();
+
+            ChangeStatus(ApiHubStatus.Connecting);
 
             log.Debug($"Connecting with token '{token.Value}'.");
 
@@ -53,42 +58,59 @@ namespace Money.Services
 
             connection = new HubConnectionBuilder()
                 .WithUrl(url, o => o.AccessTokenProvider = () => Task.FromResult(token.Value))
+                .WithAutomaticReconnect()
                 .Build();
 
-            connection.On<string>(ApiHubMethod.RaiseEvent, payload =>
-            {
-                log.Debug($"Event: {payload}");
-                events.Raise(payload);
-            });
-
-            connection.On<string>(ApiHubMethod.RaiseException, payload =>
-            {
-                log.Debug($"Exception: {payload}");
-                exceptions.Raise(payload);
-            });
-
-            connection.Closed += OnConnectionClosed;
+            connection.On<string>(ApiHubMethod.RaiseEvent, RaiseEvent);
+            connection.On<string>(ApiHubMethod.RaiseException, RaiseException);
+            connection.Reconnecting += OnConnectionReconnectingAsync;
+            connection.Reconnected += OnConnectionReconnectedAsync;
+            connection.Closed += OnConnectionClosedAsync;
 
             await connection.StartAsync();
 
-            ChangeState(true);
+            ChangeStatus(ApiHubStatus.Connected);
         }
 
-        private Task OnConnectionClosed(Exception e)
+        private void RaiseEvent(string payload)
+        {
+            eventLog.Debug(payload);
+            events.Raise(payload);
+        }
+
+        private void RaiseException(string payload)
+        {
+            exceptionLog.Debug(payload);
+            exceptions.Raise(payload);
+        }
+
+        private Task OnConnectionReconnectingAsync(Exception e)
+        {
+            log.Debug($"Reconnecting {Environment.NewLine}{e.ToString()}");
+            ChangeStatus(ApiHubStatus.Connecting, e);
+            return Task.CompletedTask;
+        }
+
+        private Task OnConnectionReconnectedAsync(string arg)
+        {
+            log.Debug($"Reconnected: {arg}");
+            ChangeStatus(ApiHubStatus.Connected);
+            return Task.CompletedTask;
+        }
+
+        private Task OnConnectionClosedAsync(Exception e)
         {
             log.Debug("Connection closed.");
 
-            bool isError = false;
             if (e != null)
             {
-                log.Fatal($"Connection error {Environment.NewLine}{e}");
-                isError = true;
+                log.Fatal($"Connection error {Environment.NewLine}{e.ToString()}");
 
-                connection.Closed -= OnConnectionClosed;
+                connection.Closed -= OnConnectionClosedAsync;
                 connection = null;
             }
 
-            ChangeState(false, isError);
+            ChangeStatus(ApiHubStatus.Disconnected, e);
             return Task.CompletedTask;
         }
 
@@ -97,24 +119,22 @@ namespace Money.Services
             if (connection != null)
             {
                 log.Debug($"Disconnecting.");
-                connection.Closed -= OnConnectionClosed;
 
                 await connection.StopAsync();
                 await connection.DisposeAsync();
                 connection = null;
             }
 
-            ChangeState(false);
+            ChangeStatus(ApiHubStatus.Disconnected);
         }
 
-        private void ChangeState(bool isActive, bool isError = false)
+        private void ChangeStatus(ApiHubStatus status, Exception e = null)
         {
-            IsActive = isActive;
-
-            if (isError)
-                IsError = true;
-
-            Changed?.Invoke();
+            if (Status != status)
+            {
+                Status = status;
+                Changed?.Invoke(status, e);
+            }
         }
     }
 }

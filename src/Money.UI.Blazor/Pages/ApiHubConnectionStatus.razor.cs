@@ -36,7 +36,7 @@ namespace Money.Pages
                     CssClass = "text-danger";
                     break;
                 case ApiHubStatus.Connecting:
-                    Message = "Connecting";
+                    Message = "Connecting...";
                     CssClass = "text-warning";
                     break;
                 case ApiHubStatus.Connected:

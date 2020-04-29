@@ -94,6 +94,16 @@ h4 {
             text-align: center;
         }
     }
+
+    .navbar-brand {
+        position: relative;
+
+        .status {
+            font-size: 10px;
+            top: 5px;
+            position: absolute;
+        }
+    }
 }
 
 .nav-tabs > li > a:hover {

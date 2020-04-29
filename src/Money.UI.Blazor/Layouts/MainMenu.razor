@@ -1,6 +1,9 @@
 ﻿@inherits MainMenuBase
 
-<NavLink class="navbar-brand" href="@Navigator.UrlSummary()">Money</NavLink>
+<NavLink class="navbar-brand" href="@Navigator.UrlSummary()">
+    Money
+    <ApiHubConnectionStatus IsTextVisible="false" />
+</NavLink>
 <HamburgerButton CssClass="navbar-toggler" Click="@OnMainMenuToggleClick" />
 <div class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
     <Network>

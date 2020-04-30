@@ -16,17 +16,17 @@ namespace Money.Services
         IEventHandler<EmailChanged>,
         IEventHandler<UserSignedOut>
     {
-        private readonly NetworkState network;
+        private readonly ServerConnectionState serverConnection;
         private readonly ProfileStorage localStorage;
 
         private ProfileModel profile;
         private Task getProfileTask;
 
-        public UserMiddleware(NetworkState network, ProfileStorage localStorage)
+        public UserMiddleware(ServerConnectionState serverConnection, ProfileStorage localStorage)
         {
-            Ensure.NotNull(network, "network");
+            Ensure.NotNull(serverConnection, "serverConnection");
             Ensure.NotNull(localStorage, "localStorage");
-            this.network = network;
+            this.serverConnection = serverConnection;
             this.localStorage = localStorage;
         }
 
@@ -51,7 +51,7 @@ namespace Money.Services
 
         private async Task LoadProfileAsync(GetProfile query, HttpQueryDispatcher.Next next)
         {
-            if (!network.IsOnline)
+            if (!serverConnection.IsAvailable)
             {
                 profile = await localStorage.LoadAsync();
                 if (profile != null)

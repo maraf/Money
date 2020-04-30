@@ -49,6 +49,7 @@ namespace Money.UI.Blazor
                 })
                 .AddAuthorizationCore()
                 .AddBaseAddressHttpClient()
+                .AddSingleton<ServerConnectionState>()
                 .AddSingleton<ApiAuthenticationStateProvider>()
                 .AddSingleton<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())
                 .AddTransient<ApiTokenValidator>()

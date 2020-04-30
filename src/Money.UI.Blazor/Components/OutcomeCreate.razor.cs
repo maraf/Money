@@ -102,7 +102,7 @@ namespace Money.Components
 
         public override void Show()
         {
-            if (Currencies.Count == 0 || Categories.Count == 0)
+            if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
                 PrerequisitesConfirm.Show();
             else
                 base.Show();
@@ -110,9 +110,9 @@ namespace Money.Components
 
         protected void OnPrerequisitesConfirmed()
         {
-            if (Currencies.Count == 0)
+            if (Currencies == null || Currencies.Count == 0)
                 Navigator.OpenCurrencies();
-            else if (Categories.Count == 0)
+            else if (Categories == null || Categories.Count == 0)
                 Navigator.OpenCategories();
         }
     }

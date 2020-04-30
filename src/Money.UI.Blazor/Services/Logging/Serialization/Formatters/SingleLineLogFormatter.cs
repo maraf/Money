@@ -16,7 +16,7 @@ namespace Neptuo.Logging.Serialization.Formatters
 
             return String.Format(
                 "{0} {1}({2}): {3}",
-                DateTime.Now.ToShortTimeString(),
+                DateTime.Now.ToString("HH:mm:ss"),
                 scopeName,
                 level.ToString().ToUpperInvariant(),
                 message

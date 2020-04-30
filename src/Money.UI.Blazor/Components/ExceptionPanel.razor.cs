@@ -13,7 +13,7 @@ namespace Money.Components
 {
     public partial class ExceptionPanel
     {
-        public static IReadOnlyCollection<Type> SkippedExceptions { get; } = new[] { typeof(UnauthorizedAccessException) };
+        public static IReadOnlyCollection<Type> SkippedExceptions { get; } = new[] { typeof(UnauthorizedAccessException), typeof(ServerNotRespondingException) };
 
         public Exception LastException { get; private set; }
 
@@ -76,10 +76,6 @@ namespace Money.Components
                             message = MessageBuilder.EmailChangeFailed();
 
                         Message = message;
-                    }
-                    else if (e is ServerNotRespondingException)
-                    {
-                        Message = MessageBuilder.ServerNotResponding();
                     }
                     else if (e is InternalServerException)
                     {

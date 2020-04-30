@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Money.Components.Bootstrap;
 using Money.Services;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace Money.Pages
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        protected Modal Dialog { get; set; }
         protected Exception LastException { get; set; }
 
         protected override void OnInitialized()
@@ -31,7 +33,10 @@ namespace Money.Pages
         private void OnStateChanged(ApiHubStatus status, Exception e)
         {
             LastException = e;
-            StateHasChanged();
+            if (LastException != null)
+                Dialog.Show();
+            else
+                Dialog.Hide();
         }
 
         protected Task ReloadAsync()

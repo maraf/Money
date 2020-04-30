@@ -38,36 +38,44 @@ namespace Money.Services
         {
             if (query is ListAllCurrency listAll)
             {
-                if (models.Count == 0)
-                {
-                    if (listAllTask == null)
-                        listAllTask = LoadAllAsync(listAll, next).ContinueWith(t => listAllTask = null);
-
-                    await listAllTask;
-                }
-
+                await EnsureListAsync(next, listAll);
                 return models.Select(c => c.Clone()).ToList();
             }
             else if (query is GetCurrencyDefault currencyDefault)
             {
+                await EnsureListAsync(next, new ListAllCurrency());
                 CurrencyModel model = models.FirstOrDefault(c => c.IsDefault);
                 if (model != null)
                     return model.UniqueCode;
             }
             else if (query is FindCurrencyDefault currencyDefaultNullable)
             {
+                await EnsureListAsync(next, new ListAllCurrency());
                 CurrencyModel model = models.FirstOrDefault(c => c.IsDefault);
                 if (model != null)
                     return model.UniqueCode;
             }
             else if (query is GetCurrencySymbol currencySymbol)
             {
+                await EnsureListAsync(next, new ListAllCurrency());
                 CurrencyModel model = Find(currencySymbol.UniqueCode);
                 if (model != null)
                     return model.Symbol;
             }
 
             return await next(query);
+        }
+
+        private async Task EnsureListAsync(HttpQueryDispatcher.Next next, ListAllCurrency listAll)
+        {
+            if (models.Count == 0)
+            {
+                if (listAllTask == null)
+                    listAllTask = LoadAllAsync(listAll, next);
+
+                await listAllTask;
+                listAllTask = null;
+            }
         }
 
         private async Task LoadAllAsync(ListAllCurrency listAll, HttpQueryDispatcher.Next next)

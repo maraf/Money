@@ -36,10 +36,9 @@ namespace Neptuo.Queries
                 return next(query);
             }
 
-            private async Task<object> ExecuteCurrentAsync(object query, HttpQueryDispatcher dispatcher)
+            private Task<object> ExecuteCurrentAsync(object query, HttpQueryDispatcher dispatcher)
             {
-                object output = await enumerator.Current.ExecuteAsync(query, dispatcher, ExecuteNextAsync);
-                return output;
+                return enumerator.Current.ExecuteAsync(query, dispatcher, ExecuteNextAsync);
             }
         }
     }

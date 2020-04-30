@@ -39,30 +39,26 @@ namespace Money.Services
         {
             if (query is ListAllCategory listAll)
             {
-                if (models.Count == 0)
-                {
-                    if (listAllTask == null)
-                        listAllTask = LoadAllAsync(listAll, next).ContinueWith(t => listAllTask = null);
-
-                    await listAllTask;
-                }
-
+                await EnsureListAsync(next, listAll);
                 return models.Select(c => c.Clone()).ToList();
             }
             else if (query is GetCategoryName categoryName)
             {
+                await EnsureListAsync(next, new ListAllCategory());
                 CategoryModel model = Find(categoryName.CategoryKey);
                 if (model != null)
                     return model.Name;
             }
             else if (query is GetCategoryIcon categoryIcon)
             {
+                await EnsureListAsync(next, new ListAllCategory());
                 CategoryModel model = Find(categoryIcon.CategoryKey);
                 if (model != null)
                     return model.Icon;
             }
             else if (query is GetCategoryColor categoryColor)
             {
+                await EnsureListAsync(next, new ListAllCategory());
                 CategoryModel model = Find(categoryColor.CategoryKey);
                 if (model == null)
                 {
@@ -78,12 +74,25 @@ namespace Money.Services
             }
             else if (query is GetCategoryNameDescription categoryNameDescription)
             {
+                await EnsureListAsync(next, new ListAllCategory());
                 CategoryModel model = Find(categoryNameDescription.CategoryKey);
                 if (model != null)
                     return new CategoryNameDescriptionModel(model.Name, model.Description);
             }
 
             return await next(query);
+        }
+
+        private async Task EnsureListAsync(HttpQueryDispatcher.Next next, ListAllCategory listAll)
+        {
+            if (models.Count == 0)
+            {
+                if (listAllTask == null)
+                    listAllTask = LoadAllAsync(listAll, next);
+
+                await listAllTask;
+                listAllTask = null;
+            }
         }
 
         private async Task LoadAllAsync(ListAllCategory listAll, HttpQueryDispatcher.Next next)

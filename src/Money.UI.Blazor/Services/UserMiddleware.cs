@@ -37,9 +37,10 @@ namespace Money.Services
                 if (profile == null)
                 {
                     if (getProfileTask == null)
-                        getProfileTask = LoadProfileAsync(getProfile, next).ContinueWith(t => getProfileTask = null);
+                        getProfileTask = LoadProfileAsync(getProfile, next);
 
                     await getProfileTask;
+                    getProfileTask = null;
                 }
 
                 return profile;

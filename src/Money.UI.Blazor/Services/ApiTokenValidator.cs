@@ -26,10 +26,19 @@ namespace Money.Services
 
         public async Task<bool> ValidateAsync(string token)
         {
-            // Unauthorized exception is processed globally, don't need to do anyting here.
-            log.Debug("Validation token using 'GetProfile' query.");
-            var profile = await queries.QueryAsync(new GetProfile());
-            return profile != null;
+            try
+            {
+                // Unauthorized exception is processed globally, don't need to do anyting here.
+                log.Debug($"Validation token using '{nameof(GetProfile)}' query.");
+                var profile = await queries.QueryAsync(new GetProfile());
+                log.Debug($"Result '{profile}'.");
+                return profile != null;
+            }
+            catch (ServerNotRespondingException e)
+            {
+                log.Debug($"Catch '{nameof(ServerNotRespondingException)}'.");
+                return !String.IsNullOrEmpty(token);
+            }
         }
     }
 }

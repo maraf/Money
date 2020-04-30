@@ -10,7 +10,7 @@
 </NavLink>
 <HamburgerButton CssClass="navbar-toggler" Click="@OnMainMenuToggleClick" />
 <div class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
-    <Network>
+    <ServerConnection>
         <Online>
 
             <ul class="nav navbar-nav mr-auto mt-3 mt-lg-0 @MenuLeftMarginCssClass">
@@ -52,5 +52,5 @@
             <UserInfo ListCssClass="@MenuLeftMarginCssClass" />
 
         </Online>
-    </Network>
+    </ServerConnection>
 </div>

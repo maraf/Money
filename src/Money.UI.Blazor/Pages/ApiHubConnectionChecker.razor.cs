@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Components.Bootstrap;
 using Money.Services;
+using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,10 @@ namespace Money.Pages
     public partial class ApiHubConnectionChecker : IDisposable
     {
         [Inject]
-        public ApiHubService State { get; set; }
+        public ServerConnectionState ServerConnection { get; set; }
+
+        [Inject]
+        public ApiHubService ApiHub { get; set; }
 
         [Inject]
         public Navigator Navigator { get; set; }
@@ -25,35 +29,30 @@ namespace Money.Pages
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        protected bool IsChangeIgnored { get; set; }
-        protected Modal Dialog { get; set; }
-        protected Exception LastException { get; set; }
-
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            State.Changed += OnStateChanged;
+            Log.Debug("Bind on changed.");
+            ServerConnection.Changed += OnStateChanged;
+            ApiHub.Changed += OnApiHubStateChanged;
         }
 
-        private void OnStateChanged(ApiHubStatus status, Exception e)
-        {
-            LastException = e;
-            if (status == ApiHubStatus.Disconnected && LastException != null)
-                Dialog.Show();
-            else if (status == ApiHubStatus.Connected)
-                Dialog.Hide();
+        private void OnApiHubStateChanged(ApiHubStatus status, Exception e)
+            => StateHasChanged();
 
-            Log.Debug($"Status changed '{status}' ('{State.Status}') => SHC.");
-            StateHasChanged();
-        }
+        private void OnStateChanged(bool isAvailable)
+            => StateHasChanged();
 
         protected Task ReloadAsync()
             => Navigator.ReloadAsync();
 
         public void Dispose()
-            => State.Changed -= OnStateChanged;
+        {
+            ServerConnection.Changed -= OnStateChanged;
+            ApiHub.Changed -= OnApiHubStateChanged;
+        }
 
-        protected Task ReconnectAsyc() 
-            => State.StartAsync();
+        protected Task ReconnectAsyc()
+            => ApiHub.StartAsync();
     }
 }

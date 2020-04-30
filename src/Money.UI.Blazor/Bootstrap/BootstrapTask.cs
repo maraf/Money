@@ -144,9 +144,9 @@ namespace Money.Bootstrap
 
         internal void RegisterHandlers(IServiceProvider serviceProvider)
         {
-            eventDispatcher.Handlers.AddAll(serviceProvider.GetService<CategoryMiddleware>());
-            eventDispatcher.Handlers.AddAll(serviceProvider.GetService<CurrencyMiddleware>());
-            eventDispatcher.Handlers.AddAll(serviceProvider.GetService<UserMiddleware>());
+            eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<CategoryMiddleware>());
+            eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<CurrencyMiddleware>());
+            eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<UserMiddleware>());
 
             serviceProvider.GetService<LocalExpenseOnlineRunner>().Initialize();
         }

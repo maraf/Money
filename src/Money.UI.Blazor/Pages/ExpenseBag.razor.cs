@@ -39,6 +39,9 @@ namespace Money.Pages
         [Inject]
         internal ILog<ExpenseBag> Log { get; set; }
 
+        [Parameter]
+        public RenderFragment BeforeContent { get; set; }
+
         public CurrencyFormatter CurrencyFormatter { get; private set; }
 
         private List<CreateOutcome> models;

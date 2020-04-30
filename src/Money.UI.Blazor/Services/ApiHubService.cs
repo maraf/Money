@@ -135,7 +135,7 @@ namespace Money.Services
 
         private void ChangeStatus(ApiHubStatus status, Exception e = null)
         {
-            if (Status != status)
+            if (Status != status || e != null)
             {
                 Status = status;
                 Changed?.Invoke(status, e);

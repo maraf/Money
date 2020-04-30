@@ -14,7 +14,6 @@ namespace Money.Commands
     {
         private readonly HttpCommandDispatcher inner;
         private readonly ServerConnectionState serverConnection;
-        private readonly IApiHubState hubState;
         private readonly CommandStorage storage;
 
         public OfflineCommandDispatcher(HttpCommandDispatcher inner, ServerConnectionState serverConnection, CommandStorage storage)

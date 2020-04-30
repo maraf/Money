@@ -5,27 +5,18 @@
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <CascadingValue Value="@routeData">
-                <Network>
-                    <Online>
-                        <VersionChecker>
-                            <ApiHubConnectionChecker>
-                                <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
-                                    <NotAuthorized>
-                                        <Login />
-                                    </NotAuthorized>
-                                    <Authorizing>
-                                        <AuthorizationProgress />
-                                    </Authorizing>
-                                </AuthorizeRouteView>
-                            </ApiHubConnectionChecker>
-                        </VersionChecker>
-                    </Online>
-                    <Offline>
-                        <LayoutView Layout="@typeof(Layout)">
-                            <ExpenseBag />
-                        </LayoutView>
-                    </Offline>
-                </Network>
+                <VersionChecker>
+                    <ApiHubConnectionChecker>
+                        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
+                            <NotAuthorized>
+                                <Login />
+                            </NotAuthorized>
+                            <Authorizing>
+                                <AuthorizationProgress />
+                            </Authorizing>
+                        </AuthorizeRouteView>
+                    </ApiHubConnectionChecker>
+                </VersionChecker>
             </CascadingValue>
         </Found>
         <NotFound>

@@ -21,17 +21,17 @@ namespace Money.Services
         IEventHandler<CategoryDeleted>,
         IEventHandler<UserSignedOut>
     {
-        private readonly NetworkState network;
+        private readonly ServerConnectionState serverConnection;
         private readonly CategoryStorage localStorage;
 
         private readonly List<CategoryModel> models = new List<CategoryModel>();
         private Task listAllTask;
 
-        public CategoryMiddleware(NetworkState network, CategoryStorage localStorage)
+        public CategoryMiddleware(ServerConnectionState serverConnection, CategoryStorage localStorage)
         {
-            Ensure.NotNull(network, "network");
+            Ensure.NotNull(serverConnection, "serverConnection");
             Ensure.NotNull(localStorage, "localStorage");
-            this.network = network;
+            this.serverConnection = serverConnection;
             this.localStorage = localStorage;
         }
 
@@ -98,7 +98,7 @@ namespace Money.Services
         private async Task LoadAllAsync(ListAllCategory listAll, HttpQueryDispatcher.Next next)
         {
             models.Clear();
-            if (!network.IsOnline)
+            if (!serverConnection.IsAvailable)
             {
                 var items = await localStorage.LoadAsync();
                 if (items != null)

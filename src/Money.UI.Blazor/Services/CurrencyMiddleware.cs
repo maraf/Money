@@ -20,17 +20,17 @@ namespace Money.Services
         IEventHandler<CurrencyDeleted>,
         IEventHandler<UserSignedOut>
     {
-        private readonly NetworkState network;
+        private readonly ServerConnectionState serverConnection;
         private readonly CurrencyStorage localStorage;
 
         private readonly List<CurrencyModel> models = new List<CurrencyModel>();
         private Task listAllTask;
 
-        public CurrencyMiddleware(NetworkState network, CurrencyStorage localStorage)
+        public CurrencyMiddleware(ServerConnectionState serverConnection, CurrencyStorage localStorage)
         {
-            Ensure.NotNull(network, "network");
+            Ensure.NotNull(serverConnection, "serverConnection");
             Ensure.NotNull(localStorage, "localStorage");
-            this.network = network;
+            this.serverConnection = serverConnection;
             this.localStorage = localStorage;
         }
 
@@ -81,7 +81,7 @@ namespace Money.Services
         private async Task LoadAllAsync(ListAllCurrency listAll, HttpQueryDispatcher.Next next)
         {
             models.Clear();
-            if (!network.IsOnline)
+            if (!serverConnection.IsAvailable)
             {
                 var items = await localStorage.LoadAsync();
                 if (items != null)

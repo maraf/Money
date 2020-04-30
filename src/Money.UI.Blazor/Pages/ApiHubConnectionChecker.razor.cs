@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Components.Bootstrap;
 using Money.Services;
+using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,14 +14,18 @@ namespace Money.Pages
     public partial class ApiHubConnectionChecker : IDisposable
     {
         [Inject]
-        public IApiHubState State { get; set; }
+        public ApiHubService State { get; set; }
 
         [Inject]
         public Navigator Navigator { get; set; }
 
+        [Inject]
+        public ILog<ApiHubConnectionChecker> Log { get; set; }
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        protected bool IsChangeIgnored { get; set; }
         protected Modal Dialog { get; set; }
         protected Exception LastException { get; set; }
 
@@ -33,10 +38,13 @@ namespace Money.Pages
         private void OnStateChanged(ApiHubStatus status, Exception e)
         {
             LastException = e;
-            if (LastException != null)
+            if (status == ApiHubStatus.Disconnected && LastException != null)
                 Dialog.Show();
-            else
+            else if (status == ApiHubStatus.Connected)
                 Dialog.Hide();
+
+            Log.Debug($"Status changed '{status}' ('{State.Status}') => SHC.");
+            StateHasChanged();
         }
 
         protected Task ReloadAsync()
@@ -44,5 +52,8 @@ namespace Money.Pages
 
         public void Dispose()
             => State.Changed -= OnStateChanged;
+
+        protected Task ReconnectAsyc() 
+            => State.StartAsync();
     }
 }

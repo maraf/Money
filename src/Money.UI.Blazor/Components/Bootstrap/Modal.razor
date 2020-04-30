@@ -3,7 +3,14 @@
         <form @onsubmit="@OnFormSubmit" @onsubmit:preventDefault="true">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">@Title</h4>
+                    <h4 class="modal-title">
+                        @if (!String.IsNullOrEmpty(TitleIcon))
+                        {
+                            <Icon Identifier="@TitleIcon" />
+                        }
+
+                        @Title
+                    </h4>
                     <button type="button" class="close" @onclick="@Hide">
                         <span aria-hidden="true">&times;</span>
                     </button>

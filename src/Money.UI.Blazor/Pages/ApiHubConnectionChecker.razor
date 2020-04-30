@@ -1,18 +1,45 @@
 ﻿@ChildContent
 
-<Modal @ref="Dialog" Title="Network error">
-    <p>
-        <ApiHubConnectionStatus />
-    </p>
-    <p>
-        We have troubles with background connection to the server. The application can't work corrently.
-    </p>
-    <p>
-        Reload the page (or application) and this problem may disappear.
-        <br />
-        Otherwise, we will be glad if you <a target="_blank" href="@Navigator.UrlMoneyRepositoryIssueNew("Background connection error")">report the problem</a>.
-    </p>
-    <p>
-        <strong>We are sorry for this inconvenience.</strong>
-    </p>
+<Modal @ref="Dialog" Title="Network status" TitleIcon="network-wired">
+    <ChildContent>
+        <p>
+            <ApiHubConnectionStatus />
+        </p>
+        @if (State.Status == ApiHubStatus.Connected)
+        {
+            <p>
+                <strong>Everthing is running smoothly 😉</strong>
+            </p>
+        }
+        else if (State.Status == ApiHubStatus.Connecting)
+        {
+            <p>
+                <strong>Currently, we are trying to contact our server...</strong>
+            </p>
+        }
+        else if (State.Status == ApiHubStatus.Disconnected)
+        {
+            <p>
+                We have troubles with background connection to the server. The application can't work corrently.
+            </p>
+            <p>
+                Reload the page (or application) and this problem may disappear.
+                <br />
+                Otherwise, we will be glad if you <a target="_blank" href="@Navigator.UrlMoneyRepositoryIssueNew("Background connection error")">report the problem</a>.
+            </p>
+            <p>
+                <strong>We are sorry for this inconvenience.</strong>
+            </p>
+        }
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary btn-sm" @onclick="ReconnectAsyc" disabled="@(State.Status != ApiHubStatus.Disconnected)">
+            <Icon Identifier="sync-alt" />
+            Reconnect
+        </button>
+        <button class="btn btn-secondary btn-sm" @onclick="ReloadAsync">
+            <Icon Identifier="sync-alt" />
+            Reload the page
+        </button>
+    </Buttons>
 </Modal>

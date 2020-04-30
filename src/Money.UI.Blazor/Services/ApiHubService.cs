@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Exceptions;
+using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,6 @@ namespace Money.Services
     {
         private readonly BrowserEventDispatcher events;
         private readonly BrowserExceptionHandler exceptions;
-        private readonly Navigator navigator;
         private readonly ApiClientConfiguration apiConfiguration;
         private readonly TokenContainer token;
         private readonly ILog log;
@@ -28,17 +28,15 @@ namespace Money.Services
         public ApiHubStatus Status { get; private set; }
         public event Action<ApiHubStatus, Exception> Changed;
 
-        public ApiHubService(BrowserEventDispatcher events, BrowserExceptionHandler exceptions, Navigator navigator, IOptions<ApiClientConfiguration> apiConfiguration, TokenContainer token, ILogFactory logFactory)
+        public ApiHubService(BrowserEventDispatcher events, BrowserExceptionHandler exceptions, IOptions<ApiClientConfiguration> apiConfiguration, TokenContainer token, ILogFactory logFactory)
         {
             Ensure.NotNull(events, "events");
             Ensure.NotNull(exceptions, "exceptions");
-            Ensure.NotNull(navigator, "navigator");
             Ensure.NotNull(apiConfiguration, "apiConfiguration");
             Ensure.NotNull(token, "token");
             Ensure.NotNull(logFactory, "logFactory");
             this.events = events;
             this.exceptions = exceptions;
-            this.navigator = navigator;
             this.apiConfiguration = apiConfiguration.Value;
             this.token = token;
             this.log = logFactory.Scope("ApiHub");
@@ -52,24 +50,31 @@ namespace Money.Services
 
             ChangeStatus(ApiHubStatus.Connecting);
 
-            log.Debug($"Connecting with token '{token.Value}'.");
+            try
+            {
+                log.Debug($"Connecting with token '{token.Value}'.");
 
-            string url = $"{apiConfiguration.ApiUrl}api?access_token={token.Value}";
+                string url = $"{apiConfiguration.ApiUrl}api?access_token={token.Value}";
 
-            connection = new HubConnectionBuilder()
-                .WithUrl(url, o => o.AccessTokenProvider = () => Task.FromResult(token.Value))
-                .WithAutomaticReconnect()
-                .Build();
+                connection = new HubConnectionBuilder()
+                    .WithUrl(url, o => o.AccessTokenProvider = () => Task.FromResult(token.Value))
+                    .WithAutomaticReconnect()
+                    .Build();
 
-            connection.On<string>(ApiHubMethod.RaiseEvent, RaiseEvent);
-            connection.On<string>(ApiHubMethod.RaiseException, RaiseException);
-            connection.Reconnecting += OnConnectionReconnectingAsync;
-            connection.Reconnected += OnConnectionReconnectedAsync;
-            connection.Closed += OnConnectionClosedAsync;
+                connection.On<string>(ApiHubMethod.RaiseEvent, RaiseEvent);
+                connection.On<string>(ApiHubMethod.RaiseException, RaiseException);
+                connection.Reconnecting += OnConnectionReconnectingAsync;
+                connection.Reconnected += OnConnectionReconnectedAsync;
+                connection.Closed += OnConnectionClosedAsync;
 
-            await connection.StartAsync();
+                await connection.StartAsync();
 
-            ChangeStatus(ApiHubStatus.Connected);
+                ChangeStatus(ApiHubStatus.Connected);
+            }
+            catch (Exception e)
+            {
+                ChangeStatus(ApiHubStatus.Disconnected);
+            }
         }
 
         private void RaiseEvent(string payload)

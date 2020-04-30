@@ -22,6 +22,9 @@ namespace Money.Components.Bootstrap
         public string Title { get; set; }
 
         [Parameter]
+        public string TitleIcon { get; set; }
+
+        [Parameter]
         public RenderFragment ChildContent { get; set; }
 
         [Parameter]

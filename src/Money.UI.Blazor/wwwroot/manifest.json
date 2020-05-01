@@ -2,7 +2,7 @@
   "short_name": "Money",
   "name": "Money by Neptuo",
   "start_url": "/",
-  "display": "fullscreen",
+  "display": "standalone",
   "background_color": "#0078D7",
   "theme_color": "#0078D7",
   "icons": [

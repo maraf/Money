@@ -59,7 +59,7 @@ namespace Money.Services
         private void OnServerStateChanged(ApiHubStatus status, Exception e)
         {
             log.Debug($"ApiHub update '{status}', '{e?.GetType()?.Name}'.");
-            if (status == ApiHubStatus.Disconnected && e is ServerNotRespondingException)
+            if (status == ApiHubStatus.Disconnected && e != null)
             {
                 isHubConnected = false;
                 RaiseChanged();

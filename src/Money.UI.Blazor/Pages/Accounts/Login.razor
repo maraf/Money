@@ -1,6 +1,6 @@
 ﻿@page "/account/login"
 
-<Money.Components.Title Main="Log in" Sub="Use a local account to log in" />
+<Title Icon="user-shield" Main="Log in" Sub="Use a local account to log in" />
 <ExceptionPanel />
 
 <div class="login">
@@ -10,7 +10,7 @@
 
     <Validation ErrorMessages="@ErrorMessages" />
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-4">
             <section>
                 <form @onsubmit="@OnSubmitAsync">
                     <div class="form-group">
@@ -31,7 +31,10 @@
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Log in</button>
-                        <button type="button" class="btn btn-outline-secondary" @onclick="@OnDemoSubmitAsync">Login with <strong>demo</strong> user</button>
+                        <button type="button" class="btn btn-outline-secondary" @onclick="@OnDemoSubmitAsync">
+                            <Icon Identifier="user-secret" />
+                            Login with <strong>demo</strong> user
+                        </button>
                     </div>
                     <div class="form-group">
                         <p>

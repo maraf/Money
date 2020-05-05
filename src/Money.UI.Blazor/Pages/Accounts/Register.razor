@@ -1,13 +1,13 @@
 ﻿@page "/account/register"
 
-<Money.Components.Title Main="Register" Sub="Create a new account" />
+<Title Icon="user-plus" Main="Register" Sub="Create a new account" />
 <ExceptionPanel />
 
 <div class="login">
 
     <Validation ErrorMessages="@ErrorMessages" />
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-4">
             <section>
                 <form @onsubmit="@OnSubmitAsync">
                     <div class="form-group">

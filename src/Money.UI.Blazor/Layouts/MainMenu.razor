@@ -46,9 +46,13 @@
                     </span>
                 </MainMenuLink>
             </ul>
-            <ul class="nav navbar-nav @MenuLeftMarginCssClass">
-                <MainMenuSeparator IsVisibleOnDesktop="false" />
-            </ul>
+            <AuthorizeView>
+                <Authorized>
+                    <ul class="nav navbar-nav @MenuLeftMarginCssClass">
+                        <MainMenuSeparator IsVisibleOnDesktop="false" />
+                    </ul>
+                </Authorized>
+            </AuthorizeView>
             <UserInfo ListCssClass="@MenuLeftMarginCssClass" />
 
         </Online>

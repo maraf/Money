@@ -85,6 +85,29 @@ namespace Money.Pages
             StateHasChanged();
         }
 
+        protected string GetItemCssClass(CategoryModel item, string length10, string length30, string length50, string length100, string lengthX)
+        {
+            int GetLength(string text) => text?.Length ?? 0;
+
+            int length = GetLength(item.Name) + GetLength(item.Description);
+            if (length < 10)
+                return length10;
+            else if (length < 30)
+                return length30;
+            else if (length < 50)
+                return length50;
+            else if (length < 100)
+                return length100;
+            else
+                return lengthX;
+        }
+
+        protected string GetItemFlexCssClass(CategoryModel item)
+            => GetItemCssClass(item, "flex-row", "flex-column flex-sm-row", "flex-column flex-md-row", "flex-column flex-lg-row", "flex-column");
+
+        protected string GetItemButtonsMarginCssClass(CategoryModel item)
+            => GetItemCssClass(item, "mt-0", "mt-2 mt-sm-0", "mt-2 mt-md-0", "mt-2 mt-lg-0", "mt-2");
+
         private CategoryModel FindModel(IEvent payload)
             => Models.FirstOrDefault(c => c.Key.Equals(payload.AggregateKey));
 

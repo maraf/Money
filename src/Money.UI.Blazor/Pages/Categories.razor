@@ -16,24 +16,28 @@
     {
         @foreach (var item in Models)
         {
-            <div class="alert d-flex flex-column flex-lg-row" style="background-color: @item.Color.ToHashCode()">
-                @if (item.Icon != null)
-                {
-                    <span class="mr-1">@item.Icon</span>
-                }
-                <strong class="mr-1">
-                    @item.Name
-                </strong>
-                <span class="gray">
-                    @item.Description
-                </span>
+            <div class="alert" style="background-color: @item.Color.ToHashCode()">
+                <div class="form-row">
+                    @if (item.Icon != null)
+                    {
+                        <div class="col-auto">@item.Icon</div>
+                    }
+                    <div class="col d-flex @GetItemFlexCssClass(item)">
+                        <strong class="mr-1">
+                            @item.Name
+                        </strong>
+                        <span class="gray">
+                            @item.Description
+                        </span>
 
-                <div class="nav ml-auto">
-                    <div class="mt-2 mt-lg-0">
-                        <IconButton Icon="pen" ToolTip="Rename" Click="@(() => OnActionClick(item, NameModal))" />
-                        <IconButton Icon="image" ToolTip="Icon" Click="@(() => OnActionClick(item, IconModal))" />
-                        <IconButton Icon="tint" ToolTip="Color" Click="@(() => OnActionClick(item, ColorModal))" />
-                        <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
+                        <div class="nav ml-auto">
+                            <div class="@GetItemButtonsMarginCssClass(item)">
+                                <IconButton Icon="pen" ToolTip="Rename" Click="@(() => OnActionClick(item, NameModal))" />
+                                <IconButton Icon="image" ToolTip="Icon" Click="@(() => OnActionClick(item, IconModal))" />
+                                <IconButton Icon="tint" ToolTip="Color" Click="@(() => OnActionClick(item, ColorModal))" />
+                                <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

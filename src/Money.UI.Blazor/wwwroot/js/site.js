@@ -13,6 +13,9 @@ window.Bootstrap = {
         },
         Hide: function (container) {
             $(container).modal('hide');
+        },
+        Dispose: function (container) {
+            $(container).modal('dispose');
         }
     }
 };

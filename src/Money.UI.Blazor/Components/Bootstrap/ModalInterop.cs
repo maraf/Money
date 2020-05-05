@@ -26,5 +26,8 @@ namespace Money.Components.Bootstrap
 
         internal void Hide(ElementReference element)
             => jsRuntime.InvokeVoidAsync("Bootstrap.Modal.Hide", element);
+
+        internal void Dispose(ElementReference element)
+            => jsRuntime.InvokeVoidAsync("Bootstrap.Modal.Dispose", element);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using Neptuo;
 using Neptuo.Logging;
@@ -10,13 +11,16 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap
 {
-    public partial class Modal
+    public partial class Modal : System.IDisposable
     {
         [Inject]
         internal ModalInterop Interop { get; set; }
 
         [Inject]
         internal ILog<Modal> Log { get; set; }
+
+        [Inject]
+        internal NavigationManager NavigationManager { get; set; }
 
         [Parameter]
         public string Title { get; set; }
@@ -52,6 +56,21 @@ namespace Money.Components.Bootstrap
 
         protected ElementReference Container { get; set; }
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            NavigationManager.LocationChanged += OnLocationChanged;
+        }
+
+        public void Dispose()
+        {
+            Hide();
+            NavigationManager.LocationChanged -= OnLocationChanged;
+        }
+
+        private void OnLocationChanged(object sender, LocationChangedEventArgs e) 
+            => Hide();
+
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
@@ -76,7 +95,7 @@ namespace Money.Components.Bootstrap
 
         protected void OnCloseButtonClick()
         {
-            Log.Debug("Modal.OnCloseButtonClick");
+            Log.Debug("OnCloseButtonClick");
 
             if (CloseButtonClick != null)
                 CloseButtonClick();
@@ -84,8 +103,10 @@ namespace Money.Components.Bootstrap
                 Hide();
         }
 
-        public void Show() => Interop.Show(Container);
+        public void Show() 
+            => Interop.Show(Container);
 
-        public void Hide() => Interop.Hide(Container);
+        public void Hide() 
+            => Interop.Hide(Container);
     }
 }

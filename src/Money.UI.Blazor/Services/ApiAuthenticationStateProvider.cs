@@ -66,7 +66,7 @@ namespace Money.Services
             return token.Value;
         }
 
-        private async Task ChangeTokenAsync(string value)
+        private async Task ChangeTokenAsync(string value, bool isValidationRequired = true)
         {
             token.Value = value;
             if (!String.IsNullOrEmpty(token.Value))
@@ -76,10 +76,13 @@ namespace Money.Services
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
 
                 bool isValid = true;
-                if (!await ValidateTokenAsync(token.Value))
+                if (isValidationRequired)
                 {
-                    log.Debug("Token isn't valid.");
-                    isValid = false;
+                    if (!await ValidateTokenAsync(token.Value))
+                    {
+                        log.Debug("Token isn't valid.");
+                        isValid = false;
+                    }
                 }
 
                 if (isValid)
@@ -114,7 +117,7 @@ namespace Money.Services
             if (isPersistent)
                 await interop.SaveTokenAsync(value);
 
-            await ChangeTokenAsync(value);
+            await ChangeTokenAsync(value, false);
 
             log.Debug("NotifyAuthenticationStateChanged.");
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Events;
+using Money.Queires;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,15 +19,20 @@ namespace Money.Components
         [Inject]
         public IEventHandlerCollection EventHandlers { get; set; }
 
+        [Inject]
+        public IQueryDispatcher Queries { get; set; }
+
         protected System.Version Client { get; set; }
         protected System.Version Api { get; set; }
 
-        protected override void OnInitialized()
+        protected async override Task OnInitializedAsync()
         {
-            base.OnInitialized();
-            
+            await base.OnInitializedAsync();
+
             Client = typeof(AppVersion).Assembly.GetName().Version;
             EventHandlers.Add<ApiVersionChanged>(this);
+
+            Api = await Queries.QueryAsync(new FindApiVersion());
         }
 
         public void Dispose()

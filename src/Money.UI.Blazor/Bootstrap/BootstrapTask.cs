@@ -103,6 +103,7 @@ namespace Money.Bootstrap
             AddMiddleware<CategoryMiddleware>(services);
             AddMiddleware<CurrencyMiddleware>(services);
             AddMiddleware<UserMiddleware>(services);
+            AddMiddleware<ApiVersionChecker>(services);
 
             //CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 

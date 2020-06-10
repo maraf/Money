@@ -1,16 +1,20 @@
 ﻿using Money.Events;
+using Money.Queires;
 using Neptuo;
 using Neptuo.Events;
+using Neptuo.Queries;
+using Neptuo.Queries.Handlers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    public class ApiVersionChecker
+    public class ApiVersionChecker : HttpQueryDispatcher.IMiddleware
     {
         private readonly Version minVersion = new Version(1, 3, 0, 0);
         private readonly Version maxVersion = new Version(2, 0, 0, 0);
@@ -36,6 +40,14 @@ namespace Money.Services
         {
             if (!IsPassed(version))
                 throw new NotSupportedApiVersionException(version);
+        }
+
+        Task<object> HttpQueryDispatcher.IMiddleware.ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
+        {
+            if (query is FindApiVersion)
+                return Task.FromResult<object>(last);
+
+            return next(query);
         }
     }
 }

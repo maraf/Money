@@ -16,5 +16,16 @@ namespace Money.Models
 
             return "#" + BitConverter.ToString(data).Replace("-", string.Empty);
         }
+
+        public static Color ToAccentColor(this Color color)
+            => SelectAccent(color, ColorCollection.White, ColorCollection.Black);
+
+        public static T SelectAccent<T>(this Color color, T light, T dark)
+        {
+            if ((color.R + color.G + color.B) / 3 < 90)
+                return light;
+
+            return dark;
+        }
     }
 }

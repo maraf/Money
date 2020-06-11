@@ -9,6 +9,9 @@ namespace Money.Models
 {
     public class ColorCollection : List<Color>
     {
+        public static readonly Color White = Color.FromArgb(255, 255, 255, 255);
+        public static readonly Color Black = Color.FromArgb(255, 0, 0, 0);
+
         public ColorCollection()
         {
             Load();

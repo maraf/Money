@@ -11,6 +11,7 @@ using Neptuo.Events;
 using Neptuo.Exceptions;
 using System;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,7 +49,7 @@ namespace Money.UI.Blazor
 #endif
                 })
                 .AddAuthorizationCore()
-                .AddBaseAddressHttpClient()
+                .AddSingleton<HttpClient>()
                 .AddSingleton<ServerConnectionState>()
                 .AddSingleton<ApiAuthenticationStateProvider>()
                 .AddSingleton<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())

@@ -18,7 +18,7 @@ namespace Money.Services
     {
         private readonly BrowserEventDispatcher events;
         private readonly BrowserExceptionHandler exceptions;
-        private readonly ApiClientConfiguration apiConfiguration;
+        private readonly ApiConfiguration apiConfiguration;
         private readonly TokenContainer token;
         private readonly ILog log;
         private readonly ILog eventLog;
@@ -28,7 +28,7 @@ namespace Money.Services
         public ApiHubStatus Status { get; private set; }
         public event Action<ApiHubStatus, Exception> Changed;
 
-        public ApiHubService(BrowserEventDispatcher events, BrowserExceptionHandler exceptions, IOptions<ApiClientConfiguration> apiConfiguration, TokenContainer token, ILogFactory logFactory)
+        public ApiHubService(BrowserEventDispatcher events, BrowserExceptionHandler exceptions, IOptions<ApiConfiguration> apiConfiguration, TokenContainer token, ILogFactory logFactory)
         {
             Ensure.NotNull(events, "events");
             Ensure.NotNull(exceptions, "exceptions");

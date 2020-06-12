@@ -24,9 +24,8 @@ namespace Money.Services
         private readonly ILog log;
         private readonly Json json;
 
-        public ApiClient(IOptions<ApiClientConfiguration> configuration, ApiVersionChecker versionChecker, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, ApiAuthenticationStateProvider authenticationState, ILogFactory logFactory, Json json)
+        public ApiClient(ApiVersionChecker versionChecker, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, ApiAuthenticationStateProvider authenticationState, ILogFactory logFactory, Json json)
         {
-            Ensure.NotNull(configuration, "configuration");
             Ensure.NotNull(versionChecker, "versionChecker");
             Ensure.NotNull(http, "http");
             Ensure.NotNull(commandMapper, "commandMapper");
@@ -43,8 +42,6 @@ namespace Money.Services
             this.authenticationState = authenticationState;
             this.log = logFactory.Scope("ApiClient");
             this.json = json;
-
-            this.http.BaseAddress = configuration.Value.ApiUrl;
         }
 
         private HttpContent CreateJsonContent<T>(T request)

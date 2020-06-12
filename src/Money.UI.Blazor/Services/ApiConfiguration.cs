@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    public class ApiClientConfiguration
+    public class ApiConfiguration
     {
         public Uri ApiUrl { get; set; }
     }

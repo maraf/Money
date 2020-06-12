@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using Money.Components;
 using Money.Components.Bootstrap;
@@ -40,7 +41,7 @@ namespace Money.UI.Blazor
         private static void ConfigureServices(IServiceCollection services)
         {
             services
-                .Configure<ApiClientConfiguration>(configuration =>
+                .Configure<ApiConfiguration>(configuration =>
                 {
 #if DEBUG
                     configuration.ApiUrl = new Uri("http://localhost:63803", UriKind.Absolute);
@@ -49,7 +50,7 @@ namespace Money.UI.Blazor
 #endif
                 })
                 .AddAuthorizationCore()
-                .AddSingleton<HttpClient>()
+                .AddSingleton(p => new HttpClient() { BaseAddress = p.GetRequiredService<IOptions<ApiConfiguration>>().Value.ApiUrl })
                 .AddSingleton<ServerConnectionState>()
                 .AddSingleton<ApiAuthenticationStateProvider>()
                 .AddSingleton<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())

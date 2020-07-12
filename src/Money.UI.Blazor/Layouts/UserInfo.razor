@@ -15,7 +15,9 @@
                     {
                         <MainMenuLink Href="@Navigator.UrlUserManage()" HrefMatch="@MainMenuLinkMatch.StartsWith">
                             <Icon Identifier="user" />
-                            @Profile.UserName
+                            <span class="d-lg-none d-xl-inline">
+                                @Profile.UserName
+                            </span>
                         </MainMenuLink>
                         <li class="nav-item">
                             <button type="button" class="btn btn-link navbar-btn nav-link" @onclick="@OnLogoutAsync">

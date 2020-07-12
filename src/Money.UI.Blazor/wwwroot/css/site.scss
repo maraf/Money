@@ -38,6 +38,11 @@ h4 {
 
     .navbar-collapse {
         border-color: #398BF5;
+        height: calc(100vh - 56px);
+
+        @media (min-width: 992px) {
+            height: auto;
+        }
     }
 
     .navbar-toggle, .navbar-toggle:focus, .navbar-toggle:hover {
@@ -417,9 +422,7 @@ h4 {
         margin-bottom: 0;
     }
 }
-
 /* ------ SPLASH SCREEN ------------------------------------------------------------------------ */
-
 .splash {
     margin-top: -50px;
     height: 350px;
@@ -499,9 +502,7 @@ h4 {
         }
     }
 }
-
 /* ------ LOADING ------------------------------------------------------------------------------ */
-
 .loading {
     position: relative;
 
@@ -522,10 +523,7 @@ h4 {
         display: block;
     }
 }
-
 /* ------ PAGING ------------------------------------------------------------------------------- */
-
-
 .pager {
     margin: 20px 0 40px 0;
 
@@ -541,9 +539,7 @@ h4 {
         margin: 0 16px;
     }
 }
-
 /* ------ USER --------------------------------------------------------------------------------- */
-
 .user {
     margin: 20px 15px;
 }
@@ -551,9 +547,7 @@ h4 {
 .login {
     margin-top: 20px;
 }
-
 /* ------ EXPENSES BAG ------------------------------------------------------------------------- */
-
 .expenses-bag {
     position: relative;
 }

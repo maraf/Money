@@ -1,4 +1,5 @@
-﻿using Money.Events;
+﻿using Money.Commands;
+using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
 using Neptuo;
@@ -21,6 +22,8 @@ namespace Money.Services
         IEventHandler<CategoryDeleted>,
         IEventHandler<UserSignedOut>
     {
+        private static readonly ListAllCategory listAllQuery = new ListAllCategory();
+
         private readonly ServerConnectionState serverConnection;
         private readonly CategoryStorage localStorage;
 
@@ -39,34 +42,27 @@ namespace Money.Services
         {
             if (query is ListAllCategory listAll)
             {
-                await EnsureListAsync(next, listAll);
+                await EnsureListAsync(null, next, listAll);
                 return models.Select(c => c.Clone()).ToList();
             }
             else if (query is GetCategoryName categoryName)
             {
-                await EnsureListAsync(next, new ListAllCategory());
+                await EnsureListAsync(dispatcher, null, listAllQuery);
                 CategoryModel model = Find(categoryName.CategoryKey);
                 if (model != null)
                     return model.Name;
             }
             else if (query is GetCategoryIcon categoryIcon)
             {
-                await EnsureListAsync(next, new ListAllCategory());
+                await EnsureListAsync(dispatcher, null, listAllQuery);
                 CategoryModel model = Find(categoryIcon.CategoryKey);
                 if (model != null)
                     return model.Icon;
             }
             else if (query is GetCategoryColor categoryColor)
             {
-                await EnsureListAsync(next, new ListAllCategory());
+                await EnsureListAsync(dispatcher, null, listAllQuery);
                 CategoryModel model = Find(categoryColor.CategoryKey);
-                if (model == null)
-                {
-                    var models = await dispatcher.QueryAsync(new ListAllCategory());
-                    model = models.FirstOrDefault(c => c.Key.Equals(categoryColor.CategoryKey));
-                }
-
-                model = Find(categoryColor.CategoryKey);
                 if (model == null)
                     return Color.FromArgb(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
@@ -74,7 +70,7 @@ namespace Money.Services
             }
             else if (query is GetCategoryNameDescription categoryNameDescription)
             {
-                await EnsureListAsync(next, new ListAllCategory());
+                await EnsureListAsync(dispatcher, null, listAllQuery);
                 CategoryModel model = Find(categoryNameDescription.CategoryKey);
                 if (model != null)
                     return new CategoryNameDescriptionModel(model.Name, model.Description);
@@ -83,19 +79,19 @@ namespace Money.Services
             return await next(query);
         }
 
-        private async Task EnsureListAsync(HttpQueryDispatcher.Next next, ListAllCategory listAll)
+        private async Task EnsureListAsync(HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next, ListAllCategory listAll)
         {
             if (models.Count == 0)
             {
                 if (listAllTask == null)
-                    listAllTask = LoadAllAsync(listAll, next);
+                    listAllTask = LoadAllAsync(dispatcher, next, listAll);
 
                 await listAllTask;
                 listAllTask = null;
             }
         }
 
-        private async Task LoadAllAsync(ListAllCategory listAll, HttpQueryDispatcher.Next next)
+        private async Task LoadAllAsync(HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next, ListAllCategory listAll)
         {
             models.Clear();
             if (!serverConnection.IsAvailable)
@@ -108,7 +104,11 @@ namespace Money.Services
                 }
             }
 
-            models.AddRange((List<CategoryModel>)await next(listAll));
+            if (dispatcher != null)
+                models.AddRange(await dispatcher.QueryAsync(listAll));
+            else
+                models.AddRange((List<CategoryModel>)await next(listAll));
+
             await localStorage.SaveAsync(models);
         }
 

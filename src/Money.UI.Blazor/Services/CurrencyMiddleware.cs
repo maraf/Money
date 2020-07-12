@@ -20,6 +20,8 @@ namespace Money.Services
         IEventHandler<CurrencyDeleted>,
         IEventHandler<UserSignedOut>
     {
+        private static readonly ListAllCurrency listAllQuery = new ListAllCurrency();
+
         private readonly ServerConnectionState serverConnection;
         private readonly CurrencyStorage localStorage;
 
@@ -38,26 +40,26 @@ namespace Money.Services
         {
             if (query is ListAllCurrency listAll)
             {
-                await EnsureListAsync(next, listAll);
+                await EnsureListAsync(null, next, listAll);
                 return models.Select(c => c.Clone()).ToList();
             }
             else if (query is GetCurrencyDefault currencyDefault)
             {
-                await EnsureListAsync(next, new ListAllCurrency());
+                await EnsureListAsync(dispatcher, null, listAllQuery);
                 CurrencyModel model = models.FirstOrDefault(c => c.IsDefault);
                 if (model != null)
                     return model.UniqueCode;
             }
             else if (query is FindCurrencyDefault currencyDefaultNullable)
             {
-                await EnsureListAsync(next, new ListAllCurrency());
+                await EnsureListAsync(dispatcher, null, listAllQuery);
                 CurrencyModel model = models.FirstOrDefault(c => c.IsDefault);
                 if (model != null)
                     return model.UniqueCode;
             }
             else if (query is GetCurrencySymbol currencySymbol)
             {
-                await EnsureListAsync(next, new ListAllCurrency());
+                await EnsureListAsync(dispatcher, null, listAllQuery);
                 CurrencyModel model = Find(currencySymbol.UniqueCode);
                 if (model != null)
                     return model.Symbol;
@@ -66,19 +68,19 @@ namespace Money.Services
             return await next(query);
         }
 
-        private async Task EnsureListAsync(HttpQueryDispatcher.Next next, ListAllCurrency listAll)
+        private async Task EnsureListAsync(HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next, ListAllCurrency listAll)
         {
             if (models.Count == 0)
             {
                 if (listAllTask == null)
-                    listAllTask = LoadAllAsync(listAll, next);
+                    listAllTask = LoadAllAsync(dispatcher, next, listAll);
 
                 await listAllTask;
                 listAllTask = null;
             }
         }
 
-        private async Task LoadAllAsync(ListAllCurrency listAll, HttpQueryDispatcher.Next next)
+        private async Task LoadAllAsync(HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next, ListAllCurrency listAll)
         {
             models.Clear();
             if (!serverConnection.IsAvailable)
@@ -91,7 +93,11 @@ namespace Money.Services
                 }
             }
 
-            models.AddRange((List<CurrencyModel>)await next(listAll));
+            if (dispatcher != null)
+                models.AddRange(await dispatcher.QueryAsync(listAll));
+            else
+                models.AddRange((List<CurrencyModel>)await next(listAll));
+
             await localStorage.SaveAsync(models);
         }
 

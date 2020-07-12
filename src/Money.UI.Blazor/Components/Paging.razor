@@ -1,6 +1,6 @@
 ﻿<nav>
     <ul class="pagination justify-content-center">
-        @if (CurrentIndex == 0)
+        @if (Context.CurrentPageIndex == 0)
         {
             <li class="page-item disabled">
                 <span class="page-link">
@@ -21,11 +21,11 @@
 
         <li class="page-item active">
             <span class="page-link">
-                @(CurrentIndex + 1)
+                @(Context.CurrentPageIndex + 1)
             </span>
         </li>
 
-        @if (HasNextPage)
+        @if (Context.HasNextPage)
         {
             <li class="page-item">
                 <a class="page-link" @onclick="@OnNextPageClickAsync">

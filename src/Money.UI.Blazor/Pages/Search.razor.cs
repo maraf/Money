@@ -24,49 +24,44 @@ namespace Money.Pages
 
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
-        protected int CurrentPageIndex { get; set; }
+        protected PagingContext PagingContext { get; set; }
 
         protected List<OutcomeOverviewModel> Models { get; set; }
         protected string Text { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
+            PagingContext = new PagingContext(LoadPageAsync, Loading);
             CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
         }
 
-        protected async Task<bool> OnSearchAsync(int pageIndex = 0)
+        protected Task OnSearchAsync() 
+            => PagingContext.LoadAsync(0);
+
+        protected async Task<PagingLoadStatus> LoadPageAsync()
         {
             if (!String.IsNullOrEmpty(Text))
             {
-                int prevPageIndex = CurrentPageIndex;
-                CurrentPageIndex = pageIndex;
-                using (Loading.Start())
-                {
-                    var models = await Queries.QueryAsync(new SearchOutcomes(Text, SortDescriptor, pageIndex));
-                    if (models.Count == 0 && pageIndex > 0)
-                    {
-                        CurrentPageIndex = prevPageIndex;
-                        return false;
-                    }
+                var models = await Queries.QueryAsync(new SearchOutcomes(Text, SortDescriptor, PagingContext.CurrentPageIndex));
+                if (models.Count == 0)
+                    return PagingLoadStatus.EmptyPage;
 
-                    Models = models;
-                }
-
-                return Models.Count > 0;
+                Models = models;
+                return Models.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
             }
             else
             {
                 Models.Clear();
-                return false;
+                return PagingLoadStatus.LastPage;
             }
         }
 
         protected async void OnSortChanged()
         {
-            await OnSearchAsync(CurrentPageIndex);
+            await PagingContext.LoadAsync(0);
             StateHasChanged();
         }
-        
+
         #region OutcomeCard.IContext
 
         void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)

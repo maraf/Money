@@ -41,6 +41,9 @@ namespace Money.Pages
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
+        [Inject]
+        public Interop Interop { get; set; }
+
         protected string Title { get; set; }
         protected string SubTitle { get; set; }
 
@@ -57,7 +60,7 @@ namespace Money.Pages
 
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
-        protected int CurrentPageIndex { get; set; }
+        protected PagingContext PagingContext { get; set; }
 
         protected OutcomeOverviewModel Selected { get; set; }
         protected string DeleteMessage { get; set; }
@@ -65,6 +68,8 @@ namespace Money.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            PagingContext = new PagingContext(LoadDataAsync, Loading);
+
             BindEvents();
 
             CategoryKey = CreateSelectedCategoryFromParameters();
@@ -92,28 +97,20 @@ namespace Money.Pages
 
         protected async void Reload()
         {
-            await LoadDataAsync();
+            await PagingContext.LoadAsync(0);
             StateHasChanged();
         }
 
-        protected async Task<bool> LoadDataAsync(int pageIndex = 0)
+        protected async Task<PagingLoadStatus> LoadDataAsync()
         {
-            int prevPageIndex = CurrentPageIndex;
-            CurrentPageIndex = pageIndex;
-            using (Loading.Start())
-            {
-                List<OutcomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(pageIndex));
-                if (models.Count > 0 || pageIndex == 0)
-                {
-                    Items = models;
-                    return true;
-                }
-                else
-                {
-                    CurrentPageIndex = prevPageIndex;
-                    return false;
-                }
-            }
+            await Interop.ScrollToTopAsync();
+
+            List<OutcomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(PagingContext.CurrentPageIndex));
+            if (models.Count == 0)
+                return PagingLoadStatus.EmptyPage;
+
+            Items = models;
+            return Items.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
         }
 
         protected virtual IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
@@ -121,7 +118,7 @@ namespace Money.Pages
 
         protected async void OnSortChanged()
         {
-            await LoadDataAsync(CurrentPageIndex);
+            await PagingContext.LoadAsync(0);
             StateHasChanged();
         }
 

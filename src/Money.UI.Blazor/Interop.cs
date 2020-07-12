@@ -30,5 +30,8 @@ namespace Money
 
         public ValueTask<string> LoadTokenAsync()
             => jsRuntime.InvokeAsync<string>("Money.LoadToken");
+
+        public async Task ScrollToTopAsync()
+            => await jsRuntime.InvokeVoidAsync("window.scrollTo", 0, 0);
     }
 }

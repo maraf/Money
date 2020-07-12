@@ -9,51 +9,34 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public partial class Paging : System.IDisposable
+    public partial class Paging
     {
         [Inject]
         internal ILog<Paging> Log { get; set; }
 
-        protected int CurrentIndex { get; set; }
-        protected bool HasNextPage { get; set; } = true;
-
         [Parameter]
-        public Func<int, Task<bool>> LoadPageAsync { get; set; }
+        public PagingContext Context { get; set; }
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
 
-            if (LoadPageAsync == null)
-                throw Ensure.Exception.Argument("LoadPageAsync", "Missing required parameter 'LoadPageAsync'.");
+            if (Context == null)
+                throw Ensure.Exception.Argument("Context", "Missing required parameter 'Context'.");
         }
 
-        protected Task OnPrevPageClickAsync()
+        protected async Task OnPrevPageClickAsync()
         {
-            if (CurrentIndex == 0)
-                return Task.CompletedTask;
-
-            CurrentIndex--;
-            HasNextPage = true;
-            return LoadPageAsync?.Invoke(CurrentIndex) ?? Task.CompletedTask;
+            await Context.PrevAsync();
+            Log.Debug($"Data loaded (prev), hasNextPage='{Context.HasNextPage}', current index '{Context.CurrentPageIndex}'.");
+            StateHasChanged();
         }
 
         protected async Task OnNextPageClickAsync()
         {
-            if (!HasNextPage)
-                return;
-
-            bool hasNextPage = await LoadPageAsync(CurrentIndex + 1);
-            Log.Debug($"Data loaded, hasNextPage='{hasNextPage}'.");
-            if (hasNextPage)
-                CurrentIndex++;
-            else
-                HasNextPage = false;
-        }
-
-        public void Dispose()
-        {
-            Log.Debug("Disposing.");
+            await Context.NextAsync();
+            Log.Debug($"Data loaded (next), hasNextPage='{Context.HasNextPage}', current index '{Context.CurrentPageIndex}'.");
+            StateHasChanged();
         }
     }
 }

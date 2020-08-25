@@ -5,6 +5,7 @@ using Money.Services;
 using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Formatters;
+using Neptuo.Models;
 using Neptuo.Queries;
 using Newtonsoft.Json.Linq;
 using System;
@@ -50,104 +51,127 @@ namespace Money.Controllers
 
         public string UserName() => HttpContext.User.Identity.Name;
 
-        [HttpPost]
-        public ActionResult Query([FromBody] Request request)
+        [HttpPost("query")]
+        public Task<ActionResult> QueryAsync([FromBody] Request request)
         {
             Ensure.NotNull(request, "request");
 
             string payload = request.Payload;
             Type type = Type.GetType(request.Type);
 
-            return Query(payload, type);
+            return QueryAsync(payload, type);
         }
 
         [HttpPost]
         [Route("{*url}")]
-        public ActionResult Query(string url, JObject rawQuery)
+        public Task<ActionResult> QueryAsync(string url, JObject rawQuery)
         {
             Ensure.NotNullOrEmpty(url, "url");
             Ensure.NotNull(rawQuery, "rawQuery");
 
             Type type = queryMapper.FindTypeByUrl(url);
-            return Query(rawQuery.ToString(), type);
+            return QueryAsync(rawQuery.ToString(), type);
         }
 
-        private ActionResult Query(string payload, Type type)
+        private async Task<ActionResult> QueryAsync(string payload, Type type)
         {
             Ensure.NotNull(type, "type");
 
             object query = formatters.Query.Deserialize(type, payload);
 
-            MethodInfo methodInfo = queryDispatcher.GetType().GetMethod(nameof(queryDispatcher.QueryAsync));
-            if (methodInfo != null)
+            try
             {
-                methodInfo = methodInfo.MakeGenericMethod(type.GetInterfaces().First().GetGenericArguments().First());
-                Task task = (Task)methodInfo.Invoke(queryDispatcher, new[] { query });
-                task.Wait();
-
-                object output = task.GetType().GetProperty(nameof(Task<object>.Result)).GetValue(task);
-
-                ResponseType responseType = ResponseType.Composite;
-                if (output != null)
+                MethodInfo methodInfo = queryDispatcher.GetType().GetMethod(nameof(queryDispatcher.QueryAsync));
+                if (methodInfo != null)
                 {
-                    type = output.GetType();
+                    methodInfo = methodInfo.MakeGenericMethod(type.GetInterfaces().First().GetGenericArguments().First());
+                    Task task = (Task)methodInfo.Invoke(queryDispatcher, new[] { query });
+                    await task;
 
-                    if (plainTypes.Contains(type))
+                    object output = task.GetType().GetProperty(nameof(Task<object>.Result)).GetValue(task);
+                    ResponseType responseType = ResponseType.Composite;
+                    if (output != null)
                     {
-                        payload = output.ToString();
-                        responseType = ResponseType.Plain;
+                        type = output.GetType();
+
+                        if (plainTypes.Contains(type))
+                        {
+                            payload = output.ToString();
+                            responseType = ResponseType.Plain;
+                        }
+                        else
+                        {
+                            payload = formatters.Query.Serialize(output);
+                        }
                     }
                     else
                     {
-                        payload = formatters.Query.Serialize(output);
+                        type = type.GetInterfaces().First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQuery<>)).GetGenericArguments()[0];
+                        payload = null;
+                        if (plainTypes.Contains(type))
+                            responseType = ResponseType.Plain;
                     }
-                }
-                else
-                {
-                    type = type.GetInterfaces().First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQuery<>)).GetGenericArguments()[0];
-                    payload = null;
-                    if (plainTypes.Contains(type))
-                        responseType = ResponseType.Plain;
-                }
 
-                HttpContext.Response.ContentType = "text/json";
-
-                return Content(
-                    json.Serialize(
-                        new Response()
+                    return new ContentResult()
+                    {
+                        Content = json.Serialize(new Response()
                         {
                             Payload = payload,
                             Type = type.AssemblyQualifiedName,
                             ResponseType = responseType
-                        }
-                    )
-                );
-            }
+                        }),
+                        ContentType = "text/json"
+                    };
+                }
 
-            return NotFound();
+                return NotFound();
+            }
+            catch (AggregateRootException e)
+            {
+                return ProcessException(e);
+            }
         }
 
-        [HttpPost]
-        public ActionResult Command([FromBody] Request request)
+        private ActionResult ProcessException(AggregateRootException e)
+        {
+            string exceptionType = e.GetType().AssemblyQualifiedName;
+            string exceptionPayload = formatters.Exception.Serialize(e);
+
+            var response = new Response()
+            {
+                Type = exceptionType,
+                Payload = exceptionPayload
+            };
+
+            return new ContentResult()
+            {
+                Content = json.Serialize(response),
+                StatusCode = 500,
+                ContentType = "text/json"
+            };
+        }
+
+        [HttpPost("command")]
+        public Task<ActionResult> CommandAsync([FromBody] Request request)
         {
             string payload = request.Payload;
             Type type = Type.GetType(request.Type);
 
-            return Command(payload, type);
+            return CommandAsync(payload, type);
         }
 
         [HttpPost]
         [Route("{*url}")]
-        public ActionResult Command(string url, JObject rawCommand)
+        public Task<ActionResult> CommandAsync(string url, JObject rawCommand)
         {
             Ensure.NotNullOrEmpty(url, "url");
             Ensure.NotNull(rawCommand, "rawCommand");
 
             Type type = commandMapper.FindTypeByUrl(url);
-            return Command(rawCommand.ToString(), type);
+            return CommandAsync(rawCommand.ToString(), type);
         }
 
-        private ActionResult Command(string payload, Type type)
+        private async Task<ActionResult> CommandAsync(string payload, Type type)
         {
             object command = formatters.Command.Deserialize(type, payload);
 
@@ -156,7 +180,7 @@ namespace Money.Controllers
             {
                 methodInfo = methodInfo.MakeGenericMethod(type);
                 Task task = (Task)methodInfo.Invoke(commandDispatcher, new[] { command });
-                task.Wait();
+                await task;
 
                 return Ok();
             }

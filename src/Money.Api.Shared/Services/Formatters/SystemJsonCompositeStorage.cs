@@ -222,6 +222,12 @@ namespace Neptuo.Formatters
 
                 if (typeof(T) == typeof(IKey))
                 {
+                    if (element.ValueKind == JsonValueKind.Null)
+                    {
+                        value = default(T);
+                        return true;
+                    }
+
                     string type = element.GetProperty("Type").GetString();
                     if (element.TryGetProperty("Guid", out JsonElement rawGuid))
                     {

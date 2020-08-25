@@ -3,11 +3,14 @@ using Money.Models.Api;
 using Money.Users.Models;
 using Neptuo;
 using Neptuo.Exceptions.Handlers;
+using Neptuo.Formatters;
 using Neptuo.Logging;
 using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,8 +26,9 @@ namespace Money.Services
         private readonly ApiAuthenticationStateProvider authenticationState;
         private readonly ILog log;
         private readonly Json json;
+        private readonly FormatterContainer formatters;
 
-        public ApiClient(ApiVersionChecker versionChecker, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, ApiAuthenticationStateProvider authenticationState, ILogFactory logFactory, Json json)
+        public ApiClient(ApiVersionChecker versionChecker, HttpClient http, CommandMapper commandMapper, QueryMapper queryMapper, IExceptionHandler exceptionHandler, ApiAuthenticationStateProvider authenticationState, ILogFactory logFactory, Json json, FormatterContainer formatters)
         {
             Ensure.NotNull(versionChecker, "versionChecker");
             Ensure.NotNull(http, "http");
@@ -34,6 +38,7 @@ namespace Money.Services
             Ensure.NotNull(authenticationState, "authenticationState");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNull(json, "json");
+            Ensure.NotNull(formatters, "formatters");
             this.versionChecker = versionChecker;
             this.http = http;
             this.commandMapper = commandMapper;
@@ -42,6 +47,7 @@ namespace Money.Services
             this.authenticationState = authenticationState;
             this.log = logFactory.Scope("ApiClient");
             this.json = json;
+            this.formatters = formatters;
         }
 
         private HttpContent CreateJsonContent<T>(T request)
@@ -79,6 +85,19 @@ namespace Money.Services
             }
             else if (responseMessage.StatusCode == HttpStatusCode.InternalServerError)
             {
+                if (responseMessage.Content.Headers.ContentType.MediaType == "text/json")
+                {
+                    Response response = await ReadJsonAsync<Response>(responseMessage);
+                    log.Debug($"Managed server exception '{response.Type}' with payload '{response.Payload}'.");
+
+                    Type exceptionType = Type.GetType(response.Type);
+                    if (exceptionType != null)
+                    {
+                        Exception serverException = (Exception)formatters.Exception.Deserialize(exceptionType, response.Payload);
+                        throw serverException;
+                    }
+                }
+
                 throw new InternalServerException();
             }
             else
@@ -87,10 +106,14 @@ namespace Money.Services
             }
         }
 
-        private async Task<T> ReadJsonResponseAsync<T>(HttpResponseMessage responseMessage)
+        private async Task<T> ReadJsonSuccessResponseAsync<T>(HttpResponseMessage responseMessage)
         {
             await EnsureSuccessResponseAsync(responseMessage);
+            return await ReadJsonAsync<T>(responseMessage);
+        }
 
+        private async Task<T> ReadJsonAsync<T>(HttpResponseMessage responseMessage)
+        {
             string responseContent = await responseMessage.Content.ReadAsStringAsync();
             log.Debug($"Response: '{responseContent}'.");
 
@@ -111,7 +134,7 @@ namespace Money.Services
                 HttpResponseMessage responseMessage = await http.PostAsync("/api/user/login", requestContent);
                 if (responseMessage.StatusCode == HttpStatusCode.OK)
                 {
-                    LoginResponse response = await ReadJsonResponseAsync<LoginResponse>(responseMessage);
+                    LoginResponse response = await ReadJsonSuccessResponseAsync<LoginResponse>(responseMessage);
                     log.Debug($"Login success, token '{response.Token}'.");
 
                     if (!String.IsNullOrEmpty(response.Token))
@@ -144,7 +167,7 @@ namespace Money.Services
             try
             {
                 HttpResponseMessage responseMessage = await http.PostAsync("/api/user/register", requestContent);
-                RegisterResponse response = await ReadJsonResponseAsync<RegisterResponse>(responseMessage);
+                RegisterResponse response = await ReadJsonSuccessResponseAsync<RegisterResponse>(responseMessage);
                 return response;
             }
             catch (Exception e)
@@ -161,7 +184,7 @@ namespace Money.Services
             try
             {
                 HttpResponseMessage responseMessage = await PostToUniformApiAsync(queryMapper, "/api/query", type, payload);
-                return await ReadJsonResponseAsync<Response>(responseMessage);
+                return await ReadJsonSuccessResponseAsync<Response>(responseMessage);
             }
             catch (Exception e)
             {

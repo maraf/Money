@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
 using Money.Components.Bootstrap;
+using Money.Pages;
 using Money.Services;
 using Neptuo.Commands;
 using Neptuo.Logging;
@@ -102,6 +103,16 @@ namespace Money.Components
         private async void ExecuteChange()
         {
             await Commands.HandleAsync(new ChangeCurrencySymbol(UniqueCode, Symbol));
+        }
+
+        private void SetUsd() => SetValue("USD", "$");
+        private void SetEur() => SetValue("EUR", "€");
+        private void SetCzk() => SetValue("CZK", "Kč");
+
+        private void SetValue(string uniqueCode, string symbol)
+        {
+            UniqueCode = uniqueCode;
+            Symbol = symbol;
         }
     }
 }

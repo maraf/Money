@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Money.Commands;
 using Money.Commands.Handlers;
+using Money.Common.Data;
 using Money.Data;
 using Money.Hubs;
 using Money.Models;
@@ -40,12 +42,11 @@ namespace Money.Bootstrap
     public class BootstrapTask : IBootstrapTask
     {
         private readonly IServiceCollection services;
-        private readonly ConnectionStrings connectionStrings;
+        private readonly IConfiguration configuration;
+        private readonly PathResolver pathResolver;
 
         private ILogFactory logFactory;
         private ILog errorLog;
-        private IFactory<ReadModelContext> readModelContextFactory;
-        private IFactory<EventSourcingContext> eventSourcingContextFactory;
 
         private PriceCalculator priceCalculator;
         private ICompositeTypeProvider typeProvider;
@@ -63,33 +64,32 @@ namespace Money.Bootstrap
         private IFormatter queryFormatter;
         private IFormatter exceptionFormatter;
 
-        public BootstrapTask(IServiceCollection services, ConnectionStrings connectionStrings)
+        public BootstrapTask(IServiceCollection services, IConfiguration configuration, PathResolver pathResolver)
         {
             Ensure.NotNull(services, "services");
-            Ensure.NotNull(connectionStrings, "connectionStrings");
+            Ensure.NotNull(configuration, "configuration");
+            Ensure.NotNull(pathResolver, "pathResolver");
             this.services = services;
-            this.connectionStrings = connectionStrings;
+            this.configuration = configuration;
+            this.pathResolver = pathResolver;
         }
 
         public void Initialize()
         {
             Logging();
 
-            readModelContextFactory = Factory.Getter(() => new ReadModelContext(connectionStrings.ReadModel));
-            eventSourcingContextFactory = Factory.Getter(() => new EventSourcingContext(connectionStrings.EventSourcing));
-            CreateReadModelContext();
-            CreateEventSourcingContext();
-
             exceptionHandlerBuilder = new ExceptionHandlerBuilder();
             exceptionHandlerBuilder.Handler(Handle);
 
             services
-                .AddSingleton(readModelContextFactory)
-                .AddSingleton(eventSourcingContextFactory)
+                .AddDbContextWithSchema<ReadModelContext>(configuration.GetSection("ReadModel"), pathResolver)
+                .AddDbContextWithSchema<EventSourcingContext>(configuration.GetSection("EventSourcing"), pathResolver)
                 .AddSingleton(exceptionHandlerBuilder)
                 .AddSingleton<IExceptionHandler>(exceptionHandlerBuilder);
 
-            Domain();
+            var provider = services.BuildServiceProvider();
+
+            Domain(provider);
 
             priceCalculator = new PriceCalculator(eventDispatcher.Handlers, queryDispatcher);
 
@@ -97,7 +97,9 @@ namespace Money.Bootstrap
                 .AddSingleton(priceCalculator)
                 .AddSingleton(new FormatterContainer(commandFormatter, eventFormatter, queryFormatter, exceptionFormatter));
 
-            ReadModels();
+            CreateReadModelContext(provider);
+            CreateEventSourcingContext(provider);
+            ReadModels(provider);
 
             services
                 .AddSingleton<IEventHandlerCollection>(eventDispatcher.Handlers)
@@ -124,7 +126,7 @@ namespace Money.Bootstrap
             errorLog = logFactory.Scope("Error");
         }
 
-        private void Domain()
+        private void Domain(IServiceProvider provider)
         {
             Converts.Repository
                 .AddStringTo<int>(Int32.TryParse)
@@ -137,6 +139,8 @@ namespace Money.Bootstrap
                 .AddJsonTimeSpan()
                 .Add(new ColorConverter())
                 .AddToStringSearchHandler();
+
+            var eventSourcingContextFactory = provider.GetRequiredService<IFactory<EventSourcingContext>>();
 
             eventStore = new EntityEventStore(eventSourcingContextFactory);
             eventDispatcher = new PersistentEventDispatcher(new EmptyEventStore());
@@ -202,8 +206,10 @@ namespace Money.Bootstrap
             queryDispatcher.AddAll(userHandler);
         }
 
-        private void ReadModels()
+        private void ReadModels(IServiceProvider provider)
         {
+            var readModelContextFactory = provider.GetRequiredService<IFactory<ReadModelContext>>();
+
             Models.Builders.BootstrapTask bootstrapTask = new Models.Builders.BootstrapTask(
                 queryDispatcher,
                 eventDispatcher.Handlers,
@@ -214,15 +220,17 @@ namespace Money.Bootstrap
             bootstrapTask.Initialize();
         }
 
-        private void CreateEventSourcingContext()
+        private void CreateEventSourcingContext(IServiceProvider provider)
         {
-            using (var eventSourcing = eventSourcingContextFactory.Create())
+            var factory = provider.GetRequiredService<IFactory<EventSourcingContext>>();
+            using (var eventSourcing = factory.Create())
                 eventSourcing.Database.EnsureCreated();
         }
 
-        private void CreateReadModelContext()
+        private void CreateReadModelContext(IServiceProvider provider)
         {
-            using (var readModels = readModelContextFactory.Create())
+            var factory = provider.GetRequiredService<IFactory<ReadModelContext>>();
+            using (var readModels = factory.Create())
                 readModels.Database.EnsureCreated();
         }
 

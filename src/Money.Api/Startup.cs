@@ -38,20 +38,15 @@ namespace Money
             Environment = environment;
         }
 
+        private string ApplyBasePath(string value) 
+            => value.Replace("{BasePath}", Environment.ContentRootPath);
+
         public void ConfigureServices(IServiceCollection services)
         {
-            ConnectionStrings connectionStrings = Configuration
-                .GetSection("ConnectionStrings")
-                .Get<ConnectionStrings>();
-
-            string ApplyBasePath(string value) => value.Replace("{BasePath}", Environment.ContentRootPath);
-
-            connectionStrings.Application = ApplyBasePath(connectionStrings.Application);
-            connectionStrings.EventSourcing = ApplyBasePath(connectionStrings.EventSourcing);
-            connectionStrings.ReadModel = ApplyBasePath(connectionStrings.ReadModel);
+            IConfiguration connectionStrings = Configuration.GetSection("Database");
 
             services
-                .AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionStrings.Application));
+                .AddDbContextWithSchema<ApplicationDbContext>(connectionStrings.GetSection("Application"), ApplyBasePath);
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -131,7 +126,7 @@ namespace Money
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>();
 
-            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings);
+            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings, ApplyBasePath);
             bootstrapTask.Initialize();
         }
 

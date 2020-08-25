@@ -4,15 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Money.Common.Data.Ef.Migrations;
 
 namespace Money.Users.Data.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class CreateIdentitySchema : MigrationWithSchema<ApplicationDbContext>
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
+                schema: Schema.Name,
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -27,6 +29,7 @@ namespace Money.Users.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
+                schema: Schema.Name,
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
@@ -41,6 +44,7 @@ namespace Money.Users.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
+                schema: Schema.Name,
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -66,6 +70,7 @@ namespace Money.Users.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
+                schema: Schema.Name,
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
@@ -80,12 +85,14 @@ namespace Money.Users.Data.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalSchema: Schema.Name,
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
+                schema: Schema.Name,
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
@@ -100,12 +107,14 @@ namespace Money.Users.Data.Migrations
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalSchema: Schema.Name,
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
+                schema: Schema.Name,
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(nullable: false),
@@ -120,12 +129,14 @@ namespace Money.Users.Data.Migrations
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalSchema: Schema.Name,
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
+                schema: Schema.Name,
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
@@ -138,53 +149,63 @@ namespace Money.Users.Data.Migrations
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalSchema: Schema.Name,
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalSchema: Schema.Name,
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
+                schema: Schema.Name,
                 table: "AspNetRoles",
                 column: "NormalizedName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
+                schema: Schema.Name,
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
+                schema: Schema.Name,
                 table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
+                schema: Schema.Name,
                 table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
+                schema: Schema.Name,
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_UserId",
+                schema: Schema.Name,
                 table: "AspNetUserRoles",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
+                schema: Schema.Name,
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
+                schema: Schema.Name,
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
@@ -193,25 +214,32 @@ namespace Money.Users.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+                name: "AspNetRoleClaims",
+                schema: Schema.Name);
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
+                name: "AspNetUserClaims",
+                schema: Schema.Name);
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
+                name: "AspNetUserLogins",
+                schema: Schema.Name);
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+                name: "AspNetUserRoles",
+                schema: Schema.Name);
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
+                name: "AspNetUserTokens",
+                schema: Schema.Name);
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "AspNetRoles",
+                schema: Schema.Name);
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "AspNetUsers",
+                schema: Schema.Name);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Money.Data;
 using Money.Users.Models;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +12,30 @@ namespace Money.Users.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private readonly SchemaOptions schema;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, SchemaOptions<ApplicationDbContext> schema)
             : base(options)
         {
+            Ensure.NotNull(schema, "schema");
+            this.schema = schema;
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+
+            if (!String.IsNullOrEmpty(schema.Name))
+            {
+                modelBuilder.HasDefaultSchema(schema.Name);
+
+                foreach (var entity in modelBuilder.Model.GetEntityTypes())
+                    entity.SetSchema(schema.Name);
+            }
         }
     }
 }

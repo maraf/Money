@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Neptuo;
 
 namespace Money.Data
 {
@@ -16,16 +17,13 @@ namespace Money.Data
         public DbSet<CurrencyEntity> Currencies { get; set; }
         public DbSet<CurrencyExchangeRateEntity> ExchangeRates { get; set; }
 
-        private readonly string connectionString;
+        private readonly SchemaOptions schema;
 
-        public ReadModelContext(string connectionString)
+        public ReadModelContext(DbContextOptions<ReadModelContext> options, SchemaOptions<ReadModelContext> schema)
+            : base(options)
         {
-            this.connectionString = connectionString;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite(connectionString);
+            Ensure.NotNull(schema, "schema");
+            this.schema = schema;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,6 +48,14 @@ namespace Money.Data
 
             modelBuilder.Entity<CurrencyExchangeRateEntity>()
                 .HasKey(e => e.Id);
+
+            if (!String.IsNullOrEmpty(schema.Name))
+            {
+                modelBuilder.HasDefaultSchema(schema.Name);
+
+                foreach (var entity in modelBuilder.Model.GetEntityTypes())
+                    entity.SetSchema(schema.Name);
+            }
         }
     }
 }

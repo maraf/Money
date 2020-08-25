@@ -18,23 +18,20 @@ namespace Neptuo.Data.Entity
         public DbSet<CommandEntity> Commands { get; private set; }
         public DbSet<UnPublishedCommandEntity> UnPublishedCommands { get; private set; }
 
-        private readonly string connectionString;
-
-        public EventSourcingContext(string connectionString)
-            : base()
+        public EventSourcingContext(DbContextOptions options, bool initializeSets = true)
+            : base(options)
         {
-            this.connectionString = connectionString;
+            if (initializeSets)
+                InitializeSets();
+        }
 
+        protected void InitializeSets()
+        {
             Events = Set<EventEntity>();
             UnPublishedEvents = Set<UnPublishedEventEntity>();
 
             Commands = Set<CommandEntity>();
             UnPublishedCommands = Set<UnPublishedCommandEntity>();
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

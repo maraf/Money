@@ -111,9 +111,15 @@ namespace Money.Pages
             {
                 using (CategoriesLoading.Start())
                 {
-                    Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedPeriod));
-                    TotalAmout = await Queries.QueryAsync(CreateTotalQuery(SelectedPeriod));
-
+                    try
+                    {
+                        Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedPeriod));
+                        TotalAmout = await Queries.QueryAsync(CreateTotalQuery(SelectedPeriod));
+                    }
+                    catch (MissingDefaultCurrentException)
+                    {
+                        Navigator.OpenCurrencies();
+                    }
                 }
 
                 Sort();

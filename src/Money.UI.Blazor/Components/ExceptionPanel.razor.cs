@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
+using Money.Components.Bootstrap;
 using Money.Services;
 using Neptuo.Exceptions.Handlers;
 using System;
@@ -28,6 +29,9 @@ namespace Money.Components
 
         [Parameter]
         public string Message { get; set; }
+
+        [Parameter]
+        public AlertMode AlertMode { get; set; } = AlertMode.Error;
 
         protected override void OnInitialized()
         {

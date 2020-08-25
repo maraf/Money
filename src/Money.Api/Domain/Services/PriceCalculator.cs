@@ -88,7 +88,11 @@ namespace Money.Services
         public Price ZeroDefault(IKey userKey)
         {
             EnsureUserStorageAsync(userKey).Wait();
-            return Price.Zero(storage[userKey].DefaultCurrencyUniqueCode);
+            string defaultCurrenyUniqueCode = storage[userKey].DefaultCurrencyUniqueCode;
+            if (defaultCurrenyUniqueCode == null)
+                throw new MissingDefaultCurrentException();
+
+            return Price.Zero(defaultCurrenyUniqueCode);
         }
 
         public Price ToDefault(IKey userKey, IPriceFixed price)

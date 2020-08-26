@@ -57,5 +57,8 @@ window.Money = {
         }
 
         return null;
+    },
+    AnimateSplash: function () {
+        setTimeout(function () { $(".splash").addClass("animate"); }, 300);
     }
 };

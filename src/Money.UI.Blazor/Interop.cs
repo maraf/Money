@@ -33,5 +33,8 @@ namespace Money
 
         public async Task ScrollToTopAsync()
             => await jsRuntime.InvokeVoidAsync("window.scrollTo", 0, 0);
+
+        public async Task AnimateSplashAsync()
+            => await jsRuntime.InvokeVoidAsync("Money.AnimateSplash");
     }
 }

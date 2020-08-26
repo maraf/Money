@@ -35,5 +35,31 @@
     <script src="/_framework/blazor.webassembly.js"></script>
     <script src="/js/site.min.js"></script>
     <script src="/service-worker.register.js"></script>
+    <script>
+
+        (function () {
+            let _startY;
+            let _maxY = 0;
+            let container = document.body;
+
+            container.addEventListener('touchstart', e => {
+                _startY = e.touches[0].pageY;
+            }, { passive: true });
+
+            container.addEventListener('touchmove', e => {
+                const y = e.touches[0].pageY;
+                if (y > _maxY) {
+                    _maxY = y;
+                }
+            }, { passive: true });
+
+            container.addEventListener("touchend", () => {
+                if (document.scrollingElement.scrollTop === 0 && _maxY > _startY && (_maxY - _startY) > 30) {
+                    alert(1);
+                }
+            }, { passive: true });
+        })();
+
+    </script>
 </body>
 </html>

@@ -11,6 +11,7 @@ body {
     min-height: 100vh;
     padding-top: 30px;
     padding-bottom: 20px;
+    overscroll-behavior-y: contain;
 }
 
 .body-content {

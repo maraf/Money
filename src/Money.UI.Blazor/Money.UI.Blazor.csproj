@@ -3,6 +3,8 @@
   <PropertyGroup>
     <RootNamespace>Money</RootNamespace>
     <VersionPrefix>1.12.2.0</VersionPrefix>
+
+    <PublishDomain>app.money.neptuo.com</PublishDomain>
     
     <TargetFramework>netstandard2.1</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
@@ -44,4 +46,32 @@
     <None Update="**\*.json.defaults" DependentUpon="%(Filename)" />
     <Watch Include="**\*.razor" />
   </ItemGroup>
+
+  <Target Name="PublishGitHubFiles" AfterTargets="ComputeFilesToPublish">
+    <!-- Declare -->
+    <PropertyGroup>
+      <Wwwroot>wwwroot</Wwwroot>
+      <CName>$(Wwwroot)\CNAME</CName>
+      <Html404>$(Wwwroot)\404.html</Html404>
+      <NoJekkyl>$(Wwwroot)\.nojekkyl</NoJekkyl>
+    </PropertyGroup>
+    
+    <!-- Create content -->
+    <Copy SourceFiles="wwwroot\index.html" DestinationFiles="$(OutputPath)$(Html404)" />
+    <WriteLinesToFile File="$(OutputPath)$(CName)" Lines="$(PublishDomain)" Overwrite="true" />
+    <WriteLinesToFile File="$(OutputPath)$(NoJekkyl)" Lines="" Overwrite="true" />
+
+    <!-- Publish -->
+    <ItemGroup>
+      <CustomPublishFile Include="$(OutputPath)$(CName)" RelativePath="$(CName)" />
+      <CustomPublishFile Include="$(OutputPath)$(Html404)" RelativePath="$(Html404)" />
+      <CustomPublishFile Include="$(OutputPath)$(NoJekkyl)" RelativePath="$(NoJekkyl)" />
+      
+      <ResolvedFileToPublish Include="@(CustomPublishFile->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(CustomPublishFile.RelativePath)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+  
 </Project>

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Data", "src\Money.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Models.Builders", "src\Money.Models.Builders\Money.Models.Builders.csproj", "{DEBB89D5-7BA3-465C-B6D0-927FD61C0DFB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.UI.Blazor", "src\Money.UI.Blazor\Money.UI.Blazor.csproj", "{F13BAE0F-446F-4E54-8DFD-63776E94D33D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Blazor.Host", "src\Money.Blazor.Host\Money.Blazor.Host.csproj", "{F13BAE0F-446F-4E54-8DFD-63776E94D33D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptuo.Json", "src\Neptuo.Json\Neptuo.Json.csproj", "{2CEB371B-B0EF-4335-99E3-83F30B1EF21E}"
 EndProject

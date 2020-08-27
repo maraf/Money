@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Money.UI.Blazor": {
+    "Money.Blazor.Host": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

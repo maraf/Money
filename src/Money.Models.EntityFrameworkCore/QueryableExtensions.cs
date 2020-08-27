@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Data
+namespace Money.Models
 {
     public static class QueryableExtensions
     {

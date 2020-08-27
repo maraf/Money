@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Money.EntityFrameworkCore;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Neptuo;
 
-namespace Money.Data
+namespace Money.Models
 {
     public class ReadModelContext : DbContext
     {

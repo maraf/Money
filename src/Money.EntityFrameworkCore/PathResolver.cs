@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Common.Data
+namespace Money.EntityFrameworkCore
 {
     public delegate string PathResolver(string relativePath);
 }

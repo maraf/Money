@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Money.Data;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Common.Data.Ef.Migrations
+namespace Money.EntityFrameworkCore.Migrations
 {
     public abstract class MigrationWithSchema : Migration
     {

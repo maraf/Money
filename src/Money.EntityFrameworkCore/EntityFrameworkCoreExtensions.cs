@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Money.Common.Data;
-using Money.Common.Data.Ef;
+using Money.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;

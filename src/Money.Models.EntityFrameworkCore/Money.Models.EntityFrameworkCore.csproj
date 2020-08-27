@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Money.Models.Builders</RootNamespace>
+    <RootNamespace>Money.Models</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Money.Models.EntityFrameworkCore\Money.Models.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Money.EntityFrameworkCore\Money.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
-    <ProjectReference Include="..\Money\Money.csproj" />
+    <ProjectReference Include="..\Neptuo.EntityFrameworkCore\Neptuo.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>
 

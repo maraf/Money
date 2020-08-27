@@ -19,8 +19,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Money.Api.Shared\Money.Api.Shared.csproj" />
-    <ProjectReference Include="..\Money.Data\Money.Data.csproj" />
+    <ProjectReference Include="..\Money.EventSourcing.EntityFrameworkCore\Money.EventSourcing.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Money.Models.Builders\Money.Models.Builders.csproj" />
+    <ProjectReference Include="..\Money.Models.EntityFrameworkCore\Money.Models.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
     <ProjectReference Include="..\Money\Money.csproj" />
     <ProjectReference Include="..\Neptuo.EntityFrameworkCore\Neptuo.EntityFrameworkCore.csproj" />
@@ -32,6 +33,10 @@
     <Content Update="appsettings.Development.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Data\Ef\" />
   </ItemGroup>
 
 </Project>

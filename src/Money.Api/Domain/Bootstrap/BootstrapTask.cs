@@ -2,13 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using Money.Commands;
-using Money.Commands.Handlers;
-using Money.Common.Data;
-using Money.Data;
-using Money.Hubs;
 using Money.Models;
+using Money.Hubs;
 using Money.Services;
 using Money.Users.Commands.Handlers;
 using Money.Users.Models;
@@ -36,6 +31,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Money.EntityFrameworkCore;
 
 namespace Money.Bootstrap
 {

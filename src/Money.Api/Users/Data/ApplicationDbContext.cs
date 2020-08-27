@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Money.Data;
+using Money.EntityFrameworkCore;
 using Money.Users.Models;
 using Neptuo;
 using System;

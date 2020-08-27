@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Money.Common.Data;
-using Money.Common.Data.Ef;
-using Money.Common.Data.Ef.Migrations;
-using Money.Data;
+using Money.EntityFrameworkCore;
+using Money.EntityFrameworkCore.Migrations;
 using Neptuo;
 using Neptuo.Activators;
 using System;

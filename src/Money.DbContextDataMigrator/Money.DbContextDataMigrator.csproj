@@ -13,7 +13,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Money.Api\Money.Api.csproj" />
-    <ProjectReference Include="..\Money.Data\Money.Data.csproj" />
+    <ProjectReference Include="..\Money.EntityFrameworkCore\Money.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Money.EventSourcing.EntityFrameworkCore\Money.EventSourcing.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Money.Models.EntityFrameworkCore\Money.Models.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

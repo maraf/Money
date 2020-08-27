@@ -1,5 +1,4 @@
-﻿using Money.Data;
-using Neptuo;
+﻿using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Bootstrap;
 using Neptuo.Events;

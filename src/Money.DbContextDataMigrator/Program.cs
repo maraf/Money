@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Money.Data;
+using Money.EntityFrameworkCore;
+using Money.Models;
 using Money.Users.Data;
 using System;
 using System.Collections.Generic;

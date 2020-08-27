@@ -10,20 +10,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Money.Common.Diagnostics;
-using Money.Common.Middlewares;
-using Money.Data;
-using Money.Hubs;
 using Money.Models;
+using Money.Hubs;
 using Money.Models.Api;
 using Money.Services;
 using Money.Users.Data;
 using Money.Users.Models;
+using Money.EntityFrameworkCore;
 
 namespace Money
 {

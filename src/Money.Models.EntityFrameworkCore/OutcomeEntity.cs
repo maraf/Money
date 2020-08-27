@@ -1,5 +1,4 @@
-﻿using Money.Models;
-using Neptuo;
+﻿using Neptuo;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Data
+namespace Money.Models
 {
     public class OutcomeEntity : IPriceFixed, IUserEntity
     {

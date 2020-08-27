@@ -197,7 +197,7 @@ namespace Money.Bootstrap
 
             bootstrapTask.Initialize();
 
-            UserHandler userHandler = new UserHandler(services.BuildServiceProvider().GetRequiredService<UserManager<ApplicationUser>>(), eventDispatcher);
+            UserHandler userHandler = new UserHandler(services.BuildServiceProvider().GetRequiredService<UserManager<User>>(), eventDispatcher);
             commandDispatcher.Handlers.AddAll(userHandler);
             queryDispatcher.AddAll(userHandler);
         }

@@ -1,4 +1,4 @@
-﻿using Money.Queries;
+﻿using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Logging;
 using Neptuo.Queries;

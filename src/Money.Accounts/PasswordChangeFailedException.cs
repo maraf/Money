@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Commands
+namespace Money
 {
     /// <summary>
     /// An exception raised when user password change fails.

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Money.Users.Data.Migrations
+namespace Money.Migrations
 {
-    public partial class CreateIdentitySchema : MigrationWithSchema<ApplicationDbContext>
+    public partial class CreateIdentitySchema : MigrationWithSchema<AccountContext>
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

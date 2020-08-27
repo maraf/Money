@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace Money.Users.Models
+namespace Money
 {
-    public class ApplicationUser : IdentityUser
+    public class User : IdentityUser
     {
-        public ApplicationUser()
+        public User()
         { }
 
-        public ApplicationUser(string userName)
+        public User(string userName)
             : base(userName)
         { }
     }

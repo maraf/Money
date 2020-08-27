@@ -19,11 +19,11 @@ namespace Money.Users.Controllers
     public class UserController : ControllerBase
     {
         private readonly JwtOptions configuration;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<User> userManager;
         private readonly JwtSecurityTokenHandler tokenHandler;
         private readonly Json json;
 
-        public UserController(IOptions<JwtOptions> configuration, UserManager<ApplicationUser> userManager, JwtSecurityTokenHandler tokenHandler, Json json)
+        public UserController(IOptions<JwtOptions> configuration, UserManager<User> userManager, JwtSecurityTokenHandler tokenHandler, Json json)
         {
             Ensure.NotNull(configuration, "configuration");
             Ensure.NotNull(userManager, "userManager");
@@ -38,7 +38,7 @@ namespace Money.Users.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
-            ApplicationUser user = await userManager.FindByNameAsync(model.UserName);
+            User user = await userManager.FindByNameAsync(model.UserName);
             if (user != null)
             {
                 if (await userManager.CheckPasswordAsync(user, model.Password))
@@ -75,7 +75,7 @@ namespace Money.Users.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
-            var user = new ApplicationUser(model.UserName);
+            var user = new User(model.UserName);
             var result = await userManager.CreateAsync(user, model.Password);
 
             var response = new RegisterResponse();

@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Money</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Money\Money.csproj" />
+    <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
+  </ItemGroup>
+
+</Project>

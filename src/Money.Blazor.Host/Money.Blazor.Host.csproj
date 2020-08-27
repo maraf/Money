@@ -23,6 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Money.Accounts.Models\Money.Accounts.Models.csproj" />
+    <ProjectReference Include="..\Money.Accounts\Money.Accounts.csproj" />
     <ProjectReference Include="..\Money.Api.Shared\Money.Api.Shared.csproj" />
     <ProjectReference Include="..\Money.Models\Money.Models.csproj" />
     <ProjectReference Include="..\Money\Money.csproj" />

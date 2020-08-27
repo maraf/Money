@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
-using Money.Queries;
+using Money.Models.Queries;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;

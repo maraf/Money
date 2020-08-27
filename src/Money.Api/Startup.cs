@@ -19,7 +19,6 @@ using Money.Models;
 using Money.Hubs;
 using Money.Models.Api;
 using Money.Services;
-using Money.Users.Data;
 using Money.Users.Models;
 using Money.EntityFrameworkCore;
 
@@ -44,7 +43,7 @@ namespace Money
             IConfiguration connectionStrings = Configuration.GetSection("Database");
 
             services
-                .AddDbContextWithSchema<ApplicationDbContext>(connectionStrings.GetSection("Application"), ApplyBasePath);
+                .AddDbContextWithSchema<AccountContext>(connectionStrings.GetSection("Application"), ApplyBasePath);
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -91,8 +90,8 @@ namespace Money
                 });
 
             services
-                .AddIdentityCore<ApplicationUser>(options => Configuration.GetSection("Identity").GetSection("Password").Bind(options.Password))
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddIdentityCore<User>(options => Configuration.GetSection("Identity").GetSection("Password").Bind(options.Password))
+                .AddEntityFrameworkStores<AccountContext>();
 
             services
                 .AddRouting(options => options.LowercaseUrls = true)
@@ -107,7 +106,7 @@ namespace Money
 
             services
                 .AddHealthChecks()
-                .AddDbContextCheck<ApplicationDbContext>()
+                .AddDbContextCheck<AccountContext>()
                 .AddFactoryDbContextCheck<ReadModelContext>()
                 .AddFactoryDbContextCheck<EventSourcingContext>();
 

@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Money.Accounts.EntityFrameworkCore\Money.Accounts.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Money.Accounts.Models.Builders\Money.Accounts.Models.Builders.csproj" />
+    <ProjectReference Include="..\Money.Accounts.Models\Money.Accounts.Models.csproj" />
+    <ProjectReference Include="..\Money.Accounts\Money.Accounts.csproj" />
     <ProjectReference Include="..\Money.Api.Shared\Money.Api.Shared.csproj" />
     <ProjectReference Include="..\Money.EventSourcing.EntityFrameworkCore\Money.EventSourcing.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Money.Models.Builders\Money.Models.Builders.csproj" />

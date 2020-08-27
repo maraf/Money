@@ -2,7 +2,7 @@
 using Money.Commands;
 using Money.Events;
 using Money.Models;
-using Money.Queries;
+using Money.Models.Queries;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;

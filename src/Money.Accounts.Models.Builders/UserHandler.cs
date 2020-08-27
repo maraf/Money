@@ -2,8 +2,7 @@
 using Money.Commands;
 using Money.Events;
 using Money.Models;
-using Money.Queries;
-using Money.Users.Models;
+using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Collections.Specialized;
 using Neptuo.Commands;
@@ -22,10 +21,10 @@ namespace Money.Users.Commands.Handlers
 {
     public class UserHandler : ICommandHandler<Envelope<ChangePassword>>, ICommandHandler<Envelope<ChangeEmail>>, IQueryHandler<GetProfile, ProfileModel>
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<User> userManager;
         private readonly IEventDispatcher eventDispatcher;
 
-        public UserHandler(UserManager<ApplicationUser> userManager, IEventDispatcher eventDispatcher)
+        public UserHandler(UserManager<User> userManager, IEventDispatcher eventDispatcher)
         {
             Ensure.NotNull(userManager, "userManager");
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
@@ -43,22 +42,22 @@ namespace Money.Users.Commands.Handlers
             return ex;
         }
 
-        private async Task<(ApplicationUser Model, StringKey Key)> GetUserAsync(Envelope envelope)
+        private async Task<(User Model, StringKey Key)> GetUserAsync(Envelope envelope)
         {
             StringKey userKey = envelope.Metadata.Get<StringKey>("UserKey");
             return (await GetUserAsync(userKey), userKey);
         }
 
-        private async Task<ApplicationUser> GetUserAsync(StringKey userKey)
+        private async Task<User> GetUserAsync(StringKey userKey)
         {
-            ApplicationUser model = await userManager.FindByIdAsync(userKey.Identifier);
+            User model = await userManager.FindByIdAsync(userKey.Identifier);
             if (model == null)
                 throw new InvalidOperationException($"Unable to load user with ID '{userKey.Identifier}'.");
 
             return model;
         }
 
-        private void EnsureNotDemo<T>(Envelope<T> envelope, (ApplicationUser Model, StringKey Key) user)
+        private void EnsureNotDemo<T>(Envelope<T> envelope, (User Model, StringKey Key) user)
             where T : ICommand
         {
             if (user.Model.IsDemo())

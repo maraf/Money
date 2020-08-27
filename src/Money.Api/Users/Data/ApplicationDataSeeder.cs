@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Users.Data
+namespace Money
 {
     public static class ApplicationDataSeeder
     {
@@ -23,13 +23,13 @@ namespace Money.Users.Data
                 using (var scope = host.Services.CreateScope())
                 {
                     var services = scope.ServiceProvider;
-                    var userManager = services.GetService<UserManager<ApplicationUser>>();
-                    var db = services.GetService<ApplicationDbContext>();
+                    var userManager = services.GetService<UserManager<User>>();
+                    var db = services.GetService<AccountContext>();
 
                     db.Database.EnsureCreated();
 
                     if (!userManager.Users.Any())
-                        userManager.CreateAsync(new ApplicationUser(ClaimsPrincipalExtensions.DemoUserName), ClaimsPrincipalExtensions.DemoUserPassword).Wait();
+                        userManager.CreateAsync(new User(ClaimsPrincipalExtensions.DemoUserName), ClaimsPrincipalExtensions.DemoUserPassword).Wait();
                 }
             }
             catch (Exception e)
@@ -41,17 +41,17 @@ namespace Money.Users.Data
             return host;
         }
 
-        public static async Task InitializeAsync(UserManager<ApplicationUser> userManager, ICommandDispatcher commands)
+        public static async Task InitializeAsync(UserManager<User> userManager, ICommandDispatcher commands)
         {
             IdentityResult userResult = await userManager.CreateAsync(
-                new ApplicationUser(ClaimsPrincipalExtensions.DemoUserName),
+                new User(ClaimsPrincipalExtensions.DemoUserName),
                 ClaimsPrincipalExtensions.DemoUserPassword
             );
 
             if (!userResult.Succeeded)
                 throw Ensure.Exception.InvalidOperation("Unnable to create demo user.");
 
-            ApplicationUser user = await userManager.FindByNameAsync(ClaimsPrincipalExtensions.DemoUserName);
+            User user = await userManager.FindByNameAsync(ClaimsPrincipalExtensions.DemoUserName);
             if (user == null)
                 throw Ensure.Exception.InvalidOperation("Unnable find created demo user.");
 

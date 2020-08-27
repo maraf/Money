@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Queries
+namespace Money.Models.Queries
 {
     /// <summary>
     /// Gets a user profile information.

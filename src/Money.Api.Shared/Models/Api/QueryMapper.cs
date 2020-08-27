@@ -1,5 +1,4 @@
 ﻿using Money.Models.Queries;
-using Money.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;

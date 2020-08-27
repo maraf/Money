@@ -1,20 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Money.EntityFrameworkCore;
-using Money.Users.Models;
 using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Money.Users.Data
+namespace Money
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class AccountContext : IdentityDbContext<User>
     {
         private readonly SchemaOptions schema;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, SchemaOptions<ApplicationDbContext> schema)
+        public AccountContext(DbContextOptions<AccountContext> options, SchemaOptions<AccountContext> schema)
             : base(options)
         {
             Ensure.NotNull(schema, "schema");

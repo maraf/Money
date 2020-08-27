@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Queires
+namespace Money.Queries
 {
     /// <summary>
     /// Vrátí aktuální verzi API (pokud již byla zjištěna).

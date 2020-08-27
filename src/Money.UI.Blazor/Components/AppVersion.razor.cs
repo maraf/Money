@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Events;
-using Money.Queires;
+using Money.Queries;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Queries;

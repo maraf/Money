@@ -1,5 +1,5 @@
 ﻿using Money.Events;
-using Money.Queires;
+using Money.Queries;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Queries;

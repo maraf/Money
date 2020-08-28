@@ -14,12 +14,14 @@ namespace Money
         {
             string accountsSource = "";
             string accountsTarget = "";
-            string entriesSource = "";
-            string entriesTarget = "";
+            string eventSourcingSource = "";
+            string eventSourcingTarget = "";
+            string readModelSource = "";
+            string readModelTarget = "";
 
             await MigrateApplicationAsync(accountsSource, accountsTarget);
-            await MigrateEventSourcingAsync(entriesSource, entriesTarget);
-            await MigrateReadModelAsync(entriesSource, entriesTarget);
+            await MigrateEventSourcingAsync(eventSourcingSource, eventSourcingTarget);
+            await MigrateReadModelAsync(readModelSource, readModelTarget);
         }
 
         private static Task CopyDbSetAsync<TContext, TEntity>(TContext sourceContext, TContext targetContext, Func<TContext, DbSet<TEntity>> dbSetGetter, Action<TEntity> entityHandler = null, params string[] includes)

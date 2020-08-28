@@ -1,4 +1,4 @@
-﻿using Money.Models.Api;
+﻿using Money.Api.Models;
 using Money.Services;
 using Neptuo.Formatters;
 using Neptuo.Logging;

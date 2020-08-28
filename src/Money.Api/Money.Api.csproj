@@ -39,8 +39,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Data\Ef\" />
-  </ItemGroup>
-
 </Project>

@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Money.EntityFrameworkCore;
 using Money.Models;
+using Money.Models.Builders;
 using Money.Hubs;
 using Money.Services;
-using Money.Users.Commands.Handlers;
-using Money.Users.Models;
 using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Bootstrap;
@@ -31,7 +31,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Money.EntityFrameworkCore;
 
 namespace Money.Bootstrap
 {

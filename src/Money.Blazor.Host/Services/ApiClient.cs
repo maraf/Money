@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Money.Accounts.Models;
 using Money.Models.Api;
-using Money.Users.Models;
 using Neptuo;
 using Neptuo.Exceptions.Handlers;
 using Neptuo.Formatters;
@@ -9,8 +8,6 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Mime;
-using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 

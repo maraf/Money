@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Money.Commands;
-using Money.Users.Models;
 using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Models.Keys;
@@ -54,7 +53,6 @@ namespace Money
             User user = await userManager.FindByNameAsync(ClaimsPrincipalExtensions.DemoUserName);
             if (user == null)
                 throw Ensure.Exception.InvalidOperation("Unnable find created demo user.");
-
             IKey userKey = StringKey.Create(user.Id, "User");
 
             await commands.HandleAsync(WrapCommand(userKey, new CreateCurrency("USD", "$")));

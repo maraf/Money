@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Money.EntityFrameworkCore;
 using Money.Models;
-using Money.Users.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,8 +56,8 @@ namespace Money
 
         private async static Task MigrateApplicationAsync(string sourceConnectionString, string targetConnectionString)
         {
-            using (var source = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite(sourceConnectionString).Options, new SchemaOptions<ApplicationDbContext>()))
-            using (var target = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(targetConnectionString).Options, new SchemaOptions<ApplicationDbContext>() { Name = "Application" }))
+            using (var source = new AccountContext(new DbContextOptionsBuilder<AccountContext>().UseSqlite(sourceConnectionString).Options, new SchemaOptions<AccountContext>()))
+            using (var target = new AccountContext(new DbContextOptionsBuilder<AccountContext>().UseSqlServer(targetConnectionString).Options, new SchemaOptions<AccountContext>() { Name = "Application" }))
             {
                 await CopyDbSetAsync(source, target, c => c.Users);
                 await CopyDbSetAsync(source, target, c => c.UserClaims);

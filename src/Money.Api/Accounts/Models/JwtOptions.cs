@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Users.Models
+namespace Money.Accounts.Models
 {
     public class JwtOptions
     {

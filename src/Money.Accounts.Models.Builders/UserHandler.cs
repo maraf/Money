@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Money.Commands;
 using Money.Events;
-using Money.Models;
 using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Collections.Specialized;
@@ -17,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Users.Commands.Handlers
+namespace Money.Models.Builders
 {
     public class UserHandler : ICommandHandler<Envelope<ChangePassword>>, ICommandHandler<Envelope<ChangeEmail>>, IQueryHandler<GetProfile, ProfileModel>
     {

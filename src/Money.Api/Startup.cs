@@ -14,12 +14,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Money.Accounts.Models;
 using Money.Common.Diagnostics;
 using Money.Models;
 using Money.Hubs;
 using Money.Models.Api;
 using Money.Services;
-using Money.Users.Models;
 using Money.EntityFrameworkCore;
 
 namespace Money

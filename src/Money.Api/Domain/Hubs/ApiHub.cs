@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Money.Api.Models;
 using Money.Events;
-using Money.Models.Api;
 using Money.Services;
 using Neptuo;
 using Neptuo.Events;

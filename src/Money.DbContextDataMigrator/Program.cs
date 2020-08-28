@@ -61,6 +61,9 @@ namespace Money
             using (var source = new AccountContext(new DbContextOptionsBuilder<AccountContext>().UseSqlite(sourceConnectionString).Options, new SchemaOptions<AccountContext>()))
             using (var target = new AccountContext(new DbContextOptionsBuilder<AccountContext>().UseSqlServer(targetConnectionString).Options, new SchemaOptions<AccountContext>() { Name = "Application" }))
             {
+                await target.Database.EnsureCreatedAsync();
+                await target.Database.MigrateAsync();
+
                 await CopyDbSetAsync(source, target, c => c.Users);
                 await CopyDbSetAsync(source, target, c => c.UserClaims);
                 await CopyDbSetAsync(source, target, c => c.UserLogins);
@@ -78,6 +81,9 @@ namespace Money
             using (var source = new EventSourcingContext(new DbContextOptionsBuilder<EventSourcingContext>().UseSqlite(sourceConnectionString).Options, new SchemaOptions<EventSourcingContext>()))
             using (var target = new EventSourcingContext(new DbContextOptionsBuilder<EventSourcingContext>().UseSqlServer(targetConnectionString).Options, new SchemaOptions<EventSourcingContext>() { Name = "EventSourcing" }))
             {
+                await target.Database.EnsureCreatedAsync();
+                await target.Database.MigrateAsync();
+
                 await CopyDbSetAsync(source, target, c => c.Events);
 
                 await target.SaveChangesAsync();
@@ -89,6 +95,9 @@ namespace Money
             using (var source = new ReadModelContext(new DbContextOptionsBuilder<ReadModelContext>().UseSqlite(sourceConnectionString).Options, new SchemaOptions<ReadModelContext>()))
             using (var target = new ReadModelContext(new DbContextOptionsBuilder<ReadModelContext>().UseSqlServer(targetConnectionString).Options, new SchemaOptions<ReadModelContext>() { Name = "ReadModel" }))
             {
+                await target.Database.EnsureCreatedAsync();
+                await target.Database.MigrateAsync();
+
                 await CopyDbSetAsync(source, target, c => c.Currencies);
                 await CopyDbSetAsync(source, target, c => c.Categories);
                 await CopyDbSetAsync(source, target, c => c.ExchangeRates);

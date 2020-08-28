@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Money.Commands;
 using Neptuo;
@@ -26,6 +27,7 @@ namespace Money
                     var db = services.GetService<AccountContext>();
 
                     db.Database.EnsureCreated();
+                    db.Database.Migrate();
 
                     if (!userManager.Users.Any())
                         userManager.CreateAsync(new User(ClaimsPrincipalExtensions.DemoUserName), ClaimsPrincipalExtensions.DemoUserPassword).Wait();

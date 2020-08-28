@@ -219,14 +219,20 @@ namespace Money.Bootstrap
         {
             var factory = provider.GetRequiredService<IFactory<EventSourcingContext>>();
             using (var eventSourcing = factory.Create())
+            {
                 eventSourcing.Database.EnsureCreated();
+                eventSourcing.Database.Migrate();
+            }
         }
 
         private void CreateReadModelContext(IServiceProvider provider)
         {
             var factory = provider.GetRequiredService<IFactory<ReadModelContext>>();
-            using (var readModels = factory.Create())
-                readModels.Database.EnsureCreated();
+            using (var readModel = factory.Create())
+            {
+                readModel.Database.EnsureCreated();
+                readModel.Database.Migrate();
+            }
         }
 
         public void Handle(Exception exception)

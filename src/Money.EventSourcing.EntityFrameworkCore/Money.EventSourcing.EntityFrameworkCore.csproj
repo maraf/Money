@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Neptuo\Neptuo.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7" />
+  </ItemGroup>
+
 </Project>

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Options;
+using Money.Hubs;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Exceptions;
-using Neptuo.Exceptions.Handlers;
 using Neptuo.Logging;
 using System;
 using System.Collections.Generic;

@@ -36,7 +36,7 @@ namespace Money.Models.Builders
             this.readModelContextFactory = readModelContextFactory;
         }
 
-        public Task HandleAsync(CategoryCreated payload)
+        public async Task HandleAsync(CategoryCreated payload)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
@@ -52,7 +52,7 @@ namespace Money.Models.Builders
                     ).SetUserKey(payload.UserKey)
                 );
 
-                return db.SaveChangesAsync();
+                await db.SaveChangesAsync();
             }
         }
 
@@ -106,12 +106,11 @@ namespace Money.Models.Builders
             }
         }
 
-        public Task<List<CategoryModel>> HandleAsync(ListAllCategory query)
+        public async Task<List<CategoryModel>> HandleAsync(ListAllCategory query)
         {
-            List<CategoryModel> result = new List<CategoryModel>();
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                return db.Categories.WhereUserKey(query.UserKey)
+                return await db.Categories.WhereUserKey(query.UserKey)
                     .WhereUserKey(query.UserKey)
                     .Where(c => !c.IsDeleted)
                     .OrderBy(c => c.Name)

@@ -88,11 +88,11 @@ namespace Money.Models.Builders
             }
         }
 
-        public Task<List<CurrencyModel>> HandleAsync(ListAllCurrency query)
+        public async Task<List<CurrencyModel>> HandleAsync(ListAllCurrency query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                return db.Currencies
+                return await db.Currencies
                     .WhereUserKey(query.UserKey)
                     .Where(c => !c.IsDeleted)
                     .Select(c => new CurrencyModel(c.UniqueCode, c.Symbol, c.IsDefault))
@@ -133,11 +133,11 @@ namespace Money.Models.Builders
             }
         }
 
-        public Task<List<ExchangeRateModel>> HandleAsync(ListTargetCurrencyExchangeRates query)
+        public async Task<List<ExchangeRateModel>> HandleAsync(ListTargetCurrencyExchangeRates query)
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                return db.ExchangeRates
+                return await db.ExchangeRates
                     .WhereUserKey(query.UserKey)
                     .Where(r => r.TargetCurrency == query.TargetCurrency)
                     .OrderByDescending(r => r.ValidFrom)

@@ -41,7 +41,7 @@ namespace Money.Services
             {
                 storage[userKey] = model = new UserModel();
 
-                model.DefaultCurrencyUniqueCode = await queryDispatcher.QueryAsync(new GetCurrencyDefault() { UserKey = userKey });
+                model.DefaultCurrencyUniqueCode = await queryDispatcher.QueryAsync(new FindCurrencyDefault() { UserKey = userKey });
 
                 IEnumerable<CurrencyModel> currencies = await queryDispatcher.QueryAsync(new ListAllCurrency() { UserKey = userKey });
                 foreach (CurrencyModel currency in currencies)

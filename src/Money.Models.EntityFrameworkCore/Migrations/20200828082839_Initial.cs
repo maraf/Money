@@ -38,7 +38,7 @@ namespace Money.Models.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(maxLength: 36, nullable: false),
-                    UniqueCode = table.Column<string>(maxLength: 16, nullable: false),
+                    UniqueCode = table.Column<string>(maxLength: 128, nullable: false),
                     Symbol = table.Column<string>(nullable: true),
                     IsDefault = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false)

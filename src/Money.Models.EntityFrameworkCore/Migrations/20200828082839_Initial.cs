@@ -8,8 +8,8 @@ namespace Money.Models.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: Schema.Name);
+            if (Schema.Name != null)
+                migrationBuilder.EnsureSchema(Schema.Name);
 
             migrationBuilder.CreateTable(
                 name: "Categories",

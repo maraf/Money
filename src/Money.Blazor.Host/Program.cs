@@ -62,6 +62,7 @@ namespace Money.UI.Blazor
                 .AddSingleton<PwaInstallInterop>()
                 .AddTransient<NetworkStateInterop>()
                 .AddSingleton<NetworkState>()
+                .AddSingleton<PullToRefreshInterop>()
                 .AddTransient<CurrencyStorage>()
                 .AddTransient<CategoryStorage>()
                 .AddTransient<ProfileStorage>()

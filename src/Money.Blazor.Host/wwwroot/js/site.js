@@ -92,7 +92,7 @@ window.PullToRefresh = {
         container.addEventListener("touchend", () => {
             const delta = Math.floor(_maxY - _startY);
             if (_isActive && delta > 100) {
-                alert(`Start '${_startY}', Max '${_maxY}', Delta '${delta}'`);
+                //alert(`Start '${_startY}', Max '${_maxY}', Delta '${delta}'`);
                 window.PullToRefresh.Raise();
             }
         }, { passive: true });

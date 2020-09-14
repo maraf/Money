@@ -29,7 +29,8 @@ namespace Money.Pages
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
-        IEventHandler<OutcomeWhenChanged>
+        IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<PulledToRefresh>
     {
         private CurrencyFormatter formatter;
 
@@ -189,7 +190,8 @@ namespace Money.Pages
                 .Add<OutcomeCreated>(this)
                 .Add<OutcomeDeleted>(this)
                 .Add<OutcomeAmountChanged>(this)
-                .Add<OutcomeWhenChanged>(this);
+                .Add<OutcomeWhenChanged>(this)
+                .Add<PulledToRefresh>(this);
         }
 
         private void UnBindEvents()
@@ -198,7 +200,8 @@ namespace Money.Pages
                 .Remove<OutcomeCreated>(this)
                 .Remove<OutcomeDeleted>(this)
                 .Remove<OutcomeAmountChanged>(this)
-                .Remove<OutcomeWhenChanged>(this);
+                .Remove<OutcomeWhenChanged>(this)
+                .Remove<PulledToRefresh>(this);
         }
 
         Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
@@ -222,6 +225,13 @@ namespace Money.Pages
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
         {
             OnMonthUpdatedEvent(payload.When);
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
+        {
+            payload.IsHandled = true;
+            _ = LoadSelectedPeriodAsync();
             return Task.CompletedTask;
         }
 

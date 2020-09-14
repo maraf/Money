@@ -28,7 +28,8 @@ namespace Money.Pages
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeDescriptionChanged>,
-        IEventHandler<OutcomeWhenChanged>
+        IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<PulledToRefresh>
     {
         public CurrencyFormatter CurrencyFormatter { get; private set; }
 
@@ -158,7 +159,8 @@ namespace Money.Pages
                 .Add<OutcomeDeleted>(this)
                 .Add<OutcomeAmountChanged>(this)
                 .Add<OutcomeDescriptionChanged>(this)
-                .Add<OutcomeWhenChanged>(this);
+                .Add<OutcomeWhenChanged>(this)
+                .Add<PulledToRefresh>(this);
         }
 
         private void UnBindEvents()
@@ -168,7 +170,8 @@ namespace Money.Pages
                 .Remove<OutcomeDeleted>(this)
                 .Remove<OutcomeAmountChanged>(this)
                 .Remove<OutcomeDescriptionChanged>(this)
-                .Remove<OutcomeWhenChanged>(this);
+                .Remove<OutcomeWhenChanged>(this)
+                .Remove<PulledToRefresh>(this);
         }
 
         private Task UpdateModel(IEvent payload, Action<OutcomeOverviewModel> handler)
@@ -234,6 +237,13 @@ namespace Money.Pages
             }
 
             Reload();
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
+        {
+            payload.IsHandled = true;
+            _ = LoadDataAsync();
             return Task.CompletedTask;
         }
 

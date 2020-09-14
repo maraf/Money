@@ -5,13 +5,16 @@ $actionButtonColor: #333;
     clear: both;
 }
 
+html, body {
+    overscroll-behavior-y: none;
+}
+
 body {
     position: relative;
     min-width: $bodyMinWidth;
     min-height: 100vh;
     padding-top: 30px;
     padding-bottom: 20px;
-    overscroll-behavior-y: contain;
 }
 
 .body-content {

@@ -62,3 +62,43 @@ window.Money = {
         setTimeout(function () { $(".splash").addClass("animate"); }, 300);
     }
 };
+
+window.PullToRefresh = {
+    Initialize: function (interop) {
+        window.PullToRefresh._interop = interop;
+
+        let _isActive = false;
+        let _startY;
+        let _maxY = 0;
+        let container = document.body;
+
+        container.addEventListener('touchstart', e => {
+            _startY = 0;
+            _maxY = 0;
+
+            if (document.scrollingElement.scrollTop === 0) {
+                _startY = Math.floor(e.touches[0].pageY);
+                _isActive = true;
+            } else {
+                _isActive = false;
+            }
+        }, { passive: true });
+
+        container.addEventListener('touchmove', e => {
+            const y = e.touches[0].pageY;
+            _maxY = Math.floor(y);
+        }, { passive: true });
+
+        container.addEventListener("touchend", () => {
+            const delta = Math.floor(_maxY - _startY);
+            if (_isActive && delta > 100) {
+                alert(`Start '${_startY}', Max '${_maxY}', Delta '${delta}'`);
+                window.PullToRefresh.Raise();
+            }
+        }, { passive: true });
+    },
+    Raise: function() {
+        window.PullToRefresh._interop.invokeMethodAsync("PullToRefresh.Pulled");
+    }
+}
+

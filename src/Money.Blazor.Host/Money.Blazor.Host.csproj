@@ -55,19 +55,19 @@
       <Wwwroot>wwwroot</Wwwroot>
       <CName>$(Wwwroot)\CNAME</CName>
       <Html404>$(Wwwroot)\404.html</Html404>
-      <NoJekkyl>$(Wwwroot)\.nojekkyl</NoJekkyl>
+      <NoJekyll>$(Wwwroot)\.nojekyll</NoJekyll>
     </PropertyGroup>
     
     <!-- Create content -->
     <Copy SourceFiles="wwwroot\index.html" DestinationFiles="$(OutputPath)$(Html404)" />
     <WriteLinesToFile File="$(OutputPath)$(CName)" Lines="$(PublishDomain)" Overwrite="true" />
-    <WriteLinesToFile File="$(OutputPath)$(NoJekkyl)" Lines="" Overwrite="true" />
+    <WriteLinesToFile File="$(OutputPath)$(NoJekyll)" Lines="" Overwrite="true" />
 
     <!-- Publish -->
     <ItemGroup>
       <CustomPublishFile Include="$(OutputPath)$(CName)" RelativePath="$(CName)" />
       <CustomPublishFile Include="$(OutputPath)$(Html404)" RelativePath="$(Html404)" />
-      <CustomPublishFile Include="$(OutputPath)$(NoJekkyl)" RelativePath="$(NoJekkyl)" />
+      <CustomPublishFile Include="$(OutputPath)$(NoJekyll)" RelativePath="$(NoJekyll)" />
       
       <ResolvedFileToPublish Include="@(CustomPublishFile->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(CustomPublishFile.RelativePath)</RelativePath>

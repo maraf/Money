@@ -67,10 +67,12 @@ window.PullToRefresh = {
     Initialize: function (interop) {
         window.PullToRefresh._interop = interop;
 
+        const refreshTreshold = 200;
         let _isActive = false;
         let _startY;
         let _maxY = 0;
         let container = document.body;
+        const listenerOptions = { passive: true };
 
         container.addEventListener('touchstart', e => {
             _startY = 0;
@@ -82,20 +84,19 @@ window.PullToRefresh = {
             } else {
                 _isActive = false;
             }
-        }, { passive: true });
+        }, listenerOptions);
 
         container.addEventListener('touchmove', e => {
             const y = e.touches[0].pageY;
             _maxY = Math.floor(y);
-        }, { passive: true });
+        }, listenerOptions);
 
         container.addEventListener("touchend", () => {
             const delta = Math.floor(_maxY - _startY);
-            if (_isActive && delta > 100) {
-                //alert(`Start '${_startY}', Max '${_maxY}', Delta '${delta}'`);
+            if (_isActive && delta > refreshTreshold) {
                 window.PullToRefresh.Raise();
             }
-        }, { passive: true });
+        }, listenerOptions);
     },
     Raise: function() {
         window.PullToRefresh._interop.invokeMethodAsync("PullToRefresh.Pulled");

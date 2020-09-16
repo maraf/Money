@@ -12,11 +12,14 @@
             <label for="currency-symbol">Symbol:</label>
             <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Display Symbol" data-autofocus="@(!IsUniqueCodeEnabled)" @bind="@Symbol" />
         </div>
-        <div class="form-group">
-            <button class="btn btn-sm btn-outline-secondary" @onclick="SetUsd">$</button>
-            <button class="btn btn-sm btn-outline-secondary" @onclick="SetEur">€</button>
-            <button class="btn btn-sm btn-outline-secondary" @onclick="SetCzk">Kč</button>
-        </div>
+        @if (isNew)
+        {
+            <div class="form-group">
+                <button class="btn btn-sm btn-outline-secondary" @onclick="SetUsd">$</button>
+                <button class="btn btn-sm btn-outline-secondary" @onclick="SetEur">€</button>
+                <button class="btn btn-sm btn-outline-secondary" @onclick="SetCzk">Kč</button>
+            </div>
+        }
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary btn-sm" @onclick="@OnSaveClick">@SaveButtonText</button>

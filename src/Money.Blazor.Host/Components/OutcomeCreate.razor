@@ -39,14 +39,24 @@
             <label>Category:</label>
             @if (Categories != null)
             {
-                @foreach (var category in Categories)
-                {
-                    <button type="button" class="btn btn-block btn-selectable @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") text-truncate @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
-                        <span>@category.Icon</span>
-                        <strong>@category.Name</strong>
-                        <span>@category.Description</span>
-                    </button>
-                }
+                <div class="form-row">
+                    @foreach (var category in Categories)
+                    {
+                        <div class="col-6 col-md-4 mb-2">
+                            <button type="button" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                                <div>
+                                    <h2>@category.Icon</h2>
+                                </div>
+                                <div class="text-truncate">
+                                    <strong>@category.Name</strong>
+                                </div>
+                                <div class="text-truncate">
+                                    <span>@category.Description</span>
+                                </div>
+                            </button>
+                        </div>
+                    }
+                </div>
             }
         </div>
     </ChildContent>

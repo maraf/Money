@@ -23,22 +23,25 @@ namespace Money.Services
         private readonly IEventDispatcher events;
         private readonly HttpClient http;
         private readonly TokenContainer token;
+        private readonly TokenStorage tokenStorage;
         private readonly Interop interop;
         private readonly ILog log;
 
         private readonly List<ITokenValidator> validators = new List<ITokenValidator>();
 
-        public ApiAuthenticationStateProvider(IEventDispatcher events, HttpClient http, TokenContainer token, Interop interop, ILogFactory logFactory, IEnumerable<ITokenValidator> validators)
+        public ApiAuthenticationStateProvider(IEventDispatcher events, HttpClient http, TokenContainer token, TokenStorage tokenStorage, Interop interop, ILogFactory logFactory, IEnumerable<ITokenValidator> validators)
         {
             Ensure.NotNull(events, "eventDispatcher");
             Ensure.NotNull(http, "http");
             Ensure.NotNull(token, "token");
+            Ensure.NotNull(tokenStorage, "tokenStorage");
             Ensure.NotNull(interop, "interop");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNull(validators, "validators");
             this.events = events;
             this.http = http;
             this.token = token;
+            this.tokenStorage = tokenStorage;
             this.interop = interop;
             this.log = logFactory.Scope("ApiAuthenticationState");
             this.validators.AddRange(validators);
@@ -58,7 +61,7 @@ namespace Money.Services
             {
                 log.Debug("Loading the token from a storage.");
 
-                var value = await interop.LoadTokenAsync();
+                var value = await tokenStorage.FindAsync();
                 await ChangeTokenAsync(value);
             }
 
@@ -114,8 +117,10 @@ namespace Money.Services
         {
             log.Debug($"Set token '{value}'.");
 
-            if (isPersistent)
-                await interop.SaveTokenAsync(value);
+            if (!String.IsNullOrEmpty(value))
+                await tokenStorage.SetAsync(value, isPersistent);
+            else
+                await tokenStorage.ClearAsync();
 
             await ChangeTokenAsync(value, false);
 

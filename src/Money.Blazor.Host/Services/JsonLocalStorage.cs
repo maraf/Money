@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazored.LocalStorage;
+using Microsoft.JSInterop;
 using Neptuo;
 using Neptuo.Formatters;
 using Neptuo.Logging;
@@ -15,18 +16,18 @@ namespace Money.Services
         where T : class
     {
         private readonly IFormatter formatter;
-        private readonly IJSRuntime jsRuntime;
+        private readonly ILocalStorageService localStorage;
         private readonly ILog log;
         private readonly string key;
 
-        public JsonLocalStorage(IFormatter formatter, IJSRuntime jsRuntime, ILogFactory logFactory, string key)
+        public JsonLocalStorage(IFormatter formatter, ILocalStorageService localStorage, ILogFactory logFactory, string key)
         {
             Ensure.NotNull(formatter, "formatter");
-            Ensure.NotNull(jsRuntime, "jsRuntime");
+            Ensure.NotNull(localStorage, "localStorage");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNullOrEmpty(key, "key");
             this.formatter = formatter;
-            this.jsRuntime = jsRuntime;
+            this.localStorage = localStorage;
             this.log = logFactory.Scope(GetType().Name);
             this.key = key;
         }
@@ -35,7 +36,7 @@ namespace Money.Services
         {
             try
             {
-                string raw = await jsRuntime.InvokeAsync<string>("window.localStorage.getItem", key);
+                string raw = await localStorage.GetItemAsStringAsync(key);
                 log.Debug($"Loaded '{raw}'.");
                 if (String.IsNullOrEmpty(raw))
                     return null;
@@ -53,13 +54,13 @@ namespace Money.Services
         public async Task SaveAsync(T model)
         {
             string raw = formatter.Serialize(model);
-            await jsRuntime.InvokeVoidAsync("window.localStorage.setItem", key, raw);
+            await localStorage.SetItemAsync(key, raw);
             log.Debug($"Saved '{raw}'.");
         }
 
         public async Task DeleteAsync()
         {
-            await jsRuntime.InvokeVoidAsync("window.localStorage.removeItem", key);
+            await localStorage.RemoveItemAsync(key);
             log.Debug($"Deleted.");
         }
     }

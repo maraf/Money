@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazored.LocalStorage;
+using Microsoft.JSInterop;
 using Money.Models;
 using Neptuo;
 using Neptuo.Logging;
@@ -13,8 +14,8 @@ namespace Money.Services
 {
     public class CategoryStorage : JsonLocalStorage<List<CategoryModel>>
     {
-        public CategoryStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory)
-            : base(formatters.Query, jsRuntime, logFactory, "categories")
+        public CategoryStorage(FormatterContainer formatters, ILocalStorageService localStorage, ILogFactory logFactory)
+            : base(formatters.Query, localStorage, logFactory, "categories")
         { }
     }
 }

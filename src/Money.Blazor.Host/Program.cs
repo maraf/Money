@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Money.Api.Routing;
 using Money.Components;
 using Money.Components.Bootstrap;
-using Money.Api.Routing;
 using Money.Models;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Exceptions;
 using System;
-using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +24,6 @@ namespace Money.UI.Blazor
 
         public async static Task Main(string[] args)
         {
-
             // Configure.
             WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault();
             ConfigureServices(builder.Services);
@@ -51,8 +51,8 @@ namespace Money.UI.Blazor
                 .AddAuthorizationCore()
                 .AddSingleton(p => new HttpClient() { BaseAddress = p.GetRequiredService<IOptions<ApiConfiguration>>().Value.ApiUrl })
                 .AddSingleton<ServerConnectionState>()
-                .AddSingleton<ApiAuthenticationStateProvider>()
-                .AddSingleton<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())
+                .AddScoped<ApiAuthenticationStateProvider>()
+                .AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>())
                 .AddTransient<ApiTokenValidator>()
                 .AddSingleton<SignalRListener>()
                 .AddSingleton<ApiHubService>()
@@ -68,7 +68,7 @@ namespace Money.UI.Blazor
                 .AddTransient<ProfileStorage>()
                 .AddTransient<NavigatorUrl>()
                 .AddSingleton<Navigator>()
-                .AddSingleton<ApiClient>()
+                .AddScoped<ApiClient>()
                 .AddSingleton<ModalInterop>()
                 .AddSingleton<TokenContainer>()
                 .AddSingleton<QueryString>()
@@ -76,6 +76,11 @@ namespace Money.UI.Blazor
                 .AddSingleton<QueryMapper>()
                 .AddSingleton<ColorCollection>()
                 .AddSingleton<IconCollection>();
+
+            services
+                .AddTransient<TokenStorage>()
+                .AddBlazoredLocalStorage()
+                .AddBlazoredSessionStorage();
 
             bootstrapTask = new Bootstrap.BootstrapTask(services);
             bootstrapTask.Initialize();

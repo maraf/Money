@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazored.LocalStorage;
+using Microsoft.JSInterop;
 using Money.Services;
 using Neptuo.Logging;
 using System;
@@ -12,8 +13,8 @@ namespace Money.Commands
 {
     public class CreateExpenseStorage : JsonLocalStorage<List<CreateOutcome>>
     {
-        public CreateExpenseStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory) 
-            : base(formatters.Query, jsRuntime, logFactory, "expenses")
+        public CreateExpenseStorage(FormatterContainer formatters, ILocalStorageService localStorage, ILogFactory logFactory) 
+            : base(formatters.Query, localStorage, logFactory, "expenses")
         { }
     }
 }

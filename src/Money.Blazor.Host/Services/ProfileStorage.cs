@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazored.LocalStorage;
+using Microsoft.JSInterop;
 using Money.Models;
 using Neptuo.Logging;
 using System;
@@ -12,8 +13,8 @@ namespace Money.Services
 {
     public class ProfileStorage : JsonLocalStorage<ProfileModel>
     {
-        public ProfileStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory) 
-            : base(formatters.Query, jsRuntime, logFactory, "profile")
+        public ProfileStorage(FormatterContainer formatters, ILocalStorageService localStorage, ILogFactory logFactory) 
+            : base(formatters.Query, localStorage, logFactory, "profile")
         { }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -24,12 +23,6 @@ namespace Money
 
         public void NavigateTo(string url)
             => jsRuntime.InvokeAsync<bool>("Money.NavigateTo", url);
-
-        public ValueTask SaveTokenAsync(string token)
-            => jsRuntime.InvokeVoidAsync("Money.SaveToken", token);
-
-        public ValueTask<string> LoadTokenAsync()
-            => jsRuntime.InvokeAsync<string>("Money.LoadToken");
 
         public async Task ScrollToTopAsync()
             => await jsRuntime.InvokeVoidAsync("window.scrollTo", 0, 0);

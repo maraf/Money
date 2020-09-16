@@ -78,7 +78,7 @@ namespace Money.Bootstrap
                 .AddSingleton(formatters)
                 .AddSingleton(logFactory)
                 .AddSingleton<MessageBuilder>()
-                .AddSingleton<LocalExpenseOnlineRunner>()
+                .AddScoped<LocalExpenseOnlineRunner>()
                 .AddTransient<HttpCommandDispatcher>()
                 .AddTransient<CommandStorage>()
                 .AddTransient<CreateExpenseStorage>()
@@ -96,7 +96,7 @@ namespace Money.Bootstrap
                 where T : class, HttpQueryDispatcher.IMiddleware
             {
                 services
-                    .AddSingleton<T>()
+                    .AddScoped<T>()
                     .AddTransient<HttpQueryDispatcher.IMiddleware>(sp => sp.GetService<T>());
             }
 

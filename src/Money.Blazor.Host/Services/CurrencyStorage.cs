@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazored.LocalStorage;
+using Microsoft.JSInterop;
 using Money.Models;
 using Neptuo;
 using Neptuo.Formatters;
@@ -14,8 +15,8 @@ namespace Money.Services
 {
     public class CurrencyStorage : JsonLocalStorage<List<CurrencyModel>>
     {
-        public CurrencyStorage(FormatterContainer formatters, IJSRuntime jsRuntime, ILogFactory logFactory)
-            : base(formatters.Query, jsRuntime, logFactory, "currencies")
+        public CurrencyStorage(FormatterContainer formatters, ILocalStorageService localStorage, ILogFactory logFactory)
+            : base(formatters.Query, localStorage, logFactory, "currencies")
         { }
     }
 }

@@ -421,6 +421,14 @@ h4 {
         margin-bottom: 0;
     }
 }
+
+@media (max-width: 767px) {
+    .modal .btn-primary {
+        width: 100%;
+        display: block;
+    }
+}
+
 /* ------ SPLASH SCREEN ------------------------------------------------------------------------ */
 
 .splash {

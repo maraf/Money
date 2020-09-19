@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Money.Models.Loading;
 using Money.Services;
 using Neptuo.Collections.Specialized;
 using System;
@@ -30,6 +31,7 @@ namespace Money.Pages.Accounts
         protected string Password { get; set; }
         protected bool IsPermanent { get; set; }
 
+        protected LoadingContext Loading { get; } = new LoadingContext();
         protected List<string> ErrorMessages { get; } = new List<string>();
 
         protected override void OnInitialized()
@@ -54,14 +56,17 @@ namespace Money.Pages.Accounts
 
         private async Task LoginAsync(string userName, string password, bool isPermanent)
         {
-            ErrorMessages.Clear();
-
-            if (Validate(userName, password))
+            using (Loading.Start())
             {
-                if (!await ApiClient.LoginAsync(userName, password, isPermanent))
-                    ErrorMessages.Add("User name and password don't match.");
-                else
-                    NavigateAway();
+                ErrorMessages.Clear();
+
+                if (Validate(userName, password))
+                {
+                    if (!await ApiClient.LoginAsync(userName, password, isPermanent))
+                        ErrorMessages.Add("User name and password don't match.");
+                    else
+                        NavigateAway();
+                }
             }
         }
 

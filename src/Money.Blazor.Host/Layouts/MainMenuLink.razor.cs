@@ -45,7 +45,7 @@ namespace Money.Layouts
 
         protected bool IsActive()
         {
-            if (PageType != null)
+            if (PageType != null && RouteData != null)
                 return PageType == RouteData.PageType;
 
             string currentUrl = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);

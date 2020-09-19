@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Money.Models.Loading;
 using Money.Services;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace Money.Pages.Accounts
         protected string Password { get; set; }
         protected string ConfirmPassword { get; set; }
 
+        protected LoadingContext Loading { get; } = new LoadingContext();
         protected List<string> ErrorMessages { get; } = new List<string>();
 
         protected override void OnInitialized()
@@ -37,25 +39,28 @@ namespace Money.Pages.Accounts
         {
             if (Validate())
             {
-                var response = await ApiClient.RegisterAsync(UserName, Password);
-                if (response.IsSuccess)
+                using (Loading.Start())
                 {
-                    if (await ApiClient.LoginAsync(UserName, Password, false))
+                    var response = await ApiClient.RegisterAsync(UserName, Password);
+                    if (response.IsSuccess)
                     {
-                        Navigator.OpenSummary();
+                        if (await ApiClient.LoginAsync(UserName, Password, false))
+                        {
+                            Navigator.OpenSummary();
+                        }
+                        else
+                        {
+                            UserName = null;
+                            Password = null;
+                            ConfirmPassword = null;
+
+                            Navigator.OpenLogin();
+                        }
                     }
                     else
                     {
-                        UserName = null;
-                        Password = null;
-                        ConfirmPassword = null;
-
-                        Navigator.OpenLogin();
-                    }
-                }
-                else
-                {
-                    ErrorMessages.AddRange(response.ErrorMessages);
+                        ErrorMessages.AddRange(response.ErrorMessages);
+                    } 
                 }
             }
         }

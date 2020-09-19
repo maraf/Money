@@ -1,5 +1,4 @@
-﻿@using Money.Models.Sorting
-@typeparam TType
+﻿@typeparam TType
 
 <div class="sort dropdown">
     <button class="@ButtonCssClass" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -15,7 +14,7 @@
 
                 @if (Current.Type.Equals(item.Value))
                 {
-                    <Icon Identifier="@DirectionToIcon(Current.Direction)" />
+                    <Icon Identifier="@DirectionToIcon(Current.Direction)" class="ml-1" />
                 }
             </a>
         }

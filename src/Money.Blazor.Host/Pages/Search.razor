@@ -6,7 +6,7 @@
 
 <div class="search">
     <form @onsubmit="@(() => OnSearchAsync())">
-        <div class="row">
+        <div class="form-row">
             <div class="col-md col-sm-12">
                 <div class="form-group">
                     <input class="form-control" placeholder="Search..." @bind="@Text" />
@@ -14,7 +14,7 @@
             </div>
             <div class="col-md-auto col-sm">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-secondary">
+                    <button type="submit" class="btn btn-primary">
                         <Icon Identifier="search" />
                         Search
                     </button>

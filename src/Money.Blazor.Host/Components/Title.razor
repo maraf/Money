@@ -4,7 +4,7 @@
         <h3>
             @if (!String.IsNullOrEmpty(Icon))
             {
-                <Icon Identifier="@Icon" />
+                <Icon Identifier="@Icon" class="mr-1" />
             }
 
             <span class="text">@Main</span>
@@ -14,7 +14,7 @@
                 <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
                     @if (!String.IsNullOrEmpty(ButtonIcon))
                     {
-                        <Icon Identifier="@ButtonIcon" />
+                        <Icon Identifier="@ButtonIcon" class="mr-1" />
                     }
 
                     @ButtonText

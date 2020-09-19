@@ -8,7 +8,13 @@ window.Bootstrap = {
                 "show": true,
                 "focus": true
             }).on('shown.bs.modal', function () {
-                $(container).find('[data-autofocus]').first().trigger('focus');
+                var $container = $(container);
+                var $select = $container.find("[data-select]");
+                if ($select.length > 0) {
+                    $select[0].setSelectionRange(0, $select[0].value.length)
+                }
+
+                $container.find('[data-autofocus]').first().trigger('focus');
             });
         },
         Hide: function (container) {
@@ -25,7 +31,7 @@ window.Network = {
         function handler() {
             interop.invokeMethodAsync("Network.StatusChanged", navigator.onLine);
         }
-
+        
         window.addEventListener('online', handler);
         window.addEventListener('offline', handler);
 

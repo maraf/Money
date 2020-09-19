@@ -3,11 +3,11 @@
 <Modal @ref="Modal" Title="@Title">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="row">
+        <div class="form-row">
             <div class="col-md-9">
                 <div class="form-group">
                     <label for="expense-amount">Amount:</label>
-                    <input type="text" class="form-control" id="expense-amount" @bind="@Amount" autocomplete="off" data-autofocus />
+                    <input type="text" class="form-control" id="expense-amount" @bind="@Amount" autocomplete="off" data-autofocus data-select />
                 </div>
             </div>
             <div class="col-md-3">

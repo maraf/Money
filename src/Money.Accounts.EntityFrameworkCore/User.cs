@@ -8,11 +8,20 @@ namespace Money
 {
     public class User : IdentityUser
     {
+        public DateTime CreatedAt { get; set; }
+        public DateTime? LastSignedAt { get; set; }
+
         public User()
         { }
 
         public User(string userName)
             : base(userName)
         { }
+
+        public User(string userName, DateTime createdAt)
+            : this(userName)
+        {
+            CreatedAt = createdAt;
+        }
     }
 }

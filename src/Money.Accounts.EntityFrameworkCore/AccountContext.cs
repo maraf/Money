@@ -28,6 +28,10 @@ namespace Money
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
+            modelBuilder.Entity<User>()
+                .Property(b => b.CreatedAt)
+                .HasDefaultValue(DateTime.MinValue);
+
             if (!String.IsNullOrEmpty(schema.Name))
             {
                 modelBuilder.HasDefaultSchema(schema.Name);

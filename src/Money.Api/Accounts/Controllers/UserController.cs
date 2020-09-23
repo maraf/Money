@@ -43,6 +43,13 @@ namespace Money.Accounts.Controllers
             {
                 if (await userManager.CheckPasswordAsync(user, model.Password))
                 {
+                    DateTime now = DateTime.Now;
+                    if (user.LastSignedAt == null || user.LastSignedAt < now)
+                    {
+                        user.LastSignedAt = now;
+                        await userManager.UpdateAsync(user);
+                    }
+
                     var claims = new[]
                     {
                         new Claim(ClaimTypes.Name, user.UserName),
@@ -75,7 +82,7 @@ namespace Money.Accounts.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
-            var user = new User(model.UserName);
+            var user = new User(model.UserName, DateTime.Now);
             var result = await userManager.CreateAsync(user, model.Password);
 
             var response = new RegisterResponse();

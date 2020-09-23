@@ -11,6 +11,8 @@ namespace Money
         public DateTime CreatedAt { get; set; }
         public DateTime? LastSignedAt { get; set; }
 
+        public ICollection<UserPropertyValue> Properties { get; set; }
+
         public User()
         { }
 

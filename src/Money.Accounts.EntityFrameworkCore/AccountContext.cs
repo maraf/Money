@@ -13,6 +13,8 @@ namespace Money
     {
         private readonly SchemaOptions schema;
 
+        public DbSet<UserPropertyKey> UserPropertyKeys { get; set; }
+
         public AccountContext(DbContextOptions<AccountContext> options, SchemaOptions<AccountContext> schema)
             : base(options)
         {
@@ -31,6 +33,30 @@ namespace Money
             modelBuilder.Entity<User>()
                 .Property(b => b.CreatedAt)
                 .HasDefaultValue(DateTime.MinValue);
+
+            modelBuilder.Entity<UserPropertyKey>()
+                .HasKey(p => p.Name);
+
+            modelBuilder.Entity<UserPropertyKey>()
+                .Property(p => p.Name)
+                .HasMaxLength(256);
+
+            modelBuilder.Entity<UserPropertyValue>()
+                .HasOne(v => v.User)
+                .WithMany(u => u.Properties)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserPropertyValue>()
+                .HasOne(v => v.Key)
+                .WithMany(v => v.Values)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserPropertyValue>()
+                .HasKey("UserId", "KeyName");
+
+            modelBuilder.Entity<UserPropertyValue>()
+                .Property(p => p.Value)
+                .HasMaxLength(1024);
 
             if (!String.IsNullOrEmpty(schema.Name))
             {

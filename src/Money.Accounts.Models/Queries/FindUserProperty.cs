@@ -12,7 +12,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// Finds an user's value for property with key.
     /// </summary>
-    public class FindUserProperty : UserQuery, IQuery<ProfileModel>
+    public class FindUserProperty : UserQuery, IQuery<string>
     {
         /// <summary>
         /// Gets a property key.

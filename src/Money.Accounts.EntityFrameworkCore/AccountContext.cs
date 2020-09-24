@@ -14,6 +14,7 @@ namespace Money
         private readonly SchemaOptions schema;
 
         public DbSet<UserPropertyKey> UserPropertyKeys { get; set; }
+        public DbSet<UserPropertyValue> UserPropertyValues { get; set; }
 
         public AccountContext(DbContextOptions<AccountContext> options, SchemaOptions<AccountContext> schema)
             : base(options)

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Money.Commands;
 using Money.Events;
 using Money.Models.Queries;
 using Neptuo;
+using Neptuo.Activators;
 using Neptuo.Collections.Specialized;
 using Neptuo.Commands;
 using Neptuo.Commands.Handlers;
@@ -18,16 +20,23 @@ using System.Threading.Tasks;
 
 namespace Money.Models.Builders
 {
-    public class UserHandler : ICommandHandler<Envelope<ChangePassword>>, ICommandHandler<Envelope<ChangeEmail>>, IQueryHandler<GetProfile, ProfileModel>
+    public class UserHandler : ICommandHandler<Envelope<ChangePassword>>,
+        ICommandHandler<Envelope<ChangeEmail>>,
+        IQueryHandler<GetProfile, ProfileModel>,
+        ICommandHandler<Envelope<SetUserProperty>>,
+        IQueryHandler<FindUserProperty, string>
     {
         private readonly UserManager<User> userManager;
+        private readonly IFactory<AccountContext> dbFactory;
         private readonly IEventDispatcher eventDispatcher;
 
-        public UserHandler(UserManager<User> userManager, IEventDispatcher eventDispatcher)
+        public UserHandler(UserManager<User> userManager, IFactory<AccountContext> dbFactory, IEventDispatcher eventDispatcher)
         {
             Ensure.NotNull(userManager, "userManager");
+            Ensure.NotNull(dbFactory, "dbFactory");
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
             this.userManager = userManager;
+            this.dbFactory = dbFactory;
             this.eventDispatcher = eventDispatcher;
         }
 
@@ -91,6 +100,55 @@ namespace Money.Models.Builders
         {
             var user = await GetUserAsync(query.UserKey.AsStringKey());
             return new ProfileModel(user.UserName, user.Email);
+        }
+
+        async Task ICommandHandler<Envelope<SetUserProperty>>.HandleAsync(Envelope<SetUserProperty> command)
+        {
+            using (var db = dbFactory.Create())
+            {
+                var user = await GetUserAsync(command);
+                UserPropertyValue value = await FindUserPropertyValueAsync(db, user.Key, command.Body.PropertyKey);
+                if (value == null)
+                {
+                    var propertyKey = await db.UserPropertyKeys
+                        .Where(k => k.Name == command.Body.PropertyKey)
+                        .FirstOrDefaultAsync();
+
+                    if (propertyKey == null)
+                        throw DecorateException(command.Body, user.Key, new UserPropertyNotSupportedException(command.Body.PropertyKey));
+
+                    value = new UserPropertyValue()
+                    {
+                        User = user.Model,
+                        Key = propertyKey,
+                        Value = command.Body.Value
+                    };
+
+                    await db.UserPropertyValues.AddAsync(value);
+                }
+                else
+                {
+                    value.Value = command.Body.Value;
+                }
+
+                await db.SaveChangesAsync();
+            }
+        }
+
+        async Task<string> IQueryHandler<FindUserProperty, string>.HandleAsync(FindUserProperty query)
+        {
+            using (var db = dbFactory.Create())
+            {
+                UserPropertyValue value = await FindUserPropertyValueAsync(db, query.UserKey, query.Key);
+                return value?.Value;
+            }
+        }
+
+        private static async Task<UserPropertyValue> FindUserPropertyValueAsync(AccountContext db, IKey userKey, string propertyKey)
+        {
+            return await db.UserPropertyValues
+                .Where(v => v.User.Id == userKey.AsStringKey().ToString() && v.Key.Name == propertyKey)
+                .FirstOrDefaultAsync();
         }
     }
 }

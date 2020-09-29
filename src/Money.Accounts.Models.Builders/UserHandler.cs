@@ -150,13 +150,7 @@ namespace Money.Models.Builders
                     .ToListAsync();
 
                 foreach (var key in keys)
-                {
-                    result.Add(new UserPropertyModel()
-                    {
-                        Key = key,
-                        Value = values.FirstOrDefault(v => v.Key == key)?.Value
-                    });
-                }
+                    result.Add(new UserPropertyModel(key, values.FirstOrDefault(v => v.Key == key)?.Value));
             }
 
             return result;

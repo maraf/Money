@@ -10,7 +10,11 @@ namespace Money
     public class UserPropertyValue
     {
         public User User { get; set; }
+        public string UserId { get; set; }
+
         public UserPropertyKey Key { get; set; }
+        public string KeyName { get; set; }
+
         public string Value { get; set; }
     }
 }

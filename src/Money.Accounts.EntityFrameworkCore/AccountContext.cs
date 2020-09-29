@@ -53,7 +53,7 @@ namespace Money
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserPropertyValue>()
-                .HasKey("UserId", "KeyName");
+                .HasKey(nameof(UserPropertyValue.UserId), nameof(UserPropertyValue.KeyName));
 
             modelBuilder.Entity<UserPropertyValue>()
                 .Property(p => p.Value)

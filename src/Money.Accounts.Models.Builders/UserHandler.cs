@@ -120,8 +120,8 @@ namespace Money.Models.Builders
 
                     value = new UserPropertyValue()
                     {
-                        User = user.Model,
-                        Key = propertyKey,
+                        UserId = user.Model.Id,
+                        KeyName = propertyKey.Name,
                         Value = command.Body.Value
                     };
 
@@ -168,7 +168,7 @@ namespace Money.Models.Builders
         private static async Task<UserPropertyValue> FindUserPropertyValueAsync(AccountContext db, IKey userKey, string propertyKey)
         {
             return await db.UserPropertyValues
-                .Where(v => v.User.Id == userKey.AsStringKey().ToString() && v.Key.Name == propertyKey)
+                .Where(v => v.UserId == userKey.AsStringKey().Identifier && v.KeyName == propertyKey)
                 .FirstOrDefaultAsync();
         }
     }

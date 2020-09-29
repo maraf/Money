@@ -33,6 +33,7 @@ namespace Money.Api.Routing
 
             Add<ChangePassword>("user-change-password");
             Add<ChangeEmail>("user-change-email");
+            Add<SetUserProperty>("user-set-property");
         }
     }
 }

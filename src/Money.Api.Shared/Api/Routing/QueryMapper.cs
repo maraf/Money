@@ -36,6 +36,8 @@ namespace Money.Api.Routing
             Add<SearchOutcomes>("search-outcomes");
 
             Add<GetProfile>("user-profile");
+            Add<ListUserProperty>("user-properties");
+            Add<FindUserProperty>("user-property");
         }
     }
 }

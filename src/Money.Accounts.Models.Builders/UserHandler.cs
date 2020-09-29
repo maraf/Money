@@ -24,6 +24,7 @@ namespace Money.Models.Builders
         ICommandHandler<Envelope<ChangeEmail>>,
         IQueryHandler<GetProfile, ProfileModel>,
         ICommandHandler<Envelope<SetUserProperty>>,
+        IQueryHandler<ListUserProperty, List<UserPropertyModel>>,
         IQueryHandler<FindUserProperty, string>
     {
         private readonly UserManager<User> userManager;
@@ -133,6 +134,32 @@ namespace Money.Models.Builders
 
                 await db.SaveChangesAsync();
             }
+        }
+
+        async Task<List<UserPropertyModel>> IQueryHandler<ListUserProperty, List<UserPropertyModel>>.HandleAsync(ListUserProperty query)
+        {
+            List<UserPropertyModel> result = new List<UserPropertyModel>();
+            using (var db = dbFactory.Create())
+            {
+                var keys = await db.UserPropertyKeys
+                    .Select(k => k.Name)
+                    .ToListAsync();
+
+                var values = await db.UserPropertyValues.Where(v => v.User.Id == query.UserKey.AsStringKey().ToString())
+                    .Select(v => new { Key = v.Key.Name, Value = v.Value })
+                    .ToListAsync();
+
+                foreach (var key in keys)
+                {
+                    result.Add(new UserPropertyModel()
+                    {
+                        Key = key,
+                        Value = values.FirstOrDefault(v => v.Key == key)?.Value
+                    });
+                }
+            }
+
+            return result;
         }
 
         async Task<string> IQueryHandler<FindUserProperty, string>.HandleAsync(FindUserProperty query)

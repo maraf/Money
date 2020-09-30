@@ -111,7 +111,7 @@ namespace Money.Models.Builders
                 UserPropertyValue value = await FindUserPropertyValueAsync(db, user.Key, command.Body.PropertyKey);
                 if (value == null)
                 {
-                    if (value.Value == command.Body.Value)
+                    if (command.Body.Value == null)
                         return;
 
                     var propertyKey = await db.UserPropertyKeys
@@ -132,7 +132,13 @@ namespace Money.Models.Builders
                 }
                 else
                 {
-                    value.Value = command.Body.Value;
+                    if (value.Value == command.Body.Value)
+                        return;
+
+                    if (command.Body.Value == null)
+                        db.UserPropertyValues.Remove(value);
+                    else
+                        value.Value = command.Body.Value;
                 }
 
                 await db.SaveChangesAsync();

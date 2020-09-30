@@ -111,6 +111,9 @@ namespace Money.Models.Builders
                 UserPropertyValue value = await FindUserPropertyValueAsync(db, user.Key, command.Body.PropertyKey);
                 if (value == null)
                 {
+                    if (value.Value == command.Body.Value)
+                        return;
+
                     var propertyKey = await db.UserPropertyKeys
                         .Where(k => k.Name == command.Body.PropertyKey)
                         .FirstOrDefaultAsync();
@@ -133,6 +136,7 @@ namespace Money.Models.Builders
                 }
 
                 await db.SaveChangesAsync();
+                await eventDispatcher.PublishAsync(new UserPropertyChanged(GuidKey.Create(Guid.NewGuid(), "EmailChanged"), user.Key, command.Body.PropertyKey, command.Body.Value));
             }
         }
 
@@ -145,7 +149,7 @@ namespace Money.Models.Builders
                     .Select(k => k.Name)
                     .ToListAsync();
 
-                var values = await db.UserPropertyValues.Where(v => v.User.Id == query.UserKey.AsStringKey().ToString())
+                var values = await db.UserPropertyValues.Where(v => v.User.Id == query.UserKey.AsStringKey().Identifier)
                     .Select(v => new { Key = v.Key.Name, Value = v.Value })
                     .ToListAsync();
 

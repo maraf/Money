@@ -16,8 +16,7 @@ namespace Money.Commands
 
         public SetUserProperty(string propertyKey, string value)
         {
-            Ensure.NotNull(propertyKey, "propertyKey");
-            Ensure.NotNull(value, "value");
+            Ensure.NotNullOrEmpty(propertyKey, "propertyKey");
             PropertyKey = propertyKey;
             Value = value;
         }

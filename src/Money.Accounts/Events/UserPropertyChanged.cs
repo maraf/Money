@@ -20,8 +20,7 @@ namespace Money.Events
         public UserPropertyChanged(IKey key, IKey aggregateKey, string propertyKey, string value)
             : base(key, aggregateKey, 0)
         {
-            Ensure.NotNull(propertyKey, "propertyKey");
-            Ensure.NotNull(value, "value");
+            Ensure.NotNullOrEmpty(propertyKey, "propertyKey");
             UserKey = aggregateKey;
             PropertyKey = propertyKey;
             Value = value;

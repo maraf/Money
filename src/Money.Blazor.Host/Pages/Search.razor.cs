@@ -35,8 +35,11 @@ namespace Money.Pages
             CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
         }
 
-        protected Task OnSearchAsync() 
-            => PagingContext.LoadAsync(0);
+        protected Task OnSearchAsync()
+        {
+            Models = null;
+            return PagingContext.LoadAsync(0);
+        }
 
         protected async Task<PagingLoadStatus> LoadPageAsync()
         {

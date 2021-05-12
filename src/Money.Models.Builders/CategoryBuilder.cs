@@ -110,9 +110,13 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = readModelContextFactory.Create())
             {
-                return await db.Categories.WhereUserKey(query.UserKey)
-                    .WhereUserKey(query.UserKey)
-                    .Where(c => !c.IsDeleted)
+                var sql = db.Categories.WhereUserKey(query.UserKey)
+                    .WhereUserKey(query.UserKey);
+
+                if (!query.IncludeDeleted)
+                    sql = sql.Where(c => !c.IsDeleted);
+
+                return await sql
                     .OrderBy(c => c.Name)
                     .Select(e => e.ToModel())
                     .ToListAsync();

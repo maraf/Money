@@ -45,7 +45,7 @@ namespace Neptuo.Formatters
             if (!provider.TryGet(context.InputType, out type))
                 return Task.FromResult(false);
 
-            int version = (int)type.VersionProperty.Getter(input);
+            int version = GetVersionValue(input, type);
             CompositeVersion typeVersion = GetCompositeVersion(type, version, context.InputType);
 
             ICompositeStorage storage = storageFactory.Create();
@@ -62,7 +62,7 @@ namespace Neptuo.Formatters
             if (!provider.TryGet(context.InputType, out type))
                 return false;
 
-            int version = (int)type.VersionProperty.Getter(input);
+            int version = GetVersionValue(input, type);
             CompositeVersion typeVersion = GetCompositeVersion(type, version, context.InputType);
 
             ICompositeStorage storage = storageFactory.Create();
@@ -70,6 +70,11 @@ namespace Neptuo.Formatters
 
             storage.Store(context.Output);
             return result;
+        }
+
+        protected virtual int GetVersionValue(object input, CompositeType type)
+        {
+            return (int)type.VersionProperty.Getter(input);
         }
 
         /// <summary>
@@ -85,7 +90,7 @@ namespace Neptuo.Formatters
         protected virtual bool TryStore(object input, ISerializerContext context, CompositeType type, CompositeVersion typeVersion, ICompositeStorage storage)
         {
             storage.Add(Name.TypeName, type.Name);
-            storage.Add(Name.Version, type.VersionProperty.Getter(input));
+            storage.Add(Name.Version, GetVersionValue(input, type));
 
             ICompositeStorage valueStorage = storage.Add(Name.Payload);
             foreach (CompositeProperty property in typeVersion.Properties)

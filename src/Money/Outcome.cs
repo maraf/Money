@@ -56,6 +56,19 @@ namespace Money
             Publish(new OutcomeCreated(amount, description, when, categoryKey));
         }
 
+        /// <summary>
+        /// Creates new instance.
+        /// </summary>
+        /// <param name="amount">An amount of the outcome.</param>
+        /// <param name="description">A description of the outcome.</param>
+        /// <param name="when">A date when the outcome occured.</param>
+        /// <param name="categoryKey">A category where the outcome is created.</param>
+        /// <param name="isFixed">Whether ths expense is fixed.</param>
+        public Outcome(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed)
+        {
+            Publish(new OutcomeCreated(amount, description, when, categoryKey, isFixed));
+        }
+
         public Outcome(IKey key, IEnumerable<IEvent> events)
             : base(key, events)
         { }

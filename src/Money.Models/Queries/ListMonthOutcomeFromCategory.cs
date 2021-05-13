@@ -16,9 +16,6 @@ namespace Money.Models.Queries
     /// </summary>
     public class ListMonthOutcomeFromCategory : UserQuery, IQuery<List<OutcomeOverviewModel>>, ISortableQuery<OutcomeOverviewSortType>, IPageableQuery
     {
-        [CompositeVersion]
-        public int Version { get; private set; }
-
         /// <summary>
         /// Gets a key of the category.
         /// </summary>
@@ -48,6 +45,10 @@ namespace Money.Models.Queries
         [CompositeProperty(3, Version = 2)]
         public int? PageIndex { get; private set; }
 
+        [CompositeVersion]
+        [CompositeProperty(4, Version = 2)]
+        public int Version { get; private set; }
+
         /// <summary>
         /// Creates a new instance.
         /// </summary>
@@ -55,7 +56,13 @@ namespace Money.Models.Queries
         /// <param name="month">A month to find outcomes from.</param>
         /// <param name="sortDescriptor">A sorting descriptor.</param>
         /// <param name="pageIndex">A page index to load. If <c>null</c>, load all results.</param>
+        [CompositeConstructor(Version = 1)]
         public ListMonthOutcomeFromCategory(IKey categoryKey, MonthModel month, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null)
+            : this(categoryKey, month, sortDescriptor, pageIndex, 1)
+        { }
+
+        [CompositeConstructor(Version = 2)]
+        public ListMonthOutcomeFromCategory(IKey categoryKey, MonthModel month, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null, int version = 2)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
             Ensure.NotNull(month, "month");
@@ -63,7 +70,7 @@ namespace Money.Models.Queries
             Month = month;
             SortDescriptor = sortDescriptor;
             PageIndex = pageIndex;
-            Version = 1;
+            Version = version;
         }
 
         /// <summary>
@@ -75,10 +82,7 @@ namespace Money.Models.Queries
         /// <param name="pageIndex">A page index to load. If <c>null</c>, load all results.</param>
         public static ListMonthOutcomeFromCategory Version2(IKey categoryKey, MonthModel month, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null)
         {
-            return new ListMonthOutcomeFromCategory(categoryKey, month, sortDescriptor, pageIndex)
-            {
-                Version = 2
-            };
+            return new ListMonthOutcomeFromCategory(categoryKey, month, sortDescriptor, pageIndex, 2);
         }
     }
 }

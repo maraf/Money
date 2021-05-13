@@ -233,7 +233,7 @@ namespace Money.Models.Builders
                 sql = ApplyPaging(sql, query);
 
                 List<OutcomeOverviewModel> outcomes = await sql
-                    .Select(o => o.ToOverviewModel())
+                    .Select(o => o.ToOverviewModel(query.Version))
                     .ToListAsync();
 
                 return outcomes;
@@ -384,7 +384,7 @@ namespace Money.Models.Builders
                 List<OutcomeEntity> entities = await sql.ToListAsync();
 
                 List<OutcomeOverviewModel> models = entities
-                    .Select(e => e.ToOverviewModel())
+                    .Select(e => e.ToOverviewModel(query.Version))
                     .ToList();
 
                 return models;

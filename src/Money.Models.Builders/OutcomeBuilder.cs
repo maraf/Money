@@ -279,12 +279,10 @@ namespace Money.Models.Builders
                         payload.Amount,
                         payload.When,
                         payload.Description,
-                        Enumerable.Empty<IKey>()
+                        Enumerable.Empty<IKey>(),
+                        payload.IsFixed
                     )
-                )
-                {
-                    IsFixed = payload.IsFixed
-                }.SetUserKey(payload.UserKey));;
+                ).SetUserKey(payload.UserKey));;
 
                 await db.SaveChangesAsync();
 

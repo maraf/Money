@@ -16,12 +16,12 @@ namespace Money.Models
         /// <summary>
         /// Gets a year.
         /// </summary>
-        public int Year { get; }
+        public virtual int Year { get; }
 
         /// <summary>
         /// Gets a month number.
         /// </summary>
-        public int Month { get; }
+        public virtual int Month { get; }
 
         /// <summary>
         /// Creates a new instance.

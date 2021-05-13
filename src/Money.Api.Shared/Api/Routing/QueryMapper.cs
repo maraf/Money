@@ -33,6 +33,8 @@ namespace Money.Api.Routing
             Add<ListYearOutcomeFromCategory>("year-outcome-from-category");
             Add<ListYearWithOutcome>("years-with-outcome");
 
+            Add<ListMonthOutcomesForCategory>("month-outcomes-for-category");
+
             Add<SearchOutcomes>("search-outcomes");
 
             Add<GetProfile>("user-profile");

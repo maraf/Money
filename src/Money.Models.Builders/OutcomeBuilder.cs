@@ -31,7 +31,8 @@ namespace Money.Models.Builders
         IQueryHandler<GetCategoryColor, Color>,
         IQueryHandler<ListMonthOutcomeFromCategory, List<OutcomeOverviewModel>>,
         IQueryHandler<ListYearOutcomeFromCategory, List<OutcomeOverviewModel>>,
-        IQueryHandler<SearchOutcomes, List<OutcomeOverviewModel>>
+        IQueryHandler<SearchOutcomes, List<OutcomeOverviewModel>>,
+        IQueryHandler<ListMonthOutcomesForCategory, List<MonthWithAmountModel>>
     {
         const int PageSize = 10;
 
@@ -280,7 +281,7 @@ namespace Money.Models.Builders
                         Enumerable.Empty<IKey>()
                     )
                 ).SetUserKey(payload.UserKey));
-                
+
                 await db.SaveChangesAsync();
 
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
@@ -413,6 +414,36 @@ namespace Money.Models.Builders
             }
 
             return sql;
+        }
+
+        public async Task<List<MonthWithAmountModel>> HandleAsync(ListMonthOutcomesForCategory query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                var sql = db.Outcomes
+                    .WhereUserKey(query.UserKey)
+                    .Where(o => o.When.Year == query.Year.Year);
+
+                sql = ApplyCategoryKey(sql, query.CategoryKey);
+
+                List<OutcomeEntity> entities = await sql.ToListAsync();
+                Dictionary<MonthModel, Price> totals = new Dictionary<MonthModel, Price>();
+                foreach (OutcomeEntity entity in entities)
+                {
+                    MonthModel month = entity.When;
+                    Price price;
+                    if (totals.TryGetValue(month, out price))
+                        price = price + priceConverter.ToDefault(query.UserKey, entity);
+                    else
+                        price = priceConverter.ToDefault(query.UserKey, entity);
+
+                    totals[month] = price;
+                }
+
+                return totals
+                    .Select(t => new MonthWithAmountModel(t.Key.Year, t.Key.Month, t.Value))
+                    .ToList();
+            }
         }
     }
 }

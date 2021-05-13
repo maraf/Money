@@ -17,6 +17,7 @@ namespace Money.Models
         public string Currency { get; set; }
         public DateTime When { get; set; }
         public IList<OutcomeCategoryEntity> Categories { get; set; }
+        public bool IsFixed { get; set; }
 
         Price IPriceFixed.Amount => new Price(Amount, Currency);
         DateTime IPriceFixed.When => When;
@@ -62,7 +63,8 @@ namespace Money.Models
                 new Price(Amount, Currency),
                 When,
                 Description,
-                GuidKey.Create(Categories.First().CategoryId, KeyFactory.Empty(typeof(Category)).Type)
+                GuidKey.Create(Categories.First().CategoryId, KeyFactory.Empty(typeof(Category)).Type),
+                IsFixed
             );
         }
     }

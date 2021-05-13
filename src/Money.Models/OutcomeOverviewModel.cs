@@ -1,4 +1,5 @@
 ﻿using Neptuo;
+using Neptuo.Formatters.Metadata;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -13,30 +14,44 @@ namespace Money.Models
     /// </summary>
     public class OutcomeOverviewModel
     {
+        [CompositeVersion]
+        public int Version { get; set; }
+
         /// <summary>
         /// Gets a key of the outcome.
         /// </summary>
+        [CompositeProperty(0)]
         public IKey Key { get; private set; }
 
         /// <summary>
         /// Gets an amount of the outcome.
         /// </summary>
+        [CompositeProperty(1)]
         public Price Amount { get; set; }
 
         /// <summary>
         /// Gets a date when the outcome ocured.
         /// </summary>
+        [CompositeProperty(2)]
         public DateTime When { get; set; }
 
         /// <summary>
         /// Gets a description of the outcome.
         /// </summary>
+        [CompositeProperty(3)]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets a key of a category.
         /// </summary>
+        [CompositeProperty(4)]
         public IKey CategoryKey { get; private set; }
+
+        /// <summary>
+        /// Gets a <c>true</c> if this is a fixed expense.
+        /// </summary>
+        [CompositeProperty(5, Version = 2)]
+        public bool IsFixed { get; set; }
 
         /// <summary>
         /// Create a new instance.
@@ -46,6 +61,7 @@ namespace Money.Models
         /// <param name="when">A date when the outcome ocured.</param>
         /// <param name="description">A description of the outcome.</param> 
         /// <param name="categoryKey">A key of a category.</param>
+        [CompositeConstructor]
         public OutcomeOverviewModel(IKey key, Price amount, DateTime when, string description, IKey categoryKey)
         {
             Ensure.Condition.NotEmptyKey(key);
@@ -56,6 +72,23 @@ namespace Money.Models
             When = when;
             Description = description;
             CategoryKey = categoryKey;
+        }
+
+        /// <summary>
+        /// Create a new instance.
+        /// </summary>
+        /// <param name="key">A key of the outcome.</param>
+        /// <param name="amount">An amount of the outcome.</param>
+        /// <param name="when">A date when the outcome ocured.</param>
+        /// <param name="description">A description of the outcome.</param> 
+        /// <param name="categoryKey">A key of a category.</param>
+        /// <param name="isFixed">Whether is it a fixed expense.</param>
+        [CompositeConstructor(Version = 2)]
+        public OutcomeOverviewModel(IKey key, Price amount, DateTime when, string description, IKey categoryKey, bool isFixed)
+            : this(key, amount, when, description, categoryKey)
+        {
+            IsFixed = isFixed;
+            Version = 2;
         }
     }
 }

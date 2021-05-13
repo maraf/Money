@@ -1,5 +1,6 @@
 ﻿using Money.Models.Sorting;
 using Neptuo;
+using Neptuo.Formatters.Metadata;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -15,25 +16,36 @@ namespace Money.Models.Queries
     /// </summary>
     public class ListMonthOutcomeFromCategory : UserQuery, IQuery<List<OutcomeOverviewModel>>, ISortableQuery<OutcomeOverviewSortType>, IPageableQuery
     {
+        [CompositeVersion]
+        public int Version { get; private set; }
+
         /// <summary>
         /// Gets a key of the category.
         /// </summary>
+        [CompositeProperty(0, Version = 1)]
+        [CompositeProperty(0, Version = 2)]
         public IKey CategoryKey { get; private set; }
 
         /// <summary>
         /// Gets a month to find outcomes from.
         /// </summary>
+        [CompositeProperty(1, Version = 1)]
+        [CompositeProperty(1, Version = 2)]
         public MonthModel Month { get; private set; }
 
         /// <summary>
         /// Gets a sorting descriptor.
         /// </summary>
+        [CompositeProperty(2, Version = 1)]
+        [CompositeProperty(2, Version = 2)]
         public SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; private set; }
 
         /// <summary>
         /// Gets a page index to load.
         /// If <c>null</c>, load all results.
         /// </summary>
+        [CompositeProperty(3, Version = 1)]
+        [CompositeProperty(3, Version = 2)]
         public int? PageIndex { get; private set; }
 
         /// <summary>
@@ -51,6 +63,22 @@ namespace Money.Models.Queries
             Month = month;
             SortDescriptor = sortDescriptor;
             PageIndex = pageIndex;
+            Version = 1;
+        }
+
+        /// <summary>
+        /// Creates a new instance which returns object in version 2.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <param name="month">A month to find outcomes from.</param>
+        /// <param name="sortDescriptor">A sorting descriptor.</param>
+        /// <param name="pageIndex">A page index to load. If <c>null</c>, load all results.</param>
+        public static ListMonthOutcomeFromCategory Version2(IKey categoryKey, MonthModel month, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null)
+        {
+            return new ListMonthOutcomeFromCategory(categoryKey, month, sortDescriptor, pageIndex)
+            {
+                Version = 2
+            };
         }
     }
 }

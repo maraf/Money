@@ -15,47 +15,47 @@ namespace Money.Models
     public class OutcomeOverviewModel
     {
         [CompositeVersion]
-        public int Version { get; set; }
+        public int Version { get; private set; }
 
         /// <summary>
         /// Gets a key of the outcome.
         /// </summary>
-        [CompositeProperty(0)]
-        [CompositeProperty(0, Version = 2)]
+        [CompositeProperty(1)]
+        [CompositeProperty(1, Version = 2)]
         public IKey Key { get; private set; }
 
         /// <summary>
         /// Gets an amount of the outcome.
         /// </summary>
-        [CompositeProperty(1)]
-        [CompositeProperty(1, Version = 2)]
+        [CompositeProperty(2)]
+        [CompositeProperty(2, Version = 2)]
         public Price Amount { get; set; }
 
         /// <summary>
         /// Gets a date when the outcome ocured.
         /// </summary>
-        [CompositeProperty(2)]
-        [CompositeProperty(2, Version = 2)]
+        [CompositeProperty(3)]
+        [CompositeProperty(3, Version = 2)]
         public DateTime When { get; set; }
 
         /// <summary>
         /// Gets a description of the outcome.
         /// </summary>
-        [CompositeProperty(3)]
-        [CompositeProperty(3, Version = 2)]
+        [CompositeProperty(4)]
+        [CompositeProperty(4, Version = 2)]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets a key of a category.
         /// </summary>
-        [CompositeProperty(4)]
-        [CompositeProperty(4, Version = 2)]
+        [CompositeProperty(5)]
+        [CompositeProperty(5, Version = 2)]
         public IKey CategoryKey { get; private set; }
 
         /// <summary>
         /// Gets a <c>true</c> if this is a fixed expense.
         /// </summary>
-        [CompositeProperty(5, Version = 2)]
+        [CompositeProperty(6, Version = 2)]
         public bool IsFixed { get; set; }
 
         /// <summary>

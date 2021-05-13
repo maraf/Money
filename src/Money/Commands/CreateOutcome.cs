@@ -66,6 +66,8 @@ namespace Money.Commands
             Description = description;
             When = when;
             CategoryKey = categoryKey;
+
+            Version = 1;
         }
 
         /// <summary>

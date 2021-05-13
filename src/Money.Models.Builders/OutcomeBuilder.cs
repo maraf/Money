@@ -254,7 +254,7 @@ namespace Money.Models.Builders
                 sql = ApplyPaging(sql, query);
 
                 List<OutcomeOverviewModel> models = await sql
-                    .Select(o => o.ToOverviewModel())
+                    .Select(o => o.ToOverviewModel(query.Version))
                     .ToListAsync();
 
                 return models;

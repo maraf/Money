@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Money.Models.Queries
 {
     /// <summary>
-    /// A query for getting list of monthly grouped expences in a single category.
+    /// A query for getting list of monthly grouped expenses in a single category.
     /// </summary>
     public class ListMonthOutcomesForCategory : UserQuery, IQuery<List<MonthWithAmountModel>>
     {

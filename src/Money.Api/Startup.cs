@@ -124,7 +124,8 @@ namespace Money
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>();
 
-            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings, ApplyBasePath);
+            var allowedUserPropertyKeys = Configuration.GetSection("UserProperties").Get<string[]>() ?? new string[0];
+            Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings, allowedUserPropertyKeys, ApplyBasePath);
             bootstrapTask.Initialize();
         }
 

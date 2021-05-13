@@ -30,15 +30,18 @@ namespace Money.Models.Builders
         private readonly UserManager<User> userManager;
         private readonly IFactory<AccountContext> dbFactory;
         private readonly IEventDispatcher eventDispatcher;
+        private readonly IReadOnlyCollection<string> allowPropertyKeys;
 
-        public UserHandler(UserManager<User> userManager, IFactory<AccountContext> dbFactory, IEventDispatcher eventDispatcher)
+        public UserHandler(UserManager<User> userManager, IFactory<AccountContext> dbFactory, IEventDispatcher eventDispatcher, IReadOnlyCollection<string> allowPropertyKeys)
         {
             Ensure.NotNull(userManager, "userManager");
             Ensure.NotNull(dbFactory, "dbFactory");
             Ensure.NotNull(eventDispatcher, "eventDispatcher");
+            Ensure.NotNull(allowPropertyKeys, "allowPropertyKeys");
             this.userManager = userManager;
             this.dbFactory = dbFactory;
             this.eventDispatcher = eventDispatcher;
+            this.allowPropertyKeys = allowPropertyKeys;
         }
 
         private T DecorateException<T>(ICommand command, StringKey userKey, T ex)
@@ -114,21 +117,17 @@ namespace Money.Models.Builders
                     if (command.Body.Value == null)
                         return;
 
-                    var propertyKey = await db.UserPropertyKeys
-                        .Where(k => k.Name == command.Body.PropertyKey)
-                        .FirstOrDefaultAsync();
-
-                    if (propertyKey == null)
+                    if (!allowPropertyKeys.Contains(command.Body.PropertyKey))
                         throw DecorateException(command.Body, user.Key, new UserPropertyNotSupportedException(command.Body.PropertyKey));
 
                     value = new UserPropertyValue()
                     {
                         UserId = user.Model.Id,
-                        KeyName = propertyKey.Name,
+                        Key = command.Body.PropertyKey,
                         Value = command.Body.Value
                     };
 
-                    await db.UserPropertyValues.AddAsync(value);
+                    await db.UserProperties.AddAsync(value);
                 }
                 else
                 {
@@ -136,7 +135,7 @@ namespace Money.Models.Builders
                         return;
 
                     if (command.Body.Value == null)
-                        db.UserPropertyValues.Remove(value);
+                        db.UserProperties.Remove(value);
                     else
                         value.Value = command.Body.Value;
                 }
@@ -151,15 +150,11 @@ namespace Money.Models.Builders
             List<UserPropertyModel> result = new List<UserPropertyModel>();
             using (var db = dbFactory.Create())
             {
-                var keys = await db.UserPropertyKeys
-                    .Select(k => k.Name)
+                var values = await db.UserProperties.Where(v => v.User.Id == query.UserKey.AsStringKey().Identifier)
+                    .Select(v => new { Key = v.Key, Value = v.Value })
                     .ToListAsync();
 
-                var values = await db.UserPropertyValues.Where(v => v.User.Id == query.UserKey.AsStringKey().Identifier)
-                    .Select(v => new { Key = v.Key.Name, Value = v.Value })
-                    .ToListAsync();
-
-                foreach (var key in keys)
+                foreach (var key in allowPropertyKeys)
                     result.Add(new UserPropertyModel(key, values.FirstOrDefault(v => v.Key == key)?.Value));
             }
 
@@ -177,8 +172,8 @@ namespace Money.Models.Builders
 
         private static async Task<UserPropertyValue> FindUserPropertyValueAsync(AccountContext db, IKey userKey, string propertyKey)
         {
-            return await db.UserPropertyValues
-                .Where(v => v.UserId == userKey.AsStringKey().Identifier && v.KeyName == propertyKey)
+            return await db.UserProperties
+                .Where(v => v.UserId == userKey.AsStringKey().Identifier && v.Key == propertyKey)
                 .FirstOrDefaultAsync();
         }
     }

@@ -13,8 +13,7 @@ namespace Money
     {
         private readonly SchemaOptions schema;
 
-        public DbSet<UserPropertyKey> UserPropertyKeys { get; set; }
-        public DbSet<UserPropertyValue> UserPropertyValues { get; set; }
+        public DbSet<UserPropertyValue> UserProperties { get; set; }
 
         public AccountContext(DbContextOptions<AccountContext> options, SchemaOptions<AccountContext> schema)
             : base(options)
@@ -27,33 +26,17 @@ namespace Money
         {
             base.OnModelCreating(modelBuilder);
 
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
-
             modelBuilder.Entity<User>()
                 .Property(b => b.CreatedAt)
                 .HasDefaultValue(DateTime.MinValue);
 
-            modelBuilder.Entity<UserPropertyKey>()
-                .HasKey(p => p.Name);
-
-            modelBuilder.Entity<UserPropertyKey>()
-                .Property(p => p.Name)
-                .HasMaxLength(256);
+            modelBuilder.Entity<UserPropertyValue>()
+                .HasKey(p => new { p.UserId, p.Key });
 
             modelBuilder.Entity<UserPropertyValue>()
-                .HasOne(v => v.User)
+                .HasOne(p => p.User)
                 .WithMany(u => u.Properties)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<UserPropertyValue>()
-                .HasOne(v => v.Key)
-                .WithMany(v => v.Values)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<UserPropertyValue>()
-                .HasKey(nameof(UserPropertyValue.UserId), nameof(UserPropertyValue.KeyName));
+                .HasForeignKey(p => p.UserId);
 
             modelBuilder.Entity<UserPropertyValue>()
                 .Property(p => p.Value)

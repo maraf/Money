@@ -38,7 +38,8 @@ namespace Money.Bootstrap
     public class BootstrapTask : IBootstrapTask
     {
         private readonly IServiceCollection services;
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration connectionStrings;
+        private readonly IReadOnlyCollection<string> allowedUserPropertyKeys;
         private readonly PathResolver pathResolver;
 
         private ILogFactory logFactory;
@@ -60,13 +61,15 @@ namespace Money.Bootstrap
         private IFormatter queryFormatter;
         private IFormatter exceptionFormatter;
 
-        public BootstrapTask(IServiceCollection services, IConfiguration configuration, PathResolver pathResolver)
+        public BootstrapTask(IServiceCollection services, IConfiguration connectionStrings, IReadOnlyCollection<string> allowedUserPropertyKeys, PathResolver pathResolver)
         {
             Ensure.NotNull(services, "services");
-            Ensure.NotNull(configuration, "configuration");
+            Ensure.NotNull(connectionStrings, "connectionStrings");
+            Ensure.NotNull(allowedUserPropertyKeys, "allowedUserPropertyKeys");
             Ensure.NotNull(pathResolver, "pathResolver");
             this.services = services;
-            this.configuration = configuration;
+            this.connectionStrings = connectionStrings;
+            this.allowedUserPropertyKeys = allowedUserPropertyKeys;
             this.pathResolver = pathResolver;
         }
 
@@ -78,8 +81,8 @@ namespace Money.Bootstrap
             exceptionHandlerBuilder.Handler(Handle);
 
             services
-                .AddDbContextWithSchema<ReadModelContext>(configuration.GetSection("ReadModel"), pathResolver)
-                .AddDbContextWithSchema<EventSourcingContext>(configuration.GetSection("EventSourcing"), pathResolver)
+                .AddDbContextWithSchema<ReadModelContext>(connectionStrings.GetSection("ReadModel"), pathResolver)
+                .AddDbContextWithSchema<EventSourcingContext>(connectionStrings.GetSection("EventSourcing"), pathResolver)
                 .AddSingleton(exceptionHandlerBuilder)
                 .AddSingleton<IExceptionHandler>(exceptionHandlerBuilder);
 
@@ -198,7 +201,12 @@ namespace Money.Bootstrap
             bootstrapTask.Initialize();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
-            UserHandler userHandler = new UserHandler(serviceProvider.GetRequiredService<UserManager<User>>(), serviceProvider.GetRequiredService<IFactory<AccountContext>>(), eventDispatcher);
+            UserHandler userHandler = new UserHandler(
+                serviceProvider.GetRequiredService<UserManager<User>>(), 
+                serviceProvider.GetRequiredService<IFactory<AccountContext>>(), 
+                eventDispatcher,
+                allowedUserPropertyKeys
+            );
             commandDispatcher.Handlers.AddAll(userHandler);
             queryDispatcher.AddAll(userHandler);
         }

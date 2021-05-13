@@ -47,6 +47,7 @@ namespace Money.Events
         [CompositeProperty(5, Version = 2)]
         public bool IsFixed { get; set; }
 
+        [CompositeConstructor(Version = 1)]
         internal OutcomeCreated(Price amount, string description, DateTime when, IKey categoryKey)
         {
             Amount = amount;
@@ -55,6 +56,7 @@ namespace Money.Events
             CategoryKey = categoryKey;
         }
 
+        [CompositeConstructor(Version = 2)]
         internal OutcomeCreated(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed)
             : this(amount, description, when, categoryKey)
         {

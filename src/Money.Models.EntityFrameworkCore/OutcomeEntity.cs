@@ -32,6 +32,7 @@ namespace Money.Models
             Amount = model.Amount.Value;
             Currency = model.Amount.Currency;
             When = model.When;
+            IsFixed = model.IsFixed;
             Categories = new List<OutcomeCategoryEntity>();
 
             foreach (IKey categoryKey in model.CategoryKeys)

@@ -32,7 +32,8 @@ namespace Money.Models.Builders
         IQueryHandler<ListMonthOutcomeFromCategory, List<OutcomeOverviewModel>>,
         IQueryHandler<ListYearOutcomeFromCategory, List<OutcomeOverviewModel>>,
         IQueryHandler<SearchOutcomes, List<OutcomeOverviewModel>>,
-        IQueryHandler<ListMonthOutcomesForCategory, List<MonthWithAmountModel>>
+        IQueryHandler<ListMonthOutcomesForCategory, List<MonthWithAmountModel>>,
+        IQueryHandler<ListYearOutcomesForCategory, List<YearWithAmountModel>>
     {
         const int PageSize = 10;
 
@@ -442,6 +443,36 @@ namespace Money.Models.Builders
 
                 return totals
                     .Select(t => new MonthWithAmountModel(t.Key.Year, t.Key.Month, t.Value))
+                    .ToList();
+            }
+        }
+
+        public async Task<List<YearWithAmountModel>> HandleAsync(ListYearOutcomesForCategory query)
+        {
+            using (ReadModelContext db = readModelContextFactory.Create())
+            {
+                var sql = db.Outcomes
+                    .WhereUserKey(query.UserKey)
+                    .Where(o => o.When.Year >= query.StartYear.Year && o.When.Year < (query.StartYear.Year + PageSize));
+
+                sql = ApplyCategoryKey(sql, query.CategoryKey);
+
+                List<OutcomeEntity> entities = await sql.ToListAsync();
+                Dictionary<YearModel, Price> totals = new Dictionary<YearModel, Price>();
+                foreach (OutcomeEntity entity in entities)
+                {
+                    YearModel month = entity.When;
+                    Price price;
+                    if (totals.TryGetValue(month, out price))
+                        price = price + priceConverter.ToDefault(query.UserKey, entity);
+                    else
+                        price = priceConverter.ToDefault(query.UserKey, entity);
+
+                    totals[month] = price;
+                }
+
+                return totals
+                    .Select(t => new YearWithAmountModel(t.Key.Year, t.Value))
                     .ToList();
             }
         }

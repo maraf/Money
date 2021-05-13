@@ -1,0 +1,43 @@
+﻿@page "/test"
+
+<div style="margin-top: 5rem;">
+    @if (Categories == null)
+    {
+        <em>Loading...</em>
+    }
+    else
+    {
+        <ul class="nav">
+            @foreach (var category in Categories)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" @onclick="(async () => await LoadCategoryAsync(category.Key))">@category.Name</a>
+                </li>
+            }
+        </ul>
+
+        @if (Summaries == null)
+        {
+            <em>Loading...</em>
+        }
+        else
+        {
+            <table class="table">
+                <tr>
+                    @foreach (var model in Summaries)
+                    {
+                        <th>@model.Year</th>
+                    }
+                </tr>
+                <tr>
+                    @foreach (var model in Summaries)
+                    {
+                        <td>
+                            @model.TotalAmount
+                        </td>
+                    }
+                </tr>
+            </table>
+        }
+    }
+</div>

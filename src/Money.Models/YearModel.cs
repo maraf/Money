@@ -15,7 +15,7 @@ namespace Money.Models
         /// <summary>
         /// Gets a year.
         /// </summary>
-        public int Year { get; }
+        public virtual int Year { get; }
 
         /// <summary>
         /// Creates a new instance.

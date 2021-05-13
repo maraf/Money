@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace Money.Models.Queries
 {
+    /// <summary>
+    /// A query for getting list of yearly grouped expences in a single category.
+    /// It returns StartYear + 9 upcoming years.
+    /// </summary>
     public class ListYearOutcomesForCategory : UserQuery, IQuery<List<YearWithAmountModel>>
     {
         public IKey CategoryKey { get; private set; }

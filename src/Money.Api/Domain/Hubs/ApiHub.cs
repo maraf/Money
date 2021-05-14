@@ -25,6 +25,7 @@ namespace Money.Hubs
         IEventHandler<CurrencyCreated>, IEventHandler<CurrencyDeleted>, IEventHandler<CurrencyDefaultChanged>, IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyExchangeRateSet>, IEventHandler<CurrencyExchangeRateRemoved>,
         IEventHandler<OutcomeCreated>, IEventHandler<OutcomeDeleted>, IEventHandler<OutcomeAmountChanged>, IEventHandler<OutcomeDescriptionChanged>, IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<IncomeCreated>, IEventHandler<IncomeDeleted>,
         IEventHandler<PasswordChanged>, IEventHandler<EmailChanged>, IEventHandler<UserPropertyChanged>
     {
         private readonly FormatterContainer formatters;
@@ -128,6 +129,9 @@ namespace Money.Hubs
         Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload) => RaiseEvent(payload);
         Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload) => RaiseEvent(payload);
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload) => RaiseEvent(payload);
+
+        Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload) => RaiseEvent(payload);
+        Task IEventHandler<IncomeDeleted>.HandleAsync(IncomeDeleted payload) => RaiseEvent(payload);
 
         Task IEventHandler<PasswordChanged>.HandleAsync(PasswordChanged payload) => RaiseEvent(payload);
         Task IEventHandler<EmailChanged>.HandleAsync(EmailChanged payload) => RaiseEvent(payload);

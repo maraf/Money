@@ -233,7 +233,7 @@ namespace Money.Models.Builders
                 sql = ApplyPaging(sql, query);
 
                 List<OutcomeOverviewModel> outcomes = await sql
-                    .Select(o => o.ToOverviewModel())
+                    .Select(o => o.ToOverviewModel(query.Version))
                     .ToListAsync();
 
                 return outcomes;
@@ -254,7 +254,7 @@ namespace Money.Models.Builders
                 sql = ApplyPaging(sql, query);
 
                 List<OutcomeOverviewModel> models = await sql
-                    .Select(o => o.ToOverviewModel())
+                    .Select(o => o.ToOverviewModel(query.Version))
                     .ToListAsync();
 
                 return models;
@@ -279,9 +279,10 @@ namespace Money.Models.Builders
                         payload.Amount,
                         payload.When,
                         payload.Description,
-                        Enumerable.Empty<IKey>()
+                        Enumerable.Empty<IKey>(),
+                        payload.IsFixed
                     )
-                ).SetUserKey(payload.UserKey));
+                ).SetUserKey(payload.UserKey));;
 
                 await db.SaveChangesAsync();
 
@@ -383,7 +384,7 @@ namespace Money.Models.Builders
                 List<OutcomeEntity> entities = await sql.ToListAsync();
 
                 List<OutcomeOverviewModel> models = entities
-                    .Select(e => e.ToOverviewModel())
+                    .Select(e => e.ToOverviewModel(query.Version))
                     .ToList();
 
                 return models;

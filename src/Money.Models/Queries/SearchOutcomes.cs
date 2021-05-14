@@ -1,5 +1,6 @@
 ﻿using Money.Models.Sorting;
 using Neptuo;
+using Neptuo.Formatters.Metadata;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -17,17 +18,27 @@ namespace Money.Models.Queries
         /// <summary>
         /// Gets a phrase to search.
         /// </summary>
+        [CompositeProperty(0, Version = 1)]
+        [CompositeProperty(0, Version = 2)]
         public string Text { get; private set; }
 
         /// <summary>
         /// Gets a sorting descriptor.
         /// </summary>
+        [CompositeProperty(1, Version = 1)]
+        [CompositeProperty(1, Version = 2)]
         public SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; private set; }
 
         /// <summary>
         /// Gets a page index to load.
         /// </summary>
+        [CompositeProperty(2, Version = 1)]
+        [CompositeProperty(2, Version = 2)]
         public int PageIndex { get; private set; }
+
+        [CompositeVersion]
+        [CompositeProperty(3, Version = 2)]
+        public int Version { get; private set; }
 
         /// <summary>
         /// Creates a new instance.
@@ -35,7 +46,13 @@ namespace Money.Models.Queries
         /// <param name="text">A phrase to search.</param>
         /// <param name="sortDescriptor">A sorting descriptor.</param>
         /// <param name="pageIndex">A page index to load.</param>
+        [CompositeConstructor(Version = 1)]
         public SearchOutcomes(string text, SortDescriptor<OutcomeOverviewSortType> sortDescriptor, int pageIndex)
+            : this(text, sortDescriptor, pageIndex, 1)
+        { }
+
+        [CompositeConstructor(Version = 2)]
+        public SearchOutcomes(string text, SortDescriptor<OutcomeOverviewSortType> sortDescriptor, int pageIndex, int version = 2)
         {
             Ensure.NotNullOrEmpty(text, "text");
             Ensure.NotNull(sortDescriptor, "sortDescriptor");
@@ -43,6 +60,13 @@ namespace Money.Models.Queries
             Text = text;
             SortDescriptor = sortDescriptor;
             PageIndex = pageIndex;
+
+            Version = version;
+        }
+
+        public static SearchOutcomes Version2(string text, SortDescriptor<OutcomeOverviewSortType> sortDescriptor, int pageIndex)
+        {
+            return new SearchOutcomes(text, sortDescriptor, pageIndex, 2);
         }
     }
 }

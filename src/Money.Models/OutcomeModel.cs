@@ -17,14 +17,16 @@ namespace Money.Models
         public DateTime When { get; set; }
         public string Description { get; private set; }
         public IEnumerable<IKey> CategoryKeys { get; private set; }
+        public bool IsFixed { get; set; }
 
-        public OutcomeModel(IKey key, Price amount, DateTime when, string description, IEnumerable<IKey> categoryKeys)
+        public OutcomeModel(IKey key, Price amount, DateTime when, string description, IEnumerable<IKey> categoryKeys, bool isFixed)
         {
             Key = key;
             Amount = amount;
             Description = description;
             When = when;
             CategoryKeys = categoryKeys;
+            IsFixed = isFixed;
         }
     }
 }

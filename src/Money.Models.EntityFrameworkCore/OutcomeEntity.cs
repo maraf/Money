@@ -17,6 +17,7 @@ namespace Money.Models
         public string Currency { get; set; }
         public DateTime When { get; set; }
         public IList<OutcomeCategoryEntity> Categories { get; set; }
+        public bool IsFixed { get; set; }
 
         Price IPriceFixed.Amount => new Price(Amount, Currency);
         DateTime IPriceFixed.When => When;
@@ -31,6 +32,7 @@ namespace Money.Models
             Amount = model.Amount.Value;
             Currency = model.Amount.Currency;
             When = model.When;
+            IsFixed = model.IsFixed;
             Categories = new List<OutcomeCategoryEntity>();
 
             foreach (IKey categoryKey in model.CategoryKeys)
@@ -51,19 +53,41 @@ namespace Money.Models
                 new Price(Amount, Currency),
                 When,
                 Description,
-                Categories.Select(c => GuidKey.Create(c.CategoryId, categoryKeyType)).ToList()
+                Categories.Select(c => GuidKey.Create(c.CategoryId, categoryKeyType)).ToList(),
+                IsFixed
             );
         }
 
-        public OutcomeOverviewModel ToOverviewModel()
+        public OutcomeOverviewModel ToOverviewModel(int version)
         {
-            return new OutcomeOverviewModel(
-                GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type),
-                new Price(Amount, Currency),
-                When,
-                Description,
-                GuidKey.Create(Categories.First().CategoryId, KeyFactory.Empty(typeof(Category)).Type)
-            );
+            GuidKey outcomeKey = GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type);
+            GuidKey categoryKey = GuidKey.Create(Categories.First().CategoryId, KeyFactory.Empty(typeof(Category)).Type);
+            Price amount = new Price(Amount, Currency);
+            if (version == 1)
+            {
+                return new OutcomeOverviewModel(
+                    outcomeKey,
+                    amount,
+                    When,
+                    Description,
+                    categoryKey
+                );
+            }
+            else if (version == 2)
+            {
+                return new OutcomeOverviewModel(
+                    outcomeKey,
+                    amount,
+                    When,
+                    Description,
+                    categoryKey,
+                    IsFixed
+                );
+            }
+            else
+            {
+                throw Ensure.Exception.InvalidOperation($"Invalid version '{version}' of expense overview model.");
+            }
         }
     }
 }

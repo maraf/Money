@@ -15,32 +15,36 @@ namespace Money.Models.Builders
     {
         private readonly IQueryHandlerCollection queryHandlers;
         private readonly IEventHandlerCollection eventHandlers;
-        private readonly IFactory<ReadModelContext> contextFactory;
+        private readonly IFactory<ReadModelContext> dbFactory;
         private readonly IPriceConverter priceConverter;
 
-        public BootstrapTask(IQueryHandlerCollection queryHandlers, IEventHandlerCollection eventHandlers, IFactory<ReadModelContext> contextFactory, IPriceConverter priceConverter)
+        public BootstrapTask(IQueryHandlerCollection queryHandlers, IEventHandlerCollection eventHandlers, IFactory<ReadModelContext> dbFactory, IPriceConverter priceConverter)
         {
             Ensure.NotNull(queryHandlers, "queryHandlers");
             Ensure.NotNull(eventHandlers, "eventHandlers");
-            Ensure.NotNull(contextFactory, "contextFactory");
+            Ensure.NotNull(dbFactory, "dbFactory");
             Ensure.NotNull(priceConverter, "priceConverter");
             this.queryHandlers = queryHandlers;
             this.eventHandlers = eventHandlers;
-            this.contextFactory = contextFactory;
+            this.dbFactory = dbFactory;
             this.priceConverter = priceConverter;
         }
 
         public void Initialize()
         {
-            CategoryBuilder categoryBuilder = new CategoryBuilder(contextFactory);
+            var categoryBuilder = new CategoryBuilder(dbFactory);
             queryHandlers.AddAll(categoryBuilder);
             eventHandlers.AddAll(categoryBuilder);
 
-            OutcomeBuilder outcomeBuilder = new OutcomeBuilder(contextFactory, priceConverter);
+            var outcomeBuilder = new OutcomeBuilder(dbFactory, priceConverter);
             queryHandlers.AddAll(outcomeBuilder);
             eventHandlers.AddAll(outcomeBuilder);
 
-            CurrencyBuilder currencyBuilder = new CurrencyBuilder(contextFactory);
+            var incomeBuilder = new IncomeBuilder(dbFactory, priceConverter);
+            queryHandlers.AddAll(incomeBuilder);
+            eventHandlers.AddAll(incomeBuilder);
+
+            var currencyBuilder = new CurrencyBuilder(dbFactory);
             queryHandlers.AddAll(currencyBuilder);
             eventHandlers.AddAll(currencyBuilder);
         }

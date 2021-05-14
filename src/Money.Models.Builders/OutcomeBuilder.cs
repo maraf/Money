@@ -37,20 +37,20 @@ namespace Money.Models.Builders
     {
         const int PageSize = 10;
 
-        private readonly IFactory<ReadModelContext> readModelContextFactory;
+        private readonly IFactory<ReadModelContext> dbFactory;
         private readonly IPriceConverter priceConverter;
 
-        internal OutcomeBuilder(IFactory<ReadModelContext> readModelContextFactory, IPriceConverter priceConverter)
+        internal OutcomeBuilder(IFactory<ReadModelContext> dbFactory, IPriceConverter priceConverter)
         {
-            Ensure.NotNull(readModelContextFactory, "readModelContextFactory");
+            Ensure.NotNull(dbFactory, "dbFactory");
             Ensure.NotNull(priceConverter, "priceConverter");
-            this.readModelContextFactory = readModelContextFactory;
+            this.dbFactory = dbFactory;
             this.priceConverter = priceConverter;
         }
 
         public async Task<List<MonthModel>> HandleAsync(ListMonthWithOutcome query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 var entities = await db.Outcomes
                     .WhereUserKey(query.UserKey)
@@ -68,7 +68,7 @@ namespace Money.Models.Builders
 
         public async Task<List<YearModel>> HandleAsync(ListYearWithOutcome query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 var entities = await db.Outcomes
                     .WhereUserKey(query.UserKey)
@@ -124,7 +124,7 @@ namespace Money.Models.Builders
 
         public async Task<List<CategoryWithAmountModel>> HandleAsync(ListMonthCategoryWithOutcome query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 List<OutcomeEntity> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
@@ -138,7 +138,7 @@ namespace Money.Models.Builders
 
         public async Task<List<CategoryWithAmountModel>> HandleAsync(ListYearCategoryWithOutcome query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 List<OutcomeEntity> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
@@ -152,7 +152,7 @@ namespace Money.Models.Builders
 
         public async Task<string> HandleAsync(GetCategoryName query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 CategoryEntity category = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
                 if (category != null && category.IsUserKey(query.UserKey))
@@ -164,7 +164,7 @@ namespace Money.Models.Builders
 
         public async Task<Color> HandleAsync(GetCategoryColor query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 CategoryEntity category = await db.Categories.FindAsync(query.CategoryKey.AsGuidKey().Guid);
                 if (category != null && category.IsUserKey(query.UserKey))
@@ -185,7 +185,7 @@ namespace Money.Models.Builders
 
         public async Task<Price> HandleAsync(GetTotalMonthOutcome query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 List<PriceFixed> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
@@ -199,7 +199,7 @@ namespace Money.Models.Builders
 
         public async Task<Price> HandleAsync(GetTotalYearOutcome query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 List<PriceFixed> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
@@ -221,7 +221,7 @@ namespace Money.Models.Builders
 
         public async Task<List<OutcomeOverviewModel>> HandleAsync(ListYearOutcomeFromCategory query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 var sql = db.Outcomes
                     .Include(o => o.Categories)
@@ -242,7 +242,7 @@ namespace Money.Models.Builders
 
         public async Task<List<OutcomeOverviewModel>> HandleAsync(ListMonthOutcomeFromCategory query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 var sql = db.Outcomes
                     .Include(o => o.Categories)
@@ -271,7 +271,7 @@ namespace Money.Models.Builders
 
         public async Task HandleAsync(OutcomeCreated payload)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 db.Outcomes.Add(new OutcomeEntity(
                     new OutcomeModel(
@@ -301,7 +301,7 @@ namespace Money.Models.Builders
 
         public async Task HandleAsync(OutcomeCategoryAdded payload)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -318,7 +318,7 @@ namespace Money.Models.Builders
 
         public async Task HandleAsync(OutcomeAmountChanged payload)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -332,7 +332,7 @@ namespace Money.Models.Builders
 
         public async Task HandleAsync(OutcomeDescriptionChanged payload)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -345,7 +345,7 @@ namespace Money.Models.Builders
 
         public async Task HandleAsync(OutcomeWhenChanged payload)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -358,7 +358,7 @@ namespace Money.Models.Builders
 
         public async Task HandleAsync(OutcomeDeleted payload)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
                 if (entity != null)
@@ -371,7 +371,7 @@ namespace Money.Models.Builders
 
         public async Task<List<OutcomeOverviewModel>> HandleAsync(SearchOutcomes query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 var sql = db.Outcomes
                     .Include(o => o.Categories)
@@ -420,7 +420,7 @@ namespace Money.Models.Builders
 
         public async Task<List<MonthWithAmountModel>> HandleAsync(ListMonthOutcomesForCategory query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 var sql = db.Outcomes
                     .WhereUserKey(query.UserKey)
@@ -450,7 +450,7 @@ namespace Money.Models.Builders
 
         public async Task<List<YearWithAmountModel>> HandleAsync(ListYearOutcomesForCategory query)
         {
-            using (ReadModelContext db = readModelContextFactory.Create())
+            using (ReadModelContext db = dbFactory.Create())
             {
                 var sql = db.Outcomes
                     .WhereUserKey(query.UserKey)

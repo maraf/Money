@@ -16,7 +16,7 @@ namespace Money
     /// A model of the include
     /// </summary>
     public class Income : AggregateRoot,
-        IEventHandler<OutcomeCreated>,
+        IEventHandler<IncomeCreated>,
         IEventHandler<IncomeDeleted>
     {
         public bool IsDeleted { get; private set; }
@@ -53,7 +53,7 @@ namespace Money
 
         public void Delete() => Publish(new IncomeDeleted());
 
-        Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
+        Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)
         {
             return UpdateState(() =>
             {

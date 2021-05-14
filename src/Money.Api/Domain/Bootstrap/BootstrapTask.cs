@@ -173,6 +173,15 @@ namespace Money.Bootstrap
                 new EmptySnapshotStore()
             );
 
+            var incomeRepository = new AggregateRootRepository<Income>(
+                eventStore,
+                eventFormatter,
+                new ReflectionAggregateRootFactory<Income>(),
+                eventDispatcher,
+                new NoSnapshotProvider(),
+                new EmptySnapshotStore()
+            );
+
             var categoryRepository = new AggregateRootRepository<Category>(
                 eventStore,
                 eventFormatter,
@@ -194,6 +203,7 @@ namespace Money.Bootstrap
             Money.BootstrapTask bootstrapTask = new Money.BootstrapTask(
                 commandDispatcher.Handlers,
                 Factory.Instance(outcomeRepository),
+                Factory.Instance(incomeRepository),
                 Factory.Instance(categoryRepository),
                 Factory.Instance(currencyListRepository)
             );

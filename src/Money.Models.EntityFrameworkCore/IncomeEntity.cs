@@ -22,6 +22,9 @@ namespace Money.Models
         Price IPriceFixed.Amount => new Price(Amount, Currency);
         DateTime IPriceFixed.When => When;
 
+        public IncomeEntity()
+        { }
+
         public IncomeEntity(IncomeCreated payload)
         {
             Id = payload.AggregateKey.AsGuidKey().Guid;

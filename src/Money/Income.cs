@@ -67,7 +67,7 @@ namespace Money
         {
             return UpdateState(() =>
             {
-                IsDeleted = true
+                IsDeleted = true;
             });
         }
     }

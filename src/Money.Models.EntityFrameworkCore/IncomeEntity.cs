@@ -1,5 +1,6 @@
 ﻿using Money.Events;
 using Money.Models.Queries;
+using Neptuo;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace Money.Models
         }
 
         public IncomeOverviewModel ToOverviewModel(ListMonthIncome query) => new IncomeOverviewModel(
-            GuidKey.Create(Id, "Income"), 
+            GuidKey.Create(Id, KeyFactory.Empty(typeof(Income)).Type), 
             new Price(Amount, Currency), 
             When, 
             Description

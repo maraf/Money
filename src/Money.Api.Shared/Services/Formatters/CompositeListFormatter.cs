@@ -70,6 +70,19 @@ namespace Neptuo.Formatters
                 this.log = log;
             }
 
+            protected override int GetVersionValue(object input, CompositeType type)
+            {
+                if (input is IList list)
+                {
+                    if (list.Count == 0)
+                        return 1;
+
+                    return base.GetVersionValue(list[0], type);
+                }
+
+                return base.GetVersionValue(input, type);
+            }
+
             protected override bool TryStore(object input, ISerializerContext context, CompositeType type, CompositeVersion typeVersion, ICompositeStorage storage)
             {
                 if (input is IList list)

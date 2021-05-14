@@ -28,6 +28,9 @@ namespace Money.Api.Routing
             Add<ListMonthOutcomeFromCategory>("month-outcome-from-category");
             Add<ListMonthWithOutcome>("months-with-outcome");
 
+            Add<GetTotalMonthIncome>("month-income-total");
+            Add<ListMonthIncome>("month-incomes");
+
             Add<GetTotalYearOutcome>("year-outcome-total");
             Add<ListYearCategoryWithOutcome>("year-categories-with-outcome");
             Add<ListYearOutcomeFromCategory>("year-outcome-from-category");

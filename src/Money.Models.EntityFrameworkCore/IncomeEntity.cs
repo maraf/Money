@@ -1,4 +1,5 @@
 ﻿using Money.Events;
+using Money.Models.Queries;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -29,5 +30,12 @@ namespace Money.Models
             Currency = payload.Amount.Currency;
             When = payload.When;
         }
+
+        public IncomeOverviewModel ToOverviewModel(ListMonthIncome query) => new IncomeOverviewModel(
+            GuidKey.Create(Id, "Income"), 
+            new Price(Amount, Currency), 
+            When, 
+            Description
+        );
     }
 }

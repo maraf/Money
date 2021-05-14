@@ -17,20 +17,24 @@ namespace Money
     {
         private readonly ICommandHandlerCollection commandHandlers;
         private readonly IFactory<IRepository<Outcome, IKey>> outcomeRepository;
+        private readonly IFactory<IRepository<Income, IKey>> incomeRepository;
         private readonly IFactory<IRepository<Category, IKey>> categoryRepository;
         private readonly IFactory<IRepository<CurrencyList, IKey>> currencyListRepository;
 
         public BootstrapTask(ICommandHandlerCollection commandHandlers, 
             IFactory<IRepository<Outcome, IKey>> outcomeRepository,
+            IFactory<IRepository<Income, IKey>> incomeRepository,
             IFactory<IRepository<Category, IKey>> categoryRepository,
             IFactory<IRepository<CurrencyList, IKey>> currencyListRepository)
         {
             Ensure.NotNull(commandHandlers, "commandHandlers");
             Ensure.NotNull(outcomeRepository, "outcomeRepository");
+            Ensure.NotNull(incomeRepository, "incomeRepository");
             Ensure.NotNull(categoryRepository, "categoryRepository");
             Ensure.NotNull(currencyListRepository, "currencyListRepository");
             this.commandHandlers = commandHandlers;
             this.outcomeRepository = outcomeRepository;
+            this.incomeRepository = incomeRepository;
             this.categoryRepository = categoryRepository;
             this.currencyListRepository = currencyListRepository;
         }
@@ -39,6 +43,9 @@ namespace Money
         {
             OutcomeHandler outcomeHandler = new OutcomeHandler(outcomeRepository);
             commandHandlers.AddAll(outcomeHandler);
+
+            IncomeHandler incomeHandler = new IncomeHandler(incomeRepository);
+            commandHandlers.AddAll(incomeHandler);
 
             CategoryHandler categoryHandler = new CategoryHandler(categoryRepository);
             commandHandlers.AddAll(categoryHandler);

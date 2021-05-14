@@ -54,6 +54,7 @@ namespace Money.Events
             Description = description;
             When = when;
             CategoryKey = categoryKey;
+            CompositeVersion = 1;
         }
 
         [CompositeConstructor(Version = 2)]

@@ -1,0 +1,42 @@
+﻿@inherits ModalDialog
+
+<Modal @ref="Modal" Title="@Title">
+    <ChildContent>
+        <Validation ErrorMessages="@ErrorMessages" />
+        <div class="form-row">
+            <div class="col-md-9">
+                <div class="form-group">
+                    <label for="expense-amount">Amount:</label>
+                    <input type="text" class="form-control" id="expense-amount" @bind="@Amount" autocomplete="off" data-autofocus data-select />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="expense-currency">Currency:</label>
+                    <select class="form-control" id="expense-currency" @bind="@Currency">
+                        @if (Currencies != null)
+                        {
+                            @foreach (var currency in Currencies)
+                            {
+                                <option value="@currency.UniqueCode">
+                                    @currency.Symbol
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="expense-description">Description:</label>
+            <input type="text" class="form-control" id="expense-description" @bind="@Description" />
+        </div>
+        <div class="form-group">
+            <label for="expense-when">When:</label>
+            <input type="date" class="form-control" id="expense-when" @bind="@When" @bind:format="yyyy-MM-dd" />
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="@OnSaveClick">@SaveButtonText</button>
+    </Buttons>
+</Modal>

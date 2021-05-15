@@ -63,7 +63,8 @@ namespace Money.Pages
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
         protected Modal PeriodSelectorModal { get; set; }
-        protected ModalDialog CreateModal { get; set; }
+        protected OutcomeCreate ExpenseCreate { get; set; }
+        protected IncomeCreate IncomeCreate { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -259,12 +260,6 @@ namespace Money.Pages
                 await LoadPeriodsAsync();
 
             await LoadSelectedPeriodAsync();
-            StateHasChanged();
-        }
-
-        protected void CreateNewExpense()
-        {
-            CreateModal.Show();
             StateHasChanged();
         }
 

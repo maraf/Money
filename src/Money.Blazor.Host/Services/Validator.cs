@@ -42,6 +42,32 @@ namespace Money.Services
 
         #endregion
 
+        #region Income
+
+        public static bool IsIncomeAmount(decimal amount) => amount > 0;
+        public static bool IsIncomeDescription(string description) => !String.IsNullOrEmpty(description);
+        public static bool IsIncomeCurrency(string currency) => !String.IsNullOrEmpty(currency);
+
+        public static void AddIncomeAmount(ICollection<string> messages, decimal amount)
+        {
+            if (!IsIncomeAmount(amount))
+                messages.Add("Amount must be greater than zero.");
+        }
+
+        public static void AddIncomeDescription(ICollection<string> messages, string description)
+        {
+            if (!IsIncomeDescription(description))
+                messages.Add("Description must be provided.");
+        }
+
+        public static void AddIncomeCurrency(ICollection<string> messages, string currency)
+        {
+            if (!IsIncomeCurrency(currency))
+                messages.Add("Currency must be selected.");
+        }
+
+        #endregion
+
         #region Category
 
         public static bool IsCategoryName(string name) => !String.IsNullOrEmpty(name);

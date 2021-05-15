@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Money.Api.Models;
 using Money.Events;
 using Money.Services;
@@ -19,6 +20,7 @@ using System.Threading.Tasks;
 
 namespace Money.Hubs
 {
+    [Authorize]
     public class ApiHub : Hub,
         IExceptionHandler<AggregateRootException>,
         IEventHandler<CategoryCreated>, IEventHandler<CategoryDeleted>, IEventHandler<CategoryRenamed>, IEventHandler<CategoryDescriptionChanged>, IEventHandler<CategoryIconChanged>, IEventHandler<CategoryColorChanged>,

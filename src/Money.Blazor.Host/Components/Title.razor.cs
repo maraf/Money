@@ -27,5 +27,8 @@ namespace Money.Components
 
         [Parameter]
         public Action ButtonClick { get; set; }
+
+        [Parameter]
+        public RenderFragment ButtonContent { get; set; }
     }
 }

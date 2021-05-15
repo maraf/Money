@@ -25,7 +25,7 @@
     <ExpenseBagPublishButton Text="You have expenses created when offline. Upload them now..." class="mb-4" />
 
     @if (SelectedPeriod != null)
-    {
+    { 
         <div class="mb-3">
             <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
 
@@ -52,14 +52,14 @@
         </div>
     }
 
-    @if (TotalAmout != null && TotalAmout.Value == 0)
+    @if (ExpenseTotal != null && ExpenseTotal.Value == 0)
     {
         <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
     }
     else if (Categories != null)
     {
         <div class="graph">
-            @if (TotalAmout != null)
+            @if (ExpenseTotal != null)
             {
                 <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
                     <div class="card-body">
@@ -69,7 +69,18 @@
                         </h3>
 
                         <div class="value">
-                            <div class="amount">@FormatPrice(TotalAmout)</div>
+                            <div class="amount">
+                                @if (IncomeTotal != null)
+                                {
+                                    <span class="text-success mr-2">
+                                        @FormatPrice(IncomeTotal)
+                                    </span>
+                                }
+
+                                <span class="text-danger">
+                                    @FormatPrice(ExpenseTotal)
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -57,7 +57,8 @@ namespace Money.Pages
         protected IReadOnlyCollection<T> PeriodGuesses { get; set; }
 
         protected LoadingContext CategoriesLoading { get; } = new LoadingContext();
-        protected Price TotalAmout { get; private set; }
+        protected Price IncomeTotal { get; private set; }
+        protected Price ExpenseTotal { get; private set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
 
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
@@ -116,7 +117,14 @@ namespace Money.Pages
                     try
                     {
                         Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedPeriod));
-                        TotalAmout = await Queries.QueryAsync(CreateTotalQuery(SelectedPeriod));
+
+                        var incomeQuery = CreateIncomeTotalQuery(SelectedPeriod);
+                        if (incomeQuery != null)
+                            IncomeTotal = await Queries.QueryAsync(CreateIncomeTotalQuery(SelectedPeriod));
+                        else
+                            IncomeTotal = null;
+
+                        ExpenseTotal = await Queries.QueryAsync(CreateExpenseTotalQuery(SelectedPeriod));
                     }
                     catch (MissingDefaultCurrentException)
                     {
@@ -128,8 +136,11 @@ namespace Money.Pages
             }
         }
 
-        protected virtual IQuery<Price> CreateTotalQuery(T item)
-            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateTotalQuery)}'.");
+        protected virtual IQuery<Price> CreateIncomeTotalQuery(T item)
+            => null;
+
+        protected virtual IQuery<Price> CreateExpenseTotalQuery(T item)
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateExpenseTotalQuery)}'.");
 
         protected virtual IQuery<List<CategoryWithAmountModel>> CreateCategoriesQuery(T item)
             => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateCategoriesQuery)}'.");

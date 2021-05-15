@@ -1,6 +1,18 @@
 ﻿$bodyMinWidth: 380px;
 $actionButtonColor: #333;
 
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #007BFF;
+}
+
 .clear {
     clear: both;
 }

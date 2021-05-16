@@ -45,5 +45,8 @@ namespace Money.Pages
 
         protected override bool IsContained(DateTime when) 
             => SelectedPeriod == when;
+
+        protected override string ListIncomeUrl()
+            => Navigator.UrlOverviewIncomes(SelectedPeriod);
     }
 }

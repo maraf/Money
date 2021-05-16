@@ -37,6 +37,9 @@ namespace Money.Services
             manager.LocationChanged -= OnLocationChanged;
         }
 
+        public string UrlCurrent() 
+            => manager.Uri;
+
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
             => LocationChanged?.Invoke(e.Location);
 
@@ -60,6 +63,9 @@ namespace Money.Services
 
         public void OpenOverview(MonthModel month)
             => manager.NavigateTo(UrlOverview(month));
+
+        public void OpenOverviewIncomes(MonthModel month)
+            => manager.NavigateTo(UrlOverviewIncomes(month));
 
         public void OpenOverview(MonthModel month, IKey categoryKey)
             => manager.NavigateTo(UrlOverview(month, categoryKey));

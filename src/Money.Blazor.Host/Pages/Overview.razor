@@ -1,6 +1,10 @@
 ﻿@typeparam T
 
-<Money.Components.Title Icon="calendar" Main="@Title" Sub="@SubTitle" ButtonText="New Expense" ButtonClick="@(() => { CreateModal.Show(); StateHasChanged(); })" />
+<Title Icon="calendar" Main="@Title" Sub="@SubTitle">
+    <ButtonContent>
+        <ExpenseCreateButton OnClick="CreateModal.Show" />
+    </ButtonContent>
+</Title>
 <ExceptionPanel />
 
 <OutcomeCreate @ref="CreateModal" CategoryKey="@CategoryKey" />
@@ -8,6 +12,20 @@
 
 <div class="overview">
     <Loading Context="@Loading" IsOverlay="true">
+        @{ 
+            var incomeUrl = ListIncomeUrl();
+        }
+        @if (incomeUrl != null)
+        {
+            <ul class="nav nav-pills float-left">
+                <li>
+                    <a class="nav-link" href="@incomeUrl">Incomes</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="@Navigator.UrlCurrent()">Expenses</a>
+                </li>
+            </ul>
+        }
         @if (Items != null)
         {
             if (Items.Count > 0)

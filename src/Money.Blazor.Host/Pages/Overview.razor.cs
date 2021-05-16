@@ -45,6 +45,9 @@ namespace Money.Pages
         [Inject]
         public Interop Interop { get; set; }
 
+        [Inject]
+        public Navigator Navigator { get; set; }
+
         protected string Title { get; set; }
         protected string SubTitle { get; set; }
 
@@ -95,6 +98,9 @@ namespace Money.Pages
 
         protected virtual T CreateSelectedItemFromParameters()
             => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedItemFromParameters)}'.");
+
+        protected virtual string ListIncomeUrl()
+            => null;
 
         protected async void Reload()
         {

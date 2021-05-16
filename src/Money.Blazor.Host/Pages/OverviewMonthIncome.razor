@@ -1,0 +1,58 @@
+﻿@page "/{Year:int}/{Month:int}/overview/incomes"
+
+<Title Icon="calendar" Main="@($"Incomes in {MonthModel}")" Sub="List of each single income in selected month">
+    <ButtonContent>
+        <IncomeCreateButton OnClick="CreateModal.Show" />
+    </ButtonContent>
+</Title>
+<ExceptionPanel />
+
+<IncomeCreate @ref="CreateModal" />
+<Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@OnDeleteConfirmed" />
+
+<div class="overview">
+    <Loading Context="@Loading" IsOverlay="true">
+        <ul class="nav nav-pills float-left">
+            <li>
+                <a class="nav-link active" href="@Navigator.UrlOverviewIncomes(MonthModel)">Incomes</a>
+            </li>
+            <li>
+                <a class="nav-link" href="@Navigator.UrlOverview(MonthModel)">Expenses</a>
+            </li>
+        </ul>
+
+        @if (Items != null)
+        {
+            if (Items.Count > 0)
+            {
+                <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+                <div class="clear"></div>
+
+                <div class="cards">
+                    <CascadingValue Value="@this">
+                        @foreach (var item in Items)
+                        {
+                            <div class="outcome-card">
+                                <div class="data">
+                                    <h2 class="amount">@CurrencyFormatter.Format(item.Amount)</h2>
+                                    <p class="when">@item.When.ToShortDateString()</p>
+                                    <p class="description">@item.Description</p>
+                                </div>
+                                <div class="controls">
+                                    <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        }
+                    </CascadingValue>
+                </div>
+
+                <Paging Context="@PagingContext" />
+            }
+            else
+            {
+                <Alert Title="No data." Message="Let's add some incomes." Mode="@AlertMode.Warning" />
+            }
+        }
+    </Loading>
+</div>

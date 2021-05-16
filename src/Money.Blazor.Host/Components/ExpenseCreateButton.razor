@@ -1,0 +1,12 @@
+﻿<button class="btn btn-primary ml-2" @onclick="OnClick">
+    <Icon Identifier="minus-circle" />
+    <span class="d-none d-md-inline">
+        New Expense
+    </span>
+</button>
+
+@code 
+{
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+}

@@ -2,18 +2,8 @@
 
 <Title Icon="signal" Main="Summary" Sub="@SubTitle">
     <ButtonContent>
-        <button class="btn btn-primary ml-2" @onclick="ExpenseCreate.Show">
-            <Icon Identifier="minus-circle" />
-            <span class="d-none d-md-inline">
-                New Expense
-            </span>
-        </button>
-        <button class="btn btn-primary ml-2" @onclick="IncomeCreate.Show">
-            <Icon Identifier="plus-circle" />
-            <span class="d-none d-md-inline">
-                New Income
-            </span>
-        </button>
+        <ExpenseCreateButton OnClick="ExpenseCreate.Show" />
+        <IncomeCreateButton OnClick="IncomeCreate.Show" />
     </ButtonContent>
 </Title>
 <ExceptionPanel />

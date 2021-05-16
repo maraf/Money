@@ -1,0 +1,12 @@
+﻿<button class="btn btn-primary ml-2" @onclick="OnClick">
+    <Icon Identifier="plus-circle" />
+    <span class="d-none d-md-inline">
+        New Income
+    </span>
+</button>
+
+@code
+{
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+}

@@ -6,6 +6,12 @@
         <p class="category @CategoryColor.SelectAccent("back-dark", "back-light")">
             <span class="badge" style="background-color: @CategoryColor.ToHashCode()">@CategoryName</span>
         </p>
+        @if (Model.IsFixed)
+        {
+            <p class="mt-3 mb-0 text-muted">
+                <em>Fixed</em>
+            </p>
+        }
     </div>
     <div class="controls">
         <IconButton Icon="dollar-sign" ToolTip="Change Amount" Click="@OnEditAmount" />

@@ -55,6 +55,9 @@ namespace Money.Components
         [Parameter]
         public IKey CategoryKey { get; set; }
 
+        [Parameter]
+        public bool IsFixed { get; set; } = true;
+
         protected async override Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
@@ -92,7 +95,7 @@ namespace Money.Components
 
         private async void Execute()
         {
-            await Commands.HandleAsync(new CreateOutcome(new Price(Amount, Currency), Description, When, CategoryKey));
+            await Commands.HandleAsync(new CreateOutcome(new Price(Amount, Currency), Description, When, CategoryKey, IsFixed));
 
             Amount = 0;
             CategoryKey = null;

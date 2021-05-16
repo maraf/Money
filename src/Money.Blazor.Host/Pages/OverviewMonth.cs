@@ -41,7 +41,7 @@ namespace Money.Pages
             => CategoryGuid != null ? GuidKey.Create(CategoryGuid.Value, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
 
         protected override IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex) 
-            => new ListMonthOutcomeFromCategory(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);
+            => ListMonthOutcomeFromCategory.Version2(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);
 
         protected override bool IsContained(DateTime when) 
             => SelectedPeriod == when;

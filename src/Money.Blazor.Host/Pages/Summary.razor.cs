@@ -30,7 +30,9 @@ namespace Money.Pages
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeWhenChanged>,
-        IEventHandler<PulledToRefresh>
+        IEventHandler<PulledToRefresh>,
+        IEventHandler<IncomeCreated>,
+        IEventHandler<IncomeDeleted>
     {
         private CurrencyFormatter formatter;
 
@@ -118,11 +120,7 @@ namespace Money.Pages
                     {
                         Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedPeriod));
 
-                        var incomeQuery = CreateIncomeTotalQuery(SelectedPeriod);
-                        if (incomeQuery != null)
-                            IncomeTotal = await Queries.QueryAsync(CreateIncomeTotalQuery(SelectedPeriod));
-                        else
-                            IncomeTotal = null;
+                        await LoadIncomeTotalAsync();
 
                         ExpenseTotal = await Queries.QueryAsync(CreateExpenseTotalQuery(SelectedPeriod));
                     }
@@ -134,6 +132,15 @@ namespace Money.Pages
 
                 Sort();
             }
+        }
+
+        private async Task LoadIncomeTotalAsync()
+        {
+            var incomeQuery = CreateIncomeTotalQuery(SelectedPeriod);
+            if (incomeQuery != null)
+                IncomeTotal = await Queries.QueryAsync(CreateIncomeTotalQuery(SelectedPeriod));
+            else
+                IncomeTotal = null;
         }
 
         protected virtual IQuery<Price> CreateIncomeTotalQuery(T item)
@@ -203,7 +210,9 @@ namespace Money.Pages
                 .Add<OutcomeDeleted>(this)
                 .Add<OutcomeAmountChanged>(this)
                 .Add<OutcomeWhenChanged>(this)
-                .Add<PulledToRefresh>(this);
+                .Add<PulledToRefresh>(this)
+                .Add<IncomeCreated>(this)
+                .Add<IncomeDeleted>(this);
         }
 
         private void UnBindEvents()
@@ -213,7 +222,9 @@ namespace Money.Pages
                 .Remove<OutcomeDeleted>(this)
                 .Remove<OutcomeAmountChanged>(this)
                 .Remove<OutcomeWhenChanged>(this)
-                .Remove<PulledToRefresh>(this);
+                .Remove<PulledToRefresh>(this)
+                .Remove<IncomeCreated>(this)
+                .Remove<IncomeDeleted>(this);
         }
 
         Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
@@ -245,6 +256,18 @@ namespace Money.Pages
             payload.IsHandled = true;
             _ = LoadSelectedPeriodAsync();
             return Task.CompletedTask;
+        }
+
+        async Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)
+        {
+            await LoadIncomeTotalAsync();
+            StateHasChanged();
+        }
+
+        async Task IEventHandler<IncomeDeleted>.HandleAsync(IncomeDeleted payload)
+        {
+            await LoadIncomeTotalAsync();
+            StateHasChanged();
         }
 
         private async void OnMonthUpdatedEvent(DateTime changed)

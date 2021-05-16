@@ -70,5 +70,8 @@ namespace Money.Pages
 
         protected override void OpenOverview(MonthModel item, IKey categorykey)
             => Navigator.OpenOverview(item, categorykey);
+
+        protected override void OpenOverviewIncomes(MonthModel item)
+            => Navigator.OpenOverviewIncomes(item);
     }
 }

@@ -196,6 +196,9 @@ namespace Money.Pages
         protected virtual void OpenOverview(T item)
         { }
 
+        protected virtual void OpenOverviewIncomes(T item)
+        { }
+
         protected virtual void OpenOverview(T item, IKey categorykey)
         { }
 

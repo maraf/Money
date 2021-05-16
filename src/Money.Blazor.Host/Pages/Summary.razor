@@ -62,7 +62,7 @@
                             <div class="amount">
                                 @if (IncomeTotal != null)
                                 {
-                                    <span class="text-success mr-2">
+                                    <span class="text-success mr-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))">
                                         @FormatPrice(IncomeTotal)
                                     </span>
                                 }

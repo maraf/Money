@@ -246,11 +246,11 @@ namespace Money.Pages
             return Task.CompletedTask;
         }
 
-        Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
+        async Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
         {
             payload.IsHandled = true;
-            _ = LoadDataAsync();
-            return Task.CompletedTask;
+            await LoadDataAsync();
+            StateHasChanged();
         }
 
         #endregion

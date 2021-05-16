@@ -254,11 +254,11 @@ namespace Money.Pages
             return Task.CompletedTask;
         }
 
-        Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
+        async Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
         {
             payload.IsHandled = true;
-            _ = LoadSelectedPeriodAsync();
-            return Task.CompletedTask;
+            await LoadSelectedPeriodAsync();
+            StateHasChanged();
         }
 
         async Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)

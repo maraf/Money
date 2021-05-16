@@ -129,6 +129,7 @@ namespace Money.Models.Builders
                 List<OutcomeEntity> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
+                    .Where(o => o.IsFixed == false)
                     .Include(o => o.Categories)
                     .ToListAsync();
 
@@ -143,6 +144,7 @@ namespace Money.Models.Builders
                 List<OutcomeEntity> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Year == query.Year.Year)
+                    .Where(o => o.IsFixed == false)
                     .Include(o => o.Categories)
                     .ToListAsync();
 

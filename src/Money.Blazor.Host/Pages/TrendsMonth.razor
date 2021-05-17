@@ -1,0 +1,10 @@
+﻿@page "/{Year:int}/trends/{CategoryGuid:guid}"
+
+@if (Models == null)
+{
+    <Loading />
+}
+else
+{
+    @Models.Count
+}

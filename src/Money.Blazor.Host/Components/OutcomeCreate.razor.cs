@@ -56,7 +56,7 @@ namespace Money.Components
         public IKey CategoryKey { get; set; }
 
         [Parameter]
-        public bool IsFixed { get; set; } = true;
+        public bool IsFixed { get; set; }
 
         protected async override Task OnParametersSetAsync()
         {

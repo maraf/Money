@@ -67,9 +67,17 @@ namespace Money.Models
         /// <param name="dateTime">A source date and time.</param>
         public static implicit operator MonthModel(DateTime dateTime) => new MonthModel(dateTime.Year, dateTime.Month);
 
-        public static bool operator ==(MonthModel model1, MonthModel model2) => EqualityComparer<MonthModel>.Default.Equals(model1, model2);
+        public static bool operator ==(MonthModel model1, MonthModel model2) 
+            => EqualityComparer<MonthModel>.Default.Equals(model1, model2);
 
-        public static bool operator !=(MonthModel model1, MonthModel model2) => !(model1 == model2);
+        public static bool operator !=(MonthModel model1, MonthModel model2) 
+            => !(model1 == model2);
+        
+        public static bool operator >(MonthModel model1, MonthModel model2) 
+            => model1.Year > model2.Year || (model1.Year == model2.Year && model1.Month > model2.Month);
+
+        public static bool operator <(MonthModel model1, MonthModel model2) 
+            => model1.Year < model2.Year || (model1.Year == model2.Year && model1.Month < model2.Month);
 
         public static MonthModel operator -(MonthModel model, int amount)
         {

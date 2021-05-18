@@ -1,10 +1,43 @@
 ﻿@page "/{Year:int}/trends/{CategoryGuid:guid}"
 
+<Title Main="@($"Trends of category {CategoryName} in {Year}")" Sub="See how the category expenses change in time" />
+
 @if (Models == null)
 {
     <Loading />
 }
 else
 {
-    @Models.Count
+    <div class="row no-gutters" style="height: min(400px, calc(100vh - 226px))">
+        @foreach (var model in Models)
+        {
+            <div class="col-1">
+                <div class="p-1 p-md-3 h-100 w-100 vertical-bar">
+                    <div class="w-100" style="height: @(model.TotalAmount.Value / MaxAmount * 100)%; background: @CategoryColor.ToHashCode()"></div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row no-gutters">
+        @foreach (var model in Models)
+        {
+            <div class="col-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
+                <div class="p-1">
+                    <div class="text-center mt-1 d-none d-lg-block">
+                        <small>
+                            @CurrencyFormatter.Format(model.TotalAmount)
+                        </small>
+                    </div>
+                    <div class="text-center mt-1">
+                        <span class="d-none d-lg-inline">
+                            @model
+                        </span>
+                        <span class="d-inline d-lg-none">
+                            @model.Month.ToString("D2")
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }

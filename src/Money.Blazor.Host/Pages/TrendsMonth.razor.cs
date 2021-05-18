@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Services;
 using Neptuo;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
@@ -24,9 +25,13 @@ namespace Money.Pages
         [Parameter]
         public Guid CategoryGuid { get; set; }
 
+        protected CurrencyFormatter CurrencyFormatter { get; set; }
         protected YearModel SelectedPeriod { get; set; }
         protected IKey CategoryKey { get; set; }
+        protected string CategoryName { get; set; }
+        protected Color CategoryColor { get; set; }
         protected List<MonthWithAmountModel> Models { get; set; }
+        protected decimal MaxAmount { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -34,8 +39,31 @@ namespace Money.Pages
 
             SelectedPeriod = new YearModel(Year);
             CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
+            CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
+            CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
+            CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+            await LoadAsync();
+        }
 
-            Models = await Queries.QueryAsync(new ListMonthOutcomesForCategory(CategoryKey, SelectedPeriod));
+        private async Task LoadAsync()
+        {
+            string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
+            var models = await Queries.QueryAsync(new ListMonthOutcomesForCategory(CategoryKey, SelectedPeriod));
+
+            MaxAmount = 0;
+            Models = new List<MonthWithAmountModel>();
+            for (int i = 0; i < 12; i++)
+            {
+                int month = i + 1;
+                var model = models.FirstOrDefault(m => m.Month == month);
+                if (model == null)
+                    model = new MonthWithAmountModel(Year, month, Price.Zero(defaultCurrency));
+
+                if (model.TotalAmount.Value > MaxAmount)
+                    MaxAmount = model.TotalAmount.Value;
+
+                Models.Add(model);
+            }
         }
     }
 }

@@ -31,22 +31,27 @@ namespace Money.Pages
         [Parameter]
         public Guid? CategoryGuid { get; set; }
 
-        public OverviewMonth() 
+        public OverviewMonth()
             => SubTitle = "List of each single expense in selected month";
 
-        protected override MonthModel CreateSelectedItemFromParameters() 
+        protected override MonthModel CreateSelectedItemFromParameters()
             => new MonthModel(Year, Month);
 
         protected override IKey CreateSelectedCategoryFromParameters()
             => CategoryGuid != null ? GuidKey.Create(CategoryGuid.Value, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
 
-        protected override IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex) 
+        protected override IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
             => ListMonthOutcomeFromCategory.Version2(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);
 
-        protected override bool IsContained(DateTime when) 
+        protected override bool IsContained(DateTime when)
             => SelectedPeriod == when;
 
         protected override string ListIncomeUrl()
-            => Navigator.UrlOverviewIncomes(SelectedPeriod);
+        {
+            if (CategoryKey.IsEmpty)
+                return Navigator.UrlOverviewIncomes(SelectedPeriod);
+
+            return null;
+        }
     }
 }

@@ -53,5 +53,13 @@ namespace Money.Pages
 
             return null;
         }
+
+        protected override (string title, string url)? TrendsTitleUrl()
+        {
+            if (CategoryKey.IsEmpty)
+                return null;
+
+            return ("Month trends", Navigator.UrlTrends(new YearModel(SelectedPeriod.Year), CategoryKey));
+        }
     }
 }

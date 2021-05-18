@@ -102,7 +102,10 @@ namespace Money.Pages
         protected virtual string ListIncomeUrl()
             => null;
 
-        protected virtual string TrendsUrl()
+        protected virtual string TrendsSelectedPeriodUrl()
+            => null;
+
+        protected virtual (string title, string url)? TrendsTitleUrl()
             => null;
 
         protected async void Reload()

@@ -40,7 +40,7 @@ namespace Money.Pages
         protected override bool IsContained(DateTime when)
             => SelectedPeriod == when;
 
-        protected override string TrendsUrl()
+        protected override string TrendsSelectedPeriodUrl()
         {
             if (CategoryKey.IsEmpty)
                 return null;

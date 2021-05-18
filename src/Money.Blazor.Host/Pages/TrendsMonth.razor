@@ -1,6 +1,13 @@
 ﻿@page "/{Year:int}/trends/{CategoryGuid:guid}"
 
-<Title Main="@($"Trends of category {CategoryName} in {Year}")" Sub="See how the category expenses change in time" />
+<Title Main="@($"Trends of category {CategoryName} in {Year}")" Sub="See how the category expenses change in time">
+    <ButtonContent>
+        <button class="btn btn-secondary" @onclick="(() => Navigator.OpenOverview(SelectedPeriod, CategoryKey))">
+            <Icon Prefix="fas" Identifier="list-ul" />
+            Year overview
+        </button>
+    </ButtonContent>
+</Title>
 
 @if (Models == null)
 {

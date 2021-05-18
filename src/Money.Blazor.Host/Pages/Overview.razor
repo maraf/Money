@@ -3,6 +3,18 @@
 <Title Icon="calendar" Main="@Title" Sub="@SubTitle">
     <ButtonContent>
         <ExpenseCreateButton OnClick="CreateModal.Show" />
+        @{
+            var trendsButton = TrendsTitleUrl();
+        }
+        @if (trendsButton != null)
+        {
+            <button class="btn btn-secondary" @onclick="(() => Navigator.Open(trendsButton.Value.url))">
+                <Icon Prefix="fas" Identifier="chart-bar" />
+                <span class="d-none d-md-inline">
+                    @trendsButton.Value.title
+                </span>
+            </button>
+        }
     </ButtonContent>
 </Title>
 <ExceptionPanel />
@@ -14,7 +26,7 @@
     <Loading Context="@Loading" IsOverlay="true">
         @{
             var incomeUrl = ListIncomeUrl();
-            var trendsUrl = TrendsUrl();
+            var trendsUrl = TrendsSelectedPeriodUrl();
         }
         @if (incomeUrl != null || trendsUrl != null)
         {
@@ -64,4 +76,4 @@
 
 <OutcomeAmount @ref="AmountEditModal" OutcomeKey="@SelectedItem?.Key" Amount="@(SelectedItem?.Amount?.Value ?? 0)" Currency="@SelectedItem?.Amount?.Currency" />
 <OutcomeDescription @ref="DescriptionEditModal" OutcomeKey="@SelectedItem?.Key" Description="@SelectedItem?.Description" />
-<OutcomeWhen @ref="WhenEditModal" OutcomeKey="@SelectedItem?.Key" When="@(SelectedItem?.When ?? DateTime.MinValue)" />
+<OutcomeWhen @ref="       DescriptionEditModal" OutcomeKey="@SelectedItem?.Key" When="@(SelectedItem?.When ?? DateTime.MinValue)" />

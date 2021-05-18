@@ -39,5 +39,13 @@ namespace Money.Pages
 
         protected override bool IsContained(DateTime when)
             => SelectedPeriod == when;
+
+        protected override string TrendsUrl()
+        {
+            if (CategoryKey.IsEmpty)
+                return null;
+
+            return Navigator.UrlTrends(SelectedPeriod, CategoryKey);
+        }
     }
 }

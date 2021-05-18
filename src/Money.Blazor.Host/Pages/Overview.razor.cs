@@ -102,6 +102,9 @@ namespace Money.Pages
         protected virtual string ListIncomeUrl()
             => null;
 
+        protected virtual string TrendsUrl()
+            => null;
+
         protected async void Reload()
         {
             await PagingContext.LoadAsync(0);

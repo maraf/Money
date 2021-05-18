@@ -19,6 +19,9 @@ namespace Money.Pages
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
 
+        [Inject]
+        protected Navigator Navigator { get; set; }
+
         [Parameter]
         public int Year { get; set; }
 

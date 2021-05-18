@@ -12,18 +12,28 @@
 
 <div class="overview">
     <Loading Context="@Loading" IsOverlay="true">
-        @{ 
+        @{
             var incomeUrl = ListIncomeUrl();
+            var trendsUrl = TrendsUrl();
         }
-        @if (incomeUrl != null)
+        @if (incomeUrl != null || trendsUrl != null)
         {
             <ul class="nav nav-pills float-left">
-                <li>
-                    <a class="nav-link" href="@incomeUrl">Incomes</a>
-                </li>
+                @if (incomeUrl != null)
+                {
+                    <li>
+                        <a class="nav-link" href="@incomeUrl">Incomes</a>
+                    </li>
+                }
                 <li>
                     <a class="nav-link active" href="@Navigator.UrlCurrent()">Expenses</a>
                 </li>
+                @if (trendsUrl != null)
+                {
+                    <li>
+                        <a class="nav-link" href="@trendsUrl">Trends</a>
+                    </li>
+                }
             </ul>
         }
         @if (Items != null)

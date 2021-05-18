@@ -29,12 +29,14 @@ else
                         </small>
                     </div>
                     <div class="text-center mt-1">
-                        <span class="d-none d-lg-inline">
-                            @model
-                        </span>
-                        <span class="d-inline d-lg-none">
-                            @model.Month.ToString("D2")
-                        </span>
+                        <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                            <span class="d-none d-lg-inline">
+                                @model
+                            </span>
+                            <span class="d-inline d-lg-none">
+                                @model.Month.ToString("D2")
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>

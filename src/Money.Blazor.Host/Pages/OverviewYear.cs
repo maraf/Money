@@ -26,7 +26,7 @@ namespace Money.Pages
         public Guid? CategoryGuid { get; set; }
 
         public OverviewYear() 
-            => SubTitle = "List of each single outcome in selected year";
+            => SubTitle = "List of each single expense in selected year";
 
         protected override YearModel CreateSelectedItemFromParameters()
             => new YearModel(Year);

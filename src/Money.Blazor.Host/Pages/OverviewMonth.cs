@@ -32,7 +32,7 @@ namespace Money.Pages
         public Guid? CategoryGuid { get; set; }
 
         public OverviewMonth() 
-            => SubTitle = "List of each single outcome in selected month";
+            => SubTitle = "List of each single expense in selected month";
 
         protected override MonthModel CreateSelectedItemFromParameters() 
             => new MonthModel(Year, Month);

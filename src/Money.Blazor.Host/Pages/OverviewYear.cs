@@ -47,5 +47,13 @@ namespace Money.Pages
 
             return Navigator.UrlTrends(SelectedPeriod, CategoryKey);
         }
+
+        protected override (string title, string url)? TrendsTitleUrl()
+        {
+            if (CategoryKey.IsEmpty)
+                return null;
+
+            return ("Year trends", Navigator.UrlTrends(CategoryKey));
+        }
     }
 }

@@ -44,10 +44,11 @@ namespace Money.Services
                 return $"/{year.Year}/overview/{categoryKey.AsGuidKey().Guid}";
         }
 
-        public string UrlTrends(YearModel year, IKey categoryKey)
-        {
-            return $"/{year.Year}/trends/{categoryKey.AsGuidKey().Guid}";
-        }
+        public string UrlTrends(IKey categoryKey) 
+            => $"/trends/{categoryKey.AsGuidKey().Guid}";
+
+        public string UrlTrends(YearModel year, IKey categoryKey) 
+            => $"/{year.Year}/trends/{categoryKey.AsGuidKey().Guid}";
 
         public string UrlSearch()
             => $"/search";

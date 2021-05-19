@@ -79,6 +79,9 @@ namespace Money.Services
         public void OpenTrends(YearModel Year, IKey categoryKey)
             => manager.NavigateTo(UrlTrends(Year, categoryKey));
 
+        public void OpenTrends(IKey categoryKey)
+            => manager.NavigateTo(UrlTrends(categoryKey));
+
         public void OpenSearch()
             => manager.NavigateTo(UrlSearch());
 

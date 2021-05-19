@@ -1,0 +1,53 @@
+﻿@page "/trends/{CategoryGuid:guid}"
+
+<Title Main="@($"Trends of category {CategoryName} from {StartYear} to {StartYear.Year + ModelsCount}")" Sub="See how the category expenses change in time" />
+
+@if (Models == null)
+{
+    <Loading />
+}
+else
+{
+    <div class="row no-gutters" style="height: 400px; height: calc(100vh - 328px)">
+        <div class="col-1"></div>
+
+        @foreach (var model in Models)
+        {
+            <div class="col-1">
+                <div class="p-1 p-md-3 h-100 w-100 vertical-bar">
+                    <div class="w-100" style="height: @(model.TotalAmount.Value / MaxAmount * 100)%; background: @CategoryColor.ToHashCode()"></div>
+                </div>
+            </div>
+        }
+
+        <div class="col-1"></div>
+    </div>
+    <div class="row no-gutters">
+        <div class="col-1"></div>
+
+        @foreach (var model in Models)
+        {
+            <div class="col-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
+                <div class="p-1">
+                    <div class="text-center mt-1 d-none d-lg-block">
+                        <small>
+                            @CurrencyFormatter.Format(model.TotalAmount)
+                        </small>
+                    </div>
+                    <div class="text-center mt-1">
+                        <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                            <span class="d-none d-lg-inline">
+                                @model
+                            </span>
+                            <span class="d-inline d-lg-none">
+                                @model.Year
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="col-1"></div>
+    </div>
+}

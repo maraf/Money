@@ -14,8 +14,10 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class TrendsMonth
+    public partial class TrendsYear
     {
+        public const int ModelsCount = 10;
+
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
 
@@ -23,24 +25,21 @@ namespace Money.Pages
         protected Navigator Navigator { get; set; }
 
         [Parameter]
-        public int Year { get; set; }
-
-        [Parameter]
         public Guid CategoryGuid { get; set; }
 
+        protected YearModel StartYear { get; set; }
         protected CurrencyFormatter CurrencyFormatter { get; set; }
-        protected YearModel SelectedPeriod { get; set; }
         protected IKey CategoryKey { get; set; }
         protected string CategoryName { get; set; }
         protected Color CategoryColor { get; set; }
-        protected List<MonthWithAmountModel> Models { get; set; }
+        protected List<YearWithAmountModel> Models { get; set; }
         protected decimal MaxAmount { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
-            SelectedPeriod = new YearModel(Year);
+            StartYear = new YearModel(DateTime.Today.Year - 5);
             CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
             CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
             CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
@@ -52,16 +51,16 @@ namespace Money.Pages
         private async Task LoadAsync()
         {
             string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
-            var models = await Queries.QueryAsync(new ListMonthOutcomesForCategory(CategoryKey, SelectedPeriod));
+            var models = await Queries.QueryAsync(new ListYearOutcomesForCategory(CategoryKey, StartYear));
 
             MaxAmount = 0;
-            Models = new List<MonthWithAmountModel>();
-            for (int i = 0; i < 12; i++)
+            Models = new List<YearWithAmountModel>();
+            for (int i = 0; i < ModelsCount; i++)
             {
-                int month = i + 1;
-                var model = models.FirstOrDefault(m => m.Month == month);
+                var year = StartYear.Year + i;
+                var model = models.FirstOrDefault(m => m.Year == year);
                 if (model == null)
-                    model = new MonthWithAmountModel(Year, month, Price.Zero(defaultCurrency));
+                    model = new YearWithAmountModel(year, Price.Zero(defaultCurrency));
 
                 if (model.TotalAmount.Value > MaxAmount)
                     MaxAmount = model.TotalAmount.Value;

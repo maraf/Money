@@ -41,10 +41,19 @@ namespace Money.Models
         /// <param name="dateTime">A source date and time.</param>
         public static implicit operator YearModel(DateTime dateTime) => new YearModel(dateTime.Year);
 
-        public static bool operator ==(YearModel model1, YearModel model2) => EqualityComparer<YearModel>.Default.Equals(model1, model2);
+        public static bool operator ==(YearModel model1, YearModel model2) 
+            => EqualityComparer<YearModel>.Default.Equals(model1, model2);
 
-        public static bool operator !=(YearModel model1, YearModel model2) => !(model1 == model2);
+        public static bool operator !=(YearModel model1, YearModel model2) 
+            => !(model1 == model2);
 
-        public static YearModel operator -(YearModel model, int amount) => new YearModel(Math.Max(model.Year - amount, 0));
+        public static bool operator >(YearModel model1, YearModel model2)
+            => model1.Year > model2.Year;
+
+        public static bool operator <(YearModel model1, YearModel model2)
+            => model1.Year < model2.Year;
+
+        public static YearModel operator -(YearModel model, int amount) 
+            => new YearModel(Math.Max(model.Year - amount, 0));
     }
 }

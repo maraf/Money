@@ -94,11 +94,14 @@ namespace Money.Services
             }
 
             if (dispatcher != null)
-                models.AddRange(await dispatcher.QueryAsync(listAll));
+            {
+                await dispatcher.QueryAsync(listAll);
+            }
             else
+            {
                 models.AddRange((List<CurrencyModel>)await next(listAll));
-
-            await localStorage.SaveAsync(models);
+                await localStorage.SaveAsync(models);
+            }
         }
 
         private CurrencyModel Find(string uniqueCode)

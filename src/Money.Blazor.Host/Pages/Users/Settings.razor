@@ -4,7 +4,7 @@
 
 <div class="row my-4 mx-1">
     @foreach (var viewModel in ViewModels)
-    { 
+    {
         <div class="col-auto mb-4">
             <button class="btn btn-block btn-light" @onclick="viewModel.Edit">
                 @if (viewModel.Icon != null)
@@ -29,5 +29,16 @@
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="(async () => { await PriceDecimals.SetAsync(); PriceDecimalsEditor.Hide(); })">Set</button>
+    </Buttons>
+</Modal>
+
+<Modal @ref="DateFormatEditor" Title="Set date format">
+    <ChildContent>
+        <div class="form-group">
+            <input type="text" class="form-control" @bind="DateFormat.CurrentValue" data-autofocus />
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="(async () => { await DateFormat.SetAsync(); DateFormatEditor.Hide(); })">Set</button>
     </Buttons>
 </Modal>

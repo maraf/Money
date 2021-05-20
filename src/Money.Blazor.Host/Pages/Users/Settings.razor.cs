@@ -34,6 +34,9 @@ namespace Money.Pages.Users
         protected PropertyViewModel PriceDecimals { get; set; }
         protected Modal PriceDecimalsEditor { get; set; }
 
+        protected PropertyViewModel DateFormat { get; set; }
+        protected Modal DateFormatEditor { get; set; }
+
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
 
@@ -44,6 +47,7 @@ namespace Money.Pages.Users
             EventHandlers.Add<UserPropertyChanged>(this);
 
             PriceDecimals = AddProperty("PriceDecimalDigits", "Price decimal digits", () => PriceDecimalsEditor.Show(), icon: "pound-sign", defaultValue: "2");
+            DateFormat = AddProperty("DateFormat", "Date format", () => DateFormatEditor.Show(), icon: "calendar-day", defaultValue: CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
 
             await LoadAsync();
         }

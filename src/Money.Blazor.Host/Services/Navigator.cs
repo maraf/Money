@@ -103,6 +103,9 @@ namespace Money.Services
         public void OpenUserPassword()
             => manager.NavigateTo(UrlUserPassword());
 
+        public void OpenUserSettings()
+            => manager.NavigateTo(UrlUserSettings());
+
         public void OpenLogin()
         {
             string loginUrl = UrlAccountLogin();

@@ -6,10 +6,16 @@
 
 <TabSet>
     <Tab Url="@Navigator.UrlUserManage()" CssClass="@GetActiveCssClass(Navigator.UrlUserManage())">
+        <Icon Identifier="address-card" />
         Profile
     </Tab>
     <Tab Url="@Navigator.UrlUserPassword()" CssClass="@GetActiveCssClass(Navigator.UrlUserPassword())">
+        <Icon Identifier="key" />
         Password
+    </Tab>
+    <Tab Url="@Navigator.UrlUserSettings()" CssClass="@GetActiveCssClass(Navigator.UrlUserSettings())">
+        <Icon Identifier="cog" />
+        Settings
     </Tab>
 </TabSet>
 

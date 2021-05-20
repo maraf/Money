@@ -1,0 +1,33 @@
+﻿@page "/user/settings"
+
+<UserHead />
+
+<div class="row my-4 mx-1">
+    @foreach (var viewModel in ViewModels)
+    { 
+        <div class="col-auto mb-4">
+            <button class="btn btn-block btn-light" @onclick="viewModel.Edit">
+                @if (viewModel.Icon != null)
+                {
+                    <Icon Identifier="@viewModel.Icon" class="mr-1" />
+                }
+
+                <strong>
+                    @(viewModel.Title + ": ")
+                </strong>
+                @(viewModel.Model?.Value ?? viewModel.DefaultValue)
+            </button>
+        </div>
+    }
+</div>
+
+<Modal @ref="PriceDecimalsEditor" Title="Set price decimals">
+    <ChildContent>
+        <div class="form-group">
+            <input type="text" class="form-control" @bind="PriceDecimals.CurrentValue" data-autofocus />
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="(async () => { await PriceDecimals.SetAsync(); PriceDecimalsEditor.Hide(); })">Set</button>
+    </Buttons>
+</Modal>

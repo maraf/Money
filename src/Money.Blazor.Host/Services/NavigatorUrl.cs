@@ -71,6 +71,9 @@ namespace Money.Services
         public string UrlUserPassword()
             => "/user/changepassword";
 
+        public string UrlUserSettings()
+            => "/user/settings";
+
         public string UrlAccountLogin()
             => "/account/login";
 

@@ -8,7 +8,7 @@
 }
 else
 {
-    <div class="row no-gutters" style="height: 400px; height: calc(100vh - 328px)">
+    <div class="row no-gutters" style="height: 400px; height: calc(100vh - 402px)">
         <div class="col-1"></div>
 
         @foreach (var model in Models)
@@ -35,12 +35,24 @@ else
                         </small>
                     </div>
                     <div class="text-center mt-1">
-                        <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                        <span class="d-inline d-md-none">
+                            @model.ToShortString()
+                        </span>
+                        <span class="d-none d-md-inline">
+                            @model
+                        </span>
+                    </div>
+                    <div class="text-center mt-1">
+                        <a href="@Navigator.UrlOverview(model, CategoryKey)" class="btn btn-sm btn-block btn-secondary">
+                            <Icon Identifier="list-ul" class="d-inline d-lg-none" />
                             <span class="d-none d-lg-inline">
-                                @model
+                                Overview
                             </span>
-                            <span class="d-inline d-lg-none">
-                                @model.Year
+                        </a>
+                        <a href="@Navigator.UrlTrends(model, CategoryKey)" class="btn btn-sm btn-block btn-link">
+                            <Icon Identifier="chart-bar" class="d-inline d-lg-none" />
+                            <span class="d-none d-lg-inline">
+                                Months
                             </span>
                         </a>
                     </div>

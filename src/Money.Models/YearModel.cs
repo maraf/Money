@@ -27,7 +27,11 @@ namespace Money.Models
             Year = year;
         }
 
-        public override string ToString() => Year.ToString();
+        public override string ToString() 
+            => Year.ToString();
+
+        public string ToShortString()
+            => Year.ToString().Substring(2);
 
         public override bool Equals(object obj) => Equals(obj as YearModel);
 

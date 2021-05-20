@@ -51,6 +51,9 @@ namespace Money.Pages
         [Inject]
         internal Navigator Navigator { get; set; }
 
+        [Inject]
+        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
         protected string SubTitle { get; set; }
 
         protected LoadingContext PeriodsLoading { get; } = new LoadingContext();
@@ -77,7 +80,7 @@ namespace Money.Pages
 
             await base.OnInitializedAsync();
 
-            formatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+            formatter = await CurrencyFormatterFactory.CreateAsync();
         }
 
         protected virtual void ClearPreviousParameters()

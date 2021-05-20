@@ -22,6 +22,9 @@ namespace Money.Pages
         [Inject]
         internal IQueryDispatcher Queries { get; set; }
 
+        [Inject]
+        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
         protected PagingContext PagingContext { get; set; }
@@ -32,7 +35,7 @@ namespace Money.Pages
         protected async override Task OnInitializedAsync()
         {
             PagingContext = new PagingContext(LoadPageAsync, Loading);
-            CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
         }
 
         protected Task OnSearchAsync()

@@ -77,6 +77,7 @@ namespace Money.Bootstrap
                 .AddSingleton(json)
                 .AddSingleton(formatters)
                 .AddSingleton(logFactory)
+                .AddTransient<CurrencyFormatterFactory>()
                 .AddSingleton<MessageBuilder>()
                 .AddScoped<LocalExpenseOnlineRunner>()
                 .AddTransient<HttpCommandDispatcher>()

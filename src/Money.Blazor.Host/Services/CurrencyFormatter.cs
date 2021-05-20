@@ -12,12 +12,16 @@ namespace Money.Services
     public class CurrencyFormatter
     {
         private readonly List<CurrencyModel> models;
+        private readonly int decimalDigits;
         private Dictionary<string, CultureInfo> currencies;
+        private Dictionary<string, CultureInfo> modified = new Dictionary<string, CultureInfo>();
 
-        public CurrencyFormatter(List<CurrencyModel> models)
+        public CurrencyFormatter(List<CurrencyModel> models, int decimalDigits)
         {
             Ensure.NotNull(models, "models");
+            Ensure.PositiveOrZero(decimalDigits, "decimalDigits");
             this.models = models;
+            this.decimalDigits = decimalDigits;
         }
 
         private void EnsureCurrencies()
@@ -53,13 +57,14 @@ namespace Money.Services
             if (!currencies.TryGetValue(price.Currency, out var culture))
                 culture = CultureInfo.CurrentCulture;
 
-            if (culture.NumberFormat.CurrencySymbol != currency.Symbol)
+            if (!modified.TryGetValue(price.Currency, out var modifiedCulture))
             {
-                culture = (CultureInfo)culture.Clone();
-                culture.NumberFormat.CurrencySymbol = currency.Symbol;
+                modified[price.Currency] = modifiedCulture = (CultureInfo)culture.Clone();
+                modifiedCulture.NumberFormat.CurrencyDecimalDigits = decimalDigits;
+                modifiedCulture.NumberFormat.CurrencySymbol = currency.Symbol;
             }
 
-            return price.Value.ToString("C", culture);
+            return price.Value.ToString("C", modifiedCulture);
         }
     }
 }

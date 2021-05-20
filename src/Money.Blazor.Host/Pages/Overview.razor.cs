@@ -48,6 +48,9 @@ namespace Money.Pages
         [Inject]
         public Navigator Navigator { get; set; }
 
+        [Inject]
+        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
         protected string Title { get; set; }
         protected string SubTitle { get; set; }
 
@@ -89,7 +92,7 @@ namespace Money.Pages
                 Title = $"Expenses in {SelectedPeriod}";
             }
 
-            CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Reload();
         }
 

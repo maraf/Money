@@ -24,6 +24,9 @@ namespace Money.Pages
         [Inject]
         protected Navigator Navigator { get; set; }
 
+        [Inject]
+        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
         [Parameter]
         public Guid CategoryGuid { get; set; }
 
@@ -43,7 +46,7 @@ namespace Money.Pages
             CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
             CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
             CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
-            CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
 
             await LoadAsync();
         }

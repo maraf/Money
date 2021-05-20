@@ -42,6 +42,9 @@ namespace Money.Pages
         [Inject]
         public Navigator Navigator { get; set; }
 
+        [Inject]
+        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
         [Parameter]
         public int Year { get; set; }
 
@@ -71,7 +74,7 @@ namespace Money.Pages
 
             MonthModel = new MonthModel(Year, Month);
 
-            CurrencyFormatter = new CurrencyFormatter(await Queries.QueryAsync(new ListAllCurrency()));
+            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Reload();
         }
 

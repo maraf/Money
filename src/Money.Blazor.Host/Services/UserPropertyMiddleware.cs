@@ -44,7 +44,7 @@ namespace Money.Services
                 await EnsureListAsync(dispatcher, null, listAllQuery);
                 UserPropertyModel model = models.FirstOrDefault(m => m.Key == find.Key);
                 if (model != null)
-                    return model;
+                    return model.Value;
             }
 
             return await next(query);

@@ -141,7 +141,7 @@ namespace Money.Models.Builders
                 }
 
                 await db.SaveChangesAsync();
-                await eventDispatcher.PublishAsync(new UserPropertyChanged(GuidKey.Create(Guid.NewGuid(), "EmailChanged"), user.Key, command.Body.PropertyKey, command.Body.Value));
+                await eventDispatcher.PublishAsync(new UserPropertyChanged(GuidKey.Create(Guid.NewGuid(), "UserProperty"), user.Key, command.Body.PropertyKey, command.Body.Value));
             }
         }
 

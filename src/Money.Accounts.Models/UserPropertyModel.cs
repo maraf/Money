@@ -11,7 +11,7 @@ namespace Money.Models
     /// <summary>
     /// A model of a single user property.
     /// </summary>
-    public class UserPropertyModel
+    public class UserPropertyModel : ICloneable<UserPropertyModel>
     {
         /// <summary>
         /// Gets a property key.
@@ -40,5 +40,8 @@ namespace Money.Models
             Key = key;
             Value = value;
         }
+
+        public UserPropertyModel Clone() 
+            => new UserPropertyModel(Key, Value);
     }
 }

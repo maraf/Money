@@ -103,6 +103,7 @@ namespace Money.Bootstrap
             AddMiddleware<CategoryMiddleware>(services);
             AddMiddleware<CurrencyMiddleware>(services);
             AddMiddleware<UserMiddleware>(services);
+            AddMiddleware<UserPropertyMiddleware>(services);
             AddMiddleware<ApiVersionChecker>(services);
 
             //CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
@@ -148,6 +149,7 @@ namespace Money.Bootstrap
             eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<CategoryMiddleware>());
             eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<CurrencyMiddleware>());
             eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<UserMiddleware>());
+            eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<UserPropertyMiddleware>());
 
             serviceProvider.GetService<LocalExpenseOnlineRunner>().Initialize();
         }

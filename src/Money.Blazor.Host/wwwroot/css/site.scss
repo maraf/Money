@@ -68,6 +68,26 @@ h4 {
 
     .navbar-toggler {
         border: none;
+        outline: none;
+    }
+
+    @media (max-width: 992px) {
+        .nav-link {
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+        }
+
+        hr {
+            margin-right: -18px;
+            margin-left: -26px;
+        }
+
+        @media (min-width: 596px) {
+            hr {
+                margin-right: -1rem;
+                margin-left: -1rem;
+            }
+        }
     }
 
     .navbar-nav > li > a,
@@ -212,11 +232,15 @@ h4 {
 }
 
 .back-dark {
-    color: #eee;
+    color: #eee !important;
 
     .btn-link {
-        color: #eee;
+        color: #eee !important;
     }
+}
+
+.back-light {
+    color: #212529 !important;
 }
 
 .btn-icon, .btn-color {

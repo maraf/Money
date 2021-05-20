@@ -44,6 +44,9 @@ namespace Money.Services
                 return $"/{year.Year}/overview/{categoryKey.AsGuidKey().Guid}";
         }
 
+        public string UrlTrends()
+            => $"/trends";
+
         public string UrlTrends(IKey categoryKey) 
             => $"/trends/{categoryKey.AsGuidKey().Guid}";
 

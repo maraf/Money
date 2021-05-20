@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
 using Money.Events;
+using Money.Queries;
 using Money.Services;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Logging;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,19 +36,27 @@ namespace Money.Components
         [Inject]
         protected ICommandDispatcher Commands { get; set; }
 
+        [Inject]
+        protected IQueryDispatcher Queries { get; set; }
+
         protected ElementReference Button { get; set; }
         protected bool IsInstallable { get; set; }
         protected bool IsUpdateable { get; set; }
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             Log.Debug("OnInitialized");
 
-            base.OnInitialized();
+            await base.OnInitializedAsync();
 
             EventHandlers
                 .Add<PwaInstallable>(this)
                 .Add<PwaUpdateable>(this);
+
+            var status = await Queries.QueryAsync(new GetPwaStatus());
+
+            IsInstallable = status.IsInstallable;
+            IsUpdateable = status.IsUpdateable;
         }
 
         public void MakeInstallable()

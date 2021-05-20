@@ -110,6 +110,8 @@ namespace Money.Bootstrap
             AddMiddleware<UserPropertyMiddleware>(services);
             AddMiddleware<ApiVersionChecker>(services);
 
+            services.AddTransient<HttpQueryDispatcher.IMiddleware>(sp => sp.GetService<PwaInstallInterop>());
+
             //CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 
             //services

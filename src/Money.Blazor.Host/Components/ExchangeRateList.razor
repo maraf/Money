@@ -21,8 +21,10 @@
                             <tr>
                                 <td>@CurrencyFormatter.Format(new Price(1, item.SourceCurrency))</td>
                                 <td>@CurrencyFormatter.Format(new Price((decimal)item.Rate, TargetCurrency))</td>
-                                <td>@item.ValidFrom.ToShortDateString()</td>
                                 <td>
+                                    <DateValue Value="item.ValidFrom" />
+                                </td>
+                                <td class="min-column">
                                     <div class="actions">
                                         <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(async () => { await OnDeleteClickAsync(item); StateHasChanged(); })" />
                                     </div>

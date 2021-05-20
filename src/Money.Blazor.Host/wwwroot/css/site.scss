@@ -218,6 +218,11 @@ h4 {
     .btn-link {
         padding: 0;
     }
+
+    .min-column {
+        max-width: 1px;
+        overflow: auto;
+    }
 }
 
 .alert {

@@ -1,0 +1,19 @@
+﻿@using System.Globalization
+@inject IQueryDispatcher Queries
+
+@Value.ToString(Format)
+
+@code
+{
+    [Parameter]
+    public DateTime Value { get; set; }
+
+    protected string Format { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        Format = await Queries.QueryAsync(new FindUserProperty("DateFormat")) ?? CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+    }
+}

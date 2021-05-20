@@ -124,15 +124,15 @@ namespace Money.Pages.Users
 
         public async Task SetAsync()
         {
-            Console.WriteLine($"Current '{CurrentValue}'.");
+            Console.WriteLine($"Current '{currentValue}', ModelValue '{Model?.Value}'.");
 
-            if (CurrentValue == DefaultValue)
-                CurrentValue = null;
+            if (String.IsNullOrEmpty(currentValue) || currentValue == DefaultValue)
+                currentValue = null;
 
-            if (Model == null || CurrentValue != Model.Value)
+            if (Model == null || currentValue != Model.Value)
             {
                 Console.WriteLine("Send command.");
-                await commands.HandleAsync(new SetUserProperty(Key, CurrentValue));
+                await commands.HandleAsync(new SetUserProperty(Key, currentValue));
             }
         }
     }

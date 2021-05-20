@@ -11,6 +11,9 @@ namespace Money.Components
 {
     public class PwaInstallInterop
     {
+        private static bool isInstallable;
+        private static bool isUpdateable;
+
         private static List<PwaInstall> editors = new List<PwaInstall>();
         private readonly IJSRuntime jSRuntime;
 
@@ -24,6 +27,11 @@ namespace Money.Components
         {
             Ensure.NotNull(editor, "editor");
             editors.Add(editor);
+
+            if (isInstallable)
+                editor.MakeInstallable();
+            else if (isUpdateable)
+                editor.MakeUpdateable();
         }
 
         public void Remove(PwaInstall editor)
@@ -35,6 +43,9 @@ namespace Money.Components
         [JSInvokable("Pwa.Installable")]
         public static void Installable()
         {
+            isInstallable = true;
+            isUpdateable = false;
+
             foreach (var editor in editors)
                 editor.MakeInstallable();
         }
@@ -42,11 +53,17 @@ namespace Money.Components
         [JSInvokable("Pwa.Updateable")]
         public static void Updateable()
         {
+            isInstallable = false;
+            isUpdateable = true;
+
             foreach (var editor in editors)
                 editor.MakeUpdateable();
         }
 
-        public ValueTask InstallAsync() 
-            => jSRuntime.InvokeVoidAsync("Pwa.install");
+        public ValueTask InstallAsync()
+            => jSRuntime.InvokeVoidAsync("Pwa.Install");
+
+        public ValueTask UpdateAsync()
+            => jSRuntime.InvokeVoidAsync("Pwa.Update");
     }
 }

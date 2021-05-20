@@ -1,5 +1,5 @@
 ﻿window.Pwa = {
-    install: function () {
+    Install: function () {
         if (window.PwaInstallPrompt) {
             window.PwaInstallPrompt.prompt();
             window.PwaInstallPrompt.userChoice.then(function () {
@@ -7,17 +7,67 @@
             });
         }
     },
-    notify: function () {
-        DotNet.invokeMethodAsync('Money.UI.Blazor', 'Pwa.Installable')
-            .then(function () { }, function () { setTimeout(Pwa.notify, 1000); });
+    Update: function () {
+        navigator.serviceWorker.ready.then(function (registration) {
+            var newWorker = null;
+            if (registration.waiting != null) {
+                newWorker = registration.waiting;
+            }
+
+            if (newWorker != null) {
+                newWorker.postMessage({ action: 'skipWaiting' });
+            }
+        });
+    },
+    installable: function () {
+        DotNet.invokeMethodAsync('Money.Blazor.Host', 'Pwa.Installable').then(function () { }, function () { setTimeout(Pwa.installable, 1000); });
+    },
+    updateable: function () {
+        DotNet.invokeMethodAsync('Money.Blazor.Host', 'Pwa.Updateable').then(function () { }, function () { setTimeout(Pwa.updateable, 1000); });
     }
 };
 
 window.addEventListener('beforeinstallprompt', function (e) {
     window.PwaInstallPrompt = e;
-    Pwa.notify();
+    Pwa.installable();
 });
 
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
+    navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+        if (registration.waiting !== null) {
+            if (navigator.serviceWorker.controller) {
+                Pwa.updateable();
+            }
+        } else {
+            registration.addEventListener("updatefound", function () {
+                var installing = registration.installing;
+                if (installing !== null) {
+                    installing.addEventListener("statechange", function () {
+                        switch (installing.state) {
+                            case 'installed':
+                                if (navigator.serviceWorker.controller) {
+                                    Pwa.updateable();
+                                }
+
+                                break;
+                        }
+                    });
+                } else if (registration.waiting !== null) {
+                    if (navigator.serviceWorker.controller) {
+                        Pwa.updateable();
+                    }
+                }
+            });
+        }
+    });
+
+    var isRefreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (isRefreshing) {
+            return;
+        }
+
+        window.location.reload();
+        isRefreshing = true;
+    })
 }

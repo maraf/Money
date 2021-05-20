@@ -1,0 +1,19 @@
+﻿@if (IsUpdateable)
+{
+    <LayoutView Layout="@typeof(Layouts.Layout)">
+        <Title Icon="download" Main="Great news. We have an update for you" Sub="Update is already installed and one click away" />
+
+        <div class="mt-4">
+            <button class="btn btn-primary" @onclick="(async () => Commands.HandleAsync(new UpdatePwa()))">
+                Activate the update
+            </button>
+            <button class="btn btn-secondary" @onclick="(() => IsUpdateable = false)">
+                Leave it for the next time
+            </button>
+        </div>
+    </LayoutView>
+}
+else
+{
+    @ChildContent
+}

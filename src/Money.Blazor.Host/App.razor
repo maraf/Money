@@ -6,16 +6,18 @@
         <Found Context="routeData">
             <CascadingValue Value="@routeData">
                 <VersionChecker>
-                    <ApiHubConnectionChecker>
-                        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
-                            <NotAuthorized>
-                                <Login />
-                            </NotAuthorized>
-                            <Authorizing>
-                                <AuthorizationProgress />
-                            </Authorizing>
-                        </AuthorizeRouteView>
-                    </ApiHubConnectionChecker>
+                    <PwaUpdate>
+                        <ApiHubConnectionChecker>
+                            <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout)">
+                                <NotAuthorized>
+                                    <Login />
+                                </NotAuthorized>
+                                <Authorizing>
+                                    <AuthorizationProgress />
+                                </Authorizing>
+                            </AuthorizeRouteView>
+                        </ApiHubConnectionChecker>
+                    </PwaUpdate>
                 </VersionChecker>
             </CascadingValue>
         </Found>

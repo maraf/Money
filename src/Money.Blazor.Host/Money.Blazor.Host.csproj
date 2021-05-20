@@ -39,16 +39,7 @@
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Components\PwaUpdate.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <Watch Remove="Components\PwaUpdate.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Components\PwaUpdate.razor" />
-  </ItemGroup>
-  <ItemGroup>
-	<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
   <!-- GitHubPages publish -->
@@ -60,7 +51,7 @@
       <Html404>$(Wwwroot)\404.html</Html404>
       <NoJekyll>$(Wwwroot)\.nojekyll</NoJekyll>
     </PropertyGroup>
-    
+
     <!-- Create content -->
     <Copy SourceFiles="wwwroot\index.html" DestinationFiles="$(OutputPath)$(Html404)" />
     <WriteLinesToFile File="$(OutputPath)$(CName)" Lines="$(PublishDomain)" Overwrite="true" />
@@ -71,12 +62,12 @@
       <CustomPublishFile Include="$(OutputPath)$(CName)" RelativePath="$(CName)" />
       <CustomPublishFile Include="$(OutputPath)$(Html404)" RelativePath="$(Html404)" />
       <CustomPublishFile Include="$(OutputPath)$(NoJekyll)" RelativePath="$(NoJekyll)" />
-      
+
       <ResolvedFileToPublish Include="@(CustomPublishFile->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(CustomPublishFile.RelativePath)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
-  
+
 </Project>

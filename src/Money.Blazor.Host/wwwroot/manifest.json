@@ -1,6 +1,6 @@
 {
-  "short_name": "Money (debug)",
-  "name": "Money by Neptuo (debug)",
+  "short_name": "Money",
+  "name": "Money by Neptuo",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0078D7",

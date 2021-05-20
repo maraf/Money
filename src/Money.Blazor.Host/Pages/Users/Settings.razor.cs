@@ -43,7 +43,7 @@ namespace Money.Pages.Users
 
             EventHandlers.Add<UserPropertyChanged>(this);
 
-            PriceDecimals = AddProperty("PriceDecimals", "Price decimals", () => PriceDecimalsEditor.Show(), icon: "pound-sign", defaultValue: "2");
+            PriceDecimals = AddProperty("PriceDecimalDigits", "Price decimal digits", () => PriceDecimalsEditor.Show(), icon: "pound-sign", defaultValue: "2");
 
             await LoadAsync();
         }

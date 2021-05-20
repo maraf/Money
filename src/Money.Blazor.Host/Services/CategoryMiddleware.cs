@@ -4,6 +4,7 @@ using Money.Models;
 using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -26,27 +27,33 @@ namespace Money.Services
 
         private readonly ServerConnectionState serverConnection;
         private readonly CategoryStorage localStorage;
-
+        private readonly ILog<CategoryMiddleware> log;
         private readonly List<CategoryModel> models = new List<CategoryModel>();
         private Task listAllTask;
 
-        public CategoryMiddleware(ServerConnectionState serverConnection, CategoryStorage localStorage)
+        public CategoryMiddleware(ServerConnectionState serverConnection, CategoryStorage localStorage, ILog<CategoryMiddleware> log)
         {
             Ensure.NotNull(serverConnection, "serverConnection");
             Ensure.NotNull(localStorage, "localStorage");
+            Ensure.NotNull(log, "log");
             this.serverConnection = serverConnection;
             this.localStorage = localStorage;
+            this.log = log;
         }
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
         {
             if (query is ListAllCategory listAll)
             {
-                await EnsureListAsync(null, next, listAll);
+                log.Debug($"Got '{nameof(ListAllCategory)}' query");
+
+                await EnsureListAsync(null, next, listAllQuery);
                 return models.Select(c => c.Clone()).ToList();
             }
             else if (query is GetCategoryName categoryName)
             {
+                log.Debug($"Got '{nameof(GetCategoryName)}' query");
+
                 await EnsureListAsync(dispatcher, null, listAllQuery);
                 CategoryModel model = Find(categoryName.CategoryKey);
                 if (model != null)
@@ -54,6 +61,8 @@ namespace Money.Services
             }
             else if (query is GetCategoryIcon categoryIcon)
             {
+                log.Debug($"Got '{nameof(GetCategoryIcon)}' query");
+
                 await EnsureListAsync(dispatcher, null, listAllQuery);
                 CategoryModel model = Find(categoryIcon.CategoryKey);
                 if (model != null)
@@ -61,6 +70,8 @@ namespace Money.Services
             }
             else if (query is GetCategoryColor categoryColor)
             {
+                log.Debug($"Got '{nameof(GetCategoryColor)}' query");
+
                 await EnsureListAsync(dispatcher, null, listAllQuery);
                 CategoryModel model = Find(categoryColor.CategoryKey);
                 if (model == null)
@@ -70,6 +81,8 @@ namespace Money.Services
             }
             else if (query is GetCategoryNameDescription categoryNameDescription)
             {
+                log.Debug($"Got '{nameof(GetCategoryNameDescription)}' query");
+
                 await EnsureListAsync(dispatcher, null, listAllQuery);
                 CategoryModel model = Find(categoryNameDescription.CategoryKey);
                 if (model != null)
@@ -81,13 +94,22 @@ namespace Money.Services
 
         private async Task EnsureListAsync(HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next, ListAllCategory listAll)
         {
+            log.Debug($"Ensure list, currently has '{models.Count}' models.");
+
             if (models.Count == 0)
             {
                 if (listAllTask == null)
+                {
+                    log.Debug($"Fire network/storage query.");
                     listAllTask = LoadAllAsync(dispatcher, next, listAll);
+                }
+
+                log.Debug($"Awating task.");
 
                 await listAllTask;
                 listAllTask = null;
+
+                log.Debug($"Awaiting done.");
             }
         }
 
@@ -96,6 +118,8 @@ namespace Money.Services
             models.Clear();
             if (!serverConnection.IsAvailable)
             {
+                log.Debug($"Using local storage.");
+
                 var items = await localStorage.LoadAsync();
                 if (items != null)
                 {
@@ -105,11 +129,18 @@ namespace Money.Services
             }
 
             if (dispatcher != null)
-                models.AddRange(await dispatcher.QueryAsync(listAll));
+            {
+                log.Debug("Using dispatcher to run the query. Skipping the query result as other brach will process it.");
+                await dispatcher.QueryAsync(listAll);
+            }
             else
+            {
+                log.Debug("Using next middleware to run the query.");
                 models.AddRange((List<CategoryModel>)await next(listAll));
 
-            await localStorage.SaveAsync(models);
+                log.Debug("Storing to local storage.");
+                await localStorage.SaveAsync(models);
+            }
         }
 
         private CategoryModel Find(IKey key)

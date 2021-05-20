@@ -42,12 +42,15 @@ namespace Money.Models
 
         public override string ToString()
         {
-            string monthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[Month - 1];
+            string monthName = ToMonthString();
             if (Year == DateTime.Now.Year)
                 return monthName;
 
             return $"{monthName} {Year}";
         }
+
+        public string ToMonthString() 
+            => CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[Month - 1];
 
         public override bool Equals(object obj) => Equals(obj as MonthModel);
 

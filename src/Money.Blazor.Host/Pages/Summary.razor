@@ -2,13 +2,12 @@
 
 <Title Icon="signal" Main="Summary" Sub="@SubTitle">
     <ButtonContent>
-        <ExpenseCreateButton OnClick="ExpenseCreate.Show" />
+        <ExpenseCreateButton OnClick="(() => Navigator.OpenExpenseCreate())" />
         <IncomeCreateButton OnClick="IncomeCreate.Show" />
     </ButtonContent>
 </Title>
 <ExceptionPanel />
 
-<OutcomeCreate @ref="ExpenseCreate" />
 <IncomeCreate @ref="IncomeCreate" />
 
 <div class="summary">

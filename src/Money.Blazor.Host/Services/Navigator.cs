@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
+using Money.Components;
 using Money.Models;
 using Neptuo;
 using Neptuo.Models.Keys;
@@ -15,19 +16,22 @@ namespace Money.Services
     public class Navigator : NavigatorUrl, System.IDisposable
     {
         private readonly NavigationManager manager;
+        private readonly ModalContainer modalContainer;
         private readonly Interop interop;
-        private readonly IJSRuntime jsRuntime;
+        private readonly IJSRuntime js;
 
         public event Action<string> LocationChanged;
 
-        public Navigator(NavigationManager manager, Interop interop, IJSRuntime jsRuntime)
+        public Navigator(NavigationManager manager, ModalContainer modalContainer, Interop interop, IJSRuntime js)
         {
             Ensure.NotNull(manager, "manager");
             Ensure.NotNull(interop, "interop");
-            Ensure.NotNull(jsRuntime, "jsRuntime");
+            Ensure.NotNull(modalContainer, "modalContainer");
+            Ensure.NotNull(js, "js");
             this.manager = manager;
+            this.modalContainer = modalContainer;
             this.interop = interop;
-            this.jsRuntime = jsRuntime;
+            this.js = js;
 
             manager.LocationChanged += OnLocationChanged;
         }
@@ -44,13 +48,16 @@ namespace Money.Services
             => LocationChanged?.Invoke(e.Location);
 
         public async Task ReloadAsync()
-            => await jsRuntime.InvokeVoidAsync("window.location.reload");
+            => await js.InvokeVoidAsync("window.location.reload");
 
         public async Task AlertAsync(string message)
-            => await jsRuntime.InvokeVoidAsync("window.alert", message);
+            => await js.InvokeVoidAsync("window.alert", message);
 
         private void OpenExternal(string url)
             => interop.NavigateTo(url);
+
+        public void OpenExpenseCreate()
+            => modalContainer.ExpenseCreate?.Show();
 
         public void Open(string url)
             => manager.NavigateTo(url);
@@ -130,5 +137,10 @@ namespace Money.Services
 
         public void OpenRegister()
             => manager.NavigateTo(UrlAccountRegister());
+
+        public class ModalContainer
+        {
+            public OutcomeCreate ExpenseCreate { get; set; }
+        }
     }
 }

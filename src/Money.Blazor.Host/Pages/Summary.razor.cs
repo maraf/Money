@@ -69,7 +69,6 @@ namespace Money.Pages
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
         protected Modal PeriodSelectorModal { get; set; }
-        protected OutcomeCreate ExpenseCreate { get; set; }
         protected IncomeCreate IncomeCreate { get; set; }
 
         protected override async Task OnInitializedAsync()

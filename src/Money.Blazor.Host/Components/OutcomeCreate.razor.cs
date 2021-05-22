@@ -64,10 +64,6 @@ namespace Money.Components
 
             Title = "Create a new Expense";
             SaveButtonText = "Create";
-
-            Categories = await Queries.QueryAsync(new ListAllCategory());
-            Currencies = await Queries.QueryAsync(new ListAllCurrency());
-            Currency = await Queries.QueryAsync(new FindCurrencyDefault());
         }
 
         protected void OnSaveClick()
@@ -103,12 +99,18 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        public override void Show()
+        public override async void Show()
         {
+            Categories = await Queries.QueryAsync(new ListAllCategory());
+            Currencies = await Queries.QueryAsync(new ListAllCurrency());
+            Currency = await Queries.QueryAsync(new FindCurrencyDefault());
+
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
                 PrerequisitesConfirm.Show();
             else
                 base.Show();
+
+            StateHasChanged();
         }
 
         protected void OnPrerequisitesConfirmed()

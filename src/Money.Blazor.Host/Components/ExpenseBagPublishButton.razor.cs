@@ -75,8 +75,6 @@ namespace Money.Components
         {
             var items = await Storage.LoadAsync();
 
-            Console.WriteLine($"Offline expenses '{items.Count}'");
-
             HasLocalExpenses = items != null && items.Count > 0;
         }
 

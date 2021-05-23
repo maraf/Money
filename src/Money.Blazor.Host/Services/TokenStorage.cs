@@ -28,7 +28,7 @@ namespace Money.Services
         public async Task SetAsync(string token, bool isPersistent)
         {
             if (isPersistent)
-                await local.SetItemAsync(key, token);
+                await local.SetItemAsStringAsync(key, token);
             else
                 await session.SetItemAsync(key, token);
         }

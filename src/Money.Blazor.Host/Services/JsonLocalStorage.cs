@@ -37,7 +37,7 @@ namespace Money.Services
             try
             {
                 string raw = await localStorage.GetItemAsStringAsync(key);
-                log.Debug($"Loaded '{raw}'.");
+                log.Debug($"Loaded '{raw}', T is '{typeof(T).FullName}'.");
                 if (String.IsNullOrEmpty(raw))
                     return null;
 
@@ -54,7 +54,7 @@ namespace Money.Services
         public async Task SaveAsync(T model)
         {
             string raw = formatter.Serialize(model);
-            await localStorage.SetItemAsync(key, raw);
+            await localStorage.SetItemAsStringAsync(key, raw);
             log.Debug($"Saved '{raw}'.");
         }
 

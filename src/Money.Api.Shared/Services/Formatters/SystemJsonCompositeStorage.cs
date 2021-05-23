@@ -20,14 +20,14 @@ namespace Neptuo.Formatters
     {
         private readonly ILog log;
         private readonly Json json;
-        private IDictionary<string, object> storage;
+        private Dictionary<string, object> storage;
 
         public SystemJsonCompositeStorage(ILogFactory logFactory, Json json)
             : this(new Dictionary<string, object>(), logFactory?.Scope("Json"), json)
         {
         }
 
-        private SystemJsonCompositeStorage(IDictionary<string, object> storage, ILog log, Json json)
+        private SystemJsonCompositeStorage(Dictionary<string, object> storage, ILog log, Json json)
         {
             Ensure.NotNull(storage, "storage");
             Ensure.NotNull(json, "json");

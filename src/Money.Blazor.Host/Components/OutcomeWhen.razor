@@ -4,7 +4,7 @@
     <ChildContent>
         <div class="form-group">
             <label for="expense-when">When:</label>
-            <input type="date" class="form-control" id="expense-when" placeholder="Expense Description" data-autofocus @bind="@When" @bind:format="yyyy-MM-dd" />
+            <DateBox Id="expense-when" @bind-Value="When" />
         </div>
     </ChildContent>
     <Buttons>

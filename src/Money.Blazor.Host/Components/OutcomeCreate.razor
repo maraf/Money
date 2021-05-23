@@ -31,7 +31,7 @@
         </div>
         <div class="form-group">
             <label for="expense-when">When:</label>
-            <input type="date" class="form-control" id="expense-when" @bind="@When" @bind:format="yyyy-MM-dd" />
+            <DateBox Id="expense-when" @bind-Value="When" />
         </div>
         <div class="form-group">
             <label>Category:</label>

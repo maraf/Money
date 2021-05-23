@@ -1,23 +1,6 @@
-﻿<button class="btn btn-primary ml-2" @onclick="OnClick">
+﻿<button class="btn btn-primary ml-2" @onclick="(() => Navigator.OpenExpenseCreate(CategoryKey))">
     <Icon Identifier="minus-circle" />
     <span class="d-none d-md-inline">
         New Expense
     </span>
 </button>
-
-@code
-{
-    [Inject]
-    protected Navigator Navigator { get; set; }
-
-    [Parameter]
-    public EventCallback OnClick { get; set; }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        if (!OnClick.HasDelegate)
-            OnClick = EventCallback.Factory.Create(this, Navigator.OpenExpenseCreate);
-    }
-}

@@ -57,7 +57,10 @@ namespace Money.Services
             => interop.NavigateTo(url);
 
         public void OpenExpenseCreate()
-            => modalContainer.ExpenseCreate?.Show();
+            => OpenExpenseCreate(KeyFactory.Empty(typeof(Category)));
+
+        public void OpenExpenseCreate(IKey categoryKey)
+            => modalContainer.ExpenseCreate?.Show(categoryKey);
 
         public void Open(string url)
             => manager.NavigateTo(url);

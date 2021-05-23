@@ -4,6 +4,7 @@ using Money.Components.Bootstrap;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Services;
+using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Logging;
 using Neptuo.Models.Keys;
@@ -30,6 +31,8 @@ namespace Money.Components
 
         [Inject]
         internal Navigator Navigator { get; set; }
+
+        protected Modal Modal { get; set; }
 
         protected string Title { get; set; }
         protected string SaveButtonText { get; set; }
@@ -99,8 +102,11 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        public override async void Show()
+        public async void Show(IKey categoryKey)
         {
+            Ensure.NotNull(categoryKey, "categoryKey");
+            CategoryKey = categoryKey;
+
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
             Currency = await Queries.QueryAsync(new FindCurrencyDefault());
@@ -108,10 +114,12 @@ namespace Money.Components
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
                 PrerequisitesConfirm.Show();
             else
-                base.Show();
+                Modal.Show();
 
             StateHasChanged();
         }
+
+        public void Hide() => Modal.Hide();
 
         protected void OnPrerequisitesConfirmed()
         {

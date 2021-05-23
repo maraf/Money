@@ -2,7 +2,7 @@
 
 <Title Icon="calendar" Main="@Title" Sub="@SubTitle">
     <ButtonContent>
-        <ExpenseCreateButton OnClick="CreateModal.Show" />
+        <ExpenseCreateButton CategoryKey="CategoryKey" />
         @{
             var trendsButton = TrendsTitleUrl();
         }
@@ -19,7 +19,6 @@
 </Title>
 <ExceptionPanel />
 
-<OutcomeCreate @ref="CreateModal" CategoryKey="@CategoryKey" />
 <Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@OnDeleteConfirmed" />
 
 <div class="overview">

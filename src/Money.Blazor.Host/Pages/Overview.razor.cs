@@ -60,7 +60,6 @@ namespace Money.Pages
         protected List<OutcomeOverviewModel> Items { get; set; }
         protected OutcomeOverviewModel SelectedItem { get; set; }
 
-        protected ModalDialog CreateModal { get; set; }
         protected ModalDialog AmountEditModal { get; set; }
         protected ModalDialog DescriptionEditModal { get; set; }
         protected ModalDialog WhenEditModal { get; set; }

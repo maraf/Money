@@ -51,8 +51,6 @@ namespace Money.Pages
         protected List<OutcomeOverviewModel> Models { get; } = new List<OutcomeOverviewModel>();
         protected LoadingContext Loading { get; } = new LoadingContext();
 
-        protected ModalDialog CreateModal { get; set; }
-
         protected async override Task OnInitializedAsync()
         {
             EventHandlers.Add<LocallyStoredExpenseCreated>(this);
@@ -80,12 +78,6 @@ namespace Money.Pages
                 if (models != null)
                     Models.AddRange(models.Select(c => new OutcomeOverviewModel(c.Key, c.Amount, c.When, c.Description, c.CategoryKey)));
             }
-        }
-
-        protected void CreateNewExpense()
-        {
-            CreateModal.Show();
-            StateHasChanged();
         }
 
         async Task IEventHandler<LocallyStoredExpenseCreated>.HandleAsync(LocallyStoredExpenseCreated payload)

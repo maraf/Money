@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@inject IQueryDispatcher Queries
+﻿@inject IQueryDispatcher Queries
 
 @Value.ToString(Format)
 
@@ -14,6 +13,6 @@
     {
         await base.OnInitializedAsync();
 
-        Format = await Queries.QueryAsync(new FindUserProperty("DateFormat")) ?? CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+        Format = await Queries.QueryAsync(new GetDateFormatProperty());
     }
 }

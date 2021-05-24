@@ -1,4 +1,5 @@
 ﻿using Money.Models.Queries;
+using Money.Queries;
 using Neptuo;
 using Neptuo.Queries;
 using System;
@@ -23,17 +24,9 @@ namespace Money.Services
         public async Task<CurrencyFormatter> CreateAsync()
         {
             var currencies = await queries.QueryAsync(new ListAllCurrency());
-            var decimalDigits = IntPropertyValue(await queries.QueryAsync(new FindUserProperty("PriceDecimalDigits")), 2);
+            var decimalDigits = await queries.QueryAsync(new GetPriceDecimalDigitsProperty());
 
             return new CurrencyFormatter(currencies, decimalDigits);
-        }
-
-        private int IntPropertyValue(string value, int defaultValue)
-        {
-            if (Int32.TryParse(value, out int intValue))
-                return intValue;
-
-            return defaultValue;
         }
     }
 }

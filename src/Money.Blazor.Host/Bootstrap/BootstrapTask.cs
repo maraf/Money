@@ -109,6 +109,7 @@ namespace Money.Bootstrap
             AddMiddleware<UserMiddleware>(services);
             AddMiddleware<UserPropertyMiddleware>(services);
             AddMiddleware<ApiVersionChecker>(services);
+            AddMiddleware<UserPropertyQueryHandler>(services);
 
             services.AddTransient<HttpQueryDispatcher.IMiddleware>(sp => sp.GetService<PwaInstallInterop>());
 

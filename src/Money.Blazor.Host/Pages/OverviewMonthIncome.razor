@@ -32,16 +32,17 @@
                     <CascadingValue Value="@this">
                         @foreach (var item in Items)
                         {
-                            <div class="outcome-card">
-                                <div class="data">
-                                    <h2 class="amount">@CurrencyFormatter.Format(item.Amount)</h2>
-                                    <p class="when">@item.When.ToShortDateString()</p>
-                                    <p class="description">@item.Description</p>
+                            <div class="row align-items-center border-bottom py-3">
+                                <div class="col-2">
+                                    <DateValue Value="item.When" />
                                 </div>
-                                <div class="controls">
-                                    <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
+                                <div class="col-2 text-right">
+                                    <h2 class="m-0">@CurrencyFormatter.Format(item.Amount)</h2>
                                 </div>
-                                <div class="clear"></div>
+                                <div class="col-1"></div>
+                                <div class="col">
+                                    @item.Description
+                                </div>
                             </div>
                         }
                     </CascadingValue>

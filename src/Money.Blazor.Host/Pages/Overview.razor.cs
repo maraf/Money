@@ -265,6 +265,8 @@ namespace Money.Pages
 
         #region OutcomeCard.IContext
 
+        bool OutcomeCard.IContext.HasEdit => true;
+
         void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
             => OnActionClick(model, AmountEditModal);
 

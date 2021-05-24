@@ -1,25 +1,28 @@
-﻿<div class="outcome-card">
-    <div class="data">
-        <h2 class="amount">@Context.CurrencyFormatter.Format(Model.Amount)</h2>
-        <p class="when">
-            <DateValue Value="Model.When" />
-        </p>
-        <p class="description">@Model.Description</p>
-        <p class="category @CategoryColor.SelectAccent("back-dark", "back-light")">
-            <span class="badge" style="background-color: @CategoryColor.ToHashCode()">@CategoryName</span>
-        </p>
+﻿<div class="row align-items-center border-bottom py-3">
+    <div class="col-12 col-sm-4 col-md-2 mb-2 mb-md-0">
+        <DateValue Value="Model.When" />
+    </div>
+    <div class="col-12 col-sm-4 col-md-2 text-md-right mb-2 mb-md-0">
+        <h3 class="m-0">@Context.CurrencyFormatter.Format(Model.Amount)</h3>
+    </div>
+    <div class="col-12 col-sm-4 col-md-2 mb-2 mb-md-0 @CategoryColor.SelectAccent("back-dark", "back-light")">
+        <span class="badge" style="background-color: @CategoryColor.ToHashCode()">@CategoryName</span>
+    </div>
+    <div class="col-12 col-md mb-2 mb-md-0">
+        @Model.Description
+
         @if (Model.IsFixed)
         {
-            <p class="mt-3 mb-0 text-muted">
-                <em>Fixed</em>
-            </p>
+            <em class="text-muted ml-1">Fixed</em>
         }
     </div>
-    <div class="controls">
-        <IconButton Icon="dollar-sign" ToolTip="Change Amount" Click="@OnEditAmount" />
-        <IconButton Icon="comment" ToolTip="Change Description" Click="@OnEditDescription" />
-        <IconButton Icon="calendar" ToolTip="Change When" Click="@OnEditWhen" />
-        <IconButton Icon="trash-alt" ToolTip="Delete" Click="@OnDelete" />
+    <div class="col-12 col-md-auto controls text-right">
+        @if (Context.HasEdit)
+        {
+            <IconButton Icon="dollar-sign" ToolTip="Change Amount" Click="@OnEditAmount" />
+            <IconButton Icon="comment" ToolTip="Change Description" Click="@OnEditDescription" />
+            <IconButton Icon="calendar" ToolTip="Change When" Click="@OnEditWhen" />
+            <IconButton Icon="trash-alt" ToolTip="Delete" Click="@OnDelete" />
+        }
     </div>
-    <div class="clear"></div>
 </div>

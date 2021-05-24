@@ -70,6 +70,8 @@ namespace Money.Pages
 
         #region OutcomeCard.IContext
 
+        bool OutcomeCard.IContext.HasEdit => false;
+
         void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
             => throw Ensure.Exception.NotSupported();
 

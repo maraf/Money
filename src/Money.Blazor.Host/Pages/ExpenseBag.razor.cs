@@ -92,17 +92,16 @@ namespace Money.Pages
             StateHasChanged();
         }
 
+        bool OutcomeCard.IContext.HasEdit => true;
+
         void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
-        {
-        }
+        { }
 
         void OutcomeCard.IContext.EditDescription(OutcomeOverviewModel model)
-        {
-        }
+        { }
 
         void OutcomeCard.IContext.EditWhen(OutcomeOverviewModel model)
-        {
-        }
+        { }
 
         async void OutcomeCard.IContext.Delete(OutcomeOverviewModel model)
         {

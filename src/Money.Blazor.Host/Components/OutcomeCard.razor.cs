@@ -16,6 +16,8 @@ namespace Money.Components
     {
         public interface IContext
         {
+            bool HasEdit { get; }
+
             CurrencyFormatter CurrencyFormatter { get; }
 
             void EditAmount(OutcomeOverviewModel model);
@@ -39,8 +41,6 @@ namespace Money.Components
 
         protected override async Task OnParametersSetAsync()
         {
-            Ensure.NotNull(Context, "Context");
-
             await base.OnParametersSetAsync();
             CategoryName = await Queries.QueryAsync(new GetCategoryName(Model.CategoryKey));
             CategoryColor = await Queries.QueryAsync(new GetCategoryColor(Model.CategoryKey));

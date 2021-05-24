@@ -428,38 +428,19 @@ h4 {
 
 .cards {
     margin: 20px 0;
-}
 
-.outcome-card {
-    padding: 30px;
-    border-bottom: 1px solid #eee;
+    .row {
+        &:first-child {
+            border-top: 1px solid #dee2e6 !important;
+        }
 
-    &:first-child {
-        border-top: 1px solid #eee;
-    }
-
-    &:hover {
-        background: #fcfcfc;
-    }
-
-    .data {
-        float: left;
-    }
-
-    .controls {
-        float: right;
+        &:hover {
+            background: #eee;
+        }
 
         .btn-link {
             color: $actionButtonColor;
         }
-    }
-
-    .amount {
-        margin-top: 0;
-    }
-
-    .category {
-        margin-bottom: 0;
     }
 }
 
@@ -635,6 +616,14 @@ h4 {
 
 .expenses-bag {
     position: relative;
+
+    button {
+        display: none;
+
+        &:last-child {
+            display: inline-block;
+        }
+    }
 }
 
 /* ------ PULL TO REFRESH ---------------------------------------------------------------------- */

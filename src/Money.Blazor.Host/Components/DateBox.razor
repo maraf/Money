@@ -1,12 +1,12 @@
 ﻿<div class="input-group">
     <div class="input-group-prepend">
-        <button class="btn btn btn-outline-secondary" @onclick="(() => ValueChanged?.Invoke(Value.AddDays(-1)))">
+        <button type="button" class="btn btn btn-outline-secondary" @onclick="(() => ValueChanged?.Invoke(Value = Value.AddDays(-1)))">
             <Icon Identifier="angle-left" />
         </button>
     </div>
     <input type="date" class="form-control" id="@Id" @bind="@Value" @bind:format="yyyy-MM-dd" data-autofocus="@AutoFocus" />
     <div class="input-group-append">
-        <button class="btn btn btn-outline-secondary" @onclick="(() => ValueChanged?.Invoke(Value.AddDays(1)))">
+        <button type="button" class="btn btn btn-outline-secondary" @onclick="(() => ValueChanged?.Invoke(Value = Value.AddDays(1)))">
             <Icon Identifier="angle-right" />
         </button>
     </div>

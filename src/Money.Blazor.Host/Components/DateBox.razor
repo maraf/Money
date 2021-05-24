@@ -4,7 +4,7 @@
             <Icon Identifier="angle-left" />
         </button>
     </div>
-    <input type="date" class="form-control" id="@Id" @bind="@Value" @bind:format="yyyy-MM-dd" />
+    <input type="date" class="form-control" id="@Id" @bind="@Value" @bind:format="yyyy-MM-dd" data-autofocus="@AutoFocus" />
     <div class="input-group-append">
         <button class="btn btn btn-outline-secondary" @onclick="(() => ValueChanged?.Invoke(Value.AddDays(1)))">
             <Icon Identifier="angle-right" />
@@ -16,6 +16,9 @@
 {
     [Parameter]
     public string Id { get; set; }
+
+    [Parameter]
+    public bool AutoFocus { get; set; }
 
     [Parameter]
     public DateTime Value { get; set; }

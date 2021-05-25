@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Money.Layouts
 {
-    public enum MainMenuLinkMatch
+    public enum MatchMode
     {
         Exact,
         StartsWith

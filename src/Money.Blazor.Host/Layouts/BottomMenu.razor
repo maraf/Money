@@ -1,0 +1,27 @@
+﻿<div class="row my-2 items-@Items.Count">
+    @foreach (var item in Items)
+    {
+        <div class="col">
+            @if (item.Url != null)
+            {
+                <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
+                    <a href="@item.Url" class="btn btn-block @(IsActive ? "btn-primary" : "btn-light")">
+                        <Icon Identifier="@item.Icon" />
+                        <span class="text">
+                            @item.Text
+                        </span>
+                    </a>
+                </Match>
+            }
+            else
+            {
+                <button @onclick="@item.OnClick" class="btn btn-block btn-light">
+                    <Icon Identifier="@item.Icon" />
+                    <span class="text">
+                        @item.Text
+                    </span>
+                </button>
+            }
+        </div>
+    }
+</div>

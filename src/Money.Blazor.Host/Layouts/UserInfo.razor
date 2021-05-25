@@ -13,7 +13,7 @@
                 <ChildContent>
                     @if (Profile != null)
                     {
-                        <MainMenuLink Href="@Navigator.UrlUserManage()" HrefMatch="@MainMenuLinkMatch.StartsWith">
+                        <MainMenuLink Href="@Navigator.UrlUserManage()" HrefMatch="@MatchMode.StartsWith">
                             <Icon Identifier="user" />
                             <span class="d-lg-none d-xl-inline">
                                 @Profile.UserName

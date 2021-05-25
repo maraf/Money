@@ -1,5 +1,4 @@
-﻿@using Neptuo.Exceptions.Handlers
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
     <div class="container">
@@ -9,7 +8,12 @@
 <div class="container body-content">
     @Body
 </div>
-<footer>
+<nav class="fixed-bottom d-block d-sm-none bottom-bar">
+    <div class="container">
+        <BottomMenu />
+    </div>
+</nav>
+<footer class="d-none d-sm-block">
     <div class="container">
         <hr />
 

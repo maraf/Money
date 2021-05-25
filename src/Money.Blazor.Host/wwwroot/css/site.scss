@@ -206,6 +206,17 @@ h4 {
     margin-bottom: 150px;
 }
 
+.bottom-bar {
+    background: #f5f5f5;
+    border-top: 1px solid #dddddd;
+
+    .items-4, .items-3 {
+        span.text {
+            display: none;
+        }
+    }
+}
+
 .center {
     text-align: center;
 }

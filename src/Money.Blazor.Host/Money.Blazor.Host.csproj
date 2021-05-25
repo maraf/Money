@@ -39,7 +39,15 @@
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Watch Remove="Layouts\Match.razor" />
+  </ItemGroup>
+  <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Layouts\Match.razor.cs">
+      <DependentUpon>Match.razor</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <!-- GitHubPages publish -->

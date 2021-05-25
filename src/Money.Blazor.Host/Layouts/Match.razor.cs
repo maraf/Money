@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace Money.Layouts
 {
-    public partial class MainMenuLink : IDisposable
+    public partial class Match : IDisposable
     {
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
 
         [Parameter]
-        public string Href { get; set; }
+        public string Url { get; set; }
 
         [Parameter]
-        public MainMenuLinkMatch HrefMatch { get; set; } = MainMenuLinkMatch.Exact;
+        public MatchMode Mode { get; set; } = MatchMode.Exact;
 
         [Parameter]
         public Type PageType { get; set; }
 
         [Parameter]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment<bool> ChildContent { get; set; }
 
         [CascadingParameter]
         public RouteData RouteData { get; set; }
@@ -49,7 +49,7 @@ namespace Money.Layouts
                 return PageType == RouteData.PageType;
 
             string currentUrl = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-            if ((HrefMatch == MainMenuLinkMatch.Exact && Href == currentUrl) || currentUrl.StartsWith(Href))
+            if ((Mode == MatchMode.Exact && Url == currentUrl) || currentUrl.StartsWith(Url))
                 return true;
 
             return false;

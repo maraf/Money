@@ -85,10 +85,10 @@ namespace Money.Services
         public string UrlMoneyProject()
             => "http://money.neptuo.com";
         
-        public string UrlMoneyRepository()
+        public string UrlGithubRepository()
             => "http://github.com/maraf/Money";
 
-        public string UrlMoneyRepositoryIssueNew(string title = null)
+        public string UrlGithubRepositoryIssueNew(string title = null)
             => AddOptionalParameter("https://github.com/maraf/Money/issues/new", "title", title);
 
         public string AddOptionalParameter(string url, string name, string value)

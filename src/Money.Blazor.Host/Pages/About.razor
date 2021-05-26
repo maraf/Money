@@ -5,20 +5,19 @@
 <ExceptionPanel />
 
 <p class="text-muted">
-    <ConvertToString Value="@(typeof(About).Assembly.GetName().Version)" />
+    <AppVersion />
 </p>
-<p>
-    <a target="_blank" href="@Navigator.UrlMoneyProject()"> 
+<p class="mt-4">
+    <a target="_blank" href="@Navigator.UrlMoneyProject()" class="btn btn-light mr-2"> 
         <Icon Identifier="book" />
-        Documentation</a>
-</p>
-<p>
-    <a target="_blank" href="@Navigator.UrlMoneyRepository()"> 
+        Documentation
+    </a>
+    <a target="_blank" href="@Navigator.UrlGithubRepository()" class="btn btn-light mr-2"> 
         <Icon Identifier="github" Prefix="fab" />
-        Source Code</a>
-</p>
-<p>
-    <a target="_blank" href="@Navigator.UrlMoneyRepositoryIssueNew()">
+        Source code
+    </a>
+    <a target="_blank" href="@Navigator.UrlGithubRepositoryIssueNew()" class="btn btn-light mr-2">
         <Icon Identifier="bug" />
-        Report an Issue</a>
+        Report a bug
+    </a>
 </p>

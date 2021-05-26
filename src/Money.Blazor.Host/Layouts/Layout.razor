@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject Navigator Navigator
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
     <div class="container">
@@ -13,19 +14,28 @@
         <BottomMenu />
     </div>
 </nav>
-<footer class="d-none d-sm-block">
+<footer class="navbar navbar-light">
     <div class="container">
-        <hr />
+        <span class="navbar-text">
+            <small>
+                &copy; 2021
+                &#8226; <a href="@Navigator.UrlMoneyProject()" target="_blank">Money</a>
+                &#8226; <a href="https://www.neptuo.com" target="_blank">Neptuo</a>
+            </small>
+        </span>
+        <span class="navbar-text text-right">
+            <small>
+                <span class="versions">
+                    <AppVersion />
 
-        <div class="d-flex mb-4">
-            <div class="mr-auto">
-                <small class="text-muted">
-                    &copy; 2020 - <a target="_blank" href="https://www.neptuo.com" class="text-muted">Neptuo</a>
-                </small>
-            </div>
-            <div class="float-right">
-                <AppVersion />
-            </div>
-        </div>
+                    &#8226;
+                </span>
+
+                <a href="@Navigator.UrlGithubRepositoryIssueNew()" target="_blank">
+                    Report a bug
+                    <Icon Identifier="bug" />
+                </a>
+            </small>
+        </span>
     </div>
 </footer>

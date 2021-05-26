@@ -1,8 +1,7 @@
-﻿<small class="text-muted">
-    <span>Client-<ConvertToString Value="@Client" /></span>
+﻿<span>Client-<ConvertToString Value="@Client" /></span>
 
-    @if (Api != null)
-    {
-        <span class="ml-1">Api-<ConvertToString Value="@Api" /></span>
-    }
-</small>
+@if (Api != null)
+{
+    @: &#8226;
+    <span class="ml-1">Api-<ConvertToString Value="@Api" /></span>
+}

@@ -79,12 +79,6 @@ namespace Money.Services
                 messages.Add("Name must be provided.");
         }
 
-        public static void AddCategoryDescription(ICollection<string> messages, string description)
-        {
-            if (!IsCategoryDescription(description))
-                messages.Add("Description must be provided.");
-        }
-
         #endregion
 
         #region Currency

@@ -29,7 +29,7 @@ namespace Money.Components
         public string Name { get; set; }
 
         [Parameter]
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
 
         protected string Title { get; set; }
         protected string SaveButtonText { get; set; }
@@ -55,6 +55,9 @@ namespace Money.Components
 
         protected void OnSaveClick()
         {
+            if (Description == null)
+                Description = String.Empty;
+
             if (CategoryKey == null || CategoryKey.IsEmpty)
             {
                 if (Validate())
@@ -82,7 +85,6 @@ namespace Money.Components
         {
             ErrorMessages.Clear();
             Validator.AddCategoryName(ErrorMessages, Name);
-            Validator.AddCategoryDescription(ErrorMessages, Description);
 
             return ErrorMessages.Count == 0;
         }

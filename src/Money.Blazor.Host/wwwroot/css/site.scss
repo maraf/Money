@@ -71,9 +71,11 @@ h4 {
     border-color: #398BF5;
 
     .collapse {
-        display: block;
-        visibility: hidden !important;
-        height: 0 !important;
+        @media (max-width: 991px) {
+            display: block;
+            visibility: hidden !important;
+            height: 0 !important;
+        }
     }
 
     .navbar-collapse {

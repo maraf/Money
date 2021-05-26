@@ -70,9 +70,17 @@ h4 {
     background-color: #0078D7;
     border-color: #398BF5;
 
+    .collapse {
+        display: block;
+        visibility: hidden !important;
+        height: 0 !important;
+    }
+
     .navbar-collapse {
         border-color: #398BF5;
         height: calc(100vh - 56px);
+        visibility: visible;
+        transition: height .4s;
 
         @media (min-width: 992px) {
             height: auto;

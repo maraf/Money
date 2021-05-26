@@ -2,7 +2,6 @@
 
 <Title Icon="calendar" Main="@Title" Sub="@SubTitle">
     <ButtonContent>
-        <ExpenseCreateButton CategoryKey="CategoryKey" />
         @{
             var trendsButton = TrendsTitleUrl();
         }
@@ -15,6 +14,7 @@
                 </span>
             </button>
         }
+        <ExpenseCreateButton CategoryKey="CategoryKey" />
     </ButtonContent>
 </Title>
 <ExceptionPanel />

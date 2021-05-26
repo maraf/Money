@@ -164,33 +164,14 @@ h4 {
         font-size: 26px;
         color: #0078D7;
     }
-    /*h2 {
-        position: relative;
-        height: 40px;
-        overflow: hidden;
 
-        button {
-            position: absolute;
-            right: 0;
-        }
-    }*/
     h3 {
         line-height: 1.25;
         margin-bottom: 0;
-
-        span.text {
-            position: relative;
-            top: 6px;
-            display: inline-block;
-            overflow: hidden;
-            max-width: calc(100% - 177px);
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        button {
-            float: right;
-        }
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     h6 {
@@ -202,10 +183,18 @@ h4 {
         white-space: nowrap;
         overflow: hidden;
     }
+
+    .actions {
+        white-space: nowrap;
+    }
 }
 
 .header-append {
     margin-bottom: 150px;
+}
+
+.header-append-small {
+    margin-bottom: 110px;
 }
 
 .bottom-bar {

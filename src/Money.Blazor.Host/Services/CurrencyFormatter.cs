@@ -28,8 +28,9 @@ namespace Money.Services
         {
             if (currencies == null)
             {
-                IEnumerable<CultureInfo> cultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
-                     .Where(c => !c.IsNeutralCulture);
+                IEnumerable<CultureInfo> cultures = CultureInfo
+                    .GetCultures(CultureTypes.AllCultures)
+                    .Where(c => !c.IsNeutralCulture);
 
                 currencies = new Dictionary<string, CultureInfo>();
                 foreach (CultureInfo culture in cultures)

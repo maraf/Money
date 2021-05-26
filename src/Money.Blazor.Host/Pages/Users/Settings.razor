@@ -42,3 +42,24 @@
         <button class="btn btn-primary" @onclick="(async () => { await DateFormat.SetAsync(); DateFormatEditor.Hide(); })">Set</button>
     </Buttons>
 </Modal>
+
+<Modal @ref="MobileMenuEditor" Title="Modify mobile menu">
+    <ChildContent>
+        @if (MobileMenuAvailableModels != null)
+        {
+            foreach (var model in MobileMenuAvailableModels)
+            {
+                <div class="btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-primary btn-block">
+                        <input type="checkbox" checked autocomplete="off">
+                        <Icon Identifier="@model.Icon" />
+                        @model.Text
+                    </label>
+                </div>
+            }
+        }
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="(async () => { await MobileMenu.SetAsync(); MobileMenuEditor.Hide(); })">Set</button>
+    </Buttons>
+</Modal>

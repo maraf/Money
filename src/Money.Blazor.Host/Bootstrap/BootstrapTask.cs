@@ -85,6 +85,7 @@ namespace Money.Bootstrap
                 .AddTransient<CreateExpenseStorage>()
                 .AddTransient<OfflineCommandDispatcher>()
                 .AddSingleton<LocalCommandDispatcher>()
+                .AddSingleton<MenuItemService>()
                 .AddSingleton<ICommandHandlerCollection, LocalCommandHandlerCollection>()
                 .AddTransient<ICommandDispatcher, LocalCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()
@@ -96,12 +97,13 @@ namespace Money.Bootstrap
                 .AddSingleton(exceptionHandler.Handler)
                 .AddSingleton(exceptionHandler.HandlerBuilder);
 
-            void AddMiddleware<T>(IServiceCollection services)
+            void AddMiddleware<T>(IServiceCollection services, bool register = true)
                 where T : class, HttpQueryDispatcher.IMiddleware
             {
-                services
-                    .AddScoped<T>()
-                    .AddTransient<HttpQueryDispatcher.IMiddleware>(sp => sp.GetService<T>());
+                if (register)
+                    services.AddScoped<T>();
+
+                services.AddTransient<HttpQueryDispatcher.IMiddleware>(sp => sp.GetService<T>());
             }
 
             AddMiddleware<CategoryMiddleware>(services);
@@ -110,8 +112,8 @@ namespace Money.Bootstrap
             AddMiddleware<UserPropertyMiddleware>(services);
             AddMiddleware<ApiVersionChecker>(services);
             AddMiddleware<UserPropertyQueryHandler>(services);
-
-            services.AddTransient<HttpQueryDispatcher.IMiddleware>(sp => sp.GetService<PwaInstallInterop>());
+            AddMiddleware<PwaInstallInterop>(services, register: false);
+            AddMiddleware<MenuItemService>(services, register: false);
 
             //CurrencyCache currencyCache = new CurrencyCache(eventDispatcher.Handlers, queryDispatcher);
 

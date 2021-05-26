@@ -37,6 +37,10 @@ namespace Money.Pages.Users
         protected PropertyViewModel DateFormat { get; set; }
         protected Modal DateFormatEditor { get; set; }
 
+        protected PropertyViewModel MobileMenu { get; set; }
+        protected Modal MobileMenuEditor { get; set; }
+        protected List<IAvailableMenuItemModel> MobileMenuAvailableModels { get; set; }
+
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
 
@@ -48,6 +52,9 @@ namespace Money.Pages.Users
 
             PriceDecimals = AddProperty("PriceDecimalDigits", "Price decimal digits", () => PriceDecimalsEditor.Show(), icon: "pound-sign", defaultValue: "2");
             DateFormat = AddProperty("DateFormat", "Date format", () => DateFormatEditor.Show(), icon: "calendar-day", defaultValue: CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
+            MobileMenu = AddProperty("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
+
+            MobileMenuAvailableModels = await Queries.QueryAsync(new ListAvailableMenuItem());
 
             await LoadAsync();
         }

@@ -6,8 +6,8 @@
 <div class="row my-4 mx-1">
     @foreach (var viewModel in ViewModels)
     {
-        <div class="col-auto mb-4">
-            <button class="btn btn-block btn-light" @onclick="viewModel.Edit">
+        <div class="col-12 col-md-auto mb-4">
+            <button class="btn btn-light text-truncate mw-100" @onclick="viewModel.Edit">
                 @if (viewModel.Icon != null)
                 {
                     <Icon Identifier="@viewModel.Icon" class="mr-1" />
@@ -22,7 +22,7 @@
     }
 </div>
 
-<Modal @ref="PriceDecimalsEditor" Title="Set price decimals">
+<Modal @ref="PriceDecimalsEditor" TitleIcon="@PriceDecimals.Icon" Title="Set price decimals">
     <ChildContent>
         <div class="form-group">
             <input type="text" class="form-control" @bind="PriceDecimals.CurrentValue" data-autofocus />
@@ -33,7 +33,7 @@
     </Buttons>
 </Modal>
 
-<Modal @ref="DateFormatEditor" Title="Set date format">
+<Modal @ref="DateFormatEditor" TitleIcon="@DateFormat.Icon" Title="Set date format">
     <ChildContent>
         <div class="form-group">
             <input type="text" class="form-control" @bind="DateFormat.CurrentValue" data-autofocus />
@@ -44,23 +44,23 @@
     </Buttons>
 </Modal>
 
-<Modal @ref="MobileMenuEditor" Title="Modify mobile menu">
+<Modal @ref="MobileMenuEditor" TitleIcon="@MobileMenu.Icon" Title="Modify mobile menu">
     <ChildContent>
-        @if (MobileMenuAvailableModels != null)
+        @if (MobileMenuAvailableModels != null && MobileSelectedIdentifiers != null)
         {
             foreach (var model in MobileMenuAvailableModels)
             {
-                <div class="btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-outline-primary btn-block">
-                        <input type="checkbox" checked autocomplete="off">
-                        <Icon Identifier="@model.Icon" />
-                        @model.Text
-                    </label>
+                var isContained = MobileSelectedIdentifiers.Contains(model.Identifier);
+                Action handler = isContained ? () => MobileSelectedIdentifiers.Remove(model.Identifier) : () => MobileSelectedIdentifiers.Add(model.Identifier);
+
+                <div @key="model.Identifier" class="alert @(isContained ? "alert-primary" : "alert-light") cursor-pointer" @onclick="handler">
+                    <Icon Identifier="@model.Icon" />
+                    @model.Text
                 </div>
             }
         }
     </ChildContent>
     <Buttons>
-        <button class="btn btn-primary" @onclick="(async () => { await MobileMenu.SetAsync(); MobileMenuEditor.Hide(); })">Set</button>
+        <button class="btn btn-primary" @onclick="SetMobileMenuAsync">Set</button>
     </Buttons>
 </Modal>

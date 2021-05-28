@@ -40,6 +40,7 @@ namespace Money.Pages.Users
         protected PropertyViewModel MobileMenu { get; set; }
         protected Modal MobileMenuEditor { get; set; }
         protected List<IAvailableMenuItemModel> MobileMenuAvailableModels { get; set; }
+        protected List<string> MobileSelectedIdentifiers { get; set; }
 
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
@@ -57,6 +58,8 @@ namespace Money.Pages.Users
             MobileMenuAvailableModels = await Queries.QueryAsync(new ListAvailableMenuItem());
 
             await LoadAsync();
+
+            MobileSelectedIdentifiers = MobileMenu.CurrentValue.Split(',').ToList();
         }
 
         public void Dispose()
@@ -77,6 +80,13 @@ namespace Money.Pages.Users
             viewModel.DefaultValue = defaultValue;
 
             return viewModel;
+        }
+
+        protected async Task SetMobileMenuAsync()
+        {
+            MobileMenu.CurrentValue = String.Join(",", MobileMenuAvailableModels.Where(m => MobileSelectedIdentifiers.Contains(m.Identifier)).Select(m => m.Identifier)); 
+            await MobileMenu.SetAsync(); 
+            MobileMenuEditor.Hide();
         }
 
         Task IEventHandler<UserPropertyChanged>.HandleAsync(UserPropertyChanged payload)

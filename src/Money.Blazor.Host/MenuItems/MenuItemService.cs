@@ -64,7 +64,10 @@ namespace Money
         {
             if (query is ListBottomMenuItem)
             {
-                return storage.ToList<IActionMenuItemModel>();
+                var value = await dispatcher.QueryAsync(new FindUserProperty("MobileMenu"));
+                var selectedItems = value.Split(',');
+
+                return storage.Where(m => selectedItems.Contains(m.Identifier)).ToList<IActionMenuItemModel>();
             }
             else if (query is ListAvailableMenuItem)
             {

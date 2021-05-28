@@ -11,7 +11,9 @@
 </div>
 <nav class="fixed-bottom d-block d-sm-none bottom-bar">
     <div class="container">
-        <BottomMenu />
+        <AuthenticatedView>
+            <BottomMenu />
+        </AuthenticatedView>
     </div>
 </nav>
 <footer class="navbar navbar-light d-none d-sm-block">

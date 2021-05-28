@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
-using Money.Pages;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -29,21 +28,12 @@ namespace Money.Layouts
         [Inject]
         protected IEventHandlerCollection EventHandlers { get; set; }
 
-        [Inject]
-        protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
         protected List<IActionMenuItemModel> Items { get; set; }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            EventHandlers.Add<UserPropertyChanged>(this);
-            AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
-        }
 
         protected async override Task OnInitializedAsync()
         {
+            EventHandlers.Add<UserPropertyChanged>(this);
+
             await base.OnInitializedAsync();
             await LoadAsync();
         }
@@ -53,19 +43,9 @@ namespace Money.Layouts
             EventHandlers.Remove<UserPropertyChanged>(this);
         }
 
-        private async void OnAuthenticationStateChanged(Task<AuthenticationState> task)
-        {
-            await LoadAsync();
-            StateHasChanged();
-        }
-
         private async Task LoadAsync()
         {
-            var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            if (state.User.Identity.IsAuthenticated)
-                Items = await Queries.QueryAsync(new ListBottomMenuItem());
-            else
-                Items = null;
+            Items = await Queries.QueryAsync(new ListBottomMenuItem());
         }
 
         async Task IEventHandler<UserPropertyChanged>.HandleAsync(UserPropertyChanged payload)

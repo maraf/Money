@@ -27,6 +27,7 @@ namespace Money.Services
         private readonly Interop interop;
         private readonly ILog log;
 
+        private Task loadTokenTask;
         private readonly List<ITokenValidator> validators = new List<ITokenValidator>();
 
         public ApiAuthenticationStateProvider(IEventDispatcher events, HttpClient http, TokenContainer token, TokenStorage tokenStorage, Interop interop, ILogFactory logFactory, IEnumerable<ITokenValidator> validators)
@@ -59,14 +60,25 @@ namespace Money.Services
             log.Debug("Getting a token.");
             if (!token.HasValue)
             {
-                log.Debug("Loading the token from a storage.");
+                if (loadTokenTask == null)
+                {
+                    log.Debug("Loading the token from a storage.");
 
-                var value = await tokenStorage.FindAsync();
-                await ChangeTokenAsync(value);
+                    loadTokenTask = LoadAndApplyTokenAsync();
+                }
+
+                await loadTokenTask;
+                loadTokenTask = null;
             }
 
             log.Debug($"Returning a token '{token.Value}'.");
             return token.Value;
+        }
+
+        private async Task LoadAndApplyTokenAsync()
+        {
+            var value = await tokenStorage.FindAsync();
+            await ChangeTokenAsync(value);
         }
 
         private async Task ChangeTokenAsync(string value, bool isValidationRequired = true)

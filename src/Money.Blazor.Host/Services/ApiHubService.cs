@@ -46,6 +46,8 @@ namespace Money.Services
 
         public async Task StartAsync()
         {
+            log.Debug($"Starting.");
+
             await StopAsync();
 
             ChangeStatus(ApiHubStatus.Connecting);
@@ -121,13 +123,15 @@ namespace Money.Services
 
         public async Task StopAsync()
         {
+            var connection = this.connection;
             if (connection != null)
             {
+                this.connection = null;
+
                 log.Debug($"Disconnecting.");
 
                 await connection.StopAsync();
                 await connection.DisposeAsync();
-                connection = null;
             }
 
             ChangeStatus(ApiHubStatus.Disconnected);
@@ -137,6 +141,8 @@ namespace Money.Services
         {
             if (Status != status || e != null)
             {
+                log.Debug($"Change status from '{Status}' to '{status}'.");
+
                 Status = status;
                 Changed?.Invoke(status, e);
             }

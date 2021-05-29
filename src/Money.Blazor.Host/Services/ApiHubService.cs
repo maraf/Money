@@ -56,7 +56,7 @@ namespace Money.Services
             {
                 log.Debug($"Connecting with token '{token.Value}'.");
 
-                string url = $"{apiConfiguration.ApiUrl}api?access_token={token.Value}";
+                string url = $"{apiConfiguration.ApiUrl}api";
 
                 connection = new HubConnectionBuilder()
                     .WithUrl(url, o => o.AccessTokenProvider = () => Task.FromResult(token.Value))

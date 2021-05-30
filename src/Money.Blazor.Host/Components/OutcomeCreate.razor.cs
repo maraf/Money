@@ -32,6 +32,9 @@ namespace Money.Components
         [Inject]
         internal Navigator Navigator { get; set; }
 
+        [Inject]
+        protected Navigator.ModalContainer ModalContainer { get; set; }
+
         protected Modal Modal { get; set; }
 
         protected string Title { get; set; }
@@ -60,6 +63,12 @@ namespace Money.Components
 
         [Parameter]
         public bool IsFixed { get; set; }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            ModalContainer.ExpenseCreate = this;
+        }
 
         protected async override Task OnParametersSetAsync()
         {

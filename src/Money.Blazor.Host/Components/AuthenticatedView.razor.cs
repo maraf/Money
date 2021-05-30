@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,10 +15,17 @@ namespace Money.Components
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
+        [Inject]
+        protected ILog<AuthenticatedView> Log { get; set; }
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        [Parameter]
+        public Action<bool> OnChanged { get; set; }
+
         protected AuthenticationState AuthenticationState { get; set; }
+        protected bool IsAuthenticated { get; set; }
 
         protected override void OnInitialized()
         {
@@ -28,8 +36,7 @@ namespace Money.Components
         protected async override Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-
-            AuthenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            await LoadAsync();
         }
 
         public void Dispose()
@@ -37,10 +44,25 @@ namespace Money.Components
             AuthenticationStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
         }
 
-        private async void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+        private void OnAuthenticationStateChanged(Task<AuthenticationState> task) 
+            => _ = LoadAsync();
+
+        private async Task LoadAsync()
         {
+            Log.Debug("Load.");
+
             AuthenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            StateHasChanged();
+            var newValue = AuthenticationState != null && AuthenticationState.User.Identity.IsAuthenticated;
+            Log.Debug($"New value '{newValue}'.");
+
+            if (IsAuthenticated != newValue)
+            {
+                Log.Debug($"Rendering child content.");
+
+                IsAuthenticated = newValue;
+                OnChanged?.Invoke(IsAuthenticated);
+                StateHasChanged();
+            }
         }
     }
 }

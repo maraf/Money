@@ -1,4 +1,4 @@
-﻿@if (AuthenticationState != null && AuthenticationState.User.Identity.IsAuthenticated)
+﻿@if (IsAuthenticated)
 {
     @ChildContent
 }

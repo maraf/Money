@@ -52,7 +52,7 @@ namespace Money.Bootstrap
             ILogFilter logFilter = DefaultLogFilter.Warning;
 
 #if DEBUG
-            logFilter = new PrefixLogFilter(new[] {
+            logFilter = PrefixLogFilter.Ignored(new[] {
                 "Root.Json",
                 "Root.CompositeListFormatter",
                 "Root.ApiClient",

@@ -38,10 +38,16 @@ namespace Money.Pages
         }
 
         private void OnApiHubStateChanged(ApiHubStatus status, Exception e)
-            => StateHasChanged();
+        {
+            Log.Debug("OnApiHubStateChanged, rerendering.");
+            StateHasChanged();
+        }
 
         private void OnStateChanged(bool isAvailable)
-            => StateHasChanged();
+        {
+            Log.Debug("OnStateChanged, rerendering.");
+            StateHasChanged();
+        }
 
         protected Task ReloadAsync()
             => Navigator.ReloadAsync();

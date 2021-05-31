@@ -23,6 +23,7 @@ namespace Money.Services
         private readonly TokenStorage tokenStorage;
         private readonly ILog log;
 
+        private ClaimsPrincipal principal;
         private Task loadTokenTask;
         private readonly List<ITokenValidator> validators = new List<ITokenValidator>();
 
@@ -77,11 +78,13 @@ namespace Money.Services
 
         private async Task ChangeTokenAsync(string value, bool isValidationRequired = true, bool isNoficationEnabled = false)
         {
+            principal = null;
             token.Value = value;
             if (!String.IsNullOrEmpty(token.Value))
             {
                 log.Debug("Applying token.");
 
+                // It is required to set the token here, because validators can use HttpClient to validate the token.
                 http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
 
                 bool isValid = true;
@@ -97,6 +100,8 @@ namespace Money.Services
                 if (isValid)
                 {
                     log.Debug("Token validation succeeded.");
+
+                    EnsurePrincipal(token.Value);
                     Notify(isNoficationEnabled);
 
                     await events.PublishAsync(new UserSignedIn());
@@ -105,9 +110,12 @@ namespace Money.Services
             }
 
             log.Debug("Clearing token.");
+
+            // Now create the Authorization header.
+            http.DefaultRequestHeaders.Authorization = null;
+
             Notify(isNoficationEnabled);
 
-            http.DefaultRequestHeaders.Authorization = null;
             await events.PublishAsync(new UserSignedOut());
 
             void Notify(bool isNoficationEnabled)
@@ -117,6 +125,20 @@ namespace Money.Services
                     log.Debug("NotifyAuthenticationStateChanged.");
                     NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
                 }
+            }
+        }
+
+        private void EnsurePrincipal(string token)
+        {
+            if (principal == null)
+            {
+                var identity = string.IsNullOrEmpty(token)
+                    ? new ClaimsIdentity()
+                    : new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+
+                log.Debug($"Identity '{identity}' ({identity.IsAuthenticated}) with '{identity.Claims.Count()}' claims.");
+
+                principal = new ClaimsPrincipal(identity);
             }
         }
 
@@ -148,14 +170,10 @@ namespace Money.Services
 
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var token = await GetTokenAsync();
+            if (principal == null)
+                EnsurePrincipal(await GetTokenAsync());
 
-            var identity = string.IsNullOrEmpty(token)
-                ? new ClaimsIdentity()
-                : new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
-
-            log.Debug($"Identity '{identity}' ({identity.IsAuthenticated}) with '{identity.Claims.Count()}' claims.");
-            return new AuthenticationState(new ClaimsPrincipal(identity));
+            return new AuthenticationState(principal);
         }
 
         public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)

@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Money.Events;
-using Money.Queries;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Logging;
-using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -24,26 +21,23 @@ namespace Money.Services
         private readonly HttpClient http;
         private readonly TokenContainer token;
         private readonly TokenStorage tokenStorage;
-        private readonly Interop interop;
         private readonly ILog log;
 
         private Task loadTokenTask;
         private readonly List<ITokenValidator> validators = new List<ITokenValidator>();
 
-        public ApiAuthenticationStateProvider(IEventDispatcher events, HttpClient http, TokenContainer token, TokenStorage tokenStorage, Interop interop, ILogFactory logFactory, IEnumerable<ITokenValidator> validators)
+        public ApiAuthenticationStateProvider(IEventDispatcher events, HttpClient http, TokenContainer token, TokenStorage tokenStorage, ILogFactory logFactory, IEnumerable<ITokenValidator> validators)
         {
             Ensure.NotNull(events, "eventDispatcher");
             Ensure.NotNull(http, "http");
             Ensure.NotNull(token, "token");
             Ensure.NotNull(tokenStorage, "tokenStorage");
-            Ensure.NotNull(interop, "interop");
             Ensure.NotNull(logFactory, "logFactory");
             Ensure.NotNull(validators, "validators");
             this.events = events;
             this.http = http;
             this.token = token;
             this.tokenStorage = tokenStorage;
-            this.interop = interop;
             this.log = logFactory.Scope("ApiAuthenticationState");
             this.validators.AddRange(validators);
         }
@@ -81,7 +75,7 @@ namespace Money.Services
             await ChangeTokenAsync(value);
         }
 
-        private async Task ChangeTokenAsync(string value, bool isValidationRequired = true)
+        private async Task ChangeTokenAsync(string value, bool isValidationRequired = true, bool isNoficationEnabled = false)
         {
             token.Value = value;
             if (!String.IsNullOrEmpty(token.Value))
@@ -103,15 +97,27 @@ namespace Money.Services
                 if (isValid)
                 {
                     log.Debug("Token validation succeeded.");
+                    Notify(isNoficationEnabled);
+
                     await events.PublishAsync(new UserSignedIn());
                     return;
                 }
             }
 
             log.Debug("Clearing token.");
+            Notify(isNoficationEnabled);
 
             http.DefaultRequestHeaders.Authorization = null;
             await events.PublishAsync(new UserSignedOut());
+
+            void Notify(bool isNoficationEnabled)
+            {
+                if (isNoficationEnabled)
+                {
+                    log.Debug("NotifyAuthenticationStateChanged.");
+                    NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+                }
+            }
         }
 
         private async Task<bool> ValidateTokenAsync(string token)
@@ -134,10 +140,7 @@ namespace Money.Services
             else
                 await tokenStorage.ClearAsync();
 
-            await ChangeTokenAsync(value, false);
-
-            log.Debug("NotifyAuthenticationStateChanged.");
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            await ChangeTokenAsync(value, false, true);
         }
 
         public Task ClearTokenAsync()

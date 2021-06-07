@@ -33,14 +33,14 @@
                         @foreach (var item in Items)
                         {
                             <div class="row align-items-center border-bottom py-3">
-                                <div class="col-2">
+                                <div class="col-4 col-md-2 mb-2 mb-md-0">
                                     <DateValue Value="item.When" />
                                 </div>
-                                <div class="col-2 text-right">
-                                    <h2 class="m-0">@CurrencyFormatter.Format(item.Amount)</h2>
+                                <div class="col-8 col-md-3 text-md-right mb-2 mb-md-0 text-right">
+                                    <h3 class="m-0">@CurrencyFormatter.Format(item.Amount)</h3>
                                 </div>
-                                <div class="col-1"></div>
-                                <div class="col">
+                                <div class="col-md-1"></div>
+                                <div class="col mb-2 mb-md-0">
                                     @item.Description
                                 </div>
                             </div>

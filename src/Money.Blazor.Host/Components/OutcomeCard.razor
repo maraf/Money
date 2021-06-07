@@ -1,14 +1,14 @@
 ﻿<div class="row align-items-center border-bottom py-3">
-    <div class="col-12 col-sm-4 col-md-2 mb-2 mb-md-0">
+    <div class="col-4 col-md-2 mb-2 mb-md-0">
         <DateValue Value="Model.When" />
     </div>
-    <div class="col-12 col-sm-4 col-md-2 text-md-right mb-2 mb-md-0">
+    <div class="col-8 col-md-3 text-md-right mb-2 mb-md-0 text-right">
         <h3 class="m-0">@Context.CurrencyFormatter.Format(Model.Amount)</h3>
     </div>
-    <div class="col-12 col-sm-4 col-md-2 mb-2 mb-md-0 @CategoryColor.SelectAccent("back-dark", "back-light")">
+    <div class="col-auto col-md-2 mb-2 mb-md-0 @CategoryColor.SelectAccent("back-dark", "back-light")">
         <span class="badge" style="background-color: @CategoryColor.ToHashCode()">@CategoryName</span>
     </div>
-    <div class="col-12 col-md mb-2 mb-md-0">
+    <div class="col mb-2 mb-md-0">
         @Model.Description
 
         @if (Model.IsFixed)
@@ -16,7 +16,7 @@
             <em class="text-muted ml-1">Fixed</em>
         }
     </div>
-    <div class="col-12 col-md-auto controls text-right">
+    <div class="col-12 col-sm-auto controls text-right">
         @if (Context.HasEdit)
         {
             <IconButton Icon="dollar-sign" ToolTip="Change Amount" Click="@OnEditAmount" />

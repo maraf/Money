@@ -44,6 +44,9 @@
                                 <div class="col mb-2 mb-md-0">
                                     @item.Description
                                 </div>
+                                <div class="col-12 col-sm-auto controls text-right">
+                                    <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
+                                </div>
                             </div>
                         }
                     </CascadingValue>

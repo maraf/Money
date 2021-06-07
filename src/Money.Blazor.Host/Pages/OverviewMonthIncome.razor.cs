@@ -10,6 +10,7 @@ using Money.Services;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;

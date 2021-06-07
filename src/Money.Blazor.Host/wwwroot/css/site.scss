@@ -99,7 +99,16 @@ h4 {
         outline: none;
     }
 
-    @media (max-width: 992px) {
+    @media (min-width: 992px) and (max-width: 993px) {
+        .navbar-nav {
+            .nav-link {
+                padding-right: .35rem;
+                padding-left: .35rem;
+            }
+        }
+    }
+
+    @media (max-width: 991px) {
         .nav-link {
             padding-top: .75rem;
             padding-bottom: .75rem;

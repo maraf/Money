@@ -59,7 +59,9 @@ namespace Money.Pages.Users
 
             await LoadAsync();
 
-            MobileSelectedIdentifiers = MobileMenu.CurrentValue.Split(',').ToList();
+            MobileSelectedIdentifiers = MobileMenu.CurrentValue != null 
+                ? MobileMenu.CurrentValue.Split(',').ToList()
+                : new List<string>(0);
         }
 
         public void Dispose()

@@ -65,7 +65,10 @@ namespace Money
             if (query is ListBottomMenuItem)
             {
                 var value = await dispatcher.QueryAsync(new FindUserProperty("MobileMenu"));
-                var selectedItems = value.Split(',');
+                
+                Console.WriteLine($"MM: (1) '{value}', {value == null}, {value == String.Empty}");
+
+                var selectedItems = value != null ? value.Split(',') : Array.Empty<string>();
 
                 return storage.Where(m => selectedItems.Contains(m.Identifier)).ToList<IActionMenuItemModel>();
             }
@@ -76,14 +79,21 @@ namespace Money
             else if (query is FindUserProperty findProperty && findProperty.Key == "MobileMenu")
             {
                 var value = (string)await next(findProperty);
-                if (String.IsNullOrEmpty(value))
+
+                Console.WriteLine($"MM: (2) '{value}', {value == null}, {value == String.Empty}");
+
+                if (value == null)
                     return DefaultValue;
+
+                return value;
             }
             else if (query is ListUserProperty listProperty)
             {
                 var value = (List<UserPropertyModel>)await next(listProperty);
                 var property = value.FirstOrDefault(p => p.Key == "MobileMenu");
-                if (property != null && String.IsNullOrEmpty(property.Value))
+
+                Console.WriteLine($"MM: (3) '{property.Value}', {property.Value == null}, {property.Value == String.Empty}");
+                if (property != null && property.Value == null)
                     property.Value = DefaultValue;
 
                 return value;

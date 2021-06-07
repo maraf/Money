@@ -1,4 +1,5 @@
-﻿@page "/trends"
+﻿@attribute [Authorize]
+@page "/trends"
 
 <Title Icon="chart-bar" Main="Select a category" Sub="To open year trends" />
 
@@ -8,22 +9,22 @@
 }
 else
 {
-<div class="form-row">
-    @foreach (var category in Categories)
-    {
-        <div class="col-4 col-md-2 mb-2">
-            <a href="@Navigator.UrlTrends(category.Key)" class="btn btn-block h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
-                <div>
-                    <h2>@category.Icon</h2>
-                </div>
-                <div class="text-truncate">
-                    <strong>@category.Name</strong>
-                </div>
-                <div class="text-truncate">
-                    <span>@category.Description</span>
-                </div>
-            </a>
-        </div>
-    }
-</div>
+    <div class="form-row">
+        @foreach (var category in Categories)
+        {
+            <div class="col-4 col-md-2 mb-2">
+                <a href="@Navigator.UrlTrends(category.Key)" class="btn btn-block h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
+                    <div>
+                        <h2>@category.Icon</h2>
+                    </div>
+                    <div class="text-truncate">
+                        <strong>@category.Name</strong>
+                    </div>
+                    <div class="text-truncate">
+                        <span>@category.Description</span>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
 }

@@ -1,4 +1,5 @@
-﻿@page "/{Year:int}/trends/{CategoryGuid:guid}"
+﻿@attribute [Authorize]
+@page "/{Year:int}/trends/{CategoryGuid:guid}"
 
 <Title Icon="chart-bar" Main="@($"Trends of category {CategoryName} in {Year}")" Sub="See how the category expenses change in time">
     <ButtonContent>

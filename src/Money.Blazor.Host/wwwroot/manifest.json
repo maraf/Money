@@ -3,8 +3,8 @@
   "name": "Money by Neptuo",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0078D7",
-  "theme_color": "#0078D7",
+  "background_color": "#004074",
+  "theme_color": "#004074",
   "icons": [
     {
       "src": "/images/icon-w-192x192.png",

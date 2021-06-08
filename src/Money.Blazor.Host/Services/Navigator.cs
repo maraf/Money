@@ -115,7 +115,7 @@ namespace Money.Services
             => manager.NavigateTo(UrlAbout());
 
         public void OpenUserManage()
-            => manager.NavigateTo(UrlUserManage());
+            => manager.NavigateTo(UrlUserProfile());
 
         public void OpenUserPassword()
             => manager.NavigateTo(UrlUserPassword());

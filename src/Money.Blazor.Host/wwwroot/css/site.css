@@ -46,6 +46,9 @@ h4 {
 .fas.fa-trash-alt {
   color: #D85A5A; }
 
+.dropdown-item {
+  padding: .25rem 1rem; }
+
 .navbar-dark {
   background-color: #004074;
   border-color: #398BF5; }
@@ -76,12 +79,12 @@ h4 {
     .navbar-dark .nav-link {
       padding-top: .75rem;
       padding-bottom: .75rem; }
-    .navbar-dark hr {
+    .navbar-dark hr.separator {
       margin-right: -18px;
       margin-left: -26px; } }
 
 @media (max-width: 991px) and (min-width: 596px) {
-  .navbar-dark hr {
+  .navbar-dark hr.separator {
     margin-right: -1rem;
     margin-left: -1rem; } }
   .navbar-dark .navbar-nav > li > a,
@@ -101,7 +104,7 @@ h4 {
   .navbar-dark a.navbar-brand {
     color: #fff;
     padding: 0; }
-  .navbar-dark .nav-item hr {
+  .navbar-dark .nav-item hr.separator {
     border-color: rgba(255, 255, 255, 0.5); }
   @media (max-width: 992px) {
     .navbar-dark .fas, .navbar-dark .fa {

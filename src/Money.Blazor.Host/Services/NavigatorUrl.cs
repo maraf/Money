@@ -76,7 +76,7 @@ namespace Money.Services
         public string UrlAbout()
             => "/about";
 
-        public string UrlUserManage()
+        public string UrlUserProfile()
             => "/user";
 
         public string UrlUserPassword()

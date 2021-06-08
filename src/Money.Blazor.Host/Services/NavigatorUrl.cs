@@ -1,4 +1,6 @@
-﻿using Money.Models;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using Money.Models;
+using Money.Models.Sorting;
 using Neptuo.Models.Keys;
 using System;
 using System.Collections.Generic;
@@ -53,8 +55,17 @@ namespace Money.Services
         public string UrlTrends(YearModel year, IKey categoryKey) 
             => $"/{year.Year}/trends/{categoryKey.AsGuidKey().Guid}";
 
-        public string UrlSearch()
-            => $"/search";
+        public string UrlSearch(string query = null, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null)
+        {
+            string url = "/search";
+            if (!String.IsNullOrEmpty(query))
+                url = QueryHelpers.AddQueryString(url, "q", query);
+
+            if (sortDescriptor != null)
+                url = QueryHelpers.AddQueryString(url, "sort", sortDescriptor.ToUrlString());
+
+            return url;
+        }
 
         public string UrlCategories()
             => "/categories";

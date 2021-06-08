@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
 using Microsoft.JSInterop;
 using Money.Components;
 using Money.Models;
+using Money.Models.Sorting;
 using Neptuo;
 using Neptuo.Models.Keys;
 using System;
@@ -19,6 +22,7 @@ namespace Money.Services
         private readonly ModalContainer modalContainer;
         private readonly Interop interop;
         private readonly IJSRuntime js;
+        private Dictionary<string, StringValues> queryString;
 
         public event Action<string> LocationChanged;
 
@@ -45,7 +49,10 @@ namespace Money.Services
             => manager.Uri;
 
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
-            => LocationChanged?.Invoke(e.Location);
+        {
+            queryString = null;
+            LocationChanged?.Invoke(e.Location);
+        }
 
         public async Task ReloadAsync()
             => await js.InvokeVoidAsync("window.location.reload");
@@ -95,8 +102,8 @@ namespace Money.Services
         public void OpenTrends(YearModel Year, IKey categoryKey)
             => manager.NavigateTo(UrlTrends(Year, categoryKey));
 
-        public void OpenSearch()
-            => manager.NavigateTo(UrlSearch());
+        public void OpenSearch(string searchText = null, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null)
+            => manager.NavigateTo(UrlSearch(searchText, sortDescriptor));
 
         public void OpenCategories()
             => manager.NavigateTo(UrlCategories());
@@ -140,6 +147,25 @@ namespace Money.Services
 
         public void OpenRegister()
             => manager.NavigateTo(UrlAccountRegister());
+
+        public Dictionary<string, StringValues> GetQueryString()
+        {
+            if (queryString == null)
+            {
+                var absolute = manager.ToAbsoluteUri(manager.Uri);
+                queryString = QueryHelpers.ParseQuery(absolute.Query);
+            }
+
+            return queryString;
+        }
+
+        public string FindQueryParameter(string name)
+        {
+            if (GetQueryString().TryGetValue(name, out var value))
+                return value;
+
+            return null;
+        }
 
         public class ModalContainer
         {

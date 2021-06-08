@@ -5,16 +5,16 @@
 <ExceptionPanel />
 
 <div class="search">
-    <form @onsubmit="@(() => OnSearchAsync())">
+    <form @onsubmit="@(() => { Navigator.OpenSearch(FormText, DefaultSort.Equals(FormSort) ? null : FormSort); StateHasChanged(); })">
         <div class="form-row">
             <div class="col-12 col-md">
                 <div class="form-group">
-                    <input class="form-control" placeholder="Search..." @bind="@Text" />
+                    <input class="form-control" placeholder="Search..." @bind="@FormText" />
                 </div>
             </div>
             <div class="col-auto col-md-auto">
                 <div class="form-group">
-                    <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+                    <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@FormSort" />
                 </div>
             </div>
             <div class="col col-md-auto">

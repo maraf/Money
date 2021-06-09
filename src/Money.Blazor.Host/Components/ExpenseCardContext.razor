@@ -1,0 +1,8 @@
+﻿<CascadingValue Value="@this">
+    @ChildContent
+</CascadingValue>
+
+<Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@OnDeleteConfirmed" />
+<OutcomeAmount @ref="AmountEditModal" OutcomeKey="@SelectedItem?.Key" Amount="@(SelectedItem?.Amount?.Value ?? 0)" Currency="@SelectedItem?.Amount?.Currency" />
+<OutcomeDescription @ref="DescriptionEditModal" OutcomeKey="@SelectedItem?.Key" Description="@SelectedItem?.Description" />
+<OutcomeWhen @ref="WhenEditModal" OutcomeKey="@SelectedItem?.Key" When="@(SelectedItem?.When ?? DateTime.MinValue)" />

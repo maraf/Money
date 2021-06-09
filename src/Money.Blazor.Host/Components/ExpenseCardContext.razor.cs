@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public partial class ExpenseCardContext : OutcomeCard.IContext
+    public partial class ExpenseCardContext : ExpenseCard.IContext
     {
         [Inject]
         public ICommandDispatcher Commands { get; set; }
@@ -26,20 +26,20 @@ namespace Money.Components
 
         #region OutcomeCard.IContext
 
-        CurrencyFormatter OutcomeCard.IContext.CurrencyFormatter => currencyFormatter;
+        CurrencyFormatter ExpenseCard.IContext.CurrencyFormatter => currencyFormatter;
 
-        bool OutcomeCard.IContext.HasEdit => true;
+        bool ExpenseCard.IContext.HasEdit => true;
 
-        void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
             => OnActionClick(model, AmountEditModal);
 
-        void OutcomeCard.IContext.EditDescription(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditDescription(OutcomeOverviewModel model)
             => OnActionClick(model, DescriptionEditModal);
 
-        void OutcomeCard.IContext.EditWhen(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditWhen(OutcomeOverviewModel model)
             => OnActionClick(model, WhenEditModal);
 
-        void OutcomeCard.IContext.Delete(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.Delete(OutcomeOverviewModel model)
             => OnDeleteClick(model);
 
         #endregion

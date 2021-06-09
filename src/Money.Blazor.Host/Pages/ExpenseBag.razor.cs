@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace Money.Pages
 {
     public partial class ExpenseBag : IDisposable, 
-        OutcomeCard.IContext,
+        ExpenseCard.IContext,
         IEventHandler<LocallyStoredExpenseCreated>, 
         IEventHandler<LocallyStoredExpensesPublished>
     {
@@ -92,18 +92,18 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        bool OutcomeCard.IContext.HasEdit => true;
+        bool ExpenseCard.IContext.HasEdit => true;
 
-        void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
         { }
 
-        void OutcomeCard.IContext.EditDescription(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditDescription(OutcomeOverviewModel model)
         { }
 
-        void OutcomeCard.IContext.EditWhen(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditWhen(OutcomeOverviewModel model)
         { }
 
-        async void OutcomeCard.IContext.Delete(OutcomeOverviewModel model)
+        async void ExpenseCard.IContext.Delete(OutcomeOverviewModel model)
         {
             Log.Debug($"Deleting '{model.Key}'.");
 

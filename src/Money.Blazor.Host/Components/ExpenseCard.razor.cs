@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public partial class OutcomeCard
+    public partial class ExpenseCard
     {
         public interface IContext
         {

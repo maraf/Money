@@ -36,12 +36,12 @@
         else
         {
             <div class="cards">
-                <CascadingValue Value="@this">
+                <ExpenseCardContext>
                     @foreach (var item in Models)
                     {
                         <OutcomeCard Model="@item" />
                     }
-                </CascadingValue>
+                </ExpenseCardContext>
             </div>
 
             <Paging Context="@PagingContext" />

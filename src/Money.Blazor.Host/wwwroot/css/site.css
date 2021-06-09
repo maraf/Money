@@ -313,9 +313,6 @@ h4 {
   max-width: 900px;
   margin: 0 auto; }
 
-.search .controls {
-  display: none; }
-
 .cards {
   margin: 20px 0; }
   .cards .row:first-child {

@@ -23,7 +23,6 @@ namespace Money.Pages
 {
     public partial class Overview<T> :
         System.IDisposable,
-        OutcomeCard.IContext,
         IEventHandler<OutcomeCreated>,
         IEventHandler<OutcomeDeleted>,
         IEventHandler<OutcomeAmountChanged>,
@@ -31,8 +30,6 @@ namespace Money.Pages
         IEventHandler<OutcomeWhenChanged>,
         IEventHandler<PulledToRefresh>
     {
-        public CurrencyFormatter CurrencyFormatter { get; private set; }
-
         [Inject]
         public ICommandDispatcher Commands { get; set; }
 
@@ -48,9 +45,6 @@ namespace Money.Pages
         [Inject]
         public Navigator Navigator { get; set; }
 
-        [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-
         protected string Title { get; set; }
         protected string SubTitle { get; set; }
 
@@ -58,19 +52,10 @@ namespace Money.Pages
         protected IKey CategoryKey { get; set; }
         protected string CategoryName { get; set; }
         protected List<OutcomeOverviewModel> Items { get; set; }
-        protected OutcomeOverviewModel SelectedItem { get; set; }
-
-        protected ModalDialog AmountEditModal { get; set; }
-        protected ModalDialog DescriptionEditModal { get; set; }
-        protected ModalDialog WhenEditModal { get; set; }
 
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
         protected PagingContext PagingContext { get; set; }
-
-        protected OutcomeOverviewModel Selected { get; set; }
-        protected string DeleteMessage { get; set; }
-        protected Confirm DeleteConfirm { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -90,8 +75,7 @@ namespace Money.Pages
             {
                 Title = $"Expenses in {SelectedPeriod}";
             }
-
-            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
+            
             Reload();
         }
 
@@ -134,27 +118,6 @@ namespace Money.Pages
         protected async void OnSortChanged()
         {
             await PagingContext.LoadAsync(0);
-            StateHasChanged();
-        }
-
-        protected void OnActionClick(OutcomeOverviewModel model, ModalDialog modal)
-        {
-            SelectedItem = model;
-            modal.Show();
-            StateHasChanged();
-        }
-
-        protected void OnDeleteClick(OutcomeOverviewModel model)
-        {
-            Selected = model;
-            DeleteMessage = $"Do you really want to delete expense '{model.Description}'?";
-            DeleteConfirm.Show();
-            StateHasChanged();
-        }
-
-        protected async void OnDeleteConfirmed()
-        {
-            await Commands.HandleAsync(new DeleteOutcome(Selected.Key));
             StateHasChanged();
         }
 
@@ -260,24 +223,6 @@ namespace Money.Pages
             await LoadDataAsync();
             StateHasChanged();
         }
-
-        #endregion
-
-        #region OutcomeCard.IContext
-
-        bool OutcomeCard.IContext.HasEdit => true;
-
-        void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
-            => OnActionClick(model, AmountEditModal);
-
-        void OutcomeCard.IContext.EditDescription(OutcomeOverviewModel model)
-            => OnActionClick(model, DescriptionEditModal);
-
-        void OutcomeCard.IContext.EditWhen(OutcomeOverviewModel model)
-            => OnActionClick(model, WhenEditModal);
-
-        void OutcomeCard.IContext.Delete(OutcomeOverviewModel model)
-            => OnDeleteClick(model);
 
         #endregion
     }

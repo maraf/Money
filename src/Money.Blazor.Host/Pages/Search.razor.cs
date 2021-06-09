@@ -5,7 +5,6 @@ using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Services;
-using Neptuo;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class Search : OutcomeCard.IContext, System.IDisposable
+    public partial class Search : System.IDisposable
     {
         public static readonly SortDescriptor<OutcomeOverviewSortType> DefaultSort = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
 
@@ -102,23 +101,5 @@ namespace Money.Pages
                 return PagingLoadStatus.LastPage;
             }
         }
-
-        #region OutcomeCard.IContext
-
-        bool OutcomeCard.IContext.HasEdit => false;
-
-        void OutcomeCard.IContext.EditAmount(OutcomeOverviewModel model)
-            => throw Ensure.Exception.NotSupported();
-
-        void OutcomeCard.IContext.EditDescription(OutcomeOverviewModel model)
-            => throw Ensure.Exception.NotSupported();
-
-        void OutcomeCard.IContext.EditWhen(OutcomeOverviewModel model)
-            => throw Ensure.Exception.NotSupported();
-
-        void OutcomeCard.IContext.Delete(OutcomeOverviewModel model)
-            => throw Ensure.Exception.NotSupported();
-
-        #endregion
     }
 }

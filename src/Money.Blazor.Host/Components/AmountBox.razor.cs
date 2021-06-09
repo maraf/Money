@@ -23,6 +23,9 @@ namespace Money.Components
         public bool AutoFocus { get; set; }
 
         [Parameter]
+        public bool AutoSelect { get; set; }
+
+        [Parameter]
         public decimal Value { get; set; }
 
         [Parameter]

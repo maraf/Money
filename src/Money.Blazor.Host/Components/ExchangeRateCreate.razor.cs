@@ -59,7 +59,7 @@ namespace Money.Components
         protected void Reset()
         {
             Rate = 1;
-            ValidFrom = DateTime.Today;
+            ValidFrom = DateTime.UtcNow.Date;
         }
 
         protected void OnSaveClick()

@@ -47,7 +47,7 @@ namespace Money.Components
         public string Description { get; set; }
 
         [Parameter]
-        public DateTime When { get; set; } = DateTime.Today;
+        public DateTime When { get; set; } = DateTime.UtcNow.Date;
 
         protected async override Task OnParametersSetAsync()
         {

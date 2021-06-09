@@ -43,7 +43,10 @@ namespace Money.Components
         {
             string rawValue = e.Value?.ToString();
             if (TryParseDate(rawValue, Format, out var value) || TryParseDate(rawValue, SimplifyFormat(), out value) || DateTime.TryParse(rawValue, out value))
+            {
+                value = TimeZoneInfo.ConvertTimeToUtc(value).Date;
                 ValueChanged?.Invoke(Value = value);
+            }
 
             string SimplifyFormat() 
                 => Format.Replace("dd", "d").Replace("MM", "M");

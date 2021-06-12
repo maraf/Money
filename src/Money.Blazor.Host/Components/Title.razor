@@ -1,52 +1,53 @@
-﻿<div class="header">
-    <div class="container">
-        <div class="d-flex">
-            <h3 class="mr-1">
-                @if (!String.IsNullOrEmpty(Icon))
-                {
-                    <Icon Identifier="@Icon" class="ml-1 mr-2" />
-                }
+﻿<TemplateContent Name="FixedTop">
+    <div class="header">
+        <div class="container">
+            <div class="d-flex">
+                <h3 class="mr-1">
+                    @if (!String.IsNullOrEmpty(Icon))
+                    {
+                        <Icon Identifier="@Icon" class="ml-1 mr-2" />
+                    }
 
-                @Main
-            </h3>
-            <div class="actions">
-                @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
-                {
-                    <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
-                        @if (!String.IsNullOrEmpty(ButtonIcon))
-                        {
-                            <Icon Identifier="@ButtonIcon" class="mr-1" />
-                        }
+                    @Main
+                </h3>
+                <div class="actions">
+                    @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
+                            @if (!String.IsNullOrEmpty(ButtonIcon))
+                            {
+                                <Icon Identifier="@ButtonIcon" class="mr-1" />
+                            }
 
-                        @ButtonText
-                    </button>
-                }
+                            @ButtonText
+                        </button>
+                    }
 
-                @ButtonContent
+                    @ButtonContent
+                </div>
             </div>
+
+            @if (!String.IsNullOrEmpty(Sub))
+            {
+                <h6 class="d-none d-md-block">
+                    @Sub
+                </h6>
+            }
+
+        </div>
+    </div>
+    @if (!String.IsNullOrEmpty(Sub))
+    {
+        <div class="d-none d-md-block">
+            <div class="header-append"></div>
         </div>
 
-        @if (!String.IsNullOrEmpty(Sub))
-        {
-            <h6 class="d-none d-md-block">
-                @Sub
-            </h6>
-        }
-
-    </div>
-</div>
-@if (!String.IsNullOrEmpty(Sub))
-{
-    <div class="d-none d-md-block">
-        <div class="header-append"></div>
-    </div>
-
-    <div class="d-block d-md-none">
+        <div class="d-block d-md-none">
+            <div class="header-append-small"></div>
+        </div>
+    }
+    else
+    {
         <div class="header-append-small"></div>
-    </div>
-}
-else
-{
-    <div class="header-append-small"></div>
-}
-
+    }
+</TemplateContent>

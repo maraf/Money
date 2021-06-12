@@ -9,26 +9,26 @@
 }
 else
 {
-    <div class="row no-gutters" style="height: 400px; height: calc(100vh - 402px)">
-        <div class="col-1"></div>
+    <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 402px)">
+        <div class="d-none d-sm-block col-sm-1"></div>
 
         @foreach (var model in Models)
         {
-            <div class="col-1">
+            <div class="col col-sm-1">
                 <div class="p-1 p-md-3 h-100 w-100 vertical-bar">
                     <div class="w-100" style="height: @(model.TotalAmount.Value / MaxAmount * 100)%; background: @CategoryColor.ToHashCode()"></div>
                 </div>
             </div>
         }
 
-        <div class="col-1"></div>
+        <div class="d-none d-sm-block col-sm-1"></div>
     </div>
-    <div class="row no-gutters">
-        <div class="col-1"></div>
+    <div class="row no-gutters" style="min-width: 440px;">
+        <div class="d-none d-sm-block col-sm-1"></div>
 
         @foreach (var model in Models)
         {
-            <div class="col-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
+            <div class="col col-sm-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
                 <div class="p-1">
                     <div class="text-center mt-1 d-none d-lg-block">
                         <small>
@@ -45,8 +45,8 @@ else
                     </div>
                     <div class="text-center mt-1">
                         <a href="@Navigator.UrlOverview(model, CategoryKey)" class="btn btn-sm btn-block btn-secondary">
-                            <Icon Identifier="list-ul" class="d-inline d-lg-none" />
-                            <span class="d-none d-lg-inline">
+                            <Icon Identifier="list-ul" class="d-inline d-xl-none" title="Overview" />
+                            <span class="d-none d-xl-inline">
                                 Overview
                             </span>
                         </a>
@@ -61,6 +61,6 @@ else
             </div>
         }
 
-        <div class="col-1"></div>
+        <div class="d-none d-sm-block col-sm-1"></div>
     </div>
 }

@@ -18,7 +18,7 @@
 }
 else
 {
-    <div class="row no-gutters" style="height: 400px; height: calc(100vh - 328px)">
+    <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 328px)">
         @foreach (var model in Models)
         {
             <div class="col-1">
@@ -28,7 +28,7 @@ else
             </div>
         }
     </div>
-    <div class="row no-gutters">
+    <div class="row no-gutters" style="min-width: 440px;">
         @foreach (var model in Models)
         {
             <div class="col-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">

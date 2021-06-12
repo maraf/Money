@@ -36,7 +36,37 @@ window.Network = {
         window.addEventListener('offline', handler);
 
         if (!navigator.onLine) {
-            handler(navigator.onLine);
+            handler();
+        }
+    }
+};
+
+window.Visibility = {
+    Initialize: function (interop) {
+        let propertyName, eventName;
+        if (typeof document.hidden !== "undefined") {
+            propertyName = "hidden";
+            eventName = "visibilitychange";
+        } else if (typeof document.msHidden !== "undefined") {
+            propertyName = "msHidden";
+            eventName = "msvisibilitychange";
+        } else if (typeof document.webkitHidden !== "undefined") {
+            propertyName = "webkitHidden";
+            eventName = "webkitvisibilitychange";
+        }
+
+        function handler() {
+            interop.invokeMethodAsync("Visibility.StatusChanged", !document[propertyName]);
+        }
+
+        if (typeof document.addEventListener === "undefined" || propertyName === undefined) {
+            console.log("This demo requires a browser, such as Google Chrome or Firefox, that supports the Page Visibility API.");
+        } else {
+            document.addEventListener(eventName, handler, false);
+
+            if (document[propertyName]) {
+                handler();
+            }
         }
     }
 };

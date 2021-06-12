@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Money.Services
 {
-    public class NetworkState
+    public class VisibilityState
     {
         private readonly ILog log;
 
         public event Action StatusChanged;
 
-        public NetworkState(NetworkStateInterop interop, ILog<NetworkState> log)
+        public VisibilityState(VisibilityStateInterop interop, ILog<VisibilityState> log)
         {
             Ensure.NotNull(interop, "interop");
             Ensure.NotNull(log, "log");
@@ -24,17 +24,17 @@ namespace Money.Services
             _ = interop.InitializeAsync(OnStatusChanged);
         }
 
-        private void OnStatusChanged(bool isOnline)
+        private void OnStatusChanged(bool isVisible)
         {
-            if (IsOnline != isOnline)
+            if (IsVisible != isVisible)
             {
-                log.Debug($"IsVisible IsOnline changed {IsOnline} => '{isOnline}'.");
+                log.Debug($"IsVisible changed {IsVisible} => '{isVisible}'.");
 
-                IsOnline = isOnline;
+                IsVisible = isVisible;
                 StatusChanged?.Invoke();
             }
         }
 
-        public bool IsOnline { get; protected set; } = true;
+        public bool IsVisible { get; protected set; } = true;
     }
 }

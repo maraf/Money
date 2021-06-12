@@ -62,6 +62,8 @@ namespace Money.UI.Blazor
                 .AddSingleton<PwaInstallInterop>()
                 .AddTransient<NetworkStateInterop>()
                 .AddSingleton<NetworkState>()
+                .AddTransient<VisibilityStateInterop>()
+                .AddSingleton<VisibilityState>()
                 .AddSingleton<PullToRefreshInterop>()
                 .AddTransient<CurrencyStorage>()
                 .AddTransient<CategoryStorage>()
@@ -102,6 +104,8 @@ namespace Money.UI.Blazor
 
             services.GetRequiredService<ApiAuthenticationStateProvider>()
                 .AddValidator(services.GetRequiredService<ApiTokenValidator>());
+
+            services.GetRequiredService<VisibilityState>();
         }
     }
 }

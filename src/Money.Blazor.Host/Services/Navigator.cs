@@ -48,6 +48,9 @@ namespace Money.Services
         public string UrlCurrent() 
             => manager.Uri;
 
+        public string UrlOrigin() 
+            => manager.BaseUri;
+
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
         {
             queryString = null;

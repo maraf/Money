@@ -86,6 +86,9 @@ namespace Money.UI.Blazor
                 .AddBlazoredLocalStorage()
                 .AddBlazoredSessionStorage();
 
+            services
+                .AddSingleton<TemplateService>();
+
             bootstrapTask = new Bootstrap.BootstrapTask(services);
             bootstrapTask.Initialize();
         }

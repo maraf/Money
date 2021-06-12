@@ -1,4 +1,6 @@
-﻿using Neptuo;
+﻿using Money.Events;
+using Neptuo;
+using Neptuo.Events;
 using Neptuo.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,14 +13,17 @@ namespace Money.Services
 {
     public class VisibilityState
     {
+        private readonly IEventDispatcher events;
         private readonly ILog log;
 
         public event Action StatusChanged;
 
-        public VisibilityState(VisibilityStateInterop interop, ILog<VisibilityState> log)
+        public VisibilityState(VisibilityStateInterop interop, IEventDispatcher events, ILog<VisibilityState> log)
         {
             Ensure.NotNull(interop, "interop");
+            Ensure.NotNull(events, "events");
             Ensure.NotNull(log, "log");
+            this.events = events;
             this.log = log;
 
             _ = interop.InitializeAsync(OnStatusChanged);
@@ -32,6 +37,8 @@ namespace Money.Services
 
                 IsVisible = isVisible;
                 StatusChanged?.Invoke();
+
+                _ = events.PublishAsync(new VisibilityChanged(IsVisible));
             }
         }
 

@@ -159,6 +159,13 @@ h4 {
     a.navbar-brand {
         color: #fff;
         padding: 0;
+
+        .brand-author {
+            position: absolute;
+            bottom: 0;
+            left: 47px;
+            font-size: 8px;
+        }
     }
 
     .nav-item hr.separator {

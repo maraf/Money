@@ -70,7 +70,7 @@ namespace Money
                             var path = context.HttpContext.Request.Path;
                             if (path.StartsWithSegments("/api"))
                             {
-                                var accessToken = context.HttpContext.Request.Query["access_token"];
+                                string accessToken = context.HttpContext.Request.Query["access_token"].FirstOrDefault();
                                 if (!string.IsNullOrEmpty(accessToken))
                                     context.Token = accessToken;
                             }

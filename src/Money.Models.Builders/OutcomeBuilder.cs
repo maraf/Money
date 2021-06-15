@@ -378,10 +378,10 @@ namespace Money.Models.Builders
                 var sql = db.Outcomes
                     .Include(o => o.Categories)
                     .WhereUserKey(query.UserKey)
-                    .Where(o => EF.Functions.Like(o.Description, $"%{query.Text}%"))
-                    .TakePage(query.PageIndex, PageSize);
+                    .Where(o => EF.Functions.Like(o.Description, $"%{query.Text}%"));
 
                 sql = ApplySorting(sql, query);
+                sql = ApplyPaging(sql, query);
 
                 List<OutcomeEntity> entities = await sql.ToListAsync();
 

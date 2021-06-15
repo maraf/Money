@@ -13,7 +13,7 @@ namespace Money.Models.Queries
     /// <summary>
     /// A query for searching in outcomes.
     /// </summary>
-    public class SearchOutcomes : UserQuery, IQuery<List<OutcomeOverviewModel>>, ISortableQuery<OutcomeOverviewSortType>
+    public class SearchOutcomes : UserQuery, IQuery<List<OutcomeOverviewModel>>, ISortableQuery<OutcomeOverviewSortType>, IPageableQuery
     {
         /// <summary>
         /// Gets a phrase to search.
@@ -39,6 +39,8 @@ namespace Money.Models.Queries
         [CompositeVersion]
         [CompositeProperty(3, Version = 2)]
         public int Version { get; private set; }
+
+        int? IPageableQuery.PageIndex => PageIndex;
 
         /// <summary>
         /// Creates a new instance.

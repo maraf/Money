@@ -93,9 +93,17 @@ namespace Money.Models.Builders
                 {
                     Price price;
                     if (totals.TryGetValue(category.CategoryId, out price))
-                        price = price + priceConverter.ToDefault(userKey, outcome);
+                    {
+                        if (!outcome.IsFixed)
+                            price = price + priceConverter.ToDefault(userKey, outcome);
+                    }
                     else
-                        price = priceConverter.ToDefault(userKey, outcome);
+                    {
+                        if (!outcome.IsFixed)
+                            price = priceConverter.ToDefault(userKey, outcome);
+                        else
+                            price = priceConverter.ZeroDefault(userKey);
+                    }
 
                     totals[category.CategoryId] = price;
                 }
@@ -129,7 +137,6 @@ namespace Money.Models.Builders
                 List<OutcomeEntity> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
-                    .Where(o => o.IsFixed == false)
                     .Include(o => o.Categories)
                     .ToListAsync();
 
@@ -144,7 +151,6 @@ namespace Money.Models.Builders
                 List<OutcomeEntity> outcomes = await db.Outcomes
                     .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Year == query.Year.Year)
-                    .Where(o => o.IsFixed == false)
                     .Include(o => o.Categories)
                     .ToListAsync();
 

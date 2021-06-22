@@ -17,6 +17,7 @@ namespace Money
     /// </summary>
     public class Income : AggregateRoot,
         IEventHandler<IncomeCreated>,
+        IEventHandler<IncomeAmountChanged>,
         IEventHandler<IncomeDeleted>
     {
         public bool IsDeleted { get; private set; }
@@ -51,6 +52,20 @@ namespace Money
             : base(key, events)
         { }
 
+        private void EnsureNotDeleted()
+        {
+            if (IsDeleted)
+                throw new IncomeAlreadyDeletedException();
+        }
+
+        public void ChangeAmount(Price amount)
+        {
+            EnsureNotDeleted();
+
+            if (Amount != amount)
+                Publish(new IncomeAmountChanged(Amount, amount));
+        }
+
         public void Delete() => Publish(new IncomeDeleted());
 
         Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)
@@ -60,6 +75,14 @@ namespace Money
                 Amount = payload.Amount;
                 Description = payload.Description;
                 When = payload.When;
+            });
+        }
+
+        Task IEventHandler<IncomeAmountChanged>.HandleAsync(IncomeAmountChanged payload)
+        {
+            return UpdateState(() =>
+            {
+                Amount = payload.NewValue;
             });
         }
 

@@ -19,6 +19,7 @@ namespace Money
         IEventHandler<IncomeCreated>,
         IEventHandler<IncomeAmountChanged>,
         IEventHandler<IncomeDescriptionChanged>,
+        IEventHandler<IncomeWhenChanged>,
         IEventHandler<IncomeDeleted>
     {
         public bool IsDeleted { get; private set; }
@@ -53,6 +54,16 @@ namespace Money
             : base(key, events)
         { }
 
+        Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)
+        {
+            return UpdateState(() =>
+            {
+                Amount = payload.Amount;
+                Description = payload.Description;
+                When = payload.When;
+            });
+        }
+
         private void EnsureNotDeleted()
         {
             if (IsDeleted)
@@ -67,26 +78,6 @@ namespace Money
                 Publish(new IncomeAmountChanged(Amount, amount));
         }
 
-        public void ChangeDescription(string description)
-        {
-            EnsureNotDeleted();
-
-            if (Description != description)
-                Publish(new IncomeDescriptionChanged(description));
-        }
-
-        public void Delete() => Publish(new IncomeDeleted());
-
-        Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)
-        {
-            return UpdateState(() =>
-            {
-                Amount = payload.Amount;
-                Description = payload.Description;
-                When = payload.When;
-            });
-        }
-
         Task IEventHandler<IncomeAmountChanged>.HandleAsync(IncomeAmountChanged payload)
         {
             return UpdateState(() =>
@@ -95,12 +86,12 @@ namespace Money
             });
         }
 
-        Task IEventHandler<IncomeDeleted>.HandleAsync(IncomeDeleted payload)
+        public void ChangeDescription(string description)
         {
-            return UpdateState(() =>
-            {
-                IsDeleted = true;
-            });
+            EnsureNotDeleted();
+
+            if (Description != description)
+                Publish(new IncomeDescriptionChanged(description));
         }
 
         Task IEventHandler<IncomeDescriptionChanged>.HandleAsync(IncomeDescriptionChanged payload)
@@ -108,6 +99,32 @@ namespace Money
             return UpdateState(() =>
             {
                 Description = payload.Description;
+            });
+        }
+
+        public void ChangeWhen(DateTime when)
+        {
+            EnsureNotDeleted();
+
+            if (When != when)
+                Publish(new IncomeWhenChanged(when));
+        }
+
+        Task IEventHandler<IncomeWhenChanged>.HandleAsync(IncomeWhenChanged payload)
+        {
+            return UpdateState(() =>
+            {
+                When = payload.When;
+            });
+        }
+
+        public void Delete() => Publish(new IncomeDeleted());
+
+        Task IEventHandler<IncomeDeleted>.HandleAsync(IncomeDeleted payload)
+        {
+            return UpdateState(() =>
+            {
+                IsDeleted = true;
             });
         }
     }

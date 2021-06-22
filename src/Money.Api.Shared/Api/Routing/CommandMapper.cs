@@ -20,6 +20,7 @@ namespace Money.Api.Routing
             Add<CreateIncome>("income-create");
             Add<ChangeIncomeAmount>("income-change-amount");
             Add<ChangeIncomeDescription>("income-change-description");
+            Add<ChangeIncomeWhen>("income-change-when");
             Add<DeleteIncome>("income-delete");
 
             Add<CreateCategory>("category-create");

@@ -11,7 +11,7 @@ namespace Money.Models
     /// <summary>
     /// A model for a month of a year.
     /// </summary>
-    public class MonthModel : IEquatable<MonthModel>
+    public class MonthModel : IEquatable<MonthModel>, IComparable<MonthModel>
     {
         /// <summary>
         /// Gets a year.
@@ -62,6 +62,15 @@ namespace Money.Models
             hashCode = hashCode * -1521134295 + Year.GetHashCode();
             hashCode = hashCode * -1521134295 + Month.GetHashCode();
             return hashCode;
+        }
+
+        public int CompareTo(MonthModel other)
+        {
+            int compare = Year.CompareTo(other.Year);
+            if (compare == 0)
+                compare = Month.CompareTo(other.Month);
+
+            return compare;
         }
 
         /// <summary>

@@ -28,20 +28,13 @@ namespace Money.Pages
         [Inject]
         protected IEventHandlerCollection EventHandlers { get; set; }
 
-        protected List<CategoryModel> Categories { get; set; }
-        protected List<YearWithAmountModel> Summaries { get; set; }
+        protected List<MonthBalanceModel> Balances { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
-            Categories = await Queries.QueryAsync(new ListAllCategory());
-        }
-
-        protected async Task LoadCategoryAsync(IKey categoryKey)
-        {
-            Summaries = null;
-            Summaries = await Queries.QueryAsync(new ListYearOutcomesForCategory(categoryKey, new YearModel(2015)));
+            Balances = await Queries.QueryAsync(new ListMonthBalance(DateTime.Now));
         }
     }
 }

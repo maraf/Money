@@ -33,7 +33,8 @@ namespace Money.Models.Builders
         IQueryHandler<ListYearOutcomeFromCategory, List<OutcomeOverviewModel>>,
         IQueryHandler<SearchOutcomes, List<OutcomeOverviewModel>>,
         IQueryHandler<ListMonthOutcomesForCategory, List<MonthWithAmountModel>>,
-        IQueryHandler<ListYearOutcomesForCategory, List<YearWithAmountModel>>
+        IQueryHandler<ListYearOutcomesForCategory, List<YearWithAmountModel>>,
+        IQueryHandler<ListMonthBalance, List<MonthBalanceModel>>
     {
         const int PageSize = 10;
 
@@ -484,6 +485,79 @@ namespace Money.Models.Builders
                     .Select(t => new YearWithAmountModel(t.Key.Year, t.Value))
                     .ToList();
             }
+        }
+
+        public async Task<List<MonthBalanceModel>> HandleAsync(ListMonthBalance query)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                Dictionary<MonthModel, Price> expenses = await GetMonthBalanceExpensesAsync(db, query);
+                Dictionary<MonthModel, Price> incomes = await GetMonthBalanceIncomesAsync(db, query);
+
+                List<MonthBalanceModel> result = new List<MonthBalanceModel>();
+                foreach (var expense in expenses)
+                {
+                    if (!incomes.TryGetValue(expense.Key, out var income))
+                        income = priceConverter.ZeroDefault(query.UserKey);
+
+                    result.Add(new MonthBalanceModel(expense.Key.Year, expense.Key.Month, expense.Value, income));
+                }
+
+                foreach (var income in incomes)
+                {
+                    if (!result.Any(b => b == income.Key))
+                        result.Add(new MonthBalanceModel(income.Key.Year, income.Key.Month, priceConverter.ZeroDefault(query.UserKey), income.Value));
+                }
+
+                result.Sort((a, b) => a.Month.CompareTo(b.Month));
+                return result;
+            }
+        }
+
+        private async Task<Dictionary<MonthModel, Price>> GetMonthBalanceExpensesAsync(ReadModelContext db, ListMonthBalance query)
+        {
+            var sql = db.Outcomes
+                .WhereUserKey(query.UserKey)
+                .Where(o => o.When.Year == query.Year.Year);
+
+            List<OutcomeEntity> entities = await sql.ToListAsync();
+            Dictionary<MonthModel, Price> totals = new Dictionary<MonthModel, Price>();
+            foreach (OutcomeEntity entity in entities)
+            {
+                MonthModel month = entity.When;
+                Price price;
+                if (totals.TryGetValue(month, out price))
+                    price = price + priceConverter.ToDefault(query.UserKey, entity);
+                else
+                    price = priceConverter.ToDefault(query.UserKey, entity);
+
+                totals[month] = price;
+            }
+
+            return totals;
+        }
+
+        private async Task<Dictionary<MonthModel, Price>> GetMonthBalanceIncomesAsync(ReadModelContext db, ListMonthBalance query)
+        {
+            var sql = db.Incomes
+                .WhereUserKey(query.UserKey)
+                .Where(o => o.When.Year == query.Year.Year);
+
+            List<IncomeEntity> entities = await sql.ToListAsync();
+            Dictionary<MonthModel, Price> totals = new Dictionary<MonthModel, Price>();
+            foreach (IncomeEntity entity in entities)
+            {
+                MonthModel month = entity.When;
+                Price price;
+                if (totals.TryGetValue(month, out price))
+                    price = price + priceConverter.ToDefault(query.UserKey, entity);
+                else
+                    price = priceConverter.ToDefault(query.UserKey, entity);
+
+                totals[month] = price;
+            }
+
+            return totals;
         }
     }
 }

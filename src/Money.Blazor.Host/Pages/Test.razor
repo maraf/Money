@@ -1,43 +1,38 @@
 ﻿@page "/test"
 
 <div style="margin-top: 5rem;">
-    @if (Categories == null)
+    @if (Balances == null)
     {
         <em>Loading...</em>
     }
     else
     {
-        <ul class="nav">
-            @foreach (var category in Categories)
+        <table>
+            <tr>
+                <td>
+                    Month
+                </td>
+                <td>
+                    Expenses
+                </td>
+                <td>
+                    Incomes
+                </td>
+            </tr>
+            @foreach (var balance in Balances)
             {
-                <li class="nav-item">
-                    <a class="nav-link" @onclick="(async () => await LoadCategoryAsync(category.Key))">@category.Name</a>
-                </li>
+                <tr>
+                    <td>
+                        @balance
+                    </td>
+                    <td>
+                        @balance.ExpenseSummary
+                    </td>
+                    <td>
+                        @balance.IncomeSummary
+                    </td>
+                </tr>
             }
-        </ul>
-
-        @if (Summaries == null)
-        {
-            <em>Loading...</em>
-        }
-        else
-        {
-            <table class="table">
-                <tr>
-                    @foreach (var model in Summaries)
-                    {
-                        <th>@model.Year</th>
-                    }
-                </tr>
-                <tr>
-                    @foreach (var model in Summaries)
-                    {
-                        <td>
-                            @model.TotalAmount
-                        </td>
-                    }
-                </tr>
-            </table>
-        }
+        </table>
     }
 </div>

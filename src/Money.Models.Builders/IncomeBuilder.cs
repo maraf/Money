@@ -18,6 +18,7 @@ namespace Money.Models.Builders
 {
     public class IncomeBuilder : IEventHandler<IncomeCreated>,
         IEventHandler<IncomeAmountChanged>,
+        IEventHandler<IncomeDescriptionChanged>,
         IEventHandler<IncomeDeleted>,
         IQueryHandler<GetTotalMonthIncome, Price>,
         IQueryHandler<ListMonthIncome, List<IncomeOverviewModel>>
@@ -53,6 +54,19 @@ namespace Money.Models.Builders
                 {
                     entity.Amount = payload.NewValue.Value;
                     entity.Currency = payload.NewValue.Currency;
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task HandleAsync(IncomeDescriptionChanged payload)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                IncomeEntity entity = await db.Incomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
+                if (entity != null)
+                {
+                    entity.Description = payload.Description;
                     await db.SaveChangesAsync();
                 }
             }

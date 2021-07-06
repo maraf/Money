@@ -14,6 +14,7 @@ namespace Money.Models
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<OutcomeCategoryEntity> OutcomeCategories { get; set; }
         public DbSet<OutcomeEntity> Outcomes { get; set; }
+        public DbSet<ExpenseTemplateEntity> ExpenseTemplates { get; set; }
         public DbSet<IncomeEntity> Incomes { get; set; }
         public DbSet<CurrencyEntity> Currencies { get; set; }
         public DbSet<CurrencyExchangeRateEntity> ExchangeRates { get; set; }

@@ -28,6 +28,8 @@ namespace Money.Api.Routing
             Add<ListMonthOutcomeFromCategory>("month-outcome-from-category");
             Add<ListMonthWithOutcome>("months-with-outcome");
 
+            Add<ListAllExpenseTemplate>("expense-templates");
+
             Add<GetTotalMonthIncome>("month-income-total");
             Add<ListMonthIncome>("month-incomes");
 

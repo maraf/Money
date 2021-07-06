@@ -40,6 +40,10 @@ namespace Money.Models.Builders
             queryHandlers.AddAll(outcomeBuilder);
             eventHandlers.AddAll(outcomeBuilder);
 
+            var expenseTemplateBuilder = new ExpenseTemplateBuilder(dbFactory);
+            queryHandlers.AddAll(expenseTemplateBuilder);
+            eventHandlers.AddAll(expenseTemplateBuilder);
+
             var incomeBuilder = new IncomeBuilder(dbFactory, priceConverter);
             queryHandlers.AddAll(incomeBuilder);
             eventHandlers.AddAll(incomeBuilder);

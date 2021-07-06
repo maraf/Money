@@ -183,6 +183,11 @@ namespace Neptuo.Formatters
                 }
 
                 JsonElement element = (JsonElement)target;
+                if (element.ValueKind == JsonValueKind.Null)
+                {
+                    value = default(T);
+                    return true;
+                }
 
                 if (typeof(T) == typeof(string))
                 {

@@ -27,6 +27,12 @@ namespace Neptuo.Formatters.Converters
 
         private bool TryConvertFromJson(Type targetType, JToken sourceValue, out object targetValue)
         {
+            if (sourceValue.Type == JTokenType.Null)
+            {
+                targetValue = null;
+                return true;
+            }
+
             targetValue = JsonConvert.DeserializeObject(sourceValue.ToString(), targetType);
             return targetValue != null;
         }

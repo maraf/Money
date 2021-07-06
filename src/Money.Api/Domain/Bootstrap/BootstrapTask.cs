@@ -164,13 +164,25 @@ namespace Money.Bootstrap
 
             queryDispatcher = new DefaultQueryDispatcher();
 
+            var snapshotProvider = new NoSnapshotProvider();
+            var snapshotStore = new EmptySnapshotStore();
+
             var outcomeRepository = new AggregateRootRepository<Outcome>(
                 eventStore,
                 eventFormatter,
                 new ReflectionAggregateRootFactory<Outcome>(),
                 eventDispatcher,
-                new NoSnapshotProvider(),
-                new EmptySnapshotStore()
+                snapshotProvider,
+                snapshotStore
+            );
+
+            var expenseTemplateRepository = new AggregateRootRepository<ExpenseTemplate>(
+                eventStore,
+                eventFormatter,
+                new ReflectionAggregateRootFactory<ExpenseTemplate>(),
+                eventDispatcher,
+                snapshotProvider,
+                snapshotStore
             );
 
             var incomeRepository = new AggregateRootRepository<Income>(
@@ -178,8 +190,8 @@ namespace Money.Bootstrap
                 eventFormatter,
                 new ReflectionAggregateRootFactory<Income>(),
                 eventDispatcher,
-                new NoSnapshotProvider(),
-                new EmptySnapshotStore()
+                snapshotProvider,
+                snapshotStore
             );
 
             var categoryRepository = new AggregateRootRepository<Category>(
@@ -187,8 +199,8 @@ namespace Money.Bootstrap
                 eventFormatter,
                 new ReflectionAggregateRootFactory<Category>(),
                 eventDispatcher,
-                new NoSnapshotProvider(),
-                new EmptySnapshotStore()
+                snapshotProvider,
+                snapshotStore
             );
 
             var currencyListRepository = new AggregateRootRepository<CurrencyList>(
@@ -196,13 +208,14 @@ namespace Money.Bootstrap
                 eventFormatter,
                 new ReflectionAggregateRootFactory<CurrencyList>(),
                 eventDispatcher,
-                new NoSnapshotProvider(),
-                new EmptySnapshotStore()
+                snapshotProvider,
+                snapshotStore
             );
 
             Money.BootstrapTask bootstrapTask = new Money.BootstrapTask(
                 commandDispatcher.Handlers,
                 Factory.Instance(outcomeRepository),
+                Factory.Instance(expenseTemplateRepository),
                 Factory.Instance(incomeRepository),
                 Factory.Instance(categoryRepository),
                 Factory.Instance(currencyListRepository)

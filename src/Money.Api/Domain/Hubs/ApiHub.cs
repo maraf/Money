@@ -27,6 +27,7 @@ namespace Money.Hubs
         IEventHandler<CurrencyCreated>, IEventHandler<CurrencyDeleted>, IEventHandler<CurrencyDefaultChanged>, IEventHandler<CurrencySymbolChanged>,
         IEventHandler<CurrencyExchangeRateSet>, IEventHandler<CurrencyExchangeRateRemoved>,
         IEventHandler<OutcomeCreated>, IEventHandler<OutcomeDeleted>, IEventHandler<OutcomeAmountChanged>, IEventHandler<OutcomeDescriptionChanged>, IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<ExpenseTemplateCreated>, IEventHandler<ExpenseTemplateDeleted>,
         IEventHandler<IncomeCreated>, IEventHandler<IncomeAmountChanged>, IEventHandler<IncomeDescriptionChanged>, IEventHandler<IncomeWhenChanged>, IEventHandler<IncomeDeleted>,
         IEventHandler<PasswordChanged>, IEventHandler<EmailChanged>, IEventHandler<UserPropertyChanged>
     {
@@ -131,6 +132,9 @@ namespace Money.Hubs
         Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload) => RaiseEvent(payload);
         Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload) => RaiseEvent(payload);
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload) => RaiseEvent(payload);
+
+        Task IEventHandler<ExpenseTemplateCreated>.HandleAsync(ExpenseTemplateCreated payload) => RaiseEvent(payload);
+        Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload) => RaiseEvent(payload);
 
         Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload) => RaiseEvent(payload);
         Task IEventHandler<IncomeAmountChanged>.HandleAsync(IncomeAmountChanged payload) => RaiseEvent(payload);

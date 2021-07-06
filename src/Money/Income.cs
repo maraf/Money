@@ -118,7 +118,11 @@ namespace Money
             });
         }
 
-        public void Delete() => Publish(new IncomeDeleted());
+        public void Delete()
+        {
+            EnsureNotDeleted();
+            Publish(new IncomeDeleted());
+        }
 
         Task IEventHandler<IncomeDeleted>.HandleAsync(IncomeDeleted payload)
         {

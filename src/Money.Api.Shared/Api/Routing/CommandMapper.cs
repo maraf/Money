@@ -17,6 +17,9 @@ namespace Money.Api.Routing
             Add<ChangeOutcomeWhen>("outcome-change-when");
             Add<DeleteOutcome>("outcome-delete");
 
+            Add<CreateExpenseTemplate>("expense-template-create");
+            Add<DeleteExpenseTemplate>("expense-template-delete");
+
             Add<CreateIncome>("income-create");
             Add<ChangeIncomeAmount>("income-change-amount");
             Add<ChangeIncomeDescription>("income-change-description");

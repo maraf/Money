@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,20 +19,17 @@ namespace Money.Accounts.Controllers
     [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
     {
-        private readonly JwtOptions configuration;
         private readonly UserManager<User> userManager;
-        private readonly JwtSecurityTokenHandler tokenHandler;
+        private readonly JwtTokenGenerator tokenGenerator;
         private readonly Json json;
 
-        public UserController(IOptions<JwtOptions> configuration, UserManager<User> userManager, JwtSecurityTokenHandler tokenHandler, Json json)
+        public UserController(UserManager<User> userManager, JwtTokenGenerator tokenGenerator, Json json)
         {
-            Ensure.NotNull(configuration, "configuration");
             Ensure.NotNull(userManager, "userManager");
-            Ensure.NotNull(tokenHandler, "tokenHandler");
+            Ensure.NotNull(tokenGenerator, "tokenGenerator");
             Ensure.NotNull(json, "json");
-            this.configuration = configuration.Value;
             this.userManager = userManager;
-            this.tokenHandler = tokenHandler;
+            this.tokenGenerator = tokenGenerator;
             this.json = json;
         }
 
@@ -50,26 +48,26 @@ namespace Money.Accounts.Controllers
                         await userManager.UpdateAsync(user);
                     }
 
-                    var claims = new[]
+                    var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Name, user.UserName),
                         new Claim(ClaimTypes.NameIdentifier, user.Id)
                     };
 
-                    var credentials = new SigningCredentials(configuration.GetSecurityKey(), SecurityAlgorithms.HmacSha256);
-                    var expiry = DateTime.Now.Add(configuration.GetExpiry());
+                    if (model.IsAutoRenewable) 
+                    {
+                        string refreshToken = GenerateRefreshToken();
+                        string tokenName = Guid.NewGuid().ToString();
+                        claims.Add(new Claim(JwtTokenGenerator.ClaimTypes.RefreshToken, refreshToken));
+                        claims.Add(new Claim(JwtTokenGenerator.ClaimTypes.TokenName, tokenName));
+                        await userManager.SetAuthenticationTokenAsync(user, JwtTokenGenerator.ClaimTypes.RefreshToken, tokenName, refreshToken);
+                    }
 
-                    var token = new JwtSecurityToken(
-                        configuration.Issuer,
-                        configuration.Issuer,
-                        claims,
-                        expires: expiry,
-                        signingCredentials: credentials
-                    );
+                    var token = tokenGenerator.Generate(claims);
 
                     var response = new LoginResponse()
                     {
-                        Token = tokenHandler.WriteToken(token)
+                        Token = token
                     };
 
                     return Content(json.Serialize(response), "text/json");
@@ -77,6 +75,16 @@ namespace Money.Accounts.Controllers
             }
 
             return BadRequest();
+        }
+
+        protected string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
         }
 
         [HttpPost]

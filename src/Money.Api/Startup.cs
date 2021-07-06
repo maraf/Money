@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Money.Accounts;
+using Money.Accounts.Middlewares;
 using Money.Accounts.Models;
 using Money.Api;
 using Money.Api.Routing;
@@ -112,6 +114,7 @@ namespace Money
                 .AddFactoryDbContextCheck<EventSourcingContext>();
 
             services
+                .AddTransient<JwtTokenGenerator>()
                 .AddTransient<JwtSecurityTokenHandler>()
                 .Configure<JwtOptions>(Configuration.GetSection("Jwt"));
 
@@ -120,6 +123,7 @@ namespace Money
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddSingleton<IUserIdProvider>(new DefaultUserIdProvider())
                 .AddTransient<ExceptionMiddleware>()
+                .AddTransient<RenewableTokenMiddleware>()
                 .AddSingleton<ApiHub>()
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>();
@@ -159,6 +163,7 @@ namespace Money
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseRenewableToken();
 
             app.UseVersionHeader();
 

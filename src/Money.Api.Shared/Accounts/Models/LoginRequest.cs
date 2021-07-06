@@ -10,5 +10,7 @@ namespace Money.Accounts.Models
     {
         public string UserName { get; set; }
         public string Password { get; set; }
+
+        public bool IsAutoRenewable { get; set; }
     }
 }

@@ -106,8 +106,14 @@ namespace Money.Services
 
                 log.Debug($"Awating task.");
 
-                await listAllTask;
-                listAllTask = null;
+                try
+                {
+                    await listAllTask;
+                }
+                finally
+                {
+                    listAllTask = null;
+                }
 
                 log.Debug($"Awaiting done.");
             }

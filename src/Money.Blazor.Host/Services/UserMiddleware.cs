@@ -3,6 +3,7 @@ using Money.Models;
 using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -18,16 +19,19 @@ namespace Money.Services
     {
         private readonly ServerConnectionState serverConnection;
         private readonly ProfileStorage localStorage;
+        private readonly ILog log;
 
         private ProfileModel profile;
         private Task getProfileTask;
 
-        public UserMiddleware(ServerConnectionState serverConnection, ProfileStorage localStorage)
+        public UserMiddleware(ServerConnectionState serverConnection, ProfileStorage localStorage, ILogFactory logFactory)
         {
             Ensure.NotNull(serverConnection, "serverConnection");
             Ensure.NotNull(localStorage, "localStorage");
+            Ensure.NotNull(logFactory, "logFactory");
             this.serverConnection = serverConnection;
             this.localStorage = localStorage;
+            this.log = logFactory.Scope("UserMiddleware");
         }
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
@@ -36,13 +40,27 @@ namespace Money.Services
             {
                 if (profile == null)
                 {
-                    if (getProfileTask == null)
-                        getProfileTask = LoadProfileAsync(getProfile, next);
+                    log.Debug("Profile is null.");
 
-                    await getProfileTask;
-                    getProfileTask = null;
+                    if (getProfileTask == null)
+                    {
+                        log.Debug("Profile task is null.");
+                        getProfileTask = LoadProfileAsync(getProfile, next);
+                    }
+
+                    try
+                    {
+                        log.Debug("Awating profile task.");
+                        await getProfileTask;
+                    }
+                    finally
+                    {
+                        log.Debug("Clearing profile task.");
+                        getProfileTask = null;
+                    }
                 }
 
+                log.Debug("Returning profile.");
                 return profile;
             }
 
@@ -58,6 +76,7 @@ namespace Money.Services
                     return;
             }
 
+            log.Debug("Get profile over the wire.");
             profile = (ProfileModel)await next(query);
             await localStorage.SaveAsync(profile);
         }

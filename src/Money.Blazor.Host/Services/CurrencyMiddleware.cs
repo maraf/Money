@@ -75,8 +75,14 @@ namespace Money.Services
                 if (listAllTask == null)
                     listAllTask = LoadAllAsync(dispatcher, next, listAll);
 
-                await listAllTask;
-                listAllTask = null;
+                try
+                {
+                    await listAllTask;
+                }
+                finally
+                {
+                    listAllTask = null;
+                }
             }
         }
 

@@ -7,6 +7,7 @@ using Money.Models.Queries;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,9 @@ namespace Money.Layouts
 
         [Inject]
         public AuthenticationStateProvider AuthenticationState { get; set; }
+
+        [Inject]
+        public ILog<UserInfo> Log { get; set; }
 
         [Parameter]
         public string ListCssClass { get; set; }
@@ -85,6 +89,8 @@ namespace Money.Layouts
 
         async Task IEventHandler<UserSignedIn>.HandleAsync(UserSignedIn payload)
         {
+            Log.Debug("User signed in.");
+
             await LoadProfileAsync();
             StateHasChanged();
         }

@@ -108,6 +108,10 @@ namespace Money.Services
                     return;
                 }
             }
+            else
+            {
+                EnsurePrincipal(null);
+            }
 
             log.Debug("Clearing token.");
 
@@ -173,6 +177,7 @@ namespace Money.Services
             if (principal == null)
                 EnsurePrincipal(await GetTokenAsync());
 
+            log.Debug($"AuthenticationState '{principal?.Identity}'.");
             return new AuthenticationState(principal);
         }
 

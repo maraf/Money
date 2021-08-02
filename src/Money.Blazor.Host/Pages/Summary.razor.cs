@@ -179,8 +179,10 @@ namespace Money.Pages
 
         protected string GetPercentualValue(CategoryWithAmountModel category)
         {
+            decimal percentage = 0;
             decimal total = Categories.Sum(c => c.TotalAmount.Value);
-            decimal percentage = 100 / total * category.TotalAmount.Value;
+            if (total != 0)
+                percentage = 100 / total * category.TotalAmount.Value;
 
             return percentage.ToString("0.##", CultureInfo.InvariantCulture);
         }

@@ -40,6 +40,8 @@ namespace Money.Components
 
             EventHandlers.Add<PwaUpdateable>(this);
             http.BaseAddress = new Uri(Navigator.UrlOrigin());
+
+            //_ = ((IEventHandler<PwaUpdateable>)this).HandleAsync(null);
         }
 
         public void Dispose()

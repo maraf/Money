@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Components;
+using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Services;
+using Neptuo.Events;
+using Neptuo.Events.Handlers;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -14,7 +17,13 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class Search : System.IDisposable
+    public partial class Search : System.IDisposable,
+        IEventHandler<OutcomeCreated>,
+        IEventHandler<OutcomeDeleted>,
+        IEventHandler<OutcomeAmountChanged>,
+        IEventHandler<OutcomeDescriptionChanged>,
+        IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<PulledToRefresh>
     {
         public static readonly SortDescriptor<OutcomeOverviewSortType> DefaultSort = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
 
@@ -22,6 +31,9 @@ namespace Money.Pages
 
         [Inject]
         protected Navigator Navigator { get; set; }
+
+        [Inject]
+        public IEventHandlerCollection EventHandlers { get; set; }
 
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
@@ -46,6 +58,7 @@ namespace Money.Pages
             PagingContext = new PagingContext(LoadPageAsync, Loading);
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Navigator.LocationChanged += OnLocationChanged;
+            BindEvents();
         }
 
         protected override async Task OnParametersSetAsync()
@@ -57,6 +70,7 @@ namespace Money.Pages
         public void Dispose()
         {
             Navigator.LocationChanged -= OnLocationChanged;
+            UnBindEvents();
         }
 
         private async void OnLocationChanged(string url)
@@ -101,5 +115,91 @@ namespace Money.Pages
                 return PagingLoadStatus.LastPage;
             }
         }
+
+        protected OutcomeOverviewModel FindModel(IEvent payload)
+            => Models.FirstOrDefault(o => o.Key.Equals(payload.AggregateKey));
+
+        #region Events
+
+        private void BindEvents()
+        {
+            EventHandlers
+                .Add<OutcomeCreated>(this)
+                .Add<OutcomeDeleted>(this)
+                .Add<OutcomeAmountChanged>(this)
+                .Add<OutcomeDescriptionChanged>(this)
+                .Add<OutcomeWhenChanged>(this)
+                .Add<PulledToRefresh>(this);
+        }
+
+        private void UnBindEvents()
+        {
+            EventHandlers
+                .Remove<OutcomeCreated>(this)
+                .Remove<OutcomeDeleted>(this)
+                .Remove<OutcomeAmountChanged>(this)
+                .Remove<OutcomeDescriptionChanged>(this)
+                .Remove<OutcomeWhenChanged>(this)
+                .Remove<PulledToRefresh>(this);
+        }
+
+        private Task UpdateModel(IEvent payload, Action<OutcomeOverviewModel> handler)
+        {
+            OutcomeOverviewModel model = FindModel(payload);
+            if (model != null)
+            {
+                handler(model);
+                StateHasChanged();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
+        {
+            _ = LoadPageAsync();
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
+        {
+            _ = LoadPageAsync();
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
+        {
+            if (Sort.Type == OutcomeOverviewSortType.ByAmount)
+                _ = LoadPageAsync();
+            else
+                UpdateModel(payload, model => model.Amount = payload.NewValue);
+
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
+        {
+            _ = LoadPageAsync();
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
+        {
+            if (Sort.Type == OutcomeOverviewSortType.ByWhen)
+                _ = LoadPageAsync();
+            else
+                UpdateModel(payload, model => model.When = payload.When);
+
+            return Task.CompletedTask;
+        }
+
+        async Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
+        {
+            payload.IsHandled = true;
+            await LoadPageAsync();
+            StateHasChanged();
+        }
+
+        #endregion
     }
 }

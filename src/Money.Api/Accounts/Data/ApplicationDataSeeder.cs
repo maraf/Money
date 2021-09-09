@@ -26,7 +26,6 @@ namespace Money
                     var userManager = services.GetService<UserManager<User>>();
                     var db = services.GetService<AccountContext>();
 
-                    db.Database.EnsureCreated();
                     db.Database.Migrate();
 
                     if (!userManager.Users.Any())

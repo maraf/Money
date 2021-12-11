@@ -19,6 +19,9 @@ namespace Money.Models.Queries
         [CompositeProperty(1, Version = 2)]
         public bool IncludeDeleted { get; set; }
 
+        [CompositeProperty(2, Version = 3)]
+        public bool IncludeIsDeletedFlag { get; set; }
+
         [CompositeConstructor(Version = 1)]
         public ListAllCategory()
         {
@@ -31,5 +34,15 @@ namespace Money.Models.Queries
             IncludeDeleted = includeDeleted;
             Version = 2;
         }
+
+        [CompositeConstructor(Version = 3)]
+        public ListAllCategory(bool includeDeleted, bool includeIsDeletedFlag)
+        {
+            IncludeDeleted = includeDeleted;
+            IncludeIsDeletedFlag = includeIsDeletedFlag;
+            Version = 3;
+        }
+
+        public static readonly ListAllCategory WithDeleted = new ListAllCategory(true, true);
     }
 }

@@ -44,10 +44,23 @@ namespace Money.Models
             ColorB = color.B;
         }
 
-        public CategoryModel ToModel()
+        public CategoryModel ToModel(bool includeIsDeletedFlag)
         {
+            GuidKey key = GuidKey.Create(Id, KeyFactory.Empty(typeof(Category)).Type);
+            if (includeIsDeletedFlag)
+            {
+                return new CategoryModel(
+                    key,
+                    Name,
+                    Description,
+                    ToColor(),
+                    Icon,
+                    IsDeleted
+                );
+            }
+
             return new CategoryModel(
-                GuidKey.Create(Id, KeyFactory.Empty(typeof(Category)).Type),
+                key,
                 Name,
                 Description,
                 ToColor(),

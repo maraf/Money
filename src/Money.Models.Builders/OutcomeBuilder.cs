@@ -117,7 +117,7 @@ namespace Money.Models.Builders
                 if (entity == null)
                     throw Ensure.Exception.InvalidOperation($"Missing category with id '{item.Key}'.");
 
-                CategoryModel model = entity.ToModel();
+                CategoryModel model = entity.ToModel(false);
                 result.Add(new CategoryWithAmountModel(
                     model.Key,
                     model.Name,

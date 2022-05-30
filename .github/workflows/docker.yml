@@ -1,0 +1,46 @@
+name: API - build & push docker image
+
+on:
+  push:
+    tags:
+    - 'api-*'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Prepare versions
+        id: versions
+        run: |
+            $version = ${env:GITHUB_REF} -replace 'refs/tags/', ''
+            $parts = $version.Split('-')
+            $version = $parts[1].Substring(1)
+            echo "::set-output name=VERSION::$version"
+        shell: pwsh
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push (bullseye-slim)
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: docker/Dockerfile.api-bullseye-slim
+          tags: maraf/money-api:${{ steps.versions.outputs.VERSION }}-bullseye-slim
+          push: true
+
+      - name: Build and push (bullseye-slim-arm32v7)
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: .
+          file: docker/Dockerfile.api-bullseye-slim-arm32v7
+          tags: maraf/money-api:${{ steps.versions.outputs.VERSION }}-bullseye-slim-arm32v7

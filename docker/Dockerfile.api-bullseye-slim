@@ -1,12 +1,12 @@
 # Build sources.
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY . ./
 WORKDIR /src/src/Money.Api
 RUN dotnet publish -c Release -r linux-x64 -o /app
 
 # Final image.
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim
 WORKDIR /app
 COPY --from=build /app .
 ENTRYPOINT ["./Money.Api"]

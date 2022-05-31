@@ -20,6 +20,8 @@ namespace Money.Pages.Accounts
         [Inject]
         internal TokenContainer Token { get; set; }
 
+        protected ElementReference UserNameBox { get; set; }
+
         protected string UserName { get; set; }
         protected string Password { get; set; }
         protected string ConfirmPassword { get; set; }
@@ -33,6 +35,14 @@ namespace Money.Pages.Accounts
 
             if (Token.HasValue)
                 Navigator.OpenSummary();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+                await UserNameBox.FocusAsync();
         }
 
         protected async Task OnSubmitAsync()

@@ -28,6 +28,8 @@ namespace Money.Pages.Users
         [Inject]
         public IEventHandlerCollection EventHandlers { get; set; }
 
+        protected ElementReference EmailBox { get; set; }
+
         public string UserName { get; private set; }
         public string Email { get; set; }
 
@@ -39,6 +41,14 @@ namespace Money.Pages.Users
 
             BindEvents();
             await ReloadAsync();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+                await EmailBox.FocusAsync();
         }
 
         private async Task ReloadAsync()

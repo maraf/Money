@@ -72,7 +72,9 @@ namespace Money.Pages
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            await SearchBox.FocusAsync();
+
+            if (firstRender)
+                await SearchBox.FocusAsync();
         }
 
         public void Dispose()

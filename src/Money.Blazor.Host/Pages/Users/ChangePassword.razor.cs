@@ -19,6 +19,8 @@ namespace Money.Pages.Users
         [Inject]
         public IEventHandlerCollection EventHandlers { get; set; }
 
+        protected ElementReference CurrentPasswordBox { get; set; }
+
         public string Current { get; set; }
         public string New { get; set; }
         public string Confirm { get; set; }
@@ -29,6 +31,14 @@ namespace Money.Pages.Users
         {
             BindEvents();
             return base.OnInitializedAsync();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+                await CurrentPasswordBox.FocusAsync();
         }
 
         protected async Task OnFormSubmit()

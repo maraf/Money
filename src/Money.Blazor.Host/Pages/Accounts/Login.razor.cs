@@ -27,6 +27,8 @@ namespace Money.Pages.Accounts
         [Parameter]
         public string ReturnUrl { get; set; }
 
+        protected ElementReference UserNameBox { get; set; }
+
         protected string UserName { get; set; }
         protected string Password { get; set; }
         protected bool IsPermanent { get; set; }
@@ -46,6 +48,14 @@ namespace Money.Pages.Accounts
         {
             base.OnParametersSet();
             ReturnUrl = QueryString.Find<string>("returnUrl");
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
+                await UserNameBox.FocusAsync();
         }
 
         protected Task OnSubmitAsync()

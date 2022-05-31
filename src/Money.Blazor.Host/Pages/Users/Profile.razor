@@ -20,7 +20,7 @@
                 </div>
                 <div class="form-group">
                     <label for="Email">E-mail:</label>
-                    <input class="form-control" autofocus type="email" id="Email" @bind="@Email" />
+                    <input @ref="EmailBox" class="form-control" type="email" id="Email" @bind="@Email" />
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>

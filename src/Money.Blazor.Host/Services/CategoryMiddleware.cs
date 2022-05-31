@@ -23,7 +23,7 @@ namespace Money.Services
         IEventHandler<CategoryDeleted>,
         IEventHandler<UserSignedOut>
     {
-        private static readonly ListAllCategory listAllQuery = new ListAllCategory();
+        private static readonly ListAllCategory listAllQuery = ListAllCategory.WithDeleted;
 
         private readonly ServerConnectionState serverConnection;
         private readonly CategoryStorage localStorage;
@@ -47,14 +47,23 @@ namespace Money.Services
             {
                 log.Debug($"Got '{nameof(ListAllCategory)}' query");
 
-                await EnsureListAsync(null, next, listAllQuery);
-                return models.Select(c => c.Clone()).ToList();
+                await EnsureListAsync(null, next);
+                return models
+                    .Where(c =>
+                    {
+                        if (!listAll.IncludeDeleted)
+                            return !c.IsDeleted;
+
+                        return true;
+                    })
+                    .Select(c => c.Clone())
+                    .ToList();
             }
             else if (query is GetCategoryName categoryName)
             {
                 log.Debug($"Got '{nameof(GetCategoryName)}' query");
 
-                await EnsureListAsync(dispatcher, null, listAllQuery);
+                await EnsureListAsync(dispatcher, null);
                 CategoryModel model = Find(categoryName.CategoryKey);
                 if (model != null)
                     return model.Name;
@@ -63,7 +72,7 @@ namespace Money.Services
             {
                 log.Debug($"Got '{nameof(GetCategoryIcon)}' query");
 
-                await EnsureListAsync(dispatcher, null, listAllQuery);
+                await EnsureListAsync(dispatcher, null);
                 CategoryModel model = Find(categoryIcon.CategoryKey);
                 if (model != null)
                     return model.Icon;
@@ -72,7 +81,7 @@ namespace Money.Services
             {
                 log.Debug($"Got '{nameof(GetCategoryColor)}' query");
 
-                await EnsureListAsync(dispatcher, null, listAllQuery);
+                await EnsureListAsync(dispatcher, null);
                 CategoryModel model = Find(categoryColor.CategoryKey);
                 if (model == null)
                     return Color.FromArgb(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
@@ -83,7 +92,7 @@ namespace Money.Services
             {
                 log.Debug($"Got '{nameof(GetCategoryNameDescription)}' query");
 
-                await EnsureListAsync(dispatcher, null, listAllQuery);
+                await EnsureListAsync(dispatcher, null);
                 CategoryModel model = Find(categoryNameDescription.CategoryKey);
                 if (model != null)
                     return new CategoryNameDescriptionModel(model.Name, model.Description);
@@ -92,7 +101,7 @@ namespace Money.Services
             return await next(query);
         }
 
-        private async Task EnsureListAsync(HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next, ListAllCategory listAll)
+        private async Task EnsureListAsync(HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
         {
             log.Debug($"Ensure list, currently has '{models.Count}' models.");
 
@@ -101,7 +110,7 @@ namespace Money.Services
                 if (listAllTask == null)
                 {
                     log.Debug($"Fire network/storage query.");
-                    listAllTask = LoadAllAsync(dispatcher, next, listAll);
+                    listAllTask = LoadAllAsync(dispatcher, next, ListAllCategory.WithDeleted);
                 }
 
                 log.Debug($"Awating task.");

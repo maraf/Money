@@ -44,6 +44,8 @@ namespace Money.Pages
         [Parameter]
         public string Query { get; set; }
 
+        protected ElementReference SearchBox { get; set; }
+
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<OutcomeOverviewSortType> Sort { get; set; }
         protected PagingContext PagingContext { get; set; }
@@ -65,6 +67,12 @@ namespace Money.Pages
         {
             await base.OnParametersSetAsync();
             await OnSearchAsync();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            await SearchBox.FocusAsync();
         }
 
         public void Dispose()

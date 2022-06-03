@@ -7,6 +7,9 @@
         </div>
         <input type="text" class="form-control" id="@Id" value="@Value.ToString(Format)" @onchange="OnValueChanged" data-autofocus="@AutoFocus" />
         <div class="input-group-append">
+            <button type="button" class="btn btn btn-outline-secondary" @onclick="(() => ValueChanged?.Invoke(Value = DateTime.Today))">
+                <Icon Identifier="calendar-day" />
+            </button>
             <button type="button" class="btn btn btn-outline-secondary" @onclick="(() => ValueChanged?.Invoke(Value = Value.AddDays(1)))">
                 <Icon Identifier="angle-right" />
             </button>

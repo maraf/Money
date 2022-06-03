@@ -4,15 +4,12 @@
 <Money.Components.Title Main="Money by Neptuo" />
 <ExceptionPanel />
 
-<p class="text-muted">
-    <AppVersion />
-</p>
 <p class="mt-4">
-    <a target="_blank" href="@Navigator.UrlMoneyProject()" class="btn btn-light mb-2 mr-2"> 
+    <a target="_blank" href="@Navigator.UrlMoneyProject()" class="btn btn-light mb-2 mr-2">
         <Icon Identifier="book" />
         Documentation
     </a>
-    <a target="_blank" href="@Navigator.UrlGithubRepository()" class="btn btn-light mb-2 mr-2"> 
+    <a target="_blank" href="@Navigator.UrlGithubRepository()" class="btn btn-light mb-2 mr-2">
         <Icon Identifier="github" Prefix="fab" />
         Source code
     </a>
@@ -21,3 +18,9 @@
         Report a bug
     </a>
 </p>
+
+<p class="display-4" style="font-size: 2.5rem;">
+    <AppVersion />
+</p>
+
+<ReleaseNotes />

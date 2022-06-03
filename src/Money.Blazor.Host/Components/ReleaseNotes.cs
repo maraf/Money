@@ -17,6 +17,7 @@ namespace Money.Components
         protected Navigator Navigator { get; set; }
 
         private readonly HttpClient http = new HttpClient();
+        private static Task<string> getTask;
         private string value;
 
         protected override async Task OnInitializedAsync()
@@ -24,7 +25,11 @@ namespace Money.Components
             http.BaseAddress = new Uri(Navigator.UrlOrigin());
 
             await base.OnInitializedAsync();
-            value = await http.GetStringAsync("/release-notes.html");
+
+            if (getTask == null)
+                getTask = http.GetStringAsync("/release-notes.html");
+
+            value = await getTask;
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)

@@ -22,8 +22,8 @@ namespace Money.Components
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
-        protected System.Version Client { get; set; }
-        protected System.Version Api { get; set; }
+        protected Version Client { get; set; }
+        protected Version Api { get; set; }
 
         protected async override Task OnInitializedAsync()
         {

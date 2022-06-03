@@ -17,8 +17,6 @@ namespace Money.Components
     public partial class PwaUpdate : IDisposable,
         IEventHandler<PwaUpdateable>
     {
-        private readonly HttpClient http = new HttpClient();
-
         [Inject]
         protected IEventHandlerCollection EventHandlers { get; set; }
 
@@ -37,11 +35,7 @@ namespace Money.Components
         protected override void OnInitialized()
         {
             base.OnInitialized();
-
             EventHandlers.Add<PwaUpdateable>(this);
-            http.BaseAddress = new Uri(Navigator.UrlOrigin());
-
-            //_ = ((IEventHandler<PwaUpdateable>)this).HandleAsync(null);
         }
 
         public void Dispose()
@@ -52,9 +46,6 @@ namespace Money.Components
         async Task IEventHandler<PwaUpdateable>.HandleAsync(PwaUpdateable payload)
         {
             IsUpdateable = true;
-            
-            ReleaseNotes = new MarkupString(await http.GetStringAsync("/release-notes.html"));
-
             StateHasChanged();
         }
     }

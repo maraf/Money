@@ -121,10 +121,13 @@ namespace Money.Components
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
                 PrerequisitesConfirm.Show();
             else
-                Modal.Show();
+                base.Show();
 
             StateHasChanged();
         }
+
+        public override void Show() 
+            => Show(KeyFactory.Empty(typeof(Category)));
 
         protected void OnPrerequisitesConfirmed()
         {

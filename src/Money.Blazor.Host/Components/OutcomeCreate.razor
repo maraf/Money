@@ -1,4 +1,6 @@
-﻿<Modal @ref="Modal" Title="@Title">
+﻿@inherits ModalDialog
+
+<Modal @ref="Modal" Title="@Title">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
         <div class="form-row">

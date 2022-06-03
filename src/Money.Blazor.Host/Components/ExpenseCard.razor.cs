@@ -20,6 +20,7 @@ namespace Money.Components
 
             CurrencyFormatter CurrencyFormatter { get; }
 
+            void Duplicate(OutcomeOverviewModel model);
             void EditAmount(OutcomeOverviewModel model);
             void EditDescription(OutcomeOverviewModel model);
             void EditWhen(OutcomeOverviewModel model);
@@ -45,6 +46,9 @@ namespace Money.Components
             CategoryName = await Queries.QueryAsync(new GetCategoryName(Model.CategoryKey));
             CategoryColor = await Queries.QueryAsync(new GetCategoryColor(Model.CategoryKey));
         }
+
+        protected void OnDuplicate() 
+            => Context.Duplicate(Model);
 
         protected void OnEditAmount() 
             => Context.EditAmount(Model);

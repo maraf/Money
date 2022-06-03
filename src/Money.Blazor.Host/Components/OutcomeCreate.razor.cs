@@ -35,8 +35,6 @@ namespace Money.Components
         [Inject]
         protected Navigator.ModalContainer ModalContainer { get; set; }
 
-        protected Modal Modal { get; set; }
-
         protected string Title { get; set; }
         protected string SaveButtonText { get; set; }
         protected List<string> ErrorMessages { get; } = new List<string>();
@@ -127,8 +125,6 @@ namespace Money.Components
 
             StateHasChanged();
         }
-
-        public void Hide() => Modal.Hide();
 
         protected void OnPrerequisitesConfirmed()
         {

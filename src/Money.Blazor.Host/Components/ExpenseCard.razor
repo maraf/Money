@@ -19,6 +19,7 @@
     <div class="col-12 col-sm-auto controls text-right">
         @if (Context.HasEdit)
         {
+            <IconButton Icon="clone" ToolTip="Duplicate" Click="@OnDuplicate" />
             <IconButton Icon="dollar-sign" ToolTip="Change Amount" Click="@OnEditAmount" />
             <IconButton Icon="comment" ToolTip="Change Description" Click="@OnEditDescription" />
             <IconButton Icon="calendar" ToolTip="Change When" Click="@OnEditWhen" />

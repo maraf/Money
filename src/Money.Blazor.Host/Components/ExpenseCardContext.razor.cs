@@ -30,6 +30,9 @@ namespace Money.Components
 
         bool ExpenseCard.IContext.HasEdit => true;
 
+        void ExpenseCard.IContext.Duplicate(OutcomeOverviewModel model)
+            => OnActionClick(model, DuplicateModal, (modal, model) => modal.Show(model.CategoryKey));
+
         void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
             => OnActionClick(model, AmountEditModal);
 
@@ -44,6 +47,7 @@ namespace Money.Components
 
         #endregion
 
+        protected OutcomeCreate DuplicateModal { get; set; }
         protected ModalDialog AmountEditModal { get; set; }
         protected ModalDialog DescriptionEditModal { get; set; }
         protected ModalDialog WhenEditModal { get; set; }
@@ -58,10 +62,15 @@ namespace Money.Components
             currencyFormatter = await CurrencyFormatterFactory.CreateAsync();
         }
 
-        protected void OnActionClick(OutcomeOverviewModel model, ModalDialog modal)
+        protected void OnActionClick<T>(OutcomeOverviewModel model, T modal, Action<T, OutcomeOverviewModel> showHandler = null)
+            where T : ModalDialog
         {
             SelectedItem = model;
-            modal.Show();
+            if (showHandler == null)
+                modal.Show();
+            else
+                showHandler(modal, model);
+
             StateHasChanged();
         }
 

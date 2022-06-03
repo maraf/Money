@@ -94,6 +94,9 @@ namespace Money.Pages
 
         bool ExpenseCard.IContext.HasEdit => true;
 
+        void ExpenseCard.IContext.Duplicate(OutcomeOverviewModel model)
+        { }
+
         void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
         { }
 

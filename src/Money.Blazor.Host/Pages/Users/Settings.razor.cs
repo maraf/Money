@@ -39,10 +39,8 @@ namespace Money.Pages.Users
         protected PropertyViewModel DateFormat { get; set; }
         protected Modal DateFormatEditor { get; set; }
 
-        protected PropertyViewModel MobileMenu { get; set; }
+        protected MobileMenuPropertyViewModel MobileMenu { get; set; }
         protected Modal MobileMenuEditor { get; set; }
-        protected List<IAvailableMenuItemModel> MobileMenuAvailableModels { get; set; }
-        protected List<string> MobileSelectedIdentifiers { get; set; }
 
         protected PropertyViewModel SummarySort { get; set; }
         protected Modal SummarySortEditor { get; set; }
@@ -61,21 +59,15 @@ namespace Money.Pages.Users
 
             PriceDecimals = AddProperty("PriceDecimalDigits", "Price decimal digits", () => PriceDecimalsEditor.Show(), icon: "pound-sign", defaultValue: "2");
             DateFormat = AddProperty("DateFormat", "Date format", () => DateFormatEditor.Show(), icon: "calendar-day", defaultValue: CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
-            MobileMenu = AddProperty("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
+            MobileMenu = AddProperty<MobileMenuPropertyViewModel>("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
             SummarySort = AddProperty("SummarySort", "Summary sort", () => SummarySortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByCategory-Ascending");
 
             SummarySortItems = new List<(string Name, SummarySortType Value)>();
             SortButton<SummarySortType>.BuildItems(SummarySortItems);
 
-            MobileMenuAvailableModels = await Queries.QueryAsync(new ListAvailableMenuItem());
-
             await LoadAsync();
 
-            MobileSelectedIdentifiers = MobileMenu.CurrentValue != null 
-                ? MobileMenu.CurrentValue.Split(',').ToList()
-                : new List<string>(0);
-
-            if (SummarySort.CurrentValue != null) 
+            if (SummarySort.CurrentValue != null)
             {
                 string[] parts = SummarySort.CurrentValue.Split('-');
                 SummarySortProperty = Enum.Parse<SummarySortType>(parts[0]);
@@ -89,10 +81,20 @@ namespace Money.Pages.Users
         }
 
         private PropertyViewModel AddProperty(string name, string title, Action edit, string defaultValue = null, string icon = null)
+            => AddProperty<PropertyViewModel>(name, title, edit, defaultValue, icon);
+
+        private T AddProperty<T>(string name, string title, Action edit, string defaultValue = null, string icon = null)
+            where T : PropertyViewModel, new()
         {
             var viewModel = ViewModels.FirstOrDefault(vm => vm.Key == name);
             if (viewModel == null)
-                ViewModels.Add(viewModel = new PropertyViewModel(Commands));
+            {
+                ViewModels.Add(viewModel = new T()
+                {
+                    Commands = Commands,
+                    Queries = Queries
+                });
+            }
 
             viewModel.Key = name;
             viewModel.Title = title;
@@ -100,17 +102,17 @@ namespace Money.Pages.Users
             viewModel.Edit = edit;
             viewModel.DefaultValue = defaultValue;
 
-            return viewModel;
+            return (T)viewModel;
         }
 
         protected async Task SetMobileMenuAsync()
         {
-            MobileMenu.CurrentValue = String.Join(",", MobileMenuAvailableModels.Where(m => MobileSelectedIdentifiers.Contains(m.Identifier)).Select(m => m.Identifier)); 
-            await MobileMenu.SetAsync(); 
+            MobileMenu.CurrentValue = String.Join(",", MobileMenu.AvailableModels.Where(m => MobileMenu.SelectedIdentifiers.Contains(m.Identifier)).Select(m => m.Identifier));
+            await MobileMenu.SetAsync();
             MobileMenuEditor.Hide();
         }
 
-        protected async Task SetSummarySortAsync() 
+        protected async Task SetSummarySortAsync()
         {
             SummarySort.CurrentValue = $"{SummarySortProperty}-{SummarySortDirection}";
             await SummarySort.SetAsync();
@@ -139,18 +141,16 @@ namespace Money.Pages.Users
                 if (viewModel != null)
                     viewModel.Model = model;
             }
+
+            foreach (var viewModel in ViewModels)
+                await viewModel.InitializeAsync();
         }
     }
 
     public class PropertyViewModel
     {
-        private readonly ICommandDispatcher commands;
-
-        public PropertyViewModel(ICommandDispatcher commands)
-        {
-            Ensure.NotNull(commands, "commands");
-            this.commands = commands;
-        }
+        public ICommandDispatcher Commands { get; set; }
+        public IQueryDispatcher Queries { get; set; }
 
         public string Key { get; set; }
         public string Title { get; set; }
@@ -177,8 +177,28 @@ namespace Money.Pages.Users
             if (Model == null || currentValue != Model.Value)
             {
                 Console.WriteLine("Send command.");
-                await commands.HandleAsync(new SetUserProperty(Key, currentValue));
+                await Commands.HandleAsync(new SetUserProperty(Key, currentValue));
             }
+        }
+
+        public virtual Task InitializeAsync()
+            => Task.CompletedTask;
+    }
+
+    public class MobileMenuPropertyViewModel : PropertyViewModel
+    {
+        public List<IAvailableMenuItemModel> AvailableModels { get; set; }
+        public List<string> SelectedIdentifiers { get; set; }
+
+        public async override Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            AvailableModels = await Queries.QueryAsync(new ListAvailableMenuItem());
+
+            SelectedIdentifiers = CurrentValue != null
+                ? CurrentValue.Split(',').ToList()
+                : new List<string>(0);
         }
     }
 }

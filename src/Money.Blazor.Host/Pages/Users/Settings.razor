@@ -47,12 +47,12 @@
 
 <Modal @ref="MobileMenuEditor" TitleIcon="@MobileMenu.Icon" Title="Modify mobile menu">
     <ChildContent>
-        @if (MobileMenuAvailableModels != null && MobileSelectedIdentifiers != null)
+        @if (MobileMenu.AvailableModels != null && MobileMenu.SelectedIdentifiers != null)
         {
-            foreach (var model in MobileMenuAvailableModels)
+            foreach (var model in MobileMenu.AvailableModels)
             {
-                var isContained = MobileSelectedIdentifiers.Contains(model.Identifier);
-                Action handler = isContained ? () => MobileSelectedIdentifiers.Remove(model.Identifier) : () => MobileSelectedIdentifiers.Add(model.Identifier);
+                var isContained = MobileMenu.SelectedIdentifiers.Contains(model.Identifier);
+                Action handler = isContained ? () => MobileMenu.SelectedIdentifiers.Remove(model.Identifier) : () => MobileMenu.SelectedIdentifiers.Add(model.Identifier);
 
                 <div @key="model.Identifier" class="alert @(isContained ? "alert-primary" : "alert-light") cursor-pointer" @onclick="handler">
                     <Icon Identifier="@model.Icon" />

@@ -42,11 +42,8 @@ namespace Money.Pages.Users
         protected MobileMenuPropertyViewModel MobileMenu { get; set; }
         protected Modal MobileMenuEditor { get; set; }
 
-        protected PropertyViewModel SummarySort { get; set; }
+        protected SortPropertyViewModel<SummarySortType> SummarySort { get; set; }
         protected Modal SummarySortEditor { get; set; }
-        protected List<(string Name, SummarySortType Value)> SummarySortItems { get; set; }
-        protected SummarySortType SummarySortProperty { get; set; }
-        protected SortDirection SummarySortDirection { get; set; }
 
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
@@ -60,19 +57,9 @@ namespace Money.Pages.Users
             PriceDecimals = AddProperty("PriceDecimalDigits", "Price decimal digits", () => PriceDecimalsEditor.Show(), icon: "pound-sign", defaultValue: "2");
             DateFormat = AddProperty("DateFormat", "Date format", () => DateFormatEditor.Show(), icon: "calendar-day", defaultValue: CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
             MobileMenu = AddProperty<MobileMenuPropertyViewModel>("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
-            SummarySort = AddProperty("SummarySort", "Summary sort", () => SummarySortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByCategory-Ascending");
-
-            SummarySortItems = new List<(string Name, SummarySortType Value)>();
-            SortButton<SummarySortType>.BuildItems(SummarySortItems);
+            SummarySort = AddProperty<SortPropertyViewModel<SummarySortType>>("SummarySort", "Summary sort", () => SummarySortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByCategory-Ascending");
 
             await LoadAsync();
-
-            if (SummarySort.CurrentValue != null)
-            {
-                string[] parts = SummarySort.CurrentValue.Split('-');
-                SummarySortProperty = Enum.Parse<SummarySortType>(parts[0]);
-                SummarySortDirection = Enum.Parse<SortDirection>(parts[1]);
-            }
         }
 
         public void Dispose()
@@ -114,7 +101,7 @@ namespace Money.Pages.Users
 
         protected async Task SetSummarySortAsync()
         {
-            SummarySort.CurrentValue = $"{SummarySortProperty}-{SummarySortDirection}";
+            SummarySort.CurrentValue = $"{SummarySort.Property}-{SummarySort.Direction}";
             await SummarySort.SetAsync();
             SummarySortEditor.Hide();
         }
@@ -199,6 +186,29 @@ namespace Money.Pages.Users
             SelectedIdentifiers = CurrentValue != null
                 ? CurrentValue.Split(',').ToList()
                 : new List<string>(0);
+        }
+    }
+
+    public class SortPropertyViewModel<T> : PropertyViewModel
+        where T : struct
+    {
+        public List<(string Name, T Value)> Items { get; set; }
+        public T Property { get; set; }
+        public SortDirection Direction { get; set; }
+
+        public async override Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            Items = new List<(string Name, T Value)>();
+            SortButton<T>.BuildItems(Items);
+
+            if (CurrentValue != null)
+            {
+                string[] parts = CurrentValue.Split('-');
+                Property = Enum.Parse<T>(parts[0]);
+                Direction = Enum.Parse<SortDirection>(parts[1]);
+            }
         }
     }
 }

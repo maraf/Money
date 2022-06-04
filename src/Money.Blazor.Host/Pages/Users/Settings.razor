@@ -70,8 +70,8 @@
     <ChildContent>
         <div class="form-group">
             <label for="summary-sort-property">Field:</label>
-            <select class="form-control" id="summary-sort-property" @bind="SummarySortProperty">
-                @foreach (var item in SummarySortItems)
+            <select class="form-control" id="summary-sort-property" @bind="SummarySort.Property">
+                @foreach (var item in SummarySort.Items)
                 {
                     <option value="@item.Value">@item.Name</option>
                 }
@@ -79,7 +79,7 @@
         </div>
         <div class="form-group">
             <label for="summary-sort-order">Direction:</label>
-            <select class="form-control" id="summary-sort-order" @bind="SummarySortDirection">
+            <select class="form-control" id="summary-sort-order" @bind="SummarySort.Direction">
                 <option value="@SortDirection.Ascending">Ascending</option>
                 <option value="@SortDirection.Descending">Descending</option>
             </select>

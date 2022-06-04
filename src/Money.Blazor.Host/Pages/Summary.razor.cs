@@ -7,6 +7,7 @@ using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Services;
+using Money.Queries;
 using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -75,10 +76,10 @@ namespace Money.Pages
         {
             Log.Debug("Summary.OnInitializedAsync");
             BindEvents();
-            SortDescriptor = new SortDescriptor<SummarySortType>(SummarySortType.ByCategory, SortDirection.Ascending);
 
             await base.OnInitializedAsync();
 
+            SortDescriptor = await Queries.QueryAsync(new GetSummarySortProperty());
             formatter = await CurrencyFormatterFactory.CreateAsync();
         }
 

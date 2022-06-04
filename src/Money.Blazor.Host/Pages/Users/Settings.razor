@@ -64,3 +64,25 @@
         <button class="btn btn-primary" @onclick="SetMobileMenuAsync">Set</button>
     </Buttons>
 </Modal>
+
+<Modal @ref="SummarySortEditor" TitleIcon="@SummarySort.Icon" Title="Set summary sort">
+    <ChildContent>
+        <div class="form-group">
+            <label for="summary-sort-property">Field:</label>
+            <select class="form-control" id="summary-sort-property" @bind="SummarySortProperty">
+                <option value="ByAmount">Amount</option>
+                <option value="ByCategory">Category</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="summary-sort-order">Direction:</label>
+            <select class="form-control" id="summary-sort-order" @bind="SummarySortDirection">
+                <option value="Ascending">Ascending</option>
+                <option value="Descending">Descending</option>
+            </select>
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="SetSummarySortAsync">Set</button>
+    </Buttons>
+</Modal>

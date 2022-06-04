@@ -1,8 +1,11 @@
 ﻿using Money.Models.Queries;
+using Money.Models.Sorting;
 using Money.Queries;
+using Money.Pages;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -24,6 +27,21 @@ namespace Money.Services
             {
                 var value = IntPropertyValue(await dispatcher.QueryAsync(new FindUserProperty("PriceDecimalDigits")), 2);
                 return value;
+            }
+            else if (query is GetSummarySortProperty)
+            {
+                var value = await dispatcher.QueryAsync(new FindUserProperty("SummarySort"));
+                if (String.IsNullOrEmpty(value))
+                    value = "ByCategory-Ascending";
+
+                string[] parts = value.Split('-');
+
+                var result = new SortDescriptor<SummarySortType>(
+                    Enum.Parse<SummarySortType>(parts[0], true),
+                    Enum.Parse<SortDirection>(parts[1], true)
+                );
+
+                return result;
             }
 
             return await next(query);

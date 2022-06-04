@@ -42,6 +42,11 @@ namespace Money.Pages.Users
         protected List<IAvailableMenuItemModel> MobileMenuAvailableModels { get; set; }
         protected List<string> MobileSelectedIdentifiers { get; set; }
 
+        protected PropertyViewModel SummarySort { get; set; }
+        protected Modal SummarySortEditor { get; set; }
+        protected string SummarySortProperty { get; set; }
+        protected string SummarySortDirection { get; set; }
+
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
 
@@ -54,6 +59,7 @@ namespace Money.Pages.Users
             PriceDecimals = AddProperty("PriceDecimalDigits", "Price decimal digits", () => PriceDecimalsEditor.Show(), icon: "pound-sign", defaultValue: "2");
             DateFormat = AddProperty("DateFormat", "Date format", () => DateFormatEditor.Show(), icon: "calendar-day", defaultValue: CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
             MobileMenu = AddProperty("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
+            SummarySort = AddProperty("SummarySort", "Summary sort", () => SummarySortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByCategory-Ascending");
 
             MobileMenuAvailableModels = await Queries.QueryAsync(new ListAvailableMenuItem());
 
@@ -62,6 +68,13 @@ namespace Money.Pages.Users
             MobileSelectedIdentifiers = MobileMenu.CurrentValue != null 
                 ? MobileMenu.CurrentValue.Split(',').ToList()
                 : new List<string>(0);
+
+            if (SummarySort.CurrentValue != null) 
+            {
+                string[] parts = SummarySort.CurrentValue.Split('-');
+                SummarySortProperty = parts[0];
+                SummarySortDirection = parts[1];
+            }
         }
 
         public void Dispose()
@@ -89,6 +102,13 @@ namespace Money.Pages.Users
             MobileMenu.CurrentValue = String.Join(",", MobileMenuAvailableModels.Where(m => MobileSelectedIdentifiers.Contains(m.Identifier)).Select(m => m.Identifier)); 
             await MobileMenu.SetAsync(); 
             MobileMenuEditor.Hide();
+        }
+
+        protected async Task SetSummarySortAsync() 
+        {
+            SummarySort.CurrentValue = $"{SummarySortProperty}-{SummarySortDirection}";
+            await SummarySort.SetAsync();
+            SummarySortEditor.Hide();
         }
 
         Task IEventHandler<UserPropertyChanged>.HandleAsync(UserPropertyChanged payload)

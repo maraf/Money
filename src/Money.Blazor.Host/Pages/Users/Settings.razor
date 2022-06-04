@@ -1,4 +1,5 @@
-﻿@page "/user/settings"
+﻿@using Money.Models.Sorting
+@page "/user/settings"
 @attribute [Authorize]
 
 <UserHead />
@@ -70,15 +71,17 @@
         <div class="form-group">
             <label for="summary-sort-property">Field:</label>
             <select class="form-control" id="summary-sort-property" @bind="SummarySortProperty">
-                <option value="ByAmount">Amount</option>
-                <option value="ByCategory">Category</option>
+                @foreach (var item in SummarySortItems)
+                {
+                    <option value="@item.Value">@item.Name</option>
+                }
             </select>
         </div>
         <div class="form-group">
             <label for="summary-sort-order">Direction:</label>
             <select class="form-control" id="summary-sort-order" @bind="SummarySortDirection">
-                <option value="Ascending">Ascending</option>
-                <option value="Descending">Descending</option>
+                <option value="@SortDirection.Ascending">Ascending</option>
+                <option value="@SortDirection.Descending">Descending</option>
             </select>
         </div>
     </ChildContent>

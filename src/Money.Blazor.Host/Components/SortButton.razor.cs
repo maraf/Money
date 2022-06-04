@@ -39,6 +39,11 @@ namespace Money.Components
         {
             base.OnInitialized();
 
+            BuildItems(Items, defaultSortDirection);
+        }
+
+        public static void BuildItems(List<(string Name, TType Value)> items, Dictionary<TType, SortDirection> defaultSortDirection = null)
+        {
             Type parameterType = typeof(TType);
             foreach (object value in Enum.GetValues(parameterType))
             {
@@ -54,10 +59,10 @@ namespace Money.Components
                     text = attribute.Description;
 
                 DefaultValueAttribute defaultValue = itemInfo.GetCustomAttribute<DefaultValueAttribute>();
-                if (defaultValue != null)
+                if (defaultValue != null && defaultSortDirection != null)
                     defaultSortDirection[type] = (SortDirection)defaultValue.Value;
 
-                Items.Add((text, type));
+                items.Add((text, type));
             }
         }
 

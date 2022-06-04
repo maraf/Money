@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Commands;
+using Money.Components;
 using Money.Components.Bootstrap;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -44,8 +46,9 @@ namespace Money.Pages.Users
 
         protected PropertyViewModel SummarySort { get; set; }
         protected Modal SummarySortEditor { get; set; }
-        protected string SummarySortProperty { get; set; }
-        protected string SummarySortDirection { get; set; }
+        protected List<(string Name, SummarySortType Value)> SummarySortItems { get; set; }
+        protected SummarySortType SummarySortProperty { get; set; }
+        protected SortDirection SummarySortDirection { get; set; }
 
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
@@ -61,6 +64,9 @@ namespace Money.Pages.Users
             MobileMenu = AddProperty("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
             SummarySort = AddProperty("SummarySort", "Summary sort", () => SummarySortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByCategory-Ascending");
 
+            SummarySortItems = new List<(string Name, SummarySortType Value)>();
+            SortButton<SummarySortType>.BuildItems(SummarySortItems);
+
             MobileMenuAvailableModels = await Queries.QueryAsync(new ListAvailableMenuItem());
 
             await LoadAsync();
@@ -72,8 +78,8 @@ namespace Money.Pages.Users
             if (SummarySort.CurrentValue != null) 
             {
                 string[] parts = SummarySort.CurrentValue.Split('-');
-                SummarySortProperty = parts[0];
-                SummarySortDirection = parts[1];
+                SummarySortProperty = Enum.Parse<SummarySortType>(parts[0]);
+                SummarySortDirection = Enum.Parse<SortDirection>(parts[1]);
             }
         }
 

@@ -1,0 +1,5 @@
+@page "/templates"
+@attribute [Authorize]
+
+<Money.Components.Title Icon="redo" Main="Expense Templates" Sub="List of templates for common expenses" ButtonText="New Template" ButtonClick="@(() => { StateHasChanged(); })" />
+<ExceptionPanel />

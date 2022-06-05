@@ -113,6 +113,9 @@ namespace Money.Services
 
         public void OpenCurrencies()
             => manager.NavigateTo(UrlCurrencies());
+        
+        public void OpenExpenseTemplates()
+            => manager.NavigateTo(UrlExpenseTemplates());
 
         public void OpenAbout()
             => manager.NavigateTo(UrlAbout());

@@ -73,6 +73,9 @@ namespace Money.Services
         public string UrlCurrencies()
             => "/currencies";
 
+        public string UrlExpenseTemplates()
+            => "/templates";
+
         public string UrlAbout()
             => "/about";
 

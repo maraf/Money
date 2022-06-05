@@ -1,0 +1,8 @@
+<Modal @ref="Editor" TitleIcon="@Model.Icon" Title="@Title">
+    <ChildContent>
+        @ChildContent
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="(async () => { await Model.SetAsync(); Editor.Hide(); })">Set</button>
+    </Buttons>
+</Modal>

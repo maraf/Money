@@ -1,4 +1,5 @@
 ﻿@using Money.Models.Sorting
+@using Money.Components.Settings
 @page "/user/settings"
 @attribute [Authorize]
 
@@ -23,71 +24,52 @@
     }
 </div>
 
-<Modal @ref="PriceDecimalsEditor" TitleIcon="@PriceDecimals.Icon" Title="Set price decimals">
-    <ChildContent>
-        <div class="form-group">
-            <input type="text" class="form-control" @bind="PriceDecimals.CurrentValue" data-autofocus />
-        </div>
-    </ChildContent>
-    <Buttons>
-        <button class="btn btn-primary" @onclick="(async () => { await PriceDecimals.SetAsync(); PriceDecimalsEditor.Hide(); })">Set</button>
-    </Buttons>
-</Modal>
+<PropertyDialog @ref="PriceDecimalsEditor" Model="@PriceDecimals" Title="Set price decimals">
+    <div class="form-group">
+        <input type="text" class="form-control" @bind="PriceDecimals.CurrentValue" data-autofocus />
+    </div>
+</PropertyDialog>
 
-<Modal @ref="DateFormatEditor" TitleIcon="@DateFormat.Icon" Title="Set date format">
-    <ChildContent>
-        <div class="form-group">
-            <input type="text" class="form-control" @bind="DateFormat.CurrentValue" data-autofocus />
-        </div>
-    </ChildContent>
-    <Buttons>
-        <button class="btn btn-primary" @onclick="(async () => { await DateFormat.SetAsync(); DateFormatEditor.Hide(); })">Set</button>
-    </Buttons>
-</Modal>
 
-<Modal @ref="MobileMenuEditor" TitleIcon="@MobileMenu.Icon" Title="Modify mobile menu">
-    <ChildContent>
-        @if (MobileMenu.AvailableModels != null && MobileMenu.SelectedIdentifiers != null)
+<PropertyDialog @ref="DateFormatEditor" Model="@DateFormat" Title="Set date format">
+    <div class="form-group">
+        <input type="text" class="form-control" @bind="DateFormat.CurrentValue" data-autofocus />
+    </div>
+</PropertyDialog>
+
+<PropertyDialog @ref="MobileMenuEditor" Model="@MobileMenu" Title="Modify mobile menu">
+    @if (MobileMenu.AvailableModels != null && MobileMenu.SelectedIdentifiers != null)
+    {
+        foreach (var model in MobileMenu.AvailableModels)
         {
-            foreach (var model in MobileMenu.AvailableModels)
-            {
-                var isContained = MobileMenu.SelectedIdentifiers.Contains(model.Identifier);
-                Action handler = isContained ? () => MobileMenu.SelectedIdentifiers.Remove(model.Identifier) : () => MobileMenu.SelectedIdentifiers.Add(model.Identifier);
+            var isContained = MobileMenu.SelectedIdentifiers.Contains(model.Identifier);
+            Action handler = isContained ? () => MobileMenu.SelectedIdentifiers.Remove(model.Identifier) : () => MobileMenu.SelectedIdentifiers.Add(model.Identifier);
 
-                <div @key="model.Identifier" class="alert @(isContained ? "alert-primary" : "alert-light") cursor-pointer" @onclick="handler">
-                    <Icon Identifier="@model.Icon" />
-                    @model.Text
-                </div>
-            }
+            <div @key="model.Identifier" class="alert @(isContained ? "alert-primary" : "alert-light") cursor-pointer" @onclick="handler">
+                <Icon Identifier="@model.Icon" />
+                @model.Text
+            </div>
         }
-    </ChildContent>
-    <Buttons>
-        <button class="btn btn-primary" @onclick="(async () => { await MobileMenu.SetAsync(); MobileMenuEditor.Hide(); })">Set</button>
-    </Buttons>
-</Modal>
+    }
+</PropertyDialog>
 
-<Modal @ref="SummarySortEditor" TitleIcon="@SummarySort.Icon" Title="Set summary sort">
-    <ChildContent>
-        <div class="form-group">
-            <label for="summary-sort-property">Field:</label>
-            <select class="form-control" id="summary-sort-property" @bind="SummarySort.Property">
-                @foreach (var item in SummarySort.Properties)
-                {
-                    <option value="@item.Value">@item.Name</option>
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="summary-sort-order">Direction:</label>
-            <select class="form-control" id="summary-sort-order" @bind="SummarySort.Direction">
-                @foreach (var item in SummarySort.Directions)
-                {
-                    <option value="@item.Value">@item.Name</option>
-                }
-            </select>
-        </div>
-    </ChildContent>
-    <Buttons>
-        <button class="btn btn-primary" @onclick="(async () => { await SummarySort.SetAsync(); SummarySortEditor.Hide(); })">Set</button>
-    </Buttons>
-</Modal>
+<PropertyDialog @ref="SummarySortEditor" Model="@SummarySort" Title="Set summary sort">
+    <div class="form-group">
+        <label for="summary-sort-property">Field:</label>
+        <select class="form-control" id="summary-sort-property" @bind="SummarySort.Property">
+            @foreach (var item in SummarySort.Properties)
+            {
+                <option value="@item.Value">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="summary-sort-order">Direction:</label>
+        <select class="form-control" id="summary-sort-order" @bind="SummarySort.Direction">
+            @foreach (var item in SummarySort.Directions)
+            {
+                <option value="@item.Value">@item.Name</option>
+            }
+        </select>
+    </div>
+</PropertyDialog>

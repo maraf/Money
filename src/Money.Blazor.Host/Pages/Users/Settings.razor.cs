@@ -2,6 +2,7 @@
 using Money.Commands;
 using Money.Components;
 using Money.Components.Bootstrap;
+using Money.Components.Settings;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
@@ -34,16 +35,16 @@ namespace Money.Pages.Users
         protected IEventHandlerCollection EventHandlers { get; set; }
 
         protected PropertyViewModel PriceDecimals { get; set; }
-        protected Modal PriceDecimalsEditor { get; set; }
+        protected PropertyDialog PriceDecimalsEditor { get; set; }
 
         protected PropertyViewModel DateFormat { get; set; }
-        protected Modal DateFormatEditor { get; set; }
+        protected PropertyDialog DateFormatEditor { get; set; }
 
         protected MobileMenuPropertyViewModel MobileMenu { get; set; }
-        protected Modal MobileMenuEditor { get; set; }
+        protected PropertyDialog MobileMenuEditor { get; set; }
 
         protected SortPropertyViewModel<SummarySortType> SummarySort { get; set; }
-        protected Modal SummarySortEditor { get; set; }
+        protected PropertyDialog SummarySortEditor { get; set; }
 
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();

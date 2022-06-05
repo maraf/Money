@@ -62,7 +62,7 @@
         }
     </ChildContent>
     <Buttons>
-        <button class="btn btn-primary" @onclick="SetMobileMenuAsync">Set</button>
+        <button class="btn btn-primary" @onclick="(async () => { await MobileMenu.SetAsync(); MobileMenuEditor.Hide(); })">Set</button>
     </Buttons>
 </Modal>
 
@@ -88,6 +88,6 @@
         </div>
     </ChildContent>
     <Buttons>
-        <button class="btn btn-primary" @onclick="SetSummarySortAsync">Set</button>
+        <button class="btn btn-primary" @onclick="(async () => { await SummarySort.SetAsync(); SummarySortEditor.Hide(); })">Set</button>
     </Buttons>
 </Modal>

@@ -92,20 +92,6 @@ namespace Money.Pages.Users
             return (T)viewModel;
         }
 
-        protected async Task SetMobileMenuAsync()
-        {
-            MobileMenu.CurrentValue = String.Join(",", MobileMenu.AvailableModels.Where(m => MobileMenu.SelectedIdentifiers.Contains(m.Identifier)).Select(m => m.Identifier));
-            await MobileMenu.SetAsync();
-            MobileMenuEditor.Hide();
-        }
-
-        protected async Task SetSummarySortAsync()
-        {
-            SummarySort.CurrentValue = $"{SummarySort.Property}-{SummarySort.Direction}";
-            await SummarySort.SetAsync();
-            SummarySortEditor.Hide();
-        }
-
         Task IEventHandler<UserPropertyChanged>.HandleAsync(UserPropertyChanged payload)
         {
             var viewModel = ViewModels.FirstOrDefault(vm => vm.Key == payload.PropertyKey);
@@ -154,7 +140,7 @@ namespace Money.Pages.Users
             set => currentValue = value;
         }
 
-        public async Task SetAsync()
+        public virtual async Task SetAsync()
         {
             Console.WriteLine($"Current '{currentValue}', ModelValue '{Model?.Value}'.");
 
@@ -187,6 +173,12 @@ namespace Money.Pages.Users
                 ? CurrentValue.Split(',').ToList()
                 : new List<string>(0);
         }
+
+        public override Task SetAsync()
+        {
+            CurrentValue = String.Join(",", AvailableModels.Where(m => SelectedIdentifiers.Contains(m.Identifier)).Select(m => m.Identifier));
+            return base.SetAsync();
+        }
     }
 
     public class SortPropertyViewModel<T> : PropertyViewModel
@@ -213,6 +205,12 @@ namespace Money.Pages.Users
                 Property = Enum.Parse<T>(parts[0]);
                 Direction = Enum.Parse<SortDirection>(parts[1]);
             }
+        }
+
+        public override Task SetAsync()
+        {
+            CurrentValue = $"{Property}-{Direction}";
+            return base.SetAsync();
         }
     }
 }

@@ -49,6 +49,9 @@ namespace Money.Pages.Users
         protected SortPropertyViewModel<OutcomeOverviewSortType> ExpenseOverviewSort { get; set; }
         protected PropertyDialog ExpenseOverviewSortEditor { get; set; }
 
+        protected SortPropertyViewModel<OutcomeOverviewSortType> SearchSort { get; set; }
+        protected PropertyDialog SearchSortEditor { get; set; }
+
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
 
@@ -63,6 +66,7 @@ namespace Money.Pages.Users
             MobileMenu = AddProperty<MobileMenuPropertyViewModel>("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
             SummarySort = AddProperty<SortPropertyViewModel<SummarySortType>>("SummarySort", "Summary sort", () => SummarySortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByCategory-Ascending");
             ExpenseOverviewSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("ExpenseOverviewSort", "Expense overview sort", () => ExpenseOverviewSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
+            SearchSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("SearchSort", "Search sort", () => SearchSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
 
             await LoadAsync();
         }

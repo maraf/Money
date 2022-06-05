@@ -37,6 +37,10 @@ namespace Money.Services
             {
                 return await GetSortDescriptorAsync<OutcomeOverviewSortType>(dispatcher, "ExpenseOverviewSort", "ByWhen-Descending");
             }
+            else if (query is GetSearchSortProperty) 
+            {
+                return await GetSortDescriptorAsync<OutcomeOverviewSortType>(dispatcher, "SearchSort", "ByWhen-Descending");
+            }
 
             return await next(query);
         }

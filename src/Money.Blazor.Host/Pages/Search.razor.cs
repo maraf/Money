@@ -5,6 +5,7 @@ using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
+using Money.Queries;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -25,8 +26,6 @@ namespace Money.Pages
         IEventHandler<OutcomeWhenChanged>,
         IEventHandler<PulledToRefresh>
     {
-        public static readonly SortDescriptor<OutcomeOverviewSortType> DefaultSort = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
-
         public CurrencyFormatter CurrencyFormatter { get; private set; }
 
         [Inject]
@@ -46,6 +45,8 @@ namespace Money.Pages
 
         protected ElementReference SearchBox { get; set; }
 
+        protected SortDescriptor<OutcomeOverviewSortType> DefaultSort { get; set; }
+
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected SortDescriptor<OutcomeOverviewSortType> Sort { get; set; }
         protected PagingContext PagingContext { get; set; }
@@ -56,6 +57,7 @@ namespace Money.Pages
 
         protected async override Task OnInitializedAsync()
         {
+            DefaultSort = await Queries.QueryAsync(new GetSearchSortProperty());
             FormSort = Sort = DefaultSort;
             PagingContext = new PagingContext(LoadPageAsync, Loading);
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();

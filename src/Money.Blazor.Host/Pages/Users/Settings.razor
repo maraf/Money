@@ -60,3 +60,7 @@
 <PropertyDialog @ref="ExpenseOverviewSortEditor" Model="@ExpenseOverviewSort" Title="Set expense overview sort">
     <SortDescriptorEditor T="OutcomeOverviewSortType" @bind-Property="ExpenseOverviewSort.Property" @bind-Direction="ExpenseOverviewSort.Direction" />
 </PropertyDialog>
+
+<PropertyDialog @ref="SearchSortEditor" Model="@SearchSort" Title="Set search sort">
+    <SortDescriptorEditor T="OutcomeOverviewSortType" @bind-Property="SearchSort.Property" @bind-Direction="SearchSort.Direction" />
+</PropertyDialog>

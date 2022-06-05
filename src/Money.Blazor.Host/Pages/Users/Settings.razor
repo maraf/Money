@@ -54,22 +54,5 @@
 </PropertyDialog>
 
 <PropertyDialog @ref="SummarySortEditor" Model="@SummarySort" Title="Set summary sort">
-    <div class="form-group">
-        <label for="summary-sort-property">Field:</label>
-        <select class="form-control" id="summary-sort-property" @bind="SummarySort.Property">
-            @foreach (var item in SummarySort.Properties)
-            {
-                <option value="@item.Value">@item.Name</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="summary-sort-order">Direction:</label>
-        <select class="form-control" id="summary-sort-order" @bind="SummarySort.Direction">
-            @foreach (var item in SummarySort.Directions)
-            {
-                <option value="@item.Value">@item.Name</option>
-            }
-        </select>
-    </div>
+    <SortDescriptorEditor T="SummarySortType" @bind-Property="SummarySort.Property" @bind-Direction="SummarySort.Direction" />
 </PropertyDialog>

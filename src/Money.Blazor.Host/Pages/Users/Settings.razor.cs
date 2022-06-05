@@ -185,20 +185,12 @@ namespace Money.Pages.Users
     public class SortPropertyViewModel<T> : PropertyViewModel
         where T : struct
     {
-        public List<(string Name, T Value)> Properties { get; set; }
         public T Property { get; set; }
-        public List<(string Name, SortDirection Value)> Directions { get; set; }
         public SortDirection Direction { get; set; }
 
         public async override Task InitializeAsync()
         {
             await base.InitializeAsync();
-
-            Properties = new List<(string Name, T Value)>();
-            SortButton<T>.BuildItems(Properties);
-
-            Directions = new List<(string Name, SortDirection Value)>();
-            SortButton<SortDirection>.BuildItems(Directions);
 
             if (CurrentValue != null)
             {

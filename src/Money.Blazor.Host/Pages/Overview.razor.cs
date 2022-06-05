@@ -7,6 +7,7 @@ using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Services;
+using Money.Queries;
 using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -54,7 +55,7 @@ namespace Money.Pages
         protected List<OutcomeOverviewModel> Items { get; set; }
 
         protected LoadingContext Loading { get; } = new LoadingContext();
-        protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
+        protected SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; set; }
         protected PagingContext PagingContext { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -65,6 +66,8 @@ namespace Money.Pages
 
             CategoryKey = CreateSelectedCategoryFromParameters();
             SelectedPeriod = CreateSelectedItemFromParameters();
+            
+            SortDescriptor = await Queries.QueryAsync(new GetExpenseOverviewSortProperty());
 
             if (!CategoryKey.IsEmpty)
             {

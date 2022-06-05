@@ -1,3 +1,4 @@
+using Money.Models;
 using Money.Models.Sorting;
 using Money.Pages;
 using Neptuo.Queries;
@@ -11,8 +12,8 @@ using System.Threading.Tasks;
 namespace Money.Queries
 {
     /// <summary>
-    /// A query for getting a sort descriptor for summary.
+    /// A query for getting a sort descriptor for expense overview.
     /// </summary>
-    public class GetSummarySortProperty : IQuery<SortDescriptor<SummarySortType>>
+    public class GetExpenseOverviewSortProperty : IQuery<SortDescriptor<OutcomeOverviewSortType>>
     { }
 }

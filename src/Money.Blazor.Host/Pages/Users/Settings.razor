@@ -56,3 +56,7 @@
 <PropertyDialog @ref="SummarySortEditor" Model="@SummarySort" Title="Set summary sort">
     <SortDescriptorEditor T="SummarySortType" @bind-Property="SummarySort.Property" @bind-Direction="SummarySort.Direction" />
 </PropertyDialog>
+
+<PropertyDialog @ref="ExpenseOverviewSortEditor" Model="@ExpenseOverviewSort" Title="Set expense overview sort">
+    <SortDescriptorEditor T="OutcomeOverviewSortType" @bind-Property="ExpenseOverviewSort.Property" @bind-Direction="ExpenseOverviewSort.Direction" />
+</PropertyDialog>

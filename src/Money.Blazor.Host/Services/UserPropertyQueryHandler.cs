@@ -1,4 +1,5 @@
-﻿using Money.Models.Queries;
+﻿using Money.Models;
+using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Queries;
 using Money.Pages;
@@ -30,21 +31,31 @@ namespace Money.Services
             }
             else if (query is GetSummarySortProperty)
             {
-                var value = await dispatcher.QueryAsync(new FindUserProperty("SummarySort"));
-                if (String.IsNullOrEmpty(value))
-                    value = "ByCategory-Ascending";
-
-                string[] parts = value.Split('-');
-
-                var result = new SortDescriptor<SummarySortType>(
-                    Enum.Parse<SummarySortType>(parts[0], true),
-                    Enum.Parse<SortDirection>(parts[1], true)
-                );
-
-                return result;
+                return await GetSortDescriptorAsync<SummarySortType>(dispatcher, "SummarySort", "ByCategory-Ascending");
+            }
+            else if (query is GetExpenseOverviewSortProperty) 
+            {
+                return await GetSortDescriptorAsync<OutcomeOverviewSortType>(dispatcher, "ExpenseOverviewSort", "ByWhen-Descending");
             }
 
             return await next(query);
+        }
+
+        private async Task<SortDescriptor<T>> GetSortDescriptorAsync<T>(HttpQueryDispatcher dispatcher, string propertyName, string defaultValue)
+            where T : struct
+        {
+            var value = await dispatcher.QueryAsync(new FindUserProperty(propertyName));
+            if (String.IsNullOrEmpty(value))
+                value = defaultValue;
+
+            string[] parts = value.Split('-');
+
+            var result = new SortDescriptor<T>(
+                Enum.Parse<T>(parts[0], true),
+                Enum.Parse<SortDirection>(parts[1], true)
+            );
+
+            return result;
         }
 
         private int IntPropertyValue(string value, int defaultValue)

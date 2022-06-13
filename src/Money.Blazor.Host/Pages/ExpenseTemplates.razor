@@ -1,5 +1,35 @@
 @page "/templates"
 @attribute [Authorize]
 
-<Money.Components.Title Icon="redo" Main="Expense Templates" Sub="List of templates for common expenses" ButtonText="New Template" ButtonClick="@(() => { StateHasChanged(); })" />
+<Money.Components.Title Icon="redo" Main="Expense Templates" Sub="List of templates for common expenses" ButtonText="New Template" ButtonClick="@(() => { Modal.Show(); StateHasChanged(); })" />
 <ExceptionPanel />
+
+<ExpenseTemplateCreate @ref="Modal" />
+
+@foreach (var model in Models)
+{
+    <div class="card">
+        <div class="card-body">
+            @if (model.Amount != null)
+            {
+                <p>
+                    @model.Amount
+                </p>
+            }
+
+            @if (!model.CategoryKey.IsEmpty)
+            {
+                <p>
+                    @model.CategoryKey
+                </p>
+            }
+
+            @if (!String.IsNullOrEmpty(model.Description))
+            {
+                <p>
+                    @model.Description
+                </p>
+            }
+        </div>
+    </div>
+}

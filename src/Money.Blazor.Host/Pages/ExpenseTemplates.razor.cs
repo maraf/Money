@@ -9,6 +9,7 @@ using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Logging;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using Neptuo.Queries.Handlers;
 using System;
@@ -28,8 +29,13 @@ namespace Money.Pages
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
 
+        [Inject]
+        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
+        protected CurrencyFormatter CurrencyFormatter { get; private set; }
         protected ExpenseTemplateCreate Modal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
+        protected List<CategoryModel> Categories { get; private set; }
 
         protected async override Task OnInitializedAsync()
         {
@@ -39,7 +45,22 @@ namespace Money.Pages
 
             await base.OnInitializedAsync();
 
+            Categories = await Queries.QueryAsync(new ListAllCategory(true));
+            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
+
             await ReloadAsync();
+        }
+
+        protected string FindCategoryName(IKey categoryKey)
+        {
+            var category = Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
+            return category?.Name;
+        }
+
+        protected Color? FindCategoryColor(IKey categoryKey)
+        {
+            var category = Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
+            return category?.Color;
         }
 
         private async Task ReloadAsync()

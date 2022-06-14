@@ -306,8 +306,7 @@ h4 {
   max-width: 900px;
   margin: 0 auto; }
   .overview .sort {
-    float: right;
-    margin-right: 35px; }
+    float: right; }
 
 .search {
   max-width: 900px;

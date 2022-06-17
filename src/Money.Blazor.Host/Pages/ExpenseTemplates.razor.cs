@@ -6,6 +6,7 @@ using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Services;
+using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Logging;
@@ -24,18 +25,28 @@ namespace Money.Pages
     public partial class ExpenseTemplates : IDisposable, IEventHandler<ExpenseTemplateCreated>, IEventHandler<ExpenseTemplateDeleted>
     {
         [Inject]
+        protected ICommandDispatcher Commands { get; set; }
+
+        [Inject]
         protected IEventHandlerCollection EventHandlers { get; set; }
 
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
 
         [Inject]
+        protected Navigator Navigator { get; set; }
+
+        [Inject]
         protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
 
         protected CurrencyFormatter CurrencyFormatter { get; private set; }
-        protected ExpenseTemplateCreate Modal { get; set; }
+        protected ExpenseTemplateCreate CreateModal { get; set; }
+        protected Confirm DeleteConfirm { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
         protected List<CategoryModel> Categories { get; private set; }
+        
+        protected IKey ToDeleteKey { get; set; }
+        protected string DeleteMessage { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
@@ -50,6 +61,10 @@ namespace Money.Pages
 
             await ReloadAsync();
         }
+
+        public void Dispose() => EventHandlers
+            .Remove<ExpenseTemplateCreated>(this)
+            .Remove<ExpenseTemplateDeleted>(this);
 
         protected string FindCategoryName(IKey categoryKey)
         {
@@ -70,9 +85,10 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        public void Dispose() => EventHandlers
-                .Remove<ExpenseTemplateCreated>(this)
-                .Remove<ExpenseTemplateDeleted>(this);
+        protected async void Delete()
+        {
+            _ = Commands.HandleAsync(new DeleteExpenseTemplate(ToDeleteKey));
+        }
 
         public Task HandleAsync(ExpenseTemplateCreated payload)
         {

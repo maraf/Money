@@ -239,6 +239,8 @@ h4 {
       color: #333; }
   .card p:last-child {
     margin: 0; }
+  .card.card-hover:hover {
+    background-color: #eee; }
 
 .sort a {
   cursor: pointer; }

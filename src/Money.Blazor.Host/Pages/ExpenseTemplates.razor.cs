@@ -42,6 +42,8 @@ namespace Money.Pages
         protected CurrencyFormatter CurrencyFormatter { get; private set; }
         protected ExpenseTemplateCreate CreateModal { get; set; }
         protected Confirm DeleteConfirm { get; set; }
+        protected OutcomeCreate ExpenseModal { get; set; }
+        protected ExpenseTemplateModel ToCreateExpense { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
         protected List<CategoryModel> Categories { get; private set; }
         

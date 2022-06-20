@@ -34,6 +34,7 @@
                     }
 
                     <div class="controls text-right">
+                        <IconButton Icon="minus" ToolTip="Create expense" Click="@(() => { ToCreateExpense = model; ExpenseModal.Show(model.CategoryKey); StateHasChanged(); })" />
                         <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {CurrencyFormatter.Format(model.Amount)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })" />
                     </div>
                 </div>
@@ -42,4 +43,5 @@
     }
 </div>
 
+<OutcomeCreate @ref="ExpenseModal" Amount="@(ToCreateExpense?.Amount?.Value ?? 0)" Currency="@ToCreateExpense?.Amount?.Currency" Description="@ToCreateExpense?.Description" CategoryKey="@ToCreateExpense?.CategoryKey"  />
 <Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@Delete" />

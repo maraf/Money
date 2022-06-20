@@ -2,6 +2,49 @@
 
 <Modal @ref="Modal" Title="@Title">
     <ChildContent>
+        @if (Templates != null)
+        {
+            <style>
+                .card.card-hover {
+                    height: calc(100% - 15px);
+                }
+            </style>
+            <div class="form-row">
+                @foreach (var model in Templates)
+                {
+                    <div class="col-4">
+                        <div class="card card-hover cursor-pointer" @onclick="(() => ApplyTemplate(model))">
+                            <div class="card-body">
+                                @if (model.Amount != null)
+                                {
+                                    <div>
+                                        <strong>
+                                            @CurrencyFormatter.Format(model.Amount)
+                                        </strong>
+                                    </div>
+                                }
+
+                                @if (!model.CategoryKey.IsEmpty)
+                                {
+                                    <p class="m-0 @FindCategoryColor(model.CategoryKey)?.SelectAccent("back-dark", "back-light")">
+                                        <span class="badge" style="background-color: @FindCategoryColor(model.CategoryKey)?.ToHashCode()">@FindCategoryName(model.CategoryKey)</span>
+                                    </p>
+                                }
+
+                                @if (!String.IsNullOrEmpty(model.Description))
+                                {
+                                    <p>
+                                        <small>
+                                            @model.Description
+                                        </small>
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
         <Validation ErrorMessages="@ErrorMessages" />
         <div class="form-row">
             <div class="col-md-9">

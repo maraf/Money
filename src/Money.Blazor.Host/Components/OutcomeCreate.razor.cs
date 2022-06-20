@@ -35,10 +35,16 @@ namespace Money.Components
         [Inject]
         protected Navigator.ModalContainer ModalContainer { get; set; }
 
+        [Inject]
+        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
+        protected CurrencyFormatter CurrencyFormatter { get; private set; }
+
         protected string Title { get; set; }
         protected string SaveButtonText { get; set; }
         protected List<string> ErrorMessages { get; } = new List<string>();
 
+        protected List<ExpenseTemplateModel> Templates { get; private set; }
         protected List<CategoryModel> Categories { get; private set; }
         protected List<CurrencyModel> Currencies { get; private set; }
 
@@ -114,8 +120,11 @@ namespace Money.Components
             Ensure.NotNull(categoryKey, "categoryKey");
             CategoryKey = categoryKey;
 
+            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
+
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
+            Templates = await Queries.QueryAsync(new ListAllExpenseTemplate());
             Currency = await Queries.QueryAsync(new FindCurrencyDefault());
 
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
@@ -140,7 +149,7 @@ namespace Money.Components
             Show(categoryKey);
         }
 
-        public override void Show() 
+        public override void Show()
             => Show(KeyFactory.Empty(typeof(Category)));
 
         protected void OnPrerequisitesConfirmed()
@@ -149,6 +158,33 @@ namespace Money.Components
                 Navigator.OpenCurrencies();
             else if (Categories == null || Categories.Count == 0)
                 Navigator.OpenCategories();
+        }
+
+        protected void ApplyTemplate(ExpenseTemplateModel model)
+        {
+            if (model.Amount != null)
+            {
+                Amount = model.Amount.Value;
+                Currency = model.Amount.Currency;
+            }
+
+            if (!String.IsNullOrEmpty(model.Description))
+                Description = model.Description;
+
+            if (!model.CategoryKey.IsEmpty)
+                CategoryKey = model.CategoryKey;
+        }
+
+        protected string FindCategoryName(IKey categoryKey)
+        {
+            var category = Categories?.FirstOrDefault(c => c.Key.Equals(categoryKey));
+            return category?.Name;
+        }
+
+        protected Color? FindCategoryColor(IKey categoryKey)
+        {
+            var category = Categories?.FirstOrDefault(c => c.Key.Equals(categoryKey));
+            return category?.Color;
         }
     }
 }

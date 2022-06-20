@@ -126,6 +126,20 @@ namespace Money.Components
             StateHasChanged();
         }
 
+        public async void Show(decimal? amount, string currency, string description, IKey categoryKey)
+        {
+            if (amount != null)
+                Amount = amount.Value;
+
+            if (!String.IsNullOrEmpty(currency))
+                Currency = currency;
+
+            if (!String.IsNullOrEmpty(description))
+                Description = description;
+
+            Show(categoryKey);
+        }
+
         public override void Show() 
             => Show(KeyFactory.Empty(typeof(Category)));
 

@@ -45,10 +45,10 @@ namespace Money.Services
             manager.LocationChanged -= OnLocationChanged;
         }
 
-        public string UrlCurrent() 
+        public string UrlCurrent()
             => manager.Uri;
 
-        public string UrlOrigin() 
+        public string UrlOrigin()
             => manager.BaseUri;
 
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)
@@ -71,6 +71,9 @@ namespace Money.Services
 
         public void OpenExpenseCreate(IKey categoryKey)
             => modalContainer.ExpenseCreate?.Show(categoryKey);
+
+        public void OpenExpenseCreate(decimal? amount, string currency, string description, IKey categoryKey) 
+            => modalContainer.ExpenseCreate?.Show(amount, currency, description, categoryKey);
 
         public void Open(string url)
             => manager.NavigateTo(url);
@@ -113,7 +116,7 @@ namespace Money.Services
 
         public void OpenCurrencies()
             => manager.NavigateTo(UrlCurrencies());
-        
+
         public void OpenExpenseTemplates()
             => manager.NavigateTo(UrlExpenseTemplates());
 

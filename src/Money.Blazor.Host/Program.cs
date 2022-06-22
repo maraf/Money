@@ -69,6 +69,7 @@ namespace Money.UI.Blazor
                 .AddTransient<CategoryStorage>()
                 .AddTransient<ProfileStorage>()
                 .AddTransient<UserPropertyStorage>()
+                .AddTransient<ExpenseTemplateStorage>()
                 .AddTransient<NavigatorUrl>()
                 .AddSingleton<Navigator>()
                 .AddSingleton<Navigator.ModalContainer>()

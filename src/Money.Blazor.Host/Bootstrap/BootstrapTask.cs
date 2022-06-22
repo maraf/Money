@@ -110,6 +110,7 @@ namespace Money.Bootstrap
             AddMiddleware<CurrencyMiddleware>(services);
             AddMiddleware<UserMiddleware>(services);
             AddMiddleware<UserPropertyMiddleware>(services);
+            AddMiddleware<ExpenseTemplateMiddleware>(services);
             AddMiddleware<ApiVersionChecker>(services);
             AddMiddleware<UserPropertyQueryHandler>(services);
             AddMiddleware<PwaInstallInterop>(services, register: false);

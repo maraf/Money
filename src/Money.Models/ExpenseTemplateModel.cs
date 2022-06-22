@@ -12,7 +12,7 @@ namespace Money.Models
     /// <summary>
     /// A model of single expense template.
     /// </summary>
-    public class ExpenseTemplateModel
+    public class ExpenseTemplateModel : ICloneable<ExpenseTemplateModel>
     {
         /// <summary>
         /// Gets a key of the expense template.
@@ -50,5 +50,8 @@ namespace Money.Models
             CategoryKey = categoryKey;
             Description = description;
         }
+
+        public ExpenseTemplateModel Clone() 
+            => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey);
     }
 }

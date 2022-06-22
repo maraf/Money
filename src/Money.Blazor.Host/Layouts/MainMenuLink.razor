@@ -1,6 +1,6 @@
 ﻿<Match Url="@Href" Mode="@HrefMatch" PageType="@PageType" Context="IsActive">
     <li class="nav-item">
-        <a href="@Href" class="nav-link @(IsActive ? "active" : "")">
+        <a href="@Href" class="nav-link @(IsActive ? "active" : "")" title="@Title">
             @ChildContent
         </a>
     </li>
@@ -10,6 +10,9 @@
 {
     [Parameter]
     public string Href { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
 
     [Parameter]
     public MatchMode HrefMatch { get; set; } = MatchMode.Exact;

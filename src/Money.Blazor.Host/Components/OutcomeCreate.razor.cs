@@ -112,6 +112,7 @@ namespace Money.Components
             Amount = 0;
             CategoryKey = null;
             Description = null;
+            IsFixed = false;
             StateHasChanged();
         }
 

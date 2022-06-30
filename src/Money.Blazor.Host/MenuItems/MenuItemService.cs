@@ -34,7 +34,8 @@ namespace Money
                     Icon = "chart-pie",
                     Text = "Monthly",
                     Url = navigator.UrlSummary(),
-                    PageType = typeof(SummaryMonth)
+                    PageType = typeof(SummaryMonth),
+                    IsBlurMenuAfterClick = true
                 },
                 new MenuItemModel()
                 {
@@ -48,7 +49,8 @@ namespace Money
                     Identifier = "categories",
                     Icon = "tag",
                     Text = "Categories",
-                    Url = navigator.UrlCategories()
+                    Url = navigator.UrlCategories(),
+                    IsBlurMenuAfterClick = true
                 },
                 new MenuItemModel()
                 {

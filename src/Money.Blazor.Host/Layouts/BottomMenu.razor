@@ -9,7 +9,7 @@
                         @if (item.Url != null)
                         {
                             <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
-                                <a href="@item.Url" class="btn btn-block @(IsActive ? "btn-primary" : "btn-light")">
+                                <a href="@item.Url" class="btn btn-block @(IsActive ? "btn-primary" : "btn-light")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                                     <Icon Identifier="@item.Icon" />
                                     <span class="text">
                                         @item.Text

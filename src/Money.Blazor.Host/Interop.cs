@@ -29,5 +29,8 @@ namespace Money
 
         public async Task AnimateSplashAsync()
             => await jsRuntime.InvokeVoidAsync("Money.AnimateSplash");
+
+        public async Task BlurActiveElementAsync()
+            => await jsRuntime.InvokeVoidAsync("Money.BlurActiveElement");
     }
 }

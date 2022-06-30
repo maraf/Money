@@ -15,5 +15,6 @@ namespace Money.Models
         public string Url { get; set; }
         public Type PageType { get; set; }
         public Action OnClick { get; set; }
+        public bool IsBlurMenuAfterClick { get; set; }
     }
 }

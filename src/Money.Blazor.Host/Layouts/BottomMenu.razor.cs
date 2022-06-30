@@ -28,6 +28,9 @@ namespace Money.Layouts
         [Inject]
         protected IEventHandlerCollection EventHandlers { get; set; }
 
+        [Inject]
+        protected Interop Interop { get; set; }
+
         protected List<IActionMenuItemModel> Items { get; set; }
 
         protected async override Task OnInitializedAsync()
@@ -52,6 +55,12 @@ namespace Money.Layouts
         {
             await LoadAsync();
             StateHasChanged();
+        }
+
+        protected async Task OnLinkClick(bool isBlurMenuAfterClick)
+        {
+            if (isBlurMenuAfterClick)
+                await Interop.BlurActiveElementAsync();
         }
     }
 }

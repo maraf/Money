@@ -356,8 +356,8 @@ h4 {
     font-weight: lighter;
     transition: opacity 0.5s; }
   .splash img {
-    width: 120px;
-    height: 120px;
+    width: 180px;
+    height: 180px;
     transition: margin-left 0.5s linear 0.5s, width 0.5s, height 0.5s; }
   .splash.animate {
     height: 56px;
@@ -366,8 +366,8 @@ h4 {
     .splash.animate .app-title {
       opacity: 0; }
     .splash.animate img {
-      width: 40px;
-      height: 40px;
+      width: 60px;
+      height: 60px;
       margin-left: calc(-100vw + 71px); }
       @media (min-width: 576px) {
         .splash.animate img {

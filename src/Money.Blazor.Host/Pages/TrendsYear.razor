@@ -9,6 +9,64 @@
 }
 else
 {
+    <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 332px)">
+        @foreach (var model in Models)
+        {
+            var size = model.TotalAmount.Value / MaxAmount * 100;
+
+            <div class="col-12 col-lg-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
+                <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
+                    <div class="w-100" style="height: @size%; background: @CategoryColor.ToHashCode()"></div>
+                </div>
+                <div class="p-1">
+                    <div class="d-flex justify-content-between align-items-center d-lg-none text-left">
+                        <span>
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                @model
+                            </a>
+                            <a href="@Navigator.UrlTrends(model, CategoryKey)" class="ml-3">
+                                <Icon Identifier="chart-bar" class="d-inline d-lg-none" />
+                                <span class="d-none d-lg-inline">
+                                    Months
+                                </span>
+                            </a>
+                        </span>
+                        <small>
+                            @CurrencyFormatter.Format(model.TotalAmount)
+                        </small>
+                    </div>
+                    <div class="d-none d-lg-block text-center mt-1">
+                        <div class="d-none d-lg-block text-center mt-1">
+                            <small>
+                                @CurrencyFormatter.Format(model.TotalAmount)
+                            </small>
+                        </div>
+                        <div class="text-center mt-1">
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                <span class="d-none d-lg-inline">
+                                    @model
+                                </span>
+                                <span class="d-inline d-lg-none">
+                                    @model.ToShortString()
+                                </span>
+                            </a>
+                            <a href="@Navigator.UrlTrends(model, CategoryKey)" class="btn btn-sm btn-block btn-link">
+                                <Icon Identifier="chart-bar" class="d-inline d-lg-none" />
+                                <span class="d-none d-lg-inline">
+                                    Months
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
+                    <div style="width: @size%; background: @CategoryColor.ToHashCode(); height: 10px;"></div>
+                </div>
+            </div>
+        }
+    </div>
+
+    /*
     <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 402px)">
         <div class="d-none d-sm-block col-sm-1"></div>
 
@@ -63,4 +121,5 @@ else
 
         <div class="d-none d-sm-block col-sm-1"></div>
     </div>
+    */
 }

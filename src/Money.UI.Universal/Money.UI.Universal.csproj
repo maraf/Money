@@ -380,7 +380,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Money.Data\Money.Data.csproj">
+    <ProjectReference Include="..\Money.Models.EntityFrameworkCore\Money.Models.EntityFrameworkCore.csproj">
       <Project>{1ad9f4c2-f7e0-4179-8938-d39a2d291bdf}</Project>
       <Name>Money.Data</Name>
     </ProjectReference>

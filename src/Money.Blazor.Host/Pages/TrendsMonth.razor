@@ -5,7 +5,7 @@
     <ButtonContent>
         <button class="btn btn-secondary" @onclick="(() => Navigator.OpenOverview(SelectedPeriod, CategoryKey))">
             <Icon Prefix="fas" Identifier="list-ul" />
-            <span class="d-none d-md-inline">
+            <span class="d-none d-lg-inline">
                 Year overview
             </span>
         </button>
@@ -18,36 +18,44 @@
 }
 else
 {
-    <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 328px)">
+    <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 312px)">
         @foreach (var model in Models)
         {
-            <div class="col-1">
-                <div class="p-1 p-md-3 h-100 w-100 vertical-bar">
-                    <div class="w-100" style="height: @(model.TotalAmount.Value / MaxAmount * 100)%; background: @CategoryColor.ToHashCode()"></div>
+            var size = model.TotalAmount.Value / MaxAmount * 100;
+
+            <div class="col-12 col-lg-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
+                <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
+                    <div class="w-100" style="height: @size%; background: @CategoryColor.ToHashCode()"></div>
                 </div>
-            </div>
-        }
-    </div>
-    <div class="row no-gutters" style="min-width: 440px;">
-        @foreach (var model in Models)
-        {
-            <div class="col-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
                 <div class="p-1">
-                    <div class="text-center mt-1 d-none d-lg-block">
+                    <div class="d-flex justify-content-between align-items-center d-lg-none text-left">
+                        <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                            @model.ToMonthString()
+                        </a>
                         <small>
                             @CurrencyFormatter.Format(model.TotalAmount)
                         </small>
                     </div>
-                    <div class="text-center mt-1">
-                        <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                            <span class="d-none d-lg-inline">
-                                @model.ToMonthString()
-                            </span>
-                            <span class="d-inline d-lg-none">
-                                @model.Month.ToString("D2")
-                            </span>
-                        </a>
+                    <div class="d-none d-lg-block text-center mt-1">
+                        <div class="d-none d-lg-block text-center mt-1">
+                            <small>
+                                @CurrencyFormatter.Format(model.TotalAmount)
+                            </small>
+                        </div>
+                        <div class="text-center mt-1">
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                <span class="d-none d-lg-inline">
+                                    @model.ToMonthString()
+                                </span>
+                                <span class="d-inline d-lg-none">
+                                    @model.Month.ToString("D2")
+                                </span>
+                            </a>
+                        </div>
                     </div>
+                </div>
+                <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
+                    <div style="width: @size%; background: @CategoryColor.ToHashCode(); height: 10px;"></div>
                 </div>
             </div>
         }

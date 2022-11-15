@@ -1,4 +1,5 @@
-﻿using Money.Accounts.Models;
+﻿using Money.Accounts;
+using Money.Accounts.Models;
 using Money.Api;
 using Money.Api.Models;
 using Money.Api.Routing;
@@ -75,6 +76,10 @@ namespace Money.Services
 
             if (responseMessage.StatusCode == HttpStatusCode.OK)
             {
+                string newToken;
+                if (responseMessage.Headers.TryGetValues(RenewalTokenHeader.Name, out var values) && (newToken = values.FirstOrDefault()) != null)
+                    await authenticationState.SetTokenAsync(newToken, true);
+
                 return;
             }
             else if (responseMessage.StatusCode == HttpStatusCode.Unauthorized)
@@ -125,7 +130,8 @@ namespace Money.Services
             HttpContent requestContent = CreateJsonContent(new LoginRequest()
             {
                 UserName = userName,
-                Password = password
+                Password = password,
+                IsAutoRenewable = isPermanent
             });
 
             try

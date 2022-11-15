@@ -32,5 +32,8 @@ namespace Money
 
         public async Task BlurActiveElementAsync()
             => await jsRuntime.InvokeVoidAsync("Money.BlurActiveElement");
+
+        public async Task FocusElementByIdAsync(string id)
+            => await jsRuntime.InvokeVoidAsync("Money.FocusElementById", id);
     }
 }

@@ -78,11 +78,16 @@
             <label>Category:</label>
             @if (Categories != null)
             {
+                var isFistCategory = true;
+
                 <div class="form-row">
                     @foreach (var category in Categories)
                     {
+                        var buttonId = isFistCategory ? "expense-category-first" : null;
+                        isFistCategory = false;
+
                         <div class="col-6 col-md-4 mb-2">
-                            <button type="button" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                            <button type="button" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
                                 <div>
                                     <h2>@category.Icon</h2>
                                 </div>
@@ -107,7 +112,7 @@
         </div>
     </ChildContent>
     <Buttons>
-        <button class="btn btn-primary" @onclick="@OnSaveClick">@SaveButtonText</button>
+        <button class="btn btn-primary" @onclick="@OnSaveClickAsync">@SaveButtonText</button>
     </Buttons>
 </Modal>
 <Confirm @ref="PrerequisitesConfirm" Message="To create an expense, you need to first create a currency and category." OnConfirmed="OnPrerequisitesConfirmed" />

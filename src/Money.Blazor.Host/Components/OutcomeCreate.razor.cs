@@ -33,6 +33,9 @@ namespace Money.Components
         internal Navigator Navigator { get; set; }
 
         [Inject]
+        internal Interop Interop { get; set; }
+
+        [Inject]
         protected Navigator.ModalContainer ModalContainer { get; set; }
 
         [Inject]
@@ -82,28 +85,37 @@ namespace Money.Components
             SaveButtonText = "Create";
         }
 
-        protected void OnSaveClick()
+        protected async Task OnSaveClickAsync()
         {
-            if (Validate())
+            if (await Validate())
             {
                 Execute();
                 Modal.Hide();
             }
         }
 
-        private bool Validate()
+        private async Task<bool> Validate()
         {
             Log.Debug($"Expense: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
 
             ErrorMessages.Clear();
-            Validator.AddOutcomeAmount(ErrorMessages, Amount);
-            Validator.AddOutcomeDescription(ErrorMessages, Description);
+            if (ErrorMessages.Count == 0 && Validator.AddOutcomeAmount(ErrorMessages, Amount))
+                await FocusElementAsync("expense-amount");
+
+            if (ErrorMessages.Count == 0 && Validator.AddOutcomeDescription(ErrorMessages, Description))
+                await FocusElementAsync("expense-description");
+
+            if (ErrorMessages.Count == 0 && Validator.AddOutcomeCategoryKey(ErrorMessages, CategoryKey))
+                await FocusElementAsync("expense-category-first");
+
             Validator.AddOutcomeCurrency(ErrorMessages, Currency);
-            Validator.AddOutcomeCategoryKey(ErrorMessages, CategoryKey);
 
             Log.Debug($"Expense: Validation: {string.Join(", ", ErrorMessages)}.");
             return ErrorMessages.Count == 0;
         }
+
+        private Task FocusElementAsync(string id) 
+            => Interop.FocusElementByIdAsync(id);
 
         private async void Execute()
         {

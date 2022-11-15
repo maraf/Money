@@ -16,28 +16,48 @@ namespace Money.Services
         public static bool IsOutcomeCurrency(string currency) => !String.IsNullOrEmpty(currency);
         public static bool IsOutcomeCategoryKey(IKey categoryKey) => categoryKey != null && !categoryKey.IsEmpty;
 
-        public static void AddOutcomeAmount(ICollection<string> messages, decimal amount)
+        public static bool AddOutcomeAmount(ICollection<string> messages, decimal amount)
         {
             if (!IsOutcomeAmount(amount))
+            {
                 messages.Add("Amount must be greater than zero.");
+                return true;
+            }
+
+            return false;
         }
 
-        public static void AddOutcomeDescription(ICollection<string> messages, string description)
+        public static bool AddOutcomeDescription(ICollection<string> messages, string description)
         {
             if (!IsOutcomeDescription(description))
+            {
                 messages.Add("Description must be provided.");
+                return true;
+            }
+
+            return false;
         }
 
-        public static void AddOutcomeCurrency(ICollection<string> messages, string currency)
+        public static bool AddOutcomeCurrency(ICollection<string> messages, string currency)
         {
             if (!IsOutcomeCurrency(currency))
+            {
                 messages.Add("Currency must be selected.");
+                return true;
+            }
+
+            return false;
         }
 
-        public static void AddOutcomeCategoryKey(ICollection<string> messages, IKey categoryKey)
+        public static bool AddOutcomeCategoryKey(ICollection<string> messages, IKey categoryKey)
         {
             if (!IsOutcomeCategoryKey(categoryKey))
+            {
                 messages.Add("Category must be selected.");
+                return true;
+            }
+
+            return false;
         }
 
         #endregion

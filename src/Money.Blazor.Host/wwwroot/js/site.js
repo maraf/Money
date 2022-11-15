@@ -84,6 +84,12 @@ window.Money = {
     },
     BlurActiveElement: function () {
         setTimeout(() => document.activeElement.blur(), 1);
+    },
+    FocusElementById: function (id) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.focus();
+        }
     }
 };
 

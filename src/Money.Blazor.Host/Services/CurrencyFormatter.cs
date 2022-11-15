@@ -50,6 +50,9 @@ namespace Money.Services
 
         public string Format(Price price)
         {
+            if (price.Value == 0)
+                return String.Empty;
+
             CurrencyModel currency = models.FirstOrDefault(c => c.UniqueCode == price.Currency);
             if (currency == null)
                 return price.ToString();

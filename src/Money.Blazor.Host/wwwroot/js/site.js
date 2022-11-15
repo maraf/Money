@@ -106,11 +106,13 @@ window.PullToRefresh = {
 
         let $refreshUi = $(".refresher");
 
+        const preRequisities = () => !document.querySelector(".modal.fade.show");
+
         container.addEventListener('touchstart', e => {
             _startY = 0;
             _maxY = 0;
 
-            if (document.scrollingElement.scrollTop === 0) {
+            if (document.scrollingElement.scrollTop === 0 && preRequisities()) {
                 _startY = Math.floor(e.touches[0].pageY);
                 _isActive = true;
             } else {
@@ -123,7 +125,7 @@ window.PullToRefresh = {
             _maxY = Math.floor(y);
 
             const delta = Math.floor(_maxY - _startY);
-            if (_isActive && delta > refreshTreshold) {
+            if (_isActive && delta > refreshTreshold && preRequisities()) {
                 $refreshUi.addClass("visible");
             } else {
                 $refreshUi.removeClass("visible");
@@ -132,7 +134,7 @@ window.PullToRefresh = {
 
         container.addEventListener("touchend", () => {
             const delta = Math.floor(_maxY - _startY);
-            if (_isActive && delta > refreshTreshold) {
+            if (_isActive && delta > refreshTreshold && preRequisities()) {
                 window.PullToRefresh.Raise();
             }
 

@@ -41,27 +41,7 @@ namespace Money.Components
         {
             base.OnInitialized();
 
-            BuildItems(Items);
-        }
-
-        public static void BuildItems(List<(string Name, TType Value)> items)
-        {
-            Type parameterType = typeof(TType);
-            foreach (object value in Enum.GetValues(parameterType))
-            {
-                TType type = (TType)value;
-                string text = Enum.GetName(parameterType, value);
-
-                MemberInfo itemInfo = parameterType
-                    .GetMember(text)
-                    .First();
-
-                DescriptionAttribute attribute = itemInfo.GetCustomAttribute<DescriptionAttribute>();
-                if (attribute != null)
-                    text = attribute.Description;
-
-                items.Add((text, type));
-            }
+            SortButton<TType>.BuildItems(Items);
         }
 
         protected override void OnParametersSet()

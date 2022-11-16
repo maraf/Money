@@ -64,3 +64,7 @@
 <PropertyDialog @ref="SearchSortEditor" Model="@SearchSort" Title="Set search sort">
     <SortDescriptorEditor T="OutcomeOverviewSortType" @bind-Property="SearchSort.Property" @bind-Direction="SearchSort.Direction" />
 </PropertyDialog>
+
+<PropertyDialog @ref="BalanceDisplayEditor" Model="@BalanceDisplay" Title="Set balance display">
+    <EnumEditor T="BalanceDisplayType" @bind-Property="BalanceDisplay.Property" />
+</PropertyDialog>

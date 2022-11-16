@@ -41,6 +41,10 @@ namespace Money.Services
             {
                 return await GetSortDescriptorAsync<OutcomeOverviewSortType>(dispatcher, "SearchSort", "ByWhen-Descending");
             }
+            else if (query is GetBalanceDisplayProperty) 
+            {
+                return await GetEnumAsync<BalanceDisplayType>(dispatcher, "BalanceDisplay", "Total");
+            }
 
             return await next(query);
         }
@@ -60,6 +64,16 @@ namespace Money.Services
             );
 
             return result;
+        }
+
+        private async Task<T> GetEnumAsync<T>(HttpQueryDispatcher dispatcher, string propertyName, string defaultValue)
+            where T : struct
+        {
+            var value = await dispatcher.QueryAsync(new FindUserProperty(propertyName));
+            if (String.IsNullOrEmpty(value))
+                value = defaultValue;
+
+            return Enum.Parse<T>(value, true);
         }
 
         private int IntPropertyValue(string value, int defaultValue)

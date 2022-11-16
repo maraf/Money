@@ -11,6 +11,7 @@ using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,9 @@ namespace Money.Pages.Users
     public partial class Settings : System.IDisposable,
         IEventHandler<UserPropertyChanged>
     {
+        [Inject]
+        protected ILog<Settings> Log { get; set; }
+
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
 
@@ -52,6 +56,9 @@ namespace Money.Pages.Users
         protected SortPropertyViewModel<OutcomeOverviewSortType> SearchSort { get; set; }
         protected PropertyDialog SearchSortEditor { get; set; }
 
+        protected EnumPropertyViewModel<BalanceDisplayType> BalanceDisplay { get; set; }
+        protected PropertyDialog BalanceDisplayEditor { get; set; }
+
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
 
@@ -66,7 +73,7 @@ namespace Money.Pages.Users
             MobileMenu = AddProperty<MobileMenuPropertyViewModel>("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
             SummarySort = AddProperty<SortPropertyViewModel<SummarySortType>>("SummarySort", "Summary sort", () => SummarySortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByCategory-Ascending");
             ExpenseOverviewSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("ExpenseOverviewSort", "Expense overview sort", () => ExpenseOverviewSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
-            SearchSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("SearchSort", "Search sort", () => SearchSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
+            BalanceDisplay = AddProperty<EnumPropertyViewModel<BalanceDisplayType>>("BalanceDisplay", "Balance display", () => BalanceDisplayEditor.Show(), icon: "tv", defaultValue: "Total");
 
             await LoadAsync();
         }
@@ -106,6 +113,8 @@ namespace Money.Pages.Users
             var viewModel = ViewModels.FirstOrDefault(vm => vm.Key == payload.PropertyKey);
             if (viewModel != null)
             {
+                Log.Debug($"Changing property '{payload.PropertyKey}' value to '{payload.Value}'");
+
                 viewModel.Model.Value = payload.Value;
                 viewModel.CurrentValue = null;
             }
@@ -211,6 +220,26 @@ namespace Money.Pages.Users
         public override Task SetAsync()
         {
             CurrentValue = $"{Property}-{Direction}";
+            return base.SetAsync();
+        }
+    }
+
+    public class EnumPropertyViewModel<T> : PropertyViewModel
+        where T : struct
+    {
+        public T Property { get; set; }
+
+        public async override Task InitializeAsync()
+        {
+            await base.InitializeAsync();
+
+            if (CurrentValue != null)
+                Property = Enum.Parse<T>(CurrentValue);
+        }
+
+        public override Task SetAsync()
+        {
+            CurrentValue = $"{Property}";
             return base.SetAsync();
         }
     }

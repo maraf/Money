@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Queries;
 using Money.Services;
 using Neptuo.Queries;
 using System;
@@ -37,6 +38,7 @@ namespace Money.Pages
         {
             await base.OnInitializedAsync();
 
+            SelectedDisplayType = await Queries.QueryAsync(new GetBalanceDisplayProperty());
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
         }
 

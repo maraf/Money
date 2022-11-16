@@ -28,6 +28,7 @@ namespace Money.Pages
 
         protected CurrencyFormatter CurrencyFormatter { get; set; }
         protected YearModel SelectedPeriod { get; set; }
+        protected List<YearModel> PeriodGuesses { get; set; }
         protected List<MonthBalanceModel> Models { get; set; }
         protected decimal MaxAmount { get; set; }
 
@@ -35,8 +36,19 @@ namespace Money.Pages
         {
             await base.OnInitializedAsync();
 
-            SelectedPeriod = new YearModel(Year);
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
+        }
+
+        protected async override Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+
+            SelectedPeriod = new YearModel(Year);
+            PeriodGuesses = new List<YearModel>(2)
+            {
+                SelectedPeriod - 1,
+                SelectedPeriod - 2,
+            };
 
             await LoadAsync();
         }
@@ -46,7 +58,7 @@ namespace Money.Pages
             string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
             var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod));
 
-            MaxAmount = models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value));
+            MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value)) : 0;
             Models = new List<MonthBalanceModel>();
             for (int i = 0; i < 12; i++)
             {
@@ -58,5 +70,8 @@ namespace Money.Pages
                 Models.Add(model);
             }
         }
+
+        protected async Task<IReadOnlyCollection<YearModel>> GetYearsAsync() 
+            => await Queries.QueryAsync(new ListYearWithOutcome());
     }
 }

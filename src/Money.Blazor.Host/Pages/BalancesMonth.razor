@@ -12,17 +12,19 @@
     </ButtonContent>
 </Title>
 
+<PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
+
 @if (Models == null)
 {
     <Loading />
 }
 else
 {
-    <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 332px)">
+    <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 356px)">
         @foreach (var model in Models)
         {
-            var expenseSize = model.ExpenseSummary.Value / MaxAmount * 100;
-            var incomeSize = model.IncomeSummary.Value / MaxAmount * 100;
+            var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;
+            var incomeSize = MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100;
 
             <div class="col-12 col-lg-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
                 <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">

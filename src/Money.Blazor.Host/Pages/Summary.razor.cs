@@ -57,7 +57,7 @@ namespace Money.Pages
 
         protected string SubTitle { get; set; }
 
-        protected LoadingContext PeriodsLoading { get; } = new LoadingContext();
+        protected bool IsPeriodReloadRequired { get; set; }
         protected List<T> Periods { get; private set; }
         protected T SelectedPeriod { get; set; }
         protected IReadOnlyCollection<T> PeriodGuesses { get; set; }
@@ -69,7 +69,6 @@ namespace Money.Pages
 
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
-        protected Modal PeriodSelectorModal { get; set; }
         protected IncomeCreate IncomeCreate { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -104,13 +103,15 @@ namespace Money.Pages
         protected virtual IQuery<List<T>> CreatePeriodsQuery()
             => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreatePeriodsQuery)}'.");
 
-        protected async Task LoadPeriodsAsync(bool isReload = true)
+        protected async Task<IReadOnlyCollection<T>> GetPeriodsAsync()
         {
-            using (PeriodsLoading.Start())
+            if (IsPeriodReloadRequired || Periods == null)
             {
-                if (isReload || Periods == null)
-                    Periods = await Queries.QueryAsync(CreatePeriodsQuery());
+                IsPeriodReloadRequired = false;
+                Periods = await Queries.QueryAsync(CreatePeriodsQuery());
             }
+
+            return Periods;
         }
 
         protected async Task LoadSelectedPeriodAsync()
@@ -280,8 +281,8 @@ namespace Money.Pages
 
         private async void OnMonthUpdatedEvent(DateTime changed)
         {
-            if (Periods != null && !IsContained(changed))
-                await LoadPeriodsAsync();
+            if (!IsContained(changed))
+                IsPeriodReloadRequired = true;
 
             await LoadSelectedPeriodAsync();
             StateHasChanged();
@@ -298,17 +299,9 @@ namespace Money.Pages
 
         private async void OnOutcomeDeletedEvent()
         {
-            if (Periods != null)
-                await LoadPeriodsAsync();
-
+            IsPeriodReloadRequired = true;
             await LoadSelectedPeriodAsync();
             StateHasChanged();
-        }
-
-        protected async Task OpenPeriodSelectorAsync()
-        {
-            PeriodSelectorModal.Show();
-            await LoadPeriodsAsync(isReload: false);
         }
 
         #endregion

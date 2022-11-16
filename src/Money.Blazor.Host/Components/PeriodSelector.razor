@@ -1,0 +1,50 @@
+﻿@typeparam T
+
+<button type="button" class="btn btn-primary" @onclick="OpenSelectorAsync">
+    @Selected?.ToString()
+    <Icon Identifier="caret-down" />
+</button>
+
+@if (Previous != null && Previous.Count > 0)
+{
+    <span class="d-none d-md-inline">
+        @foreach (var prev in Previous)
+        {
+            <a class="btn btn-link" href="@LinkFactory(prev)">
+                @prev
+            </a>
+        }
+    </span>
+}
+
+<Modal @ref="SelectorModal" Title="Select a period" TitleIcon="calendar" BodyCssClass="p-0">
+    <Loading Context="@Loading">
+        <LoadingContent>
+            <div class="p-3">
+                <i>Loading...</i>
+            </div>
+        </LoadingContent>
+        <ChildContent>
+            @if (Periods != null)
+            {
+                if (Periods.Count > 0)
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var item in Periods)
+                        {
+                            <a @onclick="@(() => SelectorModal.Hide())" href="@LinkFactory(item)" class="list-group-item @(item.Equals(Selected) ? "active" : null)">
+                                @item.ToString()
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="p-3">
+                        <Alert Title="No data." Mode="@AlertMode.Warning" />
+                    </div>
+                }
+            }
+        </ChildContent>
+    </Loading>
+</Modal>

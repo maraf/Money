@@ -18,22 +18,7 @@
         <div class="mb-3">
             <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
 
-            <button type="button" class="btn btn-primary" @onclick="@OpenPeriodSelectorAsync">
-                @SelectedPeriod.ToString()
-                <Icon Identifier="caret-down" />
-            </button>
-
-            @if (PeriodGuesses != null && PeriodGuesses.Count > 0)
-            {
-                <span class="d-none d-md-inline">
-                    @foreach (var guess in PeriodGuesses)
-                    {
-                        <a class="btn btn-link" href="@UrlSummary(guess)">
-                            @guess
-                        </a>
-                    }
-                </span>
-            }
+            <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetPeriodsAsync" LinkFactory="UrlSummary" />
 
             <span class="pl-2">
                 <Loading Context="@CategoriesLoading" />
@@ -93,36 +78,4 @@
             }
         </div>
     }
-
-    <Modal @ref="PeriodSelectorModal" Title="Select a period" TitleIcon="calendar" BodyCssClass="p-0">
-        <Loading Context="@PeriodsLoading">
-            <LoadingContent>
-                <div class="p-3">
-                    <i>Loading...</i>
-                </div>
-            </LoadingContent>
-            <ChildContent>
-                @if (Periods != null)
-                {
-                    if (Periods.Count > 0)
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var item in Periods)
-                            {
-                                <a @onclick="@(() => PeriodSelectorModal.Hide())" href="@UrlSummary(item)" class="list-group-item @(item.Equals(SelectedPeriod) ? "active" : null)">
-                                    @item.ToString()
-                                </a>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="p-3">
-                            <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
-                        </div>
-                    }
-                }
-            </ChildContent>
-        </Loading>
-    </Modal>
 </div>

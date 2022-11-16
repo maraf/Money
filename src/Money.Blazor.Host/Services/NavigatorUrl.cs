@@ -55,6 +55,9 @@ namespace Money.Services
         public string UrlTrends(YearModel year, IKey categoryKey) 
             => $"/{year.Year}/trends/{categoryKey.AsGuidKey().Guid}";
 
+        public string UrlBalances(YearModel year)
+            => $"/{year.Year}/balances";
+
         public string UrlSearch(string query = null, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null)
         {
             string url = "/search";

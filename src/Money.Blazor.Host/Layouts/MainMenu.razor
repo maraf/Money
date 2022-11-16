@@ -20,13 +20,17 @@
                     <Icon Identifier="chart-pie" />
                     Monthly
                 </MainMenuLink>
-                <MainMenuLink Href="@Navigator.UrlSummary(new YearModel(DateTime.Today.Year))" PageType="@typeof(Pages.SummaryYear)">
+                <MainMenuLink Href="@Navigator.UrlSummary(ThisYear)" PageType="@typeof(Pages.SummaryYear)">
                     <Icon Identifier="circle" />
                     Yearly
                 </MainMenuLink>
                 <MainMenuLink Href="@Navigator.UrlTrends()">
-                    <Icon Prefix="fas" Identifier="chart-bar" />
+                    <Icon Prefix="fas" Identifier="chart-line" />
                     Trends
+                </MainMenuLink>
+                <MainMenuLink Href="@Navigator.UrlBalances(ThisYear)">
+                    <Icon Prefix="fas" Identifier="chart-bar" />
+                    Balances
                 </MainMenuLink>
                 <MainMenuLink Href="@Navigator.UrlSearch()">
                     <Icon Identifier="search" />

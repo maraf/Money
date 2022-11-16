@@ -1,7 +1,7 @@
 ﻿@attribute [Authorize]
 @page "/trends/{CategoryGuid:guid}"
 
-<Title Icon="chart-bar" Main="@($"Trends of category {CategoryName} from {StartYear} to {StartYear.Year + ModelsCount - 1}")" Sub="See how the category expenses change in time" />
+<Title Icon="chart-line" Main="@($"Trends of category {CategoryName} from {StartYear} to {StartYear.Year + ModelsCount - 1}")" Sub="See how the category expenses change in time" />
 
 @if (Models == null)
 {

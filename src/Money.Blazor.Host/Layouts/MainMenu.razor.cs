@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Events;
+using Money.Models;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -16,6 +17,7 @@ namespace Money.Components
         IEventHandler<UserSignedOut>
     {
         protected const string MenuLeftMarginCssClass = "ml-2 ml-lg-0";
+        protected static readonly YearModel ThisYear = new YearModel(DateTime.Today.Year);
 
         [Inject]
         internal Navigator Navigator {get;set;}

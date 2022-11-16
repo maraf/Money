@@ -28,6 +28,7 @@ namespace Money.Pages
 
         protected CurrencyFormatter CurrencyFormatter { get; set; }
         protected YearModel SelectedPeriod { get; set; }
+        protected BalanceDisplayType SelectedDisplayType { get; set; }
         protected List<YearModel> PeriodGuesses { get; set; }
         protected List<MonthBalanceModel> Models { get; set; }
         protected decimal MaxAmount { get; set; }

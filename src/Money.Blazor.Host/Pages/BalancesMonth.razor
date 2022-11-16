@@ -12,7 +12,12 @@
     </ButtonContent>
 </Title>
 
-<PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
+<div class="d-flex justify-content-between mb-3">
+    <div>
+        <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
+    </div>
+    <EnumSelector Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
+</div>
 
 @if (Models == null)
 {
@@ -20,7 +25,7 @@
 }
 else
 {
-    <div class="row no-gutters" style="min-width: 440px; height: 400px; height: calc(100vh - 356px)">
+    <div class="row no-gutters" style="min-width: 440px; min-height: calc(100vh - 382px)">
         @foreach (var model in Models)
         {
             var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;
@@ -37,22 +42,42 @@ else
                             @model.ToMonthString()
                         </a>
                         <div>
-                            <small class="text-success">
-                                @CurrencyFormatter.Format(model.IncomeSummary)
-                            </small>
-                            <small class="text-danger">
-                                @CurrencyFormatter.Format(model.ExpenseSummary)
-                            </small>
+                            @if (SelectedDisplayType == BalanceDisplayType.Total)
+                            {
+                                <small class="text-success">
+                                    @CurrencyFormatter.Format(model.IncomeSummary)
+                                </small>
+                                <small class="text-danger">
+                                    @CurrencyFormatter.Format(model.ExpenseSummary)
+                                </small>
+                            }
+                            else
+                            {
+                                var diff = model.IncomeSummary - model.ExpenseSummary;
+                                <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
+                                    @CurrencyFormatter.Format(diff)
+                                </small>
+                            }
                         </div>
                     </div>
                     <div class="d-none d-lg-block text-center mt-1">
                         <div class="d-none d-lg-block text-center mt-1">
-                            <small class="d-block text-success">
-                                @CurrencyFormatter.Format(model.IncomeSummary)
-                            </small>
-                            <small class="d-block text-danger">
-                                @CurrencyFormatter.Format(model.ExpenseSummary)
-                            </small>
+                            @if (SelectedDisplayType == BalanceDisplayType.Total)
+                            {
+                                <small class="d-block text-success">
+                                    @CurrencyFormatter.Format(model.IncomeSummary)
+                                </small>
+                                <small class="d-block text-danger">
+                                    @CurrencyFormatter.Format(model.ExpenseSummary)
+                                </small>
+                            } 
+                            else
+                            {
+                                var diff = model.IncomeSummary - model.ExpenseSummary;
+                                <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
+                                    @CurrencyFormatter.Format(diff)
+                                </small>
+                            }
                         </div>
                         <div class="text-center mt-1">
                             <a href="@Navigator.UrlOverview(model)">

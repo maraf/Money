@@ -1,0 +1,17 @@
+﻿@typeparam TType
+
+<div class="sort dropdown">
+    <button class="@ButtonCssClass" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @Text
+        <span class="caret"></span>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-right">
+        @foreach (var item in Items)
+        {
+            <a class="dropdown-item @(item.Value.Equals(Current) ? "active" : null)" @onclick="@(() => OnItemClick(item.Value))">
+                @item.Name
+            </a>
+        }
+    </div>
+</div>

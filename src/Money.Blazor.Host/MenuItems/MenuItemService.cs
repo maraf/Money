@@ -18,13 +18,11 @@ namespace Money
     {
         private const string DefaultValue = "summary-month,expense-create";
 
-        private readonly Navigator navigator;
         private readonly List<MenuItemModel> storage;
 
         public MenuItemService(Navigator navigator)
         {
             Ensure.NotNull(navigator, "navigator");
-            this.navigator = navigator;
 
             storage = new List<MenuItemModel>()
             {
@@ -58,6 +56,13 @@ namespace Money
                     Icon = "minus-circle",
                     Text = "New Expense",
                     OnClick = navigator.OpenExpenseCreate
+                },
+                new MenuItemModel()
+                {
+                    Identifier = "main-menu",
+                    Icon = "bars",
+                    Text = "Main menu",
+                    OnClick = () => { }
                 }
             };
         }
@@ -67,11 +72,7 @@ namespace Money
             if (query is ListBottomMenuItem)
             {
                 var value = await dispatcher.QueryAsync(new FindUserProperty("MobileMenu"));
-                
-                Console.WriteLine($"MM: (1) '{value}', {value == null}, {value == String.Empty}");
-
                 var selectedItems = value != null ? value.Split(',') : Array.Empty<string>();
-
                 return storage.Where(m => selectedItems.Contains(m.Identifier)).ToList<IActionMenuItemModel>();
             }
             else if (query is ListAvailableMenuItem)
@@ -81,9 +82,6 @@ namespace Money
             else if (query is FindUserProperty findProperty && findProperty.Key == "MobileMenu")
             {
                 var value = (string)await next(findProperty);
-
-                Console.WriteLine($"MM: (2) '{value}', {value == null}, {value == String.Empty}");
-
                 if (value == null)
                     return DefaultValue;
 
@@ -94,7 +92,6 @@ namespace Money
                 var value = (List<UserPropertyModel>)await next(listProperty);
                 var property = value.FirstOrDefault(p => p.Key == "MobileMenu");
 
-                Console.WriteLine($"MM: (3) '{property.Value}', {property.Value == null}, {property.Value == String.Empty}");
                 if (property != null && property.Value == null)
                     property.Value = DefaultValue;
 

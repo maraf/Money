@@ -68,6 +68,12 @@ h4 {
 
 .dropdown-item {
     padding: .25rem 1rem;
+
+    .fa, .fas {
+        width: 20px;
+        text-align: center;
+        margin-right: 6px;
+    }
 }
 
 .navbar-dark {
@@ -84,12 +90,26 @@ h4 {
 
     .navbar-collapse {
         border-color: #398BF5;
-        height: calc(100vh - 56px);
+        height: calc(100vh - 112px);
         visibility: visible;
         transition: height .4s;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        @media (min-width: 576px) {
+            height: calc(100vh - 56px);
+        }
 
         @media (min-width: 992px) {
             height: auto;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #004074;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #004074;
         }
     }
 

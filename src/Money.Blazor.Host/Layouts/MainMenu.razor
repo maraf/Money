@@ -39,21 +39,27 @@
                 <MainMenuSeparator />
                 <MainMenuLink Href="@Navigator.UrlCategories()">
                     <Icon Identifier="tag" />
-                    Categories
+                    <span class="d-lg-none d-xl-inline">
+                        Categories
+                    </span>
                 </MainMenuLink>
                 <MainMenuLink Href="@Navigator.UrlCurrencies()">
                     <Icon Identifier="pound-sign" />
-                    Currencies
+                    <span class="d-lg-none d-xl-inline">
+                        Currencies
+                    </span>
                 </MainMenuLink>
-                <MainMenuLink Href="@Navigator.UrlExpenseTemplates()" Title="Templates">
+                <MainMenuLink Href="@Navigator.UrlExpenseTemplates()">
                     <Icon Identifier="redo" />
-                    Templates
+                    <span class="d-lg-none d-xl-inline">
+                        Templates
+                    </span>
                 </MainMenuLink>
                 <MainMenuSeparator />
                 <PwaInstall />
-                <MainMenuLink Href="@Navigator.UrlAbout()">
+                <MainMenuLink Href="@Navigator.UrlAbout()" Title="About Money app">
                     <Icon Identifier="info-circle" />
-                    <span class="d-lg-none d-xl-inline">
+                    <span class="d-lg-none">
                         About
                     </span>
                 </MainMenuLink>

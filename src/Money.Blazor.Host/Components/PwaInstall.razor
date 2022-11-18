@@ -3,7 +3,7 @@
     <li class="nav-item">
         <a @ref="Button" class="nav-link" @onclick="InstallAsync" title="Install as application to your device" data-toggle="tooltip" data-placement="bottom">
             <Icon Identifier="download" />
-            <span class="d-lg-none d-xl-inline">
+            <span class="d-lg-none">
                 Install
             </span>
         </a>
@@ -14,7 +14,7 @@ else if (IsUpdateable)
     <li class="nav-item">
         <a @ref="Button" class="nav-link" @onclick="UpdateAsync" title="Application update is ready. Reload page to complete." data-toggle="tooltip" data-placement="bottom">
             <Icon Identifier="download" />
-            <span class="d-lg-none d-xl-inline">
+            <span class="d-lg-none">
                 Update
             </span>
         </a>

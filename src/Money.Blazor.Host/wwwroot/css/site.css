@@ -95,6 +95,8 @@ h4 {
 @media (min-width: 992px) {
   .navbar-dark .navbar-collapse {
     height: auto;
+    overflow-x: unset;
+    overflow-y: unset;
   }
 }
 .navbar-dark .navbar-collapse::-webkit-scrollbar-track {

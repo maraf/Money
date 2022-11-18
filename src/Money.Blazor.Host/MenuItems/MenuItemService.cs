@@ -28,6 +28,13 @@ namespace Money
             {
                 new MenuItemModel()
                 {
+                    Identifier = "main-menu",
+                    Icon = "bars",
+                    Text = "Main menu",
+                    OnClick = navigator.ToggleMainMenu
+                },
+                new MenuItemModel()
+                {
                     Identifier = "summary-month",
                     Icon = "chart-pie",
                     Text = "Monthly",
@@ -56,13 +63,6 @@ namespace Money
                     Icon = "minus-circle",
                     Text = "New Expense",
                     OnClick = navigator.OpenExpenseCreate
-                },
-                new MenuItemModel()
-                {
-                    Identifier = "main-menu",
-                    Icon = "bars",
-                    Text = "Main menu",
-                    OnClick = () => { }
                 }
             };
         }

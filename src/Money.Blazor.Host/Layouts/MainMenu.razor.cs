@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Money.Services.Navigator;
 
 namespace Money.Components
 {
@@ -28,11 +29,15 @@ namespace Money.Components
         [Inject]
         internal IEventHandlerCollection EventHandlers { get; set; }
 
-        protected bool IsMainMenuVisible { get; set; } = false;
+        [Inject]
+        protected Navigator.ComponentContainer ComponentContainer { get; set; }
+
+        public bool IsMainMenuVisible { get; protected set; } = false;
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
+            ComponentContainer.MainMenu = this;
 
             Navigator.LocationChanged += OnLocationChanged;
             EventHandlers.Add<UserSignedOut>(this);
@@ -44,7 +49,7 @@ namespace Money.Components
             EventHandlers.Remove<UserSignedOut>(this);
         }
 
-        private void UpdateMainMenuVisible(bool isVisible)
+        public void UpdateMainMenuVisible(bool isVisible)
         {
             if (IsMainMenuVisible != isVisible)
             {

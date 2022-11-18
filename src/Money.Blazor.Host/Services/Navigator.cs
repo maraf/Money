@@ -19,21 +19,21 @@ namespace Money.Services
     public class Navigator : NavigatorUrl, System.IDisposable
     {
         private readonly NavigationManager manager;
-        private readonly ModalContainer modalContainer;
+        private readonly ComponentContainer componentContainer;
         private readonly Interop interop;
         private readonly IJSRuntime js;
         private Dictionary<string, StringValues> queryString;
 
         public event Action<string> LocationChanged;
 
-        public Navigator(NavigationManager manager, ModalContainer modalContainer, Interop interop, IJSRuntime js)
+        public Navigator(NavigationManager manager, ComponentContainer componentContainer, Interop interop, IJSRuntime js)
         {
             Ensure.NotNull(manager, "manager");
             Ensure.NotNull(interop, "interop");
-            Ensure.NotNull(modalContainer, "modalContainer");
+            Ensure.NotNull(componentContainer, "modalContainer");
             Ensure.NotNull(js, "js");
             this.manager = manager;
-            this.modalContainer = modalContainer;
+            this.componentContainer = componentContainer;
             this.interop = interop;
             this.js = js;
 
@@ -70,10 +70,10 @@ namespace Money.Services
             => OpenExpenseCreate(KeyFactory.Empty(typeof(Category)));
 
         public void OpenExpenseCreate(IKey categoryKey)
-            => modalContainer.ExpenseCreate?.Show(categoryKey);
+            => componentContainer.ExpenseCreate?.Show(categoryKey);
 
         public void OpenExpenseCreate(decimal? amount, string currency, string description, IKey categoryKey) 
-            => modalContainer.ExpenseCreate?.Show(amount, currency, description, categoryKey);
+            => componentContainer.ExpenseCreate?.Show(amount, currency, description, categoryKey);
 
         public void Open(string url)
             => manager.NavigateTo(url);
@@ -176,9 +176,16 @@ namespace Money.Services
             return null;
         }
 
-        public class ModalContainer
+        public void ToggleMainMenu()
+        {
+            if (componentContainer.MainMenu != null)
+                componentContainer.MainMenu.UpdateMainMenuVisible(!componentContainer.MainMenu.IsMainMenuVisible);
+        }
+
+        public class ComponentContainer
         {
             public OutcomeCreate ExpenseCreate { get; set; }
+            public MainMenuBase MainMenu { get; internal set; }
         }
     }
 }

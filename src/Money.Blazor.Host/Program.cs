@@ -72,7 +72,7 @@ namespace Money.UI.Blazor
                 .AddTransient<ExpenseTemplateStorage>()
                 .AddTransient<NavigatorUrl>()
                 .AddSingleton<Navigator>()
-                .AddSingleton<Navigator.ModalContainer>()
+                .AddSingleton<Navigator.ComponentContainer>()
                 .AddScoped<ApiClient>()
                 .AddSingleton<ModalInterop>()
                 .AddSingleton<TokenContainer>()

@@ -36,7 +36,7 @@ namespace Money.Components
         internal Interop Interop { get; set; }
 
         [Inject]
-        protected Navigator.ModalContainer ModalContainer { get; set; }
+        protected Navigator.ComponentContainer ComponentContainer { get; set; }
 
         [Inject]
         protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
@@ -74,7 +74,7 @@ namespace Money.Components
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            ModalContainer.ExpenseCreate = this;
+            ComponentContainer.ExpenseCreate = this;
         }
 
         protected async override Task OnParametersSetAsync()

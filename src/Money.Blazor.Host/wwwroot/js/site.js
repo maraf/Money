@@ -99,8 +99,10 @@ window.PullToRefresh = {
 
         const refreshTreshold = 200;
         let _isActive = false;
+        let _startX;
         let _startY;
-        let _maxY = 0;
+        let _lastDeltaX = 0;
+        let _lastDeltaY = 0;
         let container = document.body;
         const listenerOptions = { passive: true };
 
@@ -109,10 +111,13 @@ window.PullToRefresh = {
         const preRequisities = () => !document.querySelector(".modal.fade.show");
 
         container.addEventListener('touchstart', e => {
+            _startX = 0;
             _startY = 0;
-            _maxY = 0;
+            _lastDeltaX = 0;
+            _lastDeltaY = 0;
 
             if (document.scrollingElement.scrollTop === 0 && preRequisities()) {
+                _startX = Math.floor(e.touches[0].pageX);
                 _startY = Math.floor(e.touches[0].pageY);
                 _isActive = true;
             } else {
@@ -121,11 +126,9 @@ window.PullToRefresh = {
         }, listenerOptions);
 
         container.addEventListener('touchmove', e => {
-            const y = e.touches[0].pageY;
-            _maxY = Math.floor(y);
-
-            const delta = Math.floor(_maxY - _startY);
-            if (_isActive && delta > refreshTreshold && preRequisities()) {
+            _lastDeltaX = Math.floor(Math.floor(e.touches[0].pageX) - _startX);
+            _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
+            if (_isActive && _lastDeltaY > refreshTreshold && _lastDeltaX < (refreshTreshold / 2) && preRequisities()) {
                 $refreshUi.addClass("visible");
             } else {
                 $refreshUi.removeClass("visible");
@@ -133,8 +136,7 @@ window.PullToRefresh = {
         }, listenerOptions);
 
         container.addEventListener("touchend", () => {
-            const delta = Math.floor(_maxY - _startY);
-            if (_isActive && delta > refreshTreshold && preRequisities()) {
+            if (_isActive && _lastDeltaY > refreshTreshold && _lastDeltaX < (refreshTreshold / 2) && preRequisities()) {
                 window.PullToRefresh.Raise();
             }
 

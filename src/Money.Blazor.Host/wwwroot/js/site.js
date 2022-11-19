@@ -97,14 +97,14 @@ window.PullToRefresh = {
     Initialize: function (interop) {
         window.PullToRefresh._interop = interop;
 
-        const refreshTreshold = 200;
+        const treshold = 200;
         const container = document.body;
         const listenerOptions = { passive: true };
         
         const preRequisities = () => !document.querySelector(".modal.fade.show");
         
         refreshClosure = (() => {
-            const $refreshUi = $(".refresher");
+            const $ui = $(".refresher");
             
             let _isActive = false;
             let _startX;
@@ -130,36 +130,99 @@ window.PullToRefresh = {
             const move = e => {
                 _lastDeltaX = Math.floor(Math.floor(e.touches[0].pageX) - _startX);
                 _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
-                if (_isActive && _lastDeltaY > refreshTreshold && _lastDeltaX < (refreshTreshold / 2) && preRequisities()) {
-                    $refreshUi.addClass("visible");
+                if (_isActive && _lastDeltaY > treshold && _lastDeltaX < (treshold / 2) && preRequisities()) {
+                    $ui.addClass("visible");
                 } else {
-                    $refreshUi.removeClass("visible");
+                    $ui.removeClass("visible");
                 }
             };
 
             const end = () => {
-                if (_isActive && _lastDeltaY > refreshTreshold && _lastDeltaX < (refreshTreshold / 2) && preRequisities()) {
-                    window.PullToRefresh.Raise();
+                if (_isActive && _lastDeltaY > treshold && _lastDeltaX < (treshold / 2) && preRequisities()) {
+                    window.PullToRefresh._interop.invokeMethodAsync("PullToRefresh.Pulled");
                 }
     
-                $refreshUi.removeClass("visible");
+                $ui.removeClass("visible");
+            };
+
+            return { start, move, end };
+        })();
+        
+        swipeClosure = (() => {
+            const $ui = $(".swipe-left");
+            
+            let _isActive = false;
+            let _startX;
+            let _startY;
+            let _lastDeltaX = 0;
+            let _lastDeltaY = 0;
+
+            const start = e => {
+                _startX = 0;
+                _startY = 0;
+                _lastDeltaX = 0;
+                _lastDeltaY = 0;
+    
+                if (preRequisities()) {
+                    _startX = Math.floor(e.touches[0].pageX);
+                    _startY = Math.floor(e.touches[0].pageY);
+                    if (_startX < (treshold / 2)) {
+                        _isActive = 1;
+                        return;
+                    }
+                    
+                    if (window.innerWidth - _startX < (treshold / 2)) {
+                        _isActive = 2;
+                        return;
+                    }
+                }
+                _isActive = false;
+            };
+
+            const move = e => {
+                _lastDeltaX = Math.abs(Math.floor(Math.floor(e.touches[0].pageX) - _startX));
+                _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
+                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold / 2) && preRequisities()) {
+                    if (_isActive === 1) {
+                        // Left
+                        $ui.addClass("visible");
+                        return;
+                    }                    
+
+                    if (_isActive === 2) {
+                        // Right
+                        $ui.addClass("visible");
+                        return;
+                    }
+                }
+                
+                $ui.removeClass("visible");
+            };
+            
+            const end = () => {
+                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold / 2) && preRequisities()) {
+                    if (_isActive === 1) {
+                        console.log("Swipe left raised.");
+                    }
+                    if (_isActive === 2) {
+                        console.log("Swipe right raised.");
+                    }
+                }
+    
+                $ui.removeClass("visible");
             };
 
             return { start, move, end };
         })();
 
-        container.addEventListener('touchstart', e => {
-            refreshClosure.start(e);
-        }, listenerOptions);
-        container.addEventListener('touchmove', e => {
-            refreshClosure.move(e);
-        }, listenerOptions);
-        container.addEventListener("touchend", () => {
-            refreshClosure.end();
-        }, listenerOptions);
-    },
-    Raise: function() {
-        window.PullToRefresh._interop.invokeMethodAsync("PullToRefresh.Pulled");
+        const closures = [
+            refreshClosure,
+            swipeClosure
+        ];
+
+        container.addEventListener('touchstart', e => closures.forEach(c => c.start(e)), listenerOptions);
+        container.addEventListener('touchmove', e => closures.forEach(c => c.move(e)), listenerOptions);
+        container.addEventListener("touchend", () => closures.forEach(c => c.end()), listenerOptions);
     }
 }
 

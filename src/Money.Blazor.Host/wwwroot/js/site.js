@@ -98,49 +98,64 @@ window.PullToRefresh = {
         window.PullToRefresh._interop = interop;
 
         const refreshTreshold = 200;
-        let _isActive = false;
-        let _startX;
-        let _startY;
-        let _lastDeltaX = 0;
-        let _lastDeltaY = 0;
-        let container = document.body;
+        const container = document.body;
         const listenerOptions = { passive: true };
-
-        let $refreshUi = $(".refresher");
-
+        
         const preRequisities = () => !document.querySelector(".modal.fade.show");
+        
+        refreshClosure = (() => {
+            const $refreshUi = $(".refresher");
+            
+            let _isActive = false;
+            let _startX;
+            let _startY;
+            let _lastDeltaX = 0;
+            let _lastDeltaY = 0;
+
+            const start = e => {
+                _startX = 0;
+                _startY = 0;
+                _lastDeltaX = 0;
+                _lastDeltaY = 0;
+    
+                if (document.scrollingElement.scrollTop === 0 && preRequisities()) {
+                    _startX = Math.floor(e.touches[0].pageX);
+                    _startY = Math.floor(e.touches[0].pageY);
+                    _isActive = true;
+                } else {
+                    _isActive = false;
+                }
+            };
+
+            const move = e => {
+                _lastDeltaX = Math.floor(Math.floor(e.touches[0].pageX) - _startX);
+                _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
+                if (_isActive && _lastDeltaY > refreshTreshold && _lastDeltaX < (refreshTreshold / 2) && preRequisities()) {
+                    $refreshUi.addClass("visible");
+                } else {
+                    $refreshUi.removeClass("visible");
+                }
+            };
+
+            const end = () => {
+                if (_isActive && _lastDeltaY > refreshTreshold && _lastDeltaX < (refreshTreshold / 2) && preRequisities()) {
+                    window.PullToRefresh.Raise();
+                }
+    
+                $refreshUi.removeClass("visible");
+            };
+
+            return { start, move, end };
+        })();
 
         container.addEventListener('touchstart', e => {
-            _startX = 0;
-            _startY = 0;
-            _lastDeltaX = 0;
-            _lastDeltaY = 0;
-
-            if (document.scrollingElement.scrollTop === 0 && preRequisities()) {
-                _startX = Math.floor(e.touches[0].pageX);
-                _startY = Math.floor(e.touches[0].pageY);
-                _isActive = true;
-            } else {
-                _isActive = false;
-            }
+            refreshClosure.start(e);
         }, listenerOptions);
-
         container.addEventListener('touchmove', e => {
-            _lastDeltaX = Math.floor(Math.floor(e.touches[0].pageX) - _startX);
-            _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
-            if (_isActive && _lastDeltaY > refreshTreshold && _lastDeltaX < (refreshTreshold / 2) && preRequisities()) {
-                $refreshUi.addClass("visible");
-            } else {
-                $refreshUi.removeClass("visible");
-            }
+            refreshClosure.move(e);
         }, listenerOptions);
-
         container.addEventListener("touchend", () => {
-            if (_isActive && _lastDeltaY > refreshTreshold && _lastDeltaX < (refreshTreshold / 2) && preRequisities()) {
-                window.PullToRefresh.Raise();
-            }
-
-            $refreshUi.removeClass("visible");
+            refreshClosure.end();
         }, listenerOptions);
     },
     Raise: function() {

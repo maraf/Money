@@ -23,10 +23,10 @@ namespace Money.Pages
     public class OverviewMonth : Overview<MonthModel>
     {
         [Parameter]
-        public int Year { get; set; }
+        public int? Year { get; set; }
 
         [Parameter]
-        public int Month { get; set; }
+        public int? Month { get; set; }
 
         [Parameter]
         public Guid? CategoryGuid { get; set; }
@@ -34,8 +34,14 @@ namespace Money.Pages
         public OverviewMonth()
             => SubTitle = "List of each single expense in selected month";
 
+        protected override void ClearPreviousParameters()
+        {
+            Year = null;
+            Month = null;
+        }
+
         protected override MonthModel CreateSelectedItemFromParameters()
-            => new MonthModel(Year, Month);
+            => new MonthModel(Year.Value, Month.Value);
 
         protected override IKey CreateSelectedCategoryFromParameters()
             => CategoryGuid != null ? GuidKey.Create(CategoryGuid.Value, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
@@ -61,5 +67,11 @@ namespace Money.Pages
 
             return ("Month trends", Navigator.UrlTrends(new YearModel(SelectedPeriod.Year), CategoryKey));
         }
+
+        protected override void OpenPrevPeriod()
+            => Navigator.OpenOverview(SelectedPeriod - 1, CategoryKey);
+
+        protected override void OpenNextPeriod()
+            => Navigator.OpenOverview(SelectedPeriod + 1, CategoryKey);
     }
 }

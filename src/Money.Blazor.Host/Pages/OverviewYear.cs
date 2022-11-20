@@ -20,7 +20,7 @@ namespace Money.Pages
     public class OverviewYear : Overview<YearModel>
     {
         [Parameter]
-        public int Year { get; set; }
+        public int? Year { get; set; }
 
         [Parameter]
         public Guid? CategoryGuid { get; set; }
@@ -28,8 +28,13 @@ namespace Money.Pages
         public OverviewYear() 
             => SubTitle = "List of each single expense in selected year";
 
+        protected override void ClearPreviousParameters()
+        {
+            Year = null;
+        }
+
         protected override YearModel CreateSelectedItemFromParameters()
-            => new YearModel(Year);
+            => new YearModel(Year.Value);
 
         protected override IKey CreateSelectedCategoryFromParameters()
             => CategoryGuid != null ? GuidKey.Create(CategoryGuid.Value, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
@@ -55,5 +60,11 @@ namespace Money.Pages
 
             return ("Year trends", Navigator.UrlTrends(CategoryKey));
         }
+
+        protected override void OpenPrevPeriod()
+            => Navigator.OpenOverview(SelectedPeriod - 1, CategoryKey);
+
+        protected override void OpenNextPeriod()
+            => Navigator.OpenOverview(SelectedPeriod + 1, CategoryKey);
     }
 }

@@ -29,7 +29,9 @@ namespace Money.Pages
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>,
-        IEventHandler<PulledToRefresh>
+        IEventHandler<PulledToRefresh>,
+        IEventHandler<SwipedLeft>,
+        IEventHandler<SwipedRight>
     {
         [Inject]
         public ICommandDispatcher Commands { get; set; }
@@ -60,15 +62,24 @@ namespace Money.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            CategoryKey = KeyFactory.Empty(typeof(Category));
             PagingContext = new PagingContext(LoadDataAsync, Loading);
+            SortDescriptor = await Queries.QueryAsync(new GetExpenseOverviewSortProperty());
 
             BindEvents();
+        }
 
+        public override Task SetParametersAsync(ParameterView parameters)
+        {
+            ClearPreviousParameters();
+            return base.SetParametersAsync(parameters);
+        }
+
+        protected async override Task OnParametersSetAsync()
+        {
             CategoryKey = CreateSelectedCategoryFromParameters();
             SelectedPeriod = CreateSelectedItemFromParameters();
             
-            SortDescriptor = await Queries.QueryAsync(new GetExpenseOverviewSortProperty());
-
             if (!CategoryKey.IsEmpty)
             {
                 CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
@@ -78,9 +89,12 @@ namespace Money.Pages
             {
                 Title = $"Expenses in {SelectedPeriod}";
             }
-            
+
             Reload();
         }
+
+        protected virtual void ClearPreviousParameters()
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(ClearPreviousParameters)}'.");
 
         protected virtual IKey CreateSelectedCategoryFromParameters()
             => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedCategoryFromParameters)}'.");
@@ -97,6 +111,12 @@ namespace Money.Pages
         protected virtual (string title, string url)? TrendsTitleUrl()
             => null;
 
+        protected virtual void OpenNextPeriod() 
+        { }
+
+        protected virtual void OpenPrevPeriod() 
+        { }
+
         protected async void Reload()
         {
             await PagingContext.LoadAsync(0);
@@ -108,10 +128,10 @@ namespace Money.Pages
             await Interop.ScrollToTopAsync();
 
             List<OutcomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(PagingContext.CurrentPageIndex));
-            if (models.Count == 0)
+            Items = models;
+            if (models.Count == 0) 
                 return PagingLoadStatus.EmptyPage;
 
-            Items = models;
             return Items.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
         }
 
@@ -140,7 +160,9 @@ namespace Money.Pages
                 .Add<OutcomeAmountChanged>(this)
                 .Add<OutcomeDescriptionChanged>(this)
                 .Add<OutcomeWhenChanged>(this)
-                .Add<PulledToRefresh>(this);
+                .Add<PulledToRefresh>(this)
+                .Add<SwipedLeft>(this)
+                .Add<SwipedRight>(this);
         }
 
         private void UnBindEvents()
@@ -151,7 +173,9 @@ namespace Money.Pages
                 .Remove<OutcomeAmountChanged>(this)
                 .Remove<OutcomeDescriptionChanged>(this)
                 .Remove<OutcomeWhenChanged>(this)
-                .Remove<PulledToRefresh>(this);
+                .Remove<PulledToRefresh>(this)
+                .Remove<SwipedLeft>(this)
+                .Remove<SwipedRight>(this);
         }
 
         private Task UpdateModel(IEvent payload, Action<OutcomeOverviewModel> handler)
@@ -225,6 +249,18 @@ namespace Money.Pages
             payload.IsHandled = true;
             await LoadDataAsync();
             StateHasChanged();
+        }
+
+        Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
+        {
+            OpenPrevPeriod();
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
+        {
+            OpenNextPeriod();
+            return Task.CompletedTask;
         }
 
         #endregion

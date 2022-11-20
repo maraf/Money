@@ -59,5 +59,8 @@ namespace Money.Models
 
         public static YearModel operator -(YearModel model, int amount) 
             => new YearModel(Math.Max(model.Year - amount, 0));
+
+        public static YearModel operator +(YearModel model, int amount) 
+            => new YearModel(Math.Max(model.Year + amount, 0));
     }
 }

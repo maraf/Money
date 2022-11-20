@@ -60,5 +60,11 @@ namespace Money.Pages
 
         protected override void OpenOverview(YearModel item, IKey categorykey)
             => Navigator.OpenOverview(item, categorykey);
+
+        protected override void OpenPrevPeriod()
+            => Navigator.OpenSummary(SelectedPeriod - 1);
+
+        protected override void OpenNextPeriod()
+            => Navigator.OpenSummary(SelectedPeriod + 1);
     }
 }

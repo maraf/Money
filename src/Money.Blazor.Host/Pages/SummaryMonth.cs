@@ -73,5 +73,11 @@ namespace Money.Pages
 
         protected override void OpenOverviewIncomes(MonthModel item)
             => Navigator.OpenOverviewIncomes(item);
+
+        protected override void OpenPrevPeriod()
+            => Navigator.OpenSummary(SelectedPeriod - 1);
+
+        protected override void OpenNextPeriod()
+            => Navigator.OpenSummary(SelectedPeriod + 1);
     }
 }

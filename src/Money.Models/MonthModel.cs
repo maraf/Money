@@ -103,5 +103,18 @@ namespace Money.Models
 
             return new MonthModel(year, month);
         }
+
+        public static MonthModel operator +(MonthModel model, int amount)
+        {
+            int year = model.Year;
+            int month = model.Month + amount;
+            if (month > 12)
+            {
+                year += month / 12;
+                month = month % 12;
+            }
+
+            return new MonthModel(year, month);
+        }
     }
 }

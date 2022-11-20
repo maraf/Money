@@ -32,6 +32,8 @@ namespace Money.Pages
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeWhenChanged>,
         IEventHandler<PulledToRefresh>,
+        IEventHandler<SwipedLeft>,
+        IEventHandler<SwipedRight>,
         IEventHandler<IncomeCreated>,
         IEventHandler<IncomeDeleted>
     {
@@ -208,6 +210,12 @@ namespace Money.Pages
         protected virtual void OpenOverview(T item, IKey categorykey)
         { }
 
+        protected virtual void OpenNextPeriod() 
+        { }
+
+        protected virtual void OpenPrevPeriod() 
+        { }
+
         #endregion
 
         #region Events
@@ -220,6 +228,8 @@ namespace Money.Pages
                 .Add<OutcomeAmountChanged>(this)
                 .Add<OutcomeWhenChanged>(this)
                 .Add<PulledToRefresh>(this)
+                .Add<SwipedLeft>(this)
+                .Add<SwipedRight>(this)
                 .Add<IncomeCreated>(this)
                 .Add<IncomeDeleted>(this);
         }
@@ -232,6 +242,8 @@ namespace Money.Pages
                 .Remove<OutcomeAmountChanged>(this)
                 .Remove<OutcomeWhenChanged>(this)
                 .Remove<PulledToRefresh>(this)
+                .Remove<SwipedLeft>(this)
+                .Remove<SwipedRight>(this)
                 .Remove<IncomeCreated>(this)
                 .Remove<IncomeDeleted>(this);
         }
@@ -265,6 +277,18 @@ namespace Money.Pages
             payload.IsHandled = true;
             await LoadSelectedPeriodAsync();
             StateHasChanged();
+        }
+
+        Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
+        {
+            OpenPrevPeriod();
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
+        {
+            OpenNextPeriod();
+            return Task.CompletedTask;
         }
 
         async Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)

@@ -84,6 +84,9 @@ namespace Money.Services
         public void OpenSummary(MonthModel month)
             => manager.NavigateTo(UrlSummary(month));
 
+        public void OpenSummary(YearModel year)
+            => manager.NavigateTo(UrlSummary(year));
+
         public void OpenOverview(MonthModel month)
             => manager.NavigateTo(UrlOverview(month));
 

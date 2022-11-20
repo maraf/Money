@@ -52,13 +52,13 @@ namespace Money.Services
                 await navigator.ReloadAsync();
         }
 
-        [JSInvokable("Swipe.Left")]
+        [JSInvokable("Swiped.Left")]
         public void OnSwipedLeft() 
         {
             _ = events.PublishAsync(new SwipedLeft());
         }
 
-        [JSInvokable("Swipe.Right")]
+        [JSInvokable("Swiped.Right")]
         public void OnSwipedRight() 
         {
             _ = events.PublishAsync(new SwipedRight());

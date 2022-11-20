@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Neptuo.Events;
+using Neptuo.Events.Handlers;
+using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Queries;
@@ -13,7 +16,9 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class BalancesMonth
+    public partial class BalancesMonth : IDisposable,
+        IEventHandler<SwipedLeft>,
+        IEventHandler<SwipedRight>
     {
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
@@ -23,6 +28,9 @@ namespace Money.Pages
 
         [Inject]
         protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
+        [Inject]
+        protected IEventHandlerCollection EventHandlers { get; set; }
 
         [Parameter]
         public int Year { get; set; }
@@ -40,6 +48,17 @@ namespace Money.Pages
 
             SelectedDisplayType = await Queries.QueryAsync(new GetBalanceDisplayProperty());
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
+
+            EventHandlers
+                .Add<SwipedLeft>(this)
+                .Add<SwipedRight>(this);
+        }
+
+        public void Dispose() 
+        {
+            EventHandlers
+                .Remove<SwipedLeft>(this)
+                .Remove<SwipedRight>(this);
         }
 
         protected async override Task OnParametersSetAsync()
@@ -76,5 +95,17 @@ namespace Money.Pages
 
         protected async Task<IReadOnlyCollection<YearModel>> GetYearsAsync() 
             => await Queries.QueryAsync(new ListYearWithOutcome());
+
+        Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
+        {
+            Navigator.OpenBalances(SelectedPeriod - 1);
+            return Task.CompletedTask;
+        }
+
+        Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
+        {
+            Navigator.OpenBalances(SelectedPeriod + 1);
+            return Task.CompletedTask;
+        }
     }
 }

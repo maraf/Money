@@ -108,8 +108,11 @@ namespace Money.Services
         public void OpenTrends(IKey categoryKey)
             => manager.NavigateTo(UrlTrends(categoryKey));
 
-        public void OpenTrends(YearModel Year, IKey categoryKey)
-            => manager.NavigateTo(UrlTrends(Year, categoryKey));
+        public void OpenTrends(YearModel year, IKey categoryKey)
+            => manager.NavigateTo(UrlTrends(year, categoryKey));
+
+        public void OpenBalances(YearModel year)
+            => manager.NavigateTo(UrlBalances(year));
 
         public void OpenSearch(string searchText = null, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null)
             => manager.NavigateTo(UrlSearch(searchText, sortDescriptor));

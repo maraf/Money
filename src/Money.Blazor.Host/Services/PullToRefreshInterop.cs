@@ -51,5 +51,17 @@ namespace Money.Services
             if (!e.IsHandled)
                 await navigator.ReloadAsync();
         }
+
+        [JSInvokable("Swipe.Left")]
+        public void OnSwipedLeft() 
+        {
+            _ = events.PublishAsync(new SwipedLeft());
+        }
+
+        [JSInvokable("Swipe.Right")]
+        public void OnSwipedRight() 
+        {
+            _ = events.PublishAsync(new SwipedRight());
+        }
     }
 }

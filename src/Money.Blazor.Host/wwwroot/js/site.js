@@ -95,8 +95,6 @@ window.Money = {
 
 window.PullToRefresh = {
     Initialize: function (interop) {
-        window.PullToRefresh._interop = interop;
-
         const treshold = 200;
         const container = document.body;
         const listenerOptions = { passive: true };
@@ -139,7 +137,7 @@ window.PullToRefresh = {
 
             const end = () => {
                 if (_isActive && _lastDeltaY > treshold && _lastDeltaX < (treshold / 2) && preRequisities()) {
-                    window.PullToRefresh._interop.invokeMethodAsync("PullToRefresh.Pulled");
+                    interop.invokeMethodAsync("PullToRefresh.Pulled");
                 }
     
                 $ui.removeClass("visible");
@@ -202,10 +200,10 @@ window.PullToRefresh = {
             const end = () => {
                 if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold / 2) && preRequisities()) {
                     if (_isActive === 1) {
-                        console.log("Swipe left raised.");
+                        interop.invokeMethodAsync("Swiped.Left");
                     }
                     if (_isActive === 2) {
-                        console.log("Swipe right raised.");
+                        interop.invokeMethodAsync("Swiped.Right");
                     }
                 }
     

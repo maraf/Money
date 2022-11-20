@@ -45,38 +45,11 @@
     [Parameter]
     public IEnumerable<string> Messages { get; set; }
 
-    private bool isDismissible;
+    [Parameter]
+    public bool IsDismissible { get; set; }
 
     [Parameter]
-    public bool IsDismissible
-    {
-        get => isDismissible;
-        set
-        {
-            if (isDismissible != value)
-            {
-                isDismissible = value;
-                UpdateModeCssClass();
-            }
-        }
-    }
-
-    private AlertMode mode;
-
-    [Parameter]
-    public AlertMode Mode
-    {
-        get => mode;
-        set
-        {
-            if (mode != value)
-            {
-                mode = value;
-                UpdateModeCssClass();
-            }
-        }
-
-    }
+    public AlertMode Mode { get; set;}
 
     protected string ModeCssClass { get; set; }
 
@@ -86,9 +59,15 @@
         UpdateModeCssClass();
     }
 
+    protected override Task OnParametersSetAsync()
+    {
+        UpdateModeCssClass();
+        return base.OnParametersSetAsync();
+    }
+
     protected void UpdateModeCssClass()
     {
-        switch (mode)
+        switch (Mode)
         {
             case AlertMode.Success:
                 ModeCssClass = "alert-success";
@@ -103,7 +82,7 @@
                 ModeCssClass = "alert-danger";
                 break;
             default:
-                throw Ensure.Exception.NotSupported(mode.ToString());
+                throw Ensure.Exception.NotSupported(Mode.ToString());
         }
 
         if (IsDismissible)

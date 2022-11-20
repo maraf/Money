@@ -113,7 +113,7 @@ namespace Money.Services
             if (String.IsNullOrEmpty(value))
                 return url;
 
-            value = Uri.EscapeUriString(value);
+            value = Uri.EscapeDataString(value);
 
             char separator = url.Contains('?') ? '&' : '?';
             return $"{url}{separator}{name}={value}";

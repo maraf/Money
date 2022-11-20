@@ -43,10 +43,11 @@ namespace Money.Components
             EventHandlers.Remove<PwaUpdateable>(this);
         }
 
-        async Task IEventHandler<PwaUpdateable>.HandleAsync(PwaUpdateable payload)
+        Task IEventHandler<PwaUpdateable>.HandleAsync(PwaUpdateable payload)
         {
             IsUpdateable = true;
             StateHasChanged();
+            return Task.CompletedTask;
         }
     }
 }

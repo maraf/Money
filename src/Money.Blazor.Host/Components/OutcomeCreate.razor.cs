@@ -148,7 +148,7 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        public async void Show(decimal? amount, string currency, string description, IKey categoryKey)
+        public void Show(decimal? amount, string currency, string description, IKey categoryKey)
         {
             if (amount != null)
                 Amount = amount.Value;

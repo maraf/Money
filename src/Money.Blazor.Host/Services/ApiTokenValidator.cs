@@ -34,7 +34,7 @@ namespace Money.Services
                 log.Debug($"Result '{profile}'.");
                 return profile != null;
             }
-            catch (ServerNotRespondingException e)
+            catch (ServerNotRespondingException)
             {
                 log.Debug($"Catch '{nameof(ServerNotRespondingException)}'.");
                 return !String.IsNullOrEmpty(token);

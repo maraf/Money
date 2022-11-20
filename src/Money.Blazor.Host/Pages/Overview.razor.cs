@@ -29,9 +29,7 @@ namespace Money.Pages
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>,
-        IEventHandler<PulledToRefresh>,
-        IEventHandler<SwipedLeft>,
-        IEventHandler<SwipedRight>
+        IEventHandler<PulledToRefresh>
     {
         [Inject]
         public ICommandDispatcher Commands { get; set; }
@@ -111,12 +109,6 @@ namespace Money.Pages
         protected virtual (string title, string url)? TrendsTitleUrl()
             => null;
 
-        protected virtual void OpenNextPeriod() 
-        { }
-
-        protected virtual void OpenPrevPeriod() 
-        { }
-
         protected async void Reload()
         {
             await PagingContext.LoadAsync(0);
@@ -160,9 +152,7 @@ namespace Money.Pages
                 .Add<OutcomeAmountChanged>(this)
                 .Add<OutcomeDescriptionChanged>(this)
                 .Add<OutcomeWhenChanged>(this)
-                .Add<PulledToRefresh>(this)
-                .Add<SwipedLeft>(this)
-                .Add<SwipedRight>(this);
+                .Add<PulledToRefresh>(this);
         }
 
         private void UnBindEvents()
@@ -173,9 +163,7 @@ namespace Money.Pages
                 .Remove<OutcomeAmountChanged>(this)
                 .Remove<OutcomeDescriptionChanged>(this)
                 .Remove<OutcomeWhenChanged>(this)
-                .Remove<PulledToRefresh>(this)
-                .Remove<SwipedLeft>(this)
-                .Remove<SwipedRight>(this);
+                .Remove<PulledToRefresh>(this);
         }
 
         private Task UpdateModel(IEvent payload, Action<OutcomeOverviewModel> handler)
@@ -249,18 +237,6 @@ namespace Money.Pages
             payload.IsHandled = true;
             await LoadDataAsync();
             StateHasChanged();
-        }
-
-        Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
-        {
-            OpenPrevPeriod();
-            return Task.CompletedTask;
-        }
-
-        Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
-        {
-            OpenNextPeriod();
-            return Task.CompletedTask;
         }
 
         #endregion

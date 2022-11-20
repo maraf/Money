@@ -86,7 +86,7 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        protected async void Delete()
+        protected void Delete()
         {
             _ = Commands.HandleAsync(new DeleteExpenseTemplate(ToDeleteKey));
         }

@@ -60,11 +60,5 @@ namespace Money.Pages
 
             return ("Year trends", Navigator.UrlTrends(CategoryKey));
         }
-
-        protected override void OpenPrevPeriod()
-            => Navigator.OpenOverview(SelectedPeriod - 1, CategoryKey);
-
-        protected override void OpenNextPeriod()
-            => Navigator.OpenOverview(SelectedPeriod + 1, CategoryKey);
     }
 }

@@ -73,7 +73,7 @@ namespace Money.Services
 
                 ChangeStatus(ApiHubStatus.Connected);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ChangeStatus(ApiHubStatus.Disconnected);
             }

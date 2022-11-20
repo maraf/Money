@@ -5,7 +5,7 @@
 
         <div class="my-4 form-row">
             <div class="col-12 col-md-auto mb-2">
-                <button class="btn btn-block btn-primary" @onclick="(async () => Commands.HandleAsync(new UpdatePwa()))">
+                <button class="btn btn-block btn-primary" @onclick="(() => Commands.HandleAsync(new UpdatePwa()))">
                     Activate the update
                 </button>
             </div>

@@ -28,6 +28,7 @@ body {
     min-height: 100vh;
     padding-top: 30px;
     padding-bottom: 20px;
+    overflow-x: hidden;
 }
 
 .body-content {
@@ -763,4 +764,21 @@ h4 {
     40% {
         transform: scale(1);
     }
+}
+
+/* ------ SWIPING ------------------------------------------------------------------------------ */
+
+.swipe-left, .swipe-right {
+    position: absolute;
+    top: calc(100vh / 2 - 60px);
+    font-size: 2.5rem;
+    color: $backgroundColor;
+}
+
+.swipe-left {
+    left: -35px;
+}
+
+.swipe-right {
+    right: -35px;
 }

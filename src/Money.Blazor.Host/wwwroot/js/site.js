@@ -95,13 +95,13 @@ window.Money = {
 
 window.PullToRefresh = {
     Initialize: function (interop) {
-        const treshold = 200;
         const container = document.body;
         const listenerOptions = { passive: true };
         
         const preRequisities = () => !document.querySelector(".modal.fade.show");
         
         refreshClosure = (() => {
+            const treshold = 200;
             const $ui = $(".refresher");
             
             let _isActive = false;
@@ -147,13 +147,31 @@ window.PullToRefresh = {
         })();
         
         swipeClosure = (() => {
-            const $ui = $(".swipe-left");
+            const treshold = 100;
+            const $leftUi = $(".swipe-left");
+            const $rightUi = $(".swipe-right");
             
             let _isActive = false;
             let _startX;
             let _startY;
             let _lastDeltaX = 0;
             let _lastDeltaY = 0;
+
+            const swapLeftIcon = (done) => {
+                if (done) {
+                    $leftUi.find("i").removeClass("fa-arrow-left").addClass("fa-arrow-circle-left");
+                } else {
+                    $leftUi.find("i").removeClass("fa-arrow-circle-left").addClass("fa-arrow-left");
+                }
+            }
+
+            const swapRightIcon = (done) => {
+                if (done) {
+                    $rightUi.find("i").removeClass("fa-arrow-right").addClass("fa-arrow-circle-right");
+                } else {
+                    $rightUi.find("i").removeClass("fa-arrow-circle-right").addClass("fa-arrow-right");
+                }
+            }
 
             const start = e => {
                 _startX = 0;
@@ -178,26 +196,34 @@ window.PullToRefresh = {
             };
 
             const move = e => {
-                _lastDeltaX = Math.abs(Math.floor(Math.floor(e.touches[0].pageX) - _startX));
+                _lastDeltaX = Math.floor(Math.floor(e.touches[0].pageX) - _startX);
                 _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
+
+                if (_isActive === 1) {
+                    $leftUi.css("margin-left", _lastDeltaX);
+                } else if (_isActive === 2) {
+                    _lastDeltaX *= -1;
+                    $rightUi.css("margin-right", _lastDeltaX);
+                }
+
                 if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold / 2) && preRequisities()) {
                     if (_isActive === 1) {
-                        // Left
-                        $ui.addClass("visible");
-                        return;
-                    }                    
-
-                    if (_isActive === 2) {
-                        // Right
-                        $ui.addClass("visible");
-                        return;
+                        swapLeftIcon(true);
+                    } else if (_isActive === 2) {
+                        swapRightIcon(true);
                     }
+
+                    return;
                 }
-                
-                $ui.removeClass("visible");
+
+                swapLeftIcon(false);
+                swapRightIcon(false);
             };
             
             const end = () => {
+                $leftUi.css("margin-left", 0);
+                $rightUi.css("margin-right", 0);
+
                 if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold / 2) && preRequisities()) {
                     if (_isActive === 1) {
                         interop.invokeMethodAsync("Swiped.Left");
@@ -206,8 +232,9 @@ window.PullToRefresh = {
                         interop.invokeMethodAsync("Swiped.Right");
                     }
                 }
-    
-                $ui.removeClass("visible");
+
+                swapLeftIcon(false);
+                swapRightIcon(false);
             };
 
             return { start, move, end };
@@ -223,4 +250,3 @@ window.PullToRefresh = {
         container.addEventListener("touchend", () => closures.forEach(c => c.end()), listenerOptions);
     }
 }
-

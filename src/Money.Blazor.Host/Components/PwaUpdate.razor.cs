@@ -45,8 +45,10 @@ namespace Money.Components
 
         Task IEventHandler<PwaUpdateable>.HandleAsync(PwaUpdateable payload)
         {
+#if !DEBUG
             IsUpdateable = true;
             StateHasChanged();
+#endif
             return Task.CompletedTask;
         }
     }

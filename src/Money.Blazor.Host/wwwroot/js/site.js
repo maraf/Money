@@ -200,10 +200,10 @@ window.PullToRefresh = {
                 _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
 
                 if (_isActive === 1) {
-                    $leftUi.css("margin-left", _lastDeltaX);
+                    $leftUi.css("margin-left", Math.min(_lastDeltaX, treshold * 2));
                 } else if (_isActive === 2) {
                     _lastDeltaX *= -1;
-                    $rightUi.css("margin-right", _lastDeltaX);
+                    $rightUi.css("margin-right", Math.min(_lastDeltaX, treshold * 2));
                 }
 
                 if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold / 2) && preRequisities()) {

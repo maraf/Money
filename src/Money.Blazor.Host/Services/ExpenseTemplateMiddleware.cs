@@ -3,6 +3,7 @@ using Money.Models;
 using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -20,16 +21,19 @@ namespace Money.Services
     {
         private readonly ServerConnectionState serverConnection;
         private readonly ExpenseTemplateStorage localStorage;
+        private readonly ILog log;
 
         private readonly List<ExpenseTemplateModel> models = new List<ExpenseTemplateModel>();
         private Task listAllTask;
 
-        public ExpenseTemplateMiddleware(ServerConnectionState serverConnection, ExpenseTemplateStorage localStorage)
+        public ExpenseTemplateMiddleware(ServerConnectionState serverConnection, ExpenseTemplateStorage localStorage, ILogFactory logFactory)
         {
             Ensure.NotNull(serverConnection, "serverConnection");
             Ensure.NotNull(localStorage, "localStorage");
+            Ensure.NotNull(logFactory, "logFactory");
             this.serverConnection = serverConnection;
             this.localStorage = localStorage;
+            this.log = logFactory.Scope("ExpenseTemplateMiddleware");
         }
 
         public async Task<object> ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
@@ -91,19 +95,26 @@ namespace Money.Services
             await localStorage.DeleteAsync();
         }
 
-        Task IEventHandler<ExpenseTemplateCreated>.HandleAsync(ExpenseTemplateCreated payload)
+        async Task IEventHandler<ExpenseTemplateCreated>.HandleAsync(ExpenseTemplateCreated payload)
         {
+            log.Debug("Got ExpenseTemplateCreated");
+
             models.Add(new ExpenseTemplateModel(payload.AggregateKey, payload.Amount, payload.Description, payload.CategoryKey));
-            return Task.CompletedTask;
+            await localStorage.SaveAsync(models);
         }
 
-        Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload)
+        async Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload)
         {
+            log.Debug("Got ExpenseTemplateDeleted");
+
             var model = models.Find(m => m.Key.Equals(payload.AggregateKey));
             if (model != null)
+            {
                 models.Remove(model);
+                log.Debug($"Removed model with key '{model.Key}'");
+            }
 
-            return Task.CompletedTask;
+            await localStorage.SaveAsync(models);
         }
     }
 }

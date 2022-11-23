@@ -160,6 +160,7 @@ namespace Money.Bootstrap
             eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<CurrencyMiddleware>());
             eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<UserMiddleware>());
             eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<UserPropertyMiddleware>());
+            eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<ExpenseTemplateMiddleware>());
 
             serviceProvider.GetService<LocalExpenseOnlineRunner>().Initialize();
         }

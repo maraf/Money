@@ -210,7 +210,7 @@ window.PullToRefresh = {
                     $rightUi.css("margin-right", Math.min(_lastDeltaX, treshold * 2));
                 }
 
-                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold / 2) && preRequisities()) {
+                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold * 2) && preRequisities()) {
                     if (_isActive === 1) {
                         swapLeftIcon(true);
                     } else if (_isActive === 2) {
@@ -228,7 +228,7 @@ window.PullToRefresh = {
                 $leftUi.css("margin-left", 0);
                 $rightUi.css("margin-right", 0);
 
-                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold / 2) && preRequisities()) {
+                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold * 2) && preRequisities()) {
                     if (_isActive === 1) {
                         interop.invokeMethodAsync("Swiped.Left");
                     }

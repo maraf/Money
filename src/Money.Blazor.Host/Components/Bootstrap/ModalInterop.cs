@@ -29,5 +29,8 @@ namespace Money.Components.Bootstrap
 
         internal void Dispose(ElementReference element)
             => jsRuntime.InvokeVoidAsync("Bootstrap.Modal.Dispose", element);
+
+        internal ValueTask<bool> IsOpenAsync(ElementReference element)
+            => jsRuntime.InvokeAsync<bool>("Bootstrap.Modal.IsOpen", element);
     }
 }

@@ -13,8 +13,10 @@ namespace Money.Components.Bootstrap
 {
     public partial class Modal : System.IDisposable
     {
+        private System.IDisposable locationChangingToken;
+
         [Inject]
-        internal ModalInterop Interop { get; set; }
+        protected ModalInterop Interop { get; set; }
 
         [Inject]
         internal ILog<Modal> Log { get; set; }
@@ -62,17 +64,23 @@ namespace Money.Components.Bootstrap
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            NavigationManager.LocationChanged += OnLocationChanged;
+            locationChangingToken = NavigationManager.RegisterLocationChangingHandler(OnLocationChanging);
         }
 
         public void Dispose()
         {
             Hide();
-            NavigationManager.LocationChanged -= OnLocationChanged;
+            locationChangingToken.Dispose();
         }
 
-        private void OnLocationChanged(object sender, LocationChangedEventArgs e) 
-            => Hide();
+        private async ValueTask OnLocationChanging(LocationChangingContext context)
+        {
+            if (await Interop.IsOpenAsync(Container))
+            {
+                context.PreventNavigation();
+                Hide();
+            }
+        }
 
         protected override void OnParametersSet()
         {

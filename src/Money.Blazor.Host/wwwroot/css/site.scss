@@ -540,6 +540,7 @@ h4 {
 }
 
 /* ------ SPLASH SCREEN ------------------------------------------------------------------------ */
+
 .splash {
     position: absolute;
     top: 0;
@@ -565,7 +566,7 @@ h4 {
     img {
         width: 192px;
         height: 192px;
-        transition: margin-left 0.5s linear 0.5s, width 0.5s, height 0.5s;
+        transition: opacity 0.5s, width 0.5s, height 0.5s;
     }
 
     &.animate {
@@ -573,30 +574,13 @@ h4 {
         opacity: 0;
         margin-top: -60px;
 
-        .app-title {
+        .app-title, img {
             opacity: 0;
         }
 
         img {
-            width: 60px;
-            height: 60px;
-            margin-left: calc(-100vw + 71px);
-
-            @media (min-width: 576px) {
-                margin-left: -480px;
-            }
-
-            @media (min-width: 768px) {
-                margin-left: -680px;
-            }
-
-            @media (min-width: 992px) {
-                margin-left: -890px;
-            }
-
-            @media (min-width: 1200px) {
-                margin-left: -1070px;
-            }
+            width: 56px;
+            height: 56px;
         }
     }
 }

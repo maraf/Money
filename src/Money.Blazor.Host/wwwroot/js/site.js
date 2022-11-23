@@ -84,7 +84,7 @@ window.Money = {
         return true;
     },
     AnimateSplash: function () {
-        setTimeout(function () { $(".splash").addClass("animate"); }, 300);
+        setTimeout(function () { $(".splash").addClass("animate"); }, 1000);
     },
     BlurActiveElement: function () {
         setTimeout(() => document.activeElement.blur(), 1);

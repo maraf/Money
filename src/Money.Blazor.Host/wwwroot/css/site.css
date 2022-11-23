@@ -492,40 +492,19 @@ h4 {
 .splash img {
   width: 192px;
   height: 192px;
-  transition: margin-left 0.5s linear 0.5s, width 0.5s, height 0.5s;
+  transition: opacity 0.5s, width 0.5s, height 0.5s;
 }
 .splash.animate {
   height: 56px;
   opacity: 0;
   margin-top: -60px;
 }
-.splash.animate .app-title {
+.splash.animate .app-title, .splash.animate img {
   opacity: 0;
 }
 .splash.animate img {
-  width: 60px;
-  height: 60px;
-  margin-left: calc(-100vw + 71px);
-}
-@media (min-width: 576px) {
-  .splash.animate img {
-    margin-left: -480px;
-  }
-}
-@media (min-width: 768px) {
-  .splash.animate img {
-    margin-left: -680px;
-  }
-}
-@media (min-width: 992px) {
-  .splash.animate img {
-    margin-left: -890px;
-  }
-}
-@media (min-width: 1200px) {
-  .splash.animate img {
-    margin-left: -1070px;
-  }
+  width: 56px;
+  height: 56px;
 }
 
 .loading-bar {

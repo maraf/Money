@@ -25,7 +25,7 @@
 }
 else
 {
-    <div class="row no-gutters" style="min-width: 380px; min-height: calc(100vh - 382px)">
+    <div class="row no-gutters" style="min-height: calc(100vh - 382px)">
         @foreach (var model in Models)
         {
             var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;

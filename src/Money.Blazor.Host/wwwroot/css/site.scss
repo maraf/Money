@@ -519,6 +519,17 @@ h4 {
     }
 }
 
+.modal .modal-overflow .modal-body {
+    max-height: calc(100vh - 142px - 1rem);
+    overflow: auto;
+}
+
+@media (min-width: 576px) {
+    .modal .modal-overflow .modal-body {
+        max-height: calc(100vh - 142px - 2.5rem);
+    }
+}
+
 .vertical-bar {
     display: flex;
     align-items: flex-end;

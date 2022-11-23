@@ -54,6 +54,9 @@ namespace Money.Components.Bootstrap
         [Parameter]
         public Action Closed { get; set; }
 
+        [Parameter]
+        public bool IsOverflow { get; set; }
+
         protected ElementReference Container { get; set; }
 
         protected override void OnInitialized()
@@ -89,6 +92,9 @@ namespace Money.Components.Bootstrap
                 default:
                     throw Ensure.Exception.NotSupported(Size.ToString());
             }
+
+            if (IsOverflow)
+                DialogCssClass += " modal-overflow";
         }
 
         protected void OnFormSubmit(EventArgs e) => FormSubmit?.Invoke();

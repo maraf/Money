@@ -684,7 +684,7 @@ h4 {
 }
 /* ------ SWIPING ------------------------------------------------------------------------------ */
 .swipe-left, .swipe-right {
-  position: absolute;
+  position: fixed;
   top: calc(50vh - 60px);
   font-size: 2.5rem;
   color: #004074;

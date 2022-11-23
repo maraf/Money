@@ -780,7 +780,7 @@ h4 {
 /* ------ SWIPING ------------------------------------------------------------------------------ */
 
 .swipe-left, .swipe-right {
-    position: absolute;
+    position: fixed;
     top: calc(100vh / 2 - 60px);
     font-size: 2.5rem;
     color: $backgroundColor;

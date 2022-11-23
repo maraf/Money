@@ -35,7 +35,7 @@
 
                     <div class="controls text-right">
                         <IconButton Icon="minus" ToolTip="Create expense" Click="@(() => { Navigator.OpenExpenseCreate(model.Amount?.Value, model.Amount?.Currency, model.Description, model.CategoryKey); })" />
-                        <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {CurrencyFormatter.Format(model.Amount)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })" />
+                        <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {(model.Amount != null ? CurrencyFormatter.Format(model.Amount) : null)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })" />
                     </div>
                 </div>
             </div>

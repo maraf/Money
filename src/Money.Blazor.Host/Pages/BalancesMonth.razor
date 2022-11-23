@@ -1,16 +1,7 @@
 ﻿@attribute [Authorize]
 @page "/{Year:int}/balances"
 
-<Title Icon="chart-bar" Main="@($"Balances in {Year}")" Sub="Compare incomes and expences">
-    <ButtonContent>
-        @*<button class="btn btn-secondary" @onclick="(() => Navigator.OpenOverview(SelectedPeriod, CategoryKey))">
-            <Icon Prefix="fas" Identifier="list-ul" />
-            <span class="d-none d-lg-inline">
-                Year overview
-            </span>
-        </button>*@
-    </ButtonContent>
-</Title>
+<Title Icon="chart-bar" Main="@($"Balances in {Year}")" Sub="Compare incomes and expences" />
 
 <div class="d-flex justify-content-between mb-3">
     <div>

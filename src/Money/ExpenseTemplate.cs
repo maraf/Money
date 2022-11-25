@@ -38,6 +38,11 @@ namespace Money
         public IKey CategoryKey { get; private set; }
 
         /// <summary>
+        /// Gets whether the template should create fixed expenses.
+        /// </summary>
+        public bool IsFixed { get; private set; }
+
+        /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="amount">An amount of the expense template.</param>
@@ -49,6 +54,18 @@ namespace Money
             Publish(new ExpenseTemplateCreated(amount, description, categoryKey));
         }
 
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="amount">An amount of the expense template.</param>
+        /// <param name="description">A description of the expense template.</param>
+        /// <param name="categoryKey">A category of the expense template.</param>
+        public ExpenseTemplate(Price amount, string description, IKey categoryKey, bool isFixed)
+        {
+            Ensure.NotNull(categoryKey, "categoryKey");
+            Publish(new ExpenseTemplateCreated(amount, description, categoryKey, isFixed));
+        }
+
         public ExpenseTemplate(IKey key, IEnumerable<IEvent> events)
             : base(key, events)
         { }
@@ -58,6 +75,7 @@ namespace Money
             Amount = payload.Amount;
             Description = payload.Description;
             CategoryKey = payload.CategoryKey;
+            IsFixed = payload.IsFixed;
         });
 
         private void EnsureNotDeleted()

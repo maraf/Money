@@ -59,7 +59,7 @@ namespace Money.Models.Builders
                     .ThenBy(e => e.CategoryId);
 
                 List<ExpenseTemplateModel> models = await sql
-                    .Select(e => e.ToModel())
+                    .Select(e => e.ToModel(query.Version))
                     .ToListAsync();
 
                 return models;

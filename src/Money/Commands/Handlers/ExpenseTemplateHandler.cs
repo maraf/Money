@@ -20,7 +20,14 @@ namespace Money.Commands.Handlers
             : base(repositoryFactory)
         { }
 
-        public Task HandleAsync(Envelope<CreateExpenseTemplate> envelope) => WithCommand(envelope.Body.Key).Execute(envelope, () => new ExpenseTemplate(envelope.Body.Amount, envelope.Body.Description, envelope.Body.CategoryKey));
+        public Task HandleAsync(Envelope<CreateExpenseTemplate> envelope) => WithCommand(envelope.Body.Key).Execute(envelope, () =>
+        {
+            if (envelope.Body.Version == 1)
+                return new ExpenseTemplate(envelope.Body.Amount, envelope.Body.Description, envelope.Body.CategoryKey);
+            else
+                return new ExpenseTemplate(envelope.Body.Amount, envelope.Body.Description, envelope.Body.CategoryKey, envelope.Body.IsFixed);
+        });
+
         public Task HandleAsync(Envelope<DeleteExpenseTemplate> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.ExpenseTemplateKey, envelope, model => model.Delete());
     }
 }

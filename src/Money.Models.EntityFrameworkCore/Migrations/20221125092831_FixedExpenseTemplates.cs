@@ -3,13 +3,13 @@ using Money.EntityFrameworkCore.Migrations;
 
 namespace Money.Models.Migrations
 {
-    public partial class FixedExpenses : MigrationWithSchema<ReadModelContext>
+    public partial class FixedExpenseTemplates : MigrationWithSchema<ReadModelContext>
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
                 name: "IsFixed",
-                table: "Outcomes",
+                table: "ExpenseTemplates",
                 schema: Schema.Name,
                 nullable: false,
                 defaultValue: false);
@@ -19,7 +19,7 @@ namespace Money.Models.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "IsFixed",
-                table: "Outcomes",
+                table: "ExpenseTemplates",
                 schema: Schema.Name);
         }
     }

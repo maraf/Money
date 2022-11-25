@@ -18,6 +18,7 @@ namespace Money.Models
         public decimal? Amount { get; set; }
         public string Currency { get; set; }
         public Guid? CategoryId { get; set; }
+        public bool IsFixed { get; set; }
 
         public ExpenseTemplateEntity()
         { }
@@ -35,17 +36,24 @@ namespace Money.Models
 
             if (!payload.CategoryKey.IsEmpty)
                 CategoryId = payload.CategoryKey.AsGuidKey().Guid;
+
+            IsFixed = true;
         }
 
-        public ExpenseTemplateModel ToModel() => new ExpenseTemplateModel(
-            GuidKey.Create(Id, KeyFactory.Empty(typeof(ExpenseTemplate)).Type),
-            Amount != null 
-                ? new Price(Amount.Value, Currency)
-                : null,
-            Description,
-            CategoryId != null
-                ? GuidKey.Create(CategoryId.Value, KeyFactory.Empty(typeof(Category)).Type)
-                : GuidKey.Empty(KeyFactory.Empty(typeof(Category)).Type)
-        );
+        public ExpenseTemplateModel ToModel(int version) => version == 1
+            ? new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey())
+            : new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey(), IsFixed);
+
+        private GuidKey GetKey()
+        {
+            return GuidKey.Create(Id, KeyFactory.Empty(typeof(ExpenseTemplate)).Type);
+        }
+
+        private GuidKey GetCategoryKey() => CategoryId != null
+            ? GuidKey.Create(CategoryId.Value, KeyFactory.Empty(typeof(Category)).Type)
+            : GuidKey.Empty(KeyFactory.Empty(typeof(Category)).Type);
+
+        private Price GetAmount()
+            => Amount != null ? new Price(Amount.Value, Currency) : null;
     }
 }

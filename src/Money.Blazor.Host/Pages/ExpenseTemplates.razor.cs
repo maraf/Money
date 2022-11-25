@@ -82,7 +82,7 @@ namespace Money.Pages
         private async Task ReloadAsync()
         {
             Models.Clear();
-            Models.AddRange(await Queries.QueryAsync(new ListAllExpenseTemplate()));
+            Models.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version2()));
             StateHasChanged();
         }
 

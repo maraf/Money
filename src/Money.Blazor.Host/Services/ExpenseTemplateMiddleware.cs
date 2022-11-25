@@ -99,7 +99,7 @@ namespace Money.Services
         {
             log.Debug("Got ExpenseTemplateCreated");
 
-            models.Add(new ExpenseTemplateModel(payload.AggregateKey, payload.Amount, payload.Description, payload.CategoryKey));
+            models.Add(new ExpenseTemplateModel(payload.AggregateKey, payload.Amount, payload.Description, payload.CategoryKey, payload.IsFixed));
             await localStorage.SaveAsync(models);
         }
 

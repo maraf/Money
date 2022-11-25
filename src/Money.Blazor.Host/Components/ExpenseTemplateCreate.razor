@@ -55,6 +55,13 @@
                 </div>
             }
         </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" @bind="IsFixed" />
+                Fixed
+                <span class="text-muted">(doesn't shown in summary)</span>
+            </label>
+        </div>
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="@OnSaveClick">Create</button>

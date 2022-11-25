@@ -32,10 +32,15 @@ else
                             </p>
                         }
 
-                        @if (!String.IsNullOrEmpty(model.Description))
+                        @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
                         {
                             <p>
                                 @model.Description
+
+                                @if (model.IsFixed)
+                                {
+                                    <em class="text-muted ml-1">Fixed</em>
+                                }
                             </p>
                         }
 

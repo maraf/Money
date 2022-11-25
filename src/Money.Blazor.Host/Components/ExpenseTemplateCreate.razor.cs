@@ -47,6 +47,9 @@ namespace Money.Components
         [Parameter]
         public IKey CategoryKey { get; set; }
 
+        [Parameter]
+        public bool IsFixed { get; set; }
+
         protected void OnSaveClick()
         {
             if (Validate())
@@ -78,11 +81,12 @@ namespace Money.Components
                 ? new Price(Amount, Currency)
                 : null;
 
-            await Commands.HandleAsync(new CreateExpenseTemplate(price, Description, CategoryKey));
+            await Commands.HandleAsync(new CreateExpenseTemplate(price, Description, CategoryKey, IsFixed));
 
             Amount = 0;
             CategoryKey = null;
             Description = null;
+            IsFixed = false;
             StateHasChanged();
         }
 

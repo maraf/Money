@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public partial class OutcomeCreate
+    public partial class OutcomeCreate : System.IDisposable
     {
         [Inject]
         protected ICommandDispatcher Commands { get; set; }
@@ -71,10 +71,23 @@ namespace Money.Components
         [Parameter]
         public bool IsFixed { get; set; }
 
+        private bool isAttachedToComponentContainer;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            ComponentContainer.ExpenseCreate = this;
+
+            if (ComponentContainer.ExpenseCreate == null)
+            {
+                ComponentContainer.ExpenseCreate = this;
+                isAttachedToComponentContainer = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (isAttachedToComponentContainer)
+                ComponentContainer.ExpenseCreate = null;
         }
 
         protected async override Task OnParametersSetAsync()

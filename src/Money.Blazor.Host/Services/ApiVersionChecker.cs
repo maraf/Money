@@ -16,7 +16,7 @@ namespace Money.Services
 {
     public class ApiVersionChecker : HttpQueryDispatcher.IMiddleware
     {
-        private readonly Version minVersion = new Version(1, 4, 0, 0);
+        private readonly Version minVersion = new Version(1, 7, 0, 0);
         private readonly Version maxVersion = new Version(2, 0, 0, 0);
 
         private readonly IEventDispatcher events;

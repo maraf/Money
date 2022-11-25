@@ -25,8 +25,7 @@ window.Bootstrap = {
             $(container).modal('hide');
         },
         IsOpen: function (container) {
-            const data = $(container).data('bs.modal');
-            return !data || !data._isShown ? false : true;
+            return $(container).hasClass("show");
         },
         Dispose: function (container) {
             $(container).modal('dispose');

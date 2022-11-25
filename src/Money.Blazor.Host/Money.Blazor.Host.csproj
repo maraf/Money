@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <RootNamespace>Money</RootNamespace>
-    <VersionPrefix>1.16.1.0</VersionPrefix>
     <PublishDomain>app.money.neptuo.com</PublishDomain>
+    <VersionPrefix>1.17.0.0</VersionPrefix>
     <TargetFramework>net7.0</TargetFramework>
     <UseBlazorWebAssembly>true</UseBlazorWebAssembly>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+	<BlazorEnableCompression>false</BlazorEnableCompression>
   </PropertyGroup>
 
   <ItemGroup>

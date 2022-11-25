@@ -5,7 +5,7 @@
             <div class="row my-2 items-@Items.Count">
                 @foreach (var item in Items)
                 {
-                    <div class="col">
+                    <div @key="item" class="col">
                         @if (item.Url != null)
                         {
                             <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">

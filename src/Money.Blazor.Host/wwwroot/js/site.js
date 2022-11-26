@@ -105,7 +105,7 @@ window.PullToRefresh = {
         const container = document.body;
         const listenerOptions = { passive: true };
         
-        const preRequisities = () => !document.querySelector(".modal.fade.show");
+        const prerequisities = () => !document.querySelector(".modal.fade.show") && document.querySelector("nav.navbar-dark .navbar-collapse.collapse");
         
         refreshClosure = (() => {
             const treshold = 200;
@@ -123,7 +123,7 @@ window.PullToRefresh = {
                 _lastDeltaX = 0;
                 _lastDeltaY = 0;
     
-                if (document.scrollingElement.scrollTop === 0 && preRequisities()) {
+                if (document.scrollingElement.scrollTop === 0 && prerequisities()) {
                     _startX = Math.floor(e.touches[0].pageX);
                     _startY = Math.floor(e.touches[0].pageY);
                     _isActive = true;
@@ -135,7 +135,7 @@ window.PullToRefresh = {
             const move = e => {
                 _lastDeltaX = Math.floor(Math.floor(e.touches[0].pageX) - _startX);
                 _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
-                if (_isActive && _lastDeltaY > treshold && _lastDeltaX < (treshold / 2) && preRequisities()) {
+                if (_isActive && _lastDeltaY > treshold && _lastDeltaX < (treshold / 2) && prerequisities()) {
                     $ui.addClass("visible");
                 } else {
                     $ui.removeClass("visible");
@@ -143,7 +143,7 @@ window.PullToRefresh = {
             };
 
             const end = () => {
-                if (_isActive && _lastDeltaY > treshold && _lastDeltaX < (treshold / 2) && preRequisities()) {
+                if (_isActive && _lastDeltaY > treshold && _lastDeltaX < (treshold / 2) && prerequisities()) {
                     interop.invokeMethodAsync("PullToRefresh.Pulled");
                 }
     
@@ -186,7 +186,7 @@ window.PullToRefresh = {
                 _lastDeltaX = 0;
                 _lastDeltaY = 0;
     
-                if (preRequisities()) {
+                if (prerequisities()) {
                     _startX = Math.floor(e.touches[0].pageX);
                     _startY = Math.floor(e.touches[0].pageY);
                     if (_startX < (treshold / 2)) {
@@ -213,7 +213,7 @@ window.PullToRefresh = {
                     $rightUi.css("margin-right", Math.min(_lastDeltaX, treshold * 2));
                 }
 
-                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold * 2) && preRequisities()) {
+                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold * 2) && prerequisities()) {
                     if (_isActive === 1) {
                         swapLeftIcon(true);
                     } else if (_isActive === 2) {
@@ -231,7 +231,7 @@ window.PullToRefresh = {
                 $leftUi.css("margin-left", 0);
                 $rightUi.css("margin-right", 0);
 
-                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold * 2) && preRequisities()) {
+                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold * 2) && prerequisities()) {
                     if (_isActive === 1) {
                         interop.invokeMethodAsync("Swiped.Left");
                     }

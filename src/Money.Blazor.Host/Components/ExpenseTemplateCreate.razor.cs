@@ -67,7 +67,7 @@ namespace Money.Components
 
             ErrorMessages.Clear();
 
-            if ((Amount == 0 && Currency != EmptyCurrency) || (Amount != 0 && Currency == EmptyCurrency))
+            if ((Amount == 0 && Currency != null) || (Amount != 0 && Currency == null))
                 ErrorMessages.Add("Amount and currency must be provided both or none");
 
             if (Amount != 0)

@@ -15,14 +15,11 @@
                     <div class="col-6 col-sm-6 col-md-4">
                         <div class="card card-hover cursor-pointer" @onclick="(() => ApplyTemplate(model))">
                             <div class="card-body">
-                                @if (model.Amount != null)
-                                {
-                                    <div>
-                                        <strong>
-                                            @CurrencyFormatter.Format(model.Amount)
-                                        </strong>
-                                    </div>
-                                }
+                                <div>
+                                    <strong>
+                                        @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
+                                    </strong>
+                                </div>
 
                                 @if (!model.CategoryKey.IsEmpty)
                                 {
@@ -33,9 +30,14 @@
 
                                 @if (!String.IsNullOrEmpty(model.Description))
                                 {
-                                    <p>
+                                    <p class="text-truncate">
                                         <small>
                                             @model.Description
+
+                                            @if (model.IsFixed)
+                                            {
+                                                <em class="text-muted ml-1">Fixed</em>
+                                            }
                                         </small>
                                     </p>
                                 }

@@ -192,7 +192,7 @@ namespace Money.Pages
         }
 
         protected string FormatPrice(Price price)
-            => formatter.Format(price, true);
+            => formatter.Format(price, CurrencyFormatter.FormatZero.Empty);
 
         public void Dispose()
             => UnBindEvents();

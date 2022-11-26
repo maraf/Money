@@ -18,12 +18,9 @@ else
             <div class="col-12 col-sm-6 col-md-4 col-xl-3">
                 <div class="card card-hover">
                     <div class="card-body">
-                        @if (model.Amount != null)
-                        {
                             <h3 class="m-0">
-                                @CurrencyFormatter.Format(model.Amount)
+                                @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
                             </h3>
-                        }
 
                         @if (!model.CategoryKey.IsEmpty)
                         {

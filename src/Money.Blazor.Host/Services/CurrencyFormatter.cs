@@ -48,11 +48,25 @@ namespace Money.Services
             }
         }
 
-        public string Format(Price price, bool emptyInsteadOfZero = false)
+        public string Format(Price price, FormatZero zero = FormatZero.Zero)
         {
-            if (emptyInsteadOfZero && price.Value == 0)
-                return String.Empty;
+            if (price == null || price.Value == 0)
+            {
+                return zero switch
+                {
+                    FormatZero.Empty => String.Empty,
+                    FormatZero.Placehoder => "---",
+                    _ => FormatInternal(price)
+                };
+            }
 
+            return FormatInternal(price);
+        }
+
+        private string FormatInternal(Price price) 
+        {
+            Ensure.NotNull(price, "price");
+            
             CurrencyModel currency = models.FirstOrDefault(c => c.UniqueCode == price.Currency);
             if (currency == null)
                 return price.ToString();
@@ -69,6 +83,13 @@ namespace Money.Services
             }
 
             return price.Value.ToString("C", modifiedCulture);
+        }
+
+        public enum FormatZero
+        {
+            Zero,
+            Empty,
+            Placehoder
         }
     }
 }

@@ -3,29 +3,25 @@
 <Modal @ref="Modal" Title="Create a new Expense Template" IsOverflow="true">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="form-row">
-            <div class="col-md-9">
-                <div class="form-group">
-                    <label for="expense-amount">Amount:</label>
-                    <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="expense-currency">Currency:</label>
-                    <select class="form-control" id="expense-currency" @bind="@Currency">
-                        @if (Currencies != null)
-                        {
-                            <option>@EmptyCurrency</option>
+        <div class="form-group">
+            <label for="expense-amount">Amount:</label>
+            <div class="input-group">
+                <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
+                <div class="input-group-append">
+                    @if (Currencies != null)
+                    {
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                            @(Currencies.FirstOrDefault(c => c.UniqueCode == Currency)?.Symbol ?? EmptyCurrency)
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item cursor-pointer" @onclick="(() => Currency = null)">@EmptyCurrency</a>
 
                             @foreach (var currency in Currencies)
                             {
-                                <option value="@currency.UniqueCode">
-                                    @currency.Symbol
-                                </option>
+                                <a class="dropdown-item cursor-pointer" @onclick="(() => Currency = currency.UniqueCode)">@currency.Symbol</a>
                             }
-                        }
-                    </select>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

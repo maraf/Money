@@ -192,6 +192,7 @@ namespace Money.Components
             {
                 Amount = model.Amount.Value;
                 Currency = model.Amount.Currency;
+                IsFixed = model.IsFixed;
             }
 
             if (!String.IsNullOrEmpty(model.Description))

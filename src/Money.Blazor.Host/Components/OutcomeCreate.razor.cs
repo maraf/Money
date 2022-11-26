@@ -102,31 +102,31 @@ namespace Money.Components
 
         protected async Task OnSaveClickAsync()
         {
-            if (await Validate())
+            if (await Validate(ErrorMessages))
             {
                 Execute();
                 Modal.Hide();
             }
         }
 
-        private async Task<bool> Validate()
+        private async Task<bool> Validate(List<string> messages)
         {
             Log.Debug($"Expense: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
 
-            ErrorMessages.Clear();
-            if (ErrorMessages.Count == 0 && Validator.AddOutcomeAmount(ErrorMessages, Amount))
+            messages.Clear();
+            if (messages.Count == 0 && Validator.AddOutcomeAmount(messages, Amount))
                 await FocusElementAsync("expense-amount");
 
-            if (ErrorMessages.Count == 0 && Validator.AddOutcomeDescription(ErrorMessages, Description))
+            if (messages.Count == 0 && Validator.AddOutcomeDescription(messages, Description))
                 await FocusElementAsync("expense-description");
 
-            if (ErrorMessages.Count == 0 && Validator.AddOutcomeCategoryKey(ErrorMessages, CategoryKey))
+            if (messages.Count == 0 && Validator.AddOutcomeCategoryKey(messages, CategoryKey))
                 await FocusElementAsync("expense-category-first");
 
-            Validator.AddOutcomeCurrency(ErrorMessages, Currency);
+            Validator.AddOutcomeCurrency(messages, Currency);
 
-            Log.Debug($"Expense: Validation: {string.Join(", ", ErrorMessages)}.");
-            return ErrorMessages.Count == 0;
+            Log.Debug($"Expense: Validation: {string.Join(", ", messages)}.");
+            return messages.Count == 0;
         }
 
         private Task FocusElementAsync(string id) 
@@ -160,6 +160,7 @@ namespace Money.Components
             else
                 base.Show();
 
+            AreTemplatesOpened = false;
             StateHasChanged();
         }
 
@@ -188,7 +189,7 @@ namespace Money.Components
                 Navigator.OpenCategories();
         }
 
-        protected void ApplyTemplate(ExpenseTemplateModel model)
+        protected async Task ApplyTemplateAsync(ExpenseTemplateModel model)
         {
             if (model.Amount != null)
             {
@@ -204,6 +205,8 @@ namespace Money.Components
 
             IsFixed = model.IsFixed;
             AreTemplatesOpened = false;
+
+            await Validate(new List<string>());
         }
 
         protected string FindCategoryName(IKey categoryKey)

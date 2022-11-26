@@ -2,7 +2,7 @@
 
 <div class="form-group">
     <label for="summary-sort-property">Field:</label>
-    <select class="form-control" id="summary-sort-property" @onchange="OnPropertyChanged">
+    <select class="form-control" id="summary-sort-property" @onchange="OnPropertyChanged" data-autofocus>
         @foreach (var item in Properties)
         {
             <option value="@item.Value" selected="@(item.Value.Equals(Property))">@item.Name</option>

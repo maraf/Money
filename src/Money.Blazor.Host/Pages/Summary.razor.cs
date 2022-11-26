@@ -305,7 +305,7 @@ namespace Money.Pages
 
         private async void OnMonthUpdatedEvent(DateTime changed)
         {
-            if (!IsContained(changed))
+            if (Periods != null && !IsContained(changed))
                 IsPeriodReloadRequired = true;
 
             await LoadSelectedPeriodAsync();

@@ -19,6 +19,8 @@ namespace Money.Components
 {
     public partial class ExpenseTemplateCreate
     {
+        public const string EmptyCurrency = "---";
+
         [Inject]
         protected ICommandDispatcher Commands { get; set; }
 
@@ -65,7 +67,7 @@ namespace Money.Components
 
             ErrorMessages.Clear();
 
-            if ((Amount == 0 && Currency != null) || (Amount != 0 && Currency == null))
+            if ((Amount == 0 && Currency != EmptyCurrency) || (Amount != 0 && Currency == EmptyCurrency))
                 ErrorMessages.Add("Amount and currency must be provided both or none");
 
             if (Amount != 0)

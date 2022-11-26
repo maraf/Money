@@ -16,6 +16,8 @@
                     <select class="form-control" id="expense-currency" @bind="@Currency">
                         @if (Currencies != null)
                         {
+                            <option>@EmptyCurrency</option>
+
                             @foreach (var currency in Currencies)
                             {
                                 <option value="@currency.UniqueCode">

@@ -71,6 +71,8 @@ namespace Money.Components
         [Parameter]
         public bool IsFixed { get; set; }
 
+        protected bool AreTemplatesOpened { get; set; }
+
         private bool isAttachedToComponentContainer;
 
         protected override void OnInitialized()
@@ -192,7 +194,6 @@ namespace Money.Components
             {
                 Amount = model.Amount.Value;
                 Currency = model.Amount.Currency;
-                IsFixed = model.IsFixed;
             }
 
             if (!String.IsNullOrEmpty(model.Description))
@@ -200,6 +201,9 @@ namespace Money.Components
 
             if (!model.CategoryKey.IsEmpty)
                 CategoryKey = model.CategoryKey;
+
+            IsFixed = model.IsFixed;
+            AreTemplatesOpened = false;
         }
 
         protected string FindCategoryName(IKey categoryKey)

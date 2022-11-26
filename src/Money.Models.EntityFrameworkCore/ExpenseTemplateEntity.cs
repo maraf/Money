@@ -37,7 +37,7 @@ namespace Money.Models
             if (!payload.CategoryKey.IsEmpty)
                 CategoryId = payload.CategoryKey.AsGuidKey().Guid;
 
-            IsFixed = true;
+            IsFixed = payload.IsFixed;
         }
 
         public ExpenseTemplateModel ToModel(int version) => version == 1

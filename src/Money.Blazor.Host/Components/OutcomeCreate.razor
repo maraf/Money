@@ -4,48 +4,55 @@
     <ChildContent>
         @if (Templates != null)
         {
-            <style>
-                .card.card-hover {
-                    height: calc(100% - 15px);
-                }
-            </style>
-            <div class="form-row">
-                @foreach (var model in Templates)
-                {
-                    <div class="col-6 col-sm-6 col-md-4">
-                        <div class="card card-hover cursor-pointer" @onclick="(() => ApplyTemplate(model))">
-                            <div class="card-body">
-                                <div>
-                                    <strong>
-                                        @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
-                                    </strong>
+            <button class="btn btn-light btn-block text-left mb-3" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
+                <Icon Identifier="redo" />
+                Templates
+            </button>
+            @if (AreTemplatesOpened)
+            {
+                <style>
+                    .card.card-hover {
+                        height: calc(100% - 15px);
+                    }
+                </style>
+                <div class="form-row">
+                    @foreach (var model in Templates)
+                    {
+                        <div class="col-6 col-sm-6 col-md-4">
+                            <div class="card card-hover cursor-pointer" @onclick="(() => ApplyTemplate(model))">
+                                <div class="card-body">
+                                    <div>
+                                        <strong>
+                                            @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
+                                        </strong>
+                                    </div>
+
+                                    @if (!model.CategoryKey.IsEmpty)
+                                    {
+                                        <p class="m-0 @FindCategoryColor(model.CategoryKey)?.SelectAccent("back-dark", "back-light")">
+                                            <span class="badge" style="background-color: @FindCategoryColor(model.CategoryKey)?.ToHashCode()">@FindCategoryName(model.CategoryKey)</span>
+                                        </p>
+                                    }
+
+                                    @if (!String.IsNullOrEmpty(model.Description))
+                                    {
+                                        <p class="text-truncate">
+                                            <small>
+                                                @model.Description
+
+                                                @if (model.IsFixed)
+                                                {
+                                                    <em class="text-muted ml-1">Fixed</em>
+                                                }
+                                            </small>
+                                        </p>
+                                    }
                                 </div>
-
-                                @if (!model.CategoryKey.IsEmpty)
-                                {
-                                    <p class="m-0 @FindCategoryColor(model.CategoryKey)?.SelectAccent("back-dark", "back-light")">
-                                        <span class="badge" style="background-color: @FindCategoryColor(model.CategoryKey)?.ToHashCode()">@FindCategoryName(model.CategoryKey)</span>
-                                    </p>
-                                }
-
-                                @if (!String.IsNullOrEmpty(model.Description))
-                                {
-                                    <p class="text-truncate">
-                                        <small>
-                                            @model.Description
-
-                                            @if (model.IsFixed)
-                                            {
-                                                <em class="text-muted ml-1">Fixed</em>
-                                            }
-                                        </small>
-                                    </p>
-                                }
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
         }
         <Validation ErrorMessages="@ErrorMessages" />
         <div class="form-group">

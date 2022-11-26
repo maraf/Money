@@ -4,20 +4,26 @@
 <Money.Components.Title Main="Money by Neptuo" />
 <ExceptionPanel />
 
-<p class="mt-4">
-    <a target="_blank" href="@Navigator.UrlMoneyProject()" class="btn btn-light mb-2 mr-2">
-        <Icon Identifier="book" />
-        Documentation
-    </a>
-    <a target="_blank" href="@Navigator.UrlGithubRepository()" class="btn btn-light mb-2 mr-2">
-        <Icon Identifier="github" Prefix="fab" />
-        Source code
-    </a>
-    <a target="_blank" href="@Navigator.UrlGithubRepositoryIssueNew()" class="btn btn-light mb-2 mr-2">
-        <Icon Identifier="bug" />
-        Report a bug
-    </a>
-</p>
+<div class="row mt-4">
+    <div class="col-12 col-md-auto mb-3">
+        <a target="_blank" href="@Navigator.UrlMoneyProject()" class="btn btn-light text-left w-100">
+            <Icon Identifier="book" />
+            Documentation
+        </a>
+    </div>
+    <div class="col-12 col-md-auto mb-3">
+        <a target="_blank" href="@Navigator.UrlGithubRepository()" class="btn btn-light text-left w-100">
+            <Icon Identifier="github" Prefix="fab" />
+            Source code
+        </a>
+    </div>
+    <div class="col-12 col-md-auto mb-3">
+        <a target="_blank" href="@Navigator.UrlGithubRepositoryIssueNew()" class="btn btn-light text-left w-100">
+            <Icon Identifier="bug" />
+            Report a bug
+        </a>
+    </div>
+</div>
 
 <p class="display-4" style="font-size: 2rem;">
     <AppVersion />

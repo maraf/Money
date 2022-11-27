@@ -7,8 +7,8 @@
         }
         @if (trendsButton != null)
         {
-            <button class="btn btn-secondary" @onclick="(() => Navigator.Open(trendsButton.Value.url))">
-                <Icon Prefix="fas" Identifier="chart-bar" />
+            <button @key="trendsButton" class="btn btn-secondary" @onclick="(() => Navigator.Open(trendsButton.Value.url))">
+                <Icon Prefix="fas" Identifier="chart-line" />
                 <span class="d-none d-md-inline">
                     @trendsButton.Value.title
                 </span>

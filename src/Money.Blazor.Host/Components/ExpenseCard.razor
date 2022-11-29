@@ -22,6 +22,7 @@
             @if (Context.HasEdit)
             {
                 <IconButton Icon="clone" ToolTip="Duplicate" Click="@OnDuplicate" />
+                <IconButton Icon="redo" ToolTip="Create a template" Click="@OnCreateTemplate" />
                 <IconButton Icon="dollar-sign" ToolTip="Change Amount" Click="@OnEditAmount" />
                 <IconButton Icon="comment" ToolTip="Change Description" Click="@OnEditDescription" />
                 <IconButton Icon="calendar" ToolTip="Change When" Click="@OnEditWhen" />

@@ -97,6 +97,9 @@ namespace Money.Pages
         void ExpenseCard.IContext.Duplicate(OutcomeOverviewModel model)
         { }
 
+        void ExpenseCard.IContext.CreateTemplate(OutcomeOverviewModel model)
+        { }
+
         void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
         { }
 

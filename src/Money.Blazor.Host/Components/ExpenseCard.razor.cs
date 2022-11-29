@@ -21,6 +21,7 @@ namespace Money.Components
             CurrencyFormatter CurrencyFormatter { get; }
 
             void Duplicate(OutcomeOverviewModel model);
+            void CreateTemplate(OutcomeOverviewModel model);
             void EditAmount(OutcomeOverviewModel model);
             void EditDescription(OutcomeOverviewModel model);
             void EditWhen(OutcomeOverviewModel model);
@@ -49,6 +50,9 @@ namespace Money.Components
 
         protected void OnDuplicate() 
             => Context.Duplicate(Model);
+
+        protected void OnCreateTemplate()
+            => Context.CreateTemplate(Model);
 
         protected void OnEditAmount() 
             => Context.EditAmount(Model);

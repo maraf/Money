@@ -33,6 +33,9 @@ namespace Money.Components
         void ExpenseCard.IContext.Duplicate(OutcomeOverviewModel model)
             => OnActionClick(model, DuplicateModal, (modal, model) => modal.Show(model.CategoryKey));
 
+        void ExpenseCard.IContext.CreateTemplate(OutcomeOverviewModel model)
+            => OnActionClick(model, TemplateCreateModal, (modal, model) => modal.Show(model.Amount.Value, model.Amount.Currency, model.Description, model.CategoryKey));
+
         void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
             => OnActionClick(model, AmountEditModal);
 
@@ -48,6 +51,7 @@ namespace Money.Components
         #endregion
 
         protected OutcomeCreate DuplicateModal { get; set; }
+        protected ExpenseTemplateCreate TemplateCreateModal { get; set; }
         protected ModalDialog AmountEditModal { get; set; }
         protected ModalDialog DescriptionEditModal { get; set; }
         protected ModalDialog WhenEditModal { get; set; }

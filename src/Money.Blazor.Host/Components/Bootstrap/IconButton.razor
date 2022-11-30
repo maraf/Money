@@ -1,4 +1,4 @@
-﻿<button type="submit" class="btn btn-link navbar-btn navbar-link" title="@ToolTip" @onclick="@Click">
+﻿<button type="submit" @attributes="Attributes" title="@ToolTip" @onclick="@Click">
     <Icon Identifier="@Icon" />
 </button>
 
@@ -12,4 +12,19 @@
 
     [Parameter]
     public Action Click { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (Attributes == null)
+            Attributes = new Dictionary<string, object>();
+
+        Attributes.TryGetValue("class", out var cssClass);
+        cssClass += $" btn btn-link navbar-btn navbar-link";
+        Attributes["class"] = cssClass;
+    }
 }

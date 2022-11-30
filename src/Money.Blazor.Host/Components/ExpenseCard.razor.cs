@@ -40,6 +40,7 @@ namespace Money.Components
 
         protected string CategoryName { get; private set; }
         protected Color CategoryColor { get; private set; }
+        protected bool IsExpanded { get; set; }
 
         protected override async Task OnParametersSetAsync()
         {

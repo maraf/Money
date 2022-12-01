@@ -34,7 +34,7 @@ namespace Money.Components
             => OnActionClick(model, DuplicateModal, (modal, model) => modal.Show(model.CategoryKey));
 
         void ExpenseCard.IContext.CreateTemplate(OutcomeOverviewModel model)
-            => OnActionClick(model, TemplateCreateModal, (modal, model) => modal.Show(model.Amount.Value, model.Amount.Currency, model.Description, model.CategoryKey));
+            => OnActionClick(model, TemplateCreateModal, (modal, model) => modal.Show(model.Amount, model.Description, model.CategoryKey));
 
         void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
             => OnActionClick(model, AmountEditModal);

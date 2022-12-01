@@ -38,10 +38,7 @@ namespace Money.Components
         protected Confirm PrerequisitesConfirm { get; set; }
 
         [Parameter]
-        public decimal Amount { get; set; }
-
-        [Parameter]
-        public string Currency { get; set; }
+        public Price Amount { get; set; }
 
         [Parameter]
         public string Description { get; set; }
@@ -51,6 +48,8 @@ namespace Money.Components
 
         [Parameter]
         public bool IsFixed { get; set; }
+
+        protected Price Price { get; set; }
 
         protected void OnSaveClick()
         {
@@ -63,15 +62,15 @@ namespace Money.Components
 
         private bool Validate()
         {
-            Log.Debug($"Expense: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}.");
+            Log.Debug($"Expense: Amount: {Amount}, Category: {CategoryKey}.");
 
             ErrorMessages.Clear();
 
-            if ((Amount == 0 && Currency != null) || (Amount != 0 && Currency == null))
+            if (Amount != null && ((Amount.Value == 0 && Amount.Currency != null) || (Amount.Value != 0 && Amount.Currency == null)))
                 ErrorMessages.Add("Amount and currency must be provided both or none");
 
-            if (Amount != 0)
-                Validator.AddOutcomeAmount(ErrorMessages, Amount);
+            if (Amount != null && Amount.Value != 0)
+                Validator.AddOutcomeAmount(ErrorMessages, Amount.Value);
 
             Log.Debug($"Expense: Validation: {string.Join(", ", ErrorMessages)}.");
             return ErrorMessages.Count == 0;
@@ -79,13 +78,9 @@ namespace Money.Components
 
         private async void Execute()
         {
-            var price = Amount != 0
-                ? new Price(Amount, Currency)
-                : null;
+            await Commands.HandleAsync(new CreateExpenseTemplate(Amount, Description, CategoryKey, IsFixed));
 
-            await Commands.HandleAsync(new CreateExpenseTemplate(price, Description, CategoryKey, IsFixed));
-
-            Amount = 0;
+            Amount = null;
             CategoryKey = null;
             Description = null;
             IsFixed = false;
@@ -99,7 +94,6 @@ namespace Money.Components
 
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
-            Currency = await Queries.QueryAsync(new FindCurrencyDefault());
 
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
                 PrerequisitesConfirm.Show();
@@ -109,16 +103,10 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        public void Show(decimal? amount, string currency, string description, IKey categoryKey)
+        public void Show(Price amount, string description, IKey categoryKey)
         {
-            if (amount != null)
-                Amount = amount.Value;
-
-            if (!String.IsNullOrEmpty(currency))
-                Currency = currency;
-
-            if (!String.IsNullOrEmpty(description))
-                Description = description;
+            Amount = amount;
+            Description = description;
 
             Show(categoryKey);
         }

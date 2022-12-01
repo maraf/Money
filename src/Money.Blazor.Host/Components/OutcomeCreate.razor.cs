@@ -54,12 +54,6 @@ namespace Money.Components
         protected Confirm PrerequisitesConfirm { get; set; }
 
         [Parameter]
-        public decimal Amount { get; set; }
-
-        [Parameter]
-        public string Currency { get; set; }
-
-        [Parameter]
         public string Description { get; set; }
 
         [Parameter]
@@ -70,6 +64,9 @@ namespace Money.Components
 
         [Parameter]
         public bool IsFixed { get; set; }
+
+        [Parameter]
+        public Price Amount { get; set; }
 
         protected bool AreTemplatesOpened { get; set; }
 
@@ -111,10 +108,10 @@ namespace Money.Components
 
         private async Task<bool> Validate(List<string> messages)
         {
-            Log.Debug($"Expense: Amount: {Amount}, Currency: {Currency}, Category: {CategoryKey}, When: {When}.");
+            Log.Debug($"Expense: Amount: {Amount}, Category: {CategoryKey}, When: {When}.");
 
             messages.Clear();
-            if (messages.Count == 0 && Validator.AddOutcomeAmount(messages, Amount))
+            if (messages.Count == 0 && (Amount == null || Validator.AddOutcomeAmount(messages, Amount.Value)))
                 await FocusElementAsync("expense-amount");
 
             if (messages.Count == 0 && Validator.AddOutcomeDescription(messages, Description))
@@ -123,7 +120,7 @@ namespace Money.Components
             if (messages.Count == 0 && Validator.AddOutcomeCategoryKey(messages, CategoryKey))
                 await FocusElementAsync("expense-category-first");
 
-            Validator.AddOutcomeCurrency(messages, Currency);
+            Validator.AddOutcomeCurrency(messages, Amount == null ? null : Amount.Currency);
 
             Log.Debug($"Expense: Validation: {string.Join(", ", messages)}.");
             return messages.Count == 0;
@@ -134,9 +131,9 @@ namespace Money.Components
 
         private async void Execute()
         {
-            await Commands.HandleAsync(new CreateOutcome(new Price(Amount, Currency), Description, When, CategoryKey, IsFixed));
+            await Commands.HandleAsync(new CreateOutcome(Amount, Description, When, CategoryKey, IsFixed));
 
-            Amount = 0;
+            Amount = null;
             CategoryKey = null;
             Description = null;
             IsFixed = false;
@@ -153,7 +150,6 @@ namespace Money.Components
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
             Templates = await Queries.QueryAsync(new ListAllExpenseTemplate());
-            Currency = await Queries.QueryAsync(new FindCurrencyDefault());
 
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
                 PrerequisitesConfirm.Show();
@@ -164,13 +160,10 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        public void Show(decimal? amount, string currency, string description, IKey categoryKey)
+        public void Show(Price amount, string description, IKey categoryKey)
         {
             if (amount != null)
-                Amount = amount.Value;
-
-            if (!String.IsNullOrEmpty(currency))
-                Currency = currency;
+                Amount = amount;
 
             if (!String.IsNullOrEmpty(description))
                 Description = description;
@@ -192,10 +185,7 @@ namespace Money.Components
         protected async Task ApplyTemplateAsync(ExpenseTemplateModel model)
         {
             if (model.Amount != null)
-            {
-                Amount = model.Amount.Value;
-                Currency = model.Amount.Currency;
-            }
+                Amount = model.Amount;
 
             if (!String.IsNullOrEmpty(model.Description))
                 Description = model.Description;

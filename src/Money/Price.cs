@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Money.Commands;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,10 @@ namespace Money
             Currency = currency;
         }
 
+        public override bool Equals(object obj) => Equals(obj as Price);
+
+        public bool Equals(Price other) => other != null && Value == other.Value && Currency == other.Currency;
+
         /// <summary>
         /// Creates a new zero price.
         /// </summary>
@@ -48,6 +53,12 @@ namespace Money
         {
             return $"{Value:N} {Currency}";
         }
+
+        public static bool operator ==(Price model1, Price model2)
+            => EqualityComparer<Price>.Default.Equals(model1, model2);
+
+        public static bool operator !=(Price model1, Price model2)
+            => !(model1 == model2);
 
         public static Price operator +(Price price1, Price price2)
         {

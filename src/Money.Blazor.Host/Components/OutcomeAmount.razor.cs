@@ -24,8 +24,7 @@ namespace Money.Components
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
 
-        private decimal originalAmount;
-        private string originalCurrency;
+        private Price originalAmount;
 
         public List<CurrencyModel> Currencies { get; private set; }
         protected List<string> ErrorMessages { get; } = new List<string>();
@@ -34,10 +33,7 @@ namespace Money.Components
         public IKey OutcomeKey { get; set; }
 
         [Parameter]
-        public decimal Amount { get; set; }
-
-        [Parameter]
-        public string Currency { get; set; }
+        public Price Amount { get; set; }
 
         protected async override Task OnParametersSetAsync()
         {
@@ -50,12 +46,11 @@ namespace Money.Components
         private void SetOriginal()
         {
             originalAmount = Amount;
-            originalCurrency = Currency;
         }
 
         protected void OnSaveClick()
         {
-            if (Validate() && (originalAmount != Amount || originalCurrency != Currency))
+            if (Validate() && (originalAmount != Amount))
             {
                 Execute();
                 SetOriginal();
@@ -66,15 +61,15 @@ namespace Money.Components
         private bool Validate()
         {
             ErrorMessages.Clear();
-            Validator.AddOutcomeAmount(ErrorMessages, Amount);
-            Validator.AddOutcomeCurrency(ErrorMessages, Currency);
+            Validator.AddOutcomeAmount(ErrorMessages, Amount == null ? 0 : Amount.Value);
+            Validator.AddOutcomeCurrency(ErrorMessages, Amount == null ? null : Amount.Currency);
 
             return ErrorMessages.Count == 0;
         }
 
         private async void Execute()
         {
-            await Commands.HandleAsync(new ChangeOutcomeAmount(OutcomeKey, new Price(Amount, Currency)));
+            await Commands.HandleAsync(new ChangeOutcomeAmount(OutcomeKey, Amount));
         }
     }
 }

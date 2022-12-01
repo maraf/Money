@@ -1,3 +1,19 @@
 ﻿<AuthenticatedView OnChanged="OnAuthenticationChanged">
-    <input type="text" class="form-control" id="@Id" value="@Value.ToString("F" + DecimalDigits)" @onchange="OnValueChanged" data-autofocus="@AutoFocus" data-select="@AutoSelect" autocomplete="off" />
+    <div class="input-group">
+        <input type="text" class="form-control" id="@Id" value="@Amount.ToString("F" + DecimalDigits)" @onchange="OnValueChanged" data-autofocus="@AutoFocus" data-select="@AutoSelect" autocomplete="off" />
+        <div class="input-group-append">
+            @if (Currencies != null)
+            {
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                    @Currencies.FirstOrDefault(c => c.UniqueCode == Currency)?.Symbol
+                </button>
+                <div class="dropdown-menu">
+                    @foreach (var currency in Currencies)
+                    {
+                        <a class="dropdown-item cursor-pointer" @onclick="(() => OnCurrencyChanged(currency))">@currency.Symbol</a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
 </AuthenticatedView>

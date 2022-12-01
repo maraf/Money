@@ -72,8 +72,8 @@ namespace Money.Services
         public void OpenExpenseCreate(IKey categoryKey)
             => componentContainer.ExpenseCreate?.Show(categoryKey);
 
-        public void OpenExpenseCreate(decimal? amount, string currency, string description, IKey categoryKey) 
-            => componentContainer.ExpenseCreate?.Show(amount, currency, description, categoryKey);
+        public void OpenExpenseCreate(Price amount, string description, IKey categoryKey) 
+            => componentContainer.ExpenseCreate?.Show(amount, description, categoryKey);
 
         public void Open(string url)
             => manager.NavigateTo(url);

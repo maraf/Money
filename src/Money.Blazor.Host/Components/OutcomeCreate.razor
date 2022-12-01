@@ -57,27 +57,11 @@
         <Validation ErrorMessages="@ErrorMessages" />
         <div class="form-group">
             <label for="expense-amount">Amount:</label>
-            <div class="input-group">
-                <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
-                <div class="input-group-append">
-                    @if (Currencies != null)
-                    {
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
-                            @Currencies.FirstOrDefault(c => c.UniqueCode == Currency)?.Symbol
-                        </button>
-                        <div class="dropdown-menu">
-                            @foreach (var currency in Currencies)
-                            {
-                                <a class="dropdown-item cursor-pointer" @onclick="(() => Currency = currency.UniqueCode)">@currency.Symbol</a>
-                            }
-                        </div>
-                    }
-                </div>
-            </div>
+            <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="Amount" />
         </div>
         <div class="form-group">
             <label for="expense-description">Description:</label>
-            <input type="text" class="form-control" id="expense-description" @bind="@Description" />
+            <input type="text" class="form-control" id="expense-description" @bind="Description" />
         </div>
         <div class="form-group">
             <label for="expense-when">When:</label>

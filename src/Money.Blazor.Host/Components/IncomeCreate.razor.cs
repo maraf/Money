@@ -38,10 +38,7 @@ namespace Money.Components
         protected Confirm PrerequisitesConfirm { get; set; }
 
         [Parameter]
-        public decimal Amount { get; set; }
-
-        [Parameter]
-        public string Currency { get; set; }
+        public Price Amount { get; set; }
 
         [Parameter]
         public string Description { get; set; }
@@ -57,7 +54,6 @@ namespace Money.Components
             SaveButtonText = "Create";
 
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
-            Currency = await Queries.QueryAsync(new FindCurrencyDefault());
         }
 
         protected void OnSaveClick()
@@ -71,12 +67,12 @@ namespace Money.Components
 
         private bool Validate()
         {
-            Log.Debug($"Income: Amount: {Amount}, Currency: {Currency}, When: {When}.");
+            Log.Debug($"Income: Amount: {Amount}, When: {When}.");
 
             ErrorMessages.Clear();
-            Validator.AddIncomeAmount(ErrorMessages, Amount);
+            Validator.AddIncomeAmount(ErrorMessages, Amount == null ? 0 : Amount.Value);
             Validator.AddIncomeDescription(ErrorMessages, Description);
-            Validator.AddIncomeCurrency(ErrorMessages, Currency);
+            Validator.AddIncomeCurrency(ErrorMessages, Amount == null ? null : Amount.Currency);
 
             Log.Debug($"Income: Validation: {string.Join(", ", ErrorMessages)}.");
             return ErrorMessages.Count == 0;
@@ -84,9 +80,9 @@ namespace Money.Components
 
         private async void Execute()
         {
-            await Commands.HandleAsync(new CreateIncome(new Price(Amount, Currency), Description, When));
+            await Commands.HandleAsync(new CreateIncome(Amount, Description, When));
 
-            Amount = 0;
+            Amount = null;
             Description = null;
             StateHasChanged();
         }

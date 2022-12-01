@@ -20,7 +20,7 @@
                         {
                             <tr>
                                 <td>@CurrencyFormatter.Format(new Price(1, item.SourceCurrency))</td>
-                                <td>@CurrencyFormatter.Format(new Price((decimal)item.Rate, TargetCurrency))</td>
+                                <td>@CurrencyFormatter.Format(new Price((decimal)item.Rate, TargetCurrency), applyUserDigits: false)</td>
                                 <td>
                                     <DateValue Value="item.ValidFrom" />
                                 </td>

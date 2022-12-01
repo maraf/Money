@@ -43,6 +43,14 @@ namespace Money.Components
 
         protected DateTime ValidFrom { get; set; }
 
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+
+            if (SourceCurrency == TargetCurrency)
+                SourceCurrency = null;
+        }
+
         public override void Show()
         {
             Reload();
@@ -80,7 +88,7 @@ namespace Money.Components
 
         private bool Validate()
         {
-            Log.Debug($"Rate: {Rate}, SourceCurrency: {SourceCurrency}, TargetCurrency: {TargetCurrency}");
+            Log.Debug($"Rate: '{Rate}', SourceCurrency: '{SourceCurrency}', TargetCurrency: '{TargetCurrency}', Valid '{ValidFrom}'");
 
             ErrorMessages.Clear();
             Validator.AddExchangeRate(ErrorMessages, Rate);

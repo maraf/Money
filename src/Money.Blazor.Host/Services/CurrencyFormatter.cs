@@ -48,7 +48,7 @@ namespace Money.Services
             }
         }
 
-        public string Format(Price price, FormatZero zero = FormatZero.Zero)
+        public string Format(Price price, FormatZero zero = FormatZero.Zero, bool applyUserDigits = true)
         {
             if (price == null || price.Value == 0)
             {
@@ -60,10 +60,10 @@ namespace Money.Services
                 };
             }
 
-            return FormatInternal(price);
+            return FormatInternal(price, applyUserDigits);
         }
 
-        private string FormatInternal(Price price) 
+        private string FormatInternal(Price price, bool applyUserDigits = true) 
         {
             Ensure.NotNull(price, "price");
             
@@ -75,14 +75,15 @@ namespace Money.Services
             if (!currencies.TryGetValue(price.Currency, out var culture))
                 culture = CultureInfo.CurrentCulture;
 
-            if (!modified.TryGetValue(price.Currency, out var modifiedCulture))
+            CultureInfo modifiedCulture = null;
+            if (applyUserDigits && !modified.TryGetValue(price.Currency, out modifiedCulture))
             {
                 modified[price.Currency] = modifiedCulture = (CultureInfo)culture.Clone();
                 modifiedCulture.NumberFormat.CurrencyDecimalDigits = decimalDigits;
                 modifiedCulture.NumberFormat.CurrencySymbol = currency.Symbol;
             }
 
-            return price.Value.ToString("C", modifiedCulture);
+            return price.Value.ToString("C", modifiedCulture ?? culture);
         }
 
         public enum FormatZero

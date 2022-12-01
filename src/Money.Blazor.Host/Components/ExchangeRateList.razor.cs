@@ -106,7 +106,7 @@ namespace Money.Components
         {
             if (payload.TargetUniqueCode == TargetCurrency)
             {
-                Models.Add(new ExchangeRateModel(payload.SourceUniqueCode, payload.Rate, payload.ValidFrom));
+                Models.Add(new ExchangeRateModel(payload.SourceUniqueCode, payload.Rate, payload.ValidFrom.Date));
                 Models.Sort((r1, r2) => r2.ValidFrom.CompareTo(r1.ValidFrom));
                 StateHasChanged();
             }

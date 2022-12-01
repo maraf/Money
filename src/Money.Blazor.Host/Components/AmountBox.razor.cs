@@ -57,7 +57,7 @@ namespace Money.Components
             }
         }
 
-        protected override async Task OnParametersSetAsync()
+        protected override void OnParametersSet()
         {
             base.OnParametersSet();
 

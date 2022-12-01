@@ -6,5 +6,5 @@
 <OutcomeAmount @ref="AmountEditModal" OutcomeKey="@SelectedItem?.Key" Amount="@SelectedItem?.Amount" />
 <OutcomeDescription @ref="DescriptionEditModal" OutcomeKey="@SelectedItem?.Key" Description="@SelectedItem?.Description" />
 <OutcomeWhen @ref="WhenEditModal" OutcomeKey="@SelectedItem?.Key" When="@(SelectedItem?.When ?? DateTime.MinValue)" />
-<OutcomeCreate @ref="DuplicateModal" Amount="@SelectedItem?.Amount" When="@(SelectedItem?.When ?? DateTime.Today)" Description="@SelectedItem?.Description" />
+<OutcomeCreate @ref="DuplicateModal" Amount="@SelectedItem?.Amount" When="@(SelectedItem?.When ?? DateTime.Today)" Description="@SelectedItem?.Description" IsFixed="@(SelectedItem?.IsFixed ?? false)" />
 <ExpenseTemplateCreate @ref="TemplateCreateModal" />

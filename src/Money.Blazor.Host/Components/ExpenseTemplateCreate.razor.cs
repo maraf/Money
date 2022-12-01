@@ -103,10 +103,11 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        public void Show(Price amount, string description, IKey categoryKey)
+        public void Show(Price amount, string description, IKey categoryKey, bool isFixed = false)
         {
             Amount = amount;
             Description = description;
+            IsFixed = isFixed;
 
             Show(categoryKey);
         }

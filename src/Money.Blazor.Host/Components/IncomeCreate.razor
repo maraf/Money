@@ -3,27 +3,23 @@
 <Modal @ref="Modal" Title="@Title">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="form-row">
-            <div class="col-md-9">
-                <div class="form-group">
-                    <label for="income-amount">Amount:</label>
-                    <AmountBox @bind-Value="@Amount" Id="income-amount" AutoFocus="true" AutoSelect="true" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="income-currency">Currency:</label>
-                    <select class="form-control" id="income-currency" @bind="@Currency">
-                        @if (Currencies != null)
-                        {
+        <div class="form-group">
+            <label for="expense-amount">Amount:</label>
+            <div class="input-group">
+                <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
+                <div class="input-group-append">
+                    @if (Currencies != null)
+                    {
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                            @Currencies.FirstOrDefault(c => c.UniqueCode == Currency)?.Symbol
+                        </button>
+                        <div class="dropdown-menu">
                             @foreach (var currency in Currencies)
                             {
-                                <option value="@currency.UniqueCode">
-                                    @currency.Symbol
-                                </option>
+                                <a class="dropdown-item cursor-pointer" @onclick="(() => Currency = currency.UniqueCode)">@currency.Symbol</a>
                             }
-                        }
-                    </select>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

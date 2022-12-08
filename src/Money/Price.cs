@@ -11,7 +11,7 @@ namespace Money
     /// <summary>
     /// A model for describing price.
     /// </summary>
-    public class Price
+    public class Price : IEquatable<Price>
     {
         /// <summary>
         /// Gets a value of the price.
@@ -35,24 +35,25 @@ namespace Money
             Currency = currency;
         }
 
-        public override bool Equals(object obj) => Equals(obj as Price);
+        public override bool Equals(object obj) 
+            => Equals(obj as Price);
 
-        public bool Equals(Price other) => other != null && Value == other.Value && Currency == other.Currency;
+        public bool Equals(Price other) 
+            => other != null && Value == other.Value && Currency == other.Currency;
+
+        public override int GetHashCode() 
+            => HashCode.Combine(Value, Currency);
 
         /// <summary>
         /// Creates a new zero price.
         /// </summary>
         /// <param name="currency">The currency of the price.</param>
         /// <returns>The new zero price.</returns>
-        public static Price Zero(string currency)
-        {
-            return new Price(0, currency);
-        }
+        public static Price Zero(string currency) 
+            => new Price(0, currency);
 
-        public override string ToString()
-        {
-            return $"{Value:N} {Currency}";
-        }
+        public override string ToString() 
+            => $"{Value:N} {Currency}";
 
         public static bool operator ==(Price model1, Price model2)
             => EqualityComparer<Price>.Default.Equals(model1, model2);

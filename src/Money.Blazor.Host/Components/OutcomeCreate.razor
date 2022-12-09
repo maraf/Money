@@ -34,7 +34,7 @@
                                         </p>
                                     }
 
-                                    @if (!String.IsNullOrEmpty(model.Description))
+                                    @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
                                     {
                                         <p class="text-truncate">
                                             <small>

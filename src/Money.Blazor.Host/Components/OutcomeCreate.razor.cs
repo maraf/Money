@@ -111,18 +111,21 @@ namespace Money.Components
             Log.Debug($"Expense: Amount: {Amount}, Category: {CategoryKey}, When: {When}.");
 
             messages.Clear();
-            if (messages.Count == 0 && (Amount == null || Validator.AddOutcomeAmount(messages, Amount.Value)))
+            bool isInvalidAmount = Validator.AddOutcomeAmount(messages, Amount?.Value ?? 0);
+            if (messages.Count == 0 && isInvalidAmount)
                 await FocusElementAsync("expense-amount");
 
-            if (messages.Count == 0 && Validator.AddOutcomeDescription(messages, Description))
+            bool isInvalidDescription = Validator.AddOutcomeDescription(messages, Description);
+            if (messages.Count == 0 && isInvalidDescription)
                 await FocusElementAsync("expense-description");
 
-            if (messages.Count == 0 && Validator.AddOutcomeCategoryKey(messages, CategoryKey))
+            bool isInvalidCategory = Validator.AddOutcomeCategoryKey(messages, CategoryKey);
+            if (messages.Count == 0 && isInvalidCategory)
                 await FocusElementAsync("expense-category-first");
 
-            Validator.AddOutcomeCurrency(messages, Amount == null ? null : Amount.Currency);
+            //Validator.AddOutcomeCurrency(messages, Amount?.Currency);
 
-            Log.Debug($"Expense: Validation: {string.Join(", ", messages)}.");
+            Log.Debug($"Expense: Validation: '{string.Join("', '", messages)}'.");
             return messages.Count == 0;
         }
 
@@ -160,13 +163,11 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        public void Show(Price amount, string description, IKey categoryKey)
+        public void Show(Price amount, string description, IKey categoryKey, bool isFixed)
         {
-            if (amount != null)
-                Amount = amount;
-
-            if (!String.IsNullOrEmpty(description))
-                Description = description;
+            Amount = amount;
+            Description = description;
+            IsFixed = isFixed;
 
             Show(categoryKey);
         }
@@ -184,15 +185,9 @@ namespace Money.Components
 
         protected async Task ApplyTemplateAsync(ExpenseTemplateModel model)
         {
-            if (model.Amount != null)
-                Amount = model.Amount;
-
-            if (!String.IsNullOrEmpty(model.Description))
-                Description = model.Description;
-
-            if (!model.CategoryKey.IsEmpty)
-                CategoryKey = model.CategoryKey;
-
+            Amount = model.Amount;
+            Description = model.Description;
+            CategoryKey = model.CategoryKey;
             IsFixed = model.IsFixed;
             AreTemplatesOpened = false;
 

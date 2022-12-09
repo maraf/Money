@@ -11,7 +11,7 @@ Also, we have an implementation using [Blazor](https://github.com/aspnet/Blazor)
 
 ## Running the Blazor version locally
 
-The Blazor version is typical SPA web app with backend api. So you need to run two projects `Money.Api` & `Money.Blazor.Host`. We typically do from cmd:
+The Blazor version is a typical SPA web app with backend api. So you need to run two projects `Money.Api` & `Money.Blazor.Host`. We typically do it from cmd/pwsh:
 
 ### Api
 ```

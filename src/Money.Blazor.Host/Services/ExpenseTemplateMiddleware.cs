@@ -23,6 +23,7 @@ namespace Money.Services
         private readonly ExpenseTemplateStorage localStorage;
         private readonly ILog log;
 
+        private bool areModelsLoadedAtLeastOnce;
         private readonly List<ExpenseTemplateModel> models = new List<ExpenseTemplateModel>();
         private Task listAllTask;
 
@@ -49,7 +50,7 @@ namespace Money.Services
 
         private async Task EnsureListAsync(HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next, ListAllExpenseTemplate listAll)
         {
-            if (models.Count == 0)
+            if (models.Count == 0 || !areModelsLoadedAtLeastOnce)
             {
                 if (listAllTask == null)
                     listAllTask = LoadAllAsync(dispatcher, next, listAll);
@@ -57,6 +58,7 @@ namespace Money.Services
                 try
                 {
                     await listAllTask;
+                    areModelsLoadedAtLeastOnce = true;
                 }
                 finally
                 {

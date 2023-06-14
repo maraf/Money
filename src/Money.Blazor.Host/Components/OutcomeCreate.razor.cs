@@ -161,6 +161,7 @@ namespace Money.Components
             Amount = null;
             CategoryKey = null;
             Description = null;
+            When = DateTime.UtcNow.Date;
             IsFixed = false;
             StateHasChanged();
         }

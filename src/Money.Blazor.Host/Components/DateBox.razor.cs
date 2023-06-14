@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Queries;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -42,9 +43,10 @@ namespace Money.Components
         protected void OnValueChanged(ChangeEventArgs e)
         {
             string rawValue = e.Value?.ToString();
+
             if (TryParseDate(rawValue, Format, out var value) || TryParseDate(rawValue, SimplifyFormat(), out value) || DateTime.TryParse(rawValue, out value))
             {
-                value = TimeZoneInfo.ConvertTimeToUtc(value).Date;
+                value = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, DateTimeKind.Utc);
                 ValueChanged?.Invoke(Value = value);
             }
 

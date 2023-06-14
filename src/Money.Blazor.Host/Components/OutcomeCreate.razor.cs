@@ -20,6 +20,10 @@ namespace Money.Components
 {
     public partial class OutcomeCreate : System.IDisposable
     {
+        private static int instanceCounter = 0;
+
+        private string IdPrefix = $"expensecreate{++instanceCounter}-";
+
         [Inject]
         protected ICommandDispatcher Commands { get; set; }
 
@@ -111,17 +115,35 @@ namespace Money.Components
             Log.Debug($"Expense: Amount: {Amount}, Category: {CategoryKey}, When: {When}.");
 
             messages.Clear();
+            bool areMessagesEmpty = messages.Count == 0;
             bool isInvalidAmount = Validator.AddOutcomeAmount(messages, Amount?.Value ?? 0);
-            if (messages.Count == 0 && isInvalidAmount)
+            if (areMessagesEmpty && isInvalidAmount)
+            {
+                Log.Debug("Focus expense-amount");
                 await FocusElementAsync("expense-amount");
+            }
 
+            areMessagesEmpty = messages.Count == 0;
             bool isInvalidDescription = Validator.AddOutcomeDescription(messages, Description);
-            if (messages.Count == 0 && isInvalidDescription)
+            if (areMessagesEmpty && isInvalidDescription)
+            {
+                Log.Debug("Focus expense-description");
                 await FocusElementAsync("expense-description");
+            }
 
+            areMessagesEmpty = messages.Count == 0;
             bool isInvalidCategory = Validator.AddOutcomeCategoryKey(messages, CategoryKey);
-            if (messages.Count == 0 && isInvalidCategory)
+            if (areMessagesEmpty && isInvalidCategory)
+            {
+                Log.Debug("Focus expense-category-first");
                 await FocusElementAsync("expense-category-first");
+            }
+
+            if (messages.Count == 0)
+            {
+                Log.Debug("Focus fallback expense-amount");
+                await FocusElementAsync("expense-amount");
+            }
 
             //Validator.AddOutcomeCurrency(messages, Amount?.Currency);
 
@@ -130,7 +152,7 @@ namespace Money.Components
         }
 
         private Task FocusElementAsync(string id) 
-            => Interop.FocusElementByIdAsync(id);
+            => Interop.FocusElementByIdAsync(IdPrefix + id);
 
         private async void Execute()
         {
@@ -161,6 +183,8 @@ namespace Money.Components
 
             AreTemplatesOpened = false;
             StateHasChanged();
+
+            _ = FocusOnShowAsync();
         }
 
         public void Show(Price amount, string description, IKey categoryKey, bool isFixed)
@@ -170,6 +194,13 @@ namespace Money.Components
             IsFixed = isFixed;
 
             Show(categoryKey);
+        }
+
+        private async Task FocusOnShowAsync()
+        {
+            Log.Debug("Delay 500");
+            await Task.Delay(500);
+            await Validate(new List<string>());
         }
 
         public override void Show()

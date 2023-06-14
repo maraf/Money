@@ -102,6 +102,7 @@ namespace Money.Services
             log.Debug("Got ExpenseTemplateCreated");
 
             models.Add(new ExpenseTemplateModel(payload.AggregateKey, payload.Amount, payload.Description, payload.CategoryKey, payload.IsFixed));
+            models.Sort((a, b) => StringComparer.InvariantCultureIgnoreCase.Compare(a.Description, b.Description));
             await localStorage.SaveAsync(models);
         }
 

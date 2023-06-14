@@ -77,11 +77,14 @@ namespace Money.Components
         protected void OnValueChanged(ChangeEventArgs e)
         {
             string rawValue = e.Value?.ToString();
+            Price priceValue = null;
             if (Decimal.TryParse(rawValue, out var value))
             {
                 Amount = value;
-                ValueChanged?.Invoke(Value = new Price(value, Currency));
+                priceValue = new Price(value, Currency);
             }
+
+            ValueChanged?.Invoke(Value = priceValue);
         }
 
         protected void OnCurrencyChanged(CurrencyModel currency)

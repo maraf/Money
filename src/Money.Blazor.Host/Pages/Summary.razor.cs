@@ -191,8 +191,8 @@ namespace Money.Pages
             return percentage.ToString("0.##", CultureInfo.InvariantCulture);
         }
 
-        protected string FormatPrice(Price price)
-            => formatter.Format(price, CurrencyFormatter.FormatZero.Empty);
+        protected string FormatPrice(Price price, CurrencyFormatter.FormatZero formatZero = CurrencyFormatter.FormatZero.Empty)
+            => formatter.Format(price, formatZero);
 
         public void Dispose()
             => UnBindEvents();

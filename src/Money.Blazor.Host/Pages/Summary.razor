@@ -26,14 +26,14 @@
         </div>
     }
 
-    @if (ExpenseTotal != null && ExpenseTotal.Value == 0)
+    @if (ExpenseTotal != null && ExpenseTotal.Value == 0 && (IncomeTotal == null || IncomeTotal.Value == 0))
     {
         <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
     }
     else if (Categories != null)
     {
         <div class="graph">
-            @if (ExpenseTotal != null)
+            @if (ExpenseTotal != null || IncomeTotal != null)
             {
                 <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
                     <div class="card-body">
@@ -52,7 +52,7 @@
                                 }
 
                                 <span class="text-danger">
-                                    @FormatPrice(ExpenseTotal)
+                                    @FormatPrice(ExpenseTotal, CurrencyFormatter.FormatZero.Zero)
                                 </span>
                             </div>
                         </div>

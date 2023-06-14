@@ -117,14 +117,17 @@ namespace Money.Pages
 
         protected async Task<PagingLoadStatus> LoadDataAsync()
         {
-            await Interop.ScrollToTopAsync();
+            using (Loading.Start())
+            {
+                await Interop.ScrollToTopAsync();
 
-            List<OutcomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(PagingContext.CurrentPageIndex));
-            Items = models;
-            if (models.Count == 0) 
-                return PagingLoadStatus.EmptyPage;
+                List<OutcomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(PagingContext.CurrentPageIndex));
+                Items = models;
+                if (models.Count == 0)
+                    return PagingLoadStatus.EmptyPage;
 
-            return Items.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
+                return Items.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
+            }
         }
 
         protected virtual IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)

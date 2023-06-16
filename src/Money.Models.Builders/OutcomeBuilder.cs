@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Money.Models.Builders
 {
@@ -22,7 +23,9 @@ namespace Money.Models.Builders
         IEventHandler<OutcomeWhenChanged>,
         IEventHandler<OutcomeDeleted>,
         IQueryHandler<ListMonthWithOutcome, List<MonthModel>>,
+        IQueryHandler<ListMonthWithExpenseOrIncome, List<MonthModel>>,
         IQueryHandler<ListYearWithOutcome, List<YearModel>>,
+        IQueryHandler<ListYearWithExpenseOrIncome, List<YearModel>>,
         IQueryHandler<ListMonthCategoryWithOutcome, List<CategoryWithAmountModel>>,
         IQueryHandler<ListYearCategoryWithOutcome, List<CategoryWithAmountModel>>,
         IQueryHandler<GetTotalMonthOutcome, Price>,
@@ -67,12 +70,72 @@ namespace Money.Models.Builders
             }
         }
 
+        public async Task<List<MonthModel>> HandleAsync(ListMonthWithExpenseOrIncome query)
+        {
+            var expenses = await HandleAsync(new ListMonthWithOutcome() { UserKey = query.UserKey });
+            var incomes = await GetListMonthWithIncomeAsync(query.UserKey);
+            var union = expenses
+                .Union(incomes)
+                .OrderByDescending(o => o.Year)
+                .ThenByDescending(o => o.Month)
+                .ToList();
+
+            return union;
+        }
+
+        private async Task<List<MonthModel>> GetListMonthWithIncomeAsync(IKey userKey)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                var entities = await db.Incomes
+                    .WhereUserKey(userKey)
+                    .Select(o => new { Year = o.When.Year, Month = o.When.Month })
+                    .Distinct()
+                    .OrderByDescending(o => o.Year)
+                    .ThenByDescending(o => o.Month)
+                    .ToListAsync();
+
+                return entities
+                    .Select(o => new MonthModel(o.Year, o.Month))
+                    .ToList();
+            }
+        }
+
         public async Task<List<YearModel>> HandleAsync(ListYearWithOutcome query)
         {
             using (ReadModelContext db = dbFactory.Create())
             {
                 var entities = await db.Outcomes
                     .WhereUserKey(query.UserKey)
+                    .Select(o => o.When.Year)
+                    .Distinct()
+                    .OrderByDescending(o => o)
+                    .ToListAsync();
+
+                return entities
+                    .Select(o => new YearModel(o))
+                    .ToList();
+            }
+        }
+
+        public async Task<List<YearModel>> HandleAsync(ListYearWithExpenseOrIncome query)
+        {
+            var expenses = await HandleAsync(new ListYearWithOutcome() { UserKey = query.UserKey });
+            var incomes = await GetListYearWithIncomeAsync(query.UserKey);
+            var union = expenses
+                .Union(incomes)
+                .OrderByDescending(o => o.Year)
+                .ToList();
+
+            return union;
+        }
+
+        private async Task<List<YearModel>> GetListYearWithIncomeAsync(IKey userKey)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                var entities = await db.Incomes
+                    .WhereUserKey(userKey)
                     .Select(o => o.When.Year)
                     .Distinct()
                     .OrderByDescending(o => o)

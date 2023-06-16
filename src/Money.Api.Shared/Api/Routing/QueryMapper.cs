@@ -27,6 +27,7 @@ namespace Money.Api.Routing
             Add<ListMonthCategoryWithOutcome>("month-categories-with-outcome");
             Add<ListMonthOutcomeFromCategory>("month-outcome-from-category");
             Add<ListMonthWithOutcome>("months-with-outcome");
+            Add<ListMonthWithExpenseOrIncome>("months-with-expense-or-income");
 
             Add<ListAllExpenseTemplate>("expense-templates");
 
@@ -37,6 +38,7 @@ namespace Money.Api.Routing
             Add<ListYearCategoryWithOutcome>("year-categories-with-outcome");
             Add<ListYearOutcomeFromCategory>("year-outcome-from-category");
             Add<ListYearWithOutcome>("years-with-outcome");
+            Add<ListYearWithExpenseOrIncome>("years-with-expense-or-income");
 
             Add<ListMonthOutcomesForCategory>("month-outcomes-for-category");
             Add<ListYearOutcomesForCategory>("year-outcomes-for-category");

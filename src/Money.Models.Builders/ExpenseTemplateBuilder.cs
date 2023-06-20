@@ -3,6 +3,7 @@ using Money.Events;
 using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Activators;
+using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries.Handlers;
@@ -16,6 +17,10 @@ using System.Threading.Tasks;
 namespace Money.Models.Builders
 {
     public class ExpenseTemplateBuilder : IEventHandler<ExpenseTemplateCreated>,
+        IEventHandler<ExpenseTemplateAmountChanged>,
+        IEventHandler<ExpenseTemplateDescriptionChanged>,
+        IEventHandler<ExpenseTemplateCategoryChanged>,
+        IEventHandler<ExpenseTemplateFixedChanged>,
         IEventHandler<ExpenseTemplateDeleted>,
         IQueryHandler<ListAllExpenseTemplate, List<ExpenseTemplateModel>>
     {
@@ -27,6 +32,21 @@ namespace Money.Models.Builders
             this.dbFactory = dbFactory;
         }
 
+        private Task UpdateAsync(IEvent payload, Action<ExpenseTemplateEntity> handler) => UpdateAsync(payload, (db, entity) => handler(entity));
+
+        private async Task UpdateAsync(IEvent payload, Action<ReadModelContext, ExpenseTemplateEntity> handler)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                var entity = await db.ExpenseTemplates.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
+                if (entity != null)
+                {
+                    handler(db, entity);
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
         public async Task HandleAsync(ExpenseTemplateCreated payload)
         {
             using (ReadModelContext db = dbFactory.Create())
@@ -36,18 +56,33 @@ namespace Money.Models.Builders
             }
         }
 
-        public async Task HandleAsync(ExpenseTemplateDeleted payload)
+        public Task HandleAsync(ExpenseTemplateAmountChanged payload) => UpdateAsync(payload, e =>
         {
-            using (ReadModelContext db = dbFactory.Create())
+            if (payload.NewValue != null)
             {
-                var entity = await db.ExpenseTemplates.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
-                if (entity != null)
-                {
-                    db.ExpenseTemplates.Remove(entity);
-                    await db.SaveChangesAsync();
-                }
+                e.Amount = payload.NewValue.Value;
+                e.Currency = payload.NewValue.Currency;
             }
-        }
+            else
+            {
+                e.Amount = null;
+                e.Currency = null;
+            }
+        });
+
+        public Task HandleAsync(ExpenseTemplateDescriptionChanged payload) => UpdateAsync(payload, e => e.Description = payload.Description);
+
+        public Task HandleAsync(ExpenseTemplateCategoryChanged payload) => UpdateAsync(payload, e =>
+        {
+            if (payload.CategoryKey.IsEmpty)
+                e.CategoryId = null;
+            else
+                e.CategoryId = payload.CategoryKey.AsGuidKey().Guid;
+        });
+
+        public Task HandleAsync(ExpenseTemplateFixedChanged payload) => UpdateAsync(payload, e => e.IsFixed = payload.IsFixed);
+
+        public Task HandleAsync(ExpenseTemplateDeleted payload) => UpdateAsync(payload, (db, e) => db.ExpenseTemplates.Remove(e));
 
         public async Task<List<ExpenseTemplateModel>> HandleAsync(ListAllExpenseTemplate query)
         {

@@ -18,6 +18,10 @@ namespace Money
     /// </summary>
     public class ExpenseTemplate : AggregateRoot,
         IEventHandler<ExpenseTemplateCreated>,
+        IEventHandler<ExpenseTemplateAmountChanged>,
+        IEventHandler<ExpenseTemplateDescriptionChanged>,
+        IEventHandler<ExpenseTemplateCategoryChanged>,
+        IEventHandler<ExpenseTemplateFixedChanged>,
         IEventHandler<ExpenseTemplateDeleted>
     {
         public bool IsDeleted { get; private set; }
@@ -93,6 +97,55 @@ namespace Money
         Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload) => UpdateState(() =>
         {
             IsDeleted = true;
+        });
+
+        public void ChangeAmount(Price amount)
+        {
+            EnsureNotDeleted();
+            Publish(new ExpenseTemplateAmountChanged(Amount, amount));
+        }
+
+        Task IEventHandler<ExpenseTemplateAmountChanged>.HandleAsync(ExpenseTemplateAmountChanged payload) => UpdateState(() =>
+        {
+            Amount = payload.NewValue;
+        });
+
+        public void ChangeDescription(string description)
+        {
+            EnsureNotDeleted();
+            Publish(new ExpenseTemplateDescriptionChanged(description));
+        }
+
+        Task IEventHandler<ExpenseTemplateDescriptionChanged>.HandleAsync(ExpenseTemplateDescriptionChanged payload) => UpdateState(() =>
+        {
+            Description = payload.Description;
+        });
+
+        public void ChangeCategory(IKey categoryKey)
+        {
+            EnsureNotDeleted();
+            Ensure.Condition.NotEmptyKey(categoryKey);
+            Publish(new ExpenseTemplateCategoryChanged(categoryKey));
+        }
+
+        Task IEventHandler<ExpenseTemplateCategoryChanged>.HandleAsync(ExpenseTemplateCategoryChanged payload) => UpdateState(() =>
+        {
+            CategoryKey = payload.CategoryKey;
+        });
+
+        public void ChangeFixed(bool isFixed)
+        {
+            EnsureNotDeleted();
+            if (isFixed == IsFixed)
+                throw new ExpenseTemplateAlreadyFixedException();
+
+            Publish(new ExpenseTemplateFixedChanged(isFixed));
+            throw new NotImplementedException();
+        }
+
+        Task IEventHandler<ExpenseTemplateFixedChanged>.HandleAsync(ExpenseTemplateFixedChanged payload) => UpdateState(() =>
+        {
+            IsFixed = payload.IsFixed;
         });
     }
 }

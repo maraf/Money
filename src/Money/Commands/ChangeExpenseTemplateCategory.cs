@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace Money.Commands
 {
     /// <summary>
-    /// Changes a <see cref="When"/> of the expense template with <see cref="ExpenseTemplateKey"/>.
+    /// Changes a category of the expense template with <see cref="ExpenseTemplateKey"/>.
     /// </summary>
-    public class ChangeExpenseTemplateWhen : Command
+    public class ChangeExpenseTemplateCategory : Command, IExpenseTemplateCommand
     {
         /// <summary>
         /// Gets a key of the expense template to modify.
@@ -20,21 +20,21 @@ namespace Money.Commands
         public IKey ExpenseTemplateKey { get; private set; }
 
         /// <summary>
-        /// Gets a date when the expense template occured.
+        /// Gets a category key.
         /// </summary>
-        public DateTime When { get; private set; }
+        public IKey CategoryKey { get; private set; }
 
         /// <summary>
         /// Changes a <paramref name="when"/> of the expense template with <paramref name="expenseTemplateKey"/>.
         /// </summary>
         /// <param name="expenseTemplateKey">A key of the expense template to modify.</param>
-        /// <param name="when">A date when the expense template occured.</param>
-        public ChangeExpenseTemplateWhen(IKey expenseTemplateKey, DateTime when)
+        /// <param name="categoryKey">A category key.</param>
+        public ChangeExpenseTemplateCategory(IKey expenseTemplateKey, IKey categoryKey)
         {
             Ensure.Condition.NotEmptyKey(expenseTemplateKey);
-            Ensure.NotNull(when, "when");
+            Ensure.Condition.NotEmptyKey(categoryKey);
             ExpenseTemplateKey = expenseTemplateKey;
-            When = when;
+            CategoryKey = categoryKey;
         }
     }
 }

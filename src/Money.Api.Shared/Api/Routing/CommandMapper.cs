@@ -20,7 +20,7 @@ namespace Money.Api.Routing
             Add<CreateExpenseTemplate>("expense-template-create");
             Add<ChangeExpenseTemplateAmount>("expense-template-change-amount");
             Add<ChangeExpenseTemplateDescription>("expense-template-change-description");
-            Add<ChangeExpenseTemplateWhen>("expense-template-change-when");
+            Add<ChangeExpenseTemplateCategory>("expense-template-change-category");
             Add<ChangeExpenseTemplateFixed>("expense-template-change-fixed");
             Add<DeleteExpenseTemplate>("expense-template-delete");
 

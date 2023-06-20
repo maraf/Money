@@ -13,7 +13,7 @@ namespace Money.Commands
     /// <summary>
     /// Deletes an expense template.
     /// </summary>
-    public class DeleteExpenseTemplate : Command
+    public class DeleteExpenseTemplate : Command, IExpenseTemplateCommand
     {
         /// <summary>
         /// Gets a key of the expense template to delete.

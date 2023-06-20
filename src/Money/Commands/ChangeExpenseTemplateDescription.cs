@@ -12,7 +12,7 @@ namespace Money.Commands
     /// <summary>
     /// Changes a <see cref="Description"/> of the expense template with <see cref="ExpenseTemplateKey"/>.
     /// </summary>
-    public class ChangeExpenseTemplateDescription : Command
+    public class ChangeExpenseTemplateDescription : Command, IExpenseTemplateCommand
     {
         /// <summary>
         /// Gets a key of the expense template to modify.

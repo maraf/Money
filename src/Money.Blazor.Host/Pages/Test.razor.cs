@@ -18,7 +18,13 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class Test : System.IDisposable, IEventHandler<ExpenseTemplateCreated>, IEventHandler<ExpenseTemplateDeleted>
+    public partial class Test : System.IDisposable, 
+        IEventHandler<ExpenseTemplateCreated>,
+        IEventHandler<ExpenseTemplateAmountChanged>,
+        IEventHandler<ExpenseTemplateDescriptionChanged>,
+        IEventHandler<ExpenseTemplateCategoryChanged>,
+        IEventHandler<ExpenseTemplateFixedChanged>,
+        IEventHandler<ExpenseTemplateDeleted>
     {
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
@@ -37,12 +43,20 @@ namespace Money.Pages
             await LoadAsync();
 
             EventHandlers.Add<ExpenseTemplateCreated>(this);
+            EventHandlers.Add<ExpenseTemplateAmountChanged>(this);
+            EventHandlers.Add<ExpenseTemplateDescriptionChanged>(this);
+            EventHandlers.Add<ExpenseTemplateCategoryChanged>(this);
+            EventHandlers.Add<ExpenseTemplateFixedChanged>(this);
             EventHandlers.Add<ExpenseTemplateDeleted>(this);
         }
 
         public void Dispose()
         {
             EventHandlers.Remove<ExpenseTemplateCreated>(this);
+            EventHandlers.Remove<ExpenseTemplateAmountChanged>(this);
+            EventHandlers.Remove<ExpenseTemplateDescriptionChanged>(this);
+            EventHandlers.Remove<ExpenseTemplateCategoryChanged>(this);
+            EventHandlers.Remove<ExpenseTemplateFixedChanged>(this);
             EventHandlers.Remove<ExpenseTemplateDeleted>(this);
         }
 
@@ -58,12 +72,42 @@ namespace Money.Pages
 
         public async Task HandleAsync(ExpenseTemplateCreated payload)
         {
+            Console.WriteLine("ExpenseTemplateCreated");
             await LoadAsync();
             StateHasChanged();
         }
 
         public async Task HandleAsync(ExpenseTemplateDeleted payload)
         {
+            Console.WriteLine("ExpenseTemplateDeleted");
+            await LoadAsync();
+            StateHasChanged();
+        }
+
+        public async Task HandleAsync(ExpenseTemplateAmountChanged payload)
+        {
+            Console.WriteLine("ExpenseTemplateAmountChanged");
+            await LoadAsync();
+            StateHasChanged();
+        }
+
+        public async Task HandleAsync(ExpenseTemplateDescriptionChanged payload)
+        {
+            Console.WriteLine("ExpenseTemplateDescriptionChanged");
+            await LoadAsync();
+            StateHasChanged();
+        }
+
+        public async Task HandleAsync(ExpenseTemplateCategoryChanged payload)
+        {
+            Console.WriteLine("ExpenseTemplateCategoryChanged");
+            await LoadAsync();
+            StateHasChanged();
+        }
+
+        public async Task HandleAsync(ExpenseTemplateFixedChanged payload)
+        {
+            Console.WriteLine("ExpenseTemplateFixedChanged");
             await LoadAsync();
             StateHasChanged();
         }

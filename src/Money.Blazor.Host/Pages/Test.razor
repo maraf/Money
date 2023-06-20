@@ -26,6 +26,14 @@
                         @expenseTemplate.CategoryKey
                     </td>
                     <td>
+                        @expenseTemplate.IsFixed
+                    </td>
+                    <td>
+                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeAmount(expenseTemplate)">Change amount</button>
+                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeDescription(expenseTemplate)">Change description</button>
+                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, false)">Change category</button>
+                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, true)">Clear category</button>
+                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeFixed(expenseTemplate)">Change fixed</button>
                         <button class="btn btn-small btn-danger" @onclick="async () => await Commands.HandleAsync(new DeleteExpenseTemplate(expenseTemplate.Key))">Delete</button>
                     </td>
                 </tr>
@@ -35,3 +43,29 @@
         <button class="btn btn-primary" @onclick="CreateAsync">Create expense template</button>
     }
 </div>
+
+@code
+{
+    private async Task ChangeAmount(ExpenseTemplateModel expenseTemplate)
+    {
+        await Commands.HandleAsync(new ChangeExpenseTemplateAmount(expenseTemplate.Key, new Price(666, "CZK")));
+    }
+
+    private async Task ChangeDescription(ExpenseTemplateModel expenseTemplate)
+    {
+        await Commands.HandleAsync(new ChangeExpenseTemplateDescription(expenseTemplate.Key, "Hello, World!"));
+    }
+
+    private async Task ChangeCategory(ExpenseTemplateModel expenseTemplate, bool clear)
+    {
+        if (clear)
+            await Commands.HandleAsync(new ChangeExpenseTemplateCategory(expenseTemplate.Key, GuidKey.Empty("Category")));
+        else
+            await Commands.HandleAsync(new ChangeExpenseTemplateCategory(expenseTemplate.Key, ExpenseTemplates.First().CategoryKey));
+    }
+
+    private async Task ChangeFixed(ExpenseTemplateModel expenseTemplate)
+    {
+        await Commands.HandleAsync(new ChangeExpenseTemplateFixed(expenseTemplate.Key, !expenseTemplate.IsFixed));
+    }
+}

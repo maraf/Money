@@ -123,8 +123,8 @@ namespace Money
 
         public void ChangeCategory(IKey categoryKey)
         {
+            Ensure.NotNull(categoryKey, "categoryKey");
             EnsureNotDeleted();
-            Ensure.Condition.NotEmptyKey(categoryKey);
             Publish(new ExpenseTemplateCategoryChanged(categoryKey));
         }
 
@@ -140,7 +140,6 @@ namespace Money
                 throw new ExpenseTemplateAlreadyFixedException();
 
             Publish(new ExpenseTemplateFixedChanged(isFixed));
-            throw new NotImplementedException();
         }
 
         Task IEventHandler<ExpenseTemplateFixedChanged>.HandleAsync(ExpenseTemplateFixedChanged payload) => UpdateState(() =>

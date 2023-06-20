@@ -32,7 +32,7 @@ namespace Money.Commands
         public ChangeExpenseTemplateCategory(IKey expenseTemplateKey, IKey categoryKey)
         {
             Ensure.Condition.NotEmptyKey(expenseTemplateKey);
-            Ensure.Condition.NotEmptyKey(categoryKey);
+            Ensure.NotNull(categoryKey, "categoryKey");
             ExpenseTemplateKey = expenseTemplateKey;
             CategoryKey = categoryKey;
         }

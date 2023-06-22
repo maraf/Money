@@ -1,4 +1,5 @@
-﻿using Money.Events;
+﻿using Money.Commands;
+using Money.Events;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -22,6 +23,8 @@ namespace Money
         IEventHandler<ExpenseTemplateDescriptionChanged>,
         IEventHandler<ExpenseTemplateCategoryChanged>,
         IEventHandler<ExpenseTemplateFixedChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceCleared>,
         IEventHandler<ExpenseTemplateDeleted>
     {
         public bool IsDeleted { get; private set; }
@@ -45,6 +48,10 @@ namespace Money
         /// Gets whether the template should create fixed expenses.
         /// </summary>
         public bool IsFixed { get; private set; }
+
+        public RecurrencePeriod? Period { get; set; }
+
+        public int? DayInPeriod { get; set; }
 
         /// <summary>
         /// Creates a new instance.
@@ -145,6 +152,30 @@ namespace Money
         Task IEventHandler<ExpenseTemplateFixedChanged>.HandleAsync(ExpenseTemplateFixedChanged payload) => UpdateState(() =>
         {
             IsFixed = payload.IsFixed;
+        });
+
+        public void SetRecurrence(RecurrencePeriod period, int dayInPeriod)
+        {
+            EnsureNotDeleted();
+            Publish(new ExpenseTemplateRecurrenceChanged(period, dayInPeriod));
+        }
+
+        Task IEventHandler<ExpenseTemplateRecurrenceChanged>.HandleAsync(ExpenseTemplateRecurrenceChanged payload) => UpdateState(() =>
+        {
+            Period = payload.Period;
+            DayInPeriod = payload.DayInPeriod;
+        });
+
+        public void ClearRecurrence()
+        {
+            EnsureNotDeleted();
+            Publish(new ExpenseTemplateRecurrenceCleared());
+        }
+
+        Task IEventHandler<ExpenseTemplateRecurrenceCleared>.HandleAsync(ExpenseTemplateRecurrenceCleared payload) => UpdateState(() =>
+        {
+            Period = null;
+            DayInPeriod = null;
         });
     }
 }

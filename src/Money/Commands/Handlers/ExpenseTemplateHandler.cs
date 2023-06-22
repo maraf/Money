@@ -19,6 +19,8 @@ namespace Money.Commands.Handlers
         ICommandHandler<Envelope<ChangeExpenseTemplateDescription>>,
         ICommandHandler<Envelope<ChangeExpenseTemplateCategory>>,
         ICommandHandler<Envelope<ChangeExpenseTemplateFixed>>,
+        ICommandHandler<Envelope<SetExpenseTemplateRecurrence>>,
+        ICommandHandler<Envelope<ClearExpenseTemplateRecurrence>>,
         ICommandHandler<Envelope<DeleteExpenseTemplate>>
     {
         public ExpenseTemplateHandler(IFactory<IRepository<ExpenseTemplate, IKey>> repositoryFactory)
@@ -45,5 +47,9 @@ namespace Money.Commands.Handlers
         public Task HandleAsync(Envelope<ChangeExpenseTemplateCategory> envelope) => HandleAsync(envelope, (model, command) => model.ChangeCategory(command.CategoryKey));
 
         public Task HandleAsync(Envelope<ChangeExpenseTemplateFixed> envelope) => HandleAsync(envelope, (model, command) => model.ChangeFixed(command.IsFixed));
+
+        public Task HandleAsync(Envelope<SetExpenseTemplateRecurrence> envelope) => HandleAsync(envelope, (model, command) => model.SetRecurrence(command.Period, command.DayInPeriod));
+
+        public Task HandleAsync(Envelope<ClearExpenseTemplateRecurrence> envelope) => HandleAsync(envelope, (model, command) => model.ClearRecurrence());
     }
 }

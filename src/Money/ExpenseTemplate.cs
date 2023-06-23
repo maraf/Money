@@ -1,5 +1,4 @@
-﻿using Money.Commands;
-using Money.Events;
+﻿using Money.Events;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;

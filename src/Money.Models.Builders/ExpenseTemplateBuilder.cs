@@ -22,6 +22,8 @@ namespace Money.Models.Builders
         IEventHandler<ExpenseTemplateCategoryChanged>,
         IEventHandler<ExpenseTemplateFixedChanged>,
         IEventHandler<ExpenseTemplateDeleted>,
+        IEventHandler<ExpenseTemplateRecurrenceChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceCleared>,
         IQueryHandler<ListAllExpenseTemplate, List<ExpenseTemplateModel>>
     {
         private readonly IFactory<ReadModelContext> dbFactory;
@@ -83,6 +85,18 @@ namespace Money.Models.Builders
         public Task HandleAsync(ExpenseTemplateFixedChanged payload) => UpdateAsync(payload, e => e.IsFixed = payload.IsFixed);
 
         public Task HandleAsync(ExpenseTemplateDeleted payload) => UpdateAsync(payload, (db, e) => db.ExpenseTemplates.Remove(e));
+
+        public Task HandleAsync(ExpenseTemplateRecurrenceChanged payload) => UpdateAsync(payload, e =>
+        {
+            e.Period = payload.Period;
+            e.DayInPeriod = payload.DayInPeriod;
+        });
+
+        public Task HandleAsync(ExpenseTemplateRecurrenceCleared payload) => UpdateAsync(payload, e =>
+        {
+            e.Period = null;
+            e.DayInPeriod = null;
+        });
 
         public async Task<List<ExpenseTemplateModel>> HandleAsync(ListAllExpenseTemplate query)
         {

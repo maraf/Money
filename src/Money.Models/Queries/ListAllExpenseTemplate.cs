@@ -32,5 +32,11 @@ namespace Money.Models.Queries
         /// </summary>
         public static ListAllExpenseTemplate Version2() 
             => new ListAllExpenseTemplate(2);
+
+        /// <summary>
+        /// Creates a new instance which returns objects in version 2.
+        /// </summary>
+        public static ListAllExpenseTemplate Version3() 
+            => new ListAllExpenseTemplate(3);
     }
 }

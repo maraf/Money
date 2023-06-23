@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,8 @@ namespace Money.Models
         public string Currency { get; set; }
         public Guid? CategoryId { get; set; }
         public bool IsFixed { get; set; }
+        public RecurrencePeriod? Period { get; set; }
+        public int? DayInPeriod { get; set; }
 
         public ExpenseTemplateEntity()
         { }
@@ -40,9 +43,13 @@ namespace Money.Models
             IsFixed = payload.IsFixed;
         }
 
-        public ExpenseTemplateModel ToModel(int version) => version == 1
-            ? new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey())
-            : new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey(), IsFixed);
+        public ExpenseTemplateModel ToModel(int version) => version switch
+        {
+            1 => new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey()),
+            2 => new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey(), IsFixed),
+            3 => new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey(), IsFixed, Period, DayInPeriod),
+            _ => throw new NotSupportedException($"Version '{version}' is not supported when mapping ExpenseTemplateEntity to ExpenseTemplateModel")
+        };
 
         private GuidKey GetKey()
         {

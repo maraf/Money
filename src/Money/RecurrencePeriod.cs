@@ -9,5 +9,5 @@ namespace Money;
 
 public enum RecurrencePeriod
 {
-    Monthly
+    Monthly = 1
 }

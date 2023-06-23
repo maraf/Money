@@ -53,6 +53,18 @@ namespace Money.Models
         public bool IsFixed { get; set; }
 
         /// <summary>
+        /// Gets period of recurrence of the template.
+        /// </summary>
+        [CompositeProperty(6, Version = 3)]
+        public RecurrencePeriod? Period { get; set; }
+
+        /// <summary>
+        /// Gets day in period of recurrence of the template.
+        /// </summary>
+        [CompositeProperty(7, Version = 3)]
+        public int? DayInPeriod { get; set; }
+
+        /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="key">A key of the expense template.</param>
@@ -87,8 +99,29 @@ namespace Money.Models
             Version = 2;
         }
 
-        public ExpenseTemplateModel Clone() => Version == 1
-            ? new ExpenseTemplateModel(Key, Amount, Description, CategoryKey)
-            : new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed);
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="key">A key of the expense template.</param>
+        /// <param name="amount">An amount of the expense template.</param>
+        /// <param name="description">A description of the expense template.</param> 
+        /// <param name="categoryKey">A category of the expense template.</param>
+        /// <param name="isFixed">Whether the template should create fixed expenses.</param>
+        [CompositeConstructor(Version = 2)]
+        public ExpenseTemplateModel(IKey key, Price amount, string description, IKey categoryKey, bool isFixed, RecurrencePeriod? period, int? dayInPeriod)
+            : this(key, amount, description, categoryKey, isFixed)
+        {
+            Period = period;
+            DayInPeriod = dayInPeriod;
+            Version = 3;
+        }
+
+        public ExpenseTemplateModel Clone() => Version switch
+        {
+            1 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey),
+            2 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed),
+            3 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed, Period, DayInPeriod),
+            _ => throw new NotSupportedException($"Version '{Version}' is not supported when cloning ExpenseTemplateModel")
+        };
     }
 }

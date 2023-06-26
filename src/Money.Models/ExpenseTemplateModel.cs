@@ -23,6 +23,7 @@ namespace Money.Models
         /// </summary>
         [CompositeProperty(1)]
         [CompositeProperty(1, Version = 2)]
+        [CompositeProperty(1, Version = 3)]
         public IKey Key { get; private set; }
 
         /// <summary>
@@ -30,6 +31,7 @@ namespace Money.Models
         /// </summary>
         [CompositeProperty(2)]
         [CompositeProperty(2, Version = 2)]
+        [CompositeProperty(2, Version = 3)]
         public Price Amount { get; set; }
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace Money.Models
         /// </summary>
         [CompositeProperty(3)]
         [CompositeProperty(3, Version = 2)]
+        [CompositeProperty(3, Version = 3)]
         public string Description { get; set; }
 
         /// <summary>
@@ -44,12 +47,14 @@ namespace Money.Models
         /// </summary>
         [CompositeProperty(4)]
         [CompositeProperty(4, Version = 2)]
+        [CompositeProperty(4, Version = 3)]
         public IKey CategoryKey { get; set; }
 
         /// <summary>
         /// Gets whether the template should create fixed expenses.
         /// </summary>
         [CompositeProperty(5, Version = 2)]
+        [CompositeProperty(5, Version = 3)]
         public bool IsFixed { get; set; }
 
         /// <summary>
@@ -107,7 +112,7 @@ namespace Money.Models
         /// <param name="description">A description of the expense template.</param> 
         /// <param name="categoryKey">A category of the expense template.</param>
         /// <param name="isFixed">Whether the template should create fixed expenses.</param>
-        [CompositeConstructor(Version = 2)]
+        [CompositeConstructor(Version = 3)]
         public ExpenseTemplateModel(IKey key, Price amount, string description, IKey categoryKey, bool isFixed, RecurrencePeriod? period, int? dayInPeriod)
             : this(key, amount, description, categoryKey, isFixed)
         {

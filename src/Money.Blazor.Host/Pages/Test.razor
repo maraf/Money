@@ -9,7 +9,7 @@
     }
     else
     {
-        <table>
+        <table class="table">
             @foreach (var expenseTemplate in ExpenseTemplates)
             {
                 <tr>
@@ -29,12 +29,16 @@
                         @expenseTemplate.IsFixed
                     </td>
                     <td>
-                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeAmount(expenseTemplate)">Change amount</button>
-                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeDescription(expenseTemplate)">Change description</button>
-                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, false)">Change category</button>
-                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, true)">Clear category</button>
-                        <button class="btn btn-small btn-primary" @onclick="async () => await ChangeFixed(expenseTemplate)">Change fixed</button>
-                        <button class="btn btn-small btn-danger" @onclick="async () => await Commands.HandleAsync(new DeleteExpenseTemplate(expenseTemplate.Key))">Delete</button>
+                        @(expenseTemplate.Period?.ToString() ?? "null") @expenseTemplate.DayInPeriod
+                    </td>
+                    <td>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeAmount(expenseTemplate)">Amount</button>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeDescription(expenseTemplate)">Description</button>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, false)">Category</button>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, true)">Clear category</button>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeFixed(expenseTemplate)">Fixed</button>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await SetRecurrence(expenseTemplate)">Recurrence</button>
+                        <button class="btn btn-sm m-1 btn-danger" @onclick="async () => await Commands.HandleAsync(new DeleteExpenseTemplate(expenseTemplate.Key))">Delete</button>
                     </td>
                 </tr>
             }
@@ -67,5 +71,10 @@
     private async Task ChangeFixed(ExpenseTemplateModel expenseTemplate)
     {
         await Commands.HandleAsync(new ChangeExpenseTemplateFixed(expenseTemplate.Key, !expenseTemplate.IsFixed));
+    }
+
+    private async Task SetRecurrence(ExpenseTemplateModel expenseTemplate)
+    {
+        await Commands.HandleAsync(new SetExpenseTemplateRecurrence(expenseTemplate.Key, RecurrencePeriod.Monthly, 5));
     }
 }

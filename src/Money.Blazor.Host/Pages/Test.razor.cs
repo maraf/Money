@@ -62,7 +62,7 @@ namespace Money.Pages
 
         private async Task LoadAsync()
         {
-            ExpenseTemplates = await Queries.QueryAsync(ListAllExpenseTemplate.Version2());
+            ExpenseTemplates = await Queries.QueryAsync(ListAllExpenseTemplate.Version3());
         }
 
         protected async Task CreateAsync()

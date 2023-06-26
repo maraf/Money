@@ -113,7 +113,7 @@ namespace Neptuo.Formatters.Metadata
             if (typeAttribute != null)
                 typeName = typeAttribute.Name;
 
-            Dictionary<int, ConstructorInfo> constructors = GetConstructors(type);
+            Dictionary<int, ConstructorInfo> constructors = GetConstructors(type, log);
             log.Info("Constructors '{0}'.", constructors.Count);
 
             IEnumerable<PropertyDescriptor> properties = GetProperties(type);
@@ -122,6 +122,8 @@ namespace Neptuo.Formatters.Metadata
             List<CompositeVersion> versions = new List<CompositeVersion>();
             foreach (KeyValuePair<int, ConstructorInfo> constructor in constructors)
             {
+                log.Debug("Version '{0}' constructor '{1}'.", constructor.Key, constructor.Value);
+
                 IEnumerable<PropertyDescriptor> versionProperties;
 
                 // Create version from annotated properties.
@@ -220,7 +222,7 @@ namespace Neptuo.Formatters.Metadata
             );
         }
 
-        private Dictionary<int, ConstructorInfo> GetConstructors(Type type)
+        private Dictionary<int, ConstructorInfo> GetConstructors(Type type, ILog log)
         {
             IEnumerable<ConstructorInfo> constructorInfos = bindingFlags == null 
                 ? type.GetConstructors() 
@@ -231,15 +233,20 @@ namespace Neptuo.Formatters.Metadata
             Dictionary<int, ConstructorInfo> constructors = new Dictionary<int, ConstructorInfo>();
             foreach (ConstructorInfo constructorInfo in constructorInfos)
             {
-                CompositeConstructorAttribute constructorAttribute = constructorInfo.GetCustomAttribute<CompositeConstructorAttribute>();
-                if (constructorAttribute == null)
+                var constructorAttributes = constructorInfo.GetCustomAttributes<CompositeConstructorAttribute>().ToArray();
+                log.Debug("Found '{0}' composite constructors on constructor '{1}'.", constructorAttributes.Count(), constructorInfo);
+
+                if (constructorAttributes.Length == 0)
                 {
                     defaultConstructor = constructorInfo;
                 }
                 else
                 {
-                    constructors[constructorAttribute.Version] = constructorInfo;
-                    defaultConstructor = null;
+                    foreach (var constructorAttribute in constructorAttributes)
+                    {
+                        constructors[constructorAttribute.Version] = constructorInfo;
+                        defaultConstructor = null;
+                    }
                 }
             }
 

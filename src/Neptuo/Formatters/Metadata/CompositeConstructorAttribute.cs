@@ -9,7 +9,7 @@ namespace Neptuo.Formatters.Metadata
     /// <summary>
     /// Defines constructor that is used to reconstruct instance.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Constructor)]
+    [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = true)]
     public class CompositeConstructorAttribute : Attribute
     {
         /// <summary>

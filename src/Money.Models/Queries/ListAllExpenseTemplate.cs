@@ -16,6 +16,7 @@ namespace Money.Models.Queries
     {
         [CompositeVersion]
         [CompositeProperty(1, Version = 2)]
+        [CompositeProperty(1, Version = 3)]
         public int Version { get; private set; }
 
         [CompositeConstructor(Version = 1)]
@@ -24,7 +25,8 @@ namespace Money.Models.Queries
         { }
 
         [CompositeConstructor(Version = 2)]
-        public ListAllExpenseTemplate(int version = 2) 
+        [CompositeConstructor(Version = 3)]
+        public ListAllExpenseTemplate(int version) 
             => Version = version;
 
         /// <summary>

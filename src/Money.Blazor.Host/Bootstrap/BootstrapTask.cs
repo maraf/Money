@@ -145,7 +145,8 @@ namespace Money.Bootstrap
 
             typeProvider = new ReflectionCompositeTypeProvider(
                 new ReflectionCompositeDelegateFactory(),
-                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+                logFactory
             );
 
             commandFormatter = new CompositeCommandFormatter(typeProvider, compositeStorageFactory);

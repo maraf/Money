@@ -22,6 +22,8 @@ namespace Money.Api.Routing
             Add<ChangeExpenseTemplateDescription>("expense-template-change-description");
             Add<ChangeExpenseTemplateCategory>("expense-template-change-category");
             Add<ChangeExpenseTemplateFixed>("expense-template-change-fixed");
+            Add<SetExpenseTemplateRecurrence>("expense-template-set-recurrence");
+            Add<ClearExpenseTemplateRecurrence>("expense-template-clear-recurrence");
             Add<DeleteExpenseTemplate>("expense-template-delete");
 
             Add<CreateIncome>("income-create");

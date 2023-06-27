@@ -38,6 +38,7 @@
                         <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, true)">Clear category</button>
                         <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeFixed(expenseTemplate)">Fixed</button>
                         <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await SetRecurrence(expenseTemplate)">Recurrence</button>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ClearRecurrence(expenseTemplate)">Clear recurrence</button>
                         <button class="btn btn-sm m-1 btn-danger" @onclick="async () => await Commands.HandleAsync(new DeleteExpenseTemplate(expenseTemplate.Key))">Delete</button>
                     </td>
                 </tr>
@@ -76,5 +77,10 @@
     private async Task SetRecurrence(ExpenseTemplateModel expenseTemplate)
     {
         await Commands.HandleAsync(new SetExpenseTemplateRecurrence(expenseTemplate.Key, RecurrencePeriod.Monthly, 5));
+    }
+
+    private async Task ClearRecurrence(ExpenseTemplateModel expenseTemplate)
+    {
+        await Commands.HandleAsync(new ClearExpenseTemplateRecurrence(expenseTemplate.Key));
     }
 }

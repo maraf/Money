@@ -24,6 +24,8 @@ namespace Money.Pages
         IEventHandler<ExpenseTemplateDescriptionChanged>,
         IEventHandler<ExpenseTemplateCategoryChanged>,
         IEventHandler<ExpenseTemplateFixedChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceCleared>,
         IEventHandler<ExpenseTemplateDeleted>
     {
         [Inject]
@@ -108,6 +110,20 @@ namespace Money.Pages
         public async Task HandleAsync(ExpenseTemplateFixedChanged payload)
         {
             Console.WriteLine("ExpenseTemplateFixedChanged");
+            await LoadAsync();
+            StateHasChanged();
+        }
+
+        public async Task HandleAsync(ExpenseTemplateRecurrenceChanged payload)
+        {
+            Console.WriteLine("ExpenseTemplateRecurrenceChanged");
+            await LoadAsync();
+            StateHasChanged();
+        }
+
+        public async Task HandleAsync(ExpenseTemplateRecurrenceCleared payload)
+        {
+            Console.WriteLine("ExpenseTemplateRecurrenceCleared");
             await LoadAsync();
             StateHasChanged();
         }

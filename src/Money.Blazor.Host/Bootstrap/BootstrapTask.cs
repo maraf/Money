@@ -55,6 +55,7 @@ namespace Money.Bootstrap
             logFilter = PrefixLogFilter.Ignored(new[] {
                 "Root.Json",
                 "Root.CompositeListFormatter",
+                "Root.ReflectionCompositeTypeProvider",
                 "Root.ApiClient",
                 "Root.ApiAuthenticationState"
             });

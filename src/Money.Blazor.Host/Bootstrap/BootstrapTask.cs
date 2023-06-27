@@ -53,7 +53,7 @@ namespace Money.Bootstrap
 
 #if DEBUG
             logFilter = PrefixLogFilter.Ignored(new[] {
-                //"Root.Json",
+                "Root.Json",
                 "Root.CompositeListFormatter",
                 "Root.ReflectionCompositeTypeProvider",
                 "Root.ApiClient",

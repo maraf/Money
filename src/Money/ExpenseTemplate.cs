@@ -51,6 +51,7 @@ namespace Money
         public RecurrencePeriod? Period { get; set; }
 
         public int? DayInPeriod { get; set; }
+        public DateTime? DueDate { get; set; }
 
         /// <summary>
         /// Creates a new instance.
@@ -153,16 +154,23 @@ namespace Money
             IsFixed = payload.IsFixed;
         });
 
-        public void SetRecurrence(RecurrencePeriod period, int dayInPeriod)
+        public void SetMonthlyRecurrence(int dayInPeriod)
         {
             EnsureNotDeleted();
-            Publish(new ExpenseTemplateRecurrenceChanged(period, dayInPeriod));
+            Publish(new ExpenseTemplateRecurrenceChanged(RecurrencePeriod.Monthly, dayInPeriod: dayInPeriod));
+        }
+
+        public void SetSingleRecurrence(DateTime dueDate)
+        {
+            EnsureNotDeleted();
+            Publish(new ExpenseTemplateRecurrenceChanged(RecurrencePeriod.Single, dueDate: dueDate));
         }
 
         Task IEventHandler<ExpenseTemplateRecurrenceChanged>.HandleAsync(ExpenseTemplateRecurrenceChanged payload) => UpdateState(() =>
         {
             Period = payload.Period;
             DayInPeriod = payload.DayInPeriod;
+            DueDate = payload.DueDate;
         });
 
         public void ClearRecurrence()
@@ -175,6 +183,7 @@ namespace Money
         {
             Period = null;
             DayInPeriod = null;
+            DueDate = null;
         });
     }
 }

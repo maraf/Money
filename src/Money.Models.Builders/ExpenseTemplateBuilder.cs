@@ -90,12 +90,14 @@ namespace Money.Models.Builders
         {
             e.Period = payload.Period;
             e.DayInPeriod = payload.DayInPeriod;
+            e.DueDate = payload.DueDate;
         });
 
         public Task HandleAsync(ExpenseTemplateRecurrenceCleared payload) => UpdateAsync(payload, e =>
         {
             e.Period = null;
             e.DayInPeriod = null;
+            e.DueDate = null;
         });
 
         public async Task<List<ExpenseTemplateModel>> HandleAsync(ListAllExpenseTemplate query)

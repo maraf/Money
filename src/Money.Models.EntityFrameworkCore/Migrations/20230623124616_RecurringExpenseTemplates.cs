@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Money.EntityFrameworkCore.Migrations;
+using System;
 
 #nullable disable
 
@@ -17,6 +18,12 @@ namespace Money.Models.Migrations
                 schema: Schema.Name,
                 nullable: true);
 
+            migrationBuilder.AddColumn<DateTime>(
+                name: "DueDate",
+                table: "ExpenseTemplates",
+                schema: Schema.Name,
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "Period",
                 table: "ExpenseTemplates",
@@ -29,6 +36,11 @@ namespace Money.Models.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "DayInPeriod",
+                table: "ExpenseTemplates",
+                schema: Schema.Name);
+
+            migrationBuilder.DropColumn(
+                name: "DueDate",
                 table: "ExpenseTemplates",
                 schema: Schema.Name);
 

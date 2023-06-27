@@ -297,6 +297,7 @@ namespace Neptuo.Formatters
                     string rawDateTime = element.GetString();
                     if (DateTime.TryParse(rawDateTime, out DateTime dateTime))
                     {
+                        log.Debug($"Converted string '{rawDateTime}' to datetime '{dateTime}'.");
                         value = (T)(object)dateTime;
                         return true;
                     }

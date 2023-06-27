@@ -1,4 +1,5 @@
-﻿using Neptuo;
+﻿using Microsoft.VisualBasic;
+using Neptuo;
 using Neptuo.Formatters.Metadata;
 using Neptuo.Models.Keys;
 using System;
@@ -64,10 +65,16 @@ namespace Money.Models
         public RecurrencePeriod? Period { get; set; }
 
         /// <summary>
-        /// Gets day in period of recurrence of the template.
+        /// Gets day in period of recurrence of the template for <see cref="RecurrencePeriod.Monthly"/>.
         /// </summary>
         [CompositeProperty(7, Version = 3)]
         public int? DayInPeriod { get; set; }
+
+        /// <summary>
+        /// Gets due date of the template for <see cref="RecurrencePeriod.Single"/>.
+        /// </summary>
+        [CompositeProperty(8, Version = 3)]
+        public DateTime? DueDate { get; set; }
 
         /// <summary>
         /// Creates a new instance.
@@ -113,11 +120,12 @@ namespace Money.Models
         /// <param name="categoryKey">A category of the expense template.</param>
         /// <param name="isFixed">Whether the template should create fixed expenses.</param>
         [CompositeConstructor(Version = 3)]
-        public ExpenseTemplateModel(IKey key, Price amount, string description, IKey categoryKey, bool isFixed, RecurrencePeriod? period, int? dayInPeriod)
+        public ExpenseTemplateModel(IKey key, Price amount, string description, IKey categoryKey, bool isFixed, RecurrencePeriod? period, int? dayInPeriod, DateTime? dueDate)
             : this(key, amount, description, categoryKey, isFixed)
         {
             Period = period;
             DayInPeriod = dayInPeriod;
+            DueDate = dueDate;
             Version = 3;
         }
 
@@ -125,7 +133,7 @@ namespace Money.Models
         {
             1 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey),
             2 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed),
-            3 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed, Period, DayInPeriod),
+            3 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed, Period, DayInPeriod, DueDate),
             _ => throw new NotSupportedException($"Version '{Version}' is not supported when cloning ExpenseTemplateModel")
         };
     }

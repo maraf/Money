@@ -121,6 +121,9 @@ namespace Money.Models.Migrations
                     b.Property<int?>("DayInPeriod")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 

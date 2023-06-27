@@ -29,7 +29,7 @@
                         @expenseTemplate.IsFixed
                     </td>
                     <td>
-                        @(expenseTemplate.Period?.ToString() ?? "null") @expenseTemplate.DayInPeriod
+                        @(expenseTemplate.Period?.ToString() ?? "null") @expenseTemplate.DayInPeriod @expenseTemplate.DueDate
                     </td>
                     <td>
                         <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeAmount(expenseTemplate)">Amount</button>
@@ -37,7 +37,8 @@
                         <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, false)">Category</button>
                         <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeCategory(expenseTemplate, true)">Clear category</button>
                         <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ChangeFixed(expenseTemplate)">Fixed</button>
-                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await SetRecurrence(expenseTemplate)">Recurrence</button>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await SetRecurrenceMonthly(expenseTemplate)">Recurrence monthly</button>
+                        <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await SetRecurrenceSingle(expenseTemplate)">Recurrence single</button>
                         <button class="btn btn-sm m-1 btn-primary" @onclick="async () => await ClearRecurrence(expenseTemplate)">Clear recurrence</button>
                         <button class="btn btn-sm m-1 btn-danger" @onclick="async () => await Commands.HandleAsync(new DeleteExpenseTemplate(expenseTemplate.Key))">Delete</button>
                     </td>
@@ -74,9 +75,14 @@
         await Commands.HandleAsync(new ChangeExpenseTemplateFixed(expenseTemplate.Key, !expenseTemplate.IsFixed));
     }
 
-    private async Task SetRecurrence(ExpenseTemplateModel expenseTemplate)
+    private async Task SetRecurrenceMonthly(ExpenseTemplateModel expenseTemplate)
     {
-        await Commands.HandleAsync(new SetExpenseTemplateRecurrence(expenseTemplate.Key, RecurrencePeriod.Monthly, 5));
+        await Commands.HandleAsync(new SetExpenseTemplateMonthlyRecurrence(expenseTemplate.Key, 5));
+    }
+
+    private async Task SetRecurrenceSingle(ExpenseTemplateModel expenseTemplate)
+    {
+        await Commands.HandleAsync(new SetExpenseTemplateSingleRecurrence(expenseTemplate.Key, DateTime.Today.AddDays(12)));
     }
 
     private async Task ClearRecurrence(ExpenseTemplateModel expenseTemplate)

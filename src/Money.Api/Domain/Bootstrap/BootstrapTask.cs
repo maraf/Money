@@ -130,8 +130,8 @@ namespace Money.Bootstrap
             Converts.Repository
                 .AddStringTo<int>(Int32.TryParse)
                 .AddStringTo<bool>(Boolean.TryParse)
-                .AddEnumSearchHandler(false)
                 .AddJsonEnumSearchHandler()
+                .AddEnumSearchHandler(false)
                 .AddJsonPrimitivesSearchHandler()
                 .AddJsonObjectSearchHandler()
                 .AddJsonKey()

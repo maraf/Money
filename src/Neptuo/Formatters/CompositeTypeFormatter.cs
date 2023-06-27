@@ -97,7 +97,7 @@ namespace Neptuo.Formatters
             {
                 object propertyValue = property.Getter(input);
                 if (!TryStoreValue(valueStorage, property.Name, propertyValue))
-                    throw new NotSupportedValueException(property.Type);
+                    throw new NotSupportedValueException(property.Type, property.Name);
             }
 
             return true;
@@ -173,7 +173,7 @@ namespace Neptuo.Formatters
             {
                 object value;
                 if (!TryLoadValue(valueStorage, property.Name, property.Type, out value))
-                    throw new NotSupportedValueException(property.Type);
+                    throw new NotSupportedValueException(property.Type, property.Name);
 
                 values.Add(value);
             }

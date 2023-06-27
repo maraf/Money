@@ -20,8 +20,8 @@ namespace Neptuo.Formatters
         /// Create new instance.
         /// </summary>
         /// <param name="valueType">The type of value unnable to serialize/deserialize.</param>
-        public NotSupportedValueException(Type valueType)
-            : base(String.Format("Unnable to serialize or deserialize value of type '{0}'.", valueType))
+        public NotSupportedValueException(Type valueType, string propertyName = null)
+            : base(String.Format("Unnable to serialize or deserialize value of type '{0}' for property '{1}'.", valueType, propertyName))
         {
             ValueType = valueType;
         }

@@ -1,6 +1,7 @@
 ﻿using Money;
 using Money.Services;
 using Neptuo.Collections.Specialized;
+using Neptuo.Formatters.Internals;
 using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using System;
@@ -189,43 +190,50 @@ namespace Neptuo.Formatters
                     return true;
                 }
 
-                if (typeof(T) == typeof(string))
+                Type targetType = typeof(T);
+                if (targetType.IsNullableType())
+                {
+                    // We already checked for null value above, now we can just unwrap the type.
+                    targetType = targetType.GetGenericArguments()[0];
+                }
+
+                if (targetType == typeof(string))
                 {
                     value = (T)(object)element.GetString();
                     return true;
                 }
 
-                if (typeof(T) == typeof(int))
+                if (targetType == typeof(int))
                 {
                     value = (T)(object)element.GetInt32();
                     return true;
                 }
 
-                if (typeof(T) == typeof(long))
+                if (targetType == typeof(long))
                 {
                     value = (T)(object)element.GetInt64();
                     return true;
                 }
 
-                if (typeof(T) == typeof(decimal))
+                if (targetType == typeof(decimal))
                 {
                     value = (T)(object)element.GetDecimal();
                     return true;
                 }
 
-                if (typeof(T) == typeof(double))
+                if (targetType == typeof(double))
                 {
                     value = (T)(object)element.GetDouble();
                     return true;
                 }
 
-                if (typeof(T) == typeof(bool))
+                if (targetType == typeof(bool))
                 {
                     value = (T)(object)element.GetBoolean();
                     return true;
                 }
 
-                if (typeof(T) == typeof(IKey))
+                if (targetType == typeof(IKey))
                 {
                     if (element.ValueKind == JsonValueKind.Null)
                     {
@@ -256,7 +264,7 @@ namespace Neptuo.Formatters
                     }
                 }
 
-                if (typeof(T) == typeof(Color))
+                if (targetType == typeof(Color))
                 {
                     byte[] parts = element.GetString().Split(new char[] { ';' }).Select(p => Byte.Parse(p)).ToArray();
                     value = (T)(object)Color.FromArgb(parts[0], parts[1], parts[2], parts[3]);
@@ -264,7 +272,18 @@ namespace Neptuo.Formatters
                     return true;
                 }
 
-                if (typeof(T) == typeof(Price))
+                if (targetType.IsEnum)
+                {
+                    if (element.TryGetInt32(out var intValue))
+                        value = (T)Enum.ToObject(targetType, intValue);
+                    else
+                        value = (T)(object)null;
+
+                    log.Debug($"Converted enum to Int32 and to '{value}'.");
+                    return true;
+                }
+
+                if (targetType == typeof(Price))
                 {
                     log.Debug($"Get: Price value type: '{element.GetProperty("Value").GetType().FullName}'.");
                     decimal priceValue = element.GetProperty("Value").GetDecimal();
@@ -273,7 +292,7 @@ namespace Neptuo.Formatters
                     return true;
                 }
 
-                if (typeof(T) == typeof(DateTime))
+                if (targetType == typeof(DateTime))
                 {
                     string rawDateTime = element.GetString();
                     if (DateTime.TryParse(rawDateTime, out DateTime dateTime))

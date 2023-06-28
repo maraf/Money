@@ -43,7 +43,7 @@ public class QueryController : Controller
 
     [HttpPost]
     [Route("/api/queries/{*url}")]
-    public async Task<ActionResult> QueryAsync(string url, JObject rawQuery)
+    public async Task<ActionResult> PostAsync(string url, JObject rawQuery)
     {
         string payload = rawQuery.ToString();
         Type type = queryMapper.FindTypeByUrl(url);

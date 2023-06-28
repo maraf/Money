@@ -24,8 +24,6 @@ namespace Money.Controllers
     [Route("[controller]/[action]")]
     public class ApiController : Controller
     {
-        private static Type[] plainTypes = new[] { typeof(string), typeof(int), typeof(decimal), typeof(bool) };
-
         private readonly FormatterContainer formatters;
         private readonly ICommandDispatcher commandDispatcher;
         private readonly IQueryDispatcher queryDispatcher;
@@ -94,7 +92,7 @@ namespace Money.Controllers
                     {
                         type = output.GetType();
 
-                        if (plainTypes.Contains(type))
+                        if (formatters.PlainTypes.Contains(type))
                         {
                             payload = output.ToString();
                             responseType = ResponseType.Plain;
@@ -108,7 +106,7 @@ namespace Money.Controllers
                     {
                         type = type.GetInterfaces().First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQuery<>)).GetGenericArguments()[0];
                         payload = null;
-                        if (plainTypes.Contains(type))
+                        if (formatters.PlainTypes.Contains(type))
                             responseType = ResponseType.Plain;
                     }
 

@@ -10,6 +10,8 @@ namespace Money.Services
 {
     public class FormatterContainer
     {
+        public Type[] PlainTypes { get; } = new[] { typeof(string), typeof(int), typeof(decimal), typeof(bool) };
+
         public IFormatter Command { get; private set; }
         public IFormatter Event { get; private set; }
         public IFormatter Query { get; private set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Azure.Monitor.OpenTelemetry.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Money.Accounts;
 using Money.Accounts.Middlewares;
@@ -18,6 +20,7 @@ using Money.EntityFrameworkCore;
 using Money.Hubs;
 using Money.Models;
 using Money.Services;
+using OpenTelemetry.Trace;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -127,6 +130,16 @@ namespace Money
                 .AddSingleton<ApiHub>()
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>();
+
+            var openTelemetryConnectionString = Configuration.GetSection("OpenTelemetry").GetValue<string>("ConnectionString");
+            if (!string.IsNullOrEmpty(openTelemetryConnectionString))
+            {
+                Console.WriteLine("Configuring open telemetry");
+
+                services
+                    .AddOpenTelemetry()
+                    .UseAzureMonitor(options => options.ConnectionString = openTelemetryConnectionString);
+            }
 
             var allowedUserPropertyKeys = Configuration.GetSection("UserProperties").Get<string[]>() ?? new string[0];
             Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings, allowedUserPropertyKeys, ApplyBasePath);

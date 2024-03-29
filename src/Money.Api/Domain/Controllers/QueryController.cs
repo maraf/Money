@@ -42,7 +42,7 @@ public class QueryController : Controller
     }
 
     [HttpPost]
-    [Route("/api/queries/{*url}")]
+    [Route("api/queries/{url}")]
     public async Task<ActionResult> PostAsync(string url, JObject rawQuery)
     {
         string payload = rawQuery.ToString();

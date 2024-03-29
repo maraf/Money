@@ -42,7 +42,7 @@ public class CommandController : Controller
     }
 
     [HttpPost]
-    [Route("/api/commands/{url}")]
+    [Route("api/commands/{url}")]
     public async Task<ActionResult> PostAsync(string url, JObject rawQuery)
     {
         string payload = rawQuery.ToString();
@@ -63,7 +63,7 @@ public class CommandController : Controller
     }
 
     [HttpGet]
-    [Route("/api/commands/{url}/{guid}")]
+    [Route("api/commands/{url}/{guid}")]
     public async Task<ActionResult> GetAsync(string url, string guid)
     {
         if (Guid.TryParse(guid, out var id))

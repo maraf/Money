@@ -44,6 +44,7 @@ namespace Money.Api.Routing
             Add<ListYearOutcomesForCategory>("year-outcomes-for-category");
 
             Add<ListMonthBalance>("month-balances");
+            Add<ListMonthExpenseChecklist>("month-expense-checklist");
 
             Add<SearchOutcomes>("search-outcomes");
 

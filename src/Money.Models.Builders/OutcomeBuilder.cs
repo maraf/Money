@@ -37,7 +37,8 @@ namespace Money.Models.Builders
         IQueryHandler<SearchOutcomes, List<OutcomeOverviewModel>>,
         IQueryHandler<ListMonthOutcomesForCategory, List<MonthWithAmountModel>>,
         IQueryHandler<ListYearOutcomesForCategory, List<YearWithAmountModel>>,
-        IQueryHandler<ListMonthBalance, List<MonthBalanceModel>>
+        IQueryHandler<ListMonthBalance, List<MonthBalanceModel>>,
+        IQueryHandler<ListMonthExpenseChecklist, List<ExpenseChecklistModel>>
     {
         const int PageSize = 10;
 
@@ -621,6 +622,47 @@ namespace Money.Models.Builders
             }
 
             return totals;
+        }
+
+        public async Task<List<ExpenseChecklistModel>> HandleAsync(ListMonthExpenseChecklist query)
+        {
+            var result = new List<ExpenseChecklistModel>();
+
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                var templates = await db.ExpenseTemplates
+                    .WhereUserKey(query.UserKey)
+                    .Where(e => e.Period != null)
+                    .ToListAsync();
+
+                foreach (var template in templates)
+                {
+                    var sql = db.Outcomes
+                        .WhereUserKey(query.UserKey)
+                        .Where(e => e.Description == template.Description);
+
+                    if (template.Period == RecurrencePeriod.Monthly)
+                        sql = sql.Where(e => e.When.Month == query.Month.Month && e.When.Year == query.Month.Year);
+
+                    var expense = await sql.Select(e => new { e.Id, e.When }).FirstOrDefaultAsync();
+                    if (expense == null && template.Period == RecurrencePeriod.Single && (template.DueDate.Value.Year != query.Month.Year || template.DueDate.Value.Month != query.Month.Month))
+                        continue;
+
+                    var expenseKey = expense != null
+                        ? GuidKey.Create(expense.Id, KeyFactory.Empty(typeof(Outcome)).Type)
+                        : KeyFactory.Empty(typeof(Outcome));
+
+                    var when = expense != null
+                        ? expense.When
+                        : template.Period == RecurrencePeriod.Monthly
+                            ? new DateTime(query.Month.Year, query.Month.Month, template.DayInPeriod.Value)
+                            : template.DueDate.Value;
+
+                    result.Add(template.ToExpenseChecklistModel(expenseKey, when));
+                }
+            }
+            
+            return result;
         }
     }
 }

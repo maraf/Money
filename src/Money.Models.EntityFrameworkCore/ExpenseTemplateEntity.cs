@@ -52,6 +52,14 @@ namespace Money.Models
             _ => throw new NotSupportedException($"Version '{version}' is not supported when mapping ExpenseTemplateEntity to ExpenseTemplateModel")
         };
 
+        public ExpenseChecklistModel ToExpenseChecklistModel(IKey expenseKey, DateTime when) => new ExpenseChecklistModel(
+            GetKey(),
+            expenseKey,
+            GetAmount(),
+            when,
+            Description
+        );
+
         private GuidKey GetKey()
         {
             return GuidKey.Create(Id, KeyFactory.Empty(typeof(ExpenseTemplate)).Type);

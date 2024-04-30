@@ -44,6 +44,14 @@ namespace Money
                 },
                 new MenuItemModel()
                 {
+                    Identifier = "balances",
+                    Icon = "chart-bar",
+                    Text = "Balances",
+                    Url = navigator.UrlBalances(new YearModel(DateTime.Today.Year)),
+                    IsBlurMenuAfterClick = true
+                },
+                new MenuItemModel()
+                {
                     Identifier = "search",
                     Icon = "search",
                     Text = "Search",
@@ -62,7 +70,8 @@ namespace Money
                     Identifier = "expensetemplates",
                     Icon = "redo",
                     Text = "Templates",
-                    Url = navigator.UrlExpenseTemplates()
+                    Url = navigator.UrlExpenseTemplates(),
+                    IsBlurMenuAfterClick = true
                 },
                 new MenuItemModel()
                 {

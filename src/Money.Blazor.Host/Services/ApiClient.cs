@@ -184,12 +184,15 @@ namespace Money.Services
         private Request CreateRequest(Type type, string payload)
             => new Request() { Type = type.AssemblyQualifiedName, Payload = payload };
 
-        public async Task<Response> QueryAsync(Type type, string payload)
+        public async Task<string> QueryAsync(Type type, string payload)
         {
             try
             {
-                HttpResponseMessage responseMessage = await PostToUniformApiAsync(queryMapper, "/api/query", type, payload);
-                return await ReadJsonSuccessResponseAsync<Response>(responseMessage);
+                HttpResponseMessage responseMessage = await PostToUniformApiAsync(queryMapper, "/api/queries", type, payload);
+
+                await EnsureSuccessResponseAsync(responseMessage);
+                string responseContent = await responseMessage.Content.ReadAsStringAsync();
+                return responseContent;
             }
             catch (Exception e)
             {
@@ -201,7 +204,7 @@ namespace Money.Services
         {
             try
             {
-                HttpResponseMessage responseMessage = await PostToUniformApiAsync(commandMapper, "/api/command", type, payload);
+                HttpResponseMessage responseMessage = await PostToUniformApiAsync(commandMapper, "/api/commands", type, payload);
                 await EnsureSuccessResponseAsync(responseMessage);
             }
             catch (Exception e)

@@ -50,21 +50,24 @@ namespace Neptuo.Queries
             log.Debug($"Request Type: '{type.AssemblyQualifiedName}'.");
             log.Debug($"Request Payload: '{payload}'.");
 
-            Response response = await api.QueryAsync(type, payload);
+            string response = await api.QueryAsync(type, payload);
 
-            log.Debug($"Response Type: '{response.Type}'");
-            log.Debug($"Response Payload: '{response.Payload}'");
-            if (!string.IsNullOrEmpty(response.Payload))
+            log.Debug($"Response Payload: '{response}'");
+            
+            if (!string.IsNullOrEmpty(response))
             {
-                if (response.ResponseType == ResponseType.Plain)
+                Type responseType = type.GetInterfaces().First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQuery<>)).GetGenericArguments()[0];
+                log.Debug($"Response Type: '{responseType}'");
+
+                if (formatters.PlainTypes.Contains(responseType))
                 {
-                    object output = Converts.To(outputType, response.Payload);
+                    object output = Converts.To(outputType, response);
                     log.Debug($"Output success (plain): '{output != null}'.");
                     return output;
                 }
                 else
                 {
-                    object output = formatters.Query.Deserialize(outputType, response.Payload);
+                    object output = formatters.Query.Deserialize(outputType, response);
                     log.Debug($"Output success (composite): '{output != null}'.");
                     return output;
                 }

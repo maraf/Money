@@ -48,7 +48,7 @@ namespace Money.Pages
         }
 
         protected override IQuery<List<MonthModel>> CreatePeriodsQuery()
-            => new ListMonthWithOutcome();
+            => new ListMonthWithExpenseOrIncome();
 
         protected override IQuery<Price> CreateIncomeTotalQuery(MonthModel item)
             => new GetTotalMonthIncome(item);

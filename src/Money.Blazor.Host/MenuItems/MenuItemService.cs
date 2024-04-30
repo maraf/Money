@@ -59,6 +59,13 @@ namespace Money
                 },
                 new MenuItemModel()
                 {
+                    Identifier = "expensetemplates",
+                    Icon = "redo",
+                    Text = "Templates",
+                    Url = navigator.UrlExpenseTemplates()
+                },
+                new MenuItemModel()
+                {
                     Identifier = "expense-create",
                     Icon = "minus-circle",
                     Text = "New Expense",

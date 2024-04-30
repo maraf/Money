@@ -9,6 +9,7 @@ using Money.Queries;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,9 @@ namespace Money.Pages
 
         [Inject]
         protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
+
+        [Inject]
+        protected ILog<Search> Log { get; set; }
 
         [Parameter]
         public string Query { get; set; }
@@ -91,7 +95,7 @@ namespace Money.Pages
             StateHasChanged();
         }
 
-        protected Task OnSearchAsync()
+        protected async Task OnSearchAsync()
         {
             string lastQuery = Query;
             var lastSort = Sort;
@@ -102,12 +106,14 @@ namespace Money.Pages
             else
                 FormSort = Sort = DefaultSort;
 
-            Console.WriteLine($"Sort: last '{lastSort.Type}+{lastSort.Direction}', current '{Sort.Type}+{Sort.Direction}'.");
+            Log.Debug($"Sort: last '{lastSort.Type}+{lastSort.Direction}', current '{Sort.Type}+{Sort.Direction}'.");
 
             if (lastQuery == Query && lastSort.Equals(Sort))
-                return Task.CompletedTask;
+                return;
 
-            return PagingContext.LoadAsync(0);
+            var status = await PagingContext.LoadAsync(0);
+            if (status == PagingLoadStatus.EmptyPage && lastQuery != Query)
+                Models.Clear();
         }
 
         protected async Task<PagingLoadStatus> LoadPageAsync()

@@ -75,13 +75,14 @@ namespace Money.Components
             }
         }
 
-        public async Task LoadAsync(int index)
+        public async Task<PagingLoadStatus> LoadAsync(int index)
         {
             using (loading.Start())
             {
                 CurrentPageIndex = index;
                 var status = await LoadPageAsync();
                 ProcessStatus(status);
+                return status;
             }
         }
     }

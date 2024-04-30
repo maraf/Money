@@ -44,7 +44,6 @@ namespace Money.Models
         {
             Ensure.Condition.NotEmptyKey(expenseTemplateKey);
             Ensure.NotNull(expenseKey, "expenseKey");
-            Ensure.NotNull(amount, "amount");
             ExpenseTemplateKey = expenseTemplateKey;
             ExpenseKey = expenseKey;
             Amount = amount;

@@ -61,11 +61,33 @@ else
 
                         <div class="controls text-right">
                             <IconButton Icon="minus" ToolTip="Create expense" Click="@(() => { Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed); })" />
-                            <IconButton Icon="dollar-sign" ToolTip="Change amount" Click="@(() => Edit(model, ChangeAmountModal))" />
-                            <IconButton Icon="comment" ToolTip="Change description" Click="@(() => Edit(model, ChangeDescriptionModal))" />
-                            <IconButton Icon="tag" ToolTip="Change category" Click="@(() => Edit(model, ChangeCategoryModal))" />
-                            <IconButton Icon="undo" ToolTip="Change recurrence" Click="@(() => Edit(model, ChangeRecurrenceModal))" />
-                            <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {(model.Amount != null ? CurrencyFormatter.Format(model.Amount) : null)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })" />
+                            
+                            <div class="sort dropdown d-inline-block">
+                                <IconButton Icon="ellipsis-v" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeAmountModal))">
+                                        <Icon Identifier="dollar-sign" />
+                                        Amount
+                                    </a>
+                                    <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeDescriptionModal))">
+                                        <Icon Identifier="comment" />
+                                        Description
+                                    </a>
+                                    <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeCategoryModal))">
+                                        <Icon Identifier="tag" />
+                                        Category
+                                    </a>
+                                    <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeRecurrenceModal))">
+                                        <Icon Identifier="undo" />
+                                        Recurrence
+                                    </a>
+                                    <hr class="dropdown-divider" />
+                                    <a class="dropdown-item" @onclick="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {(model.Amount != null ? CurrencyFormatter.Format(model.Amount) : null)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })">
+                                        <Icon Identifier="trash-alt" />
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

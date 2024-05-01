@@ -24,7 +24,11 @@ namespace Money.Pages
 {
     public partial class ExpenseTemplates : IDisposable, 
         IEventHandler<ExpenseTemplateCreated>,
+        IEventHandler<ExpenseTemplateAmountChanged>,
         IEventHandler<ExpenseTemplateDescriptionChanged>,
+        IEventHandler<ExpenseTemplateCategoryChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceCleared>,
         IEventHandler<ExpenseTemplateDeleted>
     {
         [Inject]
@@ -58,7 +62,11 @@ namespace Money.Pages
         {
             EventHandlers
                 .Add<ExpenseTemplateCreated>(this)
+                .Add<ExpenseTemplateAmountChanged>(this)
                 .Add<ExpenseTemplateDescriptionChanged>(this)
+                .Add<ExpenseTemplateCategoryChanged>(this)
+                .Add<ExpenseTemplateRecurrenceChanged>(this)
+                .Add<ExpenseTemplateRecurrenceCleared>(this)
                 .Add<ExpenseTemplateDeleted>(this);
 
             await base.OnInitializedAsync();
@@ -71,7 +79,11 @@ namespace Money.Pages
 
         public void Dispose() => EventHandlers
             .Remove<ExpenseTemplateCreated>(this)
+            .Remove<ExpenseTemplateAmountChanged>(this)
             .Remove<ExpenseTemplateDescriptionChanged>(this)
+            .Remove<ExpenseTemplateCategoryChanged>(this)
+            .Remove<ExpenseTemplateRecurrenceChanged>(this)
+            .Remove<ExpenseTemplateRecurrenceCleared>(this)
             .Remove<ExpenseTemplateDeleted>(this);
 
         protected string FindCategoryName(IKey categoryKey)
@@ -107,5 +119,9 @@ namespace Money.Pages
         public Task HandleAsync(ExpenseTemplateCreated payload) => OnEventAsync();
         public Task HandleAsync(ExpenseTemplateDescriptionChanged payload) => OnEventAsync();
         public Task HandleAsync(ExpenseTemplateDeleted payload) => OnEventAsync();
+        public Task HandleAsync(ExpenseTemplateAmountChanged payload) => OnEventAsync();
+        public Task HandleAsync(ExpenseTemplateCategoryChanged payload) => OnEventAsync();
+        public Task HandleAsync(ExpenseTemplateRecurrenceChanged payload) => OnEventAsync();
+        public Task HandleAsync(ExpenseTemplateRecurrenceCleared payload) => OnEventAsync();
     }
 }

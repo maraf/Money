@@ -58,6 +58,7 @@ namespace Money.Pages
         {
             EventHandlers
                 .Add<ExpenseTemplateCreated>(this)
+                .Add<ExpenseTemplateDescriptionChanged>(this)
                 .Add<ExpenseTemplateDeleted>(this);
 
             await base.OnInitializedAsync();
@@ -70,6 +71,7 @@ namespace Money.Pages
 
         public void Dispose() => EventHandlers
             .Remove<ExpenseTemplateCreated>(this)
+            .Remove<ExpenseTemplateDescriptionChanged>(this)
             .Remove<ExpenseTemplateDeleted>(this);
 
         protected string FindCategoryName(IKey categoryKey)

@@ -1,0 +1,52 @@
+﻿@inherits ModalDialog
+
+<Modal @ref="Modal" Title="Change a category of the expense template">
+    <ChildContent>
+        <Validation ErrorMessages="@ErrorMessages" />
+        <div class="form-group">
+            @if (Categories != null)
+            {
+                var isFistCategory = true;
+
+                <div class="form-row">
+                    <div class="col-6 col-md-4 mb-2">
+                        <button type="button" class="btn btn-block btn-selectable h-100 bg-white @(EmptyCategoryKey.Equals(CategoryKey) ? "btn-selectable-selected" : "")" @onclick="@(() => CategoryKey = EmptyCategoryKey)">
+                            <div>
+                                <h2></h2>
+                            </div>
+                            <div class="text-truncate">
+                                <strong></strong>
+                            </div>
+                            <div class="text-truncate">
+                                <span></span>
+                            </div>
+                        </button>
+                    </div>
+
+                    @foreach (var category in Categories)
+                    {
+                        var buttonId = isFistCategory ? "expense-template-category-first" : null;
+                        isFistCategory = false;
+
+                        <div class="col-6 col-md-4 mb-2">
+                            <button type="button" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                                <div>
+                                    <h2>@category.Icon</h2>
+                                </div>
+                                <div class="text-truncate">
+                                    <strong>@category.Name</strong>
+                                </div>
+                                <div class="text-truncate">
+                                    <span>@category.Description</span>
+                                </div>
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>
+    </Buttons>
+</Modal>

@@ -51,6 +51,7 @@ namespace Money.Pages
         protected ExpenseTemplateCreate CreateModal { get; set; }
         protected ExpenseTemplateDescription ChangeDescriptionModal { get; set; }
         protected ExpenseTemplateAmount ChangeAmountModal { get; set; }
+        protected ExpenseTemplateCategory ChangeCategoryModal { get; set; }
         protected Confirm DeleteConfirm { get; set; }
         protected OutcomeCreate ExpenseModal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();

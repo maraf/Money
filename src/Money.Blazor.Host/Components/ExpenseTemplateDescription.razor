@@ -1,0 +1,13 @@
+﻿@inherits ModalDialog
+
+<Modal @ref="Modal" Title="Change a description of the expense template">
+    <ChildContent>
+        <div class="form-group">
+            <label for="expense-description">Description:</label>
+            <input type="text" class="form-control" id="expense-description" placeholder="Expense Template Description" data-autofocus @bind="@Description" />
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>
+    </Buttons>
+</Modal>

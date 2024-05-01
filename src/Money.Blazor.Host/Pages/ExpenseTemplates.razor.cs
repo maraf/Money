@@ -22,7 +22,10 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class ExpenseTemplates : IDisposable, IEventHandler<ExpenseTemplateCreated>, IEventHandler<ExpenseTemplateDeleted>
+    public partial class ExpenseTemplates : IDisposable, 
+        IEventHandler<ExpenseTemplateCreated>,
+        IEventHandler<ExpenseTemplateDescriptionChanged>,
+        IEventHandler<ExpenseTemplateDeleted>
     {
         [Inject]
         protected ICommandDispatcher Commands { get; set; }
@@ -41,12 +44,14 @@ namespace Money.Pages
 
         protected CurrencyFormatter CurrencyFormatter { get; private set; }
         protected ExpenseTemplateCreate CreateModal { get; set; }
+        protected ExpenseTemplateDescription ChangeDescriptionModal { get; set; }
         protected Confirm DeleteConfirm { get; set; }
         protected OutcomeCreate ExpenseModal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
         protected List<CategoryModel> Categories { get; private set; }
         
         protected IKey ToDeleteKey { get; set; }
+        protected ExpenseTemplateModel Selected { get; set; }
         protected string DeleteMessage { get; set; }
 
         protected async override Task OnInitializedAsync()
@@ -91,16 +96,14 @@ namespace Money.Pages
             _ = Commands.HandleAsync(new DeleteExpenseTemplate(ToDeleteKey));
         }
 
-        public Task HandleAsync(ExpenseTemplateCreated payload)
+        protected Task OnEventAsync()
         {
             _ = ReloadAsync();
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(ExpenseTemplateDeleted payload)
-        {
-            _ = ReloadAsync();
-            return Task.CompletedTask;
-        }
+        public Task HandleAsync(ExpenseTemplateCreated payload) => OnEventAsync();
+        public Task HandleAsync(ExpenseTemplateDescriptionChanged payload) => OnEventAsync();
+        public Task HandleAsync(ExpenseTemplateDeleted payload) => OnEventAsync();
     }
 }

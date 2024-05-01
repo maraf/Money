@@ -4,6 +4,7 @@ using Money.Models.Queries;
 using Neptuo;
 using Neptuo.Events.Handlers;
 using Neptuo.Logging;
+using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,9 @@ namespace Money.Services
 {
     internal class ExpenseTemplateMiddleware : HttpQueryDispatcher.IMiddleware,
         IEventHandler<ExpenseTemplateCreated>,
+        IEventHandler<ExpenseTemplateAmountChanged>,
+        IEventHandler<ExpenseTemplateDescriptionChanged>,
+        IEventHandler<ExpenseTemplateCategoryChanged>,
         IEventHandler<ExpenseTemplateDeleted>,
         IEventHandler<UserSignedOut>
     {
@@ -106,18 +110,28 @@ namespace Money.Services
             await localStorage.SaveAsync(models);
         }
 
-        async Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload)
+        private async Task UpdateAsync(IKey aggregateKey, Action<ExpenseTemplateModel> handler)
         {
-            log.Debug("Got ExpenseTemplateDeleted");
-
-            var model = models.Find(m => m.Key.Equals(payload.AggregateKey));
+            var model = models.Find(m => m.Key.Equals(aggregateKey));
             if (model != null)
             {
-                models.Remove(model);
-                log.Debug($"Removed model with key '{model.Key}'");
+                handler(model);
+                log.Debug($"Updated model with key '{model.Key}'");
             }
 
             await localStorage.SaveAsync(models);
         }
+
+        Task IEventHandler<ExpenseTemplateAmountChanged>.HandleAsync(ExpenseTemplateAmountChanged payload)
+            => UpdateAsync(payload.AggregateKey, model => model.Amount = payload.NewValue);
+
+        Task IEventHandler<ExpenseTemplateDescriptionChanged>.HandleAsync(ExpenseTemplateDescriptionChanged payload)
+            => UpdateAsync(payload.AggregateKey, model => model.Description = payload.Description);
+
+        Task IEventHandler<ExpenseTemplateCategoryChanged>.HandleAsync(ExpenseTemplateCategoryChanged payload)
+            => UpdateAsync(payload.AggregateKey, model => model.CategoryKey = payload.CategoryKey);
+
+        Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload)
+            => UpdateAsync(payload.AggregateKey, model => models.Remove(model));
     }
 }

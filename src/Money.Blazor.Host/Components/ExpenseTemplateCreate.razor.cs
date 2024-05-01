@@ -66,11 +66,7 @@ namespace Money.Components
 
             ErrorMessages.Clear();
 
-            if (Amount != null && ((Amount.Value == 0 && Amount.Currency != null) || (Amount.Value != 0 && Amount.Currency == null)))
-                ErrorMessages.Add("Amount and currency must be provided both or none");
-
-            if (Amount != null && Amount.Value != 0)
-                Validator.AddOutcomeAmount(ErrorMessages, Amount.Value);
+            Validator.AddExpenseTemplateAmount(ErrorMessages, Amount);
 
             Log.Debug($"Expense: Validation: {string.Join(", ", ErrorMessages)}.");
             return ErrorMessages.Count == 0;

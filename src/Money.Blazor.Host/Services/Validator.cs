@@ -9,7 +9,7 @@ namespace Money.Services
 {
     internal static class Validator
     {
-        #region Outcome
+        #region Expense
 
         public static bool IsOutcomeAmount(decimal amount) => amount > 0;
         public static bool IsOutcomeDescription(string description) => !String.IsNullOrEmpty(description);
@@ -149,6 +149,24 @@ namespace Money.Services
         {
             if (!IsExchangeRateTargetCurrency(currency))
                 messages.Add("Target currency must be provided.");
+        }
+
+        #endregion
+    
+        #region 
+
+        public static bool AddExpenseTemplateAmount(ICollection<string> messages, Price amount)
+        {
+            if (amount != null && ((amount.Value == 0 && amount.Currency != null) || (amount.Value != 0 && amount.Currency == null)))
+            {
+                messages.Add("Amount and currency must be provided both or none");
+                return true;
+            }
+
+            if (amount != null && amount.Value != 0)
+                AddOutcomeAmount(messages, amount.Value);
+
+            return false;
         }
 
         #endregion

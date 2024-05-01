@@ -6,6 +6,7 @@
 
 <ExpenseTemplateCreate @ref="CreateModal" />
 <ExpenseTemplateDescription @ref="ChangeDescriptionModal" ExpenseTemplateKey="@Selected?.Key" Description="@Selected?.Description" />
+<ExpenseTemplateAmount @ref="ChangeAmountModal" ExpenseTemplateKey="@Selected?.Key" Amount="@Selected?.Amount" />
 
 @if (Models.Count == 0)
 {
@@ -44,7 +45,8 @@ else
 
                         <div class="controls text-right">
                             <IconButton Icon="minus" ToolTip="Create expense" Click="@(() => { Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed); })" />
-                            <IconButton Icon="comment" ToolTip="Change description" Click="@(() => { Selected = model; ChangeDescriptionModal.Show(); StateHasChanged(); })" />
+                            <IconButton Icon="dollar-sign" ToolTip="Change amount" Click="@(() => Edit(model, ChangeAmountModal))" />
+                            <IconButton Icon="comment" ToolTip="Change description" Click="@(() => Edit(model, ChangeDescriptionModal))" />
                             <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {(model.Amount != null ? CurrencyFormatter.Format(model.Amount) : null)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })" />
                         </div>
                     </div>

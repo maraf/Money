@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Money.Commands;
 using Money.Components;
+using Money.Components.Bootstrap;
 using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
@@ -49,6 +50,7 @@ namespace Money.Pages
         protected CurrencyFormatter CurrencyFormatter { get; private set; }
         protected ExpenseTemplateCreate CreateModal { get; set; }
         protected ExpenseTemplateDescription ChangeDescriptionModal { get; set; }
+        protected ExpenseTemplateAmount ChangeAmountModal { get; set; }
         protected Confirm DeleteConfirm { get; set; }
         protected OutcomeCreate ExpenseModal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
@@ -108,6 +110,13 @@ namespace Money.Pages
         protected void Delete()
         {
             _ = Commands.HandleAsync(new DeleteExpenseTemplate(ToDeleteKey));
+        }
+
+        protected void Edit(ExpenseTemplateModel selected, ModalDialog modal)
+        {
+            Selected = selected; 
+            modal.Show(); 
+            StateHasChanged();
         }
 
         protected Task OnEventAsync()

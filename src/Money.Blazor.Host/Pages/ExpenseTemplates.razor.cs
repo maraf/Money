@@ -52,6 +52,7 @@ namespace Money.Pages
         protected ExpenseTemplateDescription ChangeDescriptionModal { get; set; }
         protected ExpenseTemplateAmount ChangeAmountModal { get; set; }
         protected ExpenseTemplateCategory ChangeCategoryModal { get; set; }
+        protected ExpenseTemplateRecurrence ChangeRecurrenceModal { get; set; }
         protected Confirm DeleteConfirm { get; set; }
         protected OutcomeCreate ExpenseModal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
@@ -89,6 +90,14 @@ namespace Money.Pages
             .Remove<ExpenseTemplateRecurrenceCleared>(this)
             .Remove<ExpenseTemplateDeleted>(this);
 
+        protected string DayInMonth(int day) => day switch
+        {
+            1 => "1st",
+            2 => "2nd",
+            3 => "3rd",
+            _ => $"{day}th"
+        };
+
         protected string FindCategoryName(IKey categoryKey)
         {
             var category = Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
@@ -104,7 +113,7 @@ namespace Money.Pages
         private async Task ReloadAsync()
         {
             Models.Clear();
-            Models.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version2()));
+            Models.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version3()));
             StateHasChanged();
         }
 

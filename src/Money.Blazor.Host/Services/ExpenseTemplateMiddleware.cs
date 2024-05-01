@@ -20,6 +20,8 @@ namespace Money.Services
         IEventHandler<ExpenseTemplateAmountChanged>,
         IEventHandler<ExpenseTemplateDescriptionChanged>,
         IEventHandler<ExpenseTemplateCategoryChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceChanged>,
+        IEventHandler<ExpenseTemplateRecurrenceCleared>,
         IEventHandler<ExpenseTemplateDeleted>,
         IEventHandler<UserSignedOut>
     {
@@ -130,6 +132,22 @@ namespace Money.Services
 
         Task IEventHandler<ExpenseTemplateCategoryChanged>.HandleAsync(ExpenseTemplateCategoryChanged payload)
             => UpdateAsync(payload.AggregateKey, model => model.CategoryKey = payload.CategoryKey);
+
+        Task IEventHandler<ExpenseTemplateRecurrenceChanged>.HandleAsync(ExpenseTemplateRecurrenceChanged payload)
+            => UpdateAsync(payload.AggregateKey, model => 
+            {
+                model.Period = payload.Period;
+                model.DayInPeriod = payload.DayInPeriod;
+                model.DueDate = payload.DueDate;
+            });
+
+        Task IEventHandler<ExpenseTemplateRecurrenceCleared>.HandleAsync(ExpenseTemplateRecurrenceCleared payload)
+            => UpdateAsync(payload.AggregateKey, model => 
+            {
+                model.Period = null;
+                model.DayInPeriod = null;
+                model.DueDate = null;
+            });
 
         Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload)
             => UpdateAsync(payload.AggregateKey, model => models.Remove(model));

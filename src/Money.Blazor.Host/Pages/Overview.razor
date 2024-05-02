@@ -20,37 +20,43 @@
 <ExceptionPanel />
 
 <div class="overview">
-    <Loading Context="@Loading" IsOverlay="true">
-        @{
-            var incomeUrl = ListIncomeUrl();
-            var trendsUrl = TrendsSelectedPeriodUrl();
-        }
-        @if (incomeUrl != null || trendsUrl != null)
-        {
-            <ul class="nav nav-pills float-left">
-                @if (incomeUrl != null)
-                {
-                    <li>
-                        <a class="nav-link" href="@incomeUrl">Incomes</a>
-                    </li>
-                }
+    @{
+        var incomeUrl = ListIncomeUrl();
+        var trendsUrl = TrendsSelectedPeriodUrl();
+    }
+    @if (incomeUrl != null || trendsUrl != null)
+    {
+        <ul class="nav nav-pills float-left">
+            @if (incomeUrl != null)
+            {
                 <li>
-                    <a class="nav-link active" href="@Navigator.UrlCurrent()">Expenses</a>
+                    <a class="nav-link" href="@incomeUrl">Incomes</a>
                 </li>
-                @if (trendsUrl != null)
-                {
-                    <li>
-                        <a class="nav-link" href="@trendsUrl">Trends</a>
-                    </li>
-                }
-            </ul>
-        }
+            }
+            <li>
+                <a class="nav-link active" href="@Navigator.UrlCurrent()">Expenses</a>
+            </li>
+            @if (trendsUrl != null)
+            {
+                <li>
+                    <a class="nav-link" href="@trendsUrl">Trends</a>
+                </li>
+            }
+        </ul>
+    }
+
+    @if (Items?.Count > 0)
+    {
+        <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+    }
+    <div class="clear"></div>
+
+    <Loading Context="@Loading" IsOverlay="true">
         @if (Items != null)
         {
             if (Items.Count > 0)
             {
                 <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
-                <div class="clear"></div>
 
                 <div class="cards">
                     <ExpenseCardContext>
@@ -65,7 +71,7 @@
             }
             else
             {
-                <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
+                <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" class="mt-3" />
             }
         }
     </Loading>

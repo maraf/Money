@@ -17,6 +17,9 @@ namespace Money.Components
         [Inject]
         protected IQueryDispatcher Queries { get; set; }
 
+        [Inject]
+        protected ILog<DateBox> Log { get; set; }
+
         [Parameter]
         public string Id { get; set; }
 
@@ -45,16 +48,21 @@ namespace Money.Components
             string rawValue = e.Value?.ToString();
 
             if (TryParseDate(rawValue, Format, out var value) || TryParseDate(rawValue, SimplifyFormat(), out value) || DateTime.TryParse(rawValue, out value))
-            {
-                value = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, DateTimeKind.Utc);
-                ValueChanged?.Invoke(Value = value);
-            }
+                RaiseValueChanged(value);
 
             string SimplifyFormat() 
                 => Format.Replace("dd", "d").Replace("MM", "M");
 
             static bool TryParseDate(string rawValue, string format, out DateTime value) 
                 => DateTime.TryParseExact(rawValue, format, null, DateTimeStyles.None, out value);
+        }
+
+        protected void RaiseValueChanged(DateTime value)
+        {
+            Log.Debug($"RaiseValueChanged source value '{value}'");
+            Value = value = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, DateTimeKind.Utc);
+            Log.Debug($"RaiseValueChanged processed value '{value}'");
+            ValueChanged?.Invoke(Value = value);
         }
     }
 }

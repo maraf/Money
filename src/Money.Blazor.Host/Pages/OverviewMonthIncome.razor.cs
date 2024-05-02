@@ -23,6 +23,9 @@ namespace Money.Pages
 {
     public partial class OverviewMonthIncome : IDisposable,
         IEventHandler<IncomeCreated>,
+        IEventHandler<IncomeAmountChanged>,
+        IEventHandler<IncomeDescriptionChanged>,
+        IEventHandler<IncomeWhenChanged>,
         IEventHandler<IncomeDeleted>,
         IEventHandler<PulledToRefresh>
     {
@@ -118,6 +121,13 @@ namespace Money.Pages
             StateHasChanged();
         }
 
+        protected void Edit(IncomeOverviewModel model, ModalDialog modal)
+        {
+            Selected = model;
+            modal.Show();
+            StateHasChanged();
+        }
+
         protected async void OnDeleteConfirmed()
         {
             await Commands.HandleAsync(new DeleteIncome(Selected.Key));
@@ -136,6 +146,9 @@ namespace Money.Pages
         {
             EventHandlers
                 .Add<IncomeCreated>(this)
+                .Add<IncomeAmountChanged>(this)
+                .Add<IncomeWhenChanged>(this)
+                .Add<IncomeDescriptionChanged>(this)
                 .Add<IncomeDeleted>(this)
                 .Add<PulledToRefresh>(this);
         }
@@ -144,8 +157,21 @@ namespace Money.Pages
         {
             EventHandlers
                 .Remove<IncomeCreated>(this)
+                .Remove<IncomeAmountChanged>(this)
+                .Remove<IncomeWhenChanged>(this)
+                .Remove<IncomeDescriptionChanged>(this)
                 .Remove<IncomeDeleted>(this)
                 .Remove<PulledToRefresh>(this);
+        }
+
+        protected Task OnEventAsync(IKey aggregateKey, Action<IncomeOverviewModel> handler)
+        {
+            var item = Items.FirstOrDefault(i => i.Key.Equals(aggregateKey));
+            if (item != null)
+                handler(item);
+
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
         Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)
@@ -157,10 +183,19 @@ namespace Money.Pages
         }
 
         Task IEventHandler<IncomeDeleted>.HandleAsync(IncomeDeleted payload)
+            => OnEventAsync(payload.AggregateKey, item => Items.Remove(item));
+
+        Task IEventHandler<IncomeWhenChanged>.HandleAsync(IncomeWhenChanged payload)
         {
             Reload();
             return Task.CompletedTask;
         }
+
+        Task IEventHandler<IncomeDescriptionChanged>.HandleAsync(IncomeDescriptionChanged payload)
+            => OnEventAsync(payload.AggregateKey, item => item.Description = payload.Description);
+
+        Task IEventHandler<IncomeAmountChanged>.HandleAsync(IncomeAmountChanged payload)
+            => OnEventAsync(payload.AggregateKey, item => item.Amount = payload.NewValue);
 
         async Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
         {

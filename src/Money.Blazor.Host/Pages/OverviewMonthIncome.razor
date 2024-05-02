@@ -8,7 +8,17 @@
 </Title>
 <ExceptionPanel />
 
+@code
+{
+    IncomeAmount ChangeAmountModal;
+    IncomeDescription ChangeDescriptionModal;
+    IncomeWhen ChangeWhenModal;
+}
+
 <IncomeCreate @ref="CreateModal" />
+<IncomeAmount @ref="ChangeAmountModal" IncomeKey="@Selected?.Key" Amount="@Selected?.Amount" />
+<IncomeDescription @ref="ChangeDescriptionModal" IncomeKey="@Selected?.Key" Description="@Selected?.Description" />
+<IncomeWhen @ref="ChangeWhenModal" IncomeKey="@Selected?.Key" When="@(Selected?.When ?? DateTime.Today)" />
 <Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@OnDeleteConfirmed" />
 
 <div class="overview">
@@ -45,7 +55,28 @@
                                     @item.Description
                                 </div>
                                 <div class="col-12 col-sm-auto controls text-right">
-                                    <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(() => OnDeleteClick(item))" />
+                                    <div class="sort dropdown">
+                                        <IconButton Icon="ellipsis-v" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" @onclick="@(() => Edit(item, ChangeAmountModal))">
+                                                <Icon Identifier="dollar-sign" />
+                                                Amount
+                                            </a>
+                                            <a class="dropdown-item" @onclick="@(() => Edit(item, ChangeDescriptionModal))">
+                                                <Icon Identifier="comment" />
+                                                Description
+                                            </a>
+                                            <a class="dropdown-item" @onclick="@(() => Edit(item, ChangeWhenModal))">
+                                                <Icon Identifier="calendar" />
+                                                When
+                                            </a>
+                                            <hr class="dropdown-divider" />
+                                            <a class="dropdown-item" @onclick="@(() => OnDeleteClick(item))">
+                                                <Icon Identifier="trash-alt" />
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         }

@@ -1,0 +1,14 @@
+﻿@inherits ModalDialog
+
+<Modal @ref="Modal" Title="Change an amount of the income">
+    <ChildContent>
+        <Validation ErrorMessages="@ErrorMessages" />
+        <div class="form-group">
+            <label for="income-amount">Amount:</label>
+            <AmountBox Id="income-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>
+    </Buttons>
+</Modal>

@@ -1,0 +1,13 @@
+﻿@inherits ModalDialog
+
+<Modal @ref="Modal" Title="Change when the income occured">
+    <ChildContent>
+        <div class="form-group">
+            <label for="income-when">When:</label>
+            <DateBox Id="income-when" @bind-Value="When" AutoFocus="true" />
+        </div>
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>
+    </Buttons>
+</Modal>

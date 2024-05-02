@@ -32,13 +32,16 @@
             </li>
         </ul>
 
+        @if (Items?.Count > 0)
+        {
+            <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+        }
+        <div class="clear"></div>
+
         @if (Items != null)
         {
             if (Items.Count > 0)
             {
-                <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
-                <div class="clear"></div>
-
                 <div class="cards">
                     <CascadingValue Value="@this">
                         @foreach (var item in Items)

@@ -56,8 +56,6 @@
         {
             if (Items.Count > 0)
             {
-                <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
-
                 <div class="cards">
                     <ExpenseCardContext>
                         @foreach (var item in Items)

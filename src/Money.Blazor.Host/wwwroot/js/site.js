@@ -154,7 +154,8 @@ window.PullToRefresh = {
         })();
         
         swipeClosure = (() => {
-            const treshold = 100;
+            const tresholdX = 100;
+            const tresholdY = 100;
             const $leftUi = $(".swipe-left");
             const $rightUi = $(".swipe-right");
             
@@ -189,12 +190,12 @@ window.PullToRefresh = {
                 if (prerequisities()) {
                     _startX = Math.floor(e.touches[0].pageX);
                     _startY = Math.floor(e.touches[0].pageY);
-                    if (_startX < (treshold / 2)) {
+                    if (_startX < (tresholdX / 2)) {
                         _isActive = 1;
                         return;
                     }
                     
-                    if (window.innerWidth - _startX < (treshold / 2)) {
+                    if (window.innerWidth - _startX < (tresholdX / 2)) {
                         _isActive = 2;
                         return;
                     }
@@ -206,14 +207,27 @@ window.PullToRefresh = {
                 _lastDeltaX = Math.floor(Math.floor(e.touches[0].pageX) - _startX);
                 _lastDeltaY = Math.floor(Math.floor(e.touches[0].pageY) - _startY);
 
-                if (_isActive === 1) {
-                    $leftUi.css("margin-left", Math.min(_lastDeltaX, treshold * 2));
-                } else if (_isActive === 2) {
-                    _lastDeltaX *= -1;
-                    $rightUi.css("margin-right", Math.min(_lastDeltaX, treshold * 2));
+                if (Math.abs(_lastDeltaY) > tresholdY) {
+                    _isActive = false;
+                    swapLeftIcon(false);
+                    swapRightIcon(false);
+                    $leftUi.css("margin-left", 0);
+                    $rightUi.css("margin-right", 0);
+                    return;
                 }
 
-                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold * 2) && prerequisities()) {
+                if (Math.abs(_lastDeltaX) < 20) {
+                    return;
+                }
+
+                if (_isActive === 1) {
+                    $leftUi.css("margin-left", Math.min(_lastDeltaX, tresholdX * 2));
+                } else if (_isActive === 2) {
+                    _lastDeltaX *= -1;
+                    $rightUi.css("margin-right", Math.min(_lastDeltaX, tresholdX * 2));
+                }
+
+                if (_isActive && _lastDeltaX > tresholdX && _lastDeltaY < tresholdY && prerequisities()) {
                     if (_isActive === 1) {
                         swapLeftIcon(true);
                     } else if (_isActive === 2) {
@@ -231,7 +245,7 @@ window.PullToRefresh = {
                 $leftUi.css("margin-left", 0);
                 $rightUi.css("margin-right", 0);
 
-                if (_isActive && _lastDeltaX > treshold && _lastDeltaY < (treshold * 2) && prerequisities()) {
+                if (_isActive && _lastDeltaX > tresholdX && _lastDeltaY < tresholdY && prerequisities()) {
                     if (_isActive === 1) {
                         interop.invokeMethodAsync("Swiped.Left");
                     }

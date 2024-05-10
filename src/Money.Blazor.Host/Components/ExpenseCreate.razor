@@ -1,0 +1,113 @@
+﻿@inherits ModalDialog
+
+<Modal @ref="Modal" Title="Expense wizard" IsOverflow="true">
+    <div class="d-flex justify-content-around">
+        <div class="text-center @(Selected == SelectedField.Description ? "text-primary" : (String.IsNullOrEmpty(Description) ? "text-muted" : ""))" @onclick="(() => Selected = SelectedField.Description)">
+            <h1>
+                <Icon Identifier="comment" />
+            </h1>
+            <span>
+                @Description
+            </span>
+        </div>
+        <div class="text-center @(Selected == SelectedField.Amount ? "text-primary" : (Amount == null ? "text-muted" : ""))" @onclick="(() => Selected = SelectedField.Amount)">
+            <h1>
+                <Icon Prefix="fas" Identifier="dollar-sign" />
+            </h1>
+            <span>
+                @CurrencyFormatter?.Format(Amount)
+            </span>
+        </div>
+        <div class="text-center @(Selected == SelectedField.Category ? "text-primary" : (CategoryKey.IsEmpty ? "text-muted" : ""))" @onclick="(() => Selected = SelectedField.Category)">
+            <h1>
+                <Icon Identifier="tag" />
+            </h1>
+            <span>
+                @if (!CategoryKey.IsEmpty)
+                {
+                    <p class="m-0 @FindCategoryColor(CategoryKey)?.SelectAccent("back-dark", "back-light")">
+                        <span class="badge" style="background-color: @FindCategoryColor(CategoryKey)?.ToHashCode()">@FindCategoryName(CategoryKey)</span>
+                    </p>
+                }
+            </span>
+        </div>
+        <div class="text-center @(Selected == SelectedField.When ? "text-primary" : (When == DateTime.MinValue ? "text-muted" : ""))" @onclick="(() => Selected = SelectedField.When)">
+            <h1>
+                <Icon Identifier="calendar" />
+            </h1>
+            <span>
+                @if (When != DateTime.MinValue)
+                {
+                    <DateValue Value="When" />
+                }
+            </span>
+        </div>
+    </div>
+    <hr />
+    @if (Selected == SelectedField.Description)
+    {
+        <div class="form-group">
+            <label for="expense-description">Description:</label>
+            <input type="text" class="form-control" id="expense-description" placeholder="Expense Description" data-autofocus @bind="@Description" />
+        </div>
+    }
+    else if (Selected == SelectedField.Amount)
+    {
+        <div class="form-group">
+            <label for="expense-amount">Amount:</label>
+            <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
+        </div>
+    }
+    else if (Selected == SelectedField.When)
+    {
+        <div class="form-group">
+            <label for="expense-when">When:</label>
+            <DateBox Id="expense-when" @bind-Value="When" AutoFocus="true" />
+        </div>
+    }
+    else if (Selected == SelectedField.Category)
+    {
+        <div class="form-group">
+            @if (Categories != null)
+            {
+                var isFistCategory = true;
+
+                <div class="form-row">
+                    <div class="col-6 col-md-4 mb-2">
+                        <button type="button" class="btn btn-block btn-selectable h-100 bg-white @(EmptyCategoryKey.Equals(CategoryKey) ? "btn-selectable-selected" : "")" @onclick="@(() => CategoryKey = EmptyCategoryKey)">
+                            <div>
+                                <h2></h2>
+                            </div>
+                            <div class="text-truncate">
+                                <strong></strong>
+                            </div>
+                            <div class="text-truncate">
+                                <span></span>
+                            </div>
+                        </button>
+                    </div>
+
+                    @foreach (var category in Categories)
+                    {
+                        var buttonId = isFistCategory ? "expense-template-category-first" : null;
+                        isFistCategory = false;
+
+                        <div class="col-6 col-md-4 mb-2">
+                            <button type="button" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                                <div>
+                                    <h2>@category.Icon</h2>
+                                </div>
+                                <div class="text-truncate">
+                                    <strong>@category.Name</strong>
+                                </div>
+                                <div class="text-truncate">
+                                    <span>@category.Description</span>
+                                </div>
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</Modal>

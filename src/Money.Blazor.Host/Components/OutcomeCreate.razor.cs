@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public partial class OutcomeCreate : System.IDisposable
+    public partial class OutcomeCreate : System.IDisposable, IExpenseCreate
     {
         private static int instanceCounter = 0;
 

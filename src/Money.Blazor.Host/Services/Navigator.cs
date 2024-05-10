@@ -190,7 +190,7 @@ namespace Money.Services
 
         public class ComponentContainer
         {
-            public OutcomeCreate ExpenseCreate { get; set; }
+            public IExpenseCreate ExpenseCreate { get; set; }
             public MainMenuBase MainMenu { get; internal set; }
         }
     }

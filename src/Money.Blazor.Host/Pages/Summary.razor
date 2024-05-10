@@ -15,14 +15,19 @@
 
     @if (SelectedPeriod != null)
     { 
-        <div class="mb-3">
-            <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
-
-            <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetPeriodsAsync" LinkFactory="UrlSummary" />
-
-            <span class="pl-2">
-                <Loading Context="@CategoriesLoading" />
-            </span>
+        <div class="d-flex justify-content-between mb-3">
+            <div>
+                <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetPeriodsAsync" LinkFactory="UrlSummary" />
+                <span class="pl-2">
+                    <Loading Context="@CategoriesLoading" />
+                </span>
+            </div>
+            <div class="d-flex">
+                <EnumSelector Text="Display" TType="SummaryDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
+                <span class="pl-2">
+                    <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
+                </span>
+            </div>
         </div>
     }
 
@@ -44,16 +49,26 @@
 
                         <div class="value">
                             <div class="amount">
-                                @if (IncomeTotal != null)
+                                @if (SelectedDisplayType == SummaryDisplayType.Total)
                                 {
-                                    <span class="text-success mr-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))">
-                                        @FormatPrice(IncomeTotal)
+                                    @if (IncomeTotal != null)
+                                    {
+                                        <span class="text-success mr-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))">
+                                            @FormatPrice(IncomeTotal)
+                                        </span>
+                                    }
+
+                                    <span class="text-danger">
+                                        @FormatPrice(ExpenseTotal, CurrencyFormatter.FormatZero.Zero)
                                     </span>
                                 }
-
-                                <span class="text-danger">
-                                    @FormatPrice(ExpenseTotal, CurrencyFormatter.FormatZero.Zero)
-                                </span>
+                                else
+                                {
+                                    var diff = (IncomeTotal ?? new Price(0, ExpenseTotal.Currency)) - ExpenseTotal;
+                                    <span class="@(diff.Value > 0 ? "text-success" : "text-danger")">
+                                        @FormatPrice(diff, applyPlusForPositiveNumbers: true)
+                                    </span>
+                                }
                             </div>
                         </div>
                     </div>

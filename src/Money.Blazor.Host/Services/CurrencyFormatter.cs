@@ -48,7 +48,7 @@ namespace Money.Services
             }
         }
 
-        public string Format(Price price, FormatZero zero = FormatZero.Zero, bool applyUserDigits = true)
+        public string Format(Price price, FormatZero zero = FormatZero.Zero, bool applyUserDigits = true, bool applyPlusForPositiveNumbers = false)
         {
             if (price == null || price.Value == 0)
             {
@@ -60,10 +60,10 @@ namespace Money.Services
                 };
             }
 
-            return FormatInternal(price, applyUserDigits);
+            return FormatInternal(price, applyUserDigits, applyPlusForPositiveNumbers);
         }
 
-        private string FormatInternal(Price price, bool applyUserDigits = true) 
+        private string FormatInternal(Price price, bool applyUserDigits = true, bool applyPlusForPositiveNumbers = false) 
         {
             Ensure.NotNull(price, "price");
             
@@ -83,7 +83,12 @@ namespace Money.Services
                 modifiedCulture.NumberFormat.CurrencySymbol = currency.Symbol;
             }
 
-            return price.Value.ToString("C", modifiedCulture ?? culture);
+            string value = price.Value.ToString("C", modifiedCulture ?? culture);
+            if (applyPlusForPositiveNumbers && price.Value > 0)
+                value = $"+{value}";
+
+            Console.WriteLine($"DEBUG {value} {applyPlusForPositiveNumbers}");
+            return value;
         }
 
         public enum FormatZero

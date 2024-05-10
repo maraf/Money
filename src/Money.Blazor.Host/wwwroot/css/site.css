@@ -343,16 +343,6 @@ h4 {
   cursor: pointer;
 }
 
-.summary {
-  position: relative;
-}
-.summary .sort {
-  position: absolute;
-  right: 0;
-}
-.summary .sort .btn {
-  border-color: transparent;
-}
 .summary .months {
   padding-right: 70px;
 }

@@ -67,6 +67,7 @@ namespace Money.Pages
         protected LoadingContext CategoriesLoading { get; } = new LoadingContext();
         protected Price IncomeTotal { get; private set; }
         protected Price ExpenseTotal { get; private set; }
+        protected SummaryDisplayType SelectedDisplayType { get; set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
 
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
@@ -191,8 +192,8 @@ namespace Money.Pages
             return percentage.ToString("0.##", CultureInfo.InvariantCulture);
         }
 
-        protected string FormatPrice(Price price, CurrencyFormatter.FormatZero formatZero = CurrencyFormatter.FormatZero.Empty)
-            => formatter.Format(price, formatZero);
+        protected string FormatPrice(Price price, CurrencyFormatter.FormatZero formatZero = CurrencyFormatter.FormatZero.Empty, bool applyPlusForPositiveNumbers = false)
+            => formatter.Format(price, formatZero, applyPlusForPositiveNumbers: applyPlusForPositiveNumbers);
 
         public void Dispose()
             => UnBindEvents();

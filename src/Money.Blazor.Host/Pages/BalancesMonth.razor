@@ -46,7 +46,7 @@ else
                             {
                                 var diff = model.IncomeSummary - model.ExpenseSummary;
                                 <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
-                                    @CurrencyFormatter.Format(diff)
+                                    @CurrencyFormatter.Format(diff, applyPlusForPositiveNumbers: true)
                                 </small>
                             }
                         </div>
@@ -66,7 +66,7 @@ else
                             {
                                 var diff = model.IncomeSummary - model.ExpenseSummary;
                                 <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
-                                    @CurrencyFormatter.Format(diff)
+                                    @CurrencyFormatter.Format(diff, applyPlusForPositiveNumbers: true)
                                 </small>
                             }
                         </div>

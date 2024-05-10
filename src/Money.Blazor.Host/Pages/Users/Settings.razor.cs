@@ -59,6 +59,9 @@ namespace Money.Pages.Users
         protected EnumPropertyViewModel<BalanceDisplayType> BalanceDisplay { get; set; }
         protected PropertyDialog BalanceDisplayEditor { get; set; }
 
+        protected EnumPropertyViewModel<SummaryDisplayType> SummaryDisplay { get; set; }
+        protected PropertyDialog SummaryDisplayEditor { get; set; }
+
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
 
@@ -72,8 +75,10 @@ namespace Money.Pages.Users
             DateFormat = AddProperty("DateFormat", "Date format", () => DateFormatEditor.Show(), icon: "calendar-day", defaultValue: CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
             MobileMenu = AddProperty<MobileMenuPropertyViewModel>("MobileMenu", "Mobile menu", () => MobileMenuEditor.Show(), icon: "mobile");
             SummarySort = AddProperty<SortPropertyViewModel<SummarySortType>>("SummarySort", "Summary sort", () => SummarySortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByCategory-Ascending");
+            SummaryDisplay = AddProperty<EnumPropertyViewModel<SummaryDisplayType>>("SummaryDisplay", "Summary display", () => SummaryDisplayEditor.Show(), icon: "eye", defaultValue: "Total");
             ExpenseOverviewSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("ExpenseOverviewSort", "Expense overview sort", () => ExpenseOverviewSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
-            BalanceDisplay = AddProperty<EnumPropertyViewModel<BalanceDisplayType>>("BalanceDisplay", "Balance display", () => BalanceDisplayEditor.Show(), icon: "tv", defaultValue: "Total");
+            SearchSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("SearchSort", "Search sort", () => SearchSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
+            BalanceDisplay = AddProperty<EnumPropertyViewModel<BalanceDisplayType>>("BalanceDisplay", "Balance display", () => BalanceDisplayEditor.Show(), icon: "eye", defaultValue: "Total");
 
             await LoadAsync();
         }

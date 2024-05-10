@@ -81,6 +81,7 @@ namespace Money.Pages
 
             await base.OnInitializedAsync();
 
+            SelectedDisplayType = await Queries.QueryAsync(new GetSummaryDisplayProperty());
             SortDescriptor = await Queries.QueryAsync(new GetSummarySortProperty());
             formatter = await CurrencyFormatterFactory.CreateAsync();
         }

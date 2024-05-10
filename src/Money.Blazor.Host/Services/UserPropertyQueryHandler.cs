@@ -45,6 +45,10 @@ namespace Money.Services
             {
                 return await GetEnumAsync<BalanceDisplayType>(dispatcher, "BalanceDisplay", "Total");
             }
+            else if (query is GetSummaryDisplayProperty) 
+            {
+                return await GetEnumAsync<SummaryDisplayType>(dispatcher, "SummaryDisplay", "Total");
+            }
 
             return await next(query);
         }

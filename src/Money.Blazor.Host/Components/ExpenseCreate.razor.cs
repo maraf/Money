@@ -58,9 +58,11 @@ namespace Money.Components
         protected async override Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
-            Categories = await Queries.QueryAsync(new ListAllCategory());
-            Currencies = await Queries.QueryAsync(new ListAllCurrency());
+        }
+
+        protected async override Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
         }
 
         public void Dispose()
@@ -72,11 +74,20 @@ namespace Money.Components
         public void Show(IKey categoryKey)
         {
             base.Show();
+            _ = LoadAsync();
         }
 
         public void Show(Price amount, string description, IKey categoryKey, bool isFixed)
         {
             base.Show();
+            _ = LoadAsync();
+        }
+
+        protected async Task LoadAsync() 
+        {
+            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
+            Categories = await Queries.QueryAsync(new ListAllCategory());
+            Currencies = await Queries.QueryAsync(new ListAllCurrency());
         }
 
         protected enum SelectedField

@@ -15,7 +15,10 @@
                 <Icon Prefix="fas" Identifier="dollar-sign" />
             </h1>
             <span>
-                @CurrencyFormatter?.Format(Amount)
+                @if (Amount != null)
+                {
+                    @CurrencyFormatter?.Format(Amount)
+                }
             </span>
         </div>
         <div class="text-center @(Selected == SelectedField.Category ? "text-primary" : (CategoryKey.IsEmpty ? "text-muted" : ""))" @onclick="(() => Selected = SelectedField.Category)">
@@ -68,25 +71,15 @@
     else if (Selected == SelectedField.Category)
     {
         <div class="form-group">
+            <span>
+                @Categories?.Count categories
+            </span>
+
             @if (Categories != null)
             {
                 var isFistCategory = true;
 
                 <div class="form-row">
-                    <div class="col-6 col-md-4 mb-2">
-                        <button type="button" class="btn btn-block btn-selectable h-100 bg-white @(EmptyCategoryKey.Equals(CategoryKey) ? "btn-selectable-selected" : "")" @onclick="@(() => CategoryKey = EmptyCategoryKey)">
-                            <div>
-                                <h2></h2>
-                            </div>
-                            <div class="text-truncate">
-                                <strong></strong>
-                            </div>
-                            <div class="text-truncate">
-                                <span></span>
-                            </div>
-                        </button>
-                    </div>
-
                     @foreach (var category in Categories)
                     {
                         var buttonId = isFistCategory ? "expense-template-category-first" : null;

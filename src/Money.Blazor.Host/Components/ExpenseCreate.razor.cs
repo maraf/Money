@@ -83,11 +83,15 @@ namespace Money.Components
             _ = LoadAsync();
         }
 
-        protected async Task LoadAsync() 
+        protected async Task LoadAsync()
         {
+            if (When == DateTime.MinValue)
+                When = DateTime.Today;
+
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
+            StateHasChanged();
         }
 
         protected enum SelectedField

@@ -51,9 +51,9 @@
     </ul>
     @if (Selected == SelectedField.Description)
     {
-        <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind:event="input" @bind="@Description" @bind:after="SuggestTemplates" />
+        <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:after="SuggestTemplates" />
 
-        <div class="form-row">
+        <div class="form-row mt-3">
             @foreach (var model in SuggestedTemplates)
             {
                 <div class="col-6 col-sm-6 col-md-4">
@@ -80,7 +80,7 @@
 
                                         @if (model.IsFixed)
                                         {
-                                            <em class="text-muted ml-1">Fixed</em>
+                                        <em class="text-muted ml-1">Fixed</em>
                                         }
                                     </small>
                                 </p>

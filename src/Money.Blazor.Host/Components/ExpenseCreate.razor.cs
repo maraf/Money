@@ -142,6 +142,8 @@ namespace Money.Components
             CategoryKey = model.CategoryKey;
             //TODO: IsFixed = model.IsFixed;
 
+            SuggestedTemplates.Clear();
+
             return Task.CompletedTask;
         }
     }

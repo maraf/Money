@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,6 +41,7 @@ namespace Money.Components
         protected SelectedField Selected { get; set; } = SelectedField.Description;
         protected Price Amount { get; set; }
         protected string Description { get; set; }
+        protected List<ExpenseTemplateModel> SuggestedTemplates { get; set; } = new();
         protected IKey CategoryKey { get; set; } = KeyFactory.Empty(typeof(Category));
         protected DateTime When { get; set; }
 
@@ -91,6 +93,7 @@ namespace Money.Components
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
+            Templates = await Queries.QueryAsync(new ListAllExpenseTemplate());
             StateHasChanged();
         }
 
@@ -112,6 +115,34 @@ namespace Money.Components
         {
             var category = Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
             return category?.Color;
+        }
+
+        protected void SuggestTemplates()
+        {
+            SuggestedTemplates.Clear();
+            string description = Description?.ToLowerInvariant();
+            if (String.IsNullOrEmpty(description))
+                return;
+
+            foreach (var template in Templates)
+            {
+                string templateDescription = template.Description?.ToLowerInvariant();
+                if (String.IsNullOrEmpty(description))
+                    continue;
+
+                if (templateDescription.Contains(description))
+                    SuggestedTemplates.Add(template);
+            }
+        }
+
+        protected Task ApplyTemplateAsync(ExpenseTemplateModel model)
+        {
+            Amount = model.Amount;
+            Description = model.Description;
+            CategoryKey = model.CategoryKey;
+            //TODO: IsFixed = model.IsFixed;
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -5,8 +5,8 @@
     RenderFragment FieldTab(SelectedField field, bool isFilled, string icon, string iconPrefix, RenderFragment value)
     {
         return
-            @<li class="nav-item">
-                <a class="nav-link @(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => Selected = field)">
+            @<div class="col text-center text-truncate">
+                <a class="@(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => Selected = field)">
                     <h1>
                         <Icon Prefix="@iconPrefix" Identifier="@icon" />
                     </h1>
@@ -14,13 +14,13 @@
                         @value
                     </span>
                 </a>
-            </li>
+            </div>
         ;
     }
 }
 
 <Modal @ref="Modal" Title="Expense wizard" IsOverflow="true">
-    <ul class="nav nav-fill mb-3">
+    <div class="row mb-3">
         @FieldTab(SelectedField.Description, !String.IsNullOrEmpty(Description), "comment", null, @<span>@Description</span>)
         @FieldTab(SelectedField.Amount, Amount != null, "dollar-sign", null, 
             @<span>
@@ -46,7 +46,7 @@
                 }
             </span>
         )
-    </ul>
+    </div>
     @if (Selected == SelectedField.Description)
     {
         <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />

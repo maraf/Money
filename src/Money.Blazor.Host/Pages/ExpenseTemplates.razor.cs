@@ -56,7 +56,6 @@ namespace Money.Pages
         protected Confirm DeleteConfirm { get; set; }
         protected OutcomeCreate ExpenseModal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
-        protected List<CategoryModel> Categories { get; private set; }
         
         protected IKey ToDeleteKey { get; set; }
         protected ExpenseTemplateModel Selected { get; set; }
@@ -75,7 +74,6 @@ namespace Money.Pages
 
             await base.OnInitializedAsync();
 
-            Categories = await Queries.QueryAsync(new ListAllCategory(true));
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
 
             await ReloadAsync();
@@ -97,18 +95,6 @@ namespace Money.Pages
             3 => "3rd",
             _ => $"{day}th"
         };
-
-        protected string FindCategoryName(IKey categoryKey)
-        {
-            var category = Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
-            return category?.Name;
-        }
-
-        protected Color? FindCategoryColor(IKey categoryKey)
-        {
-            var category = Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
-            return category?.Color;
-        }
 
         private async Task ReloadAsync()
         {

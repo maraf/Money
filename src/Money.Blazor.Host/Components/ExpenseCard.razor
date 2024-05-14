@@ -7,8 +7,8 @@
         <div class="col-8 col-md-3 text-md-right mb-2 mb-md-0 text-right">
             <h3 class="m-0">@Context.CurrencyFormatter?.Format(Model.Amount)</h3>
         </div>
-        <div class="col-auto col-md-2 mb-2 mb-md-0 @CategoryColor.SelectAccent("back-dark", "back-light")">
-            <span class="badge" style="background-color: @CategoryColor.ToHashCode()">@CategoryName</span>
+        <div class="col-auto col-md-2 mb-2 mb-md-0">
+            <CategoryTag Key="@Model.CategoryKey" />
         </div>
         <div class="col mb-2 mb-md-0">
             @Model.Description

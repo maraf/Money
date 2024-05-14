@@ -23,7 +23,7 @@ namespace Money.Components
 
         protected string Name { get; set; }
         protected Color Color { get; set; }
-        protected string BackgroundCssClass { get; set; }
+        protected string AccentColorCssClass { get; set; }
 
         protected override async Task OnParametersSetAsync()
         {
@@ -36,7 +36,7 @@ namespace Money.Components
             {
                 Name = await Queries.QueryAsync(new GetCategoryName(Key));
                 Color = await Queries.QueryAsync(new GetCategoryColor(Key));
-                BackgroundCssClass = Color.SelectAccent("back-dark", "back-light");
+                AccentColorCssClass = Color.SelectAccent("back-dark", "back-light");
             }
         }
     }

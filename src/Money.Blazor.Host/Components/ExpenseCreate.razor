@@ -51,7 +51,7 @@
     </ul>
     @if (Selected == SelectedField.Description)
     {
-        <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:after="SuggestTemplates" />
+        <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
 
         <div class="form-row mt-3">
             @foreach (var model in SuggestedTemplates)

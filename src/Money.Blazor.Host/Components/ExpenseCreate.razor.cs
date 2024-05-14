@@ -105,18 +105,6 @@ namespace Money.Components
             When
         }
 
-        protected string FindCategoryName(IKey categoryKey)
-        {
-            var category = Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
-            return category?.Name;
-        }
-
-        protected Color? FindCategoryColor(IKey categoryKey)
-        {
-            var category = Categories.FirstOrDefault(c => c.Key.Equals(categoryKey));
-            return category?.Color;
-        }
-
         protected void SuggestTemplates()
         {
             SuggestedTemplates.Clear();

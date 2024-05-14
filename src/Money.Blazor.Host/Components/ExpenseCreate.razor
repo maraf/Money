@@ -51,41 +51,55 @@
     {
         <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
 
-        <div class="form-row mt-3">
-            @foreach (var model in SuggestedTemplates)
-            {
-                <div class="col-6 col-sm-6 col-md-4">
-                    <div class="card card-hover cursor-pointer" @onclick="(async () => await ApplyTemplateAsync(model))">
-                        <div class="card-body">
-                            <div>
-                                <strong>
-                                    @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
-                                </strong>
+        <button class="btn btn-light btn-block text-left my-3" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
+            <Icon Identifier="redo" />
+            Templates
+        </button>
+        @if (AreTemplatesOpened)
+        {
+            var templates = SuggestedTemplates.Count == 0 ? Templates : SuggestedTemplates;
+
+            <style>
+                .card.card-hover {
+                    height: calc(100% - 15px);
+                }
+            </style>
+            <div class="form-row mt-3">
+                @foreach (var model in templates)
+                {
+                    <div class="col-6 col-sm-6 col-md-4">
+                        <div class="card card-hover cursor-pointer" @onclick="(async () => await ApplyTemplateAsync(model))">
+                            <div class="card-body">
+                                <div>
+                                    <strong>
+                                        @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
+                                    </strong>
+                                </div>
+
+                                @if (!model.CategoryKey.IsEmpty)
+                                {
+                                    <CategoryTag Key="@model.CategoryKey" />
+                                }
+
+                                @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
+                                {
+                                    <p class="text-truncate">
+                                        <small>
+                                            @model.Description
+
+                                            @if (model.IsFixed)
+                                            {
+                                            <em class="text-muted ml-1">Fixed</em>
+                                            }
+                                        </small>
+                                    </p>
+                                }
                             </div>
-
-                            @if (!model.CategoryKey.IsEmpty)
-                            {
-                                <CategoryTag Key="@model.CategoryKey" />
-                            }
-
-                            @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
-                            {
-                                <p class="text-truncate">
-                                    <small>
-                                        @model.Description
-
-                                        @if (model.IsFixed)
-                                        {
-                                        <em class="text-muted ml-1">Fixed</em>
-                                        }
-                                    </small>
-                                </p>
-                            }
                         </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        }
     }
     else if (Selected == SelectedField.Amount)
     {

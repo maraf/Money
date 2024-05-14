@@ -45,6 +45,7 @@ namespace Money.Components
         protected IKey CategoryKey { get; set; } = KeyFactory.Empty(typeof(Category));
         protected DateTime When { get; set; }
 
+        protected bool AreTemplatesOpened { get; set; }
         private bool isAttachedToComponentContainer;
 
         protected override void OnInitialized()
@@ -107,6 +108,7 @@ namespace Money.Components
 
         protected void SuggestTemplates()
         {
+            AreTemplatesOpened = true;
             SuggestedTemplates.Clear();
             string description = Description?.ToLowerInvariant();
             if (String.IsNullOrEmpty(description))

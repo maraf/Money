@@ -49,14 +49,16 @@
     </div>
     @if (Selected == SelectedField.Description)
     {
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
-            <div class="input-group-append">
-                <button class="btn btn-@(AreTemplatesOpened ? String.Empty : "outline-")secondary btn-block text-left" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
-                    <Icon Identifier="redo" />
-                </button>
+        <form @onsubmit="() => Selected = SelectedField.Amount">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
+                <div class="input-group-append">
+                    <button class="btn btn-@(AreTemplatesOpened ? String.Empty : "outline-")secondary btn-block text-left" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
+                        <Icon Identifier="redo" />
+                    </button>
+                </div>
             </div>
-        </div>
+        </form>
         
         @if (AreTemplatesOpened)
         {
@@ -106,11 +108,9 @@
     }
     else if (Selected == SelectedField.Amount)
     {
-        <AmountBox AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
-    }
-    else if (Selected == SelectedField.When)
-    {
-        <DateBox @bind-Value="When" AutoFocus="true" />
+        <form @onsubmit="() => Selected = SelectedField.Category">
+            <AmountBox AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
+        </form>
     }
     else if (Selected == SelectedField.Category)
     {
@@ -118,27 +118,35 @@
         {
             var isFistCategory = true;
 
-            <div class="form-row">
-                @foreach (var category in Categories)
-                {
-                    var buttonId = isFistCategory ? "expense-template-category-first" : null;
-                    isFistCategory = false;
+            <form @onsubmit="() => Selected = SelectedField.When">
+                <div class="form-row">
+                    @foreach (var category in Categories)
+                    {
+                        var buttonId = isFistCategory ? "expense-category-first" : null;
+                        isFistCategory = false;
 
-                    <div class="col-6 col-md-4 mb-2">
-                        <button type="button" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
-                            <div>
-                                <h2>@category.Icon</h2>
-                            </div>
-                            <div class="text-truncate">
-                                <strong>@category.Name</strong>
-                            </div>
-                            <div class="text-truncate">
-                                <span>@category.Description</span>
-                            </div>
-                        </button>
-                    </div>
-                }
-            </div>
+                        <div class="col-6 col-md-4 mb-2">
+                            <button type="submit" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                                <div>
+                                    <h2>@category.Icon</h2>
+                                </div>
+                                <div class="text-truncate">
+                                    <strong>@category.Name</strong>
+                                </div>
+                                <div class="text-truncate">
+                                    <span>@category.Description</span>
+                                </div>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </form>
         }
+    }
+    else if (Selected == SelectedField.When)
+    {
+        <form @onsubmit="@(async () => { await Navigator.AlertAsync("Submit expense..."); Hide(); Description = null; AreTemplatesOpened = false; Amount = null; CategoryKey = EmptyCategoryKey; When = DateTime.Today; Selected = SelectedField.Description; })">
+            <DateBox @bind-Value="When" AutoFocus="true" />
+        </form>
     }
 </Modal>

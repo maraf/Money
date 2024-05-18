@@ -22,6 +22,9 @@ namespace Money.Components
         protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
 
         [Inject]
+        protected Navigator Navigator { get; set; }
+
+        [Inject]
         protected Navigator.ComponentContainer ComponentContainer { get; set; }
 
         [Inject]

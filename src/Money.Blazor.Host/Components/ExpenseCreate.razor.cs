@@ -22,6 +22,9 @@ namespace Money.Components
         protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
 
         [Inject]
+        protected Interop Interop { get; set; }
+
+        [Inject]
         protected Navigator Navigator { get; set; }
 
         [Inject]
@@ -69,6 +72,25 @@ namespace Money.Components
         protected async override Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
+        }
+
+        protected async override Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+
+            string elementId = Selected switch 
+            {
+                SelectedField.Description => "expense-wiz-description",
+                SelectedField.Amount => "expense-wiz-amount",
+                SelectedField.Category => !CategoryKey.IsEmpty ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" : null,
+                SelectedField.When => "expense-wiz-when",
+                _ => null,
+            };
+
+            System.Console.WriteLine($"DEBUG: element to focus '{elementId}'");
+
+            if (!String.IsNullOrEmpty(elementId))
+                await Interop.FocusElementByIdAsync(elementId);
         }
 
         public void Dispose()

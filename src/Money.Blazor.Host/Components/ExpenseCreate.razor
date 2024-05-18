@@ -51,7 +51,7 @@
     {
         <form @onsubmit="() => Selected = SelectedField.Amount">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
+                <input id="expense-wiz-description" type="text" class="form-control" placeholder="Expense Description" @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
                 <div class="input-group-append">
                     <button class="btn btn-@(AreTemplatesOpened ? String.Empty : "outline-")secondary btn-block text-left" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
                         <Icon Identifier="redo" />
@@ -109,21 +109,18 @@
     else if (Selected == SelectedField.Amount)
     {
         <form @onsubmit="() => Selected = SelectedField.Category">
-            <AmountBox AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
+            <AmountBox Id="expense-wiz-amount" AutoSelect="true" @bind-Value="@Amount" />
         </form>
     }
     else if (Selected == SelectedField.Category)
     {
         if (Categories != null)
         {
-            var isFistCategory = true;
-
             <form @onsubmit="() => Selected = SelectedField.When">
                 <div class="form-row">
                     @foreach (var category in Categories)
                     {
-                        var buttonId = isFistCategory ? "expense-category-first" : null;
-                        isFistCategory = false;
+                        var buttonId = $"expense-wiz-category-{category.Key.AsGuidKey().Guid.ToString()}";
 
                         <div class="col-6 col-md-4 mb-2">
                             <button type="submit" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
@@ -146,7 +143,7 @@
     else if (Selected == SelectedField.When)
     {
         <form @onsubmit="@(async () => { await Navigator.AlertAsync("Submit expense..."); Hide(); Description = null; AreTemplatesOpened = false; Amount = null; CategoryKey = EmptyCategoryKey; When = DateTime.Today; Selected = SelectedField.Description; })">
-            <DateBox @bind-Value="When" AutoFocus="true" />
+            <DateBox Id="expense-wiz-when" @bind-Value="When" />
         </form>
     }
 </Modal>

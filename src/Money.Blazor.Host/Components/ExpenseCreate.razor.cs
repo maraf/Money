@@ -78,20 +78,25 @@ namespace Money.Components
         {
             await base.OnAfterRenderAsync(firstRender);
 
-            string elementId = Selected switch 
+            if (FocusAfterRender)
             {
-                SelectedField.Description => "expense-wiz-description",
-                SelectedField.Amount => "expense-wiz-amount",
-                SelectedField.Category => !CategoryKey.IsEmpty ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" : null,
-                SelectedField.When => "expense-wiz-when",
-                _ => null,
-            };
+                string elementId = Selected switch 
+                {
+                    SelectedField.Description => "expense-wiz-description",
+                    SelectedField.Amount => "expense-wiz-amount",
+                    SelectedField.Category => !CategoryKey.IsEmpty ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" : null,
+                    SelectedField.When => "expense-wiz-when",
+                    _ => null,
+                };
 
-            System.Console.WriteLine($"DEBUG: element to focus '{elementId}'");
+                if (!String.IsNullOrEmpty(elementId))
+                    await Interop.FocusElementByIdAsync(elementId);
 
-            if (!String.IsNullOrEmpty(elementId))
-                await Interop.FocusElementByIdAsync(elementId);
+                FocusAfterRender = false;
+            }
         }
+
+        protected bool FocusAfterRender;
 
         public void Dispose()
         {
@@ -102,6 +107,8 @@ namespace Money.Components
         public void Show(IKey categoryKey)
         {
             base.Show();
+            FocusAfterRender = true;
+            
             CategoryKey = categoryKey;
 
             _ = LoadAsync();
@@ -110,6 +117,8 @@ namespace Money.Components
         public void Show(Price amount, string description, IKey categoryKey, bool isFixed)
         {
             base.Show();
+            FocusAfterRender = true;
+
             Amount = amount;
             Description = description;
             CategoryKey = categoryKey;
@@ -168,6 +177,12 @@ namespace Money.Components
             AreTemplatesOpened = false;
 
             return Task.CompletedTask;
+        }
+
+        protected void SetSelectedField(SelectedField selected, bool focusAfterRender = true)
+        {
+            Selected = selected;
+            FocusAfterRender = focusAfterRender;
         }
     }
 }

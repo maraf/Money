@@ -6,7 +6,7 @@
     {
         return
             @<div class="col text-center text-truncate">
-                <a class="@(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => Selected = field)">
+                <a class="@(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => SetSelectedField(field))">
                     <h1>
                         <Icon Prefix="@iconPrefix" Identifier="@icon" />
                     </h1>
@@ -49,11 +49,11 @@
     </div>
     @if (Selected == SelectedField.Description)
     {
-        <form @onsubmit="() => Selected = SelectedField.Amount">
+        <form @onsubmit="() => SetSelectedField(SelectedField.Amount)">
             <div class="input-group">
                 <input id="expense-wiz-description" type="text" class="form-control" placeholder="Expense Description" @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
                 <div class="input-group-append">
-                    <button class="btn btn-@(AreTemplatesOpened ? String.Empty : "outline-")secondary btn-block text-left" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
+                    <button type="button" class="btn btn-@(AreTemplatesOpened ? String.Empty : "outline-")secondary btn-block text-left" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
                         <Icon Identifier="redo" />
                     </button>
                 </div>
@@ -108,7 +108,7 @@
     }
     else if (Selected == SelectedField.Amount)
     {
-        <form @onsubmit="() => Selected = SelectedField.Category">
+        <form @onsubmit="() => SetSelectedField(SelectedField.Category)">
             <AmountBox Id="expense-wiz-amount" AutoSelect="true" @bind-Value="@Amount" />
         </form>
     }
@@ -116,7 +116,7 @@
     {
         if (Categories != null)
         {
-            <form @onsubmit="() => Selected = SelectedField.When">
+            <form @onsubmit="() => SetSelectedField(SelectedField.When)">
                 <div class="form-row">
                     @foreach (var category in Categories)
                     {
@@ -142,7 +142,7 @@
     }
     else if (Selected == SelectedField.When)
     {
-        <form @onsubmit="@(async () => { await Navigator.AlertAsync("Submit expense..."); Hide(); Description = null; AreTemplatesOpened = false; Amount = null; CategoryKey = EmptyCategoryKey; When = DateTime.Today; Selected = SelectedField.Description; })">
+        <form @onsubmit="@(async () => { await Navigator.AlertAsync("Submit expense..."); Hide(); Description = null; AreTemplatesOpened = false; Amount = null; CategoryKey = EmptyCategoryKey; When = DateTime.Today; SetSelectedField(SelectedField.Description, false); })">
             <DateBox Id="expense-wiz-when" @bind-Value="When" />
         </form>
     }

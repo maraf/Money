@@ -96,6 +96,10 @@ window.Money = {
         const element = document.getElementById(id);
         if (element) {
             element.focus();
+
+            if ($(element).is("[data-select]")) {
+                element.setSelectionRange(0, element.value.length)
+            }
         }
     }
 };

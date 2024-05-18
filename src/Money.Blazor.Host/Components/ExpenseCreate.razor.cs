@@ -77,12 +77,19 @@ namespace Money.Components
         public void Show(IKey categoryKey)
         {
             base.Show();
+            CategoryKey = categoryKey;
+
             _ = LoadAsync();
         }
 
         public void Show(Price amount, string description, IKey categoryKey, bool isFixed)
         {
             base.Show();
+            Amount = amount;
+            Description = description;
+            CategoryKey = categoryKey;
+            // TODO: isFixed
+
             _ = LoadAsync();
         }
 
@@ -133,6 +140,7 @@ namespace Money.Components
             //TODO: IsFixed = model.IsFixed;
 
             SuggestedTemplates.Clear();
+            AreTemplatesOpened = false;
 
             return Task.CompletedTask;
         }

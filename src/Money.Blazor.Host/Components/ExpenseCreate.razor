@@ -49,12 +49,15 @@
     </div>
     @if (Selected == SelectedField.Description)
     {
-        <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
-
-        <button class="btn btn-light btn-block text-left my-3" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
-            <Icon Identifier="redo" />
-            Templates
-        </button>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Expense Description" data-autofocus @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
+            <div class="input-group-append">
+                <button class="btn btn-@(AreTemplatesOpened ? String.Empty : "outline-")secondary btn-block text-left" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
+                    <Icon Identifier="redo" />
+                </button>
+            </div>
+        </div>
+        
         @if (AreTemplatesOpened)
         {
             var templates = SuggestedTemplates.Count == 0 ? Templates : SuggestedTemplates;

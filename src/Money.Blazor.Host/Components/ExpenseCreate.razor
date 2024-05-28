@@ -2,16 +2,23 @@
 
 @code
 {
-    RenderFragment FieldTab(SelectedField field, bool isFilled, string icon, string iconPrefix, RenderFragment value)
+    RenderFragment FieldTab(SelectedField field, bool isFilled, string icon, string placeholder, RenderFragment value)
     {
         return
             @<div class="col text-center text-truncate">
                 <a class="@(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => SetSelectedField(field))">
                     <h1>
-                        <Icon Prefix="@iconPrefix" Identifier="@icon" />
+                        <Icon Identifier="@icon" />
                     </h1>
-                    <span>
-                        @value
+                    <span class="@(!isFilled ? "font-italic" : null)">
+                        @if (!isFilled)
+                        {
+                            @placeholder
+                        }
+                        else
+                        {
+                            @value
+                        }
                     </span>
                 </a>
             </div>
@@ -21,30 +28,17 @@
 
 <Modal @ref="Modal" Title="Expense wizard" IsOverflow="true">
     <div class="row mb-3">
-        @FieldTab(SelectedField.Description, !String.IsNullOrEmpty(Description), "comment", null, @<span>@Description</span>)
-        @FieldTab(SelectedField.Amount, Amount != null, "dollar-sign", null, 
-            @<span>
-                @if (Amount != null)
-                {
-                    @CurrencyFormatter?.Format(Amount)
-                }
-            </span>
+        @FieldTab(SelectedField.Description, !String.IsNullOrEmpty(Description), "comment", "Description", 
+            @<span>@Description</span>
         )
-        @FieldTab(SelectedField.Category, !CategoryKey.IsEmpty, "tag", null, 
-            @<span>
-                @if (!CategoryKey.IsEmpty)
-                {
-                    <CategoryTag Key="@CategoryKey" />
-                }
-            </span>
+        @FieldTab(SelectedField.Amount, Amount != null, "dollar-sign", "Amount",
+            @<span>@CurrencyFormatter?.Format(Amount)</span>
         )
-        @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", null, 
-            @<span>
-                @if (When != DateTime.MinValue)
-                {
-                    <DateValue Value="When" />
-                }
-            </span>
+        @FieldTab(SelectedField.Category, !CategoryKey.IsEmpty, "tag", "Category",
+            @<CategoryTag Key="@CategoryKey" />
+        )
+        @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
+            @<DateValue Value="When" />
         )
     </div>
     @if (Selected == SelectedField.Description)

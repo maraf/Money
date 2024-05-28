@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public partial class ExpenseCreate : System.IDisposable, IExpenseCreate
+    public partial class ExpenseCreate : System.IDisposable, IExpenseCreateNavigator
     {
         protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
 
@@ -104,28 +104,29 @@ namespace Money.Components
                 ComponentContainer.ExpenseCreate = null;
         }
 
-        public void Show(IKey categoryKey)
+        private void ShowInternal(Action setParameters = null)
         {
             base.Show();
             FocusAfterRender = true;
             
-            CategoryKey = categoryKey;
+            setParameters?.Invoke();
 
             _ = LoadAsync();
         }
 
-        public void Show(Price amount, string description, IKey categoryKey, bool isFixed)
-        {
-            base.Show();
-            FocusAfterRender = true;
+        public new void Show() 
+            => ShowInternal();
 
+        public void Show(IKey categoryKey) 
+            => ShowInternal(() => CategoryKey = categoryKey);
+
+        public void Show(Price amount, string description, IKey categoryKey, bool isFixed) => ShowInternal(() =>
+        {
             Amount = amount;
             Description = description;
             CategoryKey = categoryKey;
             // TODO: isFixed
-
-            _ = LoadAsync();
-        }
+        });
 
         protected async Task LoadAsync()
         {

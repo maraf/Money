@@ -26,5 +26,13 @@ namespace Money.Components
             if (CategoryKey == null)
                 CategoryKey = KeyFactory.Empty(typeof(Category));
         }
+
+        public void Open()
+        {
+            if (CategoryKey.IsEmpty)
+                Navigator.OpenExpenseCreate();
+            else
+                Navigator.OpenExpenseCreate(CategoryKey);
+        }
     }
 }

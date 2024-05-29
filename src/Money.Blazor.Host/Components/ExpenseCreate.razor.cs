@@ -51,7 +51,6 @@ namespace Money.Components
         protected IKey CategoryKey { get; set; } = KeyFactory.Empty(typeof(Category));
         protected DateTime When { get; set; }
 
-        protected bool AreTemplatesOpened { get; set; }
         private bool isAttachedToComponentContainer;
 
         protected override void OnInitialized()
@@ -140,6 +139,14 @@ namespace Money.Components
             StateHasChanged();
         }
 
+        protected IEnumerable<ExpenseTemplateModel> GetTemplates()
+        {
+            if (Templates == null)
+                return Enumerable.Empty<ExpenseTemplateModel>();
+
+            return SuggestedTemplates.Count == 0 ? Templates : SuggestedTemplates;
+        }
+
         protected enum SelectedField
         {
             Amount,
@@ -150,7 +157,6 @@ namespace Money.Components
 
         protected void SuggestTemplates()
         {
-            AreTemplatesOpened = true;
             SuggestedTemplates.Clear();
             string description = Description?.ToLowerInvariant();
             if (String.IsNullOrEmpty(description))
@@ -175,7 +181,6 @@ namespace Money.Components
             //TODO: IsFixed = model.IsFixed;
 
             SuggestedTemplates.Clear();
-            AreTemplatesOpened = false;
 
             return Task.CompletedTask;
         }
@@ -184,6 +189,22 @@ namespace Money.Components
         {
             Selected = selected;
             FocusAfterRender = focusAfterRender;
+        }
+
+        protected async Task CreateAsync()
+        {
+            await Navigator.AlertAsync("Submit expense...");
+
+            Hide();
+
+            await Task.Delay(100);
+
+            SuggestedTemplates.Clear();
+            Description = null;
+            Amount = null;
+            CategoryKey = EmptyCategoryKey;
+            When = DateTime.Today;
+            SetSelectedField(SelectedField.Description, false);
         }
     }
 }

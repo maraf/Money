@@ -1,7 +1,7 @@
 ﻿<div @ref="Container" class="modal fade" tabindex="-1" role="dialog">
     <div class="@DialogCssClass" role="document">
-        <form @onsubmit="@OnFormSubmit" @onsubmit:preventDefault="true">
-            <div class="modal-content">
+        @Form(
+            @<div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title text-truncate">
                         @if (!String.IsNullOrEmpty(TitleIcon))
@@ -23,6 +23,20 @@
                     <button type="button" class="btn btn-default" @onclick="@OnCloseButtonClick">@CloseButtonText</button>
                 </div>
             </div>
-        </form>
+        )
     </div>
 </div>
+
+@code
+{
+
+    RenderFragment Form(RenderFragment content)
+    {
+        if (IsForm)
+        {
+            return @<form @onsubmit="@OnFormSubmit" @onsubmit:preventDefault="true">@content</form>;
+        }
+        
+        return content;
+    }
+}

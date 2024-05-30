@@ -1,4 +1,4 @@
-﻿@inherits ModalDialog
+@inherits ModalDialog
 
 @code
 {
@@ -41,6 +41,9 @@
             @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
                 @<DateValue Value="When" />
             )
+            @FieldTab(SelectedField.Flags, IsFixed, "ellipsis-v", "Flags",
+                @<span>@(IsFixed ? "Fixed" : string.Empty)</span>
+            )
         </div>
         @if (Selected == SelectedField.Description)
         {
@@ -77,7 +80,7 @@
 
                                             @if (model.IsFixed)
                                             {
-                                            <em class="text-muted ml-1">Fixed</em>
+                                                <em class="text-muted ml-1">Fixed</em>
                                             }
                                         </small>
                                     </p>
@@ -126,6 +129,18 @@
         {
             <form @onsubmit="@CreateAsync">
                 <DateBox Id="expense-wiz-when" @bind-Value="When" />
+            </form>
+        }
+        else if (Selected == SelectedField.Flags)
+        {
+            <form @onsubmit="@CreateAsync">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" @bind="IsFixed" id="expense-wiz-fixed" />
+                        Fixed
+                        <span class="text-muted">(isn't shown in summary)</span>
+                    </label>
+                </div>
             </form>
         }
     </ChildContent>

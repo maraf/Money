@@ -50,6 +50,7 @@ namespace Money.Components
         protected List<ExpenseTemplateModel> SuggestedTemplates { get; set; } = new();
         protected IKey CategoryKey { get; set; } = KeyFactory.Empty(typeof(Category));
         protected DateTime When { get; set; }
+        protected bool IsFixed { get; set; }
 
         private bool isAttachedToComponentContainer;
 
@@ -61,16 +62,6 @@ namespace Money.Components
                 ComponentContainer.ExpenseCreate = this;
                 isAttachedToComponentContainer = true;
             }
-        }
-
-        protected async override Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
-        }
-
-        protected async override Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
         }
 
         protected async override Task OnAfterRenderAsync(bool firstRender)
@@ -85,6 +76,7 @@ namespace Money.Components
                     SelectedField.Amount => "expense-wiz-amount",
                     SelectedField.Category => !CategoryKey.IsEmpty ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" : null,
                     SelectedField.When => "expense-wiz-when",
+                    SelectedField.Flags => "expense-wiz-fixed",
                     _ => null,
                 };
 
@@ -124,7 +116,7 @@ namespace Money.Components
             Amount = amount;
             Description = description;
             CategoryKey = categoryKey;
-            // TODO: isFixed
+            IsFixed = isFixed;
         });
 
         protected async Task LoadAsync()
@@ -152,7 +144,8 @@ namespace Money.Components
             Amount,
             Description,
             Category,
-            When
+            When,
+            Flags
         }
 
         protected void SuggestTemplates()
@@ -178,7 +171,7 @@ namespace Money.Components
             Amount = model.Amount;
             Description = model.Description;
             CategoryKey = model.CategoryKey;
-            //TODO: IsFixed = model.IsFixed;
+            IsFixed = model.IsFixed;
 
             SuggestedTemplates.Clear();
 
@@ -204,6 +197,7 @@ namespace Money.Components
             Amount = null;
             CategoryKey = EmptyCategoryKey;
             When = DateTime.Today;
+            IsFixed = false;
             SetSelectedField(SelectedField.Description, false);
         }
     }

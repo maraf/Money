@@ -5,9 +5,11 @@ using Money.Pages;
 using Money.Services;
 using Neptuo;
 using Neptuo.Commands;
+using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,12 +39,17 @@ namespace Money.Components
         protected IQueryDispatcher Queries { get; set; }
 
         [Inject]
+        internal ILog<ExpenseCreate> Log { get; set; }
+
+        [Inject]
         protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
         protected CurrencyFormatter CurrencyFormatter { get; set; }
 
         protected List<ExpenseTemplateModel> Templates { get; private set; }
         protected List<CategoryModel> Categories { get; private set; }
         protected List<CurrencyModel> Currencies { get; private set; }
+
+        protected ErrorMessages Errors { get; } = new(new(1), new(1), new(1), new(1), new(1));
 
         protected SelectedField Selected { get; set; } = SelectedField.Description;
         protected Price Amount { get; set; }
@@ -148,6 +155,35 @@ namespace Money.Components
             Flags
         }
 
+        protected record ErrorMessages(List<string> Amount, List<string> Description, List<string> Category, List<string> When, List<string> Flags) : IEnumerable<string>
+        {
+            public void Clear()
+            {
+                Amount.Clear();
+                Description.Clear();
+                Category.Clear();
+                When.Clear();
+                Flags.Clear();
+            }
+
+            public IEnumerable<string> Get(SelectedField field) => field switch 
+            {
+                SelectedField.Amount => Amount,
+                SelectedField.Description => Description,
+                SelectedField.Category => Category,
+                SelectedField.When => When,
+                SelectedField.Flags => Flags,
+                _ => throw new InvalidOperationException($"The '{field}' is not supported")
+            };
+
+            public IEnumerable<string> All() => Enumerable.Concat(Amount, Enumerable.Concat(Description, Enumerable.Concat(Category, Enumerable.Concat(When, Flags))));
+
+            public bool IsEmpty() => Amount.Count == 0 && Description.Count == 0 && Category.Count == 0 && When.Count == 0 && Flags.Count == 0;
+
+            public IEnumerator<string> GetEnumerator() => All().GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => All().GetEnumerator();
+        }
+
         protected void SuggestTemplates()
         {
             SuggestedTemplates.Clear();
@@ -186,11 +222,14 @@ namespace Money.Components
 
         protected async Task CreateAsync()
         {
+            if (!Validate())
+                return;
+
             await Navigator.AlertAsync("Submit expense...");
 
             Hide();
 
-            await Task.Delay(100);
+            await Task.Delay(200);
 
             SuggestedTemplates.Clear();
             Description = null;
@@ -199,6 +238,27 @@ namespace Money.Components
             When = DateTime.Today;
             IsFixed = false;
             SetSelectedField(SelectedField.Description, false);
+        }
+
+        private bool Validate()
+        {
+            Log.Debug($"Expense: Amount: {Amount}, Category: {CategoryKey}, When: {When}.");
+
+            void ValidateField(SelectedField field, Func<bool> validator)
+            {
+                bool areMessagesEmpty = Errors.IsEmpty();
+                bool isInvalid = validator();
+                if (areMessagesEmpty && isInvalid)
+                    SetSelectedField(field);
+            }
+
+            Errors.Clear();
+            ValidateField(SelectedField.Description, () => Validator.AddOutcomeDescription(Errors.Description, Description));
+            ValidateField(SelectedField.Amount, () => Validator.AddOutcomeAmount(Errors.Amount, Amount?.Value ?? 0));
+            ValidateField(SelectedField.Category, () => Validator.AddOutcomeCategoryKey(Errors.Category, CategoryKey));
+
+            Log.Debug($"Expense: Validation: '{string.Join("', '", Errors)}'.");
+            return Errors.IsEmpty();
         }
     }
 }

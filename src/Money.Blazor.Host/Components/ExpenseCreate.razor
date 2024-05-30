@@ -9,6 +9,10 @@
                 <a class="@(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => SetSelectedField(field))">
                     <h3>
                         <Icon Identifier="@icon" />
+                        @if (Errors.Get(field).Any())
+                        {
+                            <Icon Identifier="exclamation-circle" class="text-danger expense-wizard-validation-error" />
+                        }
                     </h3>
                     <span class="@(!isFilled ? "font-italic" : null)">
                         @if (!isFilled)
@@ -26,6 +30,16 @@
     }
 }
 
+<style>
+    .expense-wizard-validation-error {
+        position: absolute;
+        font-size: .75rem;
+    }
+
+    .card.card-hover {
+        height: calc(100% - 15px);
+    }
+</style>
 <Modal @ref="Modal" Title="Expense wizard" IsOverflow="true" IsForm="false">
     <ChildContent>
         <div class="row mb-3">
@@ -47,14 +61,10 @@
         </div>
         @if (Selected == SelectedField.Description)
         {
+            <Validation ErrorMessages="@Errors.Description" />
             <form @onsubmit="() => SetSelectedField(SelectedField.Amount)">
                 <input id="expense-wiz-description" type="text" class="form-control" placeholder="Expense Description" @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
             </form>
-            <style>
-                .card.card-hover {
-                    height: calc(100% - 15px);
-                }
-            </style>
             <div class="form-row mt-3">
                 @foreach (var model in GetTemplates())
                 {
@@ -93,12 +103,14 @@
         }
         else if (Selected == SelectedField.Amount)
         {
+            <Validation ErrorMessages="@Errors.Amount" />
             <form @onsubmit="() => SetSelectedField(SelectedField.Category)">
                 <AmountBox Id="expense-wiz-amount" AutoSelect="true" @bind-Value="@Amount" />
             </form>
         }
         else if (Selected == SelectedField.Category)
         {
+            <Validation ErrorMessages="@Errors.Category" />
             if (Categories != null)
             {
                 <form @onsubmit="() => SetSelectedField(SelectedField.When)">
@@ -127,12 +139,14 @@
         }
         else if (Selected == SelectedField.When)
         {
+            <Validation ErrorMessages="@Errors.When" />
             <form @onsubmit="@CreateAsync">
                 <DateBox Id="expense-wiz-when" @bind-Value="When" />
             </form>
         }
         else if (Selected == SelectedField.Flags)
         {
+            <Validation ErrorMessages="@Errors.Flags" />
             <form @onsubmit="@CreateAsync">
                 <div class="checkbox">
                     <label>

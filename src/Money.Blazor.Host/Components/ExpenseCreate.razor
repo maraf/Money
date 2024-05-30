@@ -1,4 +1,4 @@
-@inherits ModalDialog
+﻿@inherits ModalDialog
 
 @code
 {
@@ -7,9 +7,9 @@
         return
             @<div class="col text-center text-truncate">
                 <a class="@(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => SetSelectedField(field))">
-                    <h1>
+                    <h3>
                         <Icon Identifier="@icon" />
-                    </h1>
+                    </h3>
                     <span class="@(!isFilled ? "font-italic" : null)">
                         @if (!isFilled)
                         {

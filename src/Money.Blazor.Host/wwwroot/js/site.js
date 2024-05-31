@@ -22,7 +22,7 @@ window.Bootstrap = {
             $container.data("modal").show();
         },
         Hide: function (container) {
-            $container.data("modal").hide();
+            $(container).data("modal").hide();
         },
         IsOpen: function (container) {
             return $(container).hasClass("show");

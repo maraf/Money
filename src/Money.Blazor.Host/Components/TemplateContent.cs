@@ -22,7 +22,6 @@ namespace Money.Components
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            Console.WriteLine($"TC: '{Name}'.");
             Service.UseContent(Name, ChildContent);
         }
     }

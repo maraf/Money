@@ -1,0 +1,164 @@
+﻿@inherits ModalDialog
+
+@code
+{
+    RenderFragment FieldTab(SelectedField field, bool isFilled, string icon, string placeholder, RenderFragment value)
+    {
+        return
+            @<div class="col text-center text-truncate">
+                <a class="@(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => SetSelectedField(field))">
+                    <h3>
+                        <Icon Identifier="@icon" />
+                        @if (Errors.Get(field).Any())
+                        {
+                            <Icon Identifier="exclamation-circle" class="text-danger expense-wizard-validation-error" />
+                        }
+                    </h3>
+                    <span class="@(!isFilled ? "font-italic" : null)">
+                        @if (!isFilled)
+                        {
+                            @placeholder
+                        }
+                        else
+                        {
+                            @value
+                        }
+                    </span>
+                </a>
+            </div>
+        ;
+    }
+}
+
+<style>
+    .expense-wizard-validation-error {
+        position: absolute;
+        font-size: .75rem;
+    }
+
+    .card.card-hover {
+        height: calc(100% - 15px);
+    }
+</style>
+<Modal @ref="Modal" Title="Create a new Expense" IsOverflow="true" IsForm="false">
+    <ChildContent>
+        <div class="row mb-3">
+            @FieldTab(SelectedField.Description, !String.IsNullOrEmpty(Description), "comment", "Description", 
+                @<span>@Description</span>
+            )
+            @FieldTab(SelectedField.Amount, Amount != null, "dollar-sign", "Amount",
+                @<span>@CurrencyFormatter?.Format(Amount)</span>
+            )
+            @FieldTab(SelectedField.Category, !CategoryKey.IsEmpty, "tag", "Category",
+                @<CategoryTag Key="@CategoryKey" />
+            )
+            @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
+                @<DateValue Value="When" />
+            )
+            @FieldTab(SelectedField.Flags, IsFixed, "sliders-h", "Flags",
+                @<span>@(IsFixed ? "Fixed" : string.Empty)</span>
+            )
+        </div>
+        @if (Selected == SelectedField.Description)
+        {
+            <Validation ErrorMessages="@Errors.Description" />
+            <form @onsubmit="() => SetSelectedField(SelectedField.Amount)">
+                <input id="expense-wiz-description" type="text" class="form-control" placeholder="Expense Description" @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
+            </form>
+            <div class="form-row mt-3">
+                @foreach (var model in GetTemplates())
+                {
+                    <div class="col-6 col-sm-6 col-md-4">
+                        <div class="card card-hover cursor-pointer" @onclick="(() => ApplyTemplate(model))">
+                            <div class="card-body">
+                                <div>
+                                    <strong>
+                                        @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
+                                    </strong>
+                                </div>
+
+                                @if (!model.CategoryKey.IsEmpty)
+                                {
+                                    <CategoryTag Key="@model.CategoryKey" />
+                                }
+
+                                @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
+                                {
+                                    <p class="text-truncate">
+                                        <small>
+                                            @model.Description
+
+                                            @if (model.IsFixed)
+                                            {
+                                                <em class="text-muted ml-1">Fixed</em>
+                                            }
+                                        </small>
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else if (Selected == SelectedField.Amount)
+        {
+            <Validation ErrorMessages="@Errors.Amount" />
+            <form @onsubmit="() => SetSelectedField(SelectedField.Category)">
+                <AmountBox Id="expense-wiz-amount" AutoSelect="true" @bind-Value="@Amount" />
+            </form>
+        }
+        else if (Selected == SelectedField.Category)
+        {
+            <Validation ErrorMessages="@Errors.Category" />
+            if (Categories != null)
+            {
+                <form @onsubmit="() => SetSelectedField(SelectedField.When)">
+                    <div class="form-row">
+                        @foreach (var category in Categories)
+                        {
+                            var buttonId = $"expense-wiz-category-{category.Key.AsGuidKey().Guid.ToString()}";
+
+                            <div class="col-6 col-md-4 mb-2">
+                                <button type="submit" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                                    <div>
+                                        <h2>@category.Icon</h2>
+                                    </div>
+                                    <div class="text-truncate">
+                                        <strong>@category.Name</strong>
+                                    </div>
+                                    <div class="text-truncate">
+                                        <span>@category.Description</span>
+                                    </div>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </form>
+            }
+        }
+        else if (Selected == SelectedField.When)
+        {
+            <Validation ErrorMessages="@Errors.When" />
+            <form @onsubmit="@CreateAsync">
+                <DateBox Id="expense-wiz-when" @bind-Value="When" />
+            </form>
+        }
+        else if (Selected == SelectedField.Flags)
+        {
+            <Validation ErrorMessages="@Errors.Flags" />
+            <form @onsubmit="@CreateAsync">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" @bind="IsFixed" id="expense-wiz-fixed" />
+                        Fixed
+                        <span class="text-muted">(isn't shown in summary)</span>
+                    </label>
+                </div>
+            </form>
+        }
+    </ChildContent>
+    <Buttons>
+        <button class="btn btn-primary" @onclick="@CreateAsync">Create</button>
+    </Buttons>
+</Modal>

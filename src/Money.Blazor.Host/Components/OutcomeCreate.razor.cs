@@ -13,12 +13,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public partial class OutcomeCreate : System.IDisposable
+    public partial class OutcomeCreate : System.IDisposable, IExpenseCreateNavigator
     {
         private static int instanceCounter = 0;
 
@@ -166,11 +167,8 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        public async void Show(IKey categoryKey)
+        public new async void Show()
         {
-            Ensure.NotNull(categoryKey, "categoryKey");
-            CategoryKey = categoryKey;
-
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
 
             Categories = await Queries.QueryAsync(new ListAllCategory());
@@ -188,6 +186,14 @@ namespace Money.Components
             _ = FocusOnShowAsync();
         }
 
+        public void Show(IKey categoryKey)
+        {
+            Ensure.NotNull(categoryKey, "categoryKey");
+            CategoryKey = categoryKey;
+
+            Show();
+        }
+
         public void Show(Price amount, string description, IKey categoryKey, bool isFixed)
         {
             Amount = amount;
@@ -203,9 +209,6 @@ namespace Money.Components
             await Task.Delay(500);
             await Validate(new List<string>());
         }
-
-        public override void Show()
-            => Show(KeyFactory.Empty(typeof(Category)));
 
         protected void OnPrerequisitesConfirmed()
         {

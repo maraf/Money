@@ -38,17 +38,6 @@ namespace Money.Components
         [Parameter]
         public OutcomeOverviewModel Model { get; set; }
 
-        protected string CategoryName { get; private set; }
-        protected Color CategoryColor { get; private set; }
-        protected bool IsExpanded { get; set; }
-
-        protected override async Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
-            CategoryName = await Queries.QueryAsync(new GetCategoryName(Model.CategoryKey));
-            CategoryColor = await Queries.QueryAsync(new GetCategoryColor(Model.CategoryKey));
-        }
-
         protected void OnDuplicate() 
             => Context.Duplicate(Model);
 

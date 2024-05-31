@@ -67,7 +67,7 @@ namespace Money.Services
             => interop.NavigateTo(url);
 
         public void OpenExpenseCreate()
-            => OpenExpenseCreate(KeyFactory.Empty(typeof(Category)));
+            => componentContainer.ExpenseCreate?.Show();
 
         public void OpenExpenseCreate(IKey categoryKey)
             => componentContainer.ExpenseCreate?.Show(categoryKey);
@@ -190,7 +190,7 @@ namespace Money.Services
 
         public class ComponentContainer
         {
-            public OutcomeCreate ExpenseCreate { get; set; }
+            public IExpenseCreateNavigator ExpenseCreate { get; set; }
             public MainMenuBase MainMenu { get; internal set; }
         }
     }

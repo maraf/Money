@@ -59,6 +59,9 @@ namespace Money.Components.Bootstrap
         [Parameter]
         public bool IsOverflow { get; set; }
 
+        [Parameter]
+        public bool IsForm { get; set; } = true;
+
         protected ElementReference Container { get; set; }
 
         protected override void OnInitialized()

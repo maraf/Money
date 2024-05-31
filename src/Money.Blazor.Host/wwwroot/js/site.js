@@ -6,6 +6,9 @@ window.Bootstrap = {
         Show: function (container) {
             var $container = $(container);
             if (!$container.data("modal-initialized")) {
+                var modal = new bootstrap.Modal(container, {});
+                $container.data("modal", modal);
+
                 $container.data("modal-initialized", true).on('shown.bs.modal', function () {
                     var $select = $container.find("[data-select]");
                     if ($select.length > 0) {
@@ -16,19 +19,16 @@ window.Bootstrap = {
                 });
             }
 
-            $container.modal({
-                "show": true,
-                "focus": true
-            });
+            $container.data("modal").show();
         },
         Hide: function (container) {
-            $(container).modal('hide');
+            $container.data("modal").hide();
         },
         IsOpen: function (container) {
             return $(container).hasClass("show");
         },
         Dispose: function (container) {
-            $(container).modal('dispose');
+            $(container).data("modal").dispose();
         }
     }
 };

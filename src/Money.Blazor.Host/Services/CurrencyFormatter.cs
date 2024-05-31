@@ -87,7 +87,6 @@ namespace Money.Services
             if (applyPlusForPositiveNumbers && price.Value > 0)
                 value = $"+{value}";
 
-            Console.WriteLine($"DEBUG {value} {applyPlusForPositiveNumbers}");
             return value;
         }
 

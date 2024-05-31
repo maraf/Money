@@ -69,7 +69,7 @@
                 @foreach (var model in GetTemplates())
                 {
                     <div class="col-6 col-sm-6 col-md-4">
-                        <div class="card card-hover cursor-pointer" @onclick="(async () => await ApplyTemplateAsync(model))">
+                        <div class="card card-hover cursor-pointer" @onclick="(() => ApplyTemplate(model))">
                             <div class="card-body">
                                 <div>
                                     <strong>

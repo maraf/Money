@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Money.Commands;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Pages;
@@ -202,7 +203,7 @@ namespace Money.Components
             }
         }
 
-        protected Task ApplyTemplateAsync(ExpenseTemplateModel model)
+        protected void ApplyTemplate(ExpenseTemplateModel model)
         {
             Amount = model.Amount;
             Description = model.Description;
@@ -210,8 +211,7 @@ namespace Money.Components
             IsFixed = model.IsFixed;
 
             SuggestedTemplates.Clear();
-
-            return Task.CompletedTask;
+            SetSelectedField(SelectedField.Description);
         }
 
         protected void SetSelectedField(SelectedField selected, bool focusAfterRender = true)
@@ -225,7 +225,7 @@ namespace Money.Components
             if (!Validate())
                 return;
 
-            await Navigator.AlertAsync("Submit expense...");
+            await ExecuteAsync();
 
             Hide();
 
@@ -235,9 +235,14 @@ namespace Money.Components
             Description = null;
             Amount = null;
             CategoryKey = EmptyCategoryKey;
-            When = DateTime.Today;
+            When = DateTime.UtcNow.Date;
             IsFixed = false;
             SetSelectedField(SelectedField.Description, false);
+        }
+
+        private Task ExecuteAsync()
+        {
+            return Commands.HandleAsync(new CreateOutcome(Amount, Description, When, CategoryKey, IsFixed));
         }
 
         private bool Validate()

@@ -22,7 +22,7 @@
                         @item.Symbol
                     </strong>
 
-                    <div class="nav ml-auto">
+                    <div class="nav ms-auto">
                         @if (!item.IsDefault)
                         {
                             <IconButton Icon="home" ToolTip="Set as default" Click="@(async () => { await OnChangeDefaultClickAsync(item); StateHasChanged(); })" />

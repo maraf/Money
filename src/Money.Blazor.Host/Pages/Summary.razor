@@ -18,13 +18,13 @@
         <div class="d-flex justify-content-between mb-3">
             <div>
                 <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetPeriodsAsync" LinkFactory="UrlSummary" />
-                <span class="pl-2">
+                <span class="ps-2">
                     <Loading Context="@CategoriesLoading" />
                 </span>
             </div>
             <div class="d-flex">
                 <EnumSelector Text="Display" TType="SummaryDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
-                <span class="pl-2">
+                <span class="ps-2">
                     <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
                 </span>
             </div>
@@ -53,7 +53,7 @@
                                 {
                                     @if (IncomeTotal != null)
                                     {
-                                        <span class="text-success mr-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))">
+                                        <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))">
                                             @FormatPrice(IncomeTotal)
                                         </span>
                                     }

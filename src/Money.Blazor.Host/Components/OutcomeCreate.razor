@@ -4,7 +4,7 @@
     <ChildContent>
         @if (Templates != null)
         {
-            <button class="btn btn-light btn-block text-left mb-3" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
+            <button class="btn btn-light btn-block text-start mb-3" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
                 <Icon Identifier="redo" />
                 Templates
             </button>
@@ -42,7 +42,7 @@
 
                                                 @if (model.IsFixed)
                                                 {
-                                                    <em class="text-muted ml-1">Fixed</em>
+                                                    <em class="text-muted ms-1">Fixed</em>
                                                 }
                                             </small>
                                         </p>

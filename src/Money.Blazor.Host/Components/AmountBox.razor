@@ -4,7 +4,7 @@
         <div class="input-group-append">
             @if (Currencies != null)
             {
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                     @Currencies.FirstOrDefault(c => c.UniqueCode == Currency)?.Symbol
                 </button>
                 <div class="dropdown-menu">

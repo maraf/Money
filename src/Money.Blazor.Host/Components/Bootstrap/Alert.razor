@@ -4,14 +4,14 @@
 <div class="alert @ModeCssClass" role="alert">
     @if (IsDismissible)
     {
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="close" data-bs-dismiss="alert">
             <span aria-hidden="true">&times;</span>
         </button>
     }
 
     @if (Title != null)
     {
-        <strong class="mr-1">
+        <strong class="me-1">
             @Title
         </strong>
     }

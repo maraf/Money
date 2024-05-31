@@ -2,10 +2,10 @@
     <div class="header">
         <div class="container">
             <div class="d-flex">
-                <h3 class="mr-1">
+                <h3 class="mre-1">
                     @if (!String.IsNullOrEmpty(Icon))
                     {
-                        <Icon Identifier="@Icon" class="ml-1 mr-2" />
+                        <Icon Identifier="@Icon" class="ms-1 me-2" />
                     }
 
                     @Main
@@ -16,7 +16,7 @@
                         <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
                             @if (!String.IsNullOrEmpty(ButtonIcon))
                             {
-                                <Icon Identifier="@ButtonIcon" class="mr-1" />
+                                <Icon Identifier="@ButtonIcon" class="me-1" />
                             }
 
                             @ButtonText

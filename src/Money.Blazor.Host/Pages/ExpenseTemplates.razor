@@ -38,7 +38,7 @@ else
 
                                 @if (model.IsFixed)
                                 {
-                                    <em class="text-muted ml-1">Fixed</em>
+                                    <em class="text-muted ms-1">Fixed</em>
                                 }
 
                             </p>
@@ -57,12 +57,12 @@ else
                             }
                         }
 
-                        <div class="controls text-right">
+                        <div class="controls text-end">
                             <IconButton Icon="minus" ToolTip="Create expense" Click="@(() => { Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed); })" />
                             
                             <div class="sort dropdown d-inline-block">
-                                <IconButton Icon="ellipsis-v" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
-                                <div class="dropdown-menu dropdown-menu-right">
+                                <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
+                                <div class="dropdown-menu dropdown-menu-end">
                                     <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeAmountModal))">
                                         <Icon Identifier="dollar-sign" />
                                         Amount

@@ -23,14 +23,14 @@
                         <div class="col-auto">@item.Icon</div>
                     }
                     <div class="col d-flex @GetItemFlexCssClass(item)">
-                        <strong class="mr-1">
+                        <strong class="me-1">
                             @item.Name
                         </strong>
                         <span class="gray">
                             @item.Description
                         </span>
 
-                        <div class="nav ml-auto">
+                        <div class="nav ms-auto">
                             <div class="@GetItemButtonsMarginCssClass(item)">
                                 <IconButton Icon="pen" ToolTip="Rename" Click="@(() => OnActionClick(item, NameModal))" />
                                 <IconButton Icon="image" ToolTip="Icon" Click="@(() => OnActionClick(item, IconModal))" />

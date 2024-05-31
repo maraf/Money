@@ -23,7 +23,7 @@
 
 <div class="overview">
     <Loading Context="@Loading" IsOverlay="true">
-        <ul class="nav nav-pills float-left">
+        <ul class="nav nav-pills float-start">
             <li>
                 <a class="nav-link active" href="@Navigator.UrlOverviewIncomes(MonthModel)">Incomes</a>
             </li>
@@ -50,17 +50,17 @@
                                 <div class="col-4 col-md-2 mb-2 mb-md-0">
                                     <DateValue Value="item.When" />
                                 </div>
-                                <div class="col-8 col-md-3 text-md-right mb-2 mb-md-0 text-right">
+                                <div class="col-8 col-md-3 text-md-end mb-2 mb-md-0 text-end">
                                     <h3 class="m-0">@CurrencyFormatter.Format(item.Amount)</h3>
                                 </div>
                                 <div class="col-md-1"></div>
                                 <div class="col mb-2 mb-md-0">
                                     @item.Description
                                 </div>
-                                <div class="col-12 col-sm-auto controls text-right">
+                                <div class="col-12 col-sm-auto controls text-end">
                                     <div class="sort dropdown">
-                                        <IconButton Icon="ellipsis-v" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
+                                        <div class="dropdown-menu dropdown-menu-end">
                                             <a class="dropdown-item" @onclick="@(() => Edit(item, ChangeAmountModal))">
                                                 <Icon Identifier="dollar-sign" />
                                                 Amount

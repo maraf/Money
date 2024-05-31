@@ -17,7 +17,7 @@ namespace Money.Components
     public class MainMenuBase : ComponentBase, IDisposable, 
         IEventHandler<UserSignedOut>
     {
-        protected const string MenuLeftMarginCssClass = "ml-2 ml-lg-0";
+        protected const string MenuLeftMarginCssClass = "ms-2 ms-lg-0";
         protected static readonly YearModel ThisYear = new YearModel(DateTime.Today.Year);
 
         [Inject]

@@ -10,25 +10,25 @@
         <div class="col-md-6 col-lg-4">
             <section>
                 <form @onsubmit="@OnSubmitAsync">
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="UserName">User name</label>
                         <input @ref="UserNameBox" id="UserName" class="form-control" type="text" @bind="@UserName" />
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="Password">Password</label>
                         <input id="Password" class="form-control" type="password" @bind="@Password" />
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="ConfirmPassword">Confirm password</label>
                         <input id="ConfirmPassword" class="form-control" type="password" @bind="@ConfirmPassword" />
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Register</button>
                         <span class="ms-1">
                             <Loading Context="@Loading" />
                         </span>
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <p>
                             <a href="@Navigator.UrlAccountLogin()">Login using existing account?</a>
                         </p>

@@ -25,14 +25,14 @@
 </div>
 
 <PropertyDialog @ref="PriceDecimalsEditor" Model="@PriceDecimals" Title="Set price decimals">
-    <div class="form-group">
+    <div class="mb-3">
         <input type="text" class="form-control" @bind="PriceDecimals.CurrentValue" data-autofocus />
     </div>
 </PropertyDialog>
 
 
 <PropertyDialog @ref="DateFormatEditor" Model="@DateFormat" Title="Set date format">
-    <div class="form-group">
+    <div class="mb-3">
         <input type="text" class="form-control" @bind="DateFormat.CurrentValue" data-autofocus />
     </div>
 </PropertyDialog>

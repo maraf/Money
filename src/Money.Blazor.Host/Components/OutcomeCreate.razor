@@ -55,19 +55,19 @@
             }
         }
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="form-group">
+        <div class="mb-3">
             <label for="@(IdPrefix + "expense-amount")">Amount:</label>
             <AmountBox Id="@(IdPrefix + "expense-amount")" AutoSelect="true" @bind-Value="Amount" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label for="@(IdPrefix + "expense-description")">Description:</label>
             <input type="text" class="form-control" id="@(IdPrefix + "expense-description")" @bind="Description" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label for="@(IdPrefix + "expense-when")">When:</label>
             <DateBox Id="@(IdPrefix + "expense-when")" @bind-Value="When" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label>Category:</label>
             @if (Categories != null)
             {

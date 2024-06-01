@@ -3,7 +3,7 @@
 <Modal @ref="Modal" Title="Change a description of the income">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="form-group">
+        <div class="mb-3">
             <label for="income-description">Description:</label>
             <input type="text" class="form-control" id="income-description" placeholder="Income Description" data-autofocus @bind="@Description" />
         </div>

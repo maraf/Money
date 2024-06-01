@@ -3,9 +3,9 @@
 <Modal @ref="Modal" Title="Set Exchange Rate" Size="@Size.Small">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="form-group">
+        <div class="mb-3">
             <label for="exchangerate-source">Source Currency:</label>
-            <select class="form-control" id="exchangerate-source" @bind="@SourceCurrency" data-autofocus>
+            <select class="form-select" id="exchangerate-source" @bind="@SourceCurrency" data-autofocus>
                 @if (Currencies != null)
                 {
                     @foreach (var currency in Currencies)
@@ -25,13 +25,13 @@
                 }
             </select>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label for="exchangerate-rate">Rate:</label>
             <input type="text" class="form-control" id="exchangerate-rate" @bind="@Rate" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label for="exchangerate-target">Target Currency:</label>
-            <select class="form-control" id="exchangerate-target" disabled>
+            <select class="form-select" id="exchangerate-target" disabled>
                 @if (Currencies != null)
                 {
                     @foreach (var currency in Currencies)
@@ -46,7 +46,7 @@
                 }
             </select>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label for="exchangevalidfrom-validfrom">Valid from:</label>
             <input type="date" class="form-control" id="exchangevalidfrom-validfrom" @bind="@ValidFrom" @bind:format="yyy-MM-dd" />
         </div>

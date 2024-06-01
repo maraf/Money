@@ -13,15 +13,15 @@
         <div class="col-md-6 col-lg-4">
             <section>
                 <form @onsubmit="@OnSubmitAsync">
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label @ref="UserNameBox" for="UserName">User name</label>
                         <input id="UserName" class="form-control" type="text" @bind="@UserName" />
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="Password">Password</label>
                         <input id="Password" class="form-control" type="password" @bind="@Password" />
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <div class="checkbox">
                             <label for="RememberMe">
                                 <input id="RememberMe" type="checkbox" @bind="@IsPermanent" />
@@ -29,7 +29,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Log in</button>
                         <button type="button" class="btn btn-outline-secondary" @onclick="@OnDemoSubmitAsync">
                             <Icon Identifier="user-secret" />
@@ -39,7 +39,7 @@
                             <Loading Context="@Loading" />
                         </span>
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <p>
                             <a href="@Navigator.UrlAccountRegister()">Register as a new user?</a>
                         </p>

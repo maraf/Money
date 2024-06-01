@@ -14,11 +14,11 @@
     <div class="row">
         <div class="col-md-6">
             <form method="post" @onsubmit="@OnFormSubmit">
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="UserName">User name:</label>
                     <input class="form-control" disabled type="text" id="UserName" value="@UserName" />
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label for="Email">E-mail:</label>
                     <input @ref="EmailBox" class="form-control" type="email" id="Email" @bind="@Email" />
                 </div>

@@ -3,7 +3,7 @@
 <Modal @ref="Modal" Title="Change an amount of the income">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="form-group">
+        <div class="mb-3">
             <label for="income-amount">Amount:</label>
             <AmountBox Id="income-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
         </div>

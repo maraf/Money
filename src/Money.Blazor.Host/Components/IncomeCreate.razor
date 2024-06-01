@@ -3,15 +3,15 @@
 <Modal @ref="Modal" Title="@Title">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="form-group">
+        <div class="mb-3">
             <label for="expense-amount">Amount:</label>
             <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label for="income-description">Description:</label>
             <input type="text" class="form-control" id="income-description" @bind="@Description" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label for="income-when">When:</label>
             <DateBox Id="income-when" @bind-Value="When" />
         </div>

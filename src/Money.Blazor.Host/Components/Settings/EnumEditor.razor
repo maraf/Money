@@ -1,6 +1,6 @@
 ﻿@typeparam T where T : struct
 
-<div class="form-group">
+<div class="mb-3">
     @foreach (var item in Properties)
     {
         <div @key="item.Value" class="alert @(item.Value.Equals(Property) ? "alert-primary" : "alert-light") cursor-pointer" @onclick="@(() => { Property = item.Value; PropertyChanged?.Invoke(item.Value); })">

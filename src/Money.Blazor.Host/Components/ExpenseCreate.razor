@@ -6,7 +6,7 @@
     {
         return
             @<div class="col text-center text-truncate">
-                <span class="@(Selected == field ? "text-primary" : (!isFilled ? "text-secondary" : ""))" @onclick="(() => SetSelectedField(field))">
+                <span class="cursor-pointer @(Selected == field ? "text-primary" : (!isFilled ? "text-secondary" : ""))" @onclick="(() => SetSelectedField(field))">
                     <h3>
                         <Icon Identifier="@icon" />
                         @if (Errors.Get(field).Any())
@@ -35,10 +35,6 @@
         position: absolute;
         font-size: .75rem;
     }
-
-    .card.card-hover {
-        height: calc(100% - 15px);
-    }
 </style>
 <Modal @ref="Modal" Title="Create a new Expense" IsOverflow="true" IsForm="false">
     <ChildContent>
@@ -65,11 +61,11 @@
             <form @onsubmit="() => SetSelectedField(SelectedField.Amount)">
                 <input id="expense-wiz-description" type="text" class="form-control" placeholder="Expense Description" @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
             </form>
-            <div class="row mt-3">
+            <div class="row g-3 mt-1">
                 @foreach (var model in GetTemplates())
                 {
                     <div class="col-6 col-sm-6 col-md-4">
-                        <div class="card card-hover cursor-pointer" @onclick="(() => ApplyTemplate(model))">
+                        <div class="card card-hover cursor-pointer m-0" @onclick="(() => ApplyTemplate(model))">
                             <div class="card-body">
                                 <div>
                                     <strong>
@@ -84,7 +80,7 @@
 
                                 @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
                                 {
-                                    <p class="text-truncate">
+                                    <div class="text-truncate">
                                         <small>
                                             @model.Description
 
@@ -93,7 +89,7 @@
                                                 <em class="text-muted ms-1">Fixed</em>
                                             }
                                         </small>
-                                    </p>
+                                    </div>
                                 }
                             </div>
                         </div>

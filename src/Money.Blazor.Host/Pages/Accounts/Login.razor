@@ -14,16 +14,16 @@
             <section>
                 <form @onsubmit="@OnSubmitAsync">
                     <div class="mb-3">
-                        <label @ref="UserNameBox" for="UserName">User name</label>
+                        <label class="form-label" @ref="UserNameBox" for="UserName">User name</label>
                         <input id="UserName" class="form-control" type="text" @bind="@UserName" />
                     </div>
                     <div class="mb-3">
-                        <label for="Password">Password</label>
+                        <label class="form-label" for="Password">Password</label>
                         <input id="Password" class="form-control" type="password" @bind="@Password" />
                     </div>
                     <div class="mb-3">
                         <div class="checkbox">
-                            <label for="RememberMe">
+                            <label class="form-label" for="RememberMe">
                                 <input id="RememberMe" type="checkbox" @bind="@IsPermanent" />
                                 Remember me?
                             </label>

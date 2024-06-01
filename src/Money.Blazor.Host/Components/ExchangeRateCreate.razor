@@ -4,7 +4,7 @@
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
         <div class="mb-3">
-            <label for="exchangerate-source">Source Currency:</label>
+            <label class="form-label" for="exchangerate-source">Source Currency:</label>
             <select class="form-select" id="exchangerate-source" @bind="@SourceCurrency" data-autofocus>
                 @if (Currencies != null)
                 {
@@ -26,11 +26,11 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="exchangerate-rate">Rate:</label>
+            <label class="form-label" for="exchangerate-rate">Rate:</label>
             <input type="text" class="form-control" id="exchangerate-rate" @bind="@Rate" />
         </div>
         <div class="mb-3">
-            <label for="exchangerate-target">Target Currency:</label>
+            <label class="form-label" for="exchangerate-target">Target Currency:</label>
             <select class="form-select" id="exchangerate-target" disabled>
                 @if (Currencies != null)
                 {
@@ -47,7 +47,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="exchangevalidfrom-validfrom">Valid from:</label>
+            <label class="form-label" for="exchangevalidfrom-validfrom">Valid from:</label>
             <input type="date" class="form-control" id="exchangevalidfrom-validfrom" @bind="@ValidFrom" @bind:format="yyy-MM-dd" />
         </div>
     </ChildContent>

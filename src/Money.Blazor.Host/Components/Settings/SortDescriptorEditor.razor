@@ -1,7 +1,7 @@
 @typeparam T where T : struct
 
 <div class="mb-3">
-    <label for="summary-sort-property">Field:</label>
+    <label class="form-label" for="summary-sort-property">Field:</label>
     <select class="form-select" id="summary-sort-property" @onchange="OnPropertyChanged" data-autofocus>
         @foreach (var item in Properties)
         {
@@ -10,7 +10,7 @@
     </select>
 </div>
 <div class="mb-3">
-    <label for="summary-sort-order">Direction:</label>
+    <label class="form-label" for="summary-sort-order">Direction:</label>
     <select class="form-select" id="summary-sort-order" @onchange="OnDirectionChanged">
         @foreach (var item in Directions)
         {

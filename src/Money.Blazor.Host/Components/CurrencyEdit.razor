@@ -5,11 +5,11 @@
         <Validation ErrorMessages="@ErrorMessages" />
 
         <div class="mb-3">
-            <label for="currency-unique-code">Unique Code:</label>
+            <label class="form-label" for="currency-unique-code">Unique Code:</label>
             <input type="text" class="form-control" id="currency-unique-code" placeholder="Currency Unique Code" data-autofocus="@IsUniqueCodeEnabled" disabled="@(!IsUniqueCodeEnabled)" @bind="@UniqueCode" />
         </div>
         <div class="mb-3">
-            <label for="currency-symbol">Symbol:</label>
+            <label class="form-label" for="currency-symbol">Symbol:</label>
             <input type="text" class="form-control" id="currency-symbol" placeholder="Currency Display Symbol" data-autofocus="@(!IsUniqueCodeEnabled)" @bind="@Symbol" />
         </div>
         @if (isNew)

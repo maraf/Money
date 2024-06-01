@@ -24,14 +24,14 @@
             else if (Period == RecurrencePeriod.Monthly)
             {
                 <div class="mb-3">
-                    <label for="recurrence-monthly-day">Day in month:</label>
+                    <label class="form-label" for="recurrence-monthly-day">Day in month:</label>
                     <input id="recurrence-monthly-day" type="text" @bind="DayInPeriod" class="form-control" />
                 </div>
             }
             else if (Period == RecurrencePeriod.Single)
             {
                 <div class="mb-3">
-                    <label for="recurrence-single-when">Due date:</label>
+                    <label class="form-label" for="recurrence-single-when">Due date:</label>
                     <DateBox Id="recurrence-single-when" @bind-Value="DueDateBinding" />
                 </div>
             }

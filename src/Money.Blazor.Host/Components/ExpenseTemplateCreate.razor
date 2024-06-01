@@ -4,15 +4,15 @@
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
         <div class="mb-3">
-            <label for="expense-amount">Amount:</label>
+            <label class="form-label" for="expense-amount">Amount:</label>
             <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
         </div>
         <div class="mb-3">
-            <label for="expense-description">Description:</label>
+            <label class="form-label" for="expense-description">Description:</label>
             <input type="text" class="form-control" id="expense-description" @bind="@Description" />
         </div>
         <div class="mb-3">
-            <label>Category:</label>
+            <label class="form-label">Category:</label>
             @if (Categories != null)
             {
                 <div class="row g-2">

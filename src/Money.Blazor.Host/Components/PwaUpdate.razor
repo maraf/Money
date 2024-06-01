@@ -3,14 +3,14 @@
     <LayoutView Layout="@typeof(Layouts.Layout)">
         <Title Icon="download" Main="Great news. We have an update for you" Sub="Update is already installed and one click away" />
 
-        <div class="my-4 row">
-            <div class="col-12 col-md-auto mb-2">
-                <button class="btn d-block btn-primary" @onclick="(() => Commands.HandleAsync(new UpdatePwa()))">
+        <div class="my-4 row g-2">
+            <div class="col-12 col-md-auto d-grid">
+                <button class="btn btn-primary" @onclick="(() => Commands.HandleAsync(new UpdatePwa()))">
                     Activate the update
                 </button>
             </div>
-            <div class="col-12 col-md-auto">
-                <button class="btn d-block btn-secondary" @onclick="(() => IsUpdateable = false)">
+            <div class="col-12 col-md-auto d-grid">
+                <button class="btn btn-secondary" @onclick="(() => IsUpdateable = false)">
                     Leave it for the next time
                 </button>
             </div>

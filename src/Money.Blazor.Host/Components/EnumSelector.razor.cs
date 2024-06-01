@@ -23,6 +23,12 @@ namespace Money.Components
         public string Text { get; set; }
 
         [Parameter]
+        public string Icon { get; set; }
+
+        [Parameter]
+        public string IconPrefix { get; set; }
+
+        [Parameter]
         public TType Current { get; set; }
 
         [Parameter]

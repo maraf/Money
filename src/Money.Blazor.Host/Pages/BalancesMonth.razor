@@ -7,7 +7,7 @@
     <div>
         <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
     </div>
-    <EnumSelector Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
+    <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
 </div>
 
 @if (Models == null)

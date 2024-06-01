@@ -2,6 +2,10 @@
 
 <div class="sort dropdown">
     <button class="@ButtonCssClass" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @if (Icon != null)
+        {
+            <Icon Identifier="@Icon" Prefix="@IconPrefix" class="me-1" />
+        }
         @Text
         <span class="caret"></span>
     </button>

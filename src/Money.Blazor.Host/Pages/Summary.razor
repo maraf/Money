@@ -23,7 +23,7 @@
                 </span>
             </div>
             <div class="d-flex">
-                <EnumSelector Text="Display" TType="SummaryDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
+                <EnumSelector Icon="eye" Text="Display" TType="SummaryDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
                 <span class="ps-2">
                     <SortButton TType="SummarySortType" @bind-Current="@SortDescriptor" Changed="@OnSorted" />
                 </span>

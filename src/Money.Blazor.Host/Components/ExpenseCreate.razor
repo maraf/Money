@@ -42,7 +42,7 @@
 </style>
 <Modal @ref="Modal" Title="Create a new Expense" IsOverflow="true" IsForm="false">
     <ChildContent>
-        <div class="row mb-3">
+        <div class="row g-1 mb-3">
             @FieldTab(SelectedField.Description, !String.IsNullOrEmpty(Description), "comment", "Description", 
                 @<span>@Description</span>
             )

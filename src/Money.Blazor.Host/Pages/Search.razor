@@ -6,7 +6,7 @@
 
 <div class="search">
     <form @onsubmit="@(() => { Navigator.OpenSearch(FormText, DefaultSort.Equals(FormSort) ? null : FormSort); StateHasChanged(); })">
-        <div class="form-row mb-3">
+        <div class="row g-2 mb-3">
             <div class="col">
                 <input @ref="SearchBox" class="form-control" placeholder="Search..." @bind="@FormText" />
             </div>
@@ -14,7 +14,7 @@
                 <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@FormSort" />
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" class="btn btn-primary d-block">
                     <Icon Identifier="search" />
                     <span class="d-none d-md-inline">
                         Search

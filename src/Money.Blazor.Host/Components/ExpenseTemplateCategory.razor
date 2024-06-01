@@ -8,9 +8,9 @@
             {
                 var isFistCategory = true;
 
-                <div class="form-row">
+                <div class="row">
                     <div class="col-6 col-md-4 mb-2">
-                        <button type="button" class="btn btn-block btn-selectable h-100 bg-white @(EmptyCategoryKey.Equals(CategoryKey) ? "btn-selectable-selected" : "")" @onclick="@(() => CategoryKey = EmptyCategoryKey)">
+                        <button type="button" class="btn d-block btn-selectable h-100 bg-white @(EmptyCategoryKey.Equals(CategoryKey) ? "btn-selectable-selected" : "")" @onclick="@(() => CategoryKey = EmptyCategoryKey)">
                             <div>
                                 <h2></h2>
                             </div>
@@ -29,7 +29,7 @@
                         isFistCategory = false;
 
                         <div class="col-6 col-md-4 mb-2">
-                            <button type="button" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                            <button type="button" id="@buttonId" class="btn d-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
                                 <div>
                                     <h2>@category.Icon</h2>
                                 </div>

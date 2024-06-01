@@ -4,7 +4,7 @@
     <ChildContent>
         @if (Templates != null)
         {
-            <button class="btn btn-light btn-block text-start mb-3" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
+            <button class="btn btn-light d-block text-start mb-3" @onclick="(() => AreTemplatesOpened = !AreTemplatesOpened)">
                 <Icon Identifier="redo" />
                 Templates
             </button>
@@ -15,7 +15,7 @@
                         height: calc(100% - 15px);
                     }
                 </style>
-                <div class="form-row">
+                <div class="row">
                     @foreach (var model in Templates)
                     {
                         <div class="col-6 col-sm-6 col-md-4">
@@ -73,14 +73,14 @@
             {
                 var isFistCategory = true;
 
-                <div class="form-row">
+                <div class="row">
                     @foreach (var category in Categories)
                     {
                         var buttonId = isFistCategory ? IdPrefix + "expense-category-first" : null;
                         isFistCategory = false;
 
                         <div class="col-6 col-md-4 mb-2">
-                            <button type="button" id="@buttonId" class="btn btn-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                            <button type="button" id="@buttonId" class="btn d-block btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
                                 <div>
                                     <h2>@category.Icon</h2>
                                 </div>

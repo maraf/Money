@@ -17,7 +17,7 @@
         @foreach (var item in Models)
         {
             <div class="alert @item.Color.SelectAccent("back-dark", "back-light")" style="background-color: @item.Color.ToHashCode()">
-                <div class="form-row">
+                <div class="row g-3">
                     @if (item.Icon != null)
                     {
                         <div class="col-auto">@item.Icon</div>

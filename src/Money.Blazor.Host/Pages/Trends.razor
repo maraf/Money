@@ -9,11 +9,11 @@
 }
 else
 {
-    <div class="form-row">
+    <div class="row">
         @foreach (var category in Categories)
         {
             <div class="col-4 col-md-2 mb-2">
-                <a href="@Navigator.UrlTrends(category.Key)" class="btn btn-block h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
+                <a href="@Navigator.UrlTrends(category.Key)" class="btn d-block h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
                     <div>
                         <h2>@category.Icon</h2>
                     </div>

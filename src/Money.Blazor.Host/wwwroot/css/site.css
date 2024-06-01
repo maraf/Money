@@ -117,6 +117,7 @@ h4 {
 .navbar-dark .navbar-toggler {
   border: none;
   outline: none;
+  box-shadow: none;
 }
 @media (min-width: 992px) and (max-width: 993px) {
   .navbar-dark .navbar-nav .nav-link {

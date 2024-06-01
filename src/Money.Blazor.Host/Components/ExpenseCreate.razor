@@ -6,7 +6,7 @@
     {
         return
             @<div class="col text-center text-truncate">
-                <a class="@(Selected == field ? "text-primary" : (!isFilled ? "text-muted" : ""))" @onclick="(() => SetSelectedField(field))">
+                <span class="@(Selected == field ? "text-primary" : (!isFilled ? "text-secondary" : ""))" @onclick="(() => SetSelectedField(field))">
                     <h3>
                         <Icon Identifier="@icon" />
                         @if (Errors.Get(field).Any())
@@ -14,7 +14,7 @@
                             <Icon Identifier="exclamation-circle" class="text-danger expense-wizard-validation-error" />
                         }
                     </h3>
-                    <span class="@(!isFilled ? "font-italic" : null)">
+                    <span class="@(!isFilled ? "fst-italic" : null)">
                         @if (!isFilled)
                         {
                             @placeholder
@@ -24,7 +24,7 @@
                             @value
                         }
                     </span>
-                </a>
+                </span>
             </div>
         ;
     }

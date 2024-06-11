@@ -6,6 +6,7 @@ using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Money.Services;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -56,6 +57,7 @@ namespace Money.Pages
         protected Confirm DeleteConfirm { get; set; }
         protected OutcomeCreate ExpenseModal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
+        protected SortDescriptor<ExpenseTemplateSortType> SortDescriptor { get; set; } = new SortDescriptor<ExpenseTemplateSortType>(ExpenseTemplateSortType.ByDescription, SortDirection.Ascending);
         
         protected IKey ToDeleteKey { get; set; }
         protected ExpenseTemplateModel Selected { get; set; }
@@ -100,6 +102,27 @@ namespace Money.Pages
         {
             Models.Clear();
             Models.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version3()));
+            StateHasChanged();
+        }
+        protected async void OnSortChanged()
+        {
+            int Compare<T>(SortDirection direction, T a, T b, Func<T, T, int> comparer) => direction switch
+            {
+                SortDirection.Ascending => comparer(a, b),
+                SortDirection.Descending => comparer(b, a),
+                _ => throw new NotSupportedException($"Missing case for {direction}")
+            };
+
+            switch (SortDescriptor.Type)
+            {
+                case ExpenseTemplateSortType.ByAmount:
+                    Models.Sort((a, b) => Compare(SortDescriptor.Direction, a.Amount?.Value ?? 0, b.Amount?.Value ?? 0, Decimal.Compare));
+                    break;
+                case ExpenseTemplateSortType.ByDescription:
+                    Models.Sort((a, b) => Compare(SortDescriptor.Direction, a.Description, b.Description, String.Compare));
+                    break;
+            }
+
             StateHasChanged();
         }
 

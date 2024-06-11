@@ -10,6 +10,17 @@
 <ExpenseTemplateCategory @ref="ChangeCategoryModal" ExpenseTemplateKey="@Selected?.Key" CategoryKey="@Selected?.CategoryKey" />
 <ExpenseTemplateRecurrence @ref="ChangeRecurrenceModal" ExpenseTemplateKey="@Selected?.Key" Period="@Selected?.Period" DayInPeriod="@Selected?.DayInPeriod" DueDate="@Selected?.DueDate" />
 
+@if (Models?.Count > 0)
+{
+    <div class="row mb-3">
+        <div class="col"></div>
+        <div class="col-auto">
+           <SortButton TType="@ExpenseTemplateSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+        </div>
+    </div>
+}
+<div class="clear"></div>
+
 @if (Models.Count == 0)
 {
     <Alert Title="No data." Message="Let's add some templates." Mode="@AlertMode.Warning" />

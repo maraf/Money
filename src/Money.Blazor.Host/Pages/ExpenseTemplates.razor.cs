@@ -8,6 +8,7 @@ using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Services;
+using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -24,7 +25,7 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class ExpenseTemplates : IDisposable, 
+    public partial class ExpenseTemplates : System.IDisposable, 
         IEventHandler<ExpenseTemplateCreated>,
         IEventHandler<ExpenseTemplateAmountChanged>,
         IEventHandler<ExpenseTemplateDescriptionChanged>,
@@ -104,6 +105,7 @@ namespace Money.Pages
             Models.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version3()));
             StateHasChanged();
         }
+        
         protected async void OnSortChanged()
         {
             int Compare<T>(SortDirection direction, T a, T b, Func<T, T, int> comparer) => direction switch
@@ -120,6 +122,18 @@ namespace Money.Pages
                     break;
                 case ExpenseTemplateSortType.ByDescription:
                     Models.Sort((a, b) => Compare(SortDescriptor.Direction, a.Description, b.Description, String.Compare));
+                    break;
+                case ExpenseTemplateSortType.ByCategory:
+                    var categoryNames = (await Queries.QueryAsync(ListAllCategory.WithDeleted)).ToDictionary(c => c.Key, c => c.Name);
+                    categoryNames[KeyFactory.Empty(typeof(Category))] = String.Empty;
+                    Models.Sort((a, b) => 
+                    {
+                        var result = Compare(SortDescriptor.Direction, categoryNames[a.CategoryKey], categoryNames[b.CategoryKey], String.Compare);
+                        if (result == 0)
+                            return Compare(SortDescriptor.Direction, a.Description, b.Description, String.Compare);
+
+                        return result;
+                    });
                     break;
             }
 

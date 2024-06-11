@@ -72,3 +72,7 @@
 <PropertyDialog @ref="SummaryDisplayEditor" Model="@SummaryDisplay" Title="Set summary display">
     <EnumEditor T="SummaryDisplayType" @bind-Property="SummaryDisplay.Property" />
 </PropertyDialog>
+
+<PropertyDialog @ref="ExpenseTemplateSortEditor" Model="@ExpenseTemplateSort" Title="Set expense template sort">
+    <SortDescriptorEditor T="ExpenseTemplateSortType" @bind-Property="ExpenseTemplateSort.Property" @bind-Direction="ExpenseTemplateSort.Direction" />
+</PropertyDialog>

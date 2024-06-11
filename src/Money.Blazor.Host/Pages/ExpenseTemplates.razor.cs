@@ -7,6 +7,7 @@ using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
+using Money.Queries;
 using Money.Services;
 using Neptuo;
 using Neptuo.Commands;
@@ -58,7 +59,7 @@ namespace Money.Pages
         protected Confirm DeleteConfirm { get; set; }
         protected OutcomeCreate ExpenseModal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
-        protected SortDescriptor<ExpenseTemplateSortType> SortDescriptor { get; set; } = new SortDescriptor<ExpenseTemplateSortType>(ExpenseTemplateSortType.ByDescription, SortDirection.Ascending);
+        protected SortDescriptor<ExpenseTemplateSortType> SortDescriptor { get; set; }
         
         protected IKey ToDeleteKey { get; set; }
         protected ExpenseTemplateModel Selected { get; set; }
@@ -78,6 +79,8 @@ namespace Money.Pages
             await base.OnInitializedAsync();
 
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
+
+            SortDescriptor = await Queries.QueryAsync(new GetExpenseTemplateSortProperty());
 
             await ReloadAsync();
         }

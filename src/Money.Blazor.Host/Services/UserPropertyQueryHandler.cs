@@ -49,6 +49,10 @@ namespace Money.Services
             {
                 return await GetEnumAsync<SummaryDisplayType>(dispatcher, "SummaryDisplay", "Total");
             }
+            else if (query is GetExpenseTemplateSortProperty) 
+            {
+                return await GetSortDescriptorAsync<ExpenseTemplateSortType>(dispatcher, "ExpenseTemplateSort", "ByDescription-Ascending");
+            }
 
             return await next(query);
         }

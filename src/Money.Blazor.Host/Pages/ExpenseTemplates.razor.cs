@@ -105,43 +105,12 @@ namespace Money.Pages
         private async Task ReloadAsync()
         {
             Models.Clear();
-            Models.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version3()));
+            Models.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version3(SortDescriptor)));
             StateHasChanged();
         }
-        
-        protected async void OnSortChanged()
-        {
-            int Compare<T>(SortDirection direction, T a, T b, Func<T, T, int> comparer) => direction switch
-            {
-                SortDirection.Ascending => comparer(a, b),
-                SortDirection.Descending => comparer(b, a),
-                _ => throw new NotSupportedException($"Missing case for {direction}")
-            };
 
-            switch (SortDescriptor.Type)
-            {
-                case ExpenseTemplateSortType.ByAmount:
-                    Models.Sort((a, b) => Compare(SortDescriptor.Direction, a.Amount?.Value ?? 0, b.Amount?.Value ?? 0, Decimal.Compare));
-                    break;
-                case ExpenseTemplateSortType.ByDescription:
-                    Models.Sort((a, b) => Compare(SortDescriptor.Direction, a.Description, b.Description, String.Compare));
-                    break;
-                case ExpenseTemplateSortType.ByCategory:
-                    var categoryNames = (await Queries.QueryAsync(ListAllCategory.WithDeleted)).ToDictionary(c => c.Key, c => c.Name);
-                    categoryNames[KeyFactory.Empty(typeof(Category))] = String.Empty;
-                    Models.Sort((a, b) => 
-                    {
-                        var result = Compare(SortDescriptor.Direction, categoryNames[a.CategoryKey], categoryNames[b.CategoryKey], String.Compare);
-                        if (result == 0)
-                            return Compare(SortDescriptor.Direction, a.Description, b.Description, String.Compare);
-
-                        return result;
-                    });
-                    break;
-            }
-
-            StateHasChanged();
-        }
+        protected void OnSortChanged() 
+            => _ = ReloadAsync();
 
         protected void Delete()
         {

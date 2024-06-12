@@ -1,4 +1,5 @@
-﻿using Neptuo.Formatters.Metadata;
+﻿using Money.Models.Sorting;
+using Neptuo.Formatters.Metadata;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,11 @@ namespace Money.Models.Queries
         [CompositeProperty(1, Version = 3)]
         public int Version { get; private set; }
 
+        /// <summary>
+        /// Intentionally not serialized as the sorting is implemented in clients middleware.
+        /// </summary>
+        public SortDescriptor<ExpenseTemplateSortType> SortDescriptor { get; private set; }
+
         [CompositeConstructor(Version = 1)]
         public ListAllExpenseTemplate()
             : this(1)
@@ -36,9 +42,9 @@ namespace Money.Models.Queries
             => new ListAllExpenseTemplate(2);
 
         /// <summary>
-        /// Creates a new instance which returns objects in version 2.
+        /// Creates a new instance which returns objects in version 3.
         /// </summary>
-        public static ListAllExpenseTemplate Version3() 
-            => new ListAllExpenseTemplate(3);
+        public static ListAllExpenseTemplate Version3(SortDescriptor<ExpenseTemplateSortType> sortDescriptor = null) 
+            => new ListAllExpenseTemplate(3) { SortDescriptor = sortDescriptor };
     }
 }

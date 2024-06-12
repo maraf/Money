@@ -1,6 +1,7 @@
 ﻿using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Neptuo;
 using Neptuo.Events.Handlers;
 using Neptuo.Logging;
@@ -48,7 +49,9 @@ namespace Money.Services
             if (query is ListAllExpenseTemplate listAll)
             {
                 await EnsureListAsync(null, next, listAll);
-                return models.Select(c => c.Clone()).ToList();
+                var result = models.Select(c => c.Clone()).ToList();
+                await EnsureSortedAsync(dispatcher, result, listAll.SortDescriptor);
+                return result;
             }
 
             return await next(query);
@@ -94,6 +97,41 @@ namespace Money.Services
             {
                 models.AddRange((List<ExpenseTemplateModel>)await next(listAll));
                 await localStorage.SaveAsync(models);
+            }
+        }
+
+        private async Task EnsureSortedAsync(HttpQueryDispatcher dispatcher, List<ExpenseTemplateModel> models, SortDescriptor<ExpenseTemplateSortType> sortDescriptor)
+        {
+            if (sortDescriptor == null)
+                return;
+
+            int Compare<T>(SortDirection direction, T a, T b, Func<T, T, int> comparer) => direction switch
+            {
+                SortDirection.Ascending => comparer(a, b),
+                SortDirection.Descending => comparer(b, a),
+                _ => throw new NotSupportedException($"Missing case for {direction}")
+            };
+
+            switch (sortDescriptor.Type)
+            {
+                case ExpenseTemplateSortType.ByAmount:
+                    models.Sort((a, b) => Compare(sortDescriptor.Direction, a.Amount?.Value ?? 0, b.Amount?.Value ?? 0, Decimal.Compare));
+                    break;
+                case ExpenseTemplateSortType.ByDescription:
+                    models.Sort((a, b) => Compare(sortDescriptor.Direction, a.Description, b.Description, String.Compare));
+                    break;
+                case ExpenseTemplateSortType.ByCategory:
+                    var categoryNames = (await dispatcher.QueryAsync(ListAllCategory.WithDeleted)).ToDictionary(c => c.Key, c => c.Name);
+                    categoryNames[KeyFactory.Empty(typeof(Category))] = String.Empty;
+                    models.Sort((a, b) => 
+                    {
+                        var result = Compare(sortDescriptor.Direction, categoryNames[a.CategoryKey], categoryNames[b.CategoryKey], String.Compare);
+                        if (result == 0)
+                            return Compare(sortDescriptor.Direction, a.Description, b.Description, String.Compare);
+
+                        return result;
+                    });
+                    break;
             }
         }
 

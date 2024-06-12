@@ -65,6 +65,9 @@ namespace Money.Pages.Users
         protected SortPropertyViewModel<ExpenseTemplateSortType> ExpenseTemplateSort { get; set; }
         protected PropertyDialog ExpenseTemplateSortEditor { get; set; }
 
+        protected EnumPropertyViewModel<ExpenseCreateDialogType> ExpenseDialogCreate { get; set; }
+        protected PropertyDialog ExpenseDialogCreateEditor { get; set; }
+
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
 
@@ -83,6 +86,7 @@ namespace Money.Pages.Users
             SearchSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("SearchSort", "Search sort", () => SearchSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
             BalanceDisplay = AddProperty<EnumPropertyViewModel<BalanceDisplayType>>("BalanceDisplay", "Balance display", () => BalanceDisplayEditor.Show(), icon: "eye", defaultValue: "Total");
             ExpenseTemplateSort = AddProperty<SortPropertyViewModel<ExpenseTemplateSortType>>("ExpenseTemplateSort", "ExpenseTemplate sort", () => ExpenseTemplateSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByDescription-Ascending");
+            ExpenseDialogCreate = AddProperty<EnumPropertyViewModel<ExpenseCreateDialogType>>("ExpenseCreateDialog", "Expense create dialog type", () => ExpenseDialogCreateEditor.Show(), icon: "minus-circle", defaultValue: "Standard");
 
             await LoadAsync();
         }

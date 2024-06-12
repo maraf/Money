@@ -1,4 +1,5 @@
 ﻿@using Money.Models.Sorting
+@using Money.Components
 @using Money.Components.Settings
 @page "/user/settings"
 @attribute [Authorize]
@@ -75,4 +76,8 @@
 
 <PropertyDialog @ref="ExpenseTemplateSortEditor" Model="@ExpenseTemplateSort" Title="Set expense template sort">
     <SortDescriptorEditor T="ExpenseTemplateSortType" @bind-Property="ExpenseTemplateSort.Property" @bind-Direction="ExpenseTemplateSort.Direction" />
+</PropertyDialog>
+
+<PropertyDialog @ref="ExpenseDialogCreateEditor" Model="@ExpenseDialogCreate" Title="Set expense create dialog type">
+    <EnumEditor T="ExpenseCreateDialogType" @bind-Property="ExpenseDialogCreate.Property" />
 </PropertyDialog>

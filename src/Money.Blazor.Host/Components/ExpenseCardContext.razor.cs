@@ -34,7 +34,7 @@ namespace Money.Components
         bool ExpenseCard.IContext.HasEdit => true;
 
         void ExpenseCard.IContext.Duplicate(OutcomeOverviewModel model)
-            => OnActionClick<IExpenseCreateNavigator>(model, null, (modal, model) => Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.When, model.IsFixed));
+            => OnActionClick<ModalDialog>(model, null, (modal, model) => Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.When, model.IsFixed));
 
         void ExpenseCard.IContext.CreateTemplate(OutcomeOverviewModel model)
             => OnActionClick(model, TemplateCreateModal, (modal, model) => modal.Show(model.Amount, model.Description, model.CategoryKey, model.IsFixed));
@@ -69,7 +69,7 @@ namespace Money.Components
         }
 
         protected void OnActionClick<T>(OutcomeOverviewModel model, T modal, Action<T, OutcomeOverviewModel> showHandler = null)
-            where T : IModalOpener
+            where T : ModalDialog
         {
             SelectedItem = model;
             if (showHandler == null)

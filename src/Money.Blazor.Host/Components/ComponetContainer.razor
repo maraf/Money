@@ -1,0 +1,11 @@
+@inject Navigator.ComponentContainer Container
+
+<CascadingValue Value="@Container">
+    @ChildContent
+</CascadingValue>
+
+@code
+{
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

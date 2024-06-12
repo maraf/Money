@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Money.Components;
 
 namespace Money.Services
 {
@@ -52,6 +53,10 @@ namespace Money.Services
             else if (query is GetExpenseTemplateSortProperty) 
             {
                 return await GetSortDescriptorAsync<ExpenseTemplateSortType>(dispatcher, "ExpenseTemplateSort", "ByDescription-Ascending");
+            }
+            else if (query is GetExpenseCreateDialogTypeProperty) 
+            {
+                return await GetEnumAsync<ExpenseCreateDialogType>(dispatcher, GetExpenseCreateDialogTypeProperty.PropertyKey, "Standard");
             }
 
             return await next(query);

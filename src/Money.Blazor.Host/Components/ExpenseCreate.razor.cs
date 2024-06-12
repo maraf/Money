@@ -31,9 +31,6 @@ namespace Money.Components
         protected Navigator Navigator { get; set; }
 
         [Inject]
-        protected Navigator.ComponentContainer ComponentContainer { get; set; }
-
-        [Inject]
         protected ICommandDispatcher Commands { get; set; }
 
         [Inject]
@@ -45,6 +42,9 @@ namespace Money.Components
         [Inject]
         protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
         protected CurrencyFormatter CurrencyFormatter { get; set; }
+
+        [Parameter][CascadingParameter]
+        public Navigator.ComponentContainer ComponentContainer { get; set; }
 
         protected List<ExpenseTemplateModel> Templates { get; private set; }
         protected List<CategoryModel> Categories { get; private set; }
@@ -60,15 +60,14 @@ namespace Money.Components
         protected DateTime When { get; set; }
         protected bool IsFixed { get; set; }
 
-        private bool isAttachedToComponentContainer;
-
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            if (ComponentContainer.ExpenseCreate == null)
+
+            if (ComponentContainer != null)
             {
+                Log.Debug("Attach to component container");
                 ComponentContainer.ExpenseCreate = this;
-                isAttachedToComponentContainer = true;
             }
         }
 
@@ -99,7 +98,8 @@ namespace Money.Components
 
         public void Dispose()
         {
-            if (isAttachedToComponentContainer)
+            Log.Debug("Dispose");
+            if (ComponentContainer != null && ComponentContainer.ExpenseCreate == this)
                 ComponentContainer.ExpenseCreate = null;
         }
 

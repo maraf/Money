@@ -41,9 +41,6 @@ namespace Money.Components
         internal Interop Interop { get; set; }
 
         [Inject]
-        protected Navigator.ComponentContainer ComponentContainer { get; set; }
-
-        [Inject]
         protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
 
         protected CurrencyFormatter CurrencyFormatter { get; private set; }
@@ -57,6 +54,9 @@ namespace Money.Components
         protected List<CurrencyModel> Currencies { get; private set; }
 
         protected Confirm PrerequisitesConfirm { get; set; }
+
+        [Parameter][CascadingParameter]
+        public Navigator.ComponentContainer ComponentContainer { get; set; }
 
         [Parameter]
         public string Description { get; set; }
@@ -81,16 +81,17 @@ namespace Money.Components
         {
             base.OnInitialized();
 
-            if (ComponentContainer.ExpenseCreate == null)
+            if (ComponentContainer != null)
             {
+                Log.Debug("Attach to component container");
                 ComponentContainer.ExpenseCreate = this;
-                isAttachedToComponentContainer = true;
             }
         }
 
         public void Dispose()
         {
-            if (isAttachedToComponentContainer)
+            Log.Debug("Dispose");
+            if (ComponentContainer != null && ComponentContainer.ExpenseCreate == this)
                 ComponentContainer.ExpenseCreate = null;
         }
 

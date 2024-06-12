@@ -127,6 +127,15 @@ namespace Money.Components
             IsFixed = isFixed;
         });
 
+        public void Show(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed) => ShowInternal(() =>
+        {
+            Amount = amount;
+            Description = description;
+            CategoryKey = categoryKey;
+            When = when;
+            IsFixed = isFixed;
+        });
+
         protected async Task LoadAsync()
         {
             if (When == DateTime.MinValue)

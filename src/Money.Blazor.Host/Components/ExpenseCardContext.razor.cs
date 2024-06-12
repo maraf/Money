@@ -21,6 +21,9 @@ namespace Money.Components
         protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
         private CurrencyFormatter currencyFormatter;
 
+        [Inject]
+        protected Navigator Navigator { get; set; }
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
@@ -31,7 +34,7 @@ namespace Money.Components
         bool ExpenseCard.IContext.HasEdit => true;
 
         void ExpenseCard.IContext.Duplicate(OutcomeOverviewModel model)
-            => OnActionClick(model, DuplicateModal, (modal, model) => modal.Show(model.CategoryKey));
+            => OnActionClick<IExpenseCreateNavigator>(model, null, (modal, model) => Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.When, model.IsFixed));
 
         void ExpenseCard.IContext.CreateTemplate(OutcomeOverviewModel model)
             => OnActionClick(model, TemplateCreateModal, (modal, model) => modal.Show(model.Amount, model.Description, model.CategoryKey, model.IsFixed));
@@ -50,7 +53,6 @@ namespace Money.Components
 
         #endregion
 
-        protected OutcomeCreate DuplicateModal { get; set; }
         protected ExpenseTemplateCreate TemplateCreateModal { get; set; }
         protected ModalDialog AmountEditModal { get; set; }
         protected ModalDialog DescriptionEditModal { get; set; }
@@ -67,7 +69,7 @@ namespace Money.Components
         }
 
         protected void OnActionClick<T>(OutcomeOverviewModel model, T modal, Action<T, OutcomeOverviewModel> showHandler = null)
-            where T : ModalDialog
+            where T : IModalOpener
         {
             SelectedItem = model;
             if (showHandler == null)

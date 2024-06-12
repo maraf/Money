@@ -75,6 +75,9 @@ namespace Money.Services
         public void OpenExpenseCreate(Price amount, string description, IKey categoryKey, bool isFixed) 
             => componentContainer.ExpenseCreate?.Show(amount, description, categoryKey, isFixed);
 
+        public void OpenExpenseCreate(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed) 
+            => componentContainer.ExpenseCreate?.Show(amount, description, categoryKey, when, isFixed);
+
         public void Open(string url)
             => manager.NavigateTo(url);
 

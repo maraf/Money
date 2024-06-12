@@ -203,6 +203,13 @@ namespace Money.Components
 
             Show(categoryKey);
         }
+        
+        public void Show(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed)
+        {
+            When = when;
+
+            Show(amount, description, categoryKey, isFixed);
+        }
 
         private async Task FocusOnShowAsync()
         {

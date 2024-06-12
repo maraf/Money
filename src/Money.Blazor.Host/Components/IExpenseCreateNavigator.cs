@@ -13,4 +13,5 @@ public interface IExpenseCreateNavigator
     void Show();
     void Show(IKey categoryKey);
     void Show(Price amount, string description, IKey categoryKey, bool isFixed);
+    void Show(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed);
 }

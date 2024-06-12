@@ -2,6 +2,7 @@
 using Money.Models;
 using Money.Models.Queries;
 using Money.Models.Sorting;
+using Money.Queries;
 using Neptuo;
 using Neptuo.Events.Handlers;
 using Neptuo.Logging;
@@ -102,8 +103,13 @@ namespace Money.Services
 
         private async Task EnsureSortedAsync(HttpQueryDispatcher dispatcher, List<ExpenseTemplateModel> models, SortDescriptor<ExpenseTemplateSortType> sortDescriptor)
         {
+            log.Debug("Ensure sorted");
+
             if (sortDescriptor == null)
-                return;
+            {
+                sortDescriptor = await dispatcher.QueryAsync(new GetExpenseTemplateSortProperty());
+                log.Debug($"The provided sort descriptor is empty, using '{sortDescriptor.Type}' '{sortDescriptor.Direction}'");
+            }
 
             int Compare<T>(SortDirection direction, T a, T b, Func<T, T, int> comparer) => direction switch
             {

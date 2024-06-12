@@ -79,7 +79,6 @@ namespace Money.Pages
             await base.OnInitializedAsync();
 
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
-
             SortDescriptor = await Queries.QueryAsync(new GetExpenseTemplateSortProperty());
 
             await ReloadAsync();

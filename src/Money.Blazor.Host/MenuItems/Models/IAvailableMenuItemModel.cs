@@ -12,5 +12,6 @@ namespace Money.Models
         string Identifier { get; }
         string Icon { get; }
         string Text { get; }
+        bool IsRequired { get; }
     }
 }

@@ -44,11 +44,19 @@
         foreach (var model in MobileMenu.AvailableModels)
         {
             var isContained = MobileMenu.SelectedIdentifiers.Contains(model.Identifier);
-            Action handler = isContained ? () => MobileMenu.SelectedIdentifiers.Remove(model.Identifier) : () => MobileMenu.SelectedIdentifiers.Add(model.Identifier);
+            Action handler = model.IsRequired
+                ? () => { }
+                : isContained 
+                    ? () => MobileMenu.SelectedIdentifiers.Remove(model.Identifier) 
+                    : () => MobileMenu.SelectedIdentifiers.Add(model.Identifier);
 
             <div @key="model.Identifier" class="alert @(isContained ? "alert-primary" : "alert-light") cursor-pointer" @onclick="handler">
-                <Icon Identifier="@model.Icon" />
+                <Icon Identifier="@model.Icon" class="me-2" />
                 @model.Text
+                @if (model.IsRequired)
+                {
+                    <i class="ms-2">Required</i>
+                }
             </div>
         }
     }

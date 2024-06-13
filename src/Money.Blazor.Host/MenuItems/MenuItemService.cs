@@ -16,7 +16,7 @@ namespace Money
 {
     internal class MenuItemService : HttpQueryDispatcher.IMiddleware
     {
-        private const string DefaultValue = "summary-month,expense-create";
+        private const string DefaultValue = "main-menu,summary-month,expense-create";
 
         private readonly List<MenuItemModel> storage;
 
@@ -31,7 +31,8 @@ namespace Money
                     Identifier = "main-menu",
                     Icon = "bars",
                     Text = "Main menu",
-                    OnClick = navigator.ToggleMainMenu
+                    OnClick = navigator.ToggleMainMenu,
+                    IsRequired = true
                 },
                 new MenuItemModel()
                 {
@@ -101,6 +102,9 @@ namespace Money
                 if (value == null)
                     return DefaultValue;
 
+                if (!value.Contains("main-menu"))
+                    value = $"main-menu,{value}";
+
                 return value;
             }
             else if (query is ListUserProperty listProperty)
@@ -110,6 +114,9 @@ namespace Money
 
                 if (property != null && property.Value == null)
                     property.Value = DefaultValue;
+
+                if (!property.Value.Contains("main-menu"))
+                    property.Value = $"main-menu,{property.Value}";
 
                 return value;
             }

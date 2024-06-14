@@ -10,69 +10,69 @@
         </Authorized>
     </AuthorizeView>
 </NavLink>
-<HamburgerButton CssClass="navbar-toggler" Click="@OnMainMenuToggleClick" />
-<div class="navbar-collapse @(IsMainMenuVisible ? "" : "collapse")">
+<div class="collapse navbar-collapse">
     <ServerConnection>
         <Online>
-
-            <ul class="nav navbar-nav me-auto mt-3 mt-lg-0 @MenuLeftMarginCssClass">
-                <MainMenuLink href="@Navigator.UrlSummary()" PageType="typeof(Pages.SummaryMonth)">
-                    <Icon Identifier="chart-pie" />
-                    Monthly
-                </MainMenuLink>
-                <MainMenuLink Href="@Navigator.UrlSummary(ThisYear)" PageType="typeof(Pages.SummaryYear)">
-                    <Icon Identifier="circle" />
-                    Yearly
-                </MainMenuLink>
-                <MainMenuLink Href="@Navigator.UrlTrends()">
-                    <Icon Prefix="fas" Identifier="chart-line" />
-                    Trends
-                </MainMenuLink>
-                <MainMenuLink Href="@Navigator.UrlBalances(ThisYear)" PageType="typeof(Pages.BalancesMonth)">
-                    <Icon Prefix="fas" Identifier="chart-bar" />
-                    Balances
-                </MainMenuLink>
-                <MainMenuLink Href="@Navigator.UrlSearch()">
-                    <Icon Identifier="search" />
-                    Search
-                </MainMenuLink>
-                <MainMenuSeparator />
-                <MainMenuLink Href="@Navigator.UrlCategories()">
-                    <Icon Identifier="tag" />
-                    <span class="d-lg-none d-xl-inline">
-                        Categories
-                    </span>
-                </MainMenuLink>
-                <MainMenuLink Href="@Navigator.UrlCurrencies()">
-                    <Icon Identifier="pound-sign" />
-                    <span class="d-lg-none d-xl-inline">
-                        Currencies
-                    </span>
-                </MainMenuLink>
-                <MainMenuLink Href="@Navigator.UrlExpenseTemplates()">
-                    <Icon Identifier="redo" />
-                    <span class="d-lg-none d-xl-inline">
-                        Templates
-                    </span>
-                </MainMenuLink>
-                <MainMenuSeparator />
-                <PwaInstall />
-                <MainMenuLink Href="@Navigator.UrlAbout()" Title="About Money app">
-                    <Icon Identifier="info-circle" />
-                    <span class="d-lg-none">
-                        About
-                    </span>
-                </MainMenuLink>
-            </ul>
-            <AuthorizeView>
-                <Authorized>
-                    <ul class="nav navbar-nav @MenuLeftMarginCssClass">
-                        <MainMenuSeparator IsVisibleOnDesktop="false" />
+            <ul class="nav navbar-nav me-auto">
+                <li class="nav-item dropdown d-md-none">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <Icon Identifier="eye" />
+                        Views
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach (var item in ViewsItems)
+                        {
+                            <li>
+                                <a class="dropdown-item" href="@item.Url">
+                                    <Icon Identifier="@item.Icon" />
+                                    @item.Text
+                                </a>
+                            </li>
+                        }
                     </ul>
-                </Authorized>
-            </AuthorizeView>
-            <UserInfo ListCssClass="@MenuLeftMarginCssClass" />
-
+                </li>
+                @foreach (var item in ViewsItems)
+                {
+                    <MainMenuLink CssClass="d-none d-md-inline-block" href="@item.Url" PageType="@item.PageType">
+                        <Icon Identifier="@item.Icon" />
+                        <span class="d-none d-md-inline">@item.Text</span>
+                    </MainMenuLink>
+                }
+                <li class="nav-item dropdown d-xl-none">
+                    <a class="nav-link dropdown-toggle dropdown-nocaret d-none d-md-inline-block" href="#" data-bs-toggle="dropdown">
+                        <Icon Identifier="ellipsis-h" />
+                    </a>
+                    <a class="nav-link dropdown-toggle d-md-none" href="#" data-bs-toggle="dropdown">
+                        <Icon Identifier="cogs" />
+                        More
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach (var item in MoreItems)
+                        {
+                            @if (item.Text == "About")
+                            {
+                                <li><hr class="dropdown-divider"></li>
+                            }
+                            <li>
+                                <a class="dropdown-item" href="@item.Url">
+                                    <Icon Identifier="@item.Icon" />
+                                    @item.Text
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+                @foreach (var item in MoreItems)
+                {
+                    <MainMenuLink CssClass="d-none d-xl-inline" Href="@item.Url">
+                        <Icon Identifier="@item.Icon" />
+                        <span class="d-none d-lg-inline">
+                            @item.Text
+                        </span>
+                    </MainMenuLink>
+                }
+            </ul>
+            <UserInfo />
         </Online>
     </ServerConnection>
 </div>

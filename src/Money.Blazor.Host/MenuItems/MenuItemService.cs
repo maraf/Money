@@ -18,9 +18,12 @@ namespace Money
     {
         private const string DefaultValue = "main-menu,summary-month,expense-create";
 
-        private readonly List<MenuItemModel> storage;
+        protected static readonly YearModel ThisYear = new YearModel(DateTime.Today.Year);
 
-        public MenuItemService(Navigator navigator)
+        private readonly List<MenuItemModel> storage;
+        private readonly MainMenuItems mainMenu;
+
+        public MenuItemService(Navigator navigator, ApiClient apiClient)
         {
             Ensure.NotNull(navigator, "navigator");
 
@@ -82,6 +85,83 @@ namespace Money
                     OnClick = navigator.OpenExpenseCreate
                 }
             };
+
+            mainMenu = new MainMenuItems(
+                [
+                    new(
+                        Text: "Monthly",
+                        Icon: "chart-pie",
+                        Url: navigator.UrlSummary(),
+                        PageType: typeof(Pages.SummaryMonth)
+                    ),
+                    new(
+                        Text: "Yearly",
+                        Icon: "circle",
+                        Url: navigator.UrlSummary(ThisYear),
+                        PageType: typeof(Pages.SummaryYear)
+                    ),
+                    new(
+                        Text: "Trends",
+                        Icon: "chart-line",
+                        Url: navigator.UrlTrends()
+                    ),
+                    new(
+                        Text: "Balances",
+                        Icon: "chart-bar",
+                        Url: navigator.UrlBalances(ThisYear),
+                        PageType: typeof(Pages.BalancesMonth)
+                    ),
+                    new(
+                        Text: "Search",
+                        Icon: "search",
+                        Url: navigator.UrlSearch()
+                    )
+                ],
+                [
+                    new(
+                        Text: "Categories",
+                        Icon: "tag",
+                        Url: navigator.UrlCategories()
+                    ),
+                    new(
+                        Text: "Currencies",
+                        Icon: "pound-sign",
+                        Url: navigator.UrlCurrencies()
+                    ),
+                    new(
+                        Text: "Templates",
+                        Icon: "redo",
+                        Url: navigator.UrlExpenseTemplates()
+                    ),
+                    new(
+                        Text: "About",
+                        Icon: "info-circle",
+                        Url: navigator.UrlAbout()
+                    )
+                ],
+                [
+                    new(
+                        Text: "Profile",
+                        Icon: "address-card",
+                        Url: navigator.UrlUserProfile()
+                    ),
+                    new(
+                        Text: "Password",
+                        Icon: "key",
+                        Url: navigator.UrlUserPassword()
+                    ),
+                    new(
+                        Text: "Settings",
+                        Icon: "cog",
+                        Url: navigator.UrlUserSettings()
+                    ),
+                    new(
+                        Text: "Logout",
+                        Icon: "sign-out-alt",
+                        OnClick: async () => await apiClient.LogoutAsync()
+                    )
+                ]
+            );
         }
 
         async Task<object> HttpQueryDispatcher.IMiddleware.ExecuteAsync(object query, HttpQueryDispatcher dispatcher, HttpQueryDispatcher.Next next)
@@ -95,6 +175,10 @@ namespace Money
             else if (query is ListAvailableMenuItem)
             {
                 return storage.ToList<IAvailableMenuItemModel>();
+            }
+            else if (query is ListMainMenuItem)
+            {
+                return mainMenu;
             }
             else if (query is FindUserProperty findProperty && findProperty.Key == "MobileMenu")
             {

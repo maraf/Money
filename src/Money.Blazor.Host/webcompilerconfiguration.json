@@ -1,0 +1,22 @@
+{
+  "Minifiers": {
+    "GZip": false,
+    "Enabled": true
+  },
+  "CompilerSettings": {
+    "Sass": {
+      "IndentType": "Space",
+      "IndentWidth": 2,
+      "OutputStyle": "Expanded",
+      "RelativeUrls": true,
+      "LineFeed": "Lf",
+      "SourceMap": false
+    },
+    "Ignore": [
+      "**/_*.*"
+    ]
+  },
+  "Output": {
+    "Preserve": true
+  }
+}

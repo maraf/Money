@@ -32,6 +32,7 @@ namespace Money.Layouts
         protected Interop Interop { get; set; }
 
         protected List<IActionMenuItemModel> Items { get; set; }
+        protected MainMenuItems MainMenu { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
@@ -39,6 +40,7 @@ namespace Money.Layouts
 
             await base.OnInitializedAsync();
             await LoadAsync();
+            MainMenu = await Queries.QueryAsync(new ListMainMenuItem());
         }
 
         public void Dispose()

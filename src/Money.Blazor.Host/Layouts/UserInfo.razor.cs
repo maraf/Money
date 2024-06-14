@@ -45,12 +45,16 @@ namespace Money.Layouts
 
         protected LoadingContext Loading { get; } = new LoadingContext();
 
+        protected List<MenuItemModel> MenuItems { get; set; }
+
         protected async override Task OnInitializedAsync()
         {
             BindEvents();
 
             await base.OnInitializedAsync();
             await LoadProfileAsync();
+
+            MenuItems = (await Queries.QueryAsync(new ListMainMenuItem())).User;
         }
 
         private async Task LoadProfileAsync()
@@ -62,9 +66,6 @@ namespace Money.Layouts
                     Profile = await Queries.QueryAsync(new GetProfile());
             }
         }
-
-        protected Task OnLogoutAsync()
-            => ApiClient.LogoutAsync();
 
         public void Dispose()
         {

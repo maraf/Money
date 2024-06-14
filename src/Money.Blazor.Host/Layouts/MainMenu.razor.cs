@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Money.Events;
 using Money.Models;
+using Money.Models.Queries;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Logging;
+using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Money.Services.Navigator;
@@ -17,11 +20,11 @@ namespace Money.Components
     public class MainMenuBase : ComponentBase, IDisposable, 
         IEventHandler<UserSignedOut>
     {
-        protected const string MenuLeftMarginCssClass = "ms-2 ms-lg-0";
-        protected static readonly YearModel ThisYear = new YearModel(DateTime.Today.Year);
+        [Inject]
+        internal Navigator Navigator { get; set; }
 
         [Inject]
-        internal Navigator Navigator {get;set;}
+        internal IQueryDispatcher Queries { get; set; }
 
         [Inject]
         internal ILog<MainMenuBase> Log { get; set; }
@@ -34,6 +37,9 @@ namespace Money.Components
 
         public bool IsMainMenuVisible { get; protected set; } = false;
 
+        protected List<MenuItemModel> ViewsItems { get; set; }
+        protected List<MenuItemModel> MoreItems { get; set; }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -41,6 +47,15 @@ namespace Money.Components
 
             Navigator.LocationChanged += OnLocationChanged;
             EventHandlers.Add<UserSignedOut>(this);
+        }
+
+        protected async override Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+
+            var items = await Queries.QueryAsync(new ListMainMenuItem());
+            ViewsItems = items.Views;
+            MoreItems = items.More;
         }
 
         public void Dispose()
@@ -67,8 +82,5 @@ namespace Money.Components
 
         private void OnLocationChanged(string url)
             => UpdateMainMenuVisible(false);
-
-        protected void OnMainMenuToggleClick()
-            => UpdateMainMenuVisible(!IsMainMenuVisible);
     }
 }

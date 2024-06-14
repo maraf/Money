@@ -86,7 +86,7 @@ namespace Money.Bootstrap
                 .AddTransient<CreateExpenseStorage>()
                 .AddTransient<OfflineCommandDispatcher>()
                 .AddSingleton<LocalCommandDispatcher>()
-                .AddSingleton<MenuItemService>()
+                .AddTransient<MenuItemService>()
                 .AddSingleton<ICommandHandlerCollection, LocalCommandHandlerCollection>()
                 .AddTransient<ICommandDispatcher, LocalCommandDispatcher>()
                 .AddTransient<IQueryDispatcher, HttpQueryDispatcher>()

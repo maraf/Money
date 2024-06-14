@@ -44,6 +44,14 @@
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
+  <Target Name="CompileScss">
+    <PropertyGroup>
+      <CssRootFolder>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', 'wwwroot', 'css'))</CssRootFolder>
+      <WebCompilerConfigPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', 'webcompilerconfiguration.json'))</WebCompilerConfigPath>
+    </PropertyGroup>
+    <Exec Command="dotnet webcompiler -r $(CssRootFolder) -c $(WebCompilerConfigPath)" />
+  </Target>
+
   <!-- GitHubPages publish -->
   <Target Name="PublishGitHubFiles" AfterTargets="ComputeFilesToPublish">
     <!-- Declare -->

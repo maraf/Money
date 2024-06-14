@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 
 namespace Money.Models
 {
-    public class MenuItemModel : IActionMenuItemModel, IAvailableMenuItemModel
-    {
-        public string Identifier { get; set; }
-        public string Icon { get; set; }
-        public string Text { get; set; }
-        public string Url { get; set; }
-        public Type PageType { get; set; }
-        public Action OnClick { get; set; }
-        public bool IsBlurMenuAfterClick { get; set; }
-        public bool IsRequired { get; set; }
-    }
+    public record MenuItemModel(
+        string Identifier = null,
+        string Icon = null,
+        string Text = null,
+        string Url = null,
+        Type PageType = null,
+        Action OnClick = null,
+        bool IsBlurMenuAfterClick = false,
+        bool IsRequired = false
+    ) : IActionMenuItemModel, IAvailableMenuItemModel;
 }

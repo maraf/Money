@@ -81,35 +81,16 @@ h4 {
     }
 }
 
+.dropdown-nocaret::after {
+    display: none !important;
+}
+
 .navbar-dark {
     background-color: $backgroundColor;
     border-color: #398BF5;
 
-    .collapse {
-        @media (max-width: 991px) {
-            display: block;
-            visibility: hidden !important;
-            height: 0 !important;
-        }
-    }
-
     .navbar-collapse {
         border-color: #398BF5;
-        height: calc(100vh - 112px);
-        visibility: visible;
-        transition: height .4s;
-        overflow-x: hidden;
-        overflow-y: auto;
-
-        @media (min-width: 576px) {
-            height: calc(100vh - 56px);
-        }
-
-        @media (min-width: 992px) {
-            height: auto;
-            overflow-x: unset;
-            overflow-y: unset;
-        }
 
         &::-webkit-scrollbar-track {
             background: #004074;
@@ -123,40 +104,6 @@ h4 {
     .navbar-toggle, .navbar-toggle:focus, .navbar-toggle:hover {
         background-color: #0078D7;
         border-color: #398BF5;
-    }
-
-    .navbar-toggler {
-        border: none;
-        outline: none;
-        box-shadow: none;
-    }
-
-    @media (min-width: 992px) and (max-width: 993px) {
-        .navbar-nav {
-            .nav-link {
-                padding-right: .35rem;
-                padding-left: .35rem;
-            }
-        }
-    }
-
-    @media (max-width: 991px) {
-        .nav-link {
-            padding-top: .75rem;
-            padding-bottom: .75rem;
-        }
-
-        hr.separator {
-            margin-right: -18px;
-            margin-left: -26px;
-        }
-
-        @media (min-width: 596px) {
-            hr.separator {
-                margin-right: -1rem;
-                margin-left: -1rem;
-            }
-        }
     }
 
     .navbar-nav > li > a,
@@ -198,13 +145,6 @@ h4 {
 
     .nav-item hr.separator {
         border-color: rgba(255,255,255,.5);
-    }
-
-    @media (max-width: 992px) {
-        .fas, .fa {
-            width: 30px;
-            text-align: center;
-        }
     }
 
     .navbar-brand {

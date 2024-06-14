@@ -17,6 +17,15 @@
                                 </a>
                             </Match>
                         }
+                        else if (item.Text == "Main menu")
+                        {
+                            <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" class="btn btn-light">
+                                <Icon Identifier="@item.Icon" />
+                                <span class="text">
+                                    @item.Text
+                                </span>
+                            </button>
+                        }
                         else
                         {
                             <button @onclick="@item.OnClick" class="btn btn-light">
@@ -31,4 +40,70 @@
             </div>
         </div>
     </nav>
+
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" style="--bs-offcanvas-height: 42vh;">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Money by Neptuo</h5>
+            @if (MainMenu != null)
+            {
+                var about = MainMenu.More.FirstOrDefault(i => i.Text == "About");
+                if (about != null)
+                {
+                    <a href="@about.Url" class="btn btn-light btn-sm ms-3">
+                        <Icon Identifier="@about.Icon" />
+                        @about.Text
+                    </a>
+                }
+            }
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body small">
+            @if (MainMenu != null)
+            {
+                <div class="row g-3">
+                    @foreach (var item in MainMenu.Views)
+                        @MainMenuItem(item)
+                    @foreach (var item in MainMenu.More.Where(i => i.Text != "About"))
+                        @MainMenuItem(item)
+                </div>
+                <hr />
+                <div class="row g-3">
+                    @foreach (var item in MainMenu.User)
+                        @MainMenuItem(item)
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code
+{
+    RenderFragment MainMenuItem(MenuItemModel item)
+    {
+        var isLogout = item.Text == "Logout";
+        return 
+            @<div class="col-3 d-grid">
+                @if (item.Url != null)
+                {
+                    <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
+                        <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "btn-light")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
+                            <Icon Identifier="@item.Icon" />
+                            <span class="text d-block">
+                                @item.Text
+                            </span>
+                        </a>
+                    </Match>
+                }
+                else
+                {
+                    <button @onclick="@item.OnClick" class="btn btn-light @(isLogout ? "text-danger" : string.Empty)">
+                        <Icon Identifier="@item.Icon" />
+                        <span class="text d-block">
+                            @item.Text
+                        </span>
+                    </button>
+                }
+            </div>
+        ;
+    }
 }

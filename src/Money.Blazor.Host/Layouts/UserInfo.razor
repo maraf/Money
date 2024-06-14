@@ -12,62 +12,30 @@
             <ChildContent>
                 @if (Profile != null)
                 {
-                    <li class="nav-item dropdown d-none d-lg-block">
+                    <li class="nav-item dropdown d-none d-sm-block">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                             <Icon Identifier="user-circle" />
                             Me
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" href="@Navigator.UrlUserProfile()">
-                                    <Icon Identifier="address-card" />
-                                    Profile
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="@Navigator.UrlUserPassword()">
-                                    <Icon Identifier="key" />
-                                    Password
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="@Navigator.UrlUserSettings()">
-                                    <Icon Identifier="cog" />
-                                    Settings
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger cursor-pointer" @onclick="@OnLogoutAsync">
-                                    <Icon Prefix="fas" Identifier="sign-out-alt" />
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="d-block d-lg-none">
-                        <a class="nav-link" href="@Navigator.UrlUserProfile()">
-                            <Icon Identifier="address-card" />
-                            Profile
-                        </a>
-                    </li>
-                    <li class="d-block d-lg-none">
-                        <a class="nav-link" href="@Navigator.UrlUserPassword()">
-                            <Icon Identifier="key" />
-                            Password
-                        </a>
-                    </li>
-                    <li class="d-block d-lg-none">
-                        <a class="nav-link" href="@Navigator.UrlUserSettings()">
-                            <Icon Identifier="cog" />
-                            Settings
-                        </a>
-                    </li>
-                    <li class="d-block d-lg-none">
-                        <a class="nav-link text-danger cursor-pointer" @onclick="@OnLogoutAsync">
-                            <Icon Prefix="fas" Identifier="sign-out-alt" />
-                            Logout
-                        </a>
+                        @if (MenuItems != null)
+                        {
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                @foreach (var item in MenuItems)
+                                {
+                                    var isLogout = item.Text == "Logout";
+                                    @if (isLogout)
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                    }
+                                    <li>
+                                        <a class="dropdown-item @(isLogout ? "text-danger" : string.Empty) cursor-pointer" href="@item.Url" @onclick="@item.OnClick">
+                                            <Icon Identifier="@item.Icon" />
+                                            @item.Text
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        }
                     </li>
                 }
             </ChildContent>

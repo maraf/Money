@@ -5,8 +5,14 @@
         @if (Icon != null)
         {
             <Icon Identifier="@Icon" Prefix="@IconPrefix" class="me-1" />
+            <span class="d-none d-md-inline">
+                @Text
+            </span>
         }
-        @Text
+        else
+        {
+            @Text
+        }
         <span class="caret"></span>
     </button>
 

@@ -455,8 +455,7 @@ h4 {
 
 @media (max-width: 767px) {
     .modal .btn-primary {
-        width: 100%;
-        display: block;
+        flex: 1 1 auto !important; // flex-fill
     }
 }
 

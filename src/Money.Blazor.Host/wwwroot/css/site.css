@@ -397,8 +397,9 @@ h4 {
 
 @media (max-width: 767px) {
   .modal .btn-primary {
-    width: 100%;
-    display: block;
+    -webkit-box-flex: 1 !important;
+        -ms-flex: 1 1 auto !important;
+            flex: 1 1 auto !important;
   }
 }
 .modal .modal-overflow .modal-body {

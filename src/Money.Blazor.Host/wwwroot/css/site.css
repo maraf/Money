@@ -186,11 +186,17 @@ h4 {
 }
 
 .bottom-bar {
+  z-index: 1050;
   background: #f5f5f5;
   border-top: 1px solid #dddddd;
 }
 .bottom-bar .items-6 span.text, .bottom-bar .items-5 span.text, .bottom-bar .items-4 span.text, .bottom-bar .items-3 span.text {
   display: none;
+}
+
+.offcanvas-bottom-menu {
+  --bs-offcanvas-height: 42vh;
+  bottom: 55px;
 }
 
 .center {
@@ -427,7 +433,7 @@ h4 {
   height: 100%;
   overflow: hidden;
   background: #004074;
-  z-index: 1031;
+  z-index: 1060;
   -webkit-transition: height 1s, opacity 0.5s linear 1s, margin-top 0.1s linear 2s;
   transition: height 1s, opacity 0.5s linear 1s, margin-top 0.1s linear 2s;
 }

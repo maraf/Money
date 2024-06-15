@@ -32,6 +32,13 @@
 
         @Main
     </h3>
+
+    @if (!String.IsNullOrEmpty(Sub))
+    {
+        <h6 class="mb-0" style="font-size: 9px; font-weight: 100;">
+            @Sub
+        </h6>
+    }
 </TemplateContent>
 <TemplateContent Name="MobilePageActions">
     @Actions(true)

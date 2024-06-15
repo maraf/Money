@@ -19,7 +19,7 @@
                         }
                         else if (item.Text == "Main menu")
                         {
-                            <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" class="btn btn-light">
+                            <button @onclick="OnToggleMainMenu" class="btn btn-light">
                                 <Icon Identifier="@item.Icon" />
                                 <span class="text">
                                     @item.Text
@@ -41,9 +41,8 @@
         </div>
     </nav>
 
-    <div class="offcanvas offcanvas-bottom offcanvas-bottom-menu" tabindex="-1" id="offcanvasBottom">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Money by Neptuo</h5>
+    <Offcanvas @ref="Offcanvas" Title="Money by Neptuo" class="offcanvas-bottom-menu">
+        <HeaderContent>
             @if (MainMenu != null)
             {
                 var about = MainMenu.More.FirstOrDefault(i => i.Text == "About");
@@ -55,9 +54,8 @@
                     </a>
                 }
             }
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-        </div>
-        <div class="offcanvas-body small">
+        </HeaderContent>
+        <ChildContent>
             @if (MainMenu != null)
             {
                 <div class="row g-3">
@@ -72,8 +70,8 @@
                         @MainMenuItem(item)
                 </div>
             }
-        </div>
-    </div>
+        </ChildContent>
+    </Offcanvas>
 }
 
 @code

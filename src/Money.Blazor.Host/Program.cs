@@ -75,6 +75,7 @@ namespace Money.UI.Blazor
                 .AddSingleton<Navigator.ComponentContainer>()
                 .AddScoped<ApiClient>()
                 .AddSingleton<ModalInterop>()
+                .AddTransient<OffcanvasInterop>()
                 .AddSingleton<TokenContainer>()
                 .AddSingleton<QueryString>()
                 .AddSingleton<CommandMapper>()

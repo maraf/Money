@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
+using Money.Components.Bootstrap;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Services;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
@@ -20,6 +23,12 @@ namespace Money.Layouts
         IEventHandler<UserPropertyChanged>
     {
         [Inject]
+        protected ILog<BottomMenu> Log { get; set; }
+
+        [Inject]
+        protected IJSRuntime JsRuntime { get; set; }
+        
+        [Inject]
         protected Navigator Navigator { get; set; }
 
         [Inject]
@@ -33,10 +42,15 @@ namespace Money.Layouts
 
         protected List<IActionMenuItemModel> Items { get; set; }
         protected MainMenuItems MainMenu { get; set; }
+        protected Offcanvas Offcanvas { get; set; }
+
+        private bool lastIsMainMenuVisible;
 
         protected async override Task OnInitializedAsync()
         {
             EventHandlers.Add<UserPropertyChanged>(this);
+
+            Navigator.LocationChanged += OnLocationChanged;
 
             await base.OnInitializedAsync();
             await LoadAsync();
@@ -45,6 +59,7 @@ namespace Money.Layouts
 
         public void Dispose()
         {
+            Navigator.LocationChanged -= OnLocationChanged;
             EventHandlers.Remove<UserPropertyChanged>(this);
         }
 
@@ -64,5 +79,16 @@ namespace Money.Layouts
             if (isBlurMenuAfterClick)
                 await Interop.BlurActiveElementAsync();
         }
+
+        protected void OnToggleMainMenu()
+        {
+            if (Offcanvas.IsVisible)
+                Offcanvas.Hide();
+            else
+                Offcanvas.Show();
+        }
+
+        private void OnLocationChanged(string url)
+            => Offcanvas.Hide();
     }
 }

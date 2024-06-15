@@ -12,7 +12,7 @@ else
     <div class="row no-gutters" style="min-height: calc(100vh - 332px)">
         @foreach (var model in Models)
         {
-            var size = model.TotalAmount.Value / MaxAmount * 100;
+            var size = MaxAmount == 0 ? 0 : model.TotalAmount.Value / MaxAmount * 100;
 
             <div class="col-12 col-lg-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
                 <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">

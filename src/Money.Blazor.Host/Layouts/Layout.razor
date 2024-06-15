@@ -5,6 +5,10 @@
     <nav class="navbar navbar-expand-sm navbar-dark">
         <div class="container">
             <MainMenu />
+            <div class="mobile-page-title text-light flex-fill d-block d-sm-none">
+                <TemplatePlaceholder Name="MobilePageTitle" />
+            </div>
+            <TemplatePlaceholder Name="MobilePageActions" />
         </div>
     </nav>
     <TemplatePlaceholder Name="FixedTop" />

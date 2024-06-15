@@ -1,5 +1,5 @@
 ﻿<TemplateContent Name="FixedTop">
-    <div class="header">
+    <div class="header d-none d-sm-block">
         <div class="container">
             <div class="d-flex">
                 <h3 class="mre-1">
@@ -10,21 +10,7 @@
 
                     @Main
                 </h3>
-                <div class="actions">
-                    @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
-                    {
-                        <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
-                            @if (!String.IsNullOrEmpty(ButtonIcon))
-                            {
-                                <Icon Identifier="@ButtonIcon" class="me-1" />
-                            }
-
-                            @ButtonText
-                        </button>
-                    }
-
-                    @ButtonContent
-                </div>
+                @Actions(false)
             </div>
 
             @if (!String.IsNullOrEmpty(Sub))
@@ -37,19 +23,61 @@
         </div>
     </div>
 </TemplateContent>
+<TemplateContent Name="MobilePageTitle">
+    <h3 class="mb-0" style="font-weight: 100;">
+        @if (!String.IsNullOrEmpty(Icon))
+        {
+            <Icon Identifier="@Icon" class="ms-1 me-2" />
+        }
+
+        @Main
+    </h3>
+</TemplateContent>
+<TemplateContent Name="MobilePageActions">
+    @Actions(true)
+</TemplateContent>
 <TemplateContent Name="PreContent">
+    <div class="d-block d-sm-none">
+        <div class="header-append-mobile"></div>
+    </div>
+
     @if (!String.IsNullOrEmpty(Sub))
     {
         <div class="d-none d-md-block">
             <div class="header-append"></div>
         </div>
 
-        <div class="d-block d-md-none">
+        <div class="d-none d-sm-block d-md-none">
             <div class="header-append-small"></div>
         </div>
     }
     else
     {
-        <div class="header-append-small"></div>
+        <div class="d-none d-md-block">
+            <div class="header-append-small"></div>
+        </div>
     }
 </TemplateContent>
+
+@code
+{
+    RenderFragment Actions(bool isMobileTarget)
+    {
+        return 
+        @<div class="actions @(isMobileTarget ? "d-sm-none" : string.Empty)">
+            @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
+            {
+                <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
+                    @if (!String.IsNullOrEmpty(ButtonIcon))
+                    {
+                        <Icon Identifier="@ButtonIcon" class="me-1" />
+                    }
+
+                    @ButtonText
+                </button>
+            }
+
+            @ButtonContent
+        </div>;
+    }
+}

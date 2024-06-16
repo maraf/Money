@@ -296,7 +296,7 @@ h4 {
   margin: 0;
 }
 .card.card-hover:hover {
-  background-color: #eee;
+  background-color: rgba(var(--bs-emphasis-color-rgb), 0.075);
 }
 
 .sort a {
@@ -357,7 +357,7 @@ h4 {
 }
 
 .bar-graph:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(var(--bs-emphasis-color-rgb), 0.075);
 }
 
 .bar-graph-summary {
@@ -393,7 +393,7 @@ h4 {
   border-top: 1px solid #dee2e6 !important;
 }
 .cards .row:hover {
-  background: #eee;
+  background: rgba(var(--bs-emphasis-color-rgb), 0.075);
 }
 .cards .row .btn-link {
   color: #333;

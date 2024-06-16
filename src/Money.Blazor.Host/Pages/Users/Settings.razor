@@ -89,3 +89,7 @@
 <PropertyDialog @ref="ExpenseDialogCreateEditor" Model="@ExpenseDialogCreate" Title="Set expense create dialog type">
     <EnumEditor T="ExpenseCreateDialogType" @bind-Property="ExpenseDialogCreate.Property" />
 </PropertyDialog>
+
+<PropertyDialog @ref="ThemeEditor" Model="@Theme" Title="Set color theme">
+    <EnumEditor T="ThemeType" @bind-Property="Theme.Property" />
+</PropertyDialog>

@@ -7,6 +7,7 @@ using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Models.Sorting;
+using Money.Queries;
 using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
@@ -68,6 +69,9 @@ namespace Money.Pages.Users
         protected EnumPropertyViewModel<ExpenseCreateDialogType> ExpenseDialogCreate { get; set; }
         protected PropertyDialog ExpenseDialogCreateEditor { get; set; }
 
+        protected EnumPropertyViewModel<ThemeType> Theme { get; set; }
+        protected PropertyDialog ThemeEditor { get; set; }
+
         protected List<UserPropertyModel> Models { get; set; }
         protected List<PropertyViewModel> ViewModels { get; } = new List<PropertyViewModel>();
 
@@ -87,6 +91,7 @@ namespace Money.Pages.Users
             BalanceDisplay = AddProperty<EnumPropertyViewModel<BalanceDisplayType>>("BalanceDisplay", "Balance display", () => BalanceDisplayEditor.Show(), icon: "eye", defaultValue: "Total");
             ExpenseTemplateSort = AddProperty<SortPropertyViewModel<ExpenseTemplateSortType>>("ExpenseTemplateSort", "ExpenseTemplate sort", () => ExpenseTemplateSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByDescription-Ascending");
             ExpenseDialogCreate = AddProperty<EnumPropertyViewModel<ExpenseCreateDialogType>>("ExpenseCreateDialog", "Expense create dialog type", () => ExpenseDialogCreateEditor.Show(), icon: "minus-circle", defaultValue: "Standard");
+            Theme = AddProperty<EnumPropertyViewModel<ThemeType>>(GetThemeTypeProperty.PropertyKey, "Color theme", () => ThemeEditor.Show(), icon: "palette", defaultValue: "Light");
 
             await LoadAsync();
         }
@@ -96,13 +101,13 @@ namespace Money.Pages.Users
             EventHandlers.Remove<UserPropertyChanged>(this);
         }
 
-        private PropertyViewModel AddProperty(string name, string title, Action edit, string defaultValue = null, string icon = null)
-            => AddProperty<PropertyViewModel>(name, title, edit, defaultValue, icon);
+        private PropertyViewModel AddProperty(string propertyKey, string title, Action edit, string defaultValue = null, string icon = null)
+            => AddProperty<PropertyViewModel>(propertyKey, title, edit, defaultValue, icon);
 
-        private T AddProperty<T>(string name, string title, Action edit, string defaultValue = null, string icon = null)
+        private T AddProperty<T>(string propertyKey, string title, Action edit, string defaultValue = null, string icon = null)
             where T : PropertyViewModel, new()
         {
-            var viewModel = ViewModels.FirstOrDefault(vm => vm.Key == name);
+            var viewModel = ViewModels.FirstOrDefault(vm => vm.Key == propertyKey);
             if (viewModel == null)
             {
                 ViewModels.Add(viewModel = new T()
@@ -112,7 +117,7 @@ namespace Money.Pages.Users
                 });
             }
 
-            viewModel.Key = name;
+            viewModel.Key = propertyKey;
             viewModel.Title = title;
             viewModel.Icon = icon;
             viewModel.Edit = edit;

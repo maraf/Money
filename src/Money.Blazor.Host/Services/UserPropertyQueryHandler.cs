@@ -58,6 +58,10 @@ namespace Money.Services
             {
                 return await GetEnumAsync<ExpenseCreateDialogType>(dispatcher, GetExpenseCreateDialogTypeProperty.PropertyKey, "Standard");
             }
+            else if (query is GetThemeTypeProperty) 
+            {
+                return await GetEnumAsync<ThemeType>(dispatcher, GetThemeTypeProperty.PropertyKey, "Light");
+            }
 
             return await next(query);
         }

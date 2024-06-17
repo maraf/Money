@@ -147,8 +147,8 @@ h4 {
 .header {
   min-width: 380px;
   padding: 14px 0;
-  background: #f5f5f5;
-  border-bottom: 1px solid #dddddd;
+  background: rgba(var(--bs-emphasis-color-rgb), 0.075);
+  border-bottom: 1px solid var(--bs-border-color-translucent);
 }
 .header .icon {
   font-size: 26px;
@@ -191,8 +191,8 @@ h4 {
 
 .bottom-bar {
   z-index: 1050;
-  background: #f5f5f5;
-  border-top: 1px solid #dddddd;
+  background: var(--bs-body-bg);
+  border-top: 1px solid var(--bs-border-color-translucent);
 }
 .bottom-bar .items-6 span.text, .bottom-bar .items-5 span.text, .bottom-bar .items-4 span.text, .bottom-bar .items-3 span.text {
   display: none;

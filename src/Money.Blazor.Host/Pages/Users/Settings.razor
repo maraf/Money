@@ -10,7 +10,7 @@
     @foreach (var viewModel in ViewModels)
     {
         <div class="col-12 col-md-auto mb-4">
-            <button class="btn btn-light text-truncate text-start w-100" @onclick="viewModel.Edit">
+            <button class="btn bg-light-subtle text-truncate text-start w-100" @onclick="viewModel.Edit">
                 @if (viewModel.Icon != null)
                 {
                     <Icon Identifier="@viewModel.Icon" class="me-1" />

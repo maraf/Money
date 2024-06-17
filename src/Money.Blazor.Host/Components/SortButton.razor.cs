@@ -73,7 +73,7 @@ namespace Money.Components
             if (Current == null)
                 UpdateCurrent(Items.First().Value);
 
-            ButtonCssClass = "btn btn-light dropdown-toggle";
+            ButtonCssClass = "btn bg-light-subtle dropdown-toggle";
             switch (Size)
             {
                 case Size.Small:

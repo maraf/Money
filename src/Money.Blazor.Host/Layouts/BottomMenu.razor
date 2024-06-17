@@ -9,7 +9,7 @@
                         @if (item.Url != null)
                         {
                             <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
-                                <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "btn-light")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
+                                <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                                     <Icon Identifier="@item.Icon" />
                                     <span class="text">
                                         @item.Text
@@ -19,7 +19,7 @@
                         }
                         else if (item.Text == "Main menu")
                         {
-                            <button @onclick="OnToggleMainMenu" class="btn btn-light">
+                            <button @onclick="OnToggleMainMenu" class="btn bg-light-subtle">
                                 <Icon Identifier="@item.Icon" />
                                 <span class="text">
                                     @item.Text
@@ -28,7 +28,7 @@
                         }
                         else
                         {
-                            <button @onclick="@item.OnClick" class="btn btn-light">
+                            <button @onclick="@item.OnClick" class="btn bg-light-subtle">
                                 <Icon Identifier="@item.Icon" />
                                 <span class="text">
                                     @item.Text
@@ -48,7 +48,7 @@
                 var about = MainMenu.More.FirstOrDefault(i => i.Text == "About");
                 if (about != null)
                 {
-                    <a href="@about.Url" class="btn btn-light btn-sm ms-3">
+                    <a href="@about.Url" class="btn bg-light-subtle btn-sm ms-3">
                         <Icon Identifier="@about.Icon" />
                         @about.Text
                     </a>
@@ -84,7 +84,7 @@
                 @if (item.Url != null)
                 {
                     <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
-                        <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "btn-light")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
+                        <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                             <Icon Identifier="@item.Icon" />
                             <span class="text d-block">
                                 @item.Text
@@ -94,7 +94,7 @@
                 }
                 else
                 {
-                    <button @onclick="@item.OnClick" class="btn btn-light @(isLogout ? "text-danger" : string.Empty)">
+                    <button @onclick="@item.OnClick" class="btn bg-light-subtle @(isLogout ? "text-danger" : string.Empty)">
                         <Icon Identifier="@item.Icon" />
                         <span class="text d-block">
                             @item.Text

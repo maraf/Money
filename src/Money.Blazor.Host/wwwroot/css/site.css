@@ -4,11 +4,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #F5F5F5;
+  background: var(--bs-secondary-bg-subtle);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #bbb;
+  background: var(--bs-secondary);
 }
 
 .clear {

@@ -32,7 +32,7 @@ window.Bootstrap = {
         }
     },
     Offcanvas: {
-        Initialize: function(interop, container) {
+        Initialize: function (interop, container) {
             let offcanvas = bootstrap.Offcanvas.getInstance(container);
             if (!offcanvas) {
                 offcanvas = new bootstrap.Offcanvas(container);
@@ -44,15 +44,18 @@ window.Bootstrap = {
                 });
             }
         },
-        Show: function(container) {
+        Show: function (container) {
             bootstrap.Offcanvas.getInstance(container).show()
         },
-        Hide: function(container) {
+        Hide: function (container) {
             bootstrap.Offcanvas.getInstance(container).hide();
+        },
+        Dispose: function (container) {
+            bootstrap.Offcanvas.getInstance(container).dispose();
         }
     },
     Theme: {
-        Apply: function(theme) {
+        Apply: function (theme) {
             document.documentElement.setAttribute("data-bs-theme", theme);
         }
     }
@@ -63,7 +66,7 @@ window.Network = {
         function handler() {
             interop.invokeMethodAsync("Network.StatusChanged", navigator.onLine);
         }
-        
+
         window.addEventListener('online', handler);
         window.addEventListener('offline', handler);
 
@@ -133,13 +136,13 @@ window.PullToRefresh = {
     Initialize: function (interop) {
         const container = document.body;
         const listenerOptions = { passive: true };
-        
+
         const prerequisities = () => !document.querySelector(".modal.fade.show") && document.querySelector("nav.navbar-dark .navbar-collapse.collapse");
-        
+
         refreshClosure = (() => {
             const treshold = 200;
             const $ui = $(".refresher");
-            
+
             let _isActive = false;
             let _startX;
             let _startY;
@@ -151,7 +154,7 @@ window.PullToRefresh = {
                 _startY = 0;
                 _lastDeltaX = 0;
                 _lastDeltaY = 0;
-    
+
                 if (document.scrollingElement.scrollTop === 0 && prerequisities()) {
                     _startX = Math.floor(e.touches[0].pageX);
                     _startY = Math.floor(e.touches[0].pageY);
@@ -175,19 +178,19 @@ window.PullToRefresh = {
                 if (_isActive && _lastDeltaY > treshold && _lastDeltaX < (treshold / 2) && prerequisities()) {
                     interop.invokeMethodAsync("PullToRefresh.Pulled");
                 }
-    
+
                 $ui.removeClass("visible");
             };
 
             return { start, move, end };
         })();
-        
+
         swipeClosure = (() => {
             const tresholdX = 100;
             const tresholdY = 100;
             const $leftUi = $(".swipe-left");
             const $rightUi = $(".swipe-right");
-            
+
             let _isActive = false;
             let _startX;
             let _startY;
@@ -215,7 +218,7 @@ window.PullToRefresh = {
                 _startY = 0;
                 _lastDeltaX = 0;
                 _lastDeltaY = 0;
-    
+
                 if (prerequisities()) {
                     _startX = Math.floor(e.touches[0].pageX);
                     _startY = Math.floor(e.touches[0].pageY);
@@ -223,7 +226,7 @@ window.PullToRefresh = {
                         _isActive = 1;
                         return;
                     }
-                    
+
                     if (window.innerWidth - _startX < (tresholdX / 2)) {
                         _isActive = 2;
                         return;
@@ -269,7 +272,7 @@ window.PullToRefresh = {
                 swapLeftIcon(false);
                 swapRightIcon(false);
             };
-            
+
             const end = () => {
                 $leftUi.css("margin-left", 0);
                 $rightUi.css("margin-right", 0);

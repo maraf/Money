@@ -55,7 +55,7 @@ namespace Money.Pages
         protected SortDescriptor<OutcomeOverviewSortType> Sort { get; set; }
         protected PagingContext PagingContext { get; set; }
 
-        protected List<OutcomeOverviewModel> Models { get; set; }
+        protected List<OutcomeOverviewModel> Models { get; set; } = [];
         protected string FormText { get; set; }
         protected SortDescriptor<OutcomeOverviewSortType> FormSort { get; set; }
 

@@ -390,7 +390,7 @@ h4 {
   margin: 20px 0;
 }
 .cards .row:first-child {
-  border-top: 1px solid #dee2e6 !important;
+  border-top: 1px solid var(--bs-border-color) !important;
 }
 .cards .row:hover {
   background: rgba(var(--bs-emphasis-color-rgb), 0.075);

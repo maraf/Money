@@ -444,7 +444,7 @@ h4 {
 
     .row {
         &:first-child {
-            border-top: 1px solid #dee2e6 !important;
+            border-top: 1px solid var(--bs-border-color) !important;
         }
 
         &:hover {

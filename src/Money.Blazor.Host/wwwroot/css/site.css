@@ -535,7 +535,7 @@ h4 {
   height: 100%;
   display: none;
   opacity: 0.9;
-  background: #fff;
+  background: rgba(var(--bs-emphasis-color-rgb), 0.075);
 }
 
 .loading-active .mask {

@@ -50,6 +50,11 @@ window.Bootstrap = {
         Hide: function(container) {
             bootstrap.Offcanvas.getInstance(container).hide();
         }
+    },
+    Theme: {
+        Apply: function(theme) {
+            document.documentElement.setAttribute("data-bs-theme", theme);
+        }
     }
 };
 

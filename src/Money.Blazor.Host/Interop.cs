@@ -35,5 +35,8 @@ namespace Money
 
         public async Task FocusElementByIdAsync(string id)
             => await jsRuntime.InvokeVoidAsync("Money.FocusElementById", id);
+
+        public async Task ApplyThemeAsync(string theme)
+            => await jsRuntime.InvokeVoidAsync("Bootstrap.Theme.Apply", theme);
     }
 }

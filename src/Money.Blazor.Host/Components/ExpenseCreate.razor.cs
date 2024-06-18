@@ -47,6 +47,8 @@ namespace Money.Components
         [Parameter][CascadingParameter]
         public Navigator.ComponentContainer ComponentContainer { get; set; }
 
+        protected Confirm PrerequisitesConfirm { get; set; }
+
         protected List<ExpenseTemplateModel> Templates { get; private set; }
         protected List<CategoryModel> Categories { get; private set; }
         protected List<CurrencyModel> Currencies { get; private set; }
@@ -104,14 +106,18 @@ namespace Money.Components
                 ComponentContainer.ExpenseCreate = null;
         }
 
-        private void ShowInternal(Action setParameters = null)
+        private async void ShowInternal(Action setParameters = null)
         {
-            base.Show();
             FocusAfterRender = true;
             
             setParameters?.Invoke();
 
-            _ = LoadAsync();
+            await LoadAsync();
+            
+            if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
+                PrerequisitesConfirm.Show();
+            else
+                base.Show();
         }
 
         public new void Show() 
@@ -276,6 +282,14 @@ namespace Money.Components
 
             Log.Debug($"Expense: Validation: '{string.Join("', '", errors)}'.");
             return errors.IsEmpty();
+        }
+
+        protected void OnPrerequisitesConfirmed()
+        {
+            if (Currencies == null || Currencies.Count == 0)
+                Navigator.OpenCurrencies();
+            else if (Categories == null || Categories.Count == 0)
+                Navigator.OpenCategories();
         }
     }
 }

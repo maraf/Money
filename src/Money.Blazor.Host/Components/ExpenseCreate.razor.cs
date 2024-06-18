@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.VisualBasic;
 using Money.Commands;
 using Money.Models;
 using Money.Models.Queries;
@@ -50,7 +51,7 @@ namespace Money.Components
         protected List<CategoryModel> Categories { get; private set; }
         protected List<CurrencyModel> Currencies { get; private set; }
 
-        protected ErrorMessages Errors { get; } = new(new(1), new(1), new(1), new(1), new(1));
+        protected ErrorMessages Errors { get; } = ErrorMessages.Create();
 
         protected SelectedField Selected { get; set; } = SelectedField.Description;
         protected Price Amount { get; set; }
@@ -192,6 +193,8 @@ namespace Money.Components
 
             public IEnumerator<string> GetEnumerator() => All().GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => All().GetEnumerator();
+
+            public static ErrorMessages Create() => new(new(1), new(1), new(1), new(1), new(1));
         }
 
         protected void SuggestTemplates()
@@ -220,7 +223,7 @@ namespace Money.Components
             IsFixed = model.IsFixed;
 
             SuggestedTemplates.Clear();
-            SetSelectedField(SelectedField.Description);
+            Validate(ErrorMessages.Create());
         }
 
         protected void SetSelectedField(SelectedField selected, bool focusAfterRender = true)
@@ -231,7 +234,7 @@ namespace Money.Components
 
         protected async Task CreateAsync()
         {
-            if (!Validate())
+            if (!Validate(Errors))
                 return;
 
             await ExecuteAsync();
@@ -254,25 +257,25 @@ namespace Money.Components
             return Commands.HandleAsync(new CreateOutcome(Amount, Description, When, CategoryKey, IsFixed));
         }
 
-        private bool Validate()
+        private bool Validate(ErrorMessages errors)
         {
             Log.Debug($"Expense: Amount: {Amount}, Category: {CategoryKey}, When: {When}.");
 
             void ValidateField(SelectedField field, Func<bool> validator)
             {
-                bool areMessagesEmpty = Errors.IsEmpty();
+                bool areMessagesEmpty = errors.IsEmpty();
                 bool isInvalid = validator();
                 if (areMessagesEmpty && isInvalid)
                     SetSelectedField(field);
             }
 
-            Errors.Clear();
-            ValidateField(SelectedField.Description, () => Validator.AddOutcomeDescription(Errors.Description, Description));
-            ValidateField(SelectedField.Amount, () => Validator.AddOutcomeAmount(Errors.Amount, Amount?.Value ?? 0));
-            ValidateField(SelectedField.Category, () => Validator.AddOutcomeCategoryKey(Errors.Category, CategoryKey));
+            errors.Clear();
+            ValidateField(SelectedField.Description, () => Validator.AddOutcomeDescription(errors.Description, Description));
+            ValidateField(SelectedField.Amount, () => Validator.AddOutcomeAmount(errors.Amount, Amount?.Value ?? 0));
+            ValidateField(SelectedField.Category, () => Validator.AddOutcomeCategoryKey(errors.Category, CategoryKey));
 
-            Log.Debug($"Expense: Validation: '{string.Join("', '", Errors)}'.");
-            return Errors.IsEmpty();
+            Log.Debug($"Expense: Validation: '{string.Join("', '", errors)}'.");
+            return errors.IsEmpty();
         }
     }
 }

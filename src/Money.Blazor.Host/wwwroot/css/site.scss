@@ -1,6 +1,6 @@
 ﻿$backgroundColor: #004074;
 $bodyMinWidth: 380px;
-$actionButtonColor: #333;
+$actionButtonColor: var(--bs-body-color);
 
 ::-webkit-scrollbar {
     width: 8px;

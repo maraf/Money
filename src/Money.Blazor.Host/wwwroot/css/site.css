@@ -224,7 +224,7 @@ h4 {
   margin-bottom: -7px;
 }
 .alert .nav .btn-link {
-  color: #333;
+  color: var(--bs-body-color);
 }
 
 .back-dark {
@@ -290,7 +290,7 @@ h4 {
   margin-bottom: -7px;
 }
 .card .nav .btn-link {
-  color: #333;
+  color: var(--bs-body-color);
 }
 .card p:last-child {
   margin: 0;
@@ -396,7 +396,7 @@ h4 {
   background: rgba(var(--bs-emphasis-color-rgb), 0.075);
 }
 .cards .row .btn-link {
-  color: #333;
+  color: var(--bs-body-color);
 }
 
 @media (max-width: 767px) {

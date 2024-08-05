@@ -1,4 +1,4 @@
-﻿@inherits ModalDialog
+@inherits ModalDialog
 
 @code
 {
@@ -6,8 +6,8 @@
     {
         placeholder = "...";
         return
-            @<div class="col text-center text-truncate">
-                <span class="cursor-pointer @(Selected == field ? "text-primary" : (!isFilled ? "text-secondary" : ""))" @onclick="(() => SetSelectedField(field))">
+            @<div class="col text-center text-truncate cursor-pointer pb-3 @(Selected == field ? "border-bottom border-primary" : "")" style="--bs-border-width: 3px;" @onclick="(() => SetSelectedField(field))">
+                <span class="@(!isFilled ? "text-secondary" : "")">
                     <h3>
                         <Icon Identifier="@icon" />
                         @if (Errors.Get(field).Any())

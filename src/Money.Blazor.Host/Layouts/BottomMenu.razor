@@ -80,13 +80,13 @@
     {
         var isLogout = item.Text == "Logout";
         return 
-            @<div class="col-3 d-grid">
+            @<div class="col-3">
                 @if (item.Url != null)
                 {
                     <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
-                        <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
+                        <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle") w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                             <Icon Identifier="@item.Icon" />
-                            <span class="text d-block">
+                            <span class="text d-block text-truncate">
                                 @item.Text
                             </span>
                         </a>
@@ -94,7 +94,7 @@
                 }
                 else
                 {
-                    <button @onclick="@item.OnClick" class="btn bg-light-subtle @(isLogout ? "text-danger" : string.Empty)">
+                    <button @onclick="@item.OnClick" class="btn bg-light-subtle @(isLogout ? "text-danger" : string.Empty) w-100">
                         <Icon Identifier="@item.Icon" />
                         <span class="text d-block">
                             @item.Text

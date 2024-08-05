@@ -35,6 +35,7 @@ namespace Money.Pages.Accounts
 
         protected LoadingContext Loading { get; } = new LoadingContext();
         protected List<string> ErrorMessages { get; } = new List<string>();
+        protected bool IsAutoLoginUrl => Navigator.GetQueryString().ContainsKey("autologin");
 
         protected override void OnInitialized()
         {
@@ -55,7 +56,12 @@ namespace Money.Pages.Accounts
             await base.OnAfterRenderAsync(firstRender);
 
             if (firstRender)
-                await UserNameBox.FocusAsync();
+            {
+                if (IsAutoLoginUrl)
+                    OnDemoSubmitAsync();
+                else
+                    await UserNameBox.FocusAsync();
+            }
         }
 
         protected Task OnSubmitAsync()
@@ -84,7 +90,7 @@ namespace Money.Pages.Accounts
         {
             if (!String.IsNullOrEmpty(ReturnUrl))
                 Navigator.Open(ReturnUrl);
-            else if (Navigator.IsLoginUrl())
+            else if (Navigator.IsLoginUrl() || IsAutoLoginUrl)
                 Navigator.OpenSummary();
         }
 

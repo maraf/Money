@@ -77,10 +77,12 @@
                 <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
                     @if (!String.IsNullOrEmpty(ButtonIcon))
                     {
-                        <Icon Identifier="@ButtonIcon" class="me-1" />
+                        <Icon Identifier="@ButtonIcon" />
                     }
 
-                    @ButtonText
+                    <span class="ms-1 d-none d-md-inline">
+                        @ButtonText
+                    </span>
                 </button>
             }
 

@@ -402,6 +402,7 @@ h4 {
         float: right;
         clear: both;
         transition: width 1s;
+        border-radius: 3px;
     }
 }
 
@@ -450,10 +451,12 @@ h4 {
         &:hover {
             background: rgba(var(--bs-emphasis-color-rgb), 0.075);
         }
+    }
+}
 
-        .btn-link {
-            color: $actionButtonColor;
-        }
+.controls {
+    .btn-link {
+        color: $actionButtonColor;
     }
 }
 

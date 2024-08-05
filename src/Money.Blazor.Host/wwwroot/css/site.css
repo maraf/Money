@@ -354,6 +354,7 @@ h4 {
   clear: both;
   -webkit-transition: width 1s;
   transition: width 1s;
+  border-radius: 3px;
 }
 
 .bar-graph:hover {
@@ -395,7 +396,8 @@ h4 {
 .cards .row:hover {
   background: rgba(var(--bs-emphasis-color-rgb), 0.075);
 }
-.cards .row .btn-link {
+
+.controls .btn-link {
   color: var(--bs-body-color);
 }
 

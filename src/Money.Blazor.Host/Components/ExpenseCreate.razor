@@ -4,6 +4,7 @@
 {
     RenderFragment FieldTab(SelectedField field, bool isFilled, string icon, string placeholder, RenderFragment value)
     {
+        placeholder = "...";
         return
             @<div class="col text-center text-truncate">
                 <span class="cursor-pointer @(Selected == field ? "text-primary" : (!isFilled ? "text-secondary" : ""))" @onclick="(() => SetSelectedField(field))">
@@ -50,9 +51,6 @@
             )
             @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
                 @<DateValue Value="When" />
-            )
-            @FieldTab(SelectedField.Flags, IsFixed, "sliders-h", "Flags",
-                @<span>@(IsFixed ? "Fixed" : string.Empty)</span>
             )
         </div>
         @if (Selected == SelectedField.Description)
@@ -102,6 +100,14 @@
             <Validation ErrorMessages="@Errors.Amount" />
             <form @onsubmit="() => SetSelectedField(SelectedField.Category)">
                 <AmountBox Id="expense-wiz-amount" AutoSelect="true" @bind-Value="@Amount" />
+                
+                <div class="checkbox mt-3">
+                    <label>
+                        <input type="checkbox" @bind="IsFixed" id="expense-wiz-fixed" />
+                        Fixed
+                        <span class="text-muted">(isn't shown in summary)</span>
+                    </label>
+                </div>
             </form>
         }
         else if (Selected == SelectedField.Category)
@@ -138,19 +144,6 @@
             <Validation ErrorMessages="@Errors.When" />
             <form @onsubmit="@CreateAsync">
                 <DateBox Id="expense-wiz-when" @bind-Value="When" />
-            </form>
-        }
-        else if (Selected == SelectedField.Flags)
-        {
-            <Validation ErrorMessages="@Errors.Flags" />
-            <form @onsubmit="@CreateAsync">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" @bind="IsFixed" id="expense-wiz-fixed" />
-                        Fixed
-                        <span class="text-muted">(isn't shown in summary)</span>
-                    </label>
-                </div>
             </form>
         }
     </ChildContent>

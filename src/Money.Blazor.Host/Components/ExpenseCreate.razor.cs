@@ -86,7 +86,6 @@ namespace Money.Components
                     SelectedField.Amount => "expense-wiz-amount",
                     SelectedField.Category => !CategoryKey.IsEmpty ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" : null,
                     SelectedField.When => "expense-wiz-when",
-                    SelectedField.Flags => "expense-wiz-fixed",
                     _ => null,
                 };
 
@@ -113,6 +112,7 @@ namespace Money.Components
             setParameters?.Invoke();
 
             await LoadAsync();
+            SuggestTemplates();
             
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
                 PrerequisitesConfirm.Show();
@@ -160,7 +160,7 @@ namespace Money.Components
             if (Templates == null)
                 return Enumerable.Empty<ExpenseTemplateModel>();
 
-            return SuggestedTemplates.Count == 0 ? Templates : SuggestedTemplates;
+            return /*SuggestedTemplates.Count == 0 || */string.IsNullOrEmpty(Description) ? Templates : SuggestedTemplates;
         }
 
         protected enum SelectedField
@@ -168,11 +168,10 @@ namespace Money.Components
             Amount,
             Description,
             Category,
-            When,
-            Flags
+            When
         }
 
-        protected record ErrorMessages(List<string> Amount, List<string> Description, List<string> Category, List<string> When, List<string> Flags) : IEnumerable<string>
+        protected record ErrorMessages(List<string> Amount, List<string> Description, List<string> Category, List<string> When) : IEnumerable<string>
         {
             public void Clear()
             {
@@ -180,7 +179,6 @@ namespace Money.Components
                 Description.Clear();
                 Category.Clear();
                 When.Clear();
-                Flags.Clear();
             }
 
             public IEnumerable<string> Get(SelectedField field) => field switch 
@@ -189,18 +187,17 @@ namespace Money.Components
                 SelectedField.Description => Description,
                 SelectedField.Category => Category,
                 SelectedField.When => When,
-                SelectedField.Flags => Flags,
                 _ => throw new InvalidOperationException($"The '{field}' is not supported")
             };
 
-            public IEnumerable<string> All() => Enumerable.Concat(Amount, Enumerable.Concat(Description, Enumerable.Concat(Category, Enumerable.Concat(When, Flags))));
+            public IEnumerable<string> All() => Enumerable.Concat(Amount, Enumerable.Concat(Description, Enumerable.Concat(Category, When)));
 
-            public bool IsEmpty() => Amount.Count == 0 && Description.Count == 0 && Category.Count == 0 && When.Count == 0 && Flags.Count == 0;
+            public bool IsEmpty() => Amount.Count == 0 && Description.Count == 0 && Category.Count == 0 && When.Count == 0;
 
             public IEnumerator<string> GetEnumerator() => All().GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => All().GetEnumerator();
 
-            public static ErrorMessages Create() => new(new(1), new(1), new(1), new(1), new(1));
+            public static ErrorMessages Create() => new(new(1), new(1), new(1), new(1));
         }
 
         protected void SuggestTemplates()

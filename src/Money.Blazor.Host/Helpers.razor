@@ -1,0 +1,10 @@
+@code
+{
+    public static MarkupString EnsureHtmlWhitespace(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return (MarkupString)"&nbsp;";
+
+        return (MarkupString)text;
+    }
+}

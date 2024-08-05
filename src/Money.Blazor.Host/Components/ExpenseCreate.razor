@@ -1,4 +1,4 @@
-@inherits ModalDialog
+﻿@inherits ModalDialog
 
 @code
 {
@@ -121,8 +121,8 @@
                         {
                             var buttonId = $"expense-wiz-category-{category.Key.AsGuidKey().Guid.ToString()}";
 
-                            <div class="col-6 col-md-4 d-grid">
-                                <button type="submit" id="@buttonId" class="btn btn-selectable h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                            <div class="col-6 col-md-4">
+                                <button type="submit" id="@buttonId" class="btn btn-selectable w-100 h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
                                     <div>
                                         <h2>@category.Icon</h2>
                                     </div>

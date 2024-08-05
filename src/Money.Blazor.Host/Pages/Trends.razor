@@ -12,8 +12,8 @@ else
     <div class="row g-2">
         @foreach (var category in Categories)
         {
-            <div class="col-4 col-md-2 d-grid">
-                <a href="@Navigator.UrlTrends(category.Key)" class="btn h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
+            <div class="col-4 col-md-2">
+                <a href="@Navigator.UrlTrends(category.Key)" class="btn w-100 h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
                     <div>
                         <h2>@category.Icon</h2>
                     </div>

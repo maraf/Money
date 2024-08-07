@@ -60,6 +60,7 @@ namespace Money.Pages
         protected OutcomeCreate ExpenseModal { get; set; }
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
         protected SortDescriptor<ExpenseTemplateSortType> SortDescriptor { get; set; }
+        protected LoadingContext Loading { get; } = new LoadingContext();
         
         protected IKey ToDeleteKey { get; set; }
         protected ExpenseTemplateModel Selected { get; set; }
@@ -81,7 +82,8 @@ namespace Money.Pages
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             SortDescriptor = await Queries.QueryAsync(new GetExpenseTemplateSortProperty());
 
-            await ReloadAsync();
+            using (Loading.Start())
+                await ReloadAsync();
         }
 
         public void Dispose() => EventHandlers

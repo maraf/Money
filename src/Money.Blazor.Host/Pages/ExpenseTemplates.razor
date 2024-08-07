@@ -21,88 +21,90 @@
 }
 <div class="clear"></div>
 
-@if (Models.Count == 0)
-{
-    <Alert Title="No data." Message="Let's add some templates." Mode="@AlertMode.Warning" />
-}
-else
-{
-    <div class="row">
-        @foreach (var model in Models)
-        {
-            <div class="col-12 col-sm-6 col-md-4 col-xl-3">
-                <div class="card card-hover">
-                    <div class="card-body">
-                            <h3 class="m-0">
-                                @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
-                            </h3>
+<Loading Context="@Loading">
+    @if (Models.Count == 0)
+    {
+        <Alert Title="No data." Message="Let's add some templates." Mode="@AlertMode.Warning" />
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var model in Models)
+            {
+                <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                    <div class="card card-hover">
+                        <div class="card-body">
+                                <h3 class="m-0">
+                                    @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
+                                </h3>
 
-                        @if (!model.CategoryKey.IsEmpty)
-                        {
-                            <CategoryTag Key="@model.CategoryKey" />
-                        }
+                            @if (!model.CategoryKey.IsEmpty)
+                            {
+                                <CategoryTag Key="@model.CategoryKey" />
+                            }
 
-                        @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
-                        {
-                            <p>
-                                @model.Description
-
-                                @if (model.IsFixed)
-                                {
-                                    <em class="text-muted ms-1">Fixed</em>
-                                }
-
-                            </p>
-                            @if (model.Period != null)
+                            @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
                             {
                                 <p>
-                                    @if (model.Period == RecurrencePeriod.Monthly)
-                                    {
-                                        <em>Monthly on @DayInMonth(model.DayInPeriod.Value)</em>
-                                    } 
-                                    else if (model.Period == RecurrencePeriod.Single)
-                                    {
-                                        <em>Due on <DateValue Value="model.DueDate.Value" /></em>
-                                    }
-                                </p>
-                            }
-                        }
+                                    @model.Description
 
-                        <div class="controls text-end">
-                            <IconButton Icon="minus" ToolTip="Create expense" Click="@(() => { Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed); })" />
-                            
-                            <div class="sort dropdown d-inline-block">
-                                <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeAmountModal))">
-                                        <Icon Identifier="dollar-sign" />
-                                        Amount
-                                    </a>
-                                    <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeDescriptionModal))">
-                                        <Icon Identifier="comment" />
-                                        Description
-                                    </a>
-                                    <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeCategoryModal))">
-                                        <Icon Identifier="tag" />
-                                        Category
-                                    </a>
-                                    <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeRecurrenceModal))">
-                                        <Icon Identifier="undo" />
-                                        Recurrence
-                                    </a>
-                                    <hr class="dropdown-divider" />
-                                    <a class="dropdown-item" @onclick="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {(model.Amount != null ? CurrencyFormatter.Format(model.Amount) : null)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })">
-                                        <Icon Identifier="trash-alt" />
-                                        Delete
-                                    </a>
+                                    @if (model.IsFixed)
+                                    {
+                                        <em class="text-muted ms-1">Fixed</em>
+                                    }
+
+                                </p>
+                                @if (model.Period != null)
+                                {
+                                    <p>
+                                        @if (model.Period == RecurrencePeriod.Monthly)
+                                        {
+                                            <em>Monthly on @DayInMonth(model.DayInPeriod.Value)</em>
+                                        } 
+                                        else if (model.Period == RecurrencePeriod.Single)
+                                        {
+                                            <em>Due on <DateValue Value="model.DueDate.Value" /></em>
+                                        }
+                                    </p>
+                                }
+                            }
+
+                            <div class="controls text-end">
+                                <IconButton Icon="minus" ToolTip="Create expense" Click="@(() => { Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed); })" />
+                                
+                                <div class="sort dropdown d-inline-block">
+                                    <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeAmountModal))">
+                                            <Icon Identifier="dollar-sign" />
+                                            Amount
+                                        </a>
+                                        <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeDescriptionModal))">
+                                            <Icon Identifier="comment" />
+                                            Description
+                                        </a>
+                                        <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeCategoryModal))">
+                                            <Icon Identifier="tag" />
+                                            Category
+                                        </a>
+                                        <a class="dropdown-item" @onclick="@(() => Edit(model, ChangeRecurrenceModal))">
+                                            <Icon Identifier="undo" />
+                                            Recurrence
+                                        </a>
+                                        <hr class="dropdown-divider" />
+                                        <a class="dropdown-item" @onclick="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {(model.Amount != null ? CurrencyFormatter.Format(model.Amount) : null)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })">
+                                            <Icon Identifier="trash-alt" />
+                                            Delete
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+</Loading>
 
 <Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@Delete" />

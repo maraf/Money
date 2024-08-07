@@ -25,9 +25,7 @@
                                     <DateValue Value="item.ValidFrom" />
                                 </td>
                                 <td class="min-column">
-                                    <div class="actions">
-                                        <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(async () => { await OnDeleteClickAsync(item); StateHasChanged(); })" />
-                                    </div>
+                                    <IconButton Icon="trash-alt" ToolTip="Delete" Click="@(async () => { await OnDeleteClickAsync(item); StateHasChanged(); })" />
                                 </td>
                             </tr>
                         }

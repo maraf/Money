@@ -173,9 +173,6 @@ h4 {
   white-space: nowrap;
   overflow: hidden;
 }
-.header .actions {
-  white-space: nowrap;
-}
 
 .header-append {
   margin-bottom: 150px;
@@ -216,7 +213,6 @@ h4 {
 }
 .table .min-column {
   max-width: 1px;
-  overflow: auto;
 }
 
 .alert .nav {

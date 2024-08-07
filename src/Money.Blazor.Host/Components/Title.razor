@@ -35,7 +35,7 @@
 
     @if (!String.IsNullOrEmpty(Sub))
     {
-        <h6 class="mb-0" style="font-size: 10px; font-weight: 100;">
+        <h6 class="mb-0 text-truncate" style="font-size: 10px; font-weight: 100;">
             @Sub
         </h6>
     }
@@ -71,7 +71,7 @@
     RenderFragment Actions(bool isMobileTarget)
     {
         return 
-        @<div class="actions @(isMobileTarget ? "d-sm-none" : string.Empty)">
+        @<div class="text-nowrap @(isMobileTarget ? "d-sm-none" : string.Empty)">
             @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
             {
                 <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">

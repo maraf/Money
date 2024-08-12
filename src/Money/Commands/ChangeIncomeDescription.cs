@@ -35,7 +35,7 @@ namespace Money.Commands
             Ensure.Condition.NotEmptyKey(incomeKey);
             Ensure.NotNull(description, "description");
             IncomeKey = incomeKey;
-            Description = description;
+            Description = description.Trim();
         }
     }
 }

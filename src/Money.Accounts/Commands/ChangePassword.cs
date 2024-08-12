@@ -32,8 +32,8 @@ namespace Money.Commands
         {
             Ensure.NotNull(current, "current");
             Ensure.NotNull(@new, "new");
-            Current = current;
-            New = @new;
+            Current = current.Trim();
+            New = @new.Trim();
         }
     }
 }

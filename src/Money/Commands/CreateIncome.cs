@@ -41,7 +41,7 @@ namespace Money.Commands
             Ensure.NotNull(description, "description");
             Ensure.NotNull(when, "when");
             Amount = amount;
-            Description = description;
+            Description = description.Trim();
             When = when;
         }
     }

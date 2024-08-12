@@ -32,8 +32,8 @@ namespace Money.Commands
         {
             Ensure.NotNullOrEmpty(uniqueCode, "uniqueCode");
             Ensure.NotNullOrEmpty(newSymbol, "newSymbol");
-            UniqueCode = uniqueCode;
-            NewSymbol = newSymbol;
+            UniqueCode = uniqueCode?.Trim();
+            NewSymbol = newSymbol?.Trim();
         }
     }
 }

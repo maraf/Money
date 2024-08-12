@@ -55,7 +55,7 @@ namespace Money.Commands
         {
             Ensure.NotNull(categoryKey, "categoryKey");
             Amount = amount;
-            Description = description;
+            Description = description?.Trim();
             CategoryKey = categoryKey;
 
             Version = 1;

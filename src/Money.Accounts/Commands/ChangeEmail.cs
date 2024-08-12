@@ -25,7 +25,7 @@ namespace Money.Commands
         public ChangeEmail(string email)
         {
             Ensure.NotNull(email, "email");
-            Email = email;
+            Email = email.Trim();
         }
     }
 }

@@ -33,8 +33,8 @@ namespace Money.Commands
             Ensure.NotNull(name, "name");
             Ensure.NotNull(description, "description");
             Ensure.NotNull(color, "color");
-            Name = name;
-            Description = description;
+            Name = name.Trim();
+            Description = description.Trim();
             Color = color;
         }
     }

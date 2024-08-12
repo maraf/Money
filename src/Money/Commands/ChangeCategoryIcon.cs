@@ -33,7 +33,7 @@ namespace Money.Commands
         {
             Ensure.Condition.NotEmptyKey(categoryKey);
             CategoryKey = categoryKey;
-            Icon = icon;
+            Icon = icon?.Trim();
         }
     }
 }

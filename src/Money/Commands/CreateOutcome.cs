@@ -63,7 +63,7 @@ namespace Money.Commands
             Ensure.NotNull(when, "when");
             Ensure.Condition.NotEmptyKey(categoryKey);
             Amount = amount;
-            Description = description;
+            Description = description.Trim();
             When = when;
             CategoryKey = categoryKey;
 

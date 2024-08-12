@@ -15,7 +15,10 @@ window.Bootstrap = {
                         $select[0].setSelectionRange(0, $select[0].value.length)
                     }
 
-                    $container.find('[data-autofocus]').first().trigger('focus');
+                    const autofocus = $container.find('[data-autofocus]');
+                    if (autofocus.length > 0) {
+                        autofocus.first().trigger('focus');
+                    }
                 });
             }
 
@@ -123,7 +126,18 @@ window.Money = {
     FocusElementById: function (id) {
         const element = document.getElementById(id);
         if (element) {
-            element.focus();
+            const $element = $(element);
+            const $modal = $element.parents(".modal");
+            if ($modal.length > 0 && (!$modal.data("modal") || $modal.data("modal")._isTransitioning)) {
+                const modal = $modal[0];
+                const eventHandler = e => {
+                    element.focus();
+                    modal.removeEventListener("shown.bs.modal", eventHandler);
+                }
+                modal.addEventListener("shown.bs.modal", eventHandler);
+            } else {
+                element.focus();
+            }
 
             if ($(element).is("[data-select]")) {
                 element.setSelectionRange(0, element.value.length)

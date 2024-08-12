@@ -37,21 +37,23 @@
         font-size: .75rem;
     }
 </style>
-<Modal @ref="Modal" Title="Create a new Expense" IsOverflow="true" IsForm="false">
+<Modal @ref="Modal" Title="Create a new Expense" BodyCssClass="pt-0" IsOverflow="true" IsForm="false">
     <ChildContent>
-        <div class="row g-1 mb-3">
-            @FieldTab(SelectedField.Description, !String.IsNullOrEmpty(Description), "comment", "Description", 
-                @<span>@Description</span>
-            )
-            @FieldTab(SelectedField.Amount, Amount != null, "dollar-sign", "Amount",
-                @<span>@CurrencyFormatter?.Format(Amount)</span>
-            )
-            @FieldTab(SelectedField.Category, !CategoryKey.IsEmpty, "tag", "Category",
-                @<CategoryTag Key="@CategoryKey" />
-            )
-            @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
-                @<DateValue Value="When" />
-            )
+        <div class="sticky-top mb-1 bg-body">
+            <div class="row g-1 pt-3 pb-2">
+                @FieldTab(SelectedField.Description, !String.IsNullOrEmpty(Description), "comment", "Description", 
+                    @<span>@Description</span>
+                )
+                @FieldTab(SelectedField.Amount, Amount != null, "dollar-sign", "Amount",
+                    @<span>@CurrencyFormatter?.Format(Amount)</span>
+                )
+                @FieldTab(SelectedField.Category, !CategoryKey.IsEmpty, "tag", "Category",
+                    @<CategoryTag Key="@CategoryKey" />
+                )
+                @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
+                    @<DateValue Value="When" />
+                )
+            </div>
         </div>
         @if (Selected == SelectedField.Description)
         {

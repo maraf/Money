@@ -21,6 +21,9 @@ namespace Money.Components
         [Parameter]
         public IKey Key { get; set; }
 
+        [Parameter]
+        public string CssClass { get; set; }
+
         protected string Name { get; set; }
         protected Color Color { get; set; }
         protected string AccentColorCssClass { get; set; }

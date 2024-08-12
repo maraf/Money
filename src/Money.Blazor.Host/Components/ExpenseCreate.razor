@@ -37,10 +37,10 @@
         font-size: .75rem;
     }
 </style>
-<Modal @ref="Modal" Title="Create a new Expense" BodyCssClass="pt-0" IsOverflow="true" IsForm="false">
+<Modal @ref="Modal" Title="Create a new Expense" BodyCssClass="p-0" IsOverflow="true" IsForm="false">
     <ChildContent>
-        <div class="sticky-top mb-1 bg-body">
-            <div class="row g-1 py-3">
+        <div class="sticky-top mb-2 bg-body">
+            <div class="row g-1 p-3">
                 @FieldTab(SelectedField.Description, !String.IsNullOrEmpty(Description), "comment", "Description", 
                     @<span>@Description</span>
                 )
@@ -48,106 +48,108 @@
                     @<span>@CurrencyFormatter?.Format(Amount)</span>
                 )
                 @FieldTab(SelectedField.Category, !CategoryKey.IsEmpty, "tag", "Category",
-                    @<CategoryTag Key="@CategoryKey" />
+                    @<CategoryTag Key="@CategoryKey" CssClass="d-block text-truncate" />
                 )
                 @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
                     @<DateValue Value="When" />
                 )
             </div>
         </div>
-        @if (Selected == SelectedField.Description)
-        {
-            <Validation ErrorMessages="@Errors.Description" />
-            <form @onsubmit="() => SetSelectedField(SelectedField.Amount)">
-                <input id="expense-wiz-description" type="text" class="form-control" placeholder="Expense Description" @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
-            </form>
-            <div class="row g-3 mt-1">
-                @foreach (var model in GetTemplates())
-                {
-                    <div class="col-6 col-sm-6 col-md-4">
-                        <div class="card card-hover cursor-pointer m-0" @onclick="(() => ApplyTemplate(model))">
-                            <div class="card-body">
-                                <div>
-                                    <strong>
-                                        @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
-                                    </strong>
-                                </div>
-
-                                @if (!model.CategoryKey.IsEmpty)
-                                {
-                                    <CategoryTag Key="@model.CategoryKey" />
-                                }
-
-                                @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
-                                {
-                                    <div class="text-truncate">
-                                        <small>
-                                            @model.Description
-
-                                            @if (model.IsFixed)
-                                            {
-                                                <em class="text-muted ms-1">Fixed</em>
-                                            }
-                                        </small>
+        <div class="p-3 pt-0">
+            @if (Selected == SelectedField.Description)
+            {
+                <Validation ErrorMessages="@Errors.Description" />
+                <form @onsubmit="() => SetSelectedField(SelectedField.Amount)">
+                    <input id="expense-wiz-description" type="text" class="form-control" placeholder="Expense Description" @bind="@Description" @bind:event="oninput" @bind:after="SuggestTemplates" />
+                </form>
+                <div class="row g-3 mt-1">
+                    @foreach (var model in GetTemplates())
+                    {
+                        <div class="col-6 col-sm-6 col-md-4">
+                            <div class="card card-hover cursor-pointer m-0" @onclick="(() => ApplyTemplate(model))">
+                                <div class="card-body">
+                                    <div>
+                                        <strong>
+                                            @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
+                                        </strong>
                                     </div>
-                                }
+
+                                    @if (!model.CategoryKey.IsEmpty)
+                                    {
+                                        <CategoryTag Key="@model.CategoryKey" />
+                                    }
+
+                                    @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
+                                    {
+                                        <div class="text-truncate">
+                                            <small>
+                                                @model.Description
+
+                                                @if (model.IsFixed)
+                                                {
+                                                    <em class="text-muted ms-1">Fixed</em>
+                                                }
+                                            </small>
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
-        }
-        else if (Selected == SelectedField.Amount)
-        {
-            <Validation ErrorMessages="@Errors.Amount" />
-            <form @onsubmit="() => SetSelectedField(SelectedField.Category)">
-                <AmountBox Id="expense-wiz-amount" AutoSelect="true" @bind-Value="@Amount" />
-                
-                <div class="checkbox mt-3">
-                    <label>
-                        <input type="checkbox" @bind="IsFixed" id="expense-wiz-fixed" />
-                        Fixed
-                        <span class="text-muted">(isn't shown in summary)</span>
-                    </label>
+                    }
                 </div>
-            </form>
-        }
-        else if (Selected == SelectedField.Category)
-        {
-            <Validation ErrorMessages="@Errors.Category" />
-            if (Categories != null)
+            }
+            else if (Selected == SelectedField.Amount)
             {
-                <form @onsubmit="() => SetSelectedField(SelectedField.When)">
-                    <div class="row g-2">
-                        @foreach (var category in Categories)
-                        {
-                            var buttonId = $"expense-wiz-category-{category.Key.AsGuidKey().Guid.ToString()}";
-
-                            <div class="col-6 col-md-4">
-                                <button type="submit" id="@buttonId" class="btn btn-selectable w-100 h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
-                                    <div>
-                                        <h2>@category.Icon</h2>
-                                    </div>
-                                    <div class="text-truncate">
-                                        <strong>@category.Name</strong>
-                                    </div>
-                                    <div class="text-truncate">
-                                        <span>@EnsureHtmlWhitespace(category.Description)</span>
-                                    </div>
-                                </button>
-                            </div>
-                        }
+                <Validation ErrorMessages="@Errors.Amount" />
+                <form @onsubmit="() => SetSelectedField(SelectedField.Category)">
+                    <AmountBox Id="expense-wiz-amount" AutoSelect="true" @bind-Value="@Amount" />
+                    
+                    <div class="checkbox mt-3">
+                        <label>
+                            <input type="checkbox" @bind="IsFixed" id="expense-wiz-fixed" />
+                            Fixed
+                            <span class="text-muted">(isn't shown in summary)</span>
+                        </label>
                     </div>
                 </form>
             }
-        }
-        else if (Selected == SelectedField.When)
-        {
-            <Validation ErrorMessages="@Errors.When" />
-            <form @onsubmit="@CreateAsync">
-                <DateBox Id="expense-wiz-when" @bind-Value="When" />
-            </form>
-        }
+            else if (Selected == SelectedField.Category)
+            {
+                <Validation ErrorMessages="@Errors.Category" />
+                if (Categories != null)
+                {
+                    <form @onsubmit="() => SetSelectedField(SelectedField.When)">
+                        <div class="row g-2">
+                            @foreach (var category in Categories)
+                            {
+                                var buttonId = $"expense-wiz-category-{category.Key.AsGuidKey().Guid.ToString()}";
+
+                                <div class="col-6 col-md-4">
+                                    <button type="submit" id="@buttonId" class="btn btn-selectable w-100 h-100 @(category.Key.Equals(CategoryKey) ? "btn-selectable-selected" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" @onclick="@(() => CategoryKey = category.Key)">
+                                        <div>
+                                            <h2>@category.Icon</h2>
+                                        </div>
+                                        <div class="text-truncate">
+                                            <strong>@category.Name</strong>
+                                        </div>
+                                        <div class="text-truncate">
+                                            <span>@EnsureHtmlWhitespace(category.Description)</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </form>
+                }
+            }
+            else if (Selected == SelectedField.When)
+            {
+                <Validation ErrorMessages="@Errors.When" />
+                <form @onsubmit="@CreateAsync">
+                    <DateBox Id="expense-wiz-when" @bind-Value="When" />
+                </form>
+            }
+        </div>
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="@CreateAsync">Create</button>

@@ -317,3 +317,10 @@ window.PullToRefresh = {
         container.addEventListener("touchend", () => closures.forEach(c => c.end()), listenerOptions);
     }
 }
+
+Blazor.start({
+    configureRuntime: dotnet => dotnet.withEnvironmentVariable(
+        "ALLOWED_LOG_SCOPE_PREFIXES", 
+        window.localStorage.getItem("allowedLogScopePrefixes") ?? ""
+    )
+});

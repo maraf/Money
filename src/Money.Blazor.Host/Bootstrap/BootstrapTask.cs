@@ -29,7 +29,7 @@ namespace Money.Bootstrap
     internal class BootstrapTask : IBootstrapTask
     {
         private readonly IServiceCollection services;
-
+        
         private ILogFactory logFactory;
         //private PriceCalculator priceCalculator;
         private ICompositeTypeProvider typeProvider;
@@ -49,20 +49,8 @@ namespace Money.Bootstrap
 
         public void Initialize()
         {
-            ILogFilter logFilter = DefaultLogFilter.Warning;
-
-#if DEBUG
-            logFilter = PrefixLogFilter.Ignored(new[] {
-                "Root.Json",
-                "Root.CompositeListFormatter",
-                "Root.ReflectionCompositeTypeProvider",
-                "Root.ApiClient",
-                "Root.ApiAuthenticationState"
-            });
-#endif
-
             logFactory = new DefaultLogFactory("Root")
-                .AddSerializer(new ConsoleSerializer(new SingleLineLogFormatter(), logFilter));
+                .AddSerializer(new ConsoleSerializer(new SingleLineLogFormatter(), CreateLogFilter()));
 
             Json json = new Json();
 
@@ -165,6 +153,42 @@ namespace Money.Bootstrap
             eventDispatcher.Handlers.AddAll(serviceProvider.GetRequiredService<ExpenseTemplateMiddleware>());
 
             serviceProvider.GetService<LocalExpenseOnlineRunner>().Initialize();
+        }
+
+        private ILogFilter CreateLogFilter()
+        {
+            ILogFilter logFilter;
+
+            var allowedLogScopePrefixes = GetAllowedLogScopePrefixes();
+            if (allowedLogScopePrefixes.Length == 0) 
+            {
+                logFilter = DefaultLogFilter.Warning;
+
+#if DEBUG
+                logFilter = PrefixLogFilter.Ignored(new[] {
+                    "Root.Json",
+                    "Root.CompositeListFormatter",
+                    "Root.ReflectionCompositeTypeProvider",
+                    "Root.ApiClient",
+                    "Root.ApiAuthenticationState"
+                });
+#endif
+            }
+            else
+            {
+                logFilter = PrefixLogFilter.Allowed(allowedLogScopePrefixes);
+            }
+
+            return logFilter;
+        }
+
+        private string[] GetAllowedLogScopePrefixes()
+        {
+            string rawValue = Environment.GetEnvironmentVariable("ALLOWED_LOG_SCOPE_PREFIXES");
+            if (string.IsNullOrEmpty(rawValue))
+                return [];
+
+            return rawValue.Split(",", StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }

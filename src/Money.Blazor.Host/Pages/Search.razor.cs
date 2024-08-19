@@ -173,42 +173,35 @@ namespace Money.Pages
             return Task.CompletedTask;
         }
 
-        Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
+        private Task ReloadPageAsync()
         {
-            _ = LoadPageAsync();
+            _ = LoadPageAsync().ContinueWith(_ => StateHasChanged());
             return Task.CompletedTask;
         }
 
+        Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
+            => ReloadPageAsync();
+
         Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
-        {
-            _ = LoadPageAsync();
-            return Task.CompletedTask;
-        }
+            => ReloadPageAsync();
 
         Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
         {
             if (Sort.Type == OutcomeOverviewSortType.ByAmount)
-                _ = LoadPageAsync();
+                return ReloadPageAsync();
             else
-                UpdateModel(payload, model => model.Amount = payload.NewValue);
-
-            return Task.CompletedTask;
+                return UpdateModel(payload, model => model.Amount = payload.NewValue);
         }
 
         Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
-        {
-            _ = LoadPageAsync();
-            return Task.CompletedTask;
-        }
+            => ReloadPageAsync();
 
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
         {
             if (Sort.Type == OutcomeOverviewSortType.ByWhen)
-                _ = LoadPageAsync();
+                return ReloadPageAsync();
             else
-                UpdateModel(payload, model => model.When = payload.When);
-
-            return Task.CompletedTask;
+                return UpdateModel(payload, model => model.When = payload.When);
         }
 
         async Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)

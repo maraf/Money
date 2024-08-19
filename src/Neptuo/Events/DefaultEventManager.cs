@@ -62,8 +62,9 @@ namespace Neptuo.Events
             object[] contextHandlers = registry.GetContextHandlers(eventType);
             object[] envelopeHandlers = registry.GetEnvelopeHandlers(eventType);
             object[] directHandlers = registry.GetDirectHandlers(eventType);
+            object[] objectHandlers = registry.GetDirectHandlers(typeof(object));
 
-            Task[] tasks = new Task[contextHandlers.Length + envelopeHandlers.Length + directHandlers.Length];
+            Task[] tasks = new Task[contextHandlers.Length + envelopeHandlers.Length + directHandlers.Length + objectHandlers.Length];
 
             if (tasks.Length == 0)
                 return Task.FromResult(true);
@@ -79,6 +80,10 @@ namespace Neptuo.Events
             // Execute direct handlers and store tasks.
             for (int i = 0; i < directHandlers.Length; i++)
                 tasks[contextHandlers.Length + envelopeHandlers.Length + i] = ((IEventHandler<TEvent>)directHandlers[i]).HandleAsync(context.Payload.Body);
+
+            // Execute object handlers and store tasks.
+            for (int i = 0; i < objectHandlers.Length; i++)
+                tasks[contextHandlers.Length + envelopeHandlers.Length + directHandlers.Length + i] = ((IEventHandler<object>)objectHandlers[i]).HandleAsync(context.Payload.Body);
 
             // Return joined task.
             return Task.Factory.ContinueWhenAll(tasks, (items) => Task.FromResult(true));

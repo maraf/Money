@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Money.Commands;
+using Money.Events;
 using Money.Models.Queries;
 using Money.Services;
 using Money.Services.Converters;
@@ -60,6 +61,7 @@ namespace Money.Bootstrap
             FormatterContainer formatters = new FormatterContainer(commandFormatter, eventFormatter, queryFormatter, exceptionFormatter);
             eventDispatcher = new BrowserEventDispatcher(formatters, logFactory, json);
             BrowserExceptionHandler exceptionHandler = new BrowserExceptionHandler(formatters, logFactory, json);
+            exceptionHandler.HandlerBuilder.Handler(e => _ = eventDispatcher.Dispatcher.PublishAsync(new ExceptionRaised(e)));
 
             services
                 //.AddSingleton(priceCalculator)

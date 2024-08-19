@@ -295,7 +295,7 @@ h4 {
   background-color: rgba(var(--bs-emphasis-color-rgb), 0.075);
 }
 
-.sort a {
+.sort a, .dropdown a {
   cursor: pointer;
 }
 

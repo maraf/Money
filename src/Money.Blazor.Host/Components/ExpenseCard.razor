@@ -19,35 +19,38 @@
             }
         </div>
         <div class="col-auto controls">
-            <div class="sort dropdown">
-                <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
-                <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" @onclick="@OnEditAmount">
-                        <Icon Identifier="dollar-sign" />
-                        Amount
-                    </a>
-                    <a class="dropdown-item" @onclick="@OnEditDescription">
-                        <Icon Identifier="comment" />
-                        Description
-                    </a>
-                    <a class="dropdown-item" @onclick="@OnEditWhen">
-                        <Icon Identifier="calendar" />
-                        When
-                    </a>
-                    <hr class="dropdown-divider" />
-                    <a class="dropdown-item" @onclick="@OnDuplicate">
-                        <Icon Identifier="clone" />
-                        Duplicate
-                    </a>
-                    <a class="dropdown-item" @onclick="@OnCreateTemplate">
-                        <Icon Identifier="redo" />
-                        As Template
-                    </a>
-                    <hr class="dropdown-divider" />
-                    <a class="dropdown-item" @onclick="@OnDelete">
-                        <Icon Identifier="trash-alt" />
-                        Delete
-                    </a>
+            <div class="d-flex flex-row align-items-center">
+                <CommandExecutionDecorator AggregateKey="@Model.Key" />
+                <div class="dropdown">
+                    <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" @onclick="@OnEditAmount">
+                            <Icon Identifier="dollar-sign" />
+                            Amount
+                        </a>
+                        <a class="dropdown-item" @onclick="@OnEditDescription">
+                            <Icon Identifier="comment" />
+                            Description
+                        </a>
+                        <a class="dropdown-item" @onclick="@OnEditWhen">
+                            <Icon Identifier="calendar" />
+                            When
+                        </a>
+                        <hr class="dropdown-divider" />
+                        <a class="dropdown-item" @onclick="@OnDuplicate">
+                            <Icon Identifier="clone" />
+                            Duplicate
+                        </a>
+                        <a class="dropdown-item" @onclick="@OnCreateTemplate">
+                            <Icon Identifier="redo" />
+                            As Template
+                        </a>
+                        <hr class="dropdown-divider" />
+                        <a class="dropdown-item" @onclick="@OnDelete">
+                            <Icon Identifier="trash-alt" />
+                            Delete
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -12,12 +12,14 @@ namespace Money.Commands
     /// <summary>
     /// Deletes an outcome with <see cref="OutcomeKey"/>.
     /// </summary>
-    public class DeleteOutcome : Command
+    public class DeleteOutcome : Command, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the outcome to delete.
         /// </summary>
         public IKey OutcomeKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => OutcomeKey;
 
         /// <summary>
         /// Deletes an outcome with <paramref name="outcomeKey"/>.

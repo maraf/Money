@@ -12,12 +12,14 @@ namespace Money.Commands
     /// <summary>
     /// Deletes an income.
     /// </summary>
-    public class DeleteIncome : Command
+    public class DeleteIncome : Command, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the income to delete.
         /// </summary>
         public IKey IncomeKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => IncomeKey;
 
         /// <summary>
         /// Deletes an outcome with <paramref name="incomeKey"/>.

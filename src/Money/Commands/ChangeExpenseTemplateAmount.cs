@@ -13,12 +13,14 @@ namespace Money.Commands
     /// <summary>
     /// Changes an <see cref="Amount"/> of the expense template with <see cref="ExpenseTemplateAmountKey"/>.
     /// </summary>
-    public class ChangeExpenseTemplateAmount : Command, IExpenseTemplateCommand
+    public class ChangeExpenseTemplateAmount : Command, IExpenseTemplateCommand, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the expense template to modify.
         /// </summary>
         public IKey ExpenseTemplateKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => ExpenseTemplateKey;
 
         /// <summary>
         /// Gets a new expense template amount value.

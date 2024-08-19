@@ -12,12 +12,14 @@ namespace Money.Commands
     /// <summary>
     /// Deletes (soft) category with <see cref="CategoryKey"/>.
     /// </summary>
-    public class DeleteCategory : Command
+    public class DeleteCategory : Command, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the category to delete.
         /// </summary>
         public IKey CategoryKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => CategoryKey;
 
         /// <summary>
         /// Deletes (soft) category with <paramref name="categoryKey"/>.

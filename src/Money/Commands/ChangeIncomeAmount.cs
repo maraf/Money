@@ -13,12 +13,14 @@ namespace Money.Commands
     /// <summary>
     /// Changes an <see cref="Amount"/> of the income with <see cref="IncomeKey"/>.
     /// </summary>
-    public class ChangeIncomeAmount : Command
+    public class ChangeIncomeAmount : Command, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the income to modify.
         /// </summary>
         public IKey IncomeKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => IncomeKey;
 
         /// <summary>
         /// Gets a new income value.

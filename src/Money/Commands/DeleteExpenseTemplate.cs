@@ -13,12 +13,14 @@ namespace Money.Commands
     /// <summary>
     /// Deletes an expense template.
     /// </summary>
-    public class DeleteExpenseTemplate : Command, IExpenseTemplateCommand
+    public class DeleteExpenseTemplate : Command, IExpenseTemplateCommand, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the expense template to delete.
         /// </summary>
         public IKey ExpenseTemplateKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => ExpenseTemplateKey;
 
         /// <summary>
         /// Deletes an outcome with <paramref name="expenseTemplateKey"/>.

@@ -10,12 +10,14 @@ using Neptuo.Commands;
 
 namespace Money.Commands;
 
-public class SetExpenseTemplateSingleRecurrence : Command, IExpenseTemplateCommand
+public class SetExpenseTemplateSingleRecurrence : Command, IExpenseTemplateCommand, IAggregateRootCommand
 {
     /// <summary>
     /// Gets a key of the expense template to modify.
     /// </summary>
     public IKey ExpenseTemplateKey { get; private set; }
+
+    IKey IAggregateRootCommand.AggregateKey => ExpenseTemplateKey;
 
     /// <summary>
     /// Gets a due date of the expense template.

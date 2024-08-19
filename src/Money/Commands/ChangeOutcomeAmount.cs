@@ -12,12 +12,14 @@ namespace Money.Commands
     /// <summary>
     /// Changes an <see cref="Amount"/> of the outcome with <see cref="OutcomeKey"/>.
     /// </summary>
-    public class ChangeOutcomeAmount : Command
+    public class ChangeOutcomeAmount : Command, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the outcome to modify.
         /// </summary>
         public IKey OutcomeKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => OutcomeKey;
 
         /// <summary>
         /// Gets a new outcome value.

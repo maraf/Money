@@ -13,12 +13,14 @@ namespace Money.Commands;
 /// <summary>
 /// Sets the recurrence of the expense template with <see cref="ExpenseTemplateKey"/>.
 /// </summary>
-public class SetExpenseTemplateMonthlyRecurrence : Command, IExpenseTemplateCommand
+public class SetExpenseTemplateMonthlyRecurrence : Command, IExpenseTemplateCommand, IAggregateRootCommand
 {
     /// <summary>
     /// Gets a key of the expense template to modify.
     /// </summary>
     public IKey ExpenseTemplateKey { get; private set; }
+
+    IKey IAggregateRootCommand.AggregateKey => ExpenseTemplateKey;
 
     /// <summary>
     /// Gets a day in period when the recurrence should happen.

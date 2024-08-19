@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Money.Commands;
 
-public interface IAggregateCommand
+public interface IAggregateRootCommand
 {
     IKey AggregateKey { get; }
 }

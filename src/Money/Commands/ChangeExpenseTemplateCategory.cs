@@ -12,12 +12,14 @@ namespace Money.Commands
     /// <summary>
     /// Changes a category of the expense template with <see cref="ExpenseTemplateKey"/>.
     /// </summary>
-    public class ChangeExpenseTemplateCategory : Command, IExpenseTemplateCommand
+    public class ChangeExpenseTemplateCategory : Command, IExpenseTemplateCommand, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the expense template to modify.
         /// </summary>
         public IKey ExpenseTemplateKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => ExpenseTemplateKey;
 
         /// <summary>
         /// Gets a category key.

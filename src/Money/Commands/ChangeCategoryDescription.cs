@@ -12,12 +12,14 @@ namespace Money.Commands
     /// <summary>
     /// Changes a description of a category with a key <see cref="CategoryKey"/>.
     /// </summary>
-    public class ChangeCategoryDescription : Command
+    public class ChangeCategoryDescription : Command, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the category to modify.
         /// </summary>
         public IKey CategoryKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => CategoryKey;
 
         /// <summary>
         /// Gets a new description of the category.

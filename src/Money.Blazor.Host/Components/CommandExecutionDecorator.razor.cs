@@ -41,7 +41,7 @@ partial class CommandExecutionDecorator : ComponentBase, System.IDisposable, IEv
     {
         if (payload is HttpCommandSending httpCommand)
         {
-            if (httpCommand.Command is IAggregateCommand command && AggregateKey.Equals(command.AggregateKey))
+            if (httpCommand.Command is IAggregateRootCommand command && AggregateKey.Equals(command.AggregateKey))
             {
                 pendingOperations++;
                 StateHasChanged();

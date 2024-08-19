@@ -12,12 +12,14 @@ namespace Money.Commands
     /// <summary>
     /// Renames a category with a key <see cref="CategoryKey"/>.
     /// </summary>
-    public class RenameCategory : Command
+    public class RenameCategory : Command, IAggregateRootCommand
     {
         /// <summary>
         /// Gets a key of the category to rename.
         /// </summary>
         public IKey CategoryKey { get; private set; }
+
+        IKey IAggregateRootCommand.AggregateKey => CategoryKey;
 
         /// <summary>
         /// Gets a new name of the category.

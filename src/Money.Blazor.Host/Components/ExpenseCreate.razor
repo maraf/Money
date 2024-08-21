@@ -48,7 +48,7 @@
                     @<span>@CurrencyFormatter?.Format(Amount)</span>
                 )
                 @FieldTab(SelectedField.Category, !CategoryKey.IsEmpty, "tag", "Category",
-                    @<CategoryTag Key="@CategoryKey" CssClass="d-block text-truncate" />
+                    @<CategoryTag Key="@CategoryKey" CssClass="d-inline-block text-truncate" />
                 )
                 @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
                     @<DateValue Value="When" />

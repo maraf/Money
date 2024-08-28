@@ -1,0 +1,68 @@
+@page "/{Year:int}/{Month:int}/checklist"
+@attribute [Authorize]
+
+<Money.Components.Title Icon="tasks" Main="@($"Expected expenses in {SelectedPeriod}")" Sub="Monthly expense checklist" />
+<ExceptionPanel />
+
+<Loading Context="@Loading">
+    @if (Models.Count == 0)
+    {
+        <Alert Title="No data." Message="Let's add some recurring expense templates." Mode="@AlertMode.Warning" />
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var model in Models.OrderBy(m => m.When))
+            {
+                var isCreated = !model.ExpenseKey.IsEmpty;
+                var clickHandler = () => {
+                    if (isCreated)
+                        return;
+
+                    Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed);
+                };
+                <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                    <div class="@($"card card-hover {(!isCreated ? "cursor-pointer" : "")}")" style="@(isCreated ? "opacity:0.5" : "")" @onclick="clickHandler">
+                        <div class="card-body">
+                            <div class="row g-0">
+                                <div class="col-auto">
+                                    <Icon Prefix="far" Identifier="@(isCreated ? "check-square" : "square")" class="@($"h1 {(isCreated ? "text-success" : "")} me-2")" />
+                                </div>
+                                <div class="col">
+                                    <h3 class="m-0">
+                                        <span class="@(isCreated ? "text-decoration-line-through" : "")">
+                                            @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
+                                        </span>
+                                    </h3>
+
+                                    @if (!model.CategoryKey.IsEmpty)
+                                    {
+                                        <CategoryTag Key="@model.CategoryKey" />
+                                    }
+
+                                    @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
+                                    {
+                                        <p>
+                                            @model.Description
+
+                                            @if (model.IsFixed)
+                                            {
+                                                <em class="text-muted ms-1">Fixed</em>
+                                            }
+
+                                        </p>
+                                    }
+
+                                    <p>
+                                        <DateValue Value="@model.When" />
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</Loading>
+

@@ -1,7 +1,7 @@
 ﻿@attribute [Authorize]
 @page "/{Year:int}/{Month:int}/overview/incomes"
 
-<Title Icon="calendar" Main="@($"Incomes in {MonthModel}")" Sub="List of each single income in selected month">
+<Title Icon="calendar" Main="@($"Incomes in {SelectedPeriod}")" Sub="List of each single income in selected month">
     <ButtonContent>
         <IncomeCreateButton OnClick="CreateModal.Show" />
     </ButtonContent>
@@ -25,10 +25,13 @@
     <Loading Context="@Loading" IsOverlay="true">
         <ul class="nav nav-pills float-start">
             <li>
-                <a class="nav-link active" href="@Navigator.UrlOverviewIncomes(MonthModel)">Incomes</a>
+                <a class="nav-link active" href="@Navigator.UrlOverviewIncomes(SelectedPeriod)">Incomes</a>
             </li>
             <li>
-                <a class="nav-link" href="@Navigator.UrlOverview(MonthModel)">Expenses</a>
+                <a class="nav-link" href="@Navigator.UrlOverview(SelectedPeriod)">Expenses</a>
+            </li>
+            <li>
+                <a class="nav-link" href="@Navigator.UrlChecklist(SelectedPeriod)">Checklist</a>
             </li>
         </ul>
 

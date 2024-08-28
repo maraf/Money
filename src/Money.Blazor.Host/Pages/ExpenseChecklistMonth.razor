@@ -4,6 +4,18 @@
 <Money.Components.Title Icon="tasks" Main="@($"Expected expenses in {SelectedPeriod}")" Sub="Monthly expense checklist" />
 <ExceptionPanel />
 
+<ul class="nav nav-pills mb-3">
+    <li>
+        <a class="nav-link" href="@Navigator.UrlOverviewIncomes(SelectedPeriod)">Incomes</a>
+    </li>
+    <li>
+        <a class="nav-link" href="@Navigator.UrlOverview(SelectedPeriod)">Expenses</a>
+    </li>
+    <li>
+        <a class="nav-link active" href="@Navigator.UrlChecklist(SelectedPeriod)">Checklist</a>
+    </li>
+</ul>
+
 <Loading Context="@Loading">
     @if (Models.Count == 0)
     {
@@ -15,7 +27,8 @@
             @foreach (var model in Models.OrderBy(m => m.When))
             {
                 var isCreated = !model.ExpenseKey.IsEmpty;
-                var clickHandler = () => {
+                var clickHandler = () => 
+                {
                     if (isCreated)
                         return;
 

@@ -103,6 +103,9 @@ namespace Money.Pages
         protected virtual string ListIncomeUrl()
             => null;
 
+        protected virtual string ChecklistUrl()
+            => null;
+
         protected virtual string TrendsSelectedPeriodUrl()
             => null;
 

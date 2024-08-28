@@ -55,7 +55,7 @@ namespace Money.Pages
         [Parameter]
         public int Month { get; set; }
 
-        protected MonthModel MonthModel { get; set; }
+        protected MonthModel SelectedPeriod { get; set; }
 
         protected List<IncomeOverviewModel> Items { get; set; }
         protected IncomeOverviewModel SelectedItem { get; set; }
@@ -76,7 +76,7 @@ namespace Money.Pages
 
             BindEvents();
 
-            MonthModel = new MonthModel(Year, Month);
+            SelectedPeriod = new MonthModel(Year, Month);
 
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Reload();
@@ -92,7 +92,7 @@ namespace Money.Pages
         {
             await Interop.ScrollToTopAsync();
 
-            List<IncomeOverviewModel> models = await Queries.QueryAsync(new ListMonthIncome(MonthModel, SortDescriptor, PagingContext.CurrentPageIndex));
+            List<IncomeOverviewModel> models = await Queries.QueryAsync(new ListMonthIncome(SelectedPeriod, SortDescriptor, PagingContext.CurrentPageIndex));
             if (models.Count == 0)
                 return PagingLoadStatus.EmptyPage;
 
@@ -176,7 +176,7 @@ namespace Money.Pages
 
         Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)
         {
-            if (MonthModel == payload.When)
+            if (SelectedPeriod == payload.When)
                 Reload();
 
             return Task.CompletedTask;

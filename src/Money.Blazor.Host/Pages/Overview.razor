@@ -22,6 +22,7 @@
 <div class="overview">
     @{
         var incomeUrl = ListIncomeUrl();
+        var checklistUrl = ChecklistUrl();
         var trendsUrl = TrendsSelectedPeriodUrl();
     }
     @if (incomeUrl != null || trendsUrl != null)
@@ -36,6 +37,12 @@
             <li>
                 <a class="nav-link active" href="@Navigator.UrlCurrent()">Expenses</a>
             </li>
+            @if (checklistUrl != null)
+            {
+                <li>
+                    <a class="nav-link" href="@checklistUrl">Checklist</a>
+                </li>
+            }
             @if (trendsUrl != null)
             {
                 <li>

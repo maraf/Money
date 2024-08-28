@@ -60,6 +60,14 @@ namespace Money.Pages
             return null;
         }
 
+        protected override string ChecklistUrl()
+        {
+            if (CategoryKey.IsEmpty)
+                return Navigator.UrlChecklist(SelectedPeriod);
+
+            return null;
+        }
+
         protected override (string title, string url)? TrendsTitleUrl()
         {
             if (CategoryKey.IsEmpty)

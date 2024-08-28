@@ -36,19 +36,32 @@ namespace Money.Models
         public DateTime When { get; set; }
 
         /// <summary>
+        /// Gets expense category.
+        /// </summary>
+        public IKey CategoryKey { get; private set; }
+
+        /// <summary>
         /// Gets a description.
         /// </summary>
         public string Description { get; set; }
 
-        public ExpenseChecklistModel(IKey expenseTemplateKey, IKey expenseKey, Price amount, DateTime when, string description)
+        /// <summary>
+        /// Gets whether the expense is fixed.
+        /// </summary>
+        public bool IsFixed { get; set; }
+
+        public ExpenseChecklistModel(IKey expenseTemplateKey, IKey expenseKey, Price amount, DateTime when, IKey categoryKey, string description, bool isFixed)
         {
             Ensure.Condition.NotEmptyKey(expenseTemplateKey);
             Ensure.NotNull(expenseKey, "expenseKey");
+            Ensure.NotNull(categoryKey, "categoryKey");
             ExpenseTemplateKey = expenseTemplateKey;
             ExpenseKey = expenseKey;
             Amount = amount;
             When = when;
+            CategoryKey = categoryKey;
             Description = description;
+            IsFixed = isFixed;
         }
     }
 }

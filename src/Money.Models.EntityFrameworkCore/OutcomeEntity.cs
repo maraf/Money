@@ -45,12 +45,21 @@ namespace Money.Models
             }
         }
 
+        private GuidKey GetCategoryKey()
+            => GuidKey.Create(Categories.First().CategoryId, KeyFactory.Empty(typeof(Category)).Type);
+
+        private Price GetAmount()
+            => new Price(Amount, Currency);
+
+        private GuidKey GetKey()
+            => GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type);
+
         public OutcomeModel ToModel()
         {
             string categoryKeyType = KeyFactory.Empty(typeof(Category)).Type;
             return new OutcomeModel(
-                GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type),
-                new Price(Amount, Currency),
+                GetKey(),
+                GetAmount(),
                 When,
                 Description,
                 Categories.Select(c => GuidKey.Create(c.CategoryId, categoryKeyType)).ToList(),
@@ -60,9 +69,9 @@ namespace Money.Models
 
         public OutcomeOverviewModel ToOverviewModel(int version)
         {
-            GuidKey outcomeKey = GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type);
-            GuidKey categoryKey = GuidKey.Create(Categories.First().CategoryId, KeyFactory.Empty(typeof(Category)).Type);
-            Price amount = new Price(Amount, Currency);
+            GuidKey outcomeKey = GetKey();
+            GuidKey categoryKey = GetCategoryKey();
+            Price amount = GetAmount();
             if (version == 1)
             {
                 return new OutcomeOverviewModel(
@@ -89,5 +98,15 @@ namespace Money.Models
                 throw Ensure.Exception.InvalidOperation($"Invalid version '{version}' of expense overview model.");
             }
         }
+
+        public ExpenseChecklistModel ToExpenseChecklistModel(IKey expenseTemplateKey) => new ExpenseChecklistModel(
+            expenseTemplateKey,
+            GetKey(),
+            GetAmount(),
+            When,
+            GetCategoryKey(),
+            Description,
+            IsFixed
+        );
     }
 }

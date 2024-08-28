@@ -638,27 +638,24 @@ namespace Money.Models.Builders
                 foreach (var template in templates)
                 {
                     var sql = db.Outcomes
+                        .Include(o => o.Categories)
                         .WhereUserKey(query.UserKey)
                         .Where(e => e.Description == template.Description);
 
                     if (template.Period == RecurrencePeriod.Monthly)
                         sql = sql.Where(e => e.When.Month == query.Month.Month && e.When.Year == query.Month.Year);
 
-                    var expense = await sql.Select(e => new { e.Id, e.When }).FirstOrDefaultAsync();
+                    var expense = await sql.FirstOrDefaultAsync();
                     if (expense == null && template.Period == RecurrencePeriod.Single && (template.DueDate.Value.Year != query.Month.Year || template.DueDate.Value.Month != query.Month.Month))
                         continue;
 
-                    var expenseKey = expense != null
-                        ? GuidKey.Create(expense.Id, KeyFactory.Empty(typeof(Outcome)).Type)
-                        : KeyFactory.Empty(typeof(Outcome));
-
-                    var when = expense != null
-                        ? expense.When
-                        : template.Period == RecurrencePeriod.Monthly
+                    var model = expense != null 
+                        ? expense.ToExpenseChecklistModel(template.GetKey())
+                        : template.ToExpenseChecklistModel(template.Period == RecurrencePeriod.Monthly
                             ? new DateTime(query.Month.Year, query.Month.Month, template.DayInPeriod.Value)
-                            : template.DueDate.Value;
+                            : template.DueDate.Value);
 
-                    result.Add(template.ToExpenseChecklistModel(expenseKey, when));
+                    result.Add(model);
                 }
             }
             

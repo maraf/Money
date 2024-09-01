@@ -12,7 +12,7 @@ namespace Money.Models
     /// <summary>
     /// A model for a single item in monthly expense checklist
     /// </summary>
-    public class ExpenseChecklistModel
+    public class ExpenseChecklistModel : IExpenseOverviewModel
     {
         /// <summary>
         /// Gets an key of expense template.
@@ -24,6 +24,7 @@ namespace Money.Models
         /// This is the determinator whether the item is checked.
         /// </summary>
         public IKey ExpenseKey { get; private set; }
+        IKey IExpenseOverviewModel.Key => ExpenseKey;
 
         /// <summary>
         /// Gets an amount.

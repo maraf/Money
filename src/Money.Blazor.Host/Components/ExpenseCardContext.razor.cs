@@ -27,28 +27,31 @@ namespace Money.Components
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        [Parameter]
+        public bool IsEditEnabled { get; set; } = true;
+
         #region OutcomeCard.IContext
 
         CurrencyFormatter ExpenseCard.IContext.CurrencyFormatter => currencyFormatter;
 
-        bool ExpenseCard.IContext.HasEdit => true;
+        bool ExpenseCard.IContext.HasEdit => IsEditEnabled;
 
-        void ExpenseCard.IContext.Duplicate(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.Duplicate(IExpenseOverviewModel model)
             => OnActionClick<ModalDialog>(model, null, (modal, model) => Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.When, model.IsFixed));
 
-        void ExpenseCard.IContext.CreateTemplate(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.CreateTemplate(IExpenseOverviewModel model)
             => OnActionClick(model, TemplateCreateModal, (modal, model) => modal.Show(model.Amount, model.Description, model.CategoryKey, model.IsFixed));
 
-        void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditAmount(IExpenseOverviewModel model)
             => OnActionClick(model, AmountEditModal);
 
-        void ExpenseCard.IContext.EditDescription(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditDescription(IExpenseOverviewModel model)
             => OnActionClick(model, DescriptionEditModal);
 
-        void ExpenseCard.IContext.EditWhen(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditWhen(IExpenseOverviewModel model)
             => OnActionClick(model, WhenEditModal);
 
-        void ExpenseCard.IContext.Delete(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.Delete(IExpenseOverviewModel model)
             => OnDeleteClick(model);
 
         #endregion
@@ -58,7 +61,7 @@ namespace Money.Components
         protected ModalDialog DescriptionEditModal { get; set; }
         protected ModalDialog WhenEditModal { get; set; }
 
-        protected OutcomeOverviewModel SelectedItem { get; set; }
+        protected IExpenseOverviewModel SelectedItem { get; set; }
         protected string DeleteMessage { get; set; }
         protected Confirm DeleteConfirm { get; set; }
 
@@ -68,7 +71,7 @@ namespace Money.Components
             currencyFormatter = await CurrencyFormatterFactory.CreateAsync();
         }
 
-        protected void OnActionClick<T>(OutcomeOverviewModel model, T modal, Action<T, OutcomeOverviewModel> showHandler = null)
+        protected void OnActionClick<T>(IExpenseOverviewModel model, T modal, Action<T, IExpenseOverviewModel> showHandler = null)
             where T : ModalDialog
         {
             SelectedItem = model;
@@ -80,7 +83,7 @@ namespace Money.Components
             StateHasChanged();
         }
 
-        protected void OnDeleteClick(OutcomeOverviewModel model)
+        protected void OnDeleteClick(IExpenseOverviewModel model)
         {
             SelectedItem = model;
             DeleteMessage = $"Do you really want to delete expense '{model.Description}'?";

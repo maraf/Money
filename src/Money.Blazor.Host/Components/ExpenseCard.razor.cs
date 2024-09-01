@@ -20,12 +20,12 @@ namespace Money.Components
 
             CurrencyFormatter CurrencyFormatter { get; }
 
-            void Duplicate(OutcomeOverviewModel model);
-            void CreateTemplate(OutcomeOverviewModel model);
-            void EditAmount(OutcomeOverviewModel model);
-            void EditDescription(OutcomeOverviewModel model);
-            void EditWhen(OutcomeOverviewModel model);
-            void Delete(OutcomeOverviewModel model);
+            void Duplicate(IExpenseOverviewModel model);
+            void CreateTemplate(IExpenseOverviewModel model);
+            void EditAmount(IExpenseOverviewModel model);
+            void EditDescription(IExpenseOverviewModel model);
+            void EditWhen(IExpenseOverviewModel model);
+            void Delete(IExpenseOverviewModel model);
         }
 
         [Inject]
@@ -36,7 +36,16 @@ namespace Money.Components
         public IContext Context { get; set; }
 
         [Parameter]
-        public OutcomeOverviewModel Model { get; set; }
+        public IExpenseOverviewModel Model { get; set; }
+
+        [Parameter]
+        public string AmountCssClass { get; set; }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            AmountCssClass = string.Join(" ", [AmountCssClass, "m-0"]);
+        }
 
         protected void OnDuplicate() 
             => Context.Duplicate(Model);

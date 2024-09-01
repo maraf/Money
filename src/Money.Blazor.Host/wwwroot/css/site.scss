@@ -438,7 +438,9 @@ h4 {
 .cards {
     margin: 20px 0;
 
-    .row {
+    > .row {
+        border-bottom: 1px solid var(--bs-border-color) !important;
+
         &:first-child {
             border-top: 1px solid var(--bs-border-color) !important;
         }

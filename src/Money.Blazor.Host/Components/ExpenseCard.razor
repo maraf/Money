@@ -1,11 +1,11 @@
 ﻿@if (Model != null)
 {
-    <div class="row align-items-center border-bottom py-3">
+    <div class="row align-items-center py-3">
         <div class="col-4 col-md-2 mb-2 mb-md-0">
             <DateValue Value="Model.When" />
         </div>
         <div class="col-8 col-md-3 text-md-end mb-2 mb-md-0 text-end">
-            <h3 class="m-0">@Context.CurrencyFormatter?.Format(Model.Amount)</h3>
+            <h3 class="@AmountCssClass">@Context.CurrencyFormatter?.Format(Model.Amount)</h3>
         </div>
         <div class="col-auto col-md-2 mb-2 mb-md-0">
             <CategoryTag Key="@Model.CategoryKey" />
@@ -18,41 +18,44 @@
                 <em class="text-muted ms-1">Fixed</em>
             }
         </div>
-        <div class="col-auto controls">
-            <div class="d-flex flex-row align-items-center">
-                <CommandExecutionDecorator AggregateKey="@Model.Key" />
-                <div class="dropdown">
-                    <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" @onclick="@OnEditAmount">
-                            <Icon Identifier="dollar-sign" />
-                            Amount
-                        </a>
-                        <a class="dropdown-item" @onclick="@OnEditDescription">
-                            <Icon Identifier="comment" />
-                            Description
-                        </a>
-                        <a class="dropdown-item" @onclick="@OnEditWhen">
-                            <Icon Identifier="calendar" />
-                            When
-                        </a>
-                        <hr class="dropdown-divider" />
-                        <a class="dropdown-item" @onclick="@OnDuplicate">
-                            <Icon Identifier="clone" />
-                            Duplicate
-                        </a>
-                        <a class="dropdown-item" @onclick="@OnCreateTemplate">
-                            <Icon Identifier="redo" />
-                            As Template
-                        </a>
-                        <hr class="dropdown-divider" />
-                        <a class="dropdown-item" @onclick="@OnDelete">
-                            <Icon Identifier="trash-alt" />
-                            Delete
-                        </a>
+        @if (Context.HasEdit)
+        {
+            <div class="col-auto controls">
+                <div class="d-flex flex-row align-items-center">
+                    <CommandExecutionDecorator AggregateKey="@Model.Key" />
+                    <div class="dropdown">
+                        <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" @onclick="@OnEditAmount">
+                                <Icon Identifier="dollar-sign" />
+                                Amount
+                            </a>
+                            <a class="dropdown-item" @onclick="@OnEditDescription">
+                                <Icon Identifier="comment" />
+                                Description
+                            </a>
+                            <a class="dropdown-item" @onclick="@OnEditWhen">
+                                <Icon Identifier="calendar" />
+                                When
+                            </a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item" @onclick="@OnDuplicate">
+                                <Icon Identifier="clone" />
+                                Duplicate
+                            </a>
+                            <a class="dropdown-item" @onclick="@OnCreateTemplate">
+                                <Icon Identifier="redo" />
+                                As Template
+                            </a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item" @onclick="@OnDelete">
+                                <Icon Identifier="trash-alt" />
+                                Delete
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 }

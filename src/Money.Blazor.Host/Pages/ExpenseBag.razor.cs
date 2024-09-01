@@ -94,22 +94,22 @@ namespace Money.Pages
 
         bool ExpenseCard.IContext.HasEdit => true;
 
-        void ExpenseCard.IContext.Duplicate(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.Duplicate(IExpenseOverviewModel model)
         { }
 
-        void ExpenseCard.IContext.CreateTemplate(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.CreateTemplate(IExpenseOverviewModel model)
         { }
 
-        void ExpenseCard.IContext.EditAmount(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditAmount(IExpenseOverviewModel model)
         { }
 
-        void ExpenseCard.IContext.EditDescription(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditDescription(IExpenseOverviewModel model)
         { }
 
-        void ExpenseCard.IContext.EditWhen(OutcomeOverviewModel model)
+        void ExpenseCard.IContext.EditWhen(IExpenseOverviewModel model)
         { }
 
-        async void ExpenseCard.IContext.Delete(OutcomeOverviewModel model)
+        async void ExpenseCard.IContext.Delete(IExpenseOverviewModel model)
         {
             Log.Debug($"Deleting '{model.Key}'.");
 
@@ -120,7 +120,8 @@ namespace Money.Pages
                 {
                     Log.Debug($"Command found.");
 
-                    Models.Remove(model);
+                    var modelToRemove = Models.Single(m => m.Key.Equals(model.Key));
+                    Models.Remove(modelToRemove);
 
                     models.Remove(command);
                     await Storage.SaveAsync(models);

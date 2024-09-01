@@ -12,7 +12,7 @@ namespace Money.Models
     /// <summary>
     /// A model of a single outcome for overview.
     /// </summary>
-    public class OutcomeOverviewModel
+    public class OutcomeOverviewModel : IExpenseOverviewModel
     {
         [CompositeVersion]
         public int Version { get; private set; }

@@ -24,6 +24,10 @@ namespace Money.Models
         public int? DayInPeriod { get; set; }
         public DateTime? DueDate { get; set; }
 
+        public bool IsDeleted { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
         public ExpenseTemplateEntity()
         { }
 
@@ -42,6 +46,9 @@ namespace Money.Models
                 CategoryId = payload.CategoryKey.AsGuidKey().Guid;
 
             IsFixed = payload.IsFixed;
+
+            if (payload.Version >= 3)
+                CreatedAt = payload.CreatedAt;
         }
 
         public ExpenseTemplateModel ToModel(int version) => version switch

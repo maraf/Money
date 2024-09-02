@@ -53,6 +53,9 @@ namespace Money
         public int? DayInPeriod { get; set; }
         public DateTime? DueDate { get; set; }
 
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
         /// <summary>
         /// Creates a new instance.
         /// </summary>
@@ -74,7 +77,7 @@ namespace Money
         public ExpenseTemplate(Price amount, string description, IKey categoryKey, bool isFixed)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
-            Publish(new ExpenseTemplateCreated(amount, description, categoryKey, isFixed));
+            Publish(new ExpenseTemplateCreated(amount, description, categoryKey, isFixed, DateTime.Today));
         }
 
         public ExpenseTemplate(IKey key, IEnumerable<IEvent> events)
@@ -87,6 +90,9 @@ namespace Money
             Description = payload.Description;
             CategoryKey = payload.CategoryKey;
             IsFixed = payload.IsFixed;
+
+            if (payload.Version >= 3)
+                CreatedAt = payload.CreatedAt;
         });
 
         private void EnsureNotDeleted()
@@ -98,12 +104,15 @@ namespace Money
         public void Delete()
         {
             EnsureNotDeleted();
-            Publish(new ExpenseTemplateDeleted());
+            Publish(new ExpenseTemplateDeleted(DateTime.Today));
         }
 
         Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload) => UpdateState(() =>
         {
             IsDeleted = true;
+
+            if (payload.Version >= 2)
+                DeletedAt = payload.DeletedAt;
         });
 
         public void ChangeAmount(Price amount)

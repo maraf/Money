@@ -84,7 +84,12 @@ namespace Money.Models.Builders
 
         public Task HandleAsync(ExpenseTemplateFixedChanged payload) => UpdateAsync(payload, e => e.IsFixed = payload.IsFixed);
 
-        public Task HandleAsync(ExpenseTemplateDeleted payload) => UpdateAsync(payload, (db, e) => db.ExpenseTemplates.Remove(e));
+        public Task HandleAsync(ExpenseTemplateDeleted payload) => UpdateAsync(payload, (db, e) => 
+        {
+            e.IsDeleted = true;
+            if (payload.Version >= 2)
+                e.DeletedAt = payload.DeletedAt;
+        });
 
         public Task HandleAsync(ExpenseTemplateRecurrenceChanged payload) => UpdateAsync(payload, e =>
         {
@@ -106,6 +111,7 @@ namespace Money.Models.Builders
             {
                 var sql = db.ExpenseTemplates
                     .WhereUserKey(query)
+                    .Where(e => e.IsDeleted == false)
                     .OrderBy(e => e.Description)
                     .ThenBy(e => e.CategoryId);
 

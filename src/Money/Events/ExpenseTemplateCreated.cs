@@ -42,6 +42,12 @@ namespace Money.Events
         [CompositeProperty(4, Version = 2)]
         public bool IsFixed { get; private set; }
 
+        /// <summary>
+        /// Gets a date when the template was created.
+        /// </summary>
+        [CompositeProperty(5, Version = 3)]
+        public DateTime CreatedAt { get; private set; }
+
         [CompositeConstructor(Version = 1)]
         internal ExpenseTemplateCreated(Price amount, string description, IKey categoryKey)
         {
@@ -58,6 +64,14 @@ namespace Money.Events
         {
             IsFixed = isFixed;
             CompositeVersion = 2;
+        }
+
+        [CompositeConstructor(Version = 3)]
+        internal ExpenseTemplateCreated(Price amount, string description, IKey categoryKey, bool isFixed, DateTime createdAt)
+            : this(amount, description, categoryKey, isFixed)
+        {
+            CreatedAt = createdAt;
+            CompositeVersion = 3;
         }
     }
 }

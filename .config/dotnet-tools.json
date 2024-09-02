@@ -6,7 +6,15 @@
       "version": "3.8.15",
       "commands": [
         "webcompiler"
-      ]
+      ],
+      "rollForward": false
+    },
+    "dotnet-ef": {
+      "version": "8.0.8",
+      "commands": [
+        "dotnet-ef"
+      ],
+      "rollForward": false
     }
   }
 }

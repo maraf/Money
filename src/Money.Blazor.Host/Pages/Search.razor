@@ -4,7 +4,7 @@
 <Money.Components.Title Icon="search" Main="Search" Sub="Search for expenses" />
 <ExceptionPanel />
 
-<div class="search">
+<div class="container-narrow">
     <form @onsubmit="@(() => { Navigator.OpenSearch(FormText, DefaultSort.Equals(FormSort) ? null : FormSort); StateHasChanged(); })">
         <div class="row g-2 mb-3">
             <div class="col">
@@ -27,7 +27,7 @@
     <Loading Context="@Loading">
         @if (Models == null || Models.Count == 0)
         {
-            <Alert Message="No matching expense found." Mode="@AlertMode.Warning" />
+            <Alert Message="@(string.IsNullOrEmpty(Query) ? "Type your query to start..." : "No matching expense found.")" Mode="@AlertMode.Warning" />
         }
         else
         {

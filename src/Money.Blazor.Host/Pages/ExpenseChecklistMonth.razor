@@ -4,51 +4,52 @@
 <Money.Components.Title Icon="tasks" Main="@($"Expected expenses in {SelectedPeriod}")" Sub="Monthly expense checklist" />
 <ExceptionPanel />
 
-<ul class="nav nav-pills mb-3">
-    <li>
-        <a class="nav-link" href="@Navigator.UrlOverviewIncomes(SelectedPeriod)">Incomes</a>
-    </li>
-    <li>
-        <a class="nav-link" href="@Navigator.UrlOverview(SelectedPeriod)">Expenses</a>
-    </li>
-    <li>
-        <a class="nav-link active" href="@Navigator.UrlChecklist(SelectedPeriod)">Checklist</a>
-    </li>
-</ul>
+<div class="container-narrow">
+    <ul class="nav nav-pills mb-3">
+        <li>
+            <a class="nav-link" href="@Navigator.UrlOverviewIncomes(SelectedPeriod)">Incomes</a>
+        </li>
+        <li>
+            <a class="nav-link" href="@Navigator.UrlOverview(SelectedPeriod)">Expenses</a>
+        </li>
+        <li>
+            <a class="nav-link active" href="@Navigator.UrlChecklist(SelectedPeriod)">Checklist</a>
+        </li>
+    </ul>
 
-<Loading Context="@Loading">
-    @if (Models.Count == 0)
-    {
-        <Alert Title="No data." Message="Let's add some recurring expense templates." Mode="@AlertMode.Warning" />
-    }
-    else
-    {
-        <div class="cards">
-            <ExpenseCardContext IsEditEnabled="false">
-                @foreach (var model in Models.OrderBy(m => m.When))
-                {
-                    var isCreated = !model.ExpenseKey.IsEmpty;
-                    var clickHandler = () => 
+    <Loading Context="@Loading">
+        @if (Models.Count == 0)
+        {
+            <Alert Title="No data." Message="Let's add some recurring expense templates." Mode="@AlertMode.Warning" />
+        }
+        else
+        {
+            <div class="cards">
+                <ExpenseCardContext IsEditEnabled="false">
+                    @foreach (var model in Models.OrderBy(m => m.When))
                     {
-                        if (isCreated)
-                            return;
+                        var isCreated = !model.ExpenseKey.IsEmpty;
+                        var clickHandler = () => 
+                        {
+                            if (isCreated)
+                                return;
 
-                        Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed);
-                    };
-                    var rowCssClass = $"row align-items-center {(!isCreated ? "cursor-pointer" : "")}";
-                    var iconCssClass = $"h1 {(isCreated ? "text-success" : "")} m-0";
+                            Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed);
+                        };
+                        var rowCssClass = $"row align-items-center {(!isCreated ? "cursor-pointer" : "")}";
+                        var iconCssClass = $"h1 {(isCreated ? "text-success" : "")} m-0";
 
-                    <div class="@rowCssClass" @onclick="clickHandler">
-                        <div class="col-auto pe-1">
-                            <Icon Prefix="far" Identifier="@(isCreated ? "check-square" : "square")" class="@iconCssClass" />
+                        <div class="@rowCssClass" @onclick="clickHandler">
+                            <div class="col-auto pe-1">
+                                <Icon Prefix="far" Identifier="@(isCreated ? "check-square" : "square")" class="@iconCssClass" />
+                            </div>
+                            <div class="col" style="@(isCreated ? "opacity:0.5" : "")">
+                                <ExpenseCard Model="@model" AmountCssClass="@(isCreated ? "text-decoration-line-through" : "")" />
+                            </div>
                         </div>
-                        <div class="col" style="@(isCreated ? "opacity:0.5" : "")">
-                            <ExpenseCard Model="@model" AmountCssClass="@(isCreated ? "text-decoration-line-through" : "")" />
-                        </div>
-                    </div>
-                }
-            </ExpenseCardContext>
-        </div>
-    }
-</Loading>
-
+                    }
+                </ExpenseCardContext>
+            </div>
+        }
+    </Loading>
+</div>

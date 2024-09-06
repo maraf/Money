@@ -370,17 +370,12 @@ h4 {
   font-weight: bold;
 }
 
-.overview {
+.container-narrow {
   max-width: 900px;
   margin: 0 auto;
 }
-.overview .sort {
+.container-narrow .sort {
   float: right;
-}
-
-.search {
-  max-width: 900px;
-  margin: 0 auto;
 }
 
 .cards {

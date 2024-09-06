@@ -113,6 +113,7 @@ namespace Money.Components
 
             await LoadAsync();
             SuggestTemplates();
+            StateHasChanged();
             
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
                 PrerequisitesConfirm.Show();

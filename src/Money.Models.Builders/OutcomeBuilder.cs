@@ -632,7 +632,16 @@ namespace Money.Models.Builders
             {
                 var templates = await db.ExpenseTemplates
                     .WhereUserKey(query.UserKey)
+                    .Where(e => e.CreatedAt == null 
+                        || e.CreatedAt.Value.Year < query.Month.Year 
+                        || (e.CreatedAt.Value.Year == query.Month.Year && e.CreatedAt.Value.Month <= query.Month.Month)
+                    )
+                    .Where(e => e.DeletedAt == null 
+                        || e.DeletedAt.Value.Year > query.Month.Year 
+                        || (e.DeletedAt.Value.Year == query.Month.Year && e.DeletedAt.Value.Month >= query.Month.Month)
+                    )
                     .Where(e => e.Period != null)
+                    .Where(e => e.Period != RecurrencePeriod.Single || (e.DueDate.Value.Year == query.Month.Year && e.DueDate.Value.Month == query.Month.Month))
                     .ToListAsync();
 
                 foreach (var template in templates)
@@ -644,10 +653,10 @@ namespace Money.Models.Builders
 
                     if (template.Period == RecurrencePeriod.Monthly)
                         sql = sql.Where(e => e.When.Month == query.Month.Month && e.When.Year == query.Month.Year);
+                    else if (template.Period == RecurrencePeriod.Single)
+                        sql = sql.Where(e => e.When.Month == query.Month.Month && e.When.Year == query.Month.Year);
 
                     var expense = await sql.FirstOrDefaultAsync();
-                    if (expense == null && template.Period == RecurrencePeriod.Single && (template.DueDate.Value.Year != query.Month.Year || template.DueDate.Value.Month != query.Month.Month))
-                        continue;
 
                     var model = expense != null 
                         ? expense.ToExpenseChecklistModel(template.GetKey())

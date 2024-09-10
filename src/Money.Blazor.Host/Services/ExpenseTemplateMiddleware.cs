@@ -149,9 +149,9 @@ namespace Money.Services
 
         async Task IEventHandler<ExpenseTemplateCreated>.HandleAsync(ExpenseTemplateCreated payload)
         {
-            log.Debug("Got ExpenseTemplateCreated");
+            log.Debug($"Got ExpenseTemplateCreated with key '{payload.AggregateKey}'");
 
-            models.Add(new ExpenseTemplateModel(payload.AggregateKey, payload.Amount, payload.Description, payload.CategoryKey, payload.IsFixed));
+            models.Add(new ExpenseTemplateModel(payload.AggregateKey, payload.Amount, payload.Description, payload.CategoryKey, payload.IsFixed, null, null, null));
             models.Sort((a, b) => StringComparer.InvariantCultureIgnoreCase.Compare(a.Description, b.Description));
             await localStorage.SaveAsync(models);
         }

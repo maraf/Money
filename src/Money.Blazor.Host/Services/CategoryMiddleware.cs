@@ -172,7 +172,7 @@ namespace Money.Services
 
         async Task IEventHandler<CategoryCreated>.HandleAsync(CategoryCreated payload)
         {
-            models.Add(new CategoryModel(payload.AggregateKey, payload.Name, null, payload.Color, null));
+            models.Add(new CategoryModel(payload.AggregateKey, payload.Name, null, payload.Color, null, false));
             models.Sort((a, b) => a.Name.CompareTo(b.Name));
             await localStorage.SaveAsync(models);
         }

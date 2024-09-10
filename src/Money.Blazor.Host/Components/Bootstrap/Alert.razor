@@ -1,7 +1,7 @@
 ﻿@using Money.Components.Bootstrap;
 @using Neptuo;
 
-<div class="alert @ModeCssClass" role="alert">
+<div class="alert @ModeCssClass @CssClass" role="alert">
     @if (IsDismissible)
     {
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -47,7 +47,10 @@
     public bool IsDismissible { get; set; }
 
     [Parameter]
-    public AlertMode Mode { get; set;}
+    public AlertMode Mode { get; set; }
+
+    [Parameter]
+    public string CssClass { get; set; }
 
     protected string ModeCssClass { get; set; }
 

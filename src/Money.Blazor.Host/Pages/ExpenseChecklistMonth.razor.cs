@@ -13,13 +13,15 @@ using Neptuo.Queries;
 namespace Money.Pages;
 
 partial class ExpenseChecklistMonth : ComponentBase, 
-        System.IDisposable,
-        IEventHandler<OutcomeCreated>,
-        IEventHandler<OutcomeDeleted>,
-        IEventHandler<OutcomeAmountChanged>,
-        IEventHandler<OutcomeDescriptionChanged>,
-        IEventHandler<OutcomeWhenChanged>,
-        IEventHandler<PulledToRefresh>
+    System.IDisposable,
+    IEventHandler<OutcomeCreated>,
+    IEventHandler<OutcomeDeleted>,
+    IEventHandler<OutcomeAmountChanged>,
+    IEventHandler<OutcomeDescriptionChanged>,
+    IEventHandler<OutcomeWhenChanged>,
+    IEventHandler<PulledToRefresh>,
+    IEventHandler<SwipedLeft>,
+    IEventHandler<SwipedRight>
 {
     [Inject]
     protected IQueryDispatcher Queries { get; set; }
@@ -88,7 +90,9 @@ partial class ExpenseChecklistMonth : ComponentBase,
             .Add<OutcomeAmountChanged>(this)
             .Add<OutcomeDescriptionChanged>(this)
             .Add<OutcomeWhenChanged>(this)
-            .Add<PulledToRefresh>(this);
+            .Add<PulledToRefresh>(this)
+            .Add<SwipedLeft>(this)
+            .Add<SwipedRight>(this);
     }
 
     private void UnBindEvents()
@@ -99,7 +103,9 @@ partial class ExpenseChecklistMonth : ComponentBase,
             .Remove<OutcomeAmountChanged>(this)
             .Remove<OutcomeDescriptionChanged>(this)
             .Remove<OutcomeWhenChanged>(this)
-            .Remove<PulledToRefresh>(this);
+            .Remove<PulledToRefresh>(this)
+            .Remove<SwipedLeft>(this)
+            .Remove<SwipedRight>(this);
     }
 
     Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload) => ReloadDataAsync();
@@ -111,6 +117,18 @@ partial class ExpenseChecklistMonth : ComponentBase,
     {
         payload.IsHandled = true;
         return ReloadDataAsync();
+    }
+
+    Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
+    {
+        Navigator.OpenChecklist(SelectedPeriod - 1);
+        return Task.CompletedTask;
+    }
+
+    Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
+    {
+        Navigator.OpenChecklist(SelectedPeriod + 1);
+        return Task.CompletedTask;
     }
 
     #endregion

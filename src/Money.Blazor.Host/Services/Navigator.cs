@@ -96,6 +96,9 @@ namespace Money.Services
         public void OpenOverviewIncomes(MonthModel month)
             => manager.NavigateTo(UrlOverviewIncomes(month));
 
+        public void OpenChecklist(MonthModel month)
+            => manager.NavigateTo(UrlChecklist(month));
+
         public void OpenOverview(MonthModel month, IKey categoryKey)
             => manager.NavigateTo(UrlOverview(month, categoryKey));
 

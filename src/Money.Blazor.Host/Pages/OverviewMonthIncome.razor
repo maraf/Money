@@ -21,7 +21,7 @@
 <IncomeWhen @ref="ChangeWhenModal" IncomeKey="@Selected?.Key" When="@(Selected?.When ?? DateTime.Today)" />
 <Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@OnDeleteConfirmed" />
 
-<div class="overview">
+<div class="container-narrow">
     <Loading Context="@Loading" IsOverlay="true">
         <ul class="nav nav-pills float-start">
             <li>

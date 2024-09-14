@@ -15,7 +15,7 @@ namespace Money.Models
     public class CategoryModel : ICloneable<CategoryModel>
     {
         [CompositeVersion]
-        public int Version { get; set; }
+        public virtual int Version { get; set; }
 
         /// <summary>
         /// Gets a key of the category.

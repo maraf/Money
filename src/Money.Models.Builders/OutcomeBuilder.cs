@@ -148,48 +148,72 @@ namespace Money.Models.Builders
             }
         }
 
-        private async Task<List<CategoryWithAmountModel>> GetCategoryWithAmounts(ReadModelContext db, IKey userKey, List<OutcomeEntity> outcomes)
+        private async Task<List<CategoryWithAmountModel>> GetCategoryWithAmounts(ReadModelContext db, IKey userKey, List<OutcomeEntity> outcomes, int version = 1)
         {
-            Dictionary<Guid, Price> totals = new Dictionary<Guid, Price>();
+            Dictionary<Guid, Price> nonFixedTotals = new Dictionary<Guid, Price>();
+            Dictionary<Guid, Price> fixedTotals = new Dictionary<Guid, Price>();
 
             foreach (OutcomeEntity outcome in outcomes)
             {
                 foreach (OutcomeCategoryEntity category in outcome.Categories)
                 {
                     Price price;
-                    if (totals.TryGetValue(category.CategoryId, out price))
-                    {
-                        if (!outcome.IsFixed)
-                            price = price + priceConverter.ToDefault(userKey, outcome);
-                    }
-                    else
-                    {
-                        if (!outcome.IsFixed)
-                            price = priceConverter.ToDefault(userKey, outcome);
-                        else
-                            price = priceConverter.ZeroDefault(userKey);
-                    }
+                    var dictionary = outcome.IsFixed ? fixedTotals : nonFixedTotals;
 
-                    totals[category.CategoryId] = price;
+                    if (dictionary.TryGetValue(category.CategoryId, out price))
+                        price = price + priceConverter.ToDefault(userKey, outcome);
+                    else
+                        price = priceConverter.ToDefault(userKey, outcome);
+
+                    dictionary[category.CategoryId] = price;
                 }
             }
 
             List<CategoryWithAmountModel> result = new List<CategoryWithAmountModel>();
-            foreach (var item in totals)
+            foreach (var item in nonFixedTotals.Keys.Union(fixedTotals.Keys))
             {
-                CategoryEntity entity = await db.Categories.FirstOrDefaultAsync(c => c.Id == item.Key);
+                CategoryEntity entity = await db.Categories.FirstOrDefaultAsync(c => c.Id == item);
                 if (entity == null)
-                    throw Ensure.Exception.InvalidOperation($"Missing category with id '{item.Key}'.");
+                    throw Ensure.Exception.InvalidOperation($"Missing category with id '{item}'.");
 
                 CategoryModel model = entity.ToModel(false);
-                result.Add(new CategoryWithAmountModel(
-                    model.Key,
-                    model.Name,
-                    model.Description,
-                    model.Color,
-                    model.Icon,
-                    item.Value
-                ));
+
+                if (!fixedTotals.TryGetValue(item, out var fixedTotal))
+                    fixedTotal = priceConverter.ZeroDefault(userKey);
+
+                if (!nonFixedTotals.TryGetValue(item, out var nonFixedTotal))
+                    nonFixedTotal = priceConverter.ZeroDefault(userKey);
+
+                CategoryWithAmountModel resultItem = null;
+                if (version == 1)
+                {
+                    resultItem = new CategoryWithAmountModel(
+                        model.Key,
+                        model.Name,
+                        model.Description,
+                        model.Color,
+                        model.Icon,
+                        nonFixedTotal
+                    );
+                }
+                else if (version == 2)
+                {
+                    resultItem = new CategoryWithAmountModel(
+                        model.Key,
+                        model.Name,
+                        model.Description,
+                        model.Color,
+                        model.Icon,
+                        nonFixedTotal,
+                        fixedTotal
+                    );
+                }
+                else
+                {
+                    throw Ensure.Exception.InvalidOperation($"Unsupported version '{version}' of query.");
+                }
+
+                result.Add(resultItem);
             }
 
             return result.OrderBy(m => m.Name).ToList();
@@ -205,7 +229,7 @@ namespace Money.Models.Builders
                     .Include(o => o.Categories)
                     .ToListAsync();
 
-                return await GetCategoryWithAmounts(db, query.UserKey, outcomes);
+                return await GetCategoryWithAmounts(db, query.UserKey, outcomes, query.Version);
             }
         }
 
@@ -219,7 +243,7 @@ namespace Money.Models.Builders
                     .Include(o => o.Categories)
                     .ToListAsync();
 
-                return await GetCategoryWithAmounts(db, query.UserKey, outcomes);
+                return await GetCategoryWithAmounts(db, query.UserKey, outcomes, 1);
             }
         }
 

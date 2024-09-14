@@ -120,7 +120,7 @@ namespace Money.Pages
         {
             if (!String.IsNullOrEmpty(FormText))
             {
-                var models = await Queries.QueryAsync(new SearchOutcomes(FormText, Sort, PagingContext.CurrentPageIndex));
+                var models = await Queries.QueryAsync(SearchOutcomes.Version2(FormText, Sort, PagingContext.CurrentPageIndex));
                 if (models.Count == 0)
                     return PagingLoadStatus.EmptyPage;
 

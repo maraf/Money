@@ -185,10 +185,11 @@ namespace Money.Pages
 
         protected string GetPercentualValue(CategoryWithAmountModel category)
         {
+            var totalValueGetter = (CategoryWithAmountModel c) => c.Version == 1 ? c.TotalAmount.Value : c.NonFixedAmount.Value;
             decimal percentage = 0;
-            decimal total = Categories.Sum(c => c.TotalAmount.Value);
+            decimal total = Categories.Sum(c => totalValueGetter(c));
             if (total != 0)
-                percentage = 100 / total * category.TotalAmount.Value;
+                percentage = 100 / total * totalValueGetter(category);
 
             return percentage.ToString("0.##", CultureInfo.InvariantCulture);
         }

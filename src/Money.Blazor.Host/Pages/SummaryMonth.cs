@@ -57,7 +57,7 @@ namespace Money.Pages
             => new GetTotalMonthOutcome(item);
 
         protected override IQuery<List<CategoryWithAmountModel>> CreateCategoriesQuery(MonthModel item)
-            => new ListMonthCategoryWithOutcome(item);
+            => ListMonthCategoryWithOutcome.Version2(item);
 
         protected override bool IsContained(DateTime changed)
             => Periods.Contains(changed);

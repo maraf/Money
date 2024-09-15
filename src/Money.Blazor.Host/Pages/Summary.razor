@@ -53,7 +53,7 @@
                                 {
                                     @if (IncomeTotal != null)
                                     {
-                                        <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))">
+                                        <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))" @onclick:stopPropagation="true">
                                             @FormatPrice(IncomeTotal)
                                         </span>
                                     }

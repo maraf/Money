@@ -150,17 +150,15 @@ namespace Money.Models.Builders
 
         private async Task<List<CategoryWithAmountModel>> GetCategoryWithAmounts(ReadModelContext db, IKey userKey, List<OutcomeEntity> outcomes, int version = 1)
         {
-            Dictionary<Guid, Price> nonFixedTotals = new Dictionary<Guid, Price>();
+            Dictionary<Guid, Price> totals = new Dictionary<Guid, Price>();
             Dictionary<Guid, Price> fixedTotals = new Dictionary<Guid, Price>();
 
             foreach (OutcomeEntity outcome in outcomes)
             {
                 foreach (OutcomeCategoryEntity category in outcome.Categories)
                 {
-                    Price price;
-                    var dictionary = outcome.IsFixed ? fixedTotals : nonFixedTotals;
-
-                    if (dictionary.TryGetValue(category.CategoryId, out price))
+                    var dictionary = outcome.IsFixed ? fixedTotals : totals;
+                    if (dictionary.TryGetValue(category.CategoryId, out var price))
                         price = price + priceConverter.ToDefault(userKey, outcome);
                     else
                         price = priceConverter.ToDefault(userKey, outcome);
@@ -170,7 +168,7 @@ namespace Money.Models.Builders
             }
 
             List<CategoryWithAmountModel> result = new List<CategoryWithAmountModel>();
-            foreach (var item in nonFixedTotals.Keys.Union(fixedTotals.Keys))
+            foreach (var item in totals.Keys.Union(fixedTotals.Keys))
             {
                 CategoryEntity entity = await db.Categories.FirstOrDefaultAsync(c => c.Id == item);
                 if (entity == null)
@@ -181,7 +179,7 @@ namespace Money.Models.Builders
                 if (!fixedTotals.TryGetValue(item, out var fixedTotal))
                     fixedTotal = priceConverter.ZeroDefault(userKey);
 
-                if (!nonFixedTotals.TryGetValue(item, out var nonFixedTotal))
+                if (!totals.TryGetValue(item, out var nonFixedTotal))
                     nonFixedTotal = priceConverter.ZeroDefault(userKey);
 
                 CategoryWithAmountModel resultItem = null;

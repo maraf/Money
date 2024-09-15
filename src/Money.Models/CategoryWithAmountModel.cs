@@ -34,7 +34,7 @@ namespace Money.Models
         public Price TotalAmount { get; private set; }
 
         [CompositeProperty(6, Version = 2)]
-        public Price NonFixedAmount { get; private set; }
+        public Price Amount { get; private set; }
 
         [CompositeProperty(7, Version = 2)]
         public Price FixedAmount { get; private set; }
@@ -50,10 +50,10 @@ namespace Money.Models
         }
 
         [CompositeConstructor(Version = 2)]
-        public CategoryWithAmountModel(IKey key, string name, string description, Color color, string icon, Price nonFixedAmount, Price fixedAmount) 
-            : this(key, name, description, color, icon, nonFixedAmount + fixedAmount)
+        public CategoryWithAmountModel(IKey key, string name, string description, Color color, string icon, Price amount, Price fixedAmount) 
+            : this(key, name, description, color, icon, amount + fixedAmount)
         {
-            NonFixedAmount = nonFixedAmount;
+            Amount = amount;
             FixedAmount = fixedAmount;
 
             Version = 2;

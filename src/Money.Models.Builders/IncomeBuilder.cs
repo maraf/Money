@@ -22,6 +22,7 @@ namespace Money.Models.Builders
         IEventHandler<IncomeWhenChanged>,
         IEventHandler<IncomeDeleted>,
         IQueryHandler<GetTotalMonthIncome, Price>,
+        IQueryHandler<GetTotalYearIncome, Price>,
         IQueryHandler<ListMonthIncome, List<IncomeOverviewModel>>
     {
         const int PageSize = 10;
@@ -106,6 +107,20 @@ namespace Money.Models.Builders
                 List<PriceFixed> outcomes = await db.Incomes
                     .WhereUserKey(query.UserKey)
                     .Where(o => o.When.Month == query.Month.Month && o.When.Year == query.Month.Year)
+                    .Select(o => new PriceFixed(new Price(o.Amount, o.Currency), o.When))
+                    .ToListAsync();
+
+                return SumPriceInDefaultCurrency(query.UserKey, outcomes);
+            }
+        }
+
+        public async Task<Price> HandleAsync(GetTotalYearIncome query)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                List<PriceFixed> outcomes = await db.Incomes
+                    .WhereUserKey(query.UserKey)
+                    .Where(o => o.When.Year == query.Year.Year)
                     .Select(o => new PriceFixed(new Price(o.Amount, o.Currency), o.When))
                     .ToListAsync();
 

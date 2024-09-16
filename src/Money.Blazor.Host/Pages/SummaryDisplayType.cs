@@ -13,5 +13,7 @@ public enum SummaryDisplayType
     [Description("Total")]
     Total,
     [Description("Diff")]
-    Diff
+    Diff,
+    [Description("Balance")]
+    Balance
 }

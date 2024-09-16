@@ -82,10 +82,10 @@
             @if (ExistingExpenseTotal != null || IncomeTotal != null)
             {
                 <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
-                    <div class="card-body" style="@(IsTotalExpanded ? "height:auto;font-size:16px" : "")">
-                        @if (IsTotalExpanded)
+                    <div class="card-body" style="@(SelectedDisplayType == SummaryDisplayType.Balance ? "height:auto;font-size:16px" : "")">
+                        @if (SelectedDisplayType == SummaryDisplayType.Balance)
                         {
-                            <div @onclick="ToggleTotals" @onclick:stopPropagation="true">
+                            <div>
                                 @TotalItem(TotalType.Income, "Incomes", IncomeTotal)
                                 @TotalItem(TotalType.Expense, "Existing expenses", ExistingExpenseTotal)
                                 @TotalItem(TotalType.Expense, "Expected expenses", ExpectedExpenseTotal)
@@ -117,7 +117,7 @@
                                     else
                                     {
                                         var diff = GetBalanceTotal();
-                                        <span class="@(diff.Value > 0 ? "text-success" : "text-danger")" @onclick="ToggleTotals" @onclick:stopPropagation="true">
+                                        <span class="@(diff.Value > 0 ? "text-success" : "text-danger")">
                                             @FormatPrice(diff, applyPlusForPositiveNumbers: true)
                                         </span>
                                     }

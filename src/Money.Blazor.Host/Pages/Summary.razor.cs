@@ -71,8 +71,6 @@ namespace Money.Pages
         protected string DefaultCurrency { get; private set; }
         protected SummaryDisplayType SelectedDisplayType { get; set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
-        protected bool IsTotalExpanded { get; set; }
-
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
         protected IncomeCreate IncomeCreate { get; set; }
@@ -212,11 +210,6 @@ namespace Money.Pages
 
         public void Dispose()
             => UnBindEvents();
-
-        protected void ToggleTotals()
-        {
-            IsTotalExpanded = !IsTotalExpanded;
-        }
 
         private Price GetBalanceTotal()
         {

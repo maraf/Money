@@ -56,6 +56,9 @@ namespace Money.Pages
         protected override IQuery<Price> CreateExistingExpenseTotalQuery(MonthModel item)
             => new GetTotalMonthOutcome(item);
 
+        protected override IQuery<Price> CreateExpectedExpenseTotalQuery(MonthModel item)
+            => new GetMonthExpectedExpenseTotal(item);
+
         protected override IQuery<List<CategoryWithAmountModel>> CreateCategoriesQuery(MonthModel item)
             => ListMonthCategoryWithOutcome.Version2(item);
 

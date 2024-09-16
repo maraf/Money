@@ -43,6 +43,9 @@ namespace Money.Pages
         protected override IQuery<List<YearModel>> CreatePeriodsQuery()
             => new ListYearWithExpenseOrIncome();
 
+        protected override IQuery<Price> CreateIncomeTotalQuery(YearModel item)
+            => new GetTotalYearIncome(item);
+
         protected override IQuery<Price> CreateExistingExpenseTotalQuery(YearModel item)
             => new GetTotalYearOutcome(item);
 

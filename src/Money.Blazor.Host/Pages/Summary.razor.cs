@@ -200,9 +200,9 @@ namespace Money.Pages
         {
             var totalValueGetter = (CategoryWithAmountModel c) => c.Version == 1 ? c.TotalAmount.Value : c.Amount.Value;
             decimal percentage = 0;
-            decimal total = Categories.Sum(c => c.Amount.Value);
+            decimal total = Categories.Sum(c => totalValueGetter(c));
             if (total != 0)
-                percentage = 100 / total * category.Amount.Value;
+                percentage = 100 / total * totalValueGetter(category);
 
             return percentage.ToString("0.##", CultureInfo.InvariantCulture);
         }

@@ -133,11 +133,11 @@
 
                         <div class="value">
                             <div class="amount">
-                                @if (category.FixedAmount.Value > 0)
+                                @if (category.Version == 2 && category.FixedAmount.Value > 0)
                                 {
                                     <span class="text-muted" style="opacity: .5;">@FormatPrice(category.FixedAmount) + </span>
                                 }
-                                @FormatPrice(category.Amount, CurrencyFormatter.FormatZero.Zero)
+                                @FormatPrice(category.Version == 1 ? category.TotalAmount : category.Amount, CurrencyFormatter.FormatZero.Zero)
                             </div>
                             <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
                         </div>

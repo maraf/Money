@@ -45,6 +45,7 @@ namespace Money.Api.Routing
 
             Add<ListMonthBalance>("month-balances");
             Add<ListMonthExpenseChecklist>("month-expense-checklist");
+            Add<GetMonthExpectedExpenseTotal>("month-expected-expense-total");
 
             Add<SearchOutcomes>("search-outcomes");
 

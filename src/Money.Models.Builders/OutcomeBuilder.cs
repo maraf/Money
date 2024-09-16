@@ -38,7 +38,8 @@ namespace Money.Models.Builders
         IQueryHandler<ListMonthOutcomesForCategory, List<MonthWithAmountModel>>,
         IQueryHandler<ListYearOutcomesForCategory, List<YearWithAmountModel>>,
         IQueryHandler<ListMonthBalance, List<MonthBalanceModel>>,
-        IQueryHandler<ListMonthExpenseChecklist, List<ExpenseChecklistModel>>
+        IQueryHandler<ListMonthExpenseChecklist, List<ExpenseChecklistModel>>,
+        IQueryHandler<GetMonthExpectedExpenseTotal, Price>
     {
         const int PageSize = 10;
 
@@ -636,7 +637,7 @@ namespace Money.Models.Builders
                 MonthModel month = entity.When;
                 Price price;
                 if (totals.TryGetValue(month, out price))
-                    price = price + priceConverter.ToDefault(query.UserKey, entity);
+                    price += priceConverter.ToDefault(query.UserKey, entity);
                 else
                     price = priceConverter.ToDefault(query.UserKey, entity);
 
@@ -644,6 +645,21 @@ namespace Money.Models.Builders
             }
 
             return totals;
+        }
+
+        public async Task<Price> HandleAsync(GetMonthExpectedExpenseTotal query)
+        {
+            var result = priceConverter.ZeroDefault(query.UserKey);
+            var checklist = await HandleAsync(new ListMonthExpenseChecklist(query.Month) { UserKey = query.UserKey });
+            foreach (var expected in checklist)
+            {
+                if (!expected.ExpenseKey.IsEmpty)
+                    continue;
+                
+                result += priceConverter.ToDefault(query.UserKey, new PriceFixed(expected.Amount, expected.When));
+            }
+
+            return result;
         }
 
         public async Task<List<ExpenseChecklistModel>> HandleAsync(ListMonthExpenseChecklist query)

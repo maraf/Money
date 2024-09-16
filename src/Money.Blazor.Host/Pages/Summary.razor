@@ -4,16 +4,22 @@
 {
     enum TotalType { Income, Expense, Balance }
 
-    RenderFragment TotalItem(string icon, string description, Price value, TotalType type)
+    RenderFragment TotalItem(TotalType type, string description, Price value)
     {
         if (value == null)
-            value = Price.Zero(DefaultCurrency);
+            return null;
 
         var rowCssClass = "row " + (type switch 
         {
             TotalType.Balance => "mt-3",
             _ => null
         });
+        var icon = type switch
+        {
+            TotalType.Income => "indent",
+            TotalType.Expense => "outdent",
+            TotalType.Balance => "calculator",
+        };
         var valueCssClass = "col-auto " + (type switch
         {
             TotalType.Income => "text-success",
@@ -80,10 +86,10 @@
                         @if (IsTotalExpanded)
                         {
                             <div @onclick="ToggleTotals" @onclick:stopPropagation="true">
-                                @TotalItem("indent", "Incomes", IncomeTotal, TotalType.Income)
-                                @TotalItem("outdent", "Existing expenses", ExistingExpenseTotal, TotalType.Expense)
-                                @TotalItem("outdent", "Expected expenses", ExpectedExpenseTotal, TotalType.Expense)
-                                @TotalItem("outdent", "Balance", GetBalanceTotal(), TotalType.Balance)
+                                @TotalItem(TotalType.Income, "Incomes", IncomeTotal)
+                                @TotalItem(TotalType.Expense, "Existing expenses", ExistingExpenseTotal)
+                                @TotalItem(TotalType.Expense, "Expected expenses", ExpectedExpenseTotal)
+                                @TotalItem(TotalType.Balance, "Balance", GetBalanceTotal())
                             </div>
                         }
                         else

@@ -66,9 +66,12 @@ namespace Money.Pages
 
         protected LoadingContext CategoriesLoading { get; } = new LoadingContext();
         protected Price IncomeTotal { get; private set; }
-        protected Price ExpenseTotal { get; private set; }
+        protected Price ExistingExpenseTotal { get; private set; }
+        protected Price ExpectedExpenseTotal { get; private set; }
+        protected string DefaultCurrency { get; private set; }
         protected SummaryDisplayType SelectedDisplayType { get; set; }
         protected List<CategoryWithAmountModel> Categories { get; private set; }
+        protected bool IsTotalExpanded { get; set; }
 
         protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
@@ -81,6 +84,7 @@ namespace Money.Pages
 
             await base.OnInitializedAsync();
 
+            DefaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
             SelectedDisplayType = await Queries.QueryAsync(new GetSummaryDisplayProperty());
             SortDescriptor = await Queries.QueryAsync(new GetSummarySortProperty());
             formatter = await CurrencyFormatterFactory.CreateAsync();
@@ -129,8 +133,8 @@ namespace Money.Pages
                         Categories = await Queries.QueryAsync(CreateCategoriesQuery(SelectedPeriod));
 
                         await LoadIncomeTotalAsync();
-
-                        ExpenseTotal = await Queries.QueryAsync(CreateExpenseTotalQuery(SelectedPeriod));
+                        await LoadExpectedExpenseTotalAsync();
+                        ExistingExpenseTotal = await LoadTotalAsync(CreateExistingExpenseTotalQuery);
                     }
                     catch (MissingDefaultCurrentException)
                     {
@@ -142,20 +146,29 @@ namespace Money.Pages
             }
         }
 
-        private async Task LoadIncomeTotalAsync()
+        private async Task LoadIncomeTotalAsync() 
+            => IncomeTotal = await LoadTotalAsync(CreateIncomeTotalQuery);
+
+        private async Task LoadExpectedExpenseTotalAsync()
+            => ExpectedExpenseTotal = await LoadTotalAsync(CreateExpectedExpenseTotalQuery);
+
+        private async Task<Price> LoadTotalAsync(Func<T, IQuery<Price>> queryFactory)
         {
-            var incomeQuery = CreateIncomeTotalQuery(SelectedPeriod);
-            if (incomeQuery != null)
-                IncomeTotal = await Queries.QueryAsync(CreateIncomeTotalQuery(SelectedPeriod));
-            else
-                IncomeTotal = null;
+            var query = queryFactory(SelectedPeriod);
+            if (query != null)
+                return await Queries.QueryAsync(query);
+
+            return null;
         }
 
         protected virtual IQuery<Price> CreateIncomeTotalQuery(T item)
             => null;
 
-        protected virtual IQuery<Price> CreateExpenseTotalQuery(T item)
-            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateExpenseTotalQuery)}'.");
+        protected virtual IQuery<Price> CreateExistingExpenseTotalQuery(T item)
+            => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateExistingExpenseTotalQuery)}'.");
+
+        protected virtual IQuery<Price> CreateExpectedExpenseTotalQuery(T item)
+            => null;
 
         protected virtual IQuery<List<CategoryWithAmountModel>> CreateCategoriesQuery(T item)
             => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateCategoriesQuery)}'.");
@@ -199,6 +212,22 @@ namespace Money.Pages
 
         public void Dispose()
             => UnBindEvents();
+
+        protected void ToggleTotals()
+        {
+            IsTotalExpanded = !IsTotalExpanded;
+        }
+
+        private Price GetBalanceTotal()
+        {
+            var balance = IncomeTotal ?? Price.Zero(DefaultCurrency);
+            balance -= ExistingExpenseTotal;
+
+            if (ExpectedExpenseTotal != null)
+                balance -= ExpectedExpenseTotal;
+            
+            return balance;
+        }
 
         #region Navigations
 

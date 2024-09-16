@@ -53,7 +53,7 @@ namespace Money.Pages
         protected override IQuery<Price> CreateIncomeTotalQuery(MonthModel item)
             => new GetTotalMonthIncome(item);
 
-        protected override IQuery<Price> CreateExpenseTotalQuery(MonthModel item)
+        protected override IQuery<Price> CreateExistingExpenseTotalQuery(MonthModel item)
             => new GetTotalMonthOutcome(item);
 
         protected override IQuery<List<CategoryWithAmountModel>> CreateCategoriesQuery(MonthModel item)

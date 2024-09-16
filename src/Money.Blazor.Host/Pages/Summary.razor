@@ -1,5 +1,40 @@
 ﻿@typeparam T
 
+@code
+{
+    enum TotalType { Income, Expense, Balance }
+
+    RenderFragment TotalItem(string icon, string description, Price value, TotalType type)
+    {
+        if (value == null)
+            value = Price.Zero(DefaultCurrency);
+
+        var rowCssClass = "row " + (type switch 
+        {
+            TotalType.Balance => "mt-3",
+            _ => null
+        });
+        var valueCssClass = "col-auto " + (type switch
+        {
+            TotalType.Income => "text-success",
+            TotalType.Expense => "text-danger",
+            TotalType.Balance => (value.Value > 0 ? "text-success" : "text-danger") + " fw-bold",
+        });
+        return
+            @<div class="@rowCssClass">
+                <div class="col">
+                    <Icon Identifier="@icon" style="width:34px; text-align: center;" />
+                    <span class="name">@description</span>
+                </div>
+
+                <div class="@valueCssClass">
+                    @FormatPrice(value, CurrencyFormatter.FormatZero.Zero, applyPlusForPositiveNumbers: type == TotalType.Balance)
+                </div>
+            </div>
+        ;
+    }
+}
+
 <Title Icon="signal" Main="Summary" Sub="@SubTitle">
     <ButtonContent>
         <IncomeCreateButton OnClick="IncomeCreate.Show" />
@@ -31,46 +66,58 @@
         </div>
     }
 
-    @if (ExpenseTotal != null && ExpenseTotal.Value == 0 && (IncomeTotal == null || IncomeTotal.Value == 0))
+    @if (ExistingExpenseTotal != null && ExistingExpenseTotal.Value == 0 && (IncomeTotal == null || IncomeTotal.Value == 0))
     {
         <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
     }
     else if (Categories != null)
     {
         <div class="graph">
-            @if (ExpenseTotal != null || IncomeTotal != null)
+            @if (ExistingExpenseTotal != null || IncomeTotal != null)
             {
                 <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
-                    <div class="card-body">
-                        <h3 class="description">
-                            <span class="icon">📈</span>
-                            <span class="name">Summary</span>
-                        </h3>
+                    <div class="card-body" style="@(IsTotalExpanded ? "height:auto;font-size:16px" : "")">
+                        @if (IsTotalExpanded)
+                        {
+                            <div @onclick="ToggleTotals" @onclick:stopPropagation="true">
+                                @TotalItem("indent", "Incomes", IncomeTotal, TotalType.Income)
+                                @TotalItem("outdent", "Existing expenses", ExistingExpenseTotal, TotalType.Expense)
+                                @TotalItem("outdent", "Expected expenses", ExpectedExpenseTotal, TotalType.Expense)
+                                @TotalItem("outdent", "Balance", GetBalanceTotal(), TotalType.Balance)
+                            </div>
+                        }
+                        else
+                        {
+                            <h3 class="description">
+                                <span class="icon">📈</span>
+                                <span class="name">Summary</span>
+                            </h3>
 
-                        <div class="value">
-                            <div class="amount">
-                                @if (SelectedDisplayType == SummaryDisplayType.Total)
-                                {
-                                    @if (IncomeTotal != null)
+                            <div class="value">
+                                <div class="amount">
+                                    @if (SelectedDisplayType == SummaryDisplayType.Total)
                                     {
-                                        <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))" @onclick:stopPropagation="true">
-                                            @FormatPrice(IncomeTotal)
+                                        @if (IncomeTotal != null)
+                                        {
+                                            <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))" @onclick:stopPropagation="true">
+                                                @FormatPrice(IncomeTotal)
+                                            </span>
+                                        }
+
+                                        <span class="text-danger">
+                                            @FormatPrice(ExistingExpenseTotal, CurrencyFormatter.FormatZero.Zero)
                                         </span>
                                     }
-
-                                    <span class="text-danger">
-                                        @FormatPrice(ExpenseTotal, CurrencyFormatter.FormatZero.Zero)
-                                    </span>
-                                }
-                                else
-                                {
-                                    var diff = (IncomeTotal ?? new Price(0, ExpenseTotal.Currency)) - ExpenseTotal;
-                                    <span class="@(diff.Value > 0 ? "text-success" : "text-danger")">
-                                        @FormatPrice(diff, applyPlusForPositiveNumbers: true)
-                                    </span>
-                                }
+                                    else
+                                    {
+                                        var diff = GetBalanceTotal();
+                                        <span class="@(diff.Value > 0 ? "text-success" : "text-danger")" @onclick="ToggleTotals" @onclick:stopPropagation="true">
+                                            @FormatPrice(diff, applyPlusForPositiveNumbers: true)
+                                        </span>
+                                    }
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
             }

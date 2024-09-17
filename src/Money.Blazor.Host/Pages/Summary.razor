@@ -157,7 +157,7 @@
                         barWidth: GetPercentualValue(category),
                         barColor: category.Color.ToHashCode(),
                         amount: @<span>
-                            @if (category.Version == 2 != null && category.FixedAmount.Value > 0)
+                            @if (category.Version == 2 && category.FixedAmount.Value > 0)
                             {
                                 <span class="text-muted" style="opacity: .5;">@FormatPrice(category.FixedAmount) + </span>
                             }

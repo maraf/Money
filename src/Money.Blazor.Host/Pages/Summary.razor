@@ -9,7 +9,7 @@
         if (value == null)
             return null;
 
-        var rowCssClass = "row " + (type switch 
+        var rowCssClass = "d-flex " + (type switch 
         {
             TotalType.Balance => "mt-3",
             _ => null
@@ -28,14 +28,38 @@
         });
         return
             @<div class="@rowCssClass">
-                <div class="col">
-                    <Icon Identifier="@icon" style="width:34px; text-align: center;" />
-                    <span class="name">@description</span>
-                </div>
+                <Icon Identifier="@icon" class="align-self-center icon" />
+                <span class="flex-grow-1">@description</span>
 
                 <div class="@valueCssClass">
                     @FormatPrice(value, CurrencyFormatter.FormatZero.Zero, applyPlusForPositiveNumbers: type == TotalType.Balance)
                 </div>
+            </div>
+        ;
+    }
+
+    RenderFragment BarItem(string icon, string description, RenderFragment amount, string title = null, string barWidth = null, string barColor = null)
+    {
+        return 
+            @<div class="card-body">
+                <div class="d-flex">
+                    <div class="icon fs-3">
+                        @icon
+                    </div>
+                    <h3 class="align-self-center flex-grow-1 m-0 fs-6" title="@title">
+                        @description
+                    </h3>
+
+                    <div class="align-self-center">
+                        @amount
+                    </div>
+                </div>
+                @if (barWidth != null)
+                {
+                    <div class="bar-cover">
+                        <div class="bar" style="width: @barWidth%; background-color: @barColor;"></div>
+                    </div>
+                }
             </div>
         ;
     }
@@ -82,72 +106,64 @@
             @if (ExistingExpenseTotal != null || IncomeTotal != null)
             {
                 <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
-                    <div class="card-body" style="@(SelectedDisplayType == SummaryDisplayType.Balance ? "height:auto;font-size:16px" : "")">
-                        @if (SelectedDisplayType == SummaryDisplayType.Balance)
-                        {
-                            <div>
-                                @TotalItem(TotalType.Income, "Incomes", IncomeTotal)
-                                @TotalItem(TotalType.Expense, "Existing expenses", ExistingExpenseTotal)
-                                @TotalItem(TotalType.Expense, "Expected expenses", ExpectedExpenseTotal)
-                                @TotalItem(TotalType.Balance, "Balance", GetBalanceTotal())
-                            </div>
-                        }
-                        else
-                        {
-                            <h3 class="description">
-                                <span class="icon">📈</span>
-                                <span class="name">Summary</span>
-                            </h3>
-
-                            <div class="value">
-                                <div class="amount">
-                                    @if (SelectedDisplayType == SummaryDisplayType.Total)
+                    @if (SelectedDisplayType == SummaryDisplayType.Balance)
+                    {
+                        <div class="card-body">
+                            @TotalItem(TotalType.Income, "Incomes", IncomeTotal)
+                            @TotalItem(TotalType.Expense, "Existing expenses", ExistingExpenseTotal)
+                            @TotalItem(TotalType.Expense, "Expected expenses", ExpectedExpenseTotal)
+                            @TotalItem(TotalType.Balance, "Balance", GetBalanceTotal())
+                        </div>
+                    }
+                    else
+                    {
+                        @BarItem(
+                            icon: "📈",
+                            description: "Summary",
+                            amount: @<span class="fw-bold">
+                                @if (SelectedDisplayType == SummaryDisplayType.Total)
+                                {
+                                    @if (IncomeTotal != null)
                                     {
-                                        @if (IncomeTotal != null)
-                                        {
-                                            <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))" @onclick:stopPropagation="true">
-                                                @FormatPrice(IncomeTotal)
-                                            </span>
-                                        }
-
-                                        <span class="text-danger">
-                                            @FormatPrice(ExistingExpenseTotal, CurrencyFormatter.FormatZero.Zero)
+                                        <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))" @onclick:stopPropagation="true">
+                                            @FormatPrice(IncomeTotal)
                                         </span>
                                     }
-                                    else
-                                    {
-                                        var diff = GetBalanceTotal();
-                                        <span class="@(diff.Value > 0 ? "text-success" : "text-danger")">
-                                            @FormatPrice(diff, applyPlusForPositiveNumbers: true)
-                                        </span>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    </div>
+
+                                    <span class="text-danger">
+                                        @FormatPrice(ExistingExpenseTotal, CurrencyFormatter.FormatZero.Zero)
+                                    </span>
+                                }
+                                else
+                                {
+                                    var diff = GetBalanceTotal();
+                                    <span class="@(diff.Value > 0 ? "text-success" : "text-danger")">
+                                        @FormatPrice(diff, applyPlusForPositiveNumbers: true)
+                                    </span>
+                                }
+                            </span>
+                        )
+                    }
                 </div>
             }
 
             @foreach (var category in Categories)
             {
-                <div class="card bar-graph" @onclick="@(() => OpenOverview(SelectedPeriod, category.Key))">
-                    <div class="card-body">
-                        <h3 class="description" title="@category.Description">
-                            <span class="icon">@category.Icon</span>
-                            <span class="name">@category.Name</span>
-                        </h3>
-
-                        <div class="value">
-                            <div class="amount">
-                                @if (category.Version == 2 && category.FixedAmount.Value > 0)
-                                {
-                                    <span class="text-muted" style="opacity: .5;">@FormatPrice(category.FixedAmount) + </span>
-                                }
-                                @FormatPrice(category.Version == 1 ? category.TotalAmount : category.Amount, CurrencyFormatter.FormatZero.Zero)
-                            </div>
-                            <div class="bar" style="width: @GetPercentualValue(category)%; background-color: @category.Color.ToHashCode();"></div>
-                        </div>
-                    </div>
+                <div class="card bar-graph cursor-pointer" @onclick="() => OpenOverview(SelectedPeriod, category.Key)">
+                    @BarItem(
+                        icon: category.Icon,
+                        description: category.Name,
+                        title: category.Description,
+                        barWidth: GetPercentualValue(category),
+                        barColor: category.Color.ToHashCode(),
+                        amount: @<span>
+                            @if (category.Version == 2 != null && category.FixedAmount.Value > 0)
+                            {
+                                <span class="text-muted" style="opacity: .5;">@FormatPrice(category.FixedAmount) + </span>
+                            }
+                            @FormatPrice(category.Version == 1 ? category.TotalAmount : category.Amount, CurrencyFormatter.FormatZero.Zero)
+                        </span>
+                    )
                 </div>
             }
         </div>

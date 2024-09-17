@@ -356,69 +356,34 @@ h4 {
     box-shadow: none;
     cursor: pointer;
 
-    .card-body {
-        position: relative;
-        height: 60px;
-        padding: 15px;
+    .icon {
+        display: inline-block;
+        width: 36px;
+        text-align: center;
+        line-height: 1;
     }
 
-    .description {
-        position: absolute;
-        margin: 0;
-        font-size: 24px;
-        font-weight: normal;
-        line-height: 1.1;
-        display: inline;
-        z-index: 1;
+    $barHeight: 10px;
 
-        .name {
-            font-size: 16px;
-            white-space: nowrap;
-        }
-
-        .icon {
-            display: inline-block;
-            width: 34px;
-            text-align: center;
-        }
-    }
-
-    .value {
-        position: absolute;
-        width: calc(100% - 30px);
-    }
-
-    .amount {
-        float: right;
+    .bar-cover {
+        height: $barHeight;
     }
 
     .bar {
-        height: 10px;
+        height: $barHeight;
         float: right;
         clear: both;
         transition: width 1s;
         border-radius: 3px;
     }
-}
 
-.bar-graph:hover {
-    background-color: rgba(var(--bs-emphasis-color-rgb), 0.075);
+    &:hover {
+        background-color: rgba(var(--bs-emphasis-color-rgb), 0.075);
+    }
 }
 
 .bar-graph-summary {
     border: none;
-
-    .glyphicon {
-        margin: 0 4px;
-    }
-
-    .category-name {
-        font-weight: bold;
-    }
-
-    .amount {
-        font-weight: bold;
-    }
 }
 
 .container-narrow {

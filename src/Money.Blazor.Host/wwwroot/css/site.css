@@ -314,35 +314,14 @@ h4 {
           box-shadow: none;
   cursor: pointer;
 }
-.bar-graph .card-body {
-  position: relative;
-  height: 60px;
-  padding: 15px;
-}
-.bar-graph .description {
-  position: absolute;
-  margin: 0;
-  font-size: 24px;
-  font-weight: normal;
-  line-height: 1.1;
-  display: inline;
-  z-index: 1;
-}
-.bar-graph .description .name {
-  font-size: 16px;
-  white-space: nowrap;
-}
-.bar-graph .description .icon {
+.bar-graph .icon {
   display: inline-block;
-  width: 34px;
+  width: 36px;
   text-align: center;
+  line-height: 1;
 }
-.bar-graph .value {
-  position: absolute;
-  width: calc(100% - 30px);
-}
-.bar-graph .amount {
-  float: right;
+.bar-graph .bar-cover {
+  height: 10px;
 }
 .bar-graph .bar {
   height: 10px;
@@ -352,22 +331,12 @@ h4 {
   transition: width 1s;
   border-radius: 3px;
 }
-
 .bar-graph:hover {
   background-color: rgba(var(--bs-emphasis-color-rgb), 0.075);
 }
 
 .bar-graph-summary {
   border: none;
-}
-.bar-graph-summary .glyphicon {
-  margin: 0 4px;
-}
-.bar-graph-summary .category-name {
-  font-weight: bold;
-}
-.bar-graph-summary .amount {
-  font-weight: bold;
 }
 
 .container-narrow {

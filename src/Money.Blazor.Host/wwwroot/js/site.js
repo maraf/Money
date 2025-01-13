@@ -143,8 +143,11 @@ window.Money = {
                 element.setSelectionRange(0, element.value.length)
             }
         }
-    }
+    },
+    WaitForDotNet: () => window.Money._DotNetPromise,
+    DotNetReady: () => window.Money._DotNetPromiseResolve()
 };
+window.Money._DotNetPromise = new Promise(resolve => window.Money._DotNetPromiseResolve = resolve);
 
 window.PullToRefresh = {
     Initialize: function (interop) {

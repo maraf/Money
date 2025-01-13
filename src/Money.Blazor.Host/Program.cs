@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.JSInterop;
 using Money.Api.Routing;
 using Money.Components;
 using Money.Components.Bootstrap;
@@ -32,6 +33,8 @@ namespace Money.UI.Blazor
             // Startup.
             WebAssemblyHost host = builder.Build();
             StartupServices(host.Services);
+
+            await host.Services.GetRequiredService<IJSRuntime>().InvokeVoidAsync("Money.DotNetReady");
 
             // Run.
             await host.RunAsync();

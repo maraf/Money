@@ -19,11 +19,13 @@
             }
         });
     },
-    installable: function () {
-        DotNet.invokeMethodAsync('Money.Blazor.Host', 'Pwa.Installable').then(function () { }, function () { setTimeout(Pwa.installable, 1000); });
+    installable: async () => {
+        await Money.WaitForDotNet();
+        DotNet.invokeMethodAsync('Money.Blazor.Host', 'Pwa.Installable');
     },
-    updateable: function () {
-        DotNet.invokeMethodAsync('Money.Blazor.Host', 'Pwa.Updateable').then(function () { }, function () { setTimeout(Pwa.updateable, 1000); });
+    updateable: async () => {
+        await Money.WaitForDotNet();
+        DotNet.invokeMethodAsync('Money.Blazor.Host', 'Pwa.Updateable');
     }
 };
 

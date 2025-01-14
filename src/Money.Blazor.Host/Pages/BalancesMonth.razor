@@ -1,5 +1,31 @@
-﻿@attribute [Authorize]
+@attribute [Authorize]
 @page "/{Year:int}/balances"
+
+@code
+{
+    RenderFragment RenderBalanceValue(Price incomes, Price expenses, string containerCssClass = null, string totalValueCssClass = null)
+    {
+        return
+        @<div class="@containerCssClass">
+            @if (SelectedDisplayType == BalanceDisplayType.Total)
+            {
+                <small class="text-success @totalValueCssClass">
+                    @CurrencyFormatter.Format(incomes)
+                </small>
+                <small class="text-danger @totalValueCssClass">
+                    @CurrencyFormatter.Format(expenses)
+                </small>
+            }
+            else
+            {
+                var diff = incomes - expenses;
+                <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
+                    @CurrencyFormatter.Format(diff, applyPlusForPositiveNumbers: true)
+                </small>
+            }
+        </div>;
+    }
+}
 
 <Title Icon="chart-bar" Main="@($"Balances in {Year}")" Sub="Compare incomes and expences" />
 
@@ -32,44 +58,10 @@ else
                         <a href="@Navigator.UrlOverview(model)">
                             @model.ToMonthString()
                         </a>
-                        <div>
-                            @if (SelectedDisplayType == BalanceDisplayType.Total)
-                            {
-                                <small class="text-success">
-                                    @CurrencyFormatter.Format(model.IncomeSummary)
-                                </small>
-                                <small class="text-danger">
-                                    @CurrencyFormatter.Format(model.ExpenseSummary)
-                                </small>
-                            }
-                            else
-                            {
-                                var diff = model.IncomeSummary - model.ExpenseSummary;
-                                <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
-                                    @CurrencyFormatter.Format(diff, applyPlusForPositiveNumbers: true)
-                                </small>
-                            }
-                        </div>
-                    </div>
+                        @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary)
+                                                    </div>
                     <div class="d-none d-lg-block text-center mt-1">
-                        <div class="d-none d-lg-block text-center mt-1">
-                            @if (SelectedDisplayType == BalanceDisplayType.Total)
-                            {
-                                <small class="d-block text-success">
-                                    @CurrencyFormatter.Format(model.IncomeSummary)
-                                </small>
-                                <small class="d-block text-danger">
-                                    @CurrencyFormatter.Format(model.ExpenseSummary)
-                                </small>
-                            } 
-                            else
-                            {
-                                var diff = model.IncomeSummary - model.ExpenseSummary;
-                                <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
-                                    @CurrencyFormatter.Format(diff, applyPlusForPositiveNumbers: true)
-                                </small>
-                            }
-                        </div>
+                        @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary, "d-none d-lg-block text-center mt-1", "d-block")
                         <div class="text-center mt-1">
                             <a href="@Navigator.UrlOverview(model)">
                                 <span class="d-none d-lg-inline">

@@ -1,4 +1,4 @@
-﻿@attribute [Authorize]
+@attribute [Authorize]
 @page "/{Year:int}/balances"
 
 @code
@@ -33,7 +33,10 @@
     <div>
         <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
     </div>
+@if (TotalIncomes != null && TotalExpenses != null)
+    {
     @RenderBalanceValue(TotalIncomes, TotalExpenses, "fs-5")
+}
     <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
 </div>
 

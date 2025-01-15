@@ -1,4 +1,4 @@
-@attribute [Authorize]
+﻿@attribute [Authorize]
 @page "/{Year:int}/balances"
 
 @code
@@ -29,10 +29,11 @@
 
 <Title Icon="chart-bar" Main="@($"Balances in {Year}")" Sub="Compare incomes and expences" />
 
-<div class="d-flex justify-content-between mb-3">
+<div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
     </div>
+    @RenderBalanceValue(TotalIncomes, TotalExpenses, "fs-5")
     <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
 </div>
 
@@ -59,7 +60,7 @@ else
                             @model.ToMonthString()
                         </a>
                         @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary)
-                                                    </div>
+                    </div>
                     <div class="d-none d-lg-block text-center mt-1">
                         @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary, "d-none d-lg-block text-center mt-1", "d-block")
                         <div class="text-center mt-1">

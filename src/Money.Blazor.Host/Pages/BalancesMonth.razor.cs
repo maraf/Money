@@ -41,6 +41,8 @@ namespace Money.Pages
         protected List<YearModel> PeriodGuesses { get; set; }
         protected List<MonthBalanceModel> Models { get; set; }
         protected decimal MaxAmount { get; set; }
+        protected Price TotalExpenses { get; set; }
+        protected Price TotalIncomes { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -82,6 +84,8 @@ namespace Money.Pages
 
             MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value)) : 0;
             Models = new List<MonthBalanceModel>();
+            TotalExpenses = Price.Zero(defaultCurrency);
+            TotalIncomes = Price.Zero(defaultCurrency);
             for (int i = 0; i < 12; i++)
             {
                 int month = i + 1;
@@ -89,6 +93,8 @@ namespace Money.Pages
                 if (model == null)
                     model = new MonthBalanceModel(Year, month, Price.Zero(defaultCurrency), Price.Zero(defaultCurrency));
 
+                TotalExpenses += model.ExpenseSummary;
+                TotalIncomes += model.IncomeSummary;
                 Models.Add(model);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Money.Events;
 using Money.Models.Queries;
 using Money.Models.Sorting;
@@ -580,23 +581,40 @@ namespace Money.Models.Builders
             {
                 Dictionary<MonthModel, Price> expenses = await GetMonthBalanceExpensesAsync(db, query);
                 Dictionary<MonthModel, Price> incomes = await GetMonthBalanceIncomesAsync(db, query);
+                
+                // TODO: Do it for every month?
+                Dictionary<MonthModel, Price> expectedExpenses = new();
+                if (query.IncludeExpectedExpenses)
+                {
+                    for (int i = 1; i < 13; i ++)
+                    {
+                        var month = new MonthModel(query.Year.Year, i);
+                        expectedExpenses[month] = await HandleAsync(new GetMonthExpectedExpenseTotal(month) { UserKey = query.UserKey });
+                    }
+                }
 
                 List<MonthBalanceModel> result = new List<MonthBalanceModel>();
-                foreach (var expense in expenses)
+                for (int i = 1; i < 13; i ++)
                 {
-                    if (!incomes.TryGetValue(expense.Key, out var income))
+                    var expense = expenses.FirstOrDefault(e => e.Key.Month == i).Value;
+                    if (expense == null)
+                        expense = priceConverter.ZeroDefault(query.UserKey);
+
+                    var income = incomes.FirstOrDefault(e => e.Key.Month == i).Value;
+                    if (income == null)
                         income = priceConverter.ZeroDefault(query.UserKey);
 
-                    result.Add(new MonthBalanceModel(expense.Key.Year, expense.Key.Month, expense.Value, income));
+                    if (query.IncludeExpectedExpenses)
+                    {
+                        var expectedExpense = expectedExpenses.FirstOrDefault(e => e.Key.Month == i).Value;
+                        result.Add(new MonthBalanceModel(query.Year.Year, i, expense, income, expectedExpense));
+                    }
+                    else
+                    {
+                        result.Add(new MonthBalanceModel(query.Year.Year, i, expense, income));
+                    }
                 }
-
-                foreach (var income in incomes)
-                {
-                    if (!result.Any(b => b == income.Key))
-                        result.Add(new MonthBalanceModel(income.Key.Year, income.Key.Month, priceConverter.ZeroDefault(query.UserKey), income.Value));
-                }
-
-                result.Sort((a, b) => a.Month.CompareTo(b.Month));
+                
                 return result;
             }
         }

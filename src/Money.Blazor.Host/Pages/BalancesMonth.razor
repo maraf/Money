@@ -1,9 +1,9 @@
-@attribute [Authorize]
+﻿@attribute [Authorize]
 @page "/{Year:int}/balances"
 
 @code
 {
-    RenderFragment RenderBalanceValue(Price incomes, Price expenses, string containerCssClass = null, string totalValueCssClass = null)
+    RenderFragment RenderBalanceValue(Price incomes, Price expenses, Price expectedExpenses, string containerCssClass = null, string totalValueCssClass = null)
     {
         return
         @<div class="@containerCssClass">
@@ -12,13 +12,23 @@
                 <small class="text-success @totalValueCssClass">
                     @CurrencyFormatter.Format(incomes)
                 </small>
-                <small class="text-danger @totalValueCssClass">
+                <small class="text-danger ms-1 @totalValueCssClass">
                     @CurrencyFormatter.Format(expenses)
                 </small>
+                @if (expectedExpenses != null)
+                {
+                    <small class="text-danger ms-1 @totalValueCssClass" style="opacity: .5">
+                        @CurrencyFormatter.Format(expectedExpenses)
+                    </small>
+                }
             }
             else
             {
                 var diff = incomes - expenses;
+                if (expectedExpenses != null)
+                {
+                    diff = diff - expectedExpenses;
+                }
                 <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
                     @CurrencyFormatter.Format(diff, applyPlusForPositiveNumbers: true)
                 </small>
@@ -33,10 +43,17 @@
     <div>
         <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
     </div>
-@if (TotalIncomes != null && TotalExpenses != null)
+    @if (TotalIncomes != null && TotalExpenses != null)
     {
-    @RenderBalanceValue(TotalIncomes, TotalExpenses, "fs-5")
-}
+        @RenderBalanceValue(
+            TotalIncomes, 
+            TotalExpenses, 
+            TotalExpectedExpenses, 
+            SelectedDisplayType == BalanceDisplayType.Diff 
+                ? "fs-5" 
+                : "mx-1 text-center"
+        )
+    }
     <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
 </div>
 
@@ -50,22 +67,32 @@ else
         @foreach (var model in Models)
         {
             var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;
+            var expectedExpenseSize = MaxAmount == 0 ? 0 : model.ExpectedExpenseSummary.Value / MaxAmount * 100;
             var incomeSize = MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100;
 
             <div class="col-12 col-lg-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">
                 <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
                     <div class="w-100 bg-success" style="height: @incomeSize%"></div>
-                    <div class="w-100 bg-danger ms-1" style="height: @expenseSize%"></div>
+                    <div class="ms-1">
+                        <div class="w-100 bg-danger" style="height: @expectedExpenseSize%; opacity: .5;"></div>
+                        <div class="w-100 bg-danger" style="height: @expenseSize%;"></div>
+                    </div>
                 </div>
                 <div class="p-1">
                     <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
                         <a href="@Navigator.UrlOverview(model)">
                             @model.ToMonthString()
                         </a>
-                        @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary)
+                        @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary, model.ExpectedExpenseSummary)
                     </div>
                     <div class="d-none d-lg-block text-center mt-1">
-                        @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary, "d-none d-lg-block text-center mt-1", "d-block")
+                        @RenderBalanceValue(
+                            model.IncomeSummary, 
+                            model.ExpenseSummary, 
+                            model.ExpectedExpenseSummary, 
+                            "d-none d-lg-block text-center mt-1", 
+                            "d-block"
+                        )
                         <div class="text-center mt-1">
                             <a href="@Navigator.UrlOverview(model)">
                                 <span class="d-none d-lg-inline">
@@ -80,7 +107,10 @@ else
                 </div>
                 <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
                     <div class="bg-success" style="width: @incomeSize%; height: 10px"></div>
-                    <div class="bg-danger mt-1" style="width: @expenseSize%; height: 10px"></div>
+                    <div class="mt-1 d-flex">
+                        <div class="bg-danger" style="width: @expenseSize%; height: 10px"></div>
+                        <div class="bg-danger" style="width: @expectedExpenseSize%; height: 10px; opacity: .5;"></div>
+                    </div>
                 </div>
             </div>
         }

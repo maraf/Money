@@ -98,14 +98,14 @@
         </div>
     }
 
-    @if (ExistingExpenseTotal != null && ExistingExpenseTotal.Value == 0 && (IncomeTotal == null || IncomeTotal.Value == 0))
+    @if (ExistingExpenseTotal != null && ExistingExpenseTotal.Value == 0 && (IncomeTotal == null || IncomeTotal.Value == 0) && (ExpectedExpenseTotal == null || ExpectedExpenseTotal.Value == 0))
     {
         <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" />
     }
     else if (Categories != null)
     {
         <div class="graph">
-            @if (ExistingExpenseTotal != null || IncomeTotal != null)
+            @if (ExistingExpenseTotal != null || IncomeTotal != null || ExpectedExpenseTotal != null)
             {
                 <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
                     @if (SelectedDisplayType == SummaryDisplayType.Balance)

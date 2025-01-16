@@ -1,0 +1,32 @@
+<div class="form-check form-switch @(Reverse ? "form-check-reverse" : null)">
+    <input class="form-check-input" type="checkbox" role="switch" checked="@Checked" @onchange="OnCheckedChanged" id="@id">
+    <label class="form-check-label @LabelCssClass" for="@id">@Label</label>
+</div>
+
+@inject ILog<FormCheck> Log
+
+@code
+{
+    private string id = Guid.NewGuid().ToString();
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public bool Checked { get; set; }
+
+    [Parameter]
+    public Action<bool> CheckedChanged { get; set; }
+
+    [Parameter]
+    public bool Reverse { get; set; }
+
+    [Parameter]
+    public string LabelCssClass { get; set; }
+
+    private void OnCheckedChanged(ChangeEventArgs e)
+    {
+        Log.Debug($"OnCheckedChanged '{e.Value}'");
+        CheckedChanged?.Invoke((bool)e.Value);
+    }
+}

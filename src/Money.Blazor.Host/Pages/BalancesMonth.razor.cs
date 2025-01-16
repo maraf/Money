@@ -38,6 +38,7 @@ namespace Money.Pages
         protected CurrencyFormatter CurrencyFormatter { get; set; }
         protected YearModel SelectedPeriod { get; set; }
         protected BalanceDisplayType SelectedDisplayType { get; set; }
+        protected bool IncludeExpectedExpenses { get; set; } = true;
         protected List<YearModel> PeriodGuesses { get; set; }
         protected List<MonthBalanceModel> Models { get; set; }
         protected decimal MaxAmount { get; set; }
@@ -81,10 +82,10 @@ namespace Money.Pages
         private async Task LoadAsync()
         {
             string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
-            var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: true));
+            var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: IncludeExpectedExpenses));
 
-            MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + m.ExpectedExpenseSummary.Value)) : 0;
-            Models = new List<MonthBalanceModel>();
+            MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + m.ExpectedExpenseSummary?.Value ?? 0)) : 0;
+            Models = [];
             TotalExpenses = Price.Zero(defaultCurrency);
             TotalIncomes = Price.Zero(defaultCurrency);
             TotalExpectedExpenses = Price.Zero(defaultCurrency);
@@ -102,6 +103,12 @@ namespace Money.Pages
                 TotalIncomes += model.IncomeSummary;
                 Models.Add(model);
             }
+        }
+
+        private async void ReloadAsync()
+        {
+            await LoadAsync();
+            StateHasChanged();
         }
 
         protected async Task<IReadOnlyCollection<YearModel>> GetYearsAsync() 

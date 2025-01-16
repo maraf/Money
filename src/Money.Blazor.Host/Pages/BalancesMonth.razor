@@ -54,7 +54,14 @@
                 : "mx-1 text-center"
         )
     }
-    <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
+    <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged">
+        <AfterContent>
+            <hr class="dropdown-divider" />
+            <div class="px-3 py-1">
+                <FormCheck Label="Expected expenses" @bind-Checked="IncludeExpectedExpenses" @bind-Checked:after="ReloadAsync" LabelCssClass="text-start" Reverse="true" />
+            </div>
+        </AfterContent>
+    </EnumSelector>
 </div>
 
 @if (Models == null)
@@ -67,7 +74,7 @@ else
         @foreach (var model in Models)
         {
             var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;
-            var expectedExpenseSize = MaxAmount == 0 ? 0 : model.ExpectedExpenseSummary.Value / MaxAmount * 100;
+            var expectedExpenseSize = MaxAmount == 0 ? 0 : (model.ExpectedExpenseSummary?.Value ?? 0) / MaxAmount * 100;
             var incomeSize = MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100;
 
             <div class="col-12 col-lg-1 @(model > DateTime.Today ? "text-muted" : String.Empty)">

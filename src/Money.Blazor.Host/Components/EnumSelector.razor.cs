@@ -40,6 +40,9 @@ namespace Money.Components
         [Parameter]
         public Size Size { get; set; } = Size.Normal;
 
+        [Parameter]
+        public RenderFragment AfterContent { get; set; }
+
         protected List<(string Name, TType Value)> Items { get; } = new List<(string, TType)>();
         protected string ButtonCssClass { get; private set; }
 

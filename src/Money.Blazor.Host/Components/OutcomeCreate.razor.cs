@@ -75,8 +75,6 @@ namespace Money.Components
 
         protected bool AreTemplatesOpened { get; set; }
 
-        private bool isAttachedToComponentContainer;
-
         protected override void OnInitialized()
         {
             base.OnInitialized();

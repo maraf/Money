@@ -58,7 +58,7 @@ namespace Money.Pages.Accounts
             if (firstRender)
             {
                 if (IsAutoLoginUrl)
-                    OnDemoSubmitAsync();
+                    _ = OnDemoSubmitAsync();
                 else
                     await UserNameBox.FocusAsync();
             }

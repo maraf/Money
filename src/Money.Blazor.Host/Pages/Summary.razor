@@ -19,12 +19,14 @@
             TotalType.Income => "indent",
             TotalType.Expense => "outdent",
             TotalType.Balance => "calculator",
+            _ => null
         };
         var valueCssClass = "col-auto " + (type switch
         {
             TotalType.Income => "text-success",
             TotalType.Expense => "text-danger",
             TotalType.Balance => (value.Value > 0 ? "text-success" : "text-danger") + " fw-bold",
+            _ => null
         });
         return
             @<div class="@rowCssClass">

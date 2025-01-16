@@ -44,8 +44,6 @@ namespace Money.Layouts
         protected MainMenuItems MainMenu { get; set; }
         protected Offcanvas Offcanvas { get; set; }
 
-        private bool lastIsMainMenuVisible;
-
         protected async override Task OnInitializedAsync()
         {
             EventHandlers.Add<UserPropertyChanged>(this);

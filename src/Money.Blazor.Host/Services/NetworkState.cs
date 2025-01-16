@@ -26,13 +26,13 @@ namespace Money.Services
 
         private void OnStatusChanged(bool isOnline)
         {
-            // if (IsOnline != isOnline)
-            // {
-            //     log.Debug($"IsVisible IsOnline changed {IsOnline} => '{isOnline}'.");
+            if (IsOnline != isOnline)
+            {
+                log.Debug($"IsVisible IsOnline changed {IsOnline} => '{isOnline}'.");
 
-            //     IsOnline = isOnline;
-            //     StatusChanged?.Invoke();
-            // }
+                IsOnline = isOnline;
+                StatusChanged?.Invoke();
+            }
         }
 
         public bool IsOnline { get; protected set; } = true;

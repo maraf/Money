@@ -394,6 +394,11 @@ h4 {
   cursor: pointer;
 }
 
+.expense-wizard-validation-error {
+  position: absolute;
+  font-size: 0.75rem;
+}
+
 /* ------ SPLASH SCREEN ------------------------------------------------------------------------ */
 .splash {
   position: absolute;

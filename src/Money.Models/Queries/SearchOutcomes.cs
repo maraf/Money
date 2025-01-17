@@ -59,7 +59,7 @@ namespace Money.Models.Queries
             Ensure.NotNullOrEmpty(text, "text");
             Ensure.NotNull(sortDescriptor, "sortDescriptor");
             Ensure.PositiveOrZero(pageIndex, "pageIndex");
-            Text = text;
+            Text = text.Trim();
             SortDescriptor = sortDescriptor;
             PageIndex = pageIndex;
 

@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 using Money.Commands;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Models.Sorting;
 using Money.Pages;
 using Money.Services;
 using Neptuo;
@@ -17,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Money.Components
@@ -217,6 +219,42 @@ namespace Money.Components
                 if (templateDescription.Contains(description))
                     SuggestedTemplates.Add(template);
             }
+
+            if (suggestExistingExpensesCancellation != null)
+                suggestExistingExpensesCancellation.Cancel();
+
+            suggestExistingExpensesCancellation = new();
+            _ = SuggestExistingExpensesAsync(description, suggestExistingExpensesCancellation.Token);
+        }
+
+        private CancellationTokenSource suggestExistingExpensesCancellation;
+        private SortDescriptor<OutcomeOverviewSortType> suggestExistingExpensesSort = new(OutcomeOverviewSortType.ByWhen, SortDirection.Descending);
+
+        protected async Task SuggestExistingExpensesAsync(string description, CancellationToken ct)
+        {
+            var results = await Queries.QueryAsync(new SearchOutcomes(description, suggestExistingExpensesSort, 0));
+            if (ct.IsCancellationRequested)
+                return;
+
+            foreach (var result in results)
+            {
+                if (SuggestedTemplates.Any(t => IsSimilar(t, result)))
+                    continue;
+
+                SuggestedTemplates.Add(new ExpenseTemplateModel(
+                    KeyFactory.Create(typeof(ExpenseTemplate)),
+                    result.Amount,
+                    result.Description,
+                    result.CategoryKey
+                ));
+            }
+
+            StateHasChanged();
+
+            static bool IsSimilar(ExpenseTemplateModel template, OutcomeOverviewModel other) 
+                => template.Amount == other.Amount
+                    && template.Description == other.Description
+                    && template.CategoryKey.Equals(other.CategoryKey);
         }
 
         protected void ApplyTemplate(ExpenseTemplateModel model)

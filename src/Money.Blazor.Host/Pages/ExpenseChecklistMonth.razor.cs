@@ -49,16 +49,28 @@ partial class ExpenseChecklistMonth : ComponentBase,
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        
+        EnsureSelectedPeriod();
         CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
         BindEvents();
+    }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        SelectedPeriod = null;
+        return base.SetParametersAsync(parameters);
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        SelectedPeriod = new MonthModel(Year, Month);
+        EnsureSelectedPeriod();
         await LoadDataAsync();
+    }
+
+    private void EnsureSelectedPeriod()
+    {
+        if (SelectedPeriod == null)
+            SelectedPeriod = new MonthModel(Year, Month);
     }
 
     private async Task LoadDataAsync()

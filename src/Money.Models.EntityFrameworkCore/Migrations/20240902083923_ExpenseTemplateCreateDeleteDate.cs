@@ -15,16 +15,19 @@ namespace Money.Models.Migrations
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreatedAt",
                 table: "ExpenseTemplates",
+                schema: Schema.Name,
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DeletedAt",
                 table: "ExpenseTemplates",
+                schema: Schema.Name,
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsDeleted",
                 table: "ExpenseTemplates",
+                schema: Schema.Name,
                 nullable: false,
                 defaultValue: false);
         }
@@ -34,15 +37,18 @@ namespace Money.Models.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "CreatedAt",
-                table: "ExpenseTemplates");
+                table: "ExpenseTemplates",
+                schema: Schema.Name);
 
             migrationBuilder.DropColumn(
                 name: "DeletedAt",
-                table: "ExpenseTemplates");
+                table: "ExpenseTemplates",
+                schema: Schema.Name);
 
             migrationBuilder.DropColumn(
                 name: "IsDeleted",
-                table: "ExpenseTemplates");
+                table: "ExpenseTemplates",
+                schema: Schema.Name);
         }
     }
 }

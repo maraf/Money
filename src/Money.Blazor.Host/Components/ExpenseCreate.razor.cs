@@ -213,7 +213,7 @@ namespace Money.Components
             foreach (var template in Templates)
             {
                 string templateDescription = template.Description?.ToLowerInvariant();
-                if (String.IsNullOrEmpty(description))
+                if (String.IsNullOrEmpty(templateDescription))
                     continue;
 
                 if (templateDescription.Contains(description))

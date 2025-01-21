@@ -1,0 +1,35 @@
+<Project>
+  <PropertyGroup>
+	<FrameworkPackageVersion>9.0.0</FrameworkPackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+	<!-- Transitive dependencies -->
+	<PackageVersion Include="System.Runtime.Caching" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+	<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+
+	<!-- Actual dependencies -->
+	<PackageVersion Include="Blazored.LocalStorage" Version="4.5.0" />
+	<PackageVersion Include="Blazored.SessionStorage" Version="2.4.0" />
+	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="$(FrameworkPackageVersion)" />
+	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
+
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.10.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.10.1" />
+	<PackageVersion Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.2.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.0" />
+  </ItemGroup>
+</Project>

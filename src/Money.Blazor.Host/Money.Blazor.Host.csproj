@@ -4,19 +4,18 @@
     <RootNamespace>Money</RootNamespace>
     <PublishDomain>app.money.neptuo.com</PublishDomain>
     <VersionPrefix>1.17.1.0</VersionPrefix>
-    <TargetFramework>net9.0</TargetFramework>
     <UseBlazorWebAssembly>true</UseBlazorWebAssembly>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazored.LocalStorage" Version="4.1.1" />
-    <PackageReference Include="Blazored.SessionStorage" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.0" />
+    <PackageReference Include="Blazored.LocalStorage" />
+    <PackageReference Include="Blazored.SessionStorage" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
   </ItemGroup>
 
   <ItemGroup>

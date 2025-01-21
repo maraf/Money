@@ -5,7 +5,7 @@
 
         @foreach (string icon in Icons)
         {
-            <button class="btn btn-link btn-icon btn-selectable @(Icon == icon ? "btn-selectable-selected" : "")" @onclick="@(() => Icon = icon)">
+            <button class="btn btn-icon btn-selectable @(Icon == icon ? "btn-selectable-selected" : "")" @onclick="@(() => Icon = icon)">
                 @icon
             </button>
         }

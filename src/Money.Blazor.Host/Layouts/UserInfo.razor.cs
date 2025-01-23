@@ -62,8 +62,16 @@ namespace Money.Layouts
             var state = await AuthenticationState.GetAuthenticationStateAsync();
             if (state.User.Identity.IsAuthenticated)
             {
+                Log.Debug("User is authenticated");
+
                 using (Loading.Start())
                     Profile = await Queries.QueryAsync(new GetProfile());
+
+                Log.Debug($"User is '{Profile?.UserName}'");
+            }
+            else
+            {
+                Log.Debug("User is NOT authenticated");
             }
         }
 

@@ -20,3 +20,4 @@
         <button class="btn btn-primary" @onclick="@OnSaveClick">@SaveButtonText</button>
     </Buttons>
 </Modal>
+<Confirm @ref="PrerequisitesConfirm" Message="To create an income, you need to first create a currency." OnConfirmed="OnPrerequisitesConfirmed" />

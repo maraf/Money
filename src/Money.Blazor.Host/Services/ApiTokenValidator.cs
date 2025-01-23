@@ -30,7 +30,9 @@ namespace Money.Services
             {
                 // Unauthorized exception is processed globally, don't need to do anyting here.
                 log.Debug($"Validation token using '{nameof(GetProfile)}' query.");
+
                 var profile = await queries.QueryAsync(new GetProfile());
+
                 log.Debug($"Result '{profile}'.");
                 return profile != null;
             }

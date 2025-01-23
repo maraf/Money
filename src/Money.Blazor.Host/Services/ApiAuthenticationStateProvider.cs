@@ -102,9 +102,21 @@ namespace Money.Services
                     log.Debug("Token validation succeeded.");
 
                     EnsurePrincipal(token.Value);
-                    Notify(isNoficationEnabled);
 
-                    await events.PublishAsync(new UserSignedIn());
+                    var notifier = async () =>
+                    {
+                        await Task.Delay(1);
+
+                        Notify(isNoficationEnabled);
+
+                        // This notification needs to happen asynchronously, becase at this moment we might be awaiting
+                        // profile query and calling it asynchronously might result in awaiting again the awaited task
+                        // UserInfo -> Profile query -> NewToken -> ChangeTokenAsync -> UserSignedIn -> UserInfo -> Profile query
+
+                        await events.PublishAsync(new UserSignedIn());
+                    };
+                    _ = notifier();
+
                     return;
                 }
             }

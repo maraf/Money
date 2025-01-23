@@ -80,6 +80,9 @@ namespace Money.Layouts
 
         protected void OnToggleMainMenu()
         {
+            if (Offcanvas == null)
+                return;
+
             if (Offcanvas.IsVisible)
                 Offcanvas.Hide();
             else
@@ -87,6 +90,6 @@ namespace Money.Layouts
         }
 
         private void OnLocationChanged(string url)
-            => Offcanvas.Hide();
+            => Offcanvas?.Hide();
     }
 }

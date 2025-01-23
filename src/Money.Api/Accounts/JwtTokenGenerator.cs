@@ -36,7 +36,7 @@ namespace Money.Accounts
         public string Generate(IEnumerable<Claim> claims)
         {
             var credentials = new SigningCredentials(options.GetSecurityKey(), SecurityAlgorithms.HmacSha256);
-            var expiry = DateTime.Now.Add(options.GetExpiry());
+            var expiry = DateTime.UtcNow.Add(options.GetExpiry());
             var token = new JwtSecurityToken(
                 options.Issuer,
                 options.Issuer,

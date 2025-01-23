@@ -65,6 +65,7 @@ namespace Money
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = configuration.Issuer,
                         ValidAudience = configuration.Issuer,
+                        ClockSkew = TimeSpan.Zero,
                         IssuerSigningKey = configuration.GetSecurityKey()
                     };
 

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>Money</RootNamespace>
     <PublishDomain>app.money.neptuo.com</PublishDomain>
-    <VersionPrefix>1.17.1.0</VersionPrefix>
+    <VersionPrefix>1.18.0.0</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
     <UseBlazorWebAssembly>true</UseBlazorWebAssembly>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>

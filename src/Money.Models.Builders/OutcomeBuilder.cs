@@ -671,7 +671,7 @@ namespace Money.Models.Builders
             var checklist = await HandleAsync(new ListMonthExpenseChecklist(query.Month) { UserKey = query.UserKey });
             foreach (var expected in checklist)
             {
-                if (!expected.ExpenseKey.IsEmpty)
+                if (!expected.ExpenseKey.IsEmpty || expected.Amount == null)
                     continue;
                 
                 result += priceConverter.ToDefault(query.UserKey, new PriceFixed(expected.Amount, expected.When));

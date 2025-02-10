@@ -56,6 +56,14 @@ namespace Money
                 },
                 new MenuItemModel()
                 {
+                    Identifier = "expense-checklist-Month",
+                    Icon = "list-check",
+                    Text = "Monthly expense checklist",
+                    Url = navigator.UrlChecklist(new MonthModel(DateTime.Today.Year, DateTime.Today.Month)),
+                    IsBlurMenuAfterClick = true
+                },
+                new MenuItemModel()
+                {
                     Identifier = "search",
                     Icon = "search",
                     Text = "Search",

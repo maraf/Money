@@ -154,7 +154,7 @@ namespace Money.Components
             CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
-            Templates = await Queries.QueryAsync(new ListAllExpenseTemplate());
+            Templates = await Queries.QueryAsync(ListAllExpenseTemplate.Version3());
             StateHasChanged();
         }
 

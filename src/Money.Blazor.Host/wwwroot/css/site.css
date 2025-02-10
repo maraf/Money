@@ -196,8 +196,8 @@ h4 {
 }
 
 .offcanvas-bottom-menu {
-  --bs-offcanvas-height: 48vh;
-  bottom: 55px;
+  --bs-offcanvas-height: auto;
+  bottom: 54px;
 }
 
 .center {
@@ -656,4 +656,4 @@ h4 {
 .swipe-right {
   right: -35px;
 }
-/*# sourceMappingURL=/Users/marekfisera/Development/maraf/Money/src/Money.Blazor.Host/wwwroot/css/site.css.map */
+/*# sourceMappingURL=site.css.map */

@@ -23,13 +23,16 @@
         </div>
     </div>
 </TemplateContent>
+<TemplateContent Name="MobilePageIcon">
+    @if (!String.IsNullOrEmpty(Icon))
+    {
+        <h2 class="mb-0">
+            <Icon Identifier="@Icon" class="ms-1 me-2" />
+        </h2>
+    }
+</TemplateContent>
 <TemplateContent Name="MobilePageTitle">
     <h3 class="mb-0 text-truncate" style="font-weight: 100;">
-        @if (!String.IsNullOrEmpty(Icon))
-        {
-            <Icon Identifier="@Icon" class="ms-1 me-2" />
-        }
-
         @Main
     </h3>
 

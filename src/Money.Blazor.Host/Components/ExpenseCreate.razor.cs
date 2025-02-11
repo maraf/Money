@@ -107,14 +107,17 @@ namespace Money.Components
                 ComponentContainer.ExpenseCreate = null;
         }
 
-        private async void ShowInternal(Action setParameters = null)
+        private async void ShowInternal(Func<bool> setParameters = null)
         {
             FocusAfterRender = true;
             
-            setParameters?.Invoke();
+            bool suggestTemplates = setParameters?.Invoke() ?? true;
 
             await LoadAsync();
-            SuggestTemplates();
+
+            if (suggestTemplates)
+                SuggestTemplates();
+
             StateHasChanged();
             
             if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
@@ -126,8 +129,11 @@ namespace Money.Components
         public new void Show() 
             => ShowInternal();
 
-        public void Show(IKey categoryKey) 
-            => ShowInternal(() => CategoryKey = categoryKey);
+        public void Show(IKey categoryKey) => ShowInternal(() =>
+        {
+            CategoryKey = categoryKey;
+            return true;
+        });
 
         public void Show(Price amount, string description, IKey categoryKey, bool isFixed) => ShowInternal(() =>
         {
@@ -135,6 +141,7 @@ namespace Money.Components
             Description = description;
             CategoryKey = categoryKey;
             IsFixed = isFixed;
+            return false;
         });
 
         public void Show(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed) => ShowInternal(() =>
@@ -144,6 +151,7 @@ namespace Money.Components
             CategoryKey = categoryKey;
             When = when;
             IsFixed = isFixed;
+            return false;
         });
 
         protected async Task LoadAsync()

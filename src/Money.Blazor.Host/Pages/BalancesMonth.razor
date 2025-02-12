@@ -9,17 +9,11 @@
         @<div class="@containerCssClass">
             @if (SelectedDisplayType == BalanceDisplayType.Total)
             {
-                <small class="text-success @totalValueCssClass">
-                    @CurrencyFormatter.Format(incomes)
-                </small>
-                <small class="text-danger ms-1 @totalValueCssClass">
-                    @CurrencyFormatter.Format(expenses)
-                </small>
+                <PriceView TagName="small" CssClass="@($"text-success {totalValueCssClass}")" Value="@incomes" />
+                <PriceView TagName="small" CssClass="@($"text-danger ms-1 {totalValueCssClass}")" Value="expenses" />
                 @if (expectedExpenses != null)
                 {
-                    <small class="text-danger ms-1 @totalValueCssClass" style="opacity: .5">
-                        @CurrencyFormatter.Format(expectedExpenses)
-                    </small>
+                    <PriceView TagName="small" CssClass="@($"text-danger ms-1 {totalValueCssClass}")" CssStyle="opacity: .5" Value="expectedExpenses" />
                 }
             }
             else
@@ -29,9 +23,7 @@
                 {
                     diff = diff - expectedExpenses;
                 }
-                <small class="@(diff.Value > 0 ? "text-success" : "text-danger")">
-                    @CurrencyFormatter.Format(diff, applyPlusForPositiveNumbers: true)
-                </small>
+                <PriceView TagName="small" CssClass="@(diff.Value > 0 ? "text-success" : "text-danger")" Value="@diff" ApplyPlusForPositiveNumbers="true" />
             }
         </div>;
     }

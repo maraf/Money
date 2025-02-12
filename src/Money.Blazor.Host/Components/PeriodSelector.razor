@@ -1,8 +1,7 @@
 ﻿@typeparam T
 
-<button type="button" class="btn btn-primary" @onclick="OpenSelectorAsync">
+<button type="button" class="btn btn-primary dropdown-toggle" @onclick="OpenSelectorAsync">
     @Selected?.ToString()
-    <Icon Identifier="caret-down" />
 </button>
 
 @if (Previous != null && Previous.Count > 0)

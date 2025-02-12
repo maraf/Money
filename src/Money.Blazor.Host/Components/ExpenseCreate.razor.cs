@@ -293,12 +293,7 @@ namespace Money.Components
 
             await Task.Delay(200);
 
-            SuggestedTemplates.Clear();
-            Description = null;
-            Amount = null;
-            CategoryKey = EmptyCategoryKey;
-            When = DateTime.UtcNow.Date;
-            IsFixed = false;
+            ClearValues();
             SetSelectedField(SelectedField.Description, false);
         }
 
@@ -326,6 +321,16 @@ namespace Money.Components
 
             Log.Debug($"Expense: Validation: '{string.Join("', '", errors)}'.");
             return errors.IsEmpty();
+        }
+
+        private void ClearValues()
+        {
+            SuggestedTemplates.Clear();
+            Description = null;
+            Amount = null;
+            CategoryKey = EmptyCategoryKey;
+            When = DateTime.UtcNow.Date;
+            IsFixed = false;
         }
 
         protected void OnPrerequisitesConfirmed()

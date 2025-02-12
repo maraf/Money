@@ -18,7 +18,10 @@
                 </div>
                 <div class="modal-footer">
                     @Buttons
-                    <button type="button" class="btn btn-default" @onclick="@OnCloseButtonClick">@CloseButtonText</button>
+                    @if (IsCloseButton)
+                    {
+                        <button type="button" class="btn btn-default" @onclick="@OnCloseButtonClick">@CloseButtonText</button>
+                    }
                 </div>
             </div>
         )

@@ -62,6 +62,9 @@ namespace Money.Components.Bootstrap
         [Parameter]
         public bool IsForm { get; set; } = true;
 
+        [Parameter]
+        public bool IsCloseButton { get; set; } = true;
+
         protected ElementReference Container { get; set; }
 
         protected override void OnInitialized()

@@ -18,8 +18,6 @@ namespace Money.Components
         {
             bool HasEdit { get; }
 
-            CurrencyFormatter CurrencyFormatter { get; }
-
             void Duplicate(IExpenseOverviewModel model);
             void CreateTemplate(IExpenseOverviewModel model);
             void EditAmount(IExpenseOverviewModel model);

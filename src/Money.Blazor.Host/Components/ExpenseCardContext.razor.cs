@@ -18,10 +18,6 @@ namespace Money.Components
         public ICommandDispatcher Commands { get; set; }
 
         [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-        private CurrencyFormatter currencyFormatter;
-
-        [Inject]
         protected Navigator Navigator { get; set; }
 
         [Parameter]
@@ -31,8 +27,6 @@ namespace Money.Components
         public bool IsEditEnabled { get; set; } = true;
 
         #region OutcomeCard.IContext
-
-        CurrencyFormatter ExpenseCard.IContext.CurrencyFormatter => currencyFormatter;
 
         bool ExpenseCard.IContext.HasEdit => IsEditEnabled;
 
@@ -64,12 +58,6 @@ namespace Money.Components
         protected IExpenseOverviewModel SelectedItem { get; set; }
         protected string DeleteMessage { get; set; }
         protected Confirm DeleteConfirm { get; set; }
-
-        protected override async Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
-            currencyFormatter = await CurrencyFormatterFactory.CreateAsync();
-        }
 
         protected void OnActionClick<T>(IExpenseOverviewModel model, T modal, Action<T, IExpenseOverviewModel> showHandler = null)
             where T : ModalDialog

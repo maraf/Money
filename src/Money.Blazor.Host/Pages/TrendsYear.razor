@@ -31,15 +31,11 @@ else
                                 </span>
                             </a>
                         </span>
-                        <small>
-                            @CurrencyFormatter.Format(model.TotalAmount)
-                        </small>
+                        <PriceView TagName="small" Value="model.TotalAmount" />
                     </div>
                     <div class="d-none d-lg-block text-center mt-1">
                         <div class="d-none d-lg-block text-center mt-1">
-                            <small>
-                                @CurrencyFormatter.Format(model.TotalAmount)
-                            </small>
+                            <PriceView TagName="small" Value="model.TotalAmount" />
                         </div>
                         <div class="text-center mt-1">
                             <a href="@Navigator.UrlOverview(model, CategoryKey)">

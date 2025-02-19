@@ -5,7 +5,7 @@
             <DateValue Value="Model.When" />
         </div>
         <div class="col-8 col-md-3 text-md-end mb-2 mb-md-0 text-end">
-            <h3 class="@AmountCssClass">@Context.CurrencyFormatter?.Format(Model.Amount, CurrencyFormatter.FormatZero.Placehoder)</h3>
+            <PriceView TagName="h3" CssClass="@AmountCssClass" Value="Model.Amount" Zero="CurrencyFormatter.FormatZero.Placehoder" />
         </div>
         <div class="col-auto col-md-2 mb-2 mb-md-0">
             <CategoryTag Key="@Model.CategoryKey" />

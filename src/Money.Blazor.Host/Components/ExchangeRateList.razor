@@ -19,8 +19,8 @@
                         @foreach (var item in Models)
                         {
                             <tr>
-                                <td>@CurrencyFormatter.Format(new Price(1, item.SourceCurrency))</td>
-                                <td>@CurrencyFormatter.Format(new Price((decimal)item.Rate, TargetCurrency), applyUserDigits: false)</td>
+                                <PriceView TagName="td" Value="@(new Price(1, item.SourceCurrency))" />
+                                <PriceView TagName="td" Value="@(new Price((decimal)item.Rate, TargetCurrency))" ApplyUserDigits="false" />
                                 <td>
                                     <DateValue Value="item.ValidFrom" />
                                 </td>

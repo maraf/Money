@@ -39,13 +39,8 @@ namespace Money.Pages
         [Inject]
         internal ILog<ExpenseBag> Log { get; set; }
 
-        [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-
         [Parameter]
         public RenderFragment BeforeContent { get; set; }
-
-        public CurrencyFormatter CurrencyFormatter { get; private set; }
 
         private List<CreateOutcome> models;
         protected List<OutcomeOverviewModel> Models { get; } = new List<OutcomeOverviewModel>();
@@ -55,8 +50,6 @@ namespace Money.Pages
         {
             EventHandlers.Add<LocallyStoredExpenseCreated>(this);
             EventHandlers.Add<LocallyStoredExpensesPublished>(this);
-
-            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
 
             await base.OnInitializedAsync();
             await LoadAsync();

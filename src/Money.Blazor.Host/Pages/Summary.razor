@@ -34,7 +34,7 @@
                 <span class="flex-grow-1">@description</span>
 
                 <div class="@valueCssClass">
-                    @FormatPrice(value, CurrencyFormatter.FormatZero.Zero, applyPlusForPositiveNumbers: type == TotalType.Balance)
+                    <PriceView Value="value" Zero="CurrencyFormatter.FormatZero.Zero" ApplyPlusForPositiveNumbers="@(type == TotalType.Balance)" />
                 </div>
             </div>
         ;
@@ -128,20 +128,16 @@
                                     @if (IncomeTotal != null)
                                     {
                                         <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))" @onclick:stopPropagation="true">
-                                            @FormatPrice(IncomeTotal)
+                                            <PriceView Value="IncomeTotal" />
                                         </span>
                                     }
 
-                                    <span class="text-danger">
-                                        @FormatPrice(ExistingExpenseTotal, CurrencyFormatter.FormatZero.Zero)
-                                    </span>
+                                    <PriceView TagName="span" CssClass="text-danger" Value="ExistingExpenseTotal" Zero="CurrencyFormatter.FormatZero.Zero" />
                                 }
                                 else
                                 {
                                     var diff = GetBalanceTotal();
-                                    <span class="@(diff.Value > 0 ? "text-success" : "text-danger")">
-                                        @FormatPrice(diff, applyPlusForPositiveNumbers: true)
-                                    </span>
+                                    <PriceView TagName="span" CssClass="@(diff.Value > 0 ? "text-success" : "text-danger")" Value="diff" ApplyPlusForPositiveNumbers="true" />
                                 }
                             </span>
                         )
@@ -161,9 +157,11 @@
                         amount: @<span>
                             @if (category.Version == 2 && category.FixedAmount.Value > 0)
                             {
-                                <span class="text-muted" style="opacity: .5;">@FormatPrice(category.FixedAmount) + </span>
+                                <span class="text-muted" style="opacity: .5;">
+                                    <PriceView Value="category.FixedAmount" /> +
+                                </span>
                             }
-                            @FormatPrice(category.Version == 1 ? category.TotalAmount : category.Amount, CurrencyFormatter.FormatZero.Zero)
+                            <PriceView Value="@(category.Version == 1 ? category.TotalAmount : category.Amount)" Zero="CurrencyFormatter.FormatZero.Zero" />
                         </span>
                     )
                 </div>

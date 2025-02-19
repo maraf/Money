@@ -34,9 +34,6 @@ namespace Money.Components
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
-        [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-
         [Parameter]
         public string TargetCurrency { get; set; }
 
@@ -45,7 +42,6 @@ namespace Money.Components
 
         protected string Title { get; set; }
         protected List<ExchangeRateModel> Models { get; set; }
-        protected CurrencyFormatter CurrencyFormatter { get; set; }
 
         private bool isShown;
 
@@ -63,7 +59,6 @@ namespace Money.Components
             if (isShown)
             {
                 Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
-                CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
                 isShown = false;
             }
         }

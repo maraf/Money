@@ -37,8 +37,6 @@ namespace Money.Pages
         IEventHandler<IncomeCreated>,
         IEventHandler<IncomeDeleted>
     {
-        private CurrencyFormatter formatter;
-
         [Inject]
         public ICommandDispatcher Commands { get; set; }
 
@@ -53,9 +51,6 @@ namespace Money.Pages
 
         [Inject]
         internal Navigator Navigator { get; set; }
-
-        [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
 
         protected string SubTitle { get; set; }
 
@@ -85,7 +80,6 @@ namespace Money.Pages
             DefaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
             SelectedDisplayType = await Queries.QueryAsync(new GetSummaryDisplayProperty());
             SortDescriptor = await Queries.QueryAsync(new GetSummarySortProperty());
-            formatter = await CurrencyFormatterFactory.CreateAsync();
         }
 
         protected virtual void ClearPreviousParameters()
@@ -204,9 +198,6 @@ namespace Money.Pages
 
             return percentage.ToString("0.##", CultureInfo.InvariantCulture);
         }
-
-        protected string FormatPrice(Price price, CurrencyFormatter.FormatZero formatZero = CurrencyFormatter.FormatZero.Empty, bool applyPlusForPositiveNumbers = false)
-            => formatter.Format(price, formatZero, applyPlusForPositiveNumbers: applyPlusForPositiveNumbers);
 
         public void Dispose()
             => UnBindEvents();

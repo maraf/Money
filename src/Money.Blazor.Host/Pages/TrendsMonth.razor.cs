@@ -22,16 +22,12 @@ namespace Money.Pages
         [Inject]
         protected Navigator Navigator { get; set; }
 
-        [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-
         [Parameter]
         public int Year { get; set; }
 
         [Parameter]
         public Guid CategoryGuid { get; set; }
 
-        protected CurrencyFormatter CurrencyFormatter { get; set; }
         protected YearModel SelectedPeriod { get; set; }
         protected IKey CategoryKey { get; set; }
         protected string CategoryName { get; set; }
@@ -47,7 +43,6 @@ namespace Money.Pages
             CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
             CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
             CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
-            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
 
             await LoadAsync();
         }

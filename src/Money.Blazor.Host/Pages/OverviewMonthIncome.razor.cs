@@ -31,8 +31,6 @@ public partial class OverviewMonthIncome : IDisposable,
     IEventHandler<SwipedLeft>,
     IEventHandler<SwipedRight>
 {
-    public CurrencyFormatter CurrencyFormatter { get; private set; }
-
     [Inject]
     public ICommandDispatcher Commands { get; set; }
 
@@ -47,9 +45,6 @@ public partial class OverviewMonthIncome : IDisposable,
 
     [Inject]
     public Navigator Navigator { get; set; }
-
-    [Inject]
-    protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
 
     [Parameter]
     public int Year { get; set; }
@@ -78,7 +73,6 @@ public partial class OverviewMonthIncome : IDisposable,
         
         SelectedPeriod = new MonthModel(Year, Month);
         PagingContext = new PagingContext(LoadDataAsync, Loading);
-        CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
 
         BindEvents();
     }

@@ -42,10 +42,6 @@ namespace Money.Components
         [Inject]
         internal ILog<ExpenseCreate> Log { get; set; }
 
-        [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-        protected CurrencyFormatter CurrencyFormatter { get; set; }
-
         [Parameter][CascadingParameter]
         public Navigator.ComponentContainer ComponentContainer { get; set; }
 
@@ -159,7 +155,6 @@ namespace Money.Components
             if (When == DateTime.MinValue)
                 When = DateTime.Today;
 
-            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
             Templates = await Queries.QueryAsync(ListAllExpenseTemplate.Version3());

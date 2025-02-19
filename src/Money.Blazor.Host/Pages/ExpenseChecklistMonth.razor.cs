@@ -32,10 +32,6 @@ partial class ExpenseChecklistMonth : ComponentBase,
     [Inject]
     protected Navigator Navigator { get; set; }
 
-    [Inject]
-    protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-    protected CurrencyFormatter CurrencyFormatter { get; set; }
-
     [Parameter]
     public int Year { get; set; }
 
@@ -50,7 +46,6 @@ partial class ExpenseChecklistMonth : ComponentBase,
     {
         await base.OnInitializedAsync();
         EnsureSelectedPeriod();
-        CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
         BindEvents();
     }
 

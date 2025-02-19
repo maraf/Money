@@ -39,9 +39,6 @@ namespace Money.Pages
         protected IQueryDispatcher Queries { get; set; }
 
         [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-
-        [Inject]
         protected ILog<Search> Log { get; set; }
 
         [Parameter]
@@ -64,7 +61,6 @@ namespace Money.Pages
             DefaultSort = await Queries.QueryAsync(new GetSearchSortProperty());
             FormSort = Sort = DefaultSort;
             PagingContext = new PagingContext(LoadPageAsync, Loading);
-            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
             Navigator.LocationChanged += OnLocationChanged;
             BindEvents();
         }

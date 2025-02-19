@@ -27,15 +27,11 @@ namespace Money.Pages
         protected Navigator Navigator { get; set; }
 
         [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-
-        [Inject]
         protected IEventHandlerCollection EventHandlers { get; set; }
 
         [Parameter]
         public int Year { get; set; }
 
-        protected CurrencyFormatter CurrencyFormatter { get; set; }
         protected YearModel SelectedPeriod { get; set; }
         protected BalanceDisplayType SelectedDisplayType { get; set; }
         protected bool IncludeExpectedExpenses { get; set; } = true;
@@ -51,7 +47,6 @@ namespace Money.Pages
             await base.OnInitializedAsync();
 
             SelectedDisplayType = await Queries.QueryAsync(new GetBalanceDisplayProperty());
-            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
 
             EventHandlers
                 .Add<SwipedLeft>(this)

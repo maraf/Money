@@ -22,9 +22,7 @@
                             <div class="card card-hover cursor-pointer" @onclick="(async () => await ApplyTemplateAsync(model))">
                                 <div class="card-body">
                                     <div>
-                                        <strong>
-                                            @CurrencyFormatter.Format(model.Amount, CurrencyFormatter.FormatZero.Placehoder)
-                                        </strong>
+                                        <PriceView TagName="strong" Value="model.Amount" Zero="CurrencyFormatter.FormatZero.Placehoder" />
                                     </div>
 
                                     @if (!model.CategoryKey.IsEmpty)

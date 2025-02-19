@@ -40,11 +40,6 @@ namespace Money.Components
         [Inject]
         internal Interop Interop { get; set; }
 
-        [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-
-        protected CurrencyFormatter CurrencyFormatter { get; private set; }
-
         protected string Title { get; set; }
         protected string SaveButtonText { get; set; }
         protected List<string> ErrorMessages { get; } = new List<string>();
@@ -168,8 +163,6 @@ namespace Money.Components
 
         public new async void Show()
         {
-            CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
-
             Categories = await Queries.QueryAsync(new ListAllCategory());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
             Templates = await Queries.QueryAsync(ListAllExpenseTemplate.Version3());

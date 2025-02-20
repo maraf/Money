@@ -6,10 +6,8 @@ using Money.Services;
 
 namespace Money.Components;
 
-public class PriceView : ComponentBase
+public class PriceView(CurrencyFormatterFactory formatterFactory) : ComponentBase
 {
-    [Inject]
-    protected CurrencyFormatterFactory FormatterFactory { get; set; }
     private CurrencyFormatter formatter;
 
     [Parameter]
@@ -36,7 +34,7 @@ public class PriceView : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        formatter = await FormatterFactory.CreateAsync();
+        formatter = await formatterFactory.CreateAsync();
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)

@@ -27,8 +27,6 @@ namespace Money.Pages
         IEventHandler<OutcomeWhenChanged>,
         IEventHandler<PulledToRefresh>
     {
-        public CurrencyFormatter CurrencyFormatter { get; private set; }
-
         [Inject]
         protected Navigator Navigator { get; set; }
 

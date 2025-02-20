@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>Money</RootNamespace>
-    <VersionPrefix>1.8.0</VersionPrefix>
+    <VersionPrefix>1.8.1</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup>

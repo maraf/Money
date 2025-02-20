@@ -34,6 +34,9 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
+        <span class="ps-2">
+            <Loading Context="@Loading" />
+        </span>
     </div>
     @if (TotalIncomes != null && TotalExpenses != null)
     {

@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Money.Models.Loading;
 
 namespace Money.Pages
 {
@@ -32,6 +33,7 @@ namespace Money.Pages
         [Parameter]
         public int Year { get; set; }
 
+        protected LoadingContext Loading { get; set; } = new();
         protected YearModel SelectedPeriod { get; set; }
         protected BalanceDisplayType SelectedDisplayType { get; set; }
         protected bool IncludeExpectedExpenses { get; set; } = true;
@@ -76,27 +78,30 @@ namespace Money.Pages
 
         private async Task LoadAsync()
         {
-            string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
-            var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: IncludeExpectedExpenses));
-
-            MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + m.ExpectedExpenseSummary?.Value ?? 0)) : 0;
-            Models = [];
-            TotalExpenses = Price.Zero(defaultCurrency);
-            TotalIncomes = Price.Zero(defaultCurrency);
-            TotalExpectedExpenses = Price.Zero(defaultCurrency);
-            for (int i = 0; i < 12; i++)
+            using (Loading.Start())
             {
-                int month = i + 1;
-                var model = models.FirstOrDefault(m => m.Month == month);
-                if (model == null)
-                    model = new MonthBalanceModel(Year, month, Price.Zero(defaultCurrency), Price.Zero(defaultCurrency));
+                string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
+                var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: IncludeExpectedExpenses));
 
-                TotalExpenses += model.ExpenseSummary;
-                if (model.ExpectedExpenseSummary != null)
-                    TotalExpectedExpenses += model.ExpectedExpenseSummary;
-                
-                TotalIncomes += model.IncomeSummary;
-                Models.Add(model);
+                MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + m.ExpectedExpenseSummary?.Value ?? 0)) : 0;
+                Models = [];
+                TotalExpenses = Price.Zero(defaultCurrency);
+                TotalIncomes = Price.Zero(defaultCurrency);
+                TotalExpectedExpenses = Price.Zero(defaultCurrency);
+                for (int i = 0; i < 12; i++)
+                {
+                    int month = i + 1;
+                    var model = models.FirstOrDefault(m => m.Month == month);
+                    if (model == null)
+                        model = new MonthBalanceModel(Year, month, Price.Zero(defaultCurrency), Price.Zero(defaultCurrency));
+
+                    TotalExpenses += model.ExpenseSummary;
+                    if (model.ExpectedExpenseSummary != null)
+                        TotalExpectedExpenses += model.ExpectedExpenseSummary;
+
+                    TotalIncomes += model.IncomeSummary;
+                    Models.Add(model);
+                }
             }
         }
 

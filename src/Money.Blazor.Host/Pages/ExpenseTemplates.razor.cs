@@ -26,7 +26,13 @@ using System.Threading.Tasks;
 
 namespace Money.Pages
 {
-    public partial class ExpenseTemplates : System.IDisposable, 
+    public partial class ExpenseTemplates(
+        ICommandDispatcher Commands,
+        IEventHandlerCollection EventHandlers,
+        IQueryDispatcher Queries,
+        CurrencyFormatterFactory CurrencyFormatterFactory,
+        Navigator Navigator
+    ) : System.IDisposable, 
         IEventHandler<ExpenseTemplateCreated>,
         IEventHandler<ExpenseTemplateAmountChanged>,
         IEventHandler<ExpenseTemplateDescriptionChanged>,
@@ -35,21 +41,6 @@ namespace Money.Pages
         IEventHandler<ExpenseTemplateRecurrenceCleared>,
         IEventHandler<ExpenseTemplateDeleted>
     {
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
-
-        [Inject]
-        protected IEventHandlerCollection EventHandlers { get; set; }
-
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
-
-        [Inject]
-        protected Navigator Navigator { get; set; }
-
-        [Inject]
-        protected CurrencyFormatterFactory CurrencyFormatterFactory { get; set; }
-
         protected CurrencyFormatter CurrencyFormatter { get; private set; }
         protected ExpenseTemplateCreate CreateModal { get; set; }
         protected ExpenseTemplateDescription ChangeDescriptionModal { get; set; }

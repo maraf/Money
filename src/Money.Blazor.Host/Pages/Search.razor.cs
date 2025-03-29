@@ -58,7 +58,7 @@ namespace Money.Pages
         {
             DefaultSort = await Queries.QueryAsync(new GetSearchSortProperty());
             FormSort = Sort = DefaultSort;
-            PagingContext = new PagingContext(LoadPageAsync, Loading);
+            PagingContext = new PagingContext(() => LoadPageAsync(), Loading);
             Navigator.LocationChanged += OnLocationChanged;
             BindEvents();
         }
@@ -110,13 +110,18 @@ namespace Money.Pages
                 Models.Clear();
         }
 
-        protected async Task<PagingLoadStatus> LoadPageAsync()
+        protected async Task<PagingLoadStatus> LoadPageAsync(bool cleanOnEmptyResults = false)
         {
             if (!String.IsNullOrEmpty(FormText))
             {
                 var models = await Queries.QueryAsync(SearchOutcomes.Version2(FormText, Sort, PagingContext.CurrentPageIndex));
                 if (models.Count == 0)
+                {
+                    if (cleanOnEmptyResults)
+                        Models.Clear();
+
                     return PagingLoadStatus.EmptyPage;
+                }
 
                 Models = models;
                 return Models.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
@@ -169,7 +174,7 @@ namespace Money.Pages
 
         private Task ReloadPageAsync()
         {
-            _ = LoadPageAsync().ContinueWith(_ => StateHasChanged());
+            _ = LoadPageAsync(cleanOnEmptyResults: true).ContinueWith(_ => StateHasChanged());
             return Task.CompletedTask;
         }
 

@@ -145,7 +145,7 @@
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="@CreateAsync">Create</button>
-        <button class="btn" @onclick="@ClearValues">Clear</button>
+        <button class="btn" @onclick="@(() => ClearValues())">Clear</button>
     </Buttons>
 </Modal>
 

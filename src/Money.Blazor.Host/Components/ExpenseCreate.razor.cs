@@ -288,7 +288,7 @@ namespace Money.Components
 
             await Task.Delay(200);
 
-            ClearValues();
+            ClearValues(clearWhenToMinValue: true);
             SetSelectedField(SelectedField.Description, false);
         }
 
@@ -299,7 +299,7 @@ namespace Money.Components
 
         private bool Validate(ErrorMessages errors)
         {
-            Log.Debug($"Expense: Amount: {Amount}, Category: {CategoryKey}, When: {When}.");
+            Log.Debug($"Expense: Amount: '{Amount}', Category: '{CategoryKey}', When: '{When}', Description: '{Description}'.");
 
             void ValidateField(SelectedField field, Func<bool> validator)
             {
@@ -318,14 +318,16 @@ namespace Money.Components
             return errors.IsEmpty();
         }
 
-        private void ClearValues()
+        private void ClearValues(bool clearWhenToMinValue = false)
         {
             SuggestedTemplates.Clear();
             Description = null;
             Amount = null;
             CategoryKey = EmptyCategoryKey;
-            When = DateTime.UtcNow.Date;
+            When = clearWhenToMinValue ? DateTime.MinValue : DateTime.UtcNow.Date;
             IsFixed = false;
+
+            Log.Debug($"Cleared values: Amount: '{Amount}', Category: '{CategoryKey}', When: '{When}', Description: '{Description}'.");
         }
 
         protected void OnPrerequisitesConfirmed()

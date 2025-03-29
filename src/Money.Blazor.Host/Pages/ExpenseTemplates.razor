@@ -90,6 +90,11 @@
                                             Recurrence
                                         </a>
                                         <hr class="dropdown-divider" />
+                                        <a class="dropdown-item" href="@Navigator.UrlSearch(model.Description)">
+                                            <Icon Identifier="search" />
+                                            Search expenses
+                                        </a>
+                                        <hr class="dropdown-divider" />
                                         <a class="dropdown-item" @onclick="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {(model.Amount != null ? CurrencyFormatter.Format(model.Amount) : null)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })">
                                             <Icon Identifier="trash-alt" />
                                             Delete

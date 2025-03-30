@@ -82,6 +82,9 @@
   </Target>
 
   <!-- Commit id -->
+  <ItemGroup>
+    <Compile Include="$(IntermediateOutputPath)GitInfo.g.cs" />
+  </ItemGroup>
   <Target Name="UpdateGitInfo" BeforeTargets="CoreCompile" Inputs="" Outputs="$(IntermediateOutputPath)GitInfo.g.cs">
     <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" ItemName="GitCommitId" />
@@ -91,14 +94,10 @@
       <GitInfoFileLine Include="namespace $(RootNamespace)%3B" />
       <GitInfoFileLine Include="internal class GitInfo" />
       <GitInfoFileLine Include="{" />
-      <GitInfoFileLine Include="@(GitCommitId->'    public static string CommitId = &quot;%(Identity)&quot;;')" />
+      <GitInfoFileLine Include="    public static string CommitId = &quot;$(GitCommitId)&quot;%3B" />
       <GitInfoFileLine Include="}" />
     </ItemGroup>
     <WriteLinesToFile File="$(IntermediateOutputPath)GitInfo.g.cs" Lines="@(GitInfoFileLine)" Overwrite="true" />
-
-    <ItemGroup>
-      <Compile Include="$(IntermediateOutputPath)GitInfo.g.cs" />
-    </ItemGroup>
   </Target>
 
 </Project>

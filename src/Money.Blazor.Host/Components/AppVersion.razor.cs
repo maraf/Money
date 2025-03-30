@@ -22,6 +22,9 @@ namespace Money.Components
         [Inject]
         public IQueryDispatcher Queries { get; set; }
 
+        [Parameter]
+        public bool ShowAsTable { get; set; }
+
         protected Version Client { get; set; }
         protected Version Api { get; set; }
 

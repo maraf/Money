@@ -1,7 +1,39 @@
-﻿<span class="text-nowrap">Client-<ConvertToString Value="@Client" /></span>
-
-@if (Api != null)
+﻿@if (ShowAsTable)
 {
-    @: &#8226;
-    <span class="text-nowrap ms-1">Api-<ConvertToString Value="@Api" /></span>
+    <div class="mb-2">
+        <div>
+            <strong>Client</strong>
+        </div>
+        <div>
+            <ConvertToString Value="@Client" />
+        </div>
+        @if (!String.IsNullOrEmpty(GitInfo.CommitId))
+        {
+            <div>
+                @GitInfo.CommitId
+            </div>
+        }
+    </div>
+
+    @if (Api != null)
+    {
+        <div class="mb-2">
+            <div>
+                <strong>Api</strong>
+            </div>
+            <div>
+                <ConvertToString Value="@Api" />
+            </div>
+        </div>
+    }
+}
+else
+{
+    <span class="text-nowrap">Client-<ConvertToString Value="@Client" /></span>
+
+    @if (Api != null)
+    {
+        @: &#8226;
+        <span class="text-nowrap ms-1">Api-<ConvertToString Value="@Api" /></span>
+    }
 }

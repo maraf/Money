@@ -13,15 +13,12 @@ using System.Threading.Tasks;
 
 namespace Money.Components
 {
-    public partial class AppVersion : IDisposable,
+    public partial class AppVersion(
+        IEventHandlerCollection EventHandlers,
+        IQueryDispatcher Queries
+    ) : IDisposable,
         IEventHandler<ApiVersionChanged>
     {
-        [Inject]
-        public IEventHandlerCollection EventHandlers { get; set; }
-
-        [Inject]
-        public IQueryDispatcher Queries { get; set; }
-
         [Parameter]
         public bool ShowAsTable { get; set; }
 

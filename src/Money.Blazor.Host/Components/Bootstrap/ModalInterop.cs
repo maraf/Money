@@ -11,16 +11,8 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap
 {
-    public class ModalInterop
+    public class ModalInterop(IJSRuntime jsRuntime)
     {
-        private readonly IJSRuntime jsRuntime;
-
-        public ModalInterop(IJSRuntime jsRuntime)
-        {
-            Ensure.NotNull(jsRuntime, "jsRuntime");
-            this.jsRuntime = jsRuntime;
-        }
-
         internal void Show(ElementReference element)
             => jsRuntime.InvokeVoidAsync("Bootstrap.Modal.Show", element);
 

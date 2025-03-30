@@ -10,23 +10,15 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap;
 
-public class OffcanvasInterop
+public class OffcanvasInterop(IJSRuntime jsRuntime)
 {
     private readonly IJSRuntime jsRuntime;
-    private readonly DotNetObjectReference<OffcanvasInterop> thisReference;
     private Offcanvas component;
-
-    public OffcanvasInterop(IJSRuntime jsRuntime)
-    {
-        Ensure.NotNull(jsRuntime, "jsRuntime");
-        this.jsRuntime = jsRuntime;
-        thisReference = DotNetObjectReference.Create(this);
-    }
 
     public async Task InitializeAsync(Offcanvas component, ElementReference element)
     {
         this.component = component;
-        await jsRuntime.InvokeVoidAsync("Bootstrap.Offcanvas.Initialize", thisReference, element);
+        await jsRuntime.InvokeVoidAsync("Bootstrap.Offcanvas.Initialize", DotNetObjectReference.Create(this), element);
     }
 
     internal void Show(ElementReference element)

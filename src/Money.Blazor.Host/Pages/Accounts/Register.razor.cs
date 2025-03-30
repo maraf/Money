@@ -7,90 +7,80 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages.Accounts
+namespace Money.Pages.Accounts;
+
+public partial class Register(ApiClient ApiClient, Navigator Navigator, TokenContainer Token)
 {
-    public partial class Register
+    protected ElementReference UserNameBox { get; set; }
+
+    protected string UserName { get; set; }
+    protected string Password { get; set; }
+    protected string ConfirmPassword { get; set; }
+
+    protected LoadingContext Loading { get; } = new LoadingContext();
+    protected List<string> ErrorMessages { get; } = new List<string>();
+
+    protected override void OnInitialized()
     {
-        [Inject]
-        internal ApiClient ApiClient { get; set; }
+        base.OnInitialized();
 
-        [Inject]
-        internal Navigator Navigator { get; set; }
+        if (Token.HasValue)
+            Navigator.OpenSummary();
+    }
 
-        [Inject]
-        internal TokenContainer Token { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
 
-        protected ElementReference UserNameBox { get; set; }
+        if (firstRender)
+            await UserNameBox.FocusAsync();
+    }
 
-        protected string UserName { get; set; }
-        protected string Password { get; set; }
-        protected string ConfirmPassword { get; set; }
-
-        protected LoadingContext Loading { get; } = new LoadingContext();
-        protected List<string> ErrorMessages { get; } = new List<string>();
-
-        protected override void OnInitialized()
+    protected async Task OnSubmitAsync()
+    {
+        if (Validate())
         {
-            base.OnInitialized();
-
-            if (Token.HasValue)
-                Navigator.OpenSummary();
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            await base.OnAfterRenderAsync(firstRender);
-
-            if (firstRender)
-                await UserNameBox.FocusAsync();
-        }
-
-        protected async Task OnSubmitAsync()
-        {
-            if (Validate())
+            using (Loading.Start())
             {
-                using (Loading.Start())
+                var response = await ApiClient.RegisterAsync(UserName, Password);
+                if (response.IsSuccess)
                 {
-                    var response = await ApiClient.RegisterAsync(UserName, Password);
-                    if (response.IsSuccess)
+                    if (await ApiClient.LoginAsync(UserName, Password, false))
                     {
-                        if (await ApiClient.LoginAsync(UserName, Password, false))
-                        {
-                            Navigator.OpenSummary();
-                        }
-                        else
-                        {
-                            UserName = null;
-                            Password = null;
-                            ConfirmPassword = null;
-
-                            Navigator.OpenLogin();
-                        }
+                        Navigator.OpenSummary();
                     }
                     else
                     {
-                        ErrorMessages.AddRange(response.ErrorMessages);
-                    } 
+                        UserName = null;
+                        Password = null;
+                        ConfirmPassword = null;
+
+                        Navigator.OpenLogin();
+                    }
                 }
+                else
+                {
+                    ErrorMessages.AddRange(response.ErrorMessages);
+                } 
             }
         }
+    }
 
-        protected bool Validate()
-        {
-            ErrorMessages.Clear();
+    protected bool Validate()
+    {
+        ErrorMessages.Clear();
 
-            if (String.IsNullOrEmpty(UserName))
-                ErrorMessages.Add("Please, fill user name.");
+        if (String.IsNullOrEmpty(UserName))
+            ErrorMessages.Add("Please, fill user name.");
 
-            if (String.IsNullOrEmpty(Password))
-                ErrorMessages.Add("Please, fill password.");
+        if (String.IsNullOrEmpty(Password))
+            ErrorMessages.Add("Please, fill password.");
 
-            if (String.IsNullOrEmpty(ConfirmPassword))
-                ErrorMessages.Add("Please, fill password confirmation.");
-            else if (Password != ConfirmPassword)
-                ErrorMessages.Add("Passwords must match.");
+        if (String.IsNullOrEmpty(ConfirmPassword))
+            ErrorMessages.Add("Please, fill password confirmation.");
+        else if (Password != ConfirmPassword)
+            ErrorMessages.Add("Passwords must match.");
 
-            return ErrorMessages.Count == 0;
-        }
+        return ErrorMessages.Count == 0;
     }
 }

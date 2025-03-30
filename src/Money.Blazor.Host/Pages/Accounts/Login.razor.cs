@@ -8,101 +8,88 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages.Accounts
+namespace Money.Pages.Accounts;
+
+public partial class Login(Navigator Navigator, ApiClient ApiClient, QueryString QueryString, TokenContainer Token)
 {
-    public partial class Login
+    [Parameter]
+    public string ReturnUrl { get; set; }
+
+    protected ElementReference UserNameBox { get; set; }
+
+    protected string UserName { get; set; }
+    protected string Password { get; set; }
+    protected bool IsPermanent { get; set; }
+
+    protected LoadingContext Loading { get; } = new LoadingContext();
+    protected List<string> ErrorMessages { get; } = new List<string>();
+    protected bool IsAutoLoginUrl => Navigator.GetQueryString().ContainsKey("autologin");
+
+    protected override void OnInitialized()
     {
-        [Inject]
-        internal Navigator Navigator { get; set; }
+        base.OnInitialized();
 
-        [Inject]
-        internal ApiClient ApiClient { get; set; }
+        if (Token.HasValue)
+            NavigateAway();
+    }
 
-        [Inject]
-        internal QueryString QueryString { get; set; }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        ReturnUrl = QueryString.Find<string>("returnUrl");
+    }
 
-        [Inject]
-        internal TokenContainer Token { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
 
-        [Parameter]
-        public string ReturnUrl { get; set; }
-
-        protected ElementReference UserNameBox { get; set; }
-
-        protected string UserName { get; set; }
-        protected string Password { get; set; }
-        protected bool IsPermanent { get; set; }
-
-        protected LoadingContext Loading { get; } = new LoadingContext();
-        protected List<string> ErrorMessages { get; } = new List<string>();
-        protected bool IsAutoLoginUrl => Navigator.GetQueryString().ContainsKey("autologin");
-
-        protected override void OnInitialized()
+        if (firstRender)
         {
-            base.OnInitialized();
-
-            if (Token.HasValue)
-                NavigateAway();
+            if (IsAutoLoginUrl)
+                _ = OnDemoSubmitAsync();
+            else
+                await UserNameBox.FocusAsync();
         }
+    }
 
-        protected override void OnParametersSet()
+    protected Task OnSubmitAsync()
+        => LoginAsync(UserName, Password, IsPermanent);
+
+    protected Task OnDemoSubmitAsync()
+        => LoginAsync("demo", "demo", false);
+
+    private async Task LoginAsync(string userName, string password, bool isPermanent)
+    {
+        using (Loading.Start())
         {
-            base.OnParametersSet();
-            ReturnUrl = QueryString.Find<string>("returnUrl");
-        }
+            ErrorMessages.Clear();
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            await base.OnAfterRenderAsync(firstRender);
-
-            if (firstRender)
+            if (Validate(userName, password))
             {
-                if (IsAutoLoginUrl)
-                    _ = OnDemoSubmitAsync();
+                if (!await ApiClient.LoginAsync(userName, password, isPermanent))
+                    ErrorMessages.Add("User name and password don't match.");
                 else
-                    await UserNameBox.FocusAsync();
+                    NavigateAway();
             }
         }
+    }
 
-        protected Task OnSubmitAsync()
-            => LoginAsync(UserName, Password, IsPermanent);
+    private void NavigateAway()
+    {
+        if (!String.IsNullOrEmpty(ReturnUrl))
+            Navigator.Open(ReturnUrl);
+        else if (Navigator.IsLoginUrl() || IsAutoLoginUrl)
+            Navigator.OpenSummary();
+    }
 
-        protected Task OnDemoSubmitAsync()
-            => LoginAsync("demo", "demo", false);
+    private bool Validate(string userName, string password)
+    {
+        if (String.IsNullOrEmpty(userName))
+            ErrorMessages.Add("Please, fill user name.");
 
-        private async Task LoginAsync(string userName, string password, bool isPermanent)
-        {
-            using (Loading.Start())
-            {
-                ErrorMessages.Clear();
+        if (String.IsNullOrEmpty(password))
+            ErrorMessages.Add("Please, fill password.");
 
-                if (Validate(userName, password))
-                {
-                    if (!await ApiClient.LoginAsync(userName, password, isPermanent))
-                        ErrorMessages.Add("User name and password don't match.");
-                    else
-                        NavigateAway();
-                }
-            }
-        }
-
-        private void NavigateAway()
-        {
-            if (!String.IsNullOrEmpty(ReturnUrl))
-                Navigator.Open(ReturnUrl);
-            else if (Navigator.IsLoginUrl() || IsAutoLoginUrl)
-                Navigator.OpenSummary();
-        }
-
-        private bool Validate(string userName, string password)
-        {
-            if (String.IsNullOrEmpty(userName))
-                ErrorMessages.Add("Please, fill user name.");
-
-            if (String.IsNullOrEmpty(password))
-                ErrorMessages.Add("Please, fill password.");
-
-            return ErrorMessages.Count == 0;
-        }
+        return ErrorMessages.Count == 0;
     }
 }

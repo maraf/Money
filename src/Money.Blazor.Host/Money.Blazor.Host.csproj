@@ -86,9 +86,6 @@
     <Compile Include="$(IntermediateOutputPath)GitInfo.g.cs" />
   </ItemGroup>
   <Target Name="UpdateGitInfo" BeforeTargets="CoreCompile" Inputs="" Outputs="$(IntermediateOutputPath)GitInfo.g.cs">
-    <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true">
-      <Output TaskParameter="ConsoleOutput" ItemName="GitCommitId" />
-    </Exec>
     <ItemGroup>
       <GitInfoFileLine Include="using System%3B" />
       <GitInfoFileLine Include="namespace $(RootNamespace)%3B" />

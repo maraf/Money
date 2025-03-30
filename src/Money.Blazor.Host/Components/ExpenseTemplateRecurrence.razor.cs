@@ -15,89 +15,85 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class ExpenseTemplateRecurrence(ICommandDispatcher Commands)
 {
-    public partial class ExpenseTemplateRecurrence
+    protected RecurrencePeriod? originalPeriod;
+    protected int? originalDayInPeriod;
+    protected DateTime? originalDueDate;
+
+    protected List<string> ErrorMessages { get; } = new List<string>();
+    protected List<CategoryModel> Categories { get; private set; }
+    protected DateTime DueDateBinding { get; set; }
+
+    [Parameter]
+    public IKey ExpenseTemplateKey { get; set; }
+
+    [Parameter]
+    public RecurrencePeriod? Period { get; set; }
+
+    [Parameter]
+    public int? DayInPeriod { get; set; }
+
+    [Parameter]
+    public DateTime? DueDate { get; set; }
+
+    protected async override Task OnParametersSetAsync()
     {
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
+        await base.OnParametersSetAsync();
 
-        protected RecurrencePeriod? originalPeriod;
-        protected int? originalDayInPeriod;
-        protected DateTime? originalDueDate;
+        SetOriginal();
+    }
 
-        protected List<string> ErrorMessages { get; } = new List<string>();
-        protected List<CategoryModel> Categories { get; private set; }
-        protected DateTime DueDateBinding { get; set; }
+    public async override Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        
+        DueDateBinding = DueDate ?? DateTime.Today;
+        
+        if (DayInPeriod == null)
+            DayInPeriod = 1;
+    }
 
-        [Parameter]
-        public IKey ExpenseTemplateKey { get; set; }
+    private void SetOriginal()
+    {
+        originalPeriod = Period;
+        originalDayInPeriod = DayInPeriod;
+        originalDueDate = DueDate;
+    }
 
-        [Parameter]
-        public RecurrencePeriod? Period { get; set; }
-
-        [Parameter]
-        public int? DayInPeriod { get; set; }
-
-        [Parameter]
-        public DateTime? DueDate { get; set; }
-
-        protected async override Task OnParametersSetAsync()
+    protected void OnSaveClick()
+    {
+        if (Validate())
         {
-            await base.OnParametersSetAsync();
-
+            Execute();
             SetOriginal();
+            Modal.Hide();
         }
+    }
 
-        public async override Task SetParametersAsync(ParameterView parameters)
-        {
-            await base.SetParametersAsync(parameters);
-            
-            DueDateBinding = DueDate ?? DateTime.Today;
-            
-            if (DayInPeriod == null)
-                DayInPeriod = 1;
-        }
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        
+        if (Period == RecurrencePeriod.Monthly && DayInPeriod <= 0)
+            ErrorMessages.Add("Day in month must be great than 0");
+        else if(Period == RecurrencePeriod.Single && DueDateBinding == DateTime.MinValue)
+            ErrorMessages.Add("Due date must be set");
 
-        private void SetOriginal()
-        {
-            originalPeriod = Period;
-            originalDayInPeriod = DayInPeriod;
-            originalDueDate = DueDate;
-        }
+        return ErrorMessages.Count == 0;
+    }
 
-        protected void OnSaveClick()
-        {
-            if (Validate())
-            {
-                Execute();
-                SetOriginal();
-                Modal.Hide();
-            }
-        }
-
-        private bool Validate()
-        {
-            ErrorMessages.Clear();
-            
-            if (Period == RecurrencePeriod.Monthly && DayInPeriod <= 0)
-                ErrorMessages.Add("Day in month must be great than 0");
-            else if(Period == RecurrencePeriod.Single && DueDateBinding == DateTime.MinValue)
-                ErrorMessages.Add("Due date must be set");
-
-            return ErrorMessages.Count == 0;
-        }
-
-        private async void Execute()
-        {
-            if (Period == null)
-                await Commands.HandleAsync(new ClearExpenseTemplateRecurrence(ExpenseTemplateKey));
-            else if (Period == RecurrencePeriod.Monthly)
-                await Commands.HandleAsync(new SetExpenseTemplateMonthlyRecurrence(ExpenseTemplateKey, DayInPeriod.Value));
-            else if (Period == RecurrencePeriod.Single)
-                await Commands.HandleAsync(new SetExpenseTemplateSingleRecurrence(ExpenseTemplateKey, DueDateBinding));
-            else
-                throw Ensure.Exception.NotSupported($"The value '{Period}' is not supported.");
-        }
+    private async void Execute()
+    {
+        if (Period == null)
+            await Commands.HandleAsync(new ClearExpenseTemplateRecurrence(ExpenseTemplateKey));
+        else if (Period == RecurrencePeriod.Monthly)
+            await Commands.HandleAsync(new SetExpenseTemplateMonthlyRecurrence(ExpenseTemplateKey, DayInPeriod.Value));
+        else if (Period == RecurrencePeriod.Single)
+            await Commands.HandleAsync(new SetExpenseTemplateSingleRecurrence(ExpenseTemplateKey, DueDateBinding));
+        else
+            throw Ensure.Exception.NotSupported($"The value '{Period}' is not supported.");
     }
 }

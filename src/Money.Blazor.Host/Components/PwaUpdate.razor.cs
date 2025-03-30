@@ -12,44 +12,38 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class PwaUpdate(
+    IEventHandlerCollection EventHandlers,
+    ICommandDispatcher Commands,
+    Navigator Navigator
+) : IDisposable,
+    IEventHandler<PwaUpdateable>
 {
-    public partial class PwaUpdate : IDisposable,
-        IEventHandler<PwaUpdateable>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected bool IsUpdateable { get; set; }
+    protected MarkupString ReleaseNotes { get; set; }
+
+    protected override void OnInitialized()
     {
-        [Inject]
-        protected IEventHandlerCollection EventHandlers { get; set; }
+        base.OnInitialized();
+        EventHandlers.Add<PwaUpdateable>(this);
+    }
 
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
+    public void Dispose()
+    {
+        EventHandlers.Remove<PwaUpdateable>(this);
+    }
 
-        [Inject]
-        protected Navigator Navigator { get; set; }
-
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
-
-        protected bool IsUpdateable { get; set; }
-        protected MarkupString ReleaseNotes { get; set; }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-            EventHandlers.Add<PwaUpdateable>(this);
-        }
-
-        public void Dispose()
-        {
-            EventHandlers.Remove<PwaUpdateable>(this);
-        }
-
-        Task IEventHandler<PwaUpdateable>.HandleAsync(PwaUpdateable payload)
-        {
+    Task IEventHandler<PwaUpdateable>.HandleAsync(PwaUpdateable payload)
+    {
 #if !DEBUG
-            IsUpdateable = true;
-            StateHasChanged();
+        IsUpdateable = true;
+        StateHasChanged();
 #endif
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

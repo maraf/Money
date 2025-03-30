@@ -10,59 +10,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class DateBox(ILog<DateBox> Log, IQueryDispatcher Queries)
 {
-    public partial class DateBox
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public bool AutoFocus { get; set; }
+
+    [Parameter]
+    public DateTime Value { get; set; }
+
+    [Parameter]
+    public Action<DateTime> ValueChanged { get; set; }
+
+    protected string Format { get; set; }
+
+    protected async void OnAuthenticationChanged(bool isAuthenticated)
     {
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
-
-        [Inject]
-        protected ILog<DateBox> Log { get; set; }
-
-        [Parameter]
-        public string Id { get; set; }
-
-        [Parameter]
-        public bool AutoFocus { get; set; }
-
-        [Parameter]
-        public DateTime Value { get; set; }
-
-        [Parameter]
-        public Action<DateTime> ValueChanged { get; set; }
-
-        protected string Format { get; set; }
-
-        protected async void OnAuthenticationChanged(bool isAuthenticated)
+        if (isAuthenticated)
         {
-            if (isAuthenticated)
-            {
-                Format = await Queries.QueryAsync(new GetDateFormatProperty());
-                StateHasChanged();
-            }
+            Format = await Queries.QueryAsync(new GetDateFormatProperty());
+            StateHasChanged();
         }
+    }
 
-        protected void OnValueChanged(ChangeEventArgs e)
-        {
-            string rawValue = e.Value?.ToString();
+    protected void OnValueChanged(ChangeEventArgs e)
+    {
+        string rawValue = e.Value?.ToString();
 
-            if (TryParseDate(rawValue, Format, out var value) || TryParseDate(rawValue, SimplifyFormat(), out value) || DateTime.TryParse(rawValue, out value))
-                RaiseValueChanged(value);
+        if (TryParseDate(rawValue, Format, out var value) || TryParseDate(rawValue, SimplifyFormat(), out value) || DateTime.TryParse(rawValue, out value))
+            RaiseValueChanged(value);
 
-            string SimplifyFormat() 
-                => Format.Replace("dd", "d").Replace("MM", "M");
+        string SimplifyFormat() 
+            => Format.Replace("dd", "d").Replace("MM", "M");
 
-            static bool TryParseDate(string rawValue, string format, out DateTime value) 
-                => DateTime.TryParseExact(rawValue, format, null, DateTimeStyles.None, out value);
-        }
+        static bool TryParseDate(string rawValue, string format, out DateTime value) 
+            => DateTime.TryParseExact(rawValue, format, null, DateTimeStyles.None, out value);
+    }
 
-        protected void RaiseValueChanged(DateTime value)
-        {
-            Log.Debug($"RaiseValueChanged source value '{value}'");
-            Value = value = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, DateTimeKind.Utc);
-            Log.Debug($"RaiseValueChanged processed value '{value}'");
-            ValueChanged?.Invoke(Value = value);
-        }
+    protected void RaiseValueChanged(DateTime value)
+    {
+        Log.Debug($"RaiseValueChanged source value '{value}'");
+        Value = value = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, DateTimeKind.Utc);
+        Log.Debug($"RaiseValueChanged processed value '{value}'");
+        ValueChanged?.Invoke(Value = value);
     }
 }

@@ -11,11 +11,8 @@ using Neptuo.Models.Keys;
 
 namespace Money.Components;
 
-partial class CommandExecutionDecorator : ComponentBase, System.IDisposable, IEventHandler<object>
+partial class CommandExecutionDecorator(IEventHandlerCollection EventHandlers) : ComponentBase, System.IDisposable, IEventHandler<object>
 {
-    [Inject]
-    protected IEventHandlerCollection EventHandlers { get; set; }
-
     [Parameter]
     public IKey AggregateKey { get; set; }
 

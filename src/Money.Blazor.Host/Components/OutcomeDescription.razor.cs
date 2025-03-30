@@ -11,47 +11,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class OutcomeDescription(ICommandDispatcher Commands)
 {
-    public partial class OutcomeDescription
+    private string originalDescription;
+    protected List<string> ErrorMessages { get; } = new List<string>();
+
+    [Parameter]
+    public IKey OutcomeKey { get; set; }
+
+    [Parameter]
+    public string Description { get; set; }
+
+    protected override void OnParametersSet()
     {
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
-
-        private string originalDescription;
-        protected List<string> ErrorMessages { get; } = new List<string>();
-
-        [Parameter]
-        public IKey OutcomeKey { get; set; }
-
-        [Parameter]
-        public string Description { get; set; }
-
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-            originalDescription = Description;
-        }
-
-        protected void OnSaveClick()
-        {
-            if (Validate() && originalDescription != Description)
-            {
-                Execute();
-                OnParametersSet();
-                Modal.Hide();
-            }
-        }
-
-        private bool Validate()
-        {
-            ErrorMessages.Clear();
-            Validator.AddOutcomeDescription(ErrorMessages, Description);
-
-            return ErrorMessages.Count == 0;
-        }
-
-        private async void Execute()
-            => await Commands.HandleAsync(new ChangeOutcomeDescription(OutcomeKey, Description));
+        base.OnParametersSet();
+        originalDescription = Description;
     }
+
+    protected void OnSaveClick()
+    {
+        if (Validate() && originalDescription != Description)
+        {
+            Execute();
+            OnParametersSet();
+            Modal.Hide();
+        }
+    }
+
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddOutcomeDescription(ErrorMessages, Description);
+
+        return ErrorMessages.Count == 0;
+    }
+
+    private async void Execute()
+        => await Commands.HandleAsync(new ChangeOutcomeDescription(OutcomeKey, Description));
 }

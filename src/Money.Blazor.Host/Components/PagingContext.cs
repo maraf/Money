@@ -7,83 +7,72 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public class PagingContext(Func<Task<PagingLoadStatus>> loadPageAsync, LoadingContext loading)
 {
-    public class PagingContext
+    public int CurrentPageIndex { get; private set; }
+    public bool HasNextPage { get; private set; } = true;
+
+    public Func<Task<PagingLoadStatus>> LoadPageAsync { get; } = loadPageAsync;
+
+    private void ProcessStatus(PagingLoadStatus status)
     {
-        private readonly LoadingContext loading;
-
-        public int CurrentPageIndex { get; private set; }
-        public bool HasNextPage { get; private set; } = true;
-
-        public Func<Task<PagingLoadStatus>> LoadPageAsync { get; }
-
-        public PagingContext(Func<Task<PagingLoadStatus>> loadPageAsync, LoadingContext loading)
+        switch (status)
         {
-            Ensure.NotNull(loadPageAsync, "loadPageAsync");
-            Ensure.NotNull(loading, "loading");
-            LoadPageAsync = loadPageAsync;
-            this.loading = loading;
+            case PagingLoadStatus.HasNextPage:
+                HasNextPage = true;
+                break;
+
+            case PagingLoadStatus.LastPage:
+                HasNextPage = false;
+                break;
+
+            case PagingLoadStatus.EmptyPage:
+                HasNextPage = false;
+                if (CurrentPageIndex > 0)
+                    CurrentPageIndex--;
+                break;
+
+            default:
+                throw Ensure.Exception.NotSupported(status.ToString());
         }
+    }
 
-        private void ProcessStatus(PagingLoadStatus status)
+    public async Task NextAsync()
+    {
+        using (loading.Start())
         {
-            switch (status)
-            {
-                case PagingLoadStatus.HasNextPage:
-                    HasNextPage = true;
-                    break;
+            if (!HasNextPage)
+                return;
 
-                case PagingLoadStatus.LastPage:
-                    HasNextPage = false;
-                    break;
-
-                case PagingLoadStatus.EmptyPage:
-                    HasNextPage = false;
-                    if (CurrentPageIndex > 0)
-                        CurrentPageIndex--;
-                    break;
-
-                default:
-                    throw Ensure.Exception.NotSupported(status.ToString());
-            }
+            CurrentPageIndex++;
+            var status = await LoadPageAsync();
+            ProcessStatus(status);
         }
+    }
 
-        public async Task NextAsync()
+    public async Task PrevAsync()
+    {
+        using (loading.Start())
         {
-            using (loading.Start())
-            {
-                if (!HasNextPage)
-                    return;
+            if (CurrentPageIndex == 0)
+                return;
 
-                CurrentPageIndex++;
-                var status = await LoadPageAsync();
-                ProcessStatus(status);
-            }
+            CurrentPageIndex--;
+            var status = await LoadPageAsync();
+            ProcessStatus(status);
         }
+    }
 
-        public async Task PrevAsync()
+    public async Task<PagingLoadStatus> LoadAsync(int index)
+    {
+        using (loading.Start())
         {
-            using (loading.Start())
-            {
-                if (CurrentPageIndex == 0)
-                    return;
-
-                CurrentPageIndex--;
-                var status = await LoadPageAsync();
-                ProcessStatus(status);
-            }
-        }
-
-        public async Task<PagingLoadStatus> LoadAsync(int index)
-        {
-            using (loading.Start())
-            {
-                CurrentPageIndex = index;
-                var status = await LoadPageAsync();
-                ProcessStatus(status);
-                return status;
-            }
+            CurrentPageIndex = index;
+            var status = await LoadPageAsync();
+            ProcessStatus(status);
+            return status;
         }
     }
 }

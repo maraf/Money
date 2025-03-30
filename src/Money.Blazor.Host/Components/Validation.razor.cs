@@ -6,11 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class Validation
 {
-    public partial class Validation
-    {
-        [Parameter]
-        public List<string> ErrorMessages { get; set; }
-    }
+    [Parameter]
+    public List<string> ErrorMessages { get; set; }
 }

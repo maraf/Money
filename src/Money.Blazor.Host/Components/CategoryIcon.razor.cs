@@ -11,42 +11,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class CategoryIcon(ICommandDispatcher Commands, IconCollection Icons)
 {
-    public partial class CategoryIcon
+    private string originalIcon;
+
+    [Parameter]
+    public IKey CategoryKey { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+
+    protected override void OnParametersSet()
     {
-        private string originalIcon;
+        originalIcon = Icon;
+    }
 
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
-
-        [Inject]
-        protected IconCollection Icons { get; set; }
-
-        [Parameter]
-        public IKey CategoryKey { get; set; }
-
-        [Parameter]
-        public string Icon { get; set; }
-
-        protected override void OnParametersSet()
+    protected void OnSaveClick()
+    {
+        if (originalIcon != Icon)
         {
-            originalIcon = Icon;
+            Execute();
+            Modal.Hide();
         }
+    }
 
-        protected void OnSaveClick()
-        {
-            if (originalIcon != Icon)
-            {
-                Execute();
-                Modal.Hide();
-            }
-        }
-
-        private async void Execute()
-        {
-            await Commands.HandleAsync(new ChangeCategoryIcon(CategoryKey, Icon));
-            originalIcon = Icon;
-        }
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new ChangeCategoryIcon(CategoryKey, Icon));
+        originalIcon = Icon;
     }
 }

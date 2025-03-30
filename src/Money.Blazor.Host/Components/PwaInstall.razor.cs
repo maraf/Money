@@ -15,93 +15,81 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class PwaInstall(
+    ILog<PwaInstall> Log,
+    PwaInstallInterop Interop,
+    Navigator Navigator,
+    IEventHandlerCollection EventHandlers,
+    ICommandDispatcher Commands,
+    IQueryDispatcher Queries
+) : ComponentBase, IDisposable,
+    IEventHandler<PwaInstallable>,
+    IEventHandler<PwaUpdateable>
 {
-    public partial class PwaInstall : ComponentBase, IDisposable,
-        IEventHandler<PwaInstallable>,
-        IEventHandler<PwaUpdateable>
+    protected ElementReference Button { get; set; }
+    protected bool IsInstallable { get; set; }
+    protected bool IsUpdateable { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        internal PwaInstallInterop Interop { get; set; }
+        Log.Debug("OnInitialized");
 
-        [Inject]
-        internal ILog<PwaInstall> Log { get; set; }
+        await base.OnInitializedAsync();
 
-        [Inject]
-        internal Navigator Navigator { get; set; }
+        EventHandlers
+            .Add<PwaInstallable>(this)
+            .Add<PwaUpdateable>(this);
 
-        [Inject]
-        protected IEventHandlerCollection EventHandlers { get; set; }
+        var status = await Queries.QueryAsync(new GetPwaStatus());
 
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
+        IsInstallable = status.IsInstallable;
+        IsUpdateable = status.IsUpdateable;
+    }
 
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+    public void MakeInstallable()
+    {
+        Log.Debug("Installable=True");
 
-        protected ElementReference Button { get; set; }
-        protected bool IsInstallable { get; set; }
-        protected bool IsUpdateable { get; set; }
+        IsInstallable = true;
+        StateHasChanged();
+    }
 
-        protected override async Task OnInitializedAsync()
-        {
-            Log.Debug("OnInitialized");
+    public void MakeUpdateable()
+    {
+        Log.Debug("Updateable=True");
 
-            await base.OnInitializedAsync();
+        IsUpdateable = true;
+        StateHasChanged();
+    }
 
-            EventHandlers
-                .Add<PwaInstallable>(this)
-                .Add<PwaUpdateable>(this);
+    protected async Task InstallAsync()
+    {
+        await Commands.HandleAsync(new InstallPwa());
+    }
 
-            var status = await Queries.QueryAsync(new GetPwaStatus());
+    protected async Task UpdateAsync()
+    {
+        await Commands.HandleAsync(new UpdatePwa());
+    }
 
-            IsInstallable = status.IsInstallable;
-            IsUpdateable = status.IsUpdateable;
-        }
+    Task IEventHandler<PwaInstallable>.HandleAsync(PwaInstallable payload)
+    {
+        MakeInstallable();
+        return Task.CompletedTask;
+    }
 
-        public void MakeInstallable()
-        {
-            Log.Debug("Installable=True");
+    Task IEventHandler<PwaUpdateable>.HandleAsync(PwaUpdateable payload)
+    {
+        MakeUpdateable();
+        return Task.CompletedTask;
+    }
 
-            IsInstallable = true;
-            StateHasChanged();
-        }
-
-        public void MakeUpdateable()
-        {
-            Log.Debug("Updateable=True");
-
-            IsUpdateable = true;
-            StateHasChanged();
-        }
-
-        protected async Task InstallAsync()
-        {
-            await Commands.HandleAsync(new InstallPwa());
-        }
-
-        protected async Task UpdateAsync()
-        {
-            await Commands.HandleAsync(new UpdatePwa());
-        }
-
-        Task IEventHandler<PwaInstallable>.HandleAsync(PwaInstallable payload)
-        {
-            MakeInstallable();
-            return Task.CompletedTask;
-        }
-
-        Task IEventHandler<PwaUpdateable>.HandleAsync(PwaUpdateable payload)
-        {
-            MakeUpdateable();
-            return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            EventHandlers
-                .Remove<PwaInstallable>(this)
-                .Remove<PwaUpdateable>(this);
-        }
+    public void Dispose()
+    {
+        EventHandlers
+            .Remove<PwaInstallable>(this)
+            .Remove<PwaUpdateable>(this);
     }
 }

@@ -7,38 +7,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public class TemplatePlaceholder(TemplateService Service) : ComponentBase, IDisposable
 {
-    public class TemplatePlaceholder : ComponentBase, IDisposable
+    private RenderFragment content;
+
+    [Parameter]
+    public string Name { get; set; }
+
+    protected override void OnParametersSet()
     {
-        private RenderFragment content;
+        base.OnParametersSet();
+        Service.DeclarePlaceholder(Name, this);
+    }
 
-        [Inject]
-        protected TemplateService Service { get; set; }
+    public void Dispose()
+    {
+        Service.DisposePlaceholder(Name, this);
+    }
 
-        [Parameter]
-        public string Name { get; set; }
+    internal void UseContent(RenderFragment content)
+    {
+        this.content = content;
+        StateHasChanged();
+    }
 
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-            Service.DeclarePlaceholder(Name, this);
-        }
-
-        public void Dispose()
-        {
-            Service.DisposePlaceholder(Name, this);
-        }
-
-        internal void UseContent(RenderFragment content)
-        {
-            this.content = content;
-            StateHasChanged();
-        }
-
-        protected override void BuildRenderTree(RenderTreeBuilder builder)
-        {
-            builder.AddContent(0, content);
-        }
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        builder.AddContent(0, content);
     }
 }

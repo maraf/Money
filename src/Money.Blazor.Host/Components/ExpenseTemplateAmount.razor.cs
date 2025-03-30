@@ -14,60 +14,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class ExpenseTemplateAmount(ICommandDispatcher Commands, IQueryDispatcher Queries)
 {
-    public partial class ExpenseTemplateAmount
+    private Price originalAmount;
+
+    public List<CurrencyModel> Currencies { get; private set; }
+    protected List<string> ErrorMessages { get; } = new List<string>();
+
+    [Parameter]
+    public IKey ExpenseTemplateKey { get; set; }
+
+    [Parameter]
+    public Price Amount { get; set; }
+
+    protected async override Task OnParametersSetAsync()
     {
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
+        await base.OnParametersSetAsync();
 
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+        SetOriginal();
+        Currencies = await Queries.QueryAsync(new ListAllCurrency());
+    }
 
-        private Price originalAmount;
+    private void SetOriginal()
+    {
+        originalAmount = Amount;
+    }
 
-        public List<CurrencyModel> Currencies { get; private set; }
-        protected List<string> ErrorMessages { get; } = new List<string>();
-
-        [Parameter]
-        public IKey ExpenseTemplateKey { get; set; }
-
-        [Parameter]
-        public Price Amount { get; set; }
-
-        protected async override Task OnParametersSetAsync()
+    protected void OnSaveClick()
+    {
+        if (Validate() && (originalAmount != Amount))
         {
-            await base.OnParametersSetAsync();
-
+            Execute();
             SetOriginal();
-            Currencies = await Queries.QueryAsync(new ListAllCurrency());
+            Modal.Hide();
         }
+    }
 
-        private void SetOriginal()
-        {
-            originalAmount = Amount;
-        }
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddExpenseTemplateAmount(ErrorMessages, Amount);
+        return ErrorMessages.Count == 0;
+    }
 
-        protected void OnSaveClick()
-        {
-            if (Validate() && (originalAmount != Amount))
-            {
-                Execute();
-                SetOriginal();
-                Modal.Hide();
-            }
-        }
-
-        private bool Validate()
-        {
-            ErrorMessages.Clear();
-            Validator.AddExpenseTemplateAmount(ErrorMessages, Amount);
-            return ErrorMessages.Count == 0;
-        }
-
-        private async void Execute()
-        {
-            await Commands.HandleAsync(new ChangeExpenseTemplateAmount(ExpenseTemplateKey, Amount));
-        }
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new ChangeExpenseTemplateAmount(ExpenseTemplateKey, Amount));
     }
 }

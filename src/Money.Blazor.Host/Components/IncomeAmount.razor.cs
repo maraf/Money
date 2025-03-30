@@ -14,62 +14,55 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class IncomeAmount(ICommandDispatcher Commands, IQueryDispatcher Queries)
 {
-    public partial class IncomeAmount
+    private Price originalAmount;
+
+    public List<CurrencyModel> Currencies { get; private set; }
+    protected List<string> ErrorMessages { get; } = new List<string>();
+
+    [Parameter]
+    public IKey IncomeKey { get; set; }
+
+    [Parameter]
+    public Price Amount { get; set; }
+
+    protected async override Task OnParametersSetAsync()
     {
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
+        await base.OnParametersSetAsync();
 
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+        SetOriginal();
+        Currencies = await Queries.QueryAsync(new ListAllCurrency());
+    }
 
-        private Price originalAmount;
+    private void SetOriginal()
+    {
+        originalAmount = Amount;
+    }
 
-        public List<CurrencyModel> Currencies { get; private set; }
-        protected List<string> ErrorMessages { get; } = new List<string>();
-
-        [Parameter]
-        public IKey IncomeKey { get; set; }
-
-        [Parameter]
-        public Price Amount { get; set; }
-
-        protected async override Task OnParametersSetAsync()
+    protected void OnSaveClick()
+    {
+        if (Validate() && (originalAmount != Amount))
         {
-            await base.OnParametersSetAsync();
-
+            Execute();
             SetOriginal();
-            Currencies = await Queries.QueryAsync(new ListAllCurrency());
+            Modal.Hide();
         }
+    }
 
-        private void SetOriginal()
-        {
-            originalAmount = Amount;
-        }
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddOutcomeAmount(ErrorMessages, Amount == null ? 0 : Amount.Value);
+        Validator.AddOutcomeCurrency(ErrorMessages, Amount == null ? null : Amount.Currency);
 
-        protected void OnSaveClick()
-        {
-            if (Validate() && (originalAmount != Amount))
-            {
-                Execute();
-                SetOriginal();
-                Modal.Hide();
-            }
-        }
+        return ErrorMessages.Count == 0;
+    }
 
-        private bool Validate()
-        {
-            ErrorMessages.Clear();
-            Validator.AddOutcomeAmount(ErrorMessages, Amount == null ? 0 : Amount.Value);
-            Validator.AddOutcomeCurrency(ErrorMessages, Amount == null ? null : Amount.Currency);
-
-            return ErrorMessages.Count == 0;
-        }
-
-        private async void Execute()
-        {
-            await Commands.HandleAsync(new ChangeIncomeAmount(IncomeKey, Amount));
-        }
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new ChangeIncomeAmount(IncomeKey, Amount));
     }
 }

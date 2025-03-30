@@ -16,120 +16,112 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class ExchangeRateList(
+    ILog<ExchangeRateList> Log,
+    ICommandDispatcher Commands,
+    IEventHandlerCollection EventHandlers,
+    IQueryDispatcher Queries
+) : IDisposable,
+    IEventHandler<CurrencyExchangeRateSet>,
+    IEventHandler<CurrencyExchangeRateRemoved>
 {
-    public partial class ExchangeRateList : IDisposable,
-        IEventHandler<CurrencyExchangeRateSet>,
-        IEventHandler<CurrencyExchangeRateRemoved>
+    [Parameter]
+    public string TargetCurrency { get; set; }
+
+    [Parameter]
+    public Action AddClick { get; set; }
+
+    protected string Title { get; set; }
+    protected List<ExchangeRateModel> Models { get; set; }
+
+    private bool isShown;
+
+    protected override void OnInitialized()
     {
-        [Inject]
-        internal ILog<ExchangeRateList> Log { get; set; }
+        base.OnInitialized();
+        BindEvents();
+    }
 
-        [Inject]
-        public ICommandDispatcher Commands { get; set; }
+    protected async override Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
 
-        [Inject]
-        public IEventHandlerCollection EventHandlers { get; set; }
-
-        [Inject]
-        public IQueryDispatcher Queries { get; set; }
-
-        [Parameter]
-        public string TargetCurrency { get; set; }
-
-        [Parameter]
-        public Action AddClick { get; set; }
-
-        protected string Title { get; set; }
-        protected List<ExchangeRateModel> Models { get; set; }
-
-        private bool isShown;
-
-        protected override void OnInitialized()
+        Title = $"List of Exchange Rates for {TargetCurrency}.";
+        if (isShown)
         {
-            base.OnInitialized();
-            BindEvents();
+            Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
+            isShown = false;
+        }
+    }
+
+    public override void Show()
+    {
+        base.Show();
+        isShown = true;
+    }
+
+    protected void OnAddClick()
+    {
+        AddClick?.Invoke();
+        Modal.Hide();
+    }
+
+    protected async Task OnDeleteClickAsync(ExchangeRateModel model)
+        => await Commands.HandleAsync(new RemoveExchangeRate(model.SourceCurrency, TargetCurrency, model.ValidFrom, model.Rate));
+
+    public void Dispose()
+        => UnBindEvents();
+
+    #region Events
+
+    private void BindEvents()
+    {
+        EventHandlers
+            .Add<CurrencyExchangeRateSet>(this)
+            .Add<CurrencyExchangeRateRemoved>(this);
+    }
+
+    private void UnBindEvents()
+    {
+        EventHandlers
+            .Remove<CurrencyExchangeRateSet>(this)
+            .Remove<CurrencyExchangeRateRemoved>(this);
+    }
+
+    Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
+    {
+        if (payload.TargetUniqueCode == TargetCurrency)
+        {
+            Models.Add(new ExchangeRateModel(payload.SourceUniqueCode, payload.Rate, payload.ValidFrom.Date));
+            Models.Sort((r1, r2) => r2.ValidFrom.CompareTo(r1.ValidFrom));
+            StateHasChanged();
         }
 
-        protected async override Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
+        return Task.CompletedTask;
+    }
 
-            Title = $"List of Exchange Rates for {TargetCurrency}.";
-            if (isShown)
+    Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
+    {
+        Log.Debug($"Got '{nameof(CurrencyExchangeRateRemoved)}' with TargetCurrency: '{payload.TargetUniqueCode}'.");
+        if (payload.TargetUniqueCode == TargetCurrency)
+        {
+            ExchangeRateModel model = Models.FirstOrDefault(m => m.SourceCurrency == payload.SourceUniqueCode && m.Rate == payload.Rate && m.ValidFrom == payload.ValidFrom);
+            if (model != null)
             {
-                Models = await Queries.QueryAsync(new ListTargetCurrencyExchangeRates(TargetCurrency));
-                isShown = false;
-            }
-        }
-
-        public override void Show()
-        {
-            base.Show();
-            isShown = true;
-        }
-
-        protected void OnAddClick()
-        {
-            AddClick?.Invoke();
-            Modal.Hide();
-        }
-
-        protected async Task OnDeleteClickAsync(ExchangeRateModel model)
-            => await Commands.HandleAsync(new RemoveExchangeRate(model.SourceCurrency, TargetCurrency, model.ValidFrom, model.Rate));
-
-        public void Dispose()
-            => UnBindEvents();
-
-        #region Events
-
-        private void BindEvents()
-        {
-            EventHandlers
-                .Add<CurrencyExchangeRateSet>(this)
-                .Add<CurrencyExchangeRateRemoved>(this);
-        }
-
-        private void UnBindEvents()
-        {
-            EventHandlers
-                .Remove<CurrencyExchangeRateSet>(this)
-                .Remove<CurrencyExchangeRateRemoved>(this);
-        }
-
-        Task IEventHandler<CurrencyExchangeRateSet>.HandleAsync(CurrencyExchangeRateSet payload)
-        {
-            if (payload.TargetUniqueCode == TargetCurrency)
-            {
-                Models.Add(new ExchangeRateModel(payload.SourceUniqueCode, payload.Rate, payload.ValidFrom.Date));
-                Models.Sort((r1, r2) => r2.ValidFrom.CompareTo(r1.ValidFrom));
+                Log.Debug($"Found model.");
+                Models.Remove(model);
                 StateHasChanged();
             }
-
-            return Task.CompletedTask;
-        }
-
-        Task IEventHandler<CurrencyExchangeRateRemoved>.HandleAsync(CurrencyExchangeRateRemoved payload)
-        {
-            Log.Debug($"Got '{nameof(CurrencyExchangeRateRemoved)}' with TargetCurrency: '{payload.TargetUniqueCode}'.");
-            if (payload.TargetUniqueCode == TargetCurrency)
+            else
             {
-                ExchangeRateModel model = Models.FirstOrDefault(m => m.SourceCurrency == payload.SourceUniqueCode && m.Rate == payload.Rate && m.ValidFrom == payload.ValidFrom);
-                if (model != null)
-                {
-                    Log.Debug($"Found model.");
-                    Models.Remove(model);
-                    StateHasChanged();
-                }
-                else
-                {
-                    Log.Debug($"Model not found, SourceCurreny: '{payload.SourceUniqueCode}', Rate: '{payload.Rate}', ValidFrom: '{payload.ValidFrom}'.");
-                }
+                Log.Debug($"Model not found, SourceCurreny: '{payload.SourceUniqueCode}', Rate: '{payload.Rate}', ValidFrom: '{payload.ValidFrom}'.");
             }
-
-            return Task.CompletedTask;
         }
 
-        #endregion
+        return Task.CompletedTask;
     }
+
+    #endregion
 }

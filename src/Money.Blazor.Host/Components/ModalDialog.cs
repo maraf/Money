@@ -7,14 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public class ModalDialog : ComponentBase
 {
-    public class ModalDialog : ComponentBase
-    {
-        protected Modal Modal { get; set; }
+    protected Modal Modal { get; set; }
 
-        public virtual void Show() => Modal.Show();
+    public virtual void Show() => Modal.Show();
 
-        public virtual void Hide() => Modal.Hide();
-    }
+    public virtual void Hide() => Modal.Hide();
 }

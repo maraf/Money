@@ -20,48 +20,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class ExpenseCreateSwitcher(
+    ILog<ExpenseCreateSwitcher> Log,
+    IQueryDispatcher Queries,
+    IEventHandlerCollection EventHandlers
+) : IEventHandler<UserPropertyChanged>, System.IDisposable
 {
-    public partial class ExpenseCreateSwitcher : IEventHandler<UserPropertyChanged>, System.IDisposable
+    protected ExpenseCreateDialogType Selected { get; set; }
+
+    protected async override Task OnInitializedAsync()
     {
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+        await base.OnInitializedAsync();
+        await ReloadAsync();
 
-        [Inject]
-        protected IEventHandlerCollection EventHandlers { get; set; }
+        EventHandlers.Add<UserPropertyChanged>(this);
+    }
 
-        [Inject]
-        protected ILog<ExpenseCreateSwitcher> Log { get; set; }
+    public void Dispose()
+    {
+        EventHandlers.Remove<UserPropertyChanged>(this);
+    }
 
-        protected ExpenseCreateDialogType Selected { get; set; }
+    private async Task ReloadAsync()
+    {
+        Selected = await Queries.QueryAsync(new GetExpenseCreateDialogTypeProperty());
+        Log.Debug($"User prefered ExpenseCreateDialog is '{Selected}'");
+    }
 
-        protected async override Task OnInitializedAsync()
+    async Task IEventHandler<UserPropertyChanged>.HandleAsync(UserPropertyChanged payload)
+    {
+        Log.Debug($"Got UserPropertyChanged event for propertyKey '{payload.PropertyKey}' with value '{payload.Value}'");
+        if (payload.PropertyKey == GetExpenseCreateDialogTypeProperty.PropertyKey)
         {
-            await base.OnInitializedAsync();
             await ReloadAsync();
-
-            EventHandlers.Add<UserPropertyChanged>(this);
-        }
-
-        public void Dispose()
-        {
-            EventHandlers.Remove<UserPropertyChanged>(this);
-        }
-
-        private async Task ReloadAsync()
-        {
-            Selected = await Queries.QueryAsync(new GetExpenseCreateDialogTypeProperty());
-            Log.Debug($"User prefered ExpenseCreateDialog is '{Selected}'");
-        }
-
-        async Task IEventHandler<UserPropertyChanged>.HandleAsync(UserPropertyChanged payload)
-        {
-            Log.Debug($"Got UserPropertyChanged event for propertyKey '{payload.PropertyKey}' with value '{payload.Value}'");
-            if (payload.PropertyKey == GetExpenseCreateDialogTypeProperty.PropertyKey)
-            {
-                await ReloadAsync();
-                StateHasChanged();
-            }
+            StateHasChanged();
         }
     }
 }

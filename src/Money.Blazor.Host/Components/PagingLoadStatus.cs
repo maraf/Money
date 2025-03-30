@@ -5,23 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public enum PagingLoadStatus
 {
-    public enum PagingLoadStatus
-    {
-        /// <summary>
-        /// When there are more items available.
-        /// </summary>
-        HasNextPage,
+    /// <summary>
+    /// When there are more items available.
+    /// </summary>
+    HasNextPage,
 
-        /// <summary>
-        /// When this page is the last one.
-        /// </summary>
-        LastPage,
+    /// <summary>
+    /// When this page is the last one.
+    /// </summary>
+    LastPage,
 
-        /// <summary>
-        /// When loading current page resulted in zero items.
-        /// </summary>
-        EmptyPage
-    }
+    /// <summary>
+    /// When loading current page resulted in zero items.
+    /// </summary>
+    EmptyPage
 }

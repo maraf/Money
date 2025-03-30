@@ -7,20 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class Confirm
 {
-    public partial class Confirm
+    [Parameter]
+    public string Message { get; set; }
+
+    [Parameter]
+    public Action OnConfirmed { get; set; }
+
+    protected void OnPrimaryButtonClick()
     {
-        [Parameter]
-        public string Message { get; set; }
-
-        [Parameter]
-        public Action OnConfirmed { get; set; }
-
-        protected void OnPrimaryButtonClick()
-        {
-            Modal.Hide();
-            OnConfirmed?.Invoke();
-        }
+        Modal.Hide();
+        OnConfirmed?.Invoke();
     }
 }

@@ -9,34 +9,30 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class ReleaseNotes(Navigator Navigator) : ComponentBase
 {
-    public partial class ReleaseNotes : ComponentBase
+    private readonly HttpClient http = new HttpClient();
+    private static Task<string> getTask;
+    private string value;
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        protected Navigator Navigator { get; set; }
+        http.BaseAddress = new Uri(Navigator.UrlOrigin());
 
-        private readonly HttpClient http = new HttpClient();
-        private static Task<string> getTask;
-        private string value;
+        await base.OnInitializedAsync();
 
-        protected override async Task OnInitializedAsync()
-        {
-            http.BaseAddress = new Uri(Navigator.UrlOrigin());
+        if (getTask == null)
+            getTask = http.GetStringAsync("/release-notes.html");
 
-            await base.OnInitializedAsync();
+        value = await getTask;
+    }
 
-            if (getTask == null)
-                getTask = http.GetStringAsync("/release-notes.html");
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        base.BuildRenderTree(builder);
 
-            value = await getTask;
-        }
-
-        protected override void BuildRenderTree(RenderTreeBuilder builder)
-        {
-            base.BuildRenderTree(builder);
-
-            builder.AddMarkupContent(0, value);
-        }
+        builder.AddMarkupContent(0, value);
     }
 }

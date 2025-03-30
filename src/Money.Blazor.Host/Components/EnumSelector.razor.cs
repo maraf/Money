@@ -12,80 +12,76 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class EnumSelector<TType> : ComponentBase
 {
-    public partial class EnumSelector<TType> : ComponentBase
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+
+    [Parameter]
+    public string IconPrefix { get; set; }
+
+    [Parameter]
+    public TType Current { get; set; }
+
+    [Parameter]
+    public Action<TType> CurrentChanged { get; set; }
+
+    [Parameter]
+    public Action Changed { get; set; }
+
+    [Parameter]
+    public Size Size { get; set; } = Size.Normal;
+
+    [Parameter]
+    public RenderFragment AfterContent { get; set; }
+
+    protected List<(string Name, TType Value)> Items { get; } = new List<(string, TType)>();
+    protected string ButtonCssClass { get; private set; }
+
+    protected override void OnInitialized()
     {
-        [Inject]
-        internal ILog<SortButton<TType>> Log { get; set; }
+        base.OnInitialized();
 
-        [Parameter]
-        public string Text { get; set; }
+        SortButton<TType>.BuildItems(Items);
+    }
 
-        [Parameter]
-        public string Icon { get; set; }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
 
-        [Parameter]
-        public string IconPrefix { get; set; }
+        if (Current == null)
+            UpdateCurrent(Items.First().Value);
 
-        [Parameter]
-        public TType Current { get; set; }
-
-        [Parameter]
-        public Action<TType> CurrentChanged { get; set; }
-
-        [Parameter]
-        public Action Changed { get; set; }
-
-        [Parameter]
-        public Size Size { get; set; } = Size.Normal;
-
-        [Parameter]
-        public RenderFragment AfterContent { get; set; }
-
-        protected List<(string Name, TType Value)> Items { get; } = new List<(string, TType)>();
-        protected string ButtonCssClass { get; private set; }
-
-        protected override void OnInitialized()
+        ButtonCssClass = "btn bg-light-subtle dropdown-toggle";
+        switch (Size)
         {
-            base.OnInitialized();
-
-            SortButton<TType>.BuildItems(Items);
+            case Size.Small:
+                ButtonCssClass += " btn-sm";
+                break;
+            case Size.Normal:
+                break;
+            case Size.Large:
+                ButtonCssClass += " btn-lg";
+                break;
+            default:
+                throw Ensure.Exception.NotSupported(Size.ToString());
         }
+    }
 
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
+    private void UpdateCurrent(TType type)
+    {
+        Current = type;
+        CurrentChanged?.Invoke(Current);
+    }
 
-            if (Current == null)
-                UpdateCurrent(Items.First().Value);
-
-            ButtonCssClass = "btn bg-light-subtle dropdown-toggle";
-            switch (Size)
-            {
-                case Size.Small:
-                    ButtonCssClass += " btn-sm";
-                    break;
-                case Size.Normal:
-                    break;
-                case Size.Large:
-                    ButtonCssClass += " btn-lg";
-                    break;
-                default:
-                    throw Ensure.Exception.NotSupported(Size.ToString());
-            }
-        }
-
-        private void UpdateCurrent(TType type)
-        {
-            Current = type;
-            CurrentChanged?.Invoke(Current);
-        }
-
-        protected void OnItemClick(TType type)
-        {
-            UpdateCurrent(type);
-            Changed?.Invoke();
-        }
+    protected void OnItemClick(TType type)
+    {
+        UpdateCurrent(type);
+        Changed?.Invoke();
     }
 }

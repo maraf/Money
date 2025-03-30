@@ -11,36 +11,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class CategoryTag(IQueryDispatcher Queries)
 {
-    public partial class CategoryTag
+    [Parameter]
+    public IKey Key { get; set; }
+
+    [Parameter]
+    public string CssClass { get; set; }
+
+    protected string Name { get; set; }
+    protected Color Color { get; set; }
+    protected string AccentColorCssClass { get; set; }
+
+    protected override async Task OnParametersSetAsync()
     {
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+        await base.OnParametersSetAsync();
 
-        [Parameter]
-        public IKey Key { get; set; }
+        if (Key == null)
+            Key = KeyFactory.Empty(typeof(Category));
 
-        [Parameter]
-        public string CssClass { get; set; }
-
-        protected string Name { get; set; }
-        protected Color Color { get; set; }
-        protected string AccentColorCssClass { get; set; }
-
-        protected override async Task OnParametersSetAsync()
+        if (!Key.IsEmpty)
         {
-            await base.OnParametersSetAsync();
-
-            if (Key == null)
-                Key = KeyFactory.Empty(typeof(Category));
-
-            if (!Key.IsEmpty)
-            {
-                Name = await Queries.QueryAsync(new GetCategoryName(Key));
-                Color = await Queries.QueryAsync(new GetCategoryColor(Key));
-                AccentColorCssClass = Color.SelectAccent("back-dark", "back-light");
-            }
+            Name = await Queries.QueryAsync(new GetCategoryName(Key));
+            Color = await Queries.QueryAsync(new GetCategoryColor(Key));
+            AccentColorCssClass = Color.SelectAccent("back-dark", "back-light");
         }
     }
 }

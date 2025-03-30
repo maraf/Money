@@ -14,86 +14,79 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries)
 {
-    public partial class AmountBox
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public bool AutoFocus { get; set; }
+
+    [Parameter]
+    public bool AutoSelect { get; set; }
+
+    [Parameter]
+    public Price Value { get; set; }
+
+    [Parameter]
+    public Action<Price> ValueChanged { get; set; }
+
+    protected decimal Amount { get; set; }
+    protected string Currency { get; set; }
+    protected int DecimalDigits { get; set; }
+    protected List<CurrencyModel> Currencies { get; private set; }
+
+    private string defaultCurrency = null;
+
+    protected async void OnAuthenticationChanged(bool isAuthenticated)
     {
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
-
-        [Inject]
-        protected ILog<AmountBox> Log { get; set; }
-
-        [Parameter]
-        public string Id { get; set; }
-
-        [Parameter]
-        public bool AutoFocus { get; set; }
-
-        [Parameter]
-        public bool AutoSelect { get; set; }
-
-        [Parameter]
-        public Price Value { get; set; }
-
-        [Parameter]
-        public Action<Price> ValueChanged { get; set; }
-
-        protected decimal Amount { get; set; }
-        protected string Currency { get; set; }
-        protected int DecimalDigits { get; set; }
-        protected List<CurrencyModel> Currencies { get; private set; }
-
-        private string defaultCurrency = null;
-
-        protected async void OnAuthenticationChanged(bool isAuthenticated)
+        if (isAuthenticated)
         {
-            if (isAuthenticated)
-            {
-                DecimalDigits = await Queries.QueryAsync(new GetPriceDecimalDigitsProperty());
-                Currencies = await Queries.QueryAsync(new ListAllCurrency());
-                Currency = defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
-                StateHasChanged();
-            }
+            DecimalDigits = await Queries.QueryAsync(new GetPriceDecimalDigitsProperty());
+            Currencies = await Queries.QueryAsync(new ListAllCurrency());
+            Currency = defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        Log.Debug($"Parameters '{Value?.Value}' '{Value?.Currency}'");
+        if (Value != null)
+        {
+            Amount = Value.Value;
+            Currency = Value.Currency;
+        }
+        else
+        {
+            Amount = 0;
+            Currency = defaultCurrency;
+        }
+    }
+
+    protected void OnValueChanged(ChangeEventArgs e)
+    {
+        string rawValue = e.Value?.ToString();
+        Price priceValue = null;
+        if (Decimal.TryParse(rawValue, out var value))
+        {
+            Amount = value;
+            priceValue = new Price(value, Currency);
         }
 
-        protected override void OnParametersSet()
+        ValueChanged?.Invoke(Value = priceValue);
+    }
+
+    protected void OnCurrencyChanged(CurrencyModel currency)
+    {
+        if (Currency != currency.UniqueCode)
         {
-            base.OnParametersSet();
-
-            Log.Debug($"Parameters '{Value?.Value}' '{Value?.Currency}'");
-            if (Value != null)
-            {
-                Amount = Value.Value;
-                Currency = Value.Currency;
-            }
-            else
-            {
-                Amount = 0;
-                Currency = defaultCurrency;
-            }
-        }
-
-        protected void OnValueChanged(ChangeEventArgs e)
-        {
-            string rawValue = e.Value?.ToString();
-            Price priceValue = null;
-            if (Decimal.TryParse(rawValue, out var value))
-            {
-                Amount = value;
-                priceValue = new Price(value, Currency);
-            }
-
-            ValueChanged?.Invoke(Value = priceValue);
-        }
-
-        protected void OnCurrencyChanged(CurrencyModel currency)
-        {
-            if (Currency != currency.UniqueCode)
-            {
-                Currency = currency.UniqueCode;
-                ValueChanged?.Invoke(Value = new Price(Amount, Currency));
-            }
+            Currency = currency.UniqueCode;
+            ValueChanged?.Invoke(Value = new Price(Amount, Currency));
         }
     }
 }

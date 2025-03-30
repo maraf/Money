@@ -15,64 +15,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class ExpenseTemplateCategory(ICommandDispatcher Commands, IQueryDispatcher Queries)
 {
-    public partial class ExpenseTemplateCategory
+    protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
+
+    private IKey originalCategoryKey;
+
+    protected List<string> ErrorMessages { get; } = new List<string>();
+    protected List<CategoryModel> Categories { get; private set; }
+
+    [Parameter]
+    public IKey ExpenseTemplateKey { get; set; }
+
+    [Parameter]
+    public IKey CategoryKey { get; set; }
+
+    protected async override Task OnParametersSetAsync()
     {
-        protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
+        await base.OnParametersSetAsync();
 
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
+        SetOriginal();
+        Categories = await Queries.QueryAsync(new ListAllCategory());
+    }
 
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+    private void SetOriginal()
+    {
+        originalCategoryKey = CategoryKey;
+    }
 
-        private IKey originalCategoryKey;
-
-        protected List<string> ErrorMessages { get; } = new List<string>();
-        protected List<CategoryModel> Categories { get; private set; }
-
-        [Parameter]
-        public IKey ExpenseTemplateKey { get; set; }
-
-        [Parameter]
-        public IKey CategoryKey { get; set; }
-
-        protected async override Task OnParametersSetAsync()
+    protected void OnSaveClick()
+    {
+        if (Validate())
         {
-            await base.OnParametersSetAsync();
-
+            Execute();
             SetOriginal();
-            Categories = await Queries.QueryAsync(new ListAllCategory());
+            Modal.Hide();
         }
+    }
 
-        private void SetOriginal()
-        {
-            originalCategoryKey = CategoryKey;
-        }
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        if (CategoryKey == null)
+            ErrorMessages.Add("Category key must be set");
 
-        protected void OnSaveClick()
-        {
-            if (Validate())
-            {
-                Execute();
-                SetOriginal();
-                Modal.Hide();
-            }
-        }
+        return ErrorMessages.Count == 0;
+    }
 
-        private bool Validate()
-        {
-            ErrorMessages.Clear();
-            if (CategoryKey == null)
-                ErrorMessages.Add("Category key must be set");
-
-            return ErrorMessages.Count == 0;
-        }
-
-        private async void Execute()
-        {
-            await Commands.HandleAsync(new ChangeExpenseTemplateCategory(ExpenseTemplateKey, CategoryKey));
-        }
+    private async void Execute()
+    {
+        await Commands.HandleAsync(new ChangeExpenseTemplateCategory(ExpenseTemplateKey, CategoryKey));
     }
 }

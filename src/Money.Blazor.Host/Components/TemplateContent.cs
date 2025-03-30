@@ -7,22 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public class TemplateContent(TemplateService Service) : ComponentBase
 {
-    public class TemplateContent : ComponentBase
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
-        [Inject]
-        protected TemplateService Service { get; set; }
-
-        [Parameter]
-        public string Name { get; set; }
-
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
-
-        protected override void BuildRenderTree(RenderTreeBuilder builder)
-        {
-            Service.UseContent(Name, ChildContent);
-        }
+        Service.UseContent(Name, ChildContent);
     }
 }

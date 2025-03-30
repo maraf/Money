@@ -10,89 +10,83 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class ExpenseBagPublishButton(
+    IEventHandlerCollection EventHandlers,
+    CreateExpenseStorage Storage,
+    LocalExpenseOnlineRunner Runner
+) : IDisposable,
+    IEventHandler<LocallyStoredExpenseCreated>,
+    IEventHandler<LocallyStoredExpensesPublished>
 {
-    public partial class ExpenseBagPublishButton : IDisposable,
-        IEventHandler<LocallyStoredExpenseCreated>,
-        IEventHandler<LocallyStoredExpensesPublished>
+    [Parameter]
+    public string Text { get; set; } = "You are online, upload your expenses";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; }
+
+    protected bool HasLocalExpenses { get; private set; }
+
+    protected async override Task OnInitializedAsync()
     {
-        [Inject]
-        internal IEventHandlerCollection EventHandlers { get; set; }
+        EventHandlers.Add<LocallyStoredExpenseCreated>(this);
+        EventHandlers.Add<LocallyStoredExpensesPublished>(this);
 
-        [Inject]
-        internal CreateExpenseStorage Storage { get; set; }
+        await base.OnInitializedAsync();
+        await LoadAsync();
+    }
 
-        [Inject]
-        internal LocalExpenseOnlineRunner Runner { get; set; }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
 
-        [Parameter]
-        public string Text { get; set; } = "You are online, upload your expenses";
+        if (Attributes == null)
+            Attributes = new Dictionary<string, object>();
 
-        [Parameter(CaptureUnmatchedValues = true)]
-        public Dictionary<string, object> Attributes { get; set; }
+        SetCssClass();
+    }
 
-        protected bool HasLocalExpenses { get; private set; }
+    private void SetCssClass()
+    {
+        const string defaultCssClass = "btn btn-secondary text-truncate mw-100";
 
-        protected async override Task OnInitializedAsync()
-        {
-            EventHandlers.Add<LocallyStoredExpenseCreated>(this);
-            EventHandlers.Add<LocallyStoredExpensesPublished>(this);
+        object cssClass;
+        if (Attributes.TryGetValue("class", out cssClass))
+            cssClass = defaultCssClass + " " + cssClass;
+        else
+            cssClass = defaultCssClass;
 
-            await base.OnInitializedAsync();
-            await LoadAsync();
-        }
+        Attributes["class"] = cssClass;
+    }
 
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
+    public void Dispose()
+    {
+        EventHandlers.Remove<LocallyStoredExpenseCreated>(this);
+        EventHandlers.Remove<LocallyStoredExpensesPublished>(this);
+    }
 
-            if (Attributes == null)
-                Attributes = new Dictionary<string, object>();
+    private async Task LoadAsync()
+    {
+        var items = await Storage.LoadAsync();
 
-            SetCssClass();
-        }
+        HasLocalExpenses = items != null && items.Count > 0;
+    }
 
-        private void SetCssClass()
-        {
-            const string defaultCssClass = "btn btn-secondary text-truncate mw-100";
+    protected async Task PublishAsync()
+    {
+        await Runner.PublishAsync();
+    }
 
-            object cssClass;
-            if (Attributes.TryGetValue("class", out cssClass))
-                cssClass = defaultCssClass + " " + cssClass;
-            else
-                cssClass = defaultCssClass;
+    async Task IEventHandler<LocallyStoredExpenseCreated>.HandleAsync(LocallyStoredExpenseCreated payload)
+    {
+        await LoadAsync();
+        StateHasChanged();
+    }
 
-            Attributes["class"] = cssClass;
-        }
-
-        public void Dispose()
-        {
-            EventHandlers.Remove<LocallyStoredExpenseCreated>(this);
-            EventHandlers.Remove<LocallyStoredExpensesPublished>(this);
-        }
-
-        private async Task LoadAsync()
-        {
-            var items = await Storage.LoadAsync();
-
-            HasLocalExpenses = items != null && items.Count > 0;
-        }
-
-        protected async Task PublishAsync()
-        {
-            await Runner.PublishAsync();
-        }
-
-        async Task IEventHandler<LocallyStoredExpenseCreated>.HandleAsync(LocallyStoredExpenseCreated payload)
-        {
-            await LoadAsync();
-            StateHasChanged();
-        }
-
-        async Task IEventHandler<LocallyStoredExpensesPublished>.HandleAsync(LocallyStoredExpensesPublished payload)
-        {
-            await LoadAsync();
-            StateHasChanged();
-        }
+    async Task IEventHandler<LocallyStoredExpensesPublished>.HandleAsync(LocallyStoredExpensesPublished payload)
+    {
+        await LoadAsync();
+        StateHasChanged();
     }
 }

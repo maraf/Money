@@ -8,29 +8,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class Network(NetworkState State) : System.IDisposable
 {
-    public partial class Network : System.IDisposable
+    [Parameter]
+    public RenderFragment Online { get; set; }
+
+    [Parameter]
+    public RenderFragment Offline { get; set; }
+
+    protected override void OnInitialized()
     {
-        [Inject]
-        internal NetworkState State { get; set; }
+        base.OnInitialized();
 
-        [Parameter]
-        public RenderFragment Online { get; set; }
+        State.StatusChanged += StateHasChanged;
+    }
 
-        [Parameter]
-        public RenderFragment Offline { get; set; }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            State.StatusChanged += StateHasChanged;
-        }
-
-        public void Dispose()
-        {
-            State.StatusChanged -= StateHasChanged;
-        }
+    public void Dispose()
+    {
+        State.StatusChanged -= StateHasChanged;
     }
 }

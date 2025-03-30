@@ -11,47 +11,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class IncomeDescription(ICommandDispatcher Commands)
 {
-    public partial class IncomeDescription
+    private string originalDescription;
+    protected List<string> ErrorMessages { get; } = new List<string>();
+
+    [Parameter]
+    public IKey IncomeKey { get; set; }
+
+    [Parameter]
+    public string Description { get; set; }
+
+    protected override void OnParametersSet()
     {
-        [Inject]
-        protected ICommandDispatcher Commands { get; set; }
-
-        private string originalDescription;
-        protected List<string> ErrorMessages { get; } = new List<string>();
-
-        [Parameter]
-        public IKey IncomeKey { get; set; }
-
-        [Parameter]
-        public string Description { get; set; }
-
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-            originalDescription = Description;
-        }
-
-        protected void OnSaveClick()
-        {
-            if (Validate() && originalDescription != Description)
-            {
-                Execute();
-                OnParametersSet();
-                Modal.Hide();
-            }
-        }
-
-        private bool Validate()
-        {
-            ErrorMessages.Clear();
-            Validator.AddOutcomeDescription(ErrorMessages, Description);
-
-            return ErrorMessages.Count == 0;
-        }
-
-        private async void Execute()
-            => await Commands.HandleAsync(new ChangeIncomeDescription(IncomeKey, Description));
+        base.OnParametersSet();
+        originalDescription = Description;
     }
+
+    protected void OnSaveClick()
+    {
+        if (Validate() && originalDescription != Description)
+        {
+            Execute();
+            OnParametersSet();
+            Modal.Hide();
+        }
+    }
+
+    private bool Validate()
+    {
+        ErrorMessages.Clear();
+        Validator.AddOutcomeDescription(ErrorMessages, Description);
+
+        return ErrorMessages.Count == 0;
+    }
+
+    private async void Execute()
+        => await Commands.HandleAsync(new ChangeIncomeDescription(IncomeKey, Description));
 }

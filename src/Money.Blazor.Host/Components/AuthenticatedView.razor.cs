@@ -8,61 +8,60 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class AuthenticatedView(ILog<AuthenticatedView> Log, AuthenticationStateProvider AuthenticationStateProvider) : IDisposable
 {
-    public partial class AuthenticatedView : IDisposable
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    [Inject]
+    protected ILog<AuthenticatedView> Log { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public Action<bool> OnChanged { get; set; }
+
+    protected AuthenticationState AuthenticationState { get; set; }
+    protected bool IsAuthenticated { get; set; }
+
+    protected override void OnInitialized()
     {
-        [Inject]
-        protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        base.OnInitialized();
+        AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
+    }
 
-        [Inject]
-        protected ILog<AuthenticatedView> Log { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LoadAsync();
+    }
 
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
+    public void Dispose()
+    {
+        AuthenticationStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
+    }
 
-        [Parameter]
-        public Action<bool> OnChanged { get; set; }
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task) 
+        => _ = LoadAsync();
 
-        protected AuthenticationState AuthenticationState { get; set; }
-        protected bool IsAuthenticated { get; set; }
+    private async Task LoadAsync()
+    {
+        Log.Debug("Load.");
 
-        protected override void OnInitialized()
+        AuthenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var newValue = AuthenticationState != null && AuthenticationState.User.Identity.IsAuthenticated;
+        Log.Debug($"New value '{newValue}'.");
+
+        if (IsAuthenticated != newValue)
         {
-            base.OnInitialized();
-            AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
-        }
+            Log.Debug($"Rendering child content.");
 
-        protected async override Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
-            await LoadAsync();
-        }
-
-        public void Dispose()
-        {
-            AuthenticationStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
-        }
-
-        private void OnAuthenticationStateChanged(Task<AuthenticationState> task) 
-            => _ = LoadAsync();
-
-        private async Task LoadAsync()
-        {
-            Log.Debug("Load.");
-
-            AuthenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var newValue = AuthenticationState != null && AuthenticationState.User.Identity.IsAuthenticated;
-            Log.Debug($"New value '{newValue}'.");
-
-            if (IsAuthenticated != newValue)
-            {
-                Log.Debug($"Rendering child content.");
-
-                IsAuthenticated = newValue;
-                OnChanged?.Invoke(IsAuthenticated);
-                StateHasChanged();
-            }
+            IsAuthenticated = newValue;
+            OnChanged?.Invoke(IsAuthenticated);
+            StateHasChanged();
         }
     }
 }

@@ -9,17 +9,15 @@ using Neptuo.Queries;
 
 namespace Money.Components;
 
-public partial class ThemeSwitcher : IEventHandler<UserSignedIn>, IEventHandler<UserPropertyChanged>, System.IDisposable
+public partial class ThemeSwitcher(
+    IEventHandlerCollection EventHandlers,
+    IQueryDispatcher Queries,
+    Interop Interop
+) : 
+    IEventHandler<UserSignedIn>, 
+    IEventHandler<UserPropertyChanged>, 
+    System.IDisposable
 {
-    [Inject]
-    protected IEventHandlerCollection EventHandlers { get; set; }
-
-    [Inject]
-    protected IQueryDispatcher Queries { get; set; }
-
-    [Inject]
-    protected Interop Interop { get; set; }
-
     protected ThemeType Theme { get; set; }
 
     protected async override Task OnInitializedAsync()

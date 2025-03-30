@@ -9,30 +9,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Components
+namespace Money.Components;
+
+public partial class ExpenseCreateButton(Navigator Navigator)
 {
-    public partial class ExpenseCreateButton
+    [Parameter]
+    public IKey CategoryKey { get; set; }
+
+    protected override void OnParametersSet()
     {
-        [Inject]
-        protected Navigator Navigator { get; set; }
+        base.OnParametersSet();
 
-        [Parameter]
-        public IKey CategoryKey { get; set; }
+        if (CategoryKey == null)
+            CategoryKey = KeyFactory.Empty(typeof(Category));
+    }
 
-        protected override void OnParametersSet()
-        {
-            base.OnParametersSet();
-
-            if (CategoryKey == null)
-                CategoryKey = KeyFactory.Empty(typeof(Category));
-        }
-
-        public void Open()
-        {
-            if (CategoryKey.IsEmpty)
-                Navigator.OpenExpenseCreate();
-            else
-                Navigator.OpenExpenseCreate(CategoryKey);
-        }
+    public void Open()
+    {
+        if (CategoryKey.IsEmpty)
+            Navigator.OpenExpenseCreate();
+        else
+            Navigator.OpenExpenseCreate(CategoryKey);
     }
 }

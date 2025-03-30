@@ -19,8 +19,6 @@ namespace Money.Components;
 
 public partial class PwaInstall(
     ILog<PwaInstall> Log,
-    PwaInstallInterop Interop,
-    Navigator Navigator,
     IEventHandlerCollection EventHandlers,
     ICommandDispatcher Commands,
     IQueryDispatcher Queries

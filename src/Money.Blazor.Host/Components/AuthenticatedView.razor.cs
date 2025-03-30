@@ -12,12 +12,6 @@ namespace Money.Components;
 
 public partial class AuthenticatedView(ILog<AuthenticatedView> Log, AuthenticationStateProvider AuthenticationStateProvider) : IDisposable
 {
-    [Inject]
-    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
-    [Inject]
-    protected ILog<AuthenticatedView> Log { get; set; }
-
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 

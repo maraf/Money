@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components;
 
-public partial class CurrencyEdit(ILog<CurrencyEdit> Log, ICommandDispatcher Commands)
+public partial class CurrencyEdit(ICommandDispatcher Commands)
 {
     private string originalUniqueCode;
     private string originalSymbol;

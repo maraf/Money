@@ -15,8 +15,16 @@ using System.Threading.Tasks;
 
 namespace Money.Pages.Users;
 
-public partial class Profile(IQueryDispatcher Queries, ICommandDispatcher Commands, IEventHandlerCollection EventHandlers) : IEventHandler<EmailChanged>, IDisposable
+public partial class Profile(
+    IQueryDispatcher Queries, 
+    ICommandDispatcher Commands, 
+    IEventHandlerCollection EventHandlers
+) : 
+    IEventHandler<EmailChanged>, 
+    IDisposable
 {
+    private ProfileModel model;
+    
     protected ElementReference EmailBox { get; set; }
 
     public string UserName { get; private set; }

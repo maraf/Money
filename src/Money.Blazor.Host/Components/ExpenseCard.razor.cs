@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components;
 
-public partial class ExpenseCard(IQueryDispatcher Queries)
+public partial class ExpenseCard
 {
     public interface IContext
     {

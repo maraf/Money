@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components.Bootstrap;
 
-public partial class Offcanvas(ILog<Offcanvas> Log, OffcanvasInterop Interop) : System.IDisposable
+public partial class Offcanvas(OffcanvasInterop Interop) : System.IDisposable
 {
     protected ElementReference Element { get; set; }
 

@@ -16,8 +16,7 @@ namespace Money.Components;
 
 public partial class PwaUpdate(
     IEventHandlerCollection EventHandlers,
-    ICommandDispatcher Commands,
-    Navigator Navigator
+    ICommandDispatcher Commands
 ) : IDisposable,
     IEventHandler<PwaUpdateable>
 {

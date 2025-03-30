@@ -12,7 +12,6 @@ namespace Money.Components.Bootstrap;
 
 public class OffcanvasInterop(IJSRuntime jsRuntime)
 {
-    private readonly IJSRuntime jsRuntime;
     private Offcanvas component;
 
     public async Task InitializeAsync(Offcanvas component, ElementReference element)

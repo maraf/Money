@@ -86,7 +86,7 @@
                     <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
                         <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle") w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                             <Icon Identifier="@item.Icon" />
-                            <span class="text d-block text-truncate">
+                            <span class="small text d-block text-truncate">
                                 @item.Text
                             </span>
                         </a>
@@ -96,7 +96,7 @@
                 {
                     <button @onclick="@item.OnClick" class="btn bg-light-subtle @(isLogout ? "text-danger" : string.Empty) w-100">
                         <Icon Identifier="@item.Icon" />
-                        <span class="text d-block">
+                        <span class="small text d-block">
                             @item.Text
                         </span>
                     </button>

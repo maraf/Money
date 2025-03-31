@@ -47,6 +47,10 @@
                                 <Icon Identifier="redo" />
                                 As Template
                             </a>
+                            <a class="dropdown-item" href="@Navigator.UrlSearch(Model.Description)">
+                                <Icon Identifier="search" />
+                                Find similar
+                            </a>
                             <hr class="dropdown-divider" />
                             <a class="dropdown-item" @onclick="@OnDelete">
                                 <Icon Identifier="trash-alt" />

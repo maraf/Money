@@ -109,6 +109,27 @@ window.Visibility = {
     }
 };
 
+window.AutoloadNext = {
+    Initialize: function (element, interop) {
+        if ("IntersectionObserver" in window) {
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            interop.invokeMethodAsync("AutoloadNext.Intersected");
+                        }
+                    });
+                },
+                {
+                    root: null
+                }
+            );
+    
+            observer.observe(element);
+        }
+    }
+};
+
 window.Money = {
     ApplicationStarted: function () {
         isLoaded = true;

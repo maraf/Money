@@ -84,7 +84,8 @@ namespace Money.UI.Blazor
                 .AddSingleton<CommandMapper>()
                 .AddSingleton<QueryMapper>()
                 .AddSingleton<ColorCollection>()
-                .AddSingleton<IconCollection>();
+                .AddSingleton<IconCollection>()
+                .AddSingleton<AutoloadNextInterop>();
 
             services
                 .AddTransient<TokenStorage>()

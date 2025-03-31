@@ -19,6 +19,7 @@ using Neptuo.Queries;
 using Neptuo.Queries.Handlers;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,7 @@ using System.Threading.Tasks;
 namespace Money.Pages
 {
     public partial class ExpenseTemplates(
+        ILog<ExpenseTemplates> Log,
         ICommandDispatcher Commands,
         IEventHandlerCollection EventHandlers,
         IQueryDispatcher Queries,
@@ -49,10 +51,13 @@ namespace Money.Pages
         protected ExpenseTemplateRecurrence ChangeRecurrenceModal { get; set; }
         protected Confirm DeleteConfirm { get; set; }
         protected OutcomeCreate ExpenseModal { get; set; }
+        protected List<ExpenseTemplateModel> AllModels { get; } = new List<ExpenseTemplateModel>();
         protected List<ExpenseTemplateModel> Models { get; } = new List<ExpenseTemplateModel>();
         protected SortDescriptor<ExpenseTemplateSortType> SortDescriptor { get; set; }
         protected LoadingContext Loading { get; } = new LoadingContext();
         
+        protected string SearchQuery { get; set; }
+
         protected IKey ToDeleteKey { get; set; }
         protected ExpenseTemplateModel Selected { get; set; }
         protected string DeleteMessage { get; set; }
@@ -96,8 +101,9 @@ namespace Money.Pages
 
         private async Task ReloadAsync()
         {
-            Models.Clear();
-            Models.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version3(SortDescriptor)));
+            AllModels.Clear();
+            AllModels.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version3(SortDescriptor)));
+            OnSearch();
             StateHasChanged();
         }
 
@@ -120,6 +126,21 @@ namespace Money.Pages
         {
             _ = ReloadAsync();
             return Task.CompletedTask;
+        }
+
+        protected void OnSearch()
+        {
+            Log.Debug($"OnSearch '{SearchQuery}'");
+
+            Models.Clear();
+            if (String.IsNullOrEmpty(SearchQuery))
+            {
+                Models.AddRange(AllModels);
+                return;
+            }
+
+            string searchQuery = SearchQuery.ToLower().Trim();
+            Models.AddRange(AllModels.Where(m => m.Description.Contains(SearchQuery, StringComparison.CurrentCultureIgnoreCase)));
         }
 
         public Task HandleAsync(ExpenseTemplateCreated payload) => OnEventAsync();

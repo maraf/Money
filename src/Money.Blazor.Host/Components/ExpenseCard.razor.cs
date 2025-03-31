@@ -12,13 +12,12 @@ using System.Threading.Tasks;
 
 namespace Money.Components;
 
-public partial class ExpenseCard
+public partial class ExpenseCard(Navigator Navigator)
 {
     public interface IContext
     {
         bool HasEdit { get; }
 
-        void Duplicate(IExpenseOverviewModel model);
         void CreateTemplate(IExpenseOverviewModel model);
         void EditAmount(IExpenseOverviewModel model);
         void EditDescription(IExpenseOverviewModel model);
@@ -42,8 +41,8 @@ public partial class ExpenseCard
         AmountCssClass = string.Join(" ", [AmountCssClass, "m-0"]);
     }
 
-    protected void OnDuplicate() 
-        => Context.Duplicate(Model);
+    protected void OnDuplicate()
+        => Navigator.OpenExpenseCreate(Model.Amount, Model.Description, Model.CategoryKey, Model.When, Model.IsFixed);
 
     protected void OnCreateTemplate()
         => Context.CreateTemplate(Model);

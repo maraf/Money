@@ -87,9 +87,6 @@ namespace Money.Pages
 
         bool ExpenseCard.IContext.HasEdit => true;
 
-        void ExpenseCard.IContext.Duplicate(IExpenseOverviewModel model)
-        { }
-
         void ExpenseCard.IContext.CreateTemplate(IExpenseOverviewModel model)
         { }
 

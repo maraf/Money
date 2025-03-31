@@ -24,9 +24,6 @@ public partial class ExpenseCardContext(ICommandDispatcher Commands, Navigator N
 
     bool ExpenseCard.IContext.HasEdit => IsEditEnabled;
 
-    void ExpenseCard.IContext.Duplicate(IExpenseOverviewModel model)
-        => OnActionClick<ModalDialog>(model, null, (modal, model) => Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.When, model.IsFixed));
-
     void ExpenseCard.IContext.CreateTemplate(IExpenseOverviewModel model)
         => OnActionClick(model, TemplateCreateModal, (modal, model) => modal.Show(model.Amount, model.Description, model.CategoryKey, model.IsFixed));
 

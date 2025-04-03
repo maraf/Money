@@ -50,7 +50,7 @@ public partial class ExpenseTemplateRecurrence(ICommandDispatcher Commands)
     {
         await base.SetParametersAsync(parameters);
         
-        DueDateBinding = DueDate ?? DateTime.Today;
+        DueDateBinding = DueDate ?? AppDateTime.Today;
         
         if (DayInPeriod == null)
             DayInPeriod = 1;

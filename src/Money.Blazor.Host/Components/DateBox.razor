@@ -4,7 +4,7 @@
             <Icon Identifier="angle-left" />
         </button>
         <input type="text" class="form-control" id="@Id" value="@Value.ToString(Format)" @onchange="OnValueChanged" data-autofocus="@AutoFocus" />
-        <button type="button" class="btn btn btn-outline-secondary" @onclick="(() => RaiseValueChanged(DateTime.Today))">
+        <button type="button" class="btn btn btn-outline-secondary" @onclick="(() => RaiseValueChanged(AppDateTime.Today))">
             <Icon Identifier="calendar-day" />
         </button>
         <button type="button" class="btn btn btn-outline-secondary" @onclick="(() => RaiseValueChanged(Value.AddDays(1)))">

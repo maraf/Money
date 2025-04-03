@@ -38,7 +38,7 @@ namespace Money.Pages
         {
             await base.OnInitializedAsync();
 
-            StartYear = new YearModel(DateTime.Today.Year - 8);
+            StartYear = new YearModel(AppDateTime.Today.Year - 8);
             CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
             CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
             CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));

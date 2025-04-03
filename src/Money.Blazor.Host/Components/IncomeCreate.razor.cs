@@ -37,7 +37,7 @@ public partial class IncomeCreate(
     public string Description { get; set; }
 
     [Parameter]
-    public DateTime When { get; set; } = DateTime.UtcNow.Date;
+    public DateTime When { get; set; } = AppDateTime.Today;
 
     protected async override Task OnParametersSetAsync()
     {

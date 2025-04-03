@@ -18,7 +18,7 @@ namespace Money
     {
         private const string DefaultValue = "main-menu,summary-month,expense-create";
 
-        protected static readonly YearModel ThisYear = new YearModel(DateTime.Today.Year);
+        protected static readonly YearModel ThisYear = new YearModel(AppDateTime.Today.Year);
 
         private readonly List<MenuItemModel> storage;
         private readonly MainMenuItems mainMenu;
@@ -51,7 +51,7 @@ namespace Money
                     Identifier = "balances",
                     Icon = "chart-bar",
                     Text = "Balances",
-                    Url = navigator.UrlBalances(new YearModel(DateTime.Today.Year)),
+                    Url = navigator.UrlBalances(new YearModel(AppDateTime.Today.Year)),
                     IsBlurMenuAfterClick = true
                 },
                 new MenuItemModel()
@@ -59,7 +59,7 @@ namespace Money
                     Identifier = "expense-checklist-Month",
                     Icon = "list-check",
                     Text = "Monthly expense checklist",
-                    Url = navigator.UrlChecklist(new MonthModel(DateTime.Today.Year, DateTime.Today.Month)),
+                    Url = navigator.UrlChecklist(new MonthModel(AppDateTime.Today.Year, AppDateTime.Today.Month)),
                     IsBlurMenuAfterClick = true
                 },
                 new MenuItemModel()

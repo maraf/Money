@@ -144,7 +144,7 @@ public partial class ExpenseCreate(
     protected async Task LoadAsync()
     {
         if (When == DateTime.MinValue)
-            When = DateTime.Today;
+            When = AppDateTime.Today;
 
         Categories = await Queries.QueryAsync(new ListAllCategory());
         Currencies = await Queries.QueryAsync(new ListAllCurrency());
@@ -315,7 +315,7 @@ public partial class ExpenseCreate(
         Description = null;
         Amount = null;
         CategoryKey = EmptyCategoryKey;
-        When = clearWhenToMinValue ? DateTime.MinValue : DateTime.UtcNow.Date;
+        When = clearWhenToMinValue ? DateTime.MinValue : AppDateTime.Today;
         IsFixed = false;
 
         Log.Debug($"Cleared values: Amount: '{Amount}', Category: '{CategoryKey}', When: '{When}', Description: '{Description}'.");

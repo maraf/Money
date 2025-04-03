@@ -18,7 +18,7 @@
 <IncomeCreate @ref="CreateModal" />
 <IncomeAmount @ref="ChangeAmountModal" IncomeKey="@Selected?.Key" Amount="@Selected?.Amount" />
 <IncomeDescription @ref="ChangeDescriptionModal" IncomeKey="@Selected?.Key" Description="@Selected?.Description" />
-<IncomeWhen @ref="ChangeWhenModal" IncomeKey="@Selected?.Key" When="@(Selected?.When ?? DateTime.Today)" />
+<IncomeWhen @ref="ChangeWhenModal" IncomeKey="@Selected?.Key" When="@(Selected?.When ?? AppDateTime.Today)" />
 <Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@OnDeleteConfirmed" />
 
 <div class="container-narrow">

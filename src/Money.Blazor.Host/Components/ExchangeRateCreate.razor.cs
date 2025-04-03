@@ -58,7 +58,7 @@ public partial class ExchangeRateCreate(ILog<ExchangeRateCreate> Log, ICommandDi
     protected void Reset()
     {
         Rate = 1;
-        ValidFrom = DateTime.UtcNow.Date;
+        ValidFrom = AppDateTime.Today;
     }
 
     protected void OnSaveClick()

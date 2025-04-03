@@ -82,7 +82,7 @@
 
     private async Task SetRecurrenceSingle(ExpenseTemplateModel expenseTemplate)
     {
-        await Commands.HandleAsync(new SetExpenseTemplateSingleRecurrence(expenseTemplate.Key, DateTime.Today.AddDays(12)));
+        await Commands.HandleAsync(new SetExpenseTemplateSingleRecurrence(expenseTemplate.Key, AppDateTime.Today.AddDays(12)));
     }
 
     private async Task ClearRecurrence(ExpenseTemplateModel expenseTemplate)

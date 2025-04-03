@@ -9,5 +9,6 @@ namespace Money;
 
 public class AppDateTime
 {
+    public static DateTime Now => DateTime.UtcNow;
     public static DateTime Today => DateTime.UtcNow.Date;
 }

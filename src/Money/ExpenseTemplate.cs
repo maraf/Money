@@ -77,7 +77,7 @@ namespace Money
         public ExpenseTemplate(Price amount, string description, IKey categoryKey, bool isFixed)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
-            Publish(new ExpenseTemplateCreated(amount, description, categoryKey, isFixed, DateTime.Today));
+            Publish(new ExpenseTemplateCreated(amount, description, categoryKey, isFixed, AppDateTime.Today));
         }
 
         public ExpenseTemplate(IKey key, IEnumerable<IEvent> events)
@@ -104,7 +104,7 @@ namespace Money
         public void Delete()
         {
             EnsureNotDeleted();
-            Publish(new ExpenseTemplateDeleted(DateTime.Today));
+            Publish(new ExpenseTemplateDeleted(AppDateTime.Today));
         }
 
         Task IEventHandler<ExpenseTemplateDeleted>.HandleAsync(ExpenseTemplateDeleted payload) => UpdateState(() =>

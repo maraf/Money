@@ -51,7 +51,7 @@ namespace Money.Accounts.Middlewares
                 var duration = jwtOptions.GetExpiry();
 
                 var currentExpiration = DateTimeOffset.FromUnixTimeSeconds(timestamp).DateTime;
-                var newExpiration = DateTime.UtcNow.Add(duration);
+                var newExpiration = AppDateTime.Now.Add(duration);
                 var diff = newExpiration - currentExpiration;
 
                 if (diff > duration / 2)

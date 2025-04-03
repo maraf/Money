@@ -35,7 +35,7 @@ namespace Money.Pages
             if (Year != null)
                 period = new YearModel(Year.Value);
             else
-                period = DateTime.Now;
+                period = AppDateTime.Now;
 
             return (period, new[] { period - 1, period - 2 });
         }

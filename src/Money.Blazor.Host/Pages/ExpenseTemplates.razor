@@ -10,7 +10,7 @@
 <ExpenseTemplateCategory @ref="ChangeCategoryModal" ExpenseTemplateKey="@Selected?.Key" CategoryKey="@Selected?.CategoryKey" />
 <ExpenseTemplateRecurrence @ref="ChangeRecurrenceModal" ExpenseTemplateKey="@Selected?.Key" Period="@Selected?.Period" DayInPeriod="@Selected?.DayInPeriod" DueDate="@Selected?.DueDate" />
 
-<div class="row mb-3">
+<div class="row mb-4">
     <div class="col">
         <input type="text" class="form-control" @bind="SearchQuery" @bind:event="oninput" @bind:after="OnSearch" placeholder="Type to filter templates..." />
     </div>

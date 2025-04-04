@@ -1,6 +1,6 @@
 ﻿@if (Model != null)
 {
-    <div class="row align-items-center py-3">
+    <div @key="Model" class="row align-items-center py-3">
         <div class="col-4 col-md-2 mb-2 mb-md-0">
             <DateValue Value="Model.When" />
         </div>

@@ -209,57 +209,121 @@ public partial class Overview<T> :
         return Task.CompletedTask;
     }
 
-    Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
+    private async Task SortModelsAsync(OutcomeOverviewSortType? onlyIfSortType = null)
     {
-        if (IsContained(payload.When))
-            Reload();
+        if (onlyIfSortType != null && onlyIfSortType.Value != SortDescriptor.Type)
+            return;
 
-        return Task.CompletedTask;
+        Dictionary<IKey, CategoryModel> categories = null;
+        if (SortDescriptor.Type == OutcomeOverviewSortType.ByCategory)
+            categories = (await Queries.QueryAsync(ListAllCategory.WithDeleted)).ToDictionary(c => c.Key);
+
+        Items.Sort((a, b) => 
+        {
+            if (SortDescriptor.Direction == SortDirection.Descending)
+                (a, b) = (b, a);
+
+            int compareResult = 0;
+            switch (SortDescriptor.Type)
+            {
+                case OutcomeOverviewSortType.ByAmount:
+                    compareResult = a.Amount.Value.CompareTo(b.Amount.Value);
+                    break;
+                case OutcomeOverviewSortType.ByCategory:
+                    compareResult = categories[a.CategoryKey].Name.CompareTo(categories[b.CategoryKey].Name);
+                    break;
+                case OutcomeOverviewSortType.ByDescription:
+                    compareResult = a.Description.CompareTo(b.Description);
+                    break;
+                case OutcomeOverviewSortType.ByWhen:
+                    compareResult = a.When.CompareTo(b.When);
+                    break;
+                default:
+                    throw Ensure.Exception.NotSupported($"The '{SortDescriptor.Type}' is not supported for sorting");
+            }
+
+            if (compareResult == 0)
+            {
+                if (SortDescriptor.Direction == SortDirection.Descending)
+                    (a, b) = (b, a);
+
+                return a.Key.AsGuidKey().Guid.CompareTo(b.Key.AsGuidKey().Guid);
+            }
+
+            return compareResult;
+        });
     }
 
     protected virtual bool IsContained(DateTime when)
         => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(IsContained)}'.");
 
+    Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
+    {
+        if (IsContained(payload.When))
+        {
+            if (PagingContext.HasNextPage)
+            {
+                Reload();
+            }
+            else
+            {
+                Items.Add(new OutcomeOverviewModel(
+                    payload.Key,
+                    payload.Amount,
+                    payload.When,
+                    payload.Description,
+                    payload.CategoryKey,
+                    payload.IsFixed
+                ));
+                SortModelsAsync().ContinueWith(t => StateHasChanged());
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
     Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
     {
-        Reload();
+        OutcomeOverviewModel model = FindModel(payload);
+        if (model != null)
+            Items.Remove(model);
+
         return Task.CompletedTask;
     }
 
     Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
     {
-        if (SortDescriptor.Type == OutcomeOverviewSortType.ByAmount)
-            Reload();
-        else
-            UpdateModel(payload, model => model.Amount = payload.NewValue);
+        UpdateModel(payload, model => model.Amount = payload.NewValue);
+        SortModelsAsync(OutcomeOverviewSortType.ByWhen).ContinueWith(t => StateHasChanged());
 
         return Task.CompletedTask;
     }
 
     Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
     {
-        if (SortDescriptor.Type == OutcomeOverviewSortType.ByDescription)
-            Reload();
-        else
-            UpdateModel(payload, model => model.Description = payload.Description);
+        UpdateModel(payload, model => model.Description = payload.Description);
+        SortModelsAsync(OutcomeOverviewSortType.ByDescription).ContinueWith(t => StateHasChanged());
 
         return Task.CompletedTask;
     }
 
     Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
     {
-        if (SortDescriptor.Type != OutcomeOverviewSortType.ByWhen)
+        OutcomeOverviewModel model = FindModel(payload);
+        if (model != null)
         {
-            OutcomeOverviewModel model = FindModel(payload);
-            if (model != null && model.When.Year == payload.When.Year && model.When.Month == payload.When.Month)
+            if (IsContained(payload.When))
             {
                 model.When = payload.When;
+                SortModelsAsync(OutcomeOverviewSortType.ByWhen).ContinueWith(t => StateHasChanged());
+            }
+            else
+            {
+                Items.Remove(model);
                 StateHasChanged();
-                return Task.CompletedTask;
             }
         }
 
-        Reload();
         return Task.CompletedTask;
     }
 

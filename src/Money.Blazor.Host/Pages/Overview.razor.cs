@@ -127,7 +127,6 @@ public partial class Overview<T> :
 
     protected async void Reload()
     {
-        // TODO: We need a way to propagate the "reload" to the LoadDataAsync
         await PagingContext.LoadAsync(0);
         await Interop.ScrollToTopAsync();
         StateHasChanged();

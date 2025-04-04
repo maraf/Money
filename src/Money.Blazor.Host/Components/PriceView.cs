@@ -46,7 +46,9 @@ public class PriceView(CurrencyFormatterFactory formatterFactory) : ComponentBas
         if (!String.IsNullOrEmpty(CssStyle))
             builder.AddAttribute(index++, "style", CssStyle);
 
-        builder.AddContent(index++, formatter.Format(Value, Zero, ApplyUserDigits, ApplyPlusForPositiveNumbers));
+        if (formatter != null)
+            builder.AddContent(index++, formatter.Format(Value, Zero, ApplyUserDigits, ApplyPlusForPositiveNumbers));
+        
         builder.CloseElement();
     }
 }

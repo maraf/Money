@@ -13,6 +13,7 @@ public class PagingContext(Func<Task<PagingLoadStatus>> loadPageAsync, LoadingCo
 {
     public int CurrentPageIndex { get; private set; }
     public bool HasNextPage { get; private set; } = true;
+    public bool IsLoading => loading.IsLoading;
 
     public Func<Task<PagingLoadStatus>> LoadPageAsync { get; } = loadPageAsync;
 

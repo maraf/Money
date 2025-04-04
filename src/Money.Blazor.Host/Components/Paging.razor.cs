@@ -14,6 +14,9 @@ public partial class Paging(ILog<Paging> Log)
     [Parameter]
     public PagingContext Context { get; set; }
 
+    [Parameter]
+    public bool ShowAsAutoLoad { get; set; }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -22,15 +25,21 @@ public partial class Paging(ILog<Paging> Log)
             throw Ensure.Exception.Argument("Context", "Missing required parameter 'Context'.");
     }
 
-    protected async Task OnPrevPageClickAsync()
+    protected async Task LoadPrevPageAsync()
     {
+        if (Context.IsLoading || !Context.HasNextPage)
+            return;
+
         await Context.PrevAsync();
         Log.Debug($"Data loaded (prev), hasNextPage='{Context.HasNextPage}', current index '{Context.CurrentPageIndex}'.");
         StateHasChanged();
     }
 
-    protected async Task OnNextPageClickAsync()
+    protected async Task LoadNextPageAsync()
     {
+        if (Context.IsLoading || !Context.HasNextPage)
+            return;
+
         await Context.NextAsync();
         Log.Debug($"Data loaded (next), hasNextPage='{Context.HasNextPage}', current index '{Context.CurrentPageIndex}'.");
         StateHasChanged();

@@ -1,43 +1,59 @@
 ﻿<nav>
     <ul class="pagination justify-content-center">
-        @if (Context.CurrentPageIndex == 0)
+        @if (ShowAsAutoLoad)
         {
-            <li class="page-item disabled">
-                <span class="page-link">
-                    <Icon Identifier="arrow-left" />
-                </span>
-            </li>
+            @if (Context.HasNextPage)
+            {
+                <li class="page-item">
+                    <AutoloadNext Intersected="@LoadNextPageAsync" />
+                    <a class="page-link" @onclick="@LoadNextPageAsync">
+                        Next
+                        <Icon Identifier="arrow-right" />
+                    </a>
+                </li>
+            }
         }
         else
         {
-            <li class="page-item">
-                <a class="page-link" @onclick="@OnPrevPageClickAsync">
-                    <Icon Identifier="arrow-left" />
-                </a>
-            </li>
-        }
+            @if (Context.CurrentPageIndex == 0)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        <Icon Identifier="arrow-left" />
+                    </span>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" @onclick="@LoadPrevPageAsync">
+                        <Icon Identifier="arrow-left" />
+                    </a>
+                </li>
+            }
 
-        <li class="page-item active">
-            <span class="page-link">
-                @(Context.CurrentPageIndex + 1)
-            </span>
-        </li>
-
-        @if (Context.HasNextPage)
-        {
-            <li class="page-item">
-                <a class="page-link" @onclick="@OnNextPageClickAsync">
-                    <Icon Identifier="arrow-right" />
-                </a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item disabled">
+            <li class="page-item active">
                 <span class="page-link">
-                    <Icon Identifier="arrow-right" />
+                    @(Context.CurrentPageIndex + 1)
                 </span>
             </li>
+
+            @if (Context.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" @onclick="@LoadNextPageAsync">
+                        <Icon Identifier="arrow-right" />
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        <Icon Identifier="arrow-right" />
+                    </span>
+                </li>
+            }
         }
     </ul>
 </nav>

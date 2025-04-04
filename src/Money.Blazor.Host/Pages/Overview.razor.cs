@@ -12,6 +12,7 @@ using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -47,6 +48,9 @@ public partial class Overview<T> :
 
     [Inject]
     public Navigator Navigator { get; set; }
+
+    [Inject]
+    public ILog<Overview<T>> Log { get; set; }
 
     protected string Title { get; set; }
     protected string SubTitle { get; set; }
@@ -123,7 +127,9 @@ public partial class Overview<T> :
 
     protected async void Reload()
     {
+        // TODO: We need a way to propagate the "reload" to the LoadDataAsync
         await PagingContext.LoadAsync(0);
+        await Interop.ScrollToTopAsync();
         StateHasChanged();
     }
 
@@ -131,8 +137,6 @@ public partial class Overview<T> :
     {
         using (Loading.Start())
         {
-            await Interop.ScrollToTopAsync();
-
             List<OutcomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(PagingContext.CurrentPageIndex));
             if (models.Count == 0)
             {
@@ -142,8 +146,12 @@ public partial class Overview<T> :
                 return PagingLoadStatus.EmptyPage;
             }
 
-            Items = models;
-            return Items.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
+            if (Items == null || PagingContext.CurrentPageIndex == 0)
+                Items = models;
+            else
+                Items.AddRange(models);
+
+            return Items.Count >= 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
         }
     }
 

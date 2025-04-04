@@ -77,6 +77,10 @@ h4 {
   display: none !important;
 }
 
+.z-1030 {
+  z-index: 1030;
+}
+
 .navbar-dark {
   background-color: #004074;
   border-color: #398BF5;
@@ -656,4 +660,4 @@ h4 {
 .swipe-right {
   right: -35px;
 }
-/*# sourceMappingURL=site.css.map */
+/*# sourceMappingURL=/Users/marekfisera/Development/maraf/Money/src/Money.Blazor.Host/wwwroot/css/site.css.map */

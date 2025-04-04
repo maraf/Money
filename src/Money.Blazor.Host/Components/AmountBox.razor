@@ -6,7 +6,7 @@
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                 @Currencies.FirstOrDefault(c => c.UniqueCode == Currency)?.Symbol
             </button>
-            <div class="dropdown-menu dropdown-menu-end">
+            <div class="dropdown-menu dropdown-menu-end z-1030">
                 @foreach (var currency in Currencies)
                 {
                     <a class="dropdown-item cursor-pointer" @onclick="(() => OnCurrencyChanged(currency))">@currency.Symbol</a>

@@ -165,6 +165,29 @@ window.Money = {
             }
         }
     },
+    ShowTips: () => {
+        var el = document.querySelector(".app-title");
+        if (el) {
+            const tips = [
+                "Create recurring templates and use monthly checklist to see what's the status",
+                "Paying abroad? Create a new currency, set exchange rate and use it in your expenses",
+                "Use categories to group your expenses",
+                "Looking for similar expenses? Use context menu to open search with similar"
+            ];
+
+            const updateTip = () => {
+                if (el.parentElement && el.parentElement.classList.contains("animate")) {
+                    clearInterval(intervalId);
+                    return;
+                }
+                const randomTip = tips[Math.floor(Math.random() * tips.length)];
+                el.innerHTML = randomTip;
+            };
+
+            updateTip();
+            const intervalId = setInterval(updateTip, 3000);
+        }
+    },
     WaitForDotNet: () => window.Money._DotNetPromise,
     DotNetReady: () => window.Money._DotNetPromiseResolve()
 };
@@ -342,6 +365,7 @@ window.PullToRefresh = {
     }
 }
 
+Money.ShowTips();
 Blazor.start({
     configureRuntime: dotnet => dotnet.withEnvironmentVariable(
         "ALLOWED_LOG_SCOPE_PREFIXES", 

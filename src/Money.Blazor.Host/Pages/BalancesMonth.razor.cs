@@ -15,115 +15,110 @@ using System.Text;
 using System.Threading.Tasks;
 using Money.Models.Loading;
 
-namespace Money.Pages
+namespace Money.Pages;
+
+public partial class BalancesMonth(
+    IQueryDispatcher Queries,
+    Navigator Navigator,
+    IEventHandlerCollection EventHandlers
+) : 
+    IDisposable, 
+    IEventHandler<SwipedLeft>, 
+    IEventHandler<SwipedRight>
 {
-    public partial class BalancesMonth : IDisposable,
-        IEventHandler<SwipedLeft>,
-        IEventHandler<SwipedRight>
+    [Parameter]
+    public int Year { get; set; }
+
+    protected LoadingContext Loading { get; set; } = new();
+    protected YearModel SelectedPeriod { get; set; }
+    protected BalanceDisplayType SelectedDisplayType { get; set; }
+    protected bool IncludeExpectedExpenses { get; set; } = true;
+    protected List<YearModel> PeriodGuesses { get; set; }
+    protected List<MonthBalanceModel> Models { get; set; }
+    protected decimal MaxAmount { get; set; }
+    protected Price TotalExpenses { get; set; }
+    protected Price TotalExpectedExpenses { get; set; }
+    protected Price TotalIncomes { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+        await base.OnInitializedAsync();
 
-        [Inject]
-        protected Navigator Navigator { get; set; }
+        SelectedDisplayType = await Queries.QueryAsync(new GetBalanceDisplayProperty());
 
-        [Inject]
-        protected IEventHandlerCollection EventHandlers { get; set; }
+        EventHandlers
+            .Add<SwipedLeft>(this)
+            .Add<SwipedRight>(this);
+    }
 
-        [Parameter]
-        public int Year { get; set; }
+    public void Dispose() 
+    {
+        EventHandlers
+            .Remove<SwipedLeft>(this)
+            .Remove<SwipedRight>(this);
+    }
 
-        protected LoadingContext Loading { get; set; } = new();
-        protected YearModel SelectedPeriod { get; set; }
-        protected BalanceDisplayType SelectedDisplayType { get; set; }
-        protected bool IncludeExpectedExpenses { get; set; } = true;
-        protected List<YearModel> PeriodGuesses { get; set; }
-        protected List<MonthBalanceModel> Models { get; set; }
-        protected decimal MaxAmount { get; set; }
-        protected Price TotalExpenses { get; set; }
-        protected Price TotalExpectedExpenses { get; set; }
-        protected Price TotalIncomes { get; set; }
+    protected async override Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
 
-        protected override async Task OnInitializedAsync()
+        SelectedPeriod = new YearModel(Year);
+        PeriodGuesses = new List<YearModel>(2)
         {
-            await base.OnInitializedAsync();
+            SelectedPeriod - 1,
+            SelectedPeriod - 2,
+        };
 
-            SelectedDisplayType = await Queries.QueryAsync(new GetBalanceDisplayProperty());
+        await LoadAsync();
+    }
 
-            EventHandlers
-                .Add<SwipedLeft>(this)
-                .Add<SwipedRight>(this);
-        }
-
-        public void Dispose() 
+    private async Task LoadAsync()
+    {
+        using (Loading.Start())
         {
-            EventHandlers
-                .Remove<SwipedLeft>(this)
-                .Remove<SwipedRight>(this);
-        }
+            string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
+            var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: IncludeExpectedExpenses));
 
-        protected async override Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
-
-            SelectedPeriod = new YearModel(Year);
-            PeriodGuesses = new List<YearModel>(2)
+            MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + m.ExpectedExpenseSummary?.Value ?? 0)) : 0;
+            Models = [];
+            TotalExpenses = Price.Zero(defaultCurrency);
+            TotalIncomes = Price.Zero(defaultCurrency);
+            TotalExpectedExpenses = Price.Zero(defaultCurrency);
+            for (int i = 0; i < 12; i++)
             {
-                SelectedPeriod - 1,
-                SelectedPeriod - 2,
-            };
+                int month = i + 1;
+                var model = models.FirstOrDefault(m => m.Month == month);
+                if (model == null)
+                    model = new MonthBalanceModel(Year, month, Price.Zero(defaultCurrency), Price.Zero(defaultCurrency));
 
-            await LoadAsync();
-        }
+                TotalExpenses += model.ExpenseSummary;
+                if (model.ExpectedExpenseSummary != null)
+                    TotalExpectedExpenses += model.ExpectedExpenseSummary;
 
-        private async Task LoadAsync()
-        {
-            using (Loading.Start())
-            {
-                string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
-                var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: IncludeExpectedExpenses));
-
-                MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + m.ExpectedExpenseSummary?.Value ?? 0)) : 0;
-                Models = [];
-                TotalExpenses = Price.Zero(defaultCurrency);
-                TotalIncomes = Price.Zero(defaultCurrency);
-                TotalExpectedExpenses = Price.Zero(defaultCurrency);
-                for (int i = 0; i < 12; i++)
-                {
-                    int month = i + 1;
-                    var model = models.FirstOrDefault(m => m.Month == month);
-                    if (model == null)
-                        model = new MonthBalanceModel(Year, month, Price.Zero(defaultCurrency), Price.Zero(defaultCurrency));
-
-                    TotalExpenses += model.ExpenseSummary;
-                    if (model.ExpectedExpenseSummary != null)
-                        TotalExpectedExpenses += model.ExpectedExpenseSummary;
-
-                    TotalIncomes += model.IncomeSummary;
-                    Models.Add(model);
-                }
+                TotalIncomes += model.IncomeSummary;
+                Models.Add(model);
             }
         }
+    }
 
-        private async void ReloadAsync()
-        {
-            await LoadAsync();
-            StateHasChanged();
-        }
+    private async void ReloadAsync()
+    {
+        await LoadAsync();
+        StateHasChanged();
+    }
 
-        protected async Task<IReadOnlyCollection<YearModel>> GetYearsAsync() 
-            => await Queries.QueryAsync(new ListYearWithOutcome());
+    protected async Task<IReadOnlyCollection<YearModel>> GetYearsAsync() 
+        => await Queries.QueryAsync(new ListYearWithOutcome());
 
-        Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
-        {
-            Navigator.OpenBalances(SelectedPeriod - 1);
-            return Task.CompletedTask;
-        }
+    Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
+    {
+        Navigator.OpenBalances(SelectedPeriod - 1);
+        return Task.CompletedTask;
+    }
 
-        Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
-        {
-            Navigator.OpenBalances(SelectedPeriod + 1);
-            return Task.CompletedTask;
-        }
+    Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
+    {
+        Navigator.OpenBalances(SelectedPeriod + 1);
+        return Task.CompletedTask;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Money.Commands;
 using Money.Components;
 using Money.Events;
 using Money.Models;
@@ -9,21 +8,23 @@ using Money.Models.Sorting;
 using Money.Queries;
 using Money.Services;
 using Neptuo;
-using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
-using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Money.Pages;
 
-public partial class Overview<T> :
+public partial class Overview<T>(
+    IEventHandlerCollection EventHandlers,
+    IQueryDispatcher Queries,
+    Interop Interop,
+    Navigator Navigator
+) : 
     System.IDisposable,
     IEventHandler<OutcomeCreated>,
     IEventHandler<OutcomeDeleted>,
@@ -34,24 +35,6 @@ public partial class Overview<T> :
     IEventHandler<SwipedLeft>,
     IEventHandler<SwipedRight>
 {
-    [Inject]
-    public ICommandDispatcher Commands { get; set; }
-
-    [Inject]
-    public IEventHandlerCollection EventHandlers { get; set; }
-
-    [Inject]
-    public IQueryDispatcher Queries { get; set; }
-
-    [Inject]
-    public Interop Interop { get; set; }
-
-    [Inject]
-    public Navigator Navigator { get; set; }
-
-    [Inject]
-    public ILog<Overview<T>> Log { get; set; }
-
     protected string Title { get; set; }
     protected string SubTitle { get; set; }
 
@@ -84,7 +67,7 @@ public partial class Overview<T> :
     {
         CategoryKey = CreateSelectedCategoryFromParameters();
         SelectedPeriod = CreateSelectedItemFromParameters();
-        
+
         if (!CategoryKey.IsEmpty)
         {
             CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));

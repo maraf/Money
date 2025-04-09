@@ -12,7 +12,12 @@ using Neptuo.Queries;
 
 namespace Money.Pages;
 
-partial class ExpenseChecklistMonth : ComponentBase, 
+public partial class ExpenseChecklistMonth(
+    IQueryDispatcher Queries,
+    IEventHandlerCollection EventHandlers,
+    Navigator Navigator
+) : 
+    ComponentBase, 
     System.IDisposable,
     IEventHandler<OutcomeCreated>,
     IEventHandler<OutcomeDeleted>,
@@ -23,15 +28,6 @@ partial class ExpenseChecklistMonth : ComponentBase,
     IEventHandler<SwipedLeft>,
     IEventHandler<SwipedRight>
 {
-    [Inject]
-    protected IQueryDispatcher Queries { get; set; }
-
-    [Inject]
-    public IEventHandlerCollection EventHandlers { get; set; }
-
-    [Inject]
-    protected Navigator Navigator { get; set; }
-
     [Parameter]
     public int Year { get; set; }
 

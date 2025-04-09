@@ -7,65 +7,56 @@ using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
+namespace Money.Pages;
+
+public partial class TrendsMonth(IQueryDispatcher Queries, Navigator Navigator)
 {
-    public partial class TrendsMonth
+    [Parameter]
+    public int Year { get; set; }
+
+    [Parameter]
+    public Guid CategoryGuid { get; set; }
+
+    protected YearModel SelectedPeriod { get; set; }
+    protected IKey CategoryKey { get; set; }
+    protected string CategoryName { get; set; }
+    protected Color CategoryColor { get; set; }
+    protected List<MonthWithAmountModel> Models { get; set; }
+    protected decimal MaxAmount { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+        await base.OnInitializedAsync();
 
-        [Inject]
-        protected Navigator Navigator { get; set; }
+        SelectedPeriod = new YearModel(Year);
+        CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
+        CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
+        CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
 
-        [Parameter]
-        public int Year { get; set; }
+        await LoadAsync();
+    }
 
-        [Parameter]
-        public Guid CategoryGuid { get; set; }
+    private async Task LoadAsync()
+    {
+        string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
+        var models = await Queries.QueryAsync(new ListMonthOutcomesForCategory(CategoryKey, SelectedPeriod));
 
-        protected YearModel SelectedPeriod { get; set; }
-        protected IKey CategoryKey { get; set; }
-        protected string CategoryName { get; set; }
-        protected Color CategoryColor { get; set; }
-        protected List<MonthWithAmountModel> Models { get; set; }
-        protected decimal MaxAmount { get; set; }
-
-        protected override async Task OnInitializedAsync()
+        MaxAmount = 0;
+        Models = new List<MonthWithAmountModel>();
+        for (int i = 0; i < 12; i++)
         {
-            await base.OnInitializedAsync();
+            int month = i + 1;
+            var model = models.FirstOrDefault(m => m.Month == month);
+            if (model == null)
+                model = new MonthWithAmountModel(Year, month, Price.Zero(defaultCurrency));
 
-            SelectedPeriod = new YearModel(Year);
-            CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
-            CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
-            CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
+            if (model.TotalAmount.Value > MaxAmount)
+                MaxAmount = model.TotalAmount.Value;
 
-            await LoadAsync();
-        }
-
-        private async Task LoadAsync()
-        {
-            string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
-            var models = await Queries.QueryAsync(new ListMonthOutcomesForCategory(CategoryKey, SelectedPeriod));
-
-            MaxAmount = 0;
-            Models = new List<MonthWithAmountModel>();
-            for (int i = 0; i < 12; i++)
-            {
-                int month = i + 1;
-                var model = models.FirstOrDefault(m => m.Month == month);
-                if (model == null)
-                    model = new MonthWithAmountModel(Year, month, Price.Zero(defaultCurrency));
-
-                if (model.TotalAmount.Value > MaxAmount)
-                    MaxAmount = model.TotalAmount.Value;
-
-                Models.Add(model);
-            }
+            Models.Add(model);
         }
     }
 }

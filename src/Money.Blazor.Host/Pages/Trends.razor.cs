@@ -10,23 +10,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
+namespace Money.Pages;
+
+public partial class Trends(IQueryDispatcher Queries, Navigator Navigator)
 {
-    public partial class Trends
+    protected List<CategoryModel> Categories { get; set; }
+
+    protected async override Task OnInitializedAsync()
     {
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+        await base.OnInitializedAsync();
 
-        [Inject]
-        protected Navigator Navigator { get; set; }
-
-        protected List<CategoryModel> Categories { get; set; }
-
-        protected async override Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
-
-            Categories = await Queries.QueryAsync(new ListAllCategory());
-        }
+        Categories = await Queries.QueryAsync(new ListAllCategory());
     }
 }

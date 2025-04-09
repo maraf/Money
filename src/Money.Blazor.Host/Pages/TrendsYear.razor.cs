@@ -7,64 +7,55 @@ using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
+namespace Money.Pages;
+
+public partial class TrendsYear(IQueryDispatcher Queries, Navigator Navigator)
 {
-    public partial class TrendsYear
+    public const int ModelsCount = 10;
+
+    [Parameter]
+    public Guid CategoryGuid { get; set; }
+
+    protected YearModel StartYear { get; set; }
+    protected IKey CategoryKey { get; set; }
+    protected string CategoryName { get; set; }
+    protected Color CategoryColor { get; set; }
+    protected List<YearWithAmountModel> Models { get; set; }
+    protected decimal MaxAmount { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        public const int ModelsCount = 10;
+        await base.OnInitializedAsync();
 
-        [Inject]
-        protected IQueryDispatcher Queries { get; set; }
+        StartYear = new YearModel(AppDateTime.Today.Year - 8);
+        CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
+        CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
+        CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
 
-        [Inject]
-        protected Navigator Navigator { get; set; }
+        await LoadAsync();
+    }
 
-        [Parameter]
-        public Guid CategoryGuid { get; set; }
+    private async Task LoadAsync()
+    {
+        string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
+        var models = await Queries.QueryAsync(new ListYearOutcomesForCategory(CategoryKey, StartYear));
 
-        protected YearModel StartYear { get; set; }
-        protected IKey CategoryKey { get; set; }
-        protected string CategoryName { get; set; }
-        protected Color CategoryColor { get; set; }
-        protected List<YearWithAmountModel> Models { get; set; }
-        protected decimal MaxAmount { get; set; }
-
-        protected override async Task OnInitializedAsync()
+        MaxAmount = 0;
+        Models = new List<YearWithAmountModel>();
+        for (int i = 0; i < ModelsCount; i++)
         {
-            await base.OnInitializedAsync();
+            var year = StartYear.Year + i;
+            var model = models.FirstOrDefault(m => m.Year == year);
+            if (model == null)
+                model = new YearWithAmountModel(year, Price.Zero(defaultCurrency));
 
-            StartYear = new YearModel(AppDateTime.Today.Year - 8);
-            CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
-            CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
-            CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
+            if (model.TotalAmount.Value > MaxAmount)
+                MaxAmount = model.TotalAmount.Value;
 
-            await LoadAsync();
-        }
-
-        private async Task LoadAsync()
-        {
-            string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
-            var models = await Queries.QueryAsync(new ListYearOutcomesForCategory(CategoryKey, StartYear));
-
-            MaxAmount = 0;
-            Models = new List<YearWithAmountModel>();
-            for (int i = 0; i < ModelsCount; i++)
-            {
-                var year = StartYear.Year + i;
-                var model = models.FirstOrDefault(m => m.Year == year);
-                if (model == null)
-                    model = new YearWithAmountModel(year, Price.Zero(defaultCurrency));
-
-                if (model.TotalAmount.Value > MaxAmount)
-                    MaxAmount = model.TotalAmount.Value;
-
-                Models.Add(model);
-            }
+            Models.Add(model);
         }
     }
 }

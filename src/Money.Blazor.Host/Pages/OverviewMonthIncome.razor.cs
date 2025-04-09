@@ -14,14 +14,19 @@ using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Money.Pages;
 
-public partial class OverviewMonthIncome : IDisposable,
+public partial class OverviewMonthIncome(
+    ICommandDispatcher Commands,
+    IEventHandlerCollection EventHandlers,
+    IQueryDispatcher Queries,
+    Interop Interop,
+    Navigator Navigator
+) : 
+    IDisposable,
     IEventHandler<IncomeCreated>,
     IEventHandler<IncomeAmountChanged>,
     IEventHandler<IncomeDescriptionChanged>,
@@ -31,21 +36,6 @@ public partial class OverviewMonthIncome : IDisposable,
     IEventHandler<SwipedLeft>,
     IEventHandler<SwipedRight>
 {
-    [Inject]
-    public ICommandDispatcher Commands { get; set; }
-
-    [Inject]
-    public IEventHandlerCollection EventHandlers { get; set; }
-
-    [Inject]
-    public IQueryDispatcher Queries { get; set; }
-
-    [Inject]
-    public Interop Interop { get; set; }
-
-    [Inject]
-    public Navigator Navigator { get; set; }
-
     [Parameter]
     public int Year { get; set; }
 
@@ -60,7 +50,7 @@ public partial class OverviewMonthIncome : IDisposable,
     protected IncomeCreate CreateModal { get; set; }
 
     protected LoadingContext Loading { get; } = new LoadingContext();
-    protected SortDescriptor<IncomeOverviewSortType> SortDescriptor { get; set; } = new SortDescriptor<IncomeOverviewSortType>(IncomeOverviewSortType.ByWhen, SortDirection.Descending);
+    protected SortDescriptor<IncomeOverviewSortType> SortDescriptor { get; set; } = new(IncomeOverviewSortType.ByWhen, SortDirection.Descending);
     protected PagingContext PagingContext { get; set; }
 
     protected IncomeOverviewModel Selected { get; set; }
@@ -70,7 +60,7 @@ public partial class OverviewMonthIncome : IDisposable,
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        
+
         SelectedPeriod = new MonthModel(Year, Month);
         PagingContext = new PagingContext(LoadDataAsync, Loading);
 

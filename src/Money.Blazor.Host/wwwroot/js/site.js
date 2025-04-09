@@ -172,7 +172,16 @@ window.Money = {
                 "Create recurring templates and use monthly checklist to see what's the status",
                 "Paying abroad? Create a new currency, set exchange rate and use it in your expenses",
                 "Use categories to group your expenses",
-                "Looking for similar expenses? Use context menu to open search with similar"
+                "Looking for similar expenses? Use context menu to open search with similar",
+                "Balances compares your income and expenses",
+                "Balances can include expected expenses",
+                "Bottom menu items on mobile can be configured in settings",
+                "Dark or light theme can be configured in settings",
+                "Trends shows how your expenses in selected category change over time",
+                "Find expenses for expense template using context menu",
+                "Expense templates can be sorted and filtered",
+                "Category can have icon and color",
+                "Go to settings to adapt the app to your needs"
             ];
 
             const updateTip = () => {

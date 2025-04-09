@@ -8,21 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money
+namespace Money;
+
+public partial class App(Interop Interop, PullToRefreshInterop PullToRefresh)
 {
-    public partial class App
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        [Inject]
-        public Interop Interop { get; set; }
-
-        [Inject]
-        public PullToRefreshInterop PullToRefresh { get; set; }
-
-        protected async override Task OnAfterRenderAsync(bool firstRender)
-        {
-            await base.OnAfterRenderAsync(firstRender);
-            await Interop.AnimateSplashAsync();
-            await PullToRefresh.InitializeAsync();
-        }
+        await base.OnAfterRenderAsync(firstRender);
+        await Interop.AnimateSplashAsync();
+        await PullToRefresh.InitializeAsync();
     }
 }

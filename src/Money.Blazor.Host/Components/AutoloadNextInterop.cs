@@ -22,6 +22,6 @@ public class AutoloadNextInterop(IJSRuntime jsRuntime)
     }
 
     [JSInvokable("AutoloadNext.Intersected")]
-    public void Intersected() 
-        => _ = component.Intersected.InvokeAsync();
+    public async ValueTask IntersectedAsync() 
+        => await component.Intersected.InvokeAsync();
 }

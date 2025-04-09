@@ -116,7 +116,18 @@ window.AutoloadNext = {
                 (entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            interop.invokeMethodAsync("AutoloadNext.Intersected");
+                            if (window.AutoloadNext._lastInteropPromise) {
+                                return;
+                            }
+
+                            window.AutoloadNext._lastInteropPromise = interop.invokeMethodAsync("AutoloadNext.Intersected");
+                            window.AutoloadNext._lastInteropPromise
+                                .then(() => {
+                                    window.AutoloadNext._lastInteropPromise = null;
+                                })
+                                .catch(() => {
+                                    window.AutoloadNext._lastInteropPromise = null;
+                                });
                         }
                     });
                 },

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Money.Models;
 using Money.Models.Queries;
+using Money.Services;
 using Neptuo;
+using Neptuo.Events;
+using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -12,15 +15,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Money.Pages
-{
+namespace Money.Pages;
+
     [Route("/outcomes/{Year:int}/{Month:int}")]
     [Route("/overview/{Year:int}/{Month:int}")]
     [Route("/overview/{Year:int}/{Month:int}/{CategoryGuid:guid}")]
     [Route("/{Year:int}/{Month:int}/overview")]
     [Route("/{Year:int}/{Month:int}/overview/{CategoryGuid:guid}")]
     [Authorize]
-    public class OverviewMonth : Overview<MonthModel>
+public partial class OverviewMonth(
+    IEventHandlerCollection EventHandlers,
+    IQueryDispatcher Queries,
+    Interop Interop,
+    Navigator Navigator,
+    ILog<Overview<MonthModel>> Log
+) : Overview<MonthModel>(
+    EventHandlers,
+    Queries,
+    Interop,
+    Navigator,
+    Log,
+    "List of each single expense in selected month"
+)
     {
         [Parameter]
         public int? Year { get; set; }
@@ -30,9 +46,6 @@ namespace Money.Pages
 
         [Parameter]
         public Guid? CategoryGuid { get; set; }
-
-        public OverviewMonth()
-            => SubTitle = "List of each single expense in selected month";
 
         protected override void ClearPreviousParameters()
         {
@@ -81,5 +94,4 @@ namespace Money.Pages
 
         protected override void OpenPrevPeriod()
             => Navigator.OpenOverview(SelectedPeriod - 1);
-    }
 }

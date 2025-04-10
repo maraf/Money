@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Money.Components;
 using Money.Events;
 using Money.Models;
@@ -10,6 +10,7 @@ using Money.Services;
 using Neptuo;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
+using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -23,7 +24,9 @@ public partial class Overview<T>(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
     Interop Interop,
-    Navigator Navigator
+    Navigator Navigator,
+    ILog<Overview<T>> Log,
+    string subTitle = null
 ) : 
     System.IDisposable,
     IEventHandler<OutcomeCreated>,
@@ -36,7 +39,7 @@ public partial class Overview<T>(
     IEventHandler<SwipedRight>
 {
     protected string Title { get; set; }
-    protected string SubTitle { get; set; }
+    protected string SubTitle { get; set; } = subTitle;
 
     protected T SelectedPeriod { get; set; }
     protected IKey CategoryKey { get; set; }

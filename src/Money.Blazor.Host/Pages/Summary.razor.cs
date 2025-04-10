@@ -25,7 +25,8 @@ public partial class Summary<T>(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
     ILog<Summary<T>> Log,
-    Navigator Navigator
+    Navigator Navigator,
+    string subTitle = null
 ) : 
     System.IDisposable,
     IEventHandler<OutcomeCreated>,
@@ -38,7 +39,7 @@ public partial class Summary<T>(
     IEventHandler<IncomeCreated>,
     IEventHandler<IncomeDeleted>
 {
-    protected string SubTitle { get; set; }
+    protected string SubTitle { get; set; } = subTitle;
 
     protected bool IsPeriodReloadRequired { get; set; }
     protected List<T> Periods { get; private set; }

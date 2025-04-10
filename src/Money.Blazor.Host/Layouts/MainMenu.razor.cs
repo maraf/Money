@@ -11,17 +11,23 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Money.Components;
+namespace Money.Layouts;
 
-public class MainMenuBase(
+public interface IMainMenu
+{
+    bool IsMainMenuVisible { get; }
+    void UpdateMainMenuVisible(bool isVisible);
+}
+
+public partial class MainMenu(
     Navigator Navigator,
     IQueryDispatcher Queries,
-    ILog<MainMenuBase> Log,
+    ILog<MainMenu> Log,
     IEventHandlerCollection EventHandlers,
     Navigator.ComponentContainer ComponentContainer
 ) : 
-    ComponentBase, 
-    IDisposable, 
+    IDisposable,
+    IMainMenu,
     IEventHandler<UserSignedOut>
 {
     public bool IsMainMenuVisible { get; protected set; } = false;

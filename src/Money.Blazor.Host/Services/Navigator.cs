@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using Microsoft.JSInterop;
 using Money.Components;
+using Money.Layouts;
 using Money.Models;
 using Money.Models.Sorting;
 using Neptuo;
@@ -197,7 +198,7 @@ namespace Money.Services
         public class ComponentContainer
         {
             public IExpenseCreateNavigator ExpenseCreate { get; set; }
-            public MainMenuBase MainMenu { get; internal set; }
+            public IMainMenu MainMenu { get; internal set; }
         }
     }
 }

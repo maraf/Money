@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components;
 
-public partial class ExpenseCardContext(ICommandDispatcher Commands, Navigator Navigator) : ExpenseCard.IContext
+public partial class ExpenseCardContext(ICommandDispatcher Commands) : ExpenseCard.IContext
 {
     [Parameter]
     public RenderFragment ChildContent { get; set; }

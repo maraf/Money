@@ -1,0 +1,19 @@
+@if (IsActive)
+{
+    @if (PlaceholderContent != null)
+    {
+        @PlaceholderContent(activeContext)
+    }
+    else
+    {
+        @foreach(var length in WordLengths)
+        {
+            <span class="placeholder col-@length"></span>
+            @(" ")
+        }
+    }
+}
+else
+{
+    @ChildContent
+}

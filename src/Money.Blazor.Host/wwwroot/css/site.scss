@@ -452,6 +452,27 @@ h4 {
     font-size: .75rem;
 }
 
+@media (min-width: 576px) {
+    .ratio-sm {
+        position: relative;
+        width: 100%;
+    }
+    
+    .ratio-sm::before {
+        display: block;
+        padding-top: var(--bs-aspect-ratio);
+        content: "";
+    }
+
+    .ratio-sm > * {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
 /* ------ SPLASH SCREEN ------------------------------------------------------------------------ */
 
 .splash {

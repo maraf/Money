@@ -30,19 +30,21 @@
         <div class="row">
             @foreach (var model in Models)
             {
-                <div class="col-12 col-sm-6 col-md-4 col-xl-3">
-                    <div class="card card-hover">
-                        <div class="card-body">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                    <div class="card card-hover ratio-sm ratio-4x3 mb-4">
+                        <div class="card-body d-flex flex-column">
                             <PriceView TagName="h3" CssClass="m-0" Value="model.Amount" Zero="CurrencyFormatter.FormatZero.Placehoder" />
 
                             @if (!model.CategoryKey.IsEmpty)
                             {
-                                <CategoryTag Key="@model.CategoryKey" />
+                                <div>
+                                    <CategoryTag Key="@model.CategoryKey" />
+                                </div>
                             }
 
                             @if (!String.IsNullOrEmpty(model.Description) || model.IsFixed)
                             {
-                                <p>
+                                <p class="mb-0">
                                     @model.Description
 
                                     @if (model.IsFixed)
@@ -66,6 +68,7 @@
                                 }
                             }
 
+                            <div class="flex-fill"></div>
                             <div class="controls text-end">
                                 <IconButton Icon="minus" ToolTip="Create expense" Click="@(() => { Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed); })" />
                                 

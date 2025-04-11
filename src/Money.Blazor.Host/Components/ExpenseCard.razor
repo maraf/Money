@@ -1,63 +1,78 @@
 ﻿@if (Model != null)
 {
-    <div @key="Model" class="row align-items-center py-3">
+    <div @key="Model" class="row align-items-center py-3 @CssClass">
         <div class="col-4 col-md-2 mb-2 mb-md-0">
-            <DateValue Value="Model.When" />
+            <Placeholder WordMinLength="6" WordMaxLength="7">
+                <DateValue Value="Model.When" />
+            </Placeholder>
         </div>
         <div class="col-8 col-md-3 text-md-end mb-2 mb-md-0 text-end">
-            <PriceView TagName="h3" CssClass="@AmountCssClass" Value="Model.Amount" Zero="CurrencyFormatter.FormatZero.Placehoder" />
+            <Placeholder WordMinLength="7">
+                <PriceView TagName="h3" CssClass="@AmountCssClass" Value="Model.Amount" Zero="CurrencyFormatter.FormatZero.Placehoder" />
+            </Placeholder>
         </div>
         <div class="col-auto col-md-2 mb-2 mb-md-0">
-            <CategoryTag Key="@Model.CategoryKey" />
+            <Placeholder WordMinCount="1" WordMaxCount="3" WordMinLength="2" WordMaxLength="7" TotalMaxLength="9">
+                <CategoryTag Key="@Model.CategoryKey" />
+            </Placeholder>
         </div>
         <div class="col mb-2 mb-md-0">
-            @Model.Description
+            <Placeholder WordMinCount="2" WordMaxCount="4" WordMinLength="2" WordMaxLength="5" TotalMaxLength="11">
+                @Model.Description
 
-            @if (Model.IsFixed)
-            {
-                <em class="text-muted ms-1">Fixed</em>
-            }
+                @if (Model.IsFixed)
+                {
+                    <em class="text-muted ms-1">Fixed</em>
+                }
+            </Placeholder>
         </div>
         @if (Context.HasEdit)
         {
             <div class="col-auto controls">
                 <div class="d-flex flex-row align-items-center">
-                    <CommandExecutionDecorator AggregateKey="@Model.Key" />
-                    <div class="dropdown">
-                        <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" @onclick="@OnEditAmount">
-                                <Icon Identifier="dollar-sign" />
-                                Amount
-                            </a>
-                            <a class="dropdown-item" @onclick="@OnEditDescription">
-                                <Icon Identifier="comment" />
-                                Description
-                            </a>
-                            <a class="dropdown-item" @onclick="@OnEditWhen">
-                                <Icon Identifier="calendar" />
-                                When
-                            </a>
-                            <hr class="dropdown-divider" />
-                            <a class="dropdown-item" @onclick="@OnDuplicate">
-                                <Icon Identifier="clone" />
-                                Duplicate
-                            </a>
-                            <a class="dropdown-item" @onclick="@OnCreateTemplate">
-                                <Icon Identifier="redo" />
-                                As Template
-                            </a>
-                            <a class="dropdown-item" href="@Navigator.UrlSearch(Model.Description)">
-                                <Icon Identifier="search" />
-                                Find similar
-                            </a>
-                            <hr class="dropdown-divider" />
-                            <a class="dropdown-item" @onclick="@OnDelete">
-                                <Icon Identifier="trash-alt" />
-                                Delete
-                            </a>
-                        </div>
-                    </div>
+                    <Placeholder>
+                        <ChildContent>
+                            <CommandExecutionDecorator AggregateKey="@Model.Key" />
+                            <div class="dropdown">
+                                <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" @onclick="@OnEditAmount">
+                                        <Icon Identifier="dollar-sign" />
+                                        Amount
+                                    </a>
+                                    <a class="dropdown-item" @onclick="@OnEditDescription">
+                                        <Icon Identifier="comment" />
+                                        Description
+                                    </a>
+                                    <a class="dropdown-item" @onclick="@OnEditWhen">
+                                        <Icon Identifier="calendar" />
+                                        When
+                                    </a>
+                                    <hr class="dropdown-divider" />
+                                    <a class="dropdown-item" @onclick="@OnDuplicate">
+                                        <Icon Identifier="clone" />
+                                        Duplicate
+                                    </a>
+                                    <a class="dropdown-item" @onclick="@OnCreateTemplate">
+                                        <Icon Identifier="redo" />
+                                        As Template
+                                    </a>
+                                    <a class="dropdown-item" href="@Navigator.UrlSearch(Model.Description)">
+                                        <Icon Identifier="search" />
+                                        Find similar
+                                    </a>
+                                    <hr class="dropdown-divider" />
+                                    <a class="dropdown-item" @onclick="@OnDelete">
+                                        <Icon Identifier="trash-alt" />
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </ChildContent>
+                        <PlaceholderContent>
+                            <IconButton Icon="ellipsis-v" />
+                        </PlaceholderContent>
+                    </Placeholder>
                 </div>
             </div>
         }

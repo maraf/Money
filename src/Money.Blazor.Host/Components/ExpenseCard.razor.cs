@@ -33,6 +33,9 @@ public partial class ExpenseCard(Navigator Navigator)
     public IExpenseOverviewModel Model { get; set; }
 
     [Parameter]
+    public string CssClass { get; set; }
+
+    [Parameter]
     public string AmountCssClass { get; set; }
 
     protected override void OnParametersSet()

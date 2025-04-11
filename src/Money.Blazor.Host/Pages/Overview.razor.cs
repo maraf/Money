@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Money.Components;
 using Money.Events;
 using Money.Models;
@@ -118,13 +118,29 @@ public partial class Overview<T>(
         StateHasChanged();
     }
 
+    protected virtual IReadOnlyCollection<OutcomeOverviewModel> GetLoadingPlaceholders()
+    {
+        var expense = new OutcomeOverviewModel(
+            KeyFactory.Create(typeof(Outcome)), 
+            new Price(1, "USD"), 
+            AppDateTime.Today, 
+            string.Empty, 
+            KeyFactory.Create(typeof(Category)), 
+            false
+        );
+        return [ expense, expense, expense, expense, expense ];
+    }
+
     protected async Task<PagingLoadStatus> LoadDataAsync()
     {
         using (Loading.Start())
         {
+            Log.Debug($"Starting to load {PagingContext.CurrentPageIndex}");
+
             List<OutcomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(PagingContext.CurrentPageIndex));
             if (models.Count == 0)
             {
+                Log.Debug("Empty result");
                 if (PagingContext.CurrentPageIndex == 0)
                     Items = models;
 
@@ -136,7 +152,10 @@ public partial class Overview<T>(
             else
                 Items.AddRange(models);
 
-            return Items.Count >= 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
+            var result = Items.Count >= 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
+            Log.Debug($"Loading finished, all items '{Items.Count}', result '{result}'");
+            StateHasChanged();
+            return result;
         }
     }
 

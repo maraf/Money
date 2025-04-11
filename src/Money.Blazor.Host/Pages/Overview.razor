@@ -58,26 +58,48 @@
     }
     <div class="clear"></div>
 
-    <Loading Context="@Loading" IsOverlay="true">
-        @if (Items != null)
-        {
-            if (Items.Count > 0)
+    <div class="cards">
+        <ExpenseCardContext>
+            @if (Items != null)
             {
-                <div class="cards">
-                    <ExpenseCardContext>
-                        @foreach (var item in Items)
+                if (Items.Count > 0)
+                {
+                    var index = 0;
+                    @foreach (var item in Items)
+                    {
+                        <ExpenseCard Model="@item" />
+                        
+                        if (index == Items.Count - 2)
                         {
-                            <ExpenseCard Model="@item" />
+                            <AutoloadNext Intersected="@PagingContext.NextAsync" />
                         }
-                    </ExpenseCardContext>
-                </div>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" CssClass="mt-3" />
+                }
+            }
 
-                <Paging Context="@PagingContext" ShowAsAutoLoad="true" />
-            }
-            else
+            <Loading Context="@Loading">
+                <LoadingContent>
+                    <PlaceholderContainer WrapInElement="false" IsActive="true" Context="ctx">
+                        @foreach (var item in GetLoadingPlaceholders().Take(Items?.Count > 0 ? 2 : 10))
+                        {
+                            <ExpenseCard Model="@item" CssClass="@ctx.CssClass" />
+                        }
+                    </PlaceholderContainer>
+                </LoadingContent>
+            </Loading>
+
+            @if (Items != null)
             {
-                <Alert Title="No data." Message="Let's add some expenses." Mode="@AlertMode.Warning" CssClass="mt-3" />
+                if (Items.Count > 0)
+                {
+                    <Paging Context="@PagingContext" ShowAsNext="true" CssClass="mt-3" />
+                }
             }
-        }
-    </Loading>
+        </ExpenseCardContext>
+    </div>
 </div>

@@ -15,7 +15,10 @@ public partial class Paging(ILog<Paging> Log)
     public PagingContext Context { get; set; }
 
     [Parameter]
-    public bool ShowAsAutoLoad { get; set; }
+    public bool ShowAsNext { get; set; }
+
+    [Parameter]
+    public string CssClass { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -27,21 +30,19 @@ public partial class Paging(ILog<Paging> Log)
 
     protected async Task LoadPrevPageAsync()
     {
-        if (Context.IsLoading || !Context.HasNextPage)
-            return;
-
-        await Context.PrevAsync();
-        Log.Debug($"Data loaded (prev), hasNextPage='{Context.HasNextPage}', current index '{Context.CurrentPageIndex}'.");
-        StateHasChanged();
+        if (await Context.PrevAsync())
+        {
+            Log.Debug($"Data loaded (prev), hasNextPage='{Context.HasNextPage}', current index '{Context.CurrentPageIndex}'.");
+            StateHasChanged();
+        }
     }
 
     protected async Task LoadNextPageAsync()
     {
-        if (Context.IsLoading || !Context.HasNextPage)
-            return;
-
-        await Context.NextAsync();
-        Log.Debug($"Data loaded (next), hasNextPage='{Context.HasNextPage}', current index '{Context.CurrentPageIndex}'.");
-        StateHasChanged();
+        if (await Context.NextAsync())
+        {
+            Log.Debug($"Data loaded (next), hasNextPage='{Context.HasNextPage}', current index '{Context.CurrentPageIndex}'.");
+            StateHasChanged();
+        }
     }
 }

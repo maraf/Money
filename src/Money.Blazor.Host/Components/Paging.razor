@@ -1,8 +1,8 @@
-﻿<nav>
+﻿<nav class="@CssClass">
     <ul class="pagination justify-content-center">
-        @if (ShowAsAutoLoad)
+        @if (ShowAsNext)
         {
-            @if (Context.HasNextPage)
+            @if (Context.HasNextPage && !Context.IsLoading)
             {
                 <li class="page-item">
                     <AutoloadNext Intersected="@LoadNextPageAsync" />

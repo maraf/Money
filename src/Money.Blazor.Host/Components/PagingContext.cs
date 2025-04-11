@@ -15,8 +15,6 @@ public class PagingContext(Func<Task<PagingLoadStatus>> loadPageAsync, LoadingCo
     public bool HasNextPage { get; private set; } = true;
     public bool IsLoading => loading.IsLoading;
 
-    public Func<Task<PagingLoadStatus>> LoadPageAsync { get; } = loadPageAsync;
-
     private void ProcessStatus(PagingLoadStatus status)
     {
         switch (status)
@@ -40,38 +38,51 @@ public class PagingContext(Func<Task<PagingLoadStatus>> loadPageAsync, LoadingCo
         }
     }
 
-    public async Task NextAsync()
+    public async Task<bool> NextAsync()
     {
+        if (IsLoading || !HasNextPage)
+            return false;
+
         using (loading.Start())
         {
             if (!HasNextPage)
-                return;
+                return false;
 
             CurrentPageIndex++;
-            var status = await LoadPageAsync();
+            var status = await loadPageAsync();
             ProcessStatus(status);
         }
+
+        return true;
     }
 
-    public async Task PrevAsync()
+    public async Task<bool> PrevAsync()
     {
+        if (IsLoading || !HasNextPage)
+            return false;
+
         using (loading.Start())
         {
             if (CurrentPageIndex == 0)
-                return;
+                return false;
 
             CurrentPageIndex--;
-            var status = await LoadPageAsync();
+            var status = await loadPageAsync();
             ProcessStatus(status);
         }
+
+        return true;
     }
 
     public async Task<PagingLoadStatus> LoadAsync(int index)
     {
+        if (IsLoading || !HasNextPage)
+            return PagingLoadStatus.HasNextPage;
+
         using (loading.Start())
         {
             CurrentPageIndex = index;
-            var status = await LoadPageAsync();
+            var status = await loadPageAsync();
             ProcessStatus(status);
             return status;
         }

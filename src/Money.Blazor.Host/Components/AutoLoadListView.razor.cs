@@ -22,6 +22,9 @@ public partial class AutoLoadListView<TModel>
     public LoadingContext LoadingContext { get; set; }
 
     [Parameter]
+    public string NoDataTitle { get; set; }
+
+    [Parameter]
     public string NoDataMessage { get; set; }
 
     public record ItemContext(TModel Model, PlaceholderContext Placeholder);

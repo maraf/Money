@@ -139,7 +139,7 @@ public partial class Overview<T>(
             else
                 Items.AddRange(models);
 
-            var result = Items.Count >= 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
+            var result = models.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
             Log.Debug($"Loading finished, all items '{Items.Count}', result '{result}'");
             StateHasChanged();
             return result;

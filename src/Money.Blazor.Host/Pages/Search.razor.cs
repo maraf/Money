@@ -51,7 +51,7 @@ public partial class Search(
     {
         DefaultSort = await Queries.QueryAsync(new GetSearchSortProperty());
         FormSort = Sort = DefaultSort;
-        PagingContext = new PagingContext(() => LoadPageAsync(), Loading);
+        PagingContext = new PagingContext(LoadPageAsync, Loading);
         Navigator.LocationChanged += OnLocationChanged;
         BindEvents();
     }
@@ -96,33 +96,48 @@ public partial class Search(
         Log.Debug($"Sort: last '{lastSort.Type}+{lastSort.Direction}', current '{Sort.Type}+{Sort.Direction}'.");
 
         if (lastQuery == Query && lastSort.Equals(Sort))
+        {
+            Log.Debug("No change in query or sort.");
             return;
+        }
 
-        var status = await PagingContext.LoadAsync(0);
-        if (status == PagingLoadStatus.EmptyPage && lastQuery != Query)
-            Models.Clear();
+        Log.Debug($"Load first page with '{Query}' and '{Sort}'.");
+        await PagingContext.LoadAsync(0);
     }
 
-    protected async Task<PagingLoadStatus> LoadPageAsync(bool cleanOnEmptyResults = false)
+    protected async Task<PagingLoadStatus> LoadPageAsync()
     {
-        if (!String.IsNullOrEmpty(FormText))
+        using (Loading.Start())
         {
-            var models = await Queries.QueryAsync(SearchOutcomes.Version2(FormText, Sort, PagingContext.CurrentPageIndex));
-            if (models.Count == 0)
+            Log.Debug($"Starting to load {PagingContext.CurrentPageIndex}");
+            if (PagingContext.CurrentPageIndex == 0)
             {
-                if (cleanOnEmptyResults)
-                    Models.Clear();
-
-                return PagingLoadStatus.EmptyPage;
+                Models = [];
+                StateHasChanged();
             }
 
-            Models = models;
-            return Models.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
-        }
-        else
-        {
-            Models.Clear();
-            return PagingLoadStatus.LastPage;
+            if (!String.IsNullOrEmpty(FormText))
+            {
+                var models = await Queries.QueryAsync(SearchOutcomes.Version2(FormText, Sort, PagingContext.CurrentPageIndex));
+                if (models.Count == 0)
+                {
+                    Log.Debug("Empty result");
+                    return PagingLoadStatus.EmptyPage;
+                }
+
+                Models.AddRange(models);
+
+                var result = models.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
+                Log.Debug($"Loading finished, all items '{Models.Count}', result '{result}'");
+                StateHasChanged();
+                return result;
+            }
+            else
+            {
+                Log.Debug($"Empty query");
+                Models.Clear();
+                return PagingLoadStatus.LastPage;
+            }
         }
     }
 
@@ -165,33 +180,33 @@ public partial class Search(
         return Task.CompletedTask;
     }
 
-    private Task ReloadPageAsync()
+    private Task ReloadDataAsync()
     {
-        _ = LoadPageAsync(cleanOnEmptyResults: true).ContinueWith(_ => StateHasChanged());
+        _ = PagingContext.LoadAsync(0).ContinueWith(_ => StateHasChanged());
         return Task.CompletedTask;
     }
 
     Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
-        => ReloadPageAsync();
+        => ReloadDataAsync();
 
     Task IEventHandler<OutcomeDeleted>.HandleAsync(OutcomeDeleted payload)
-        => ReloadPageAsync();
+        => ReloadDataAsync();
 
     Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload)
     {
         if (Sort.Type == OutcomeOverviewSortType.ByAmount)
-            return ReloadPageAsync();
+            return ReloadDataAsync();
         else
             return UpdateModel(payload, model => model.Amount = payload.NewValue);
     }
 
     Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload)
-        => ReloadPageAsync();
+        => ReloadDataAsync();
 
     Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
     {
         if (Sort.Type == OutcomeOverviewSortType.ByWhen)
-            return ReloadPageAsync();
+            return ReloadDataAsync();
         else
             return UpdateModel(payload, model => model.When = payload.When);
     }

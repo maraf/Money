@@ -60,7 +60,14 @@
 
     <div class="cards">
         <ExpenseCardContext>
-            <AutoLoadListView Items="@Items" LoadingContext="@Loading" PagingContext="@PagingContext" NoDataMessage="Let's add some expenses." Context="item">
+            <AutoLoadListView
+                Items="@Items"
+                LoadingContext="@Loading"
+                PagingContext="@PagingContext"
+                NoDataTitle="No data."
+                NoDataMessage="Let's add some expenses."
+                Context="item"
+            >
                 <ExpenseCard Model="@item.Model" CssClass="@item.Placeholder?.CssClass" />
             </AutoLoadListView>
         </ExpenseCardContext>

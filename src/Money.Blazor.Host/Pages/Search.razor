@@ -24,23 +24,17 @@
         </div>
     </form>
 
-    <Loading Context="@Loading">
-        @if (Models == null || Models.Count == 0)
-        {
-            <Alert Message="@(string.IsNullOrEmpty(Query) ? "Type your query to start..." : "No matching expense found.")" Mode="@AlertMode.Warning" />
-        }
-        else
-        {
-            <div class="cards">
-                <ExpenseCardContext>
-                    @foreach (var item in Models)
-                    {
-                        <ExpenseCard Model="@item" />
-                    }
-                </ExpenseCardContext>
-            </div>
-
-            <Paging Context="@PagingContext" />
-        }
-    </Loading>
+    <div class="cards">
+        <ExpenseCardContext>
+            <AutoLoadListView 
+                Items="@Models" 
+                LoadingContext="@Loading" 
+                PagingContext="@PagingContext" 
+                NoDataMessage="@(string.IsNullOrEmpty(Query) ? "Type your query to start..." : "No matching expense found.")" 
+                Context="item"
+            >
+                <ExpenseCard Model="@item.Model" CssClass="@item.Placeholder?.CssClass" />
+            </AutoLoadListView>
+        </ExpenseCardContext>
+    </div>
 </div>

@@ -16,9 +16,9 @@
             index++;
         }
     }
-    else
+    else if (!LoadingContext.IsLoading)
     {
-        <Alert Title="No data." Message="@NoDataMessage" Mode="@AlertMode.Warning" CssClass="mt-3" />
+        <Alert Title="@NoDataTitle" Message="@NoDataMessage" Mode="@AlertMode.Warning" CssClass="mt-3" />
     }
 }
 

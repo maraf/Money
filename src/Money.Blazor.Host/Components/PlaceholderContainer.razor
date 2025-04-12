@@ -1,33 +1,3 @@
 <CascadingValue Value="@this">
-    @{
-        var context = IsActive ? activeContext : inactiveContext;
-    }
-    @if (WrapInElement)
-    {
-        <div class="@context.CssClass">
-            @ChildContent(context)
-        </div>
-    }
-    else
-    {
-        @ChildContent(context)
-    }
+    @ChildContent(IsActive ? activeContext : inactiveContext)
 </CascadingValue>
-
-@code
-{
-    private static readonly PlaceholderContext activeContext = new PlaceholderContext("placeholder-glow", true);
-    private static readonly PlaceholderContext inactiveContext = new PlaceholderContext(string.Empty, false);
-
-    [Parameter]
-    public bool IsActive { get; set; }
-
-    [Parameter]
-    public RenderFragment<PlaceholderContext> ChildContent { get; set; }
-
-    [Parameter]
-    public string TagName { get; set; }
-
-    [Parameter]
-    public bool WrapInElement { get; set; } = true;
-}

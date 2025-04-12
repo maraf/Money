@@ -84,7 +84,7 @@
 
             <Loading Context="@Loading">
                 <LoadingContent>
-                    <PlaceholderContainer WrapInElement="false" IsActive="true" Context="ctx">
+                    <PlaceholderContainer IsActive="true" Context="ctx">
                         @foreach (var item in GetLoadingPlaceholders().Take(Items?.Count > 0 ? 2 : 10))
                         {
                             <ExpenseCard Model="@item" CssClass="@ctx.CssClass" />

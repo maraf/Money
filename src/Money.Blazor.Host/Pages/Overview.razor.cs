@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Money.Components;
 using Money.Events;
 using Money.Models;
@@ -116,19 +116,6 @@ public partial class Overview<T>(
         await PagingContext.LoadAsync(0);
         await Interop.ScrollToTopAsync();
         StateHasChanged();
-    }
-
-    protected virtual IReadOnlyCollection<OutcomeOverviewModel> GetLoadingPlaceholders()
-    {
-        var expense = new OutcomeOverviewModel(
-            KeyFactory.Create(typeof(Outcome)), 
-            new Price(1, "USD"), 
-            AppDateTime.Today, 
-            string.Empty, 
-            KeyFactory.Create(typeof(Category)), 
-            false
-        );
-        return [ expense, expense, expense, expense, expense ];
     }
 
     protected async Task<PagingLoadStatus> LoadDataAsync()

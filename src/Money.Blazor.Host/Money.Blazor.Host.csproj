@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <RootNamespace>Money</RootNamespace>
@@ -7,7 +7,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <UseBlazorWebAssembly>true</UseBlazorWebAssembly>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
-	<WasmFingerprintAssets Condition="'$(Configuration)' == 'Debug'">false</WasmFingerprintAssets>
+	  <WasmFingerprintAssets Condition="'$(Configuration)' == 'Debug'">false</WasmFingerprintAssets>
   </PropertyGroup>
 
   <ItemGroup>

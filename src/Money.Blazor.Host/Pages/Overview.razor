@@ -85,9 +85,9 @@
             <Loading Context="@Loading">
                 <LoadingContent>
                     <PlaceholderContainer IsActive="true" Context="ctx">
-                        @foreach (var item in GetLoadingPlaceholders().Take(Items?.Count > 0 ? 2 : 10))
+                        @for (int i = 0; i < (Items?.Count > 0 ? 2 : 5); i++)
                         {
-                            <ExpenseCard Model="@item" CssClass="@ctx.CssClass" />
+                            <ExpenseCard Model="@MockData.ExpenseOverviewModel" CssClass="@ctx.CssClass" />
                         }
                     </PlaceholderContainer>
                 </LoadingContent>

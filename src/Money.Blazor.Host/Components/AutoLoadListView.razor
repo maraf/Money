@@ -1,0 +1,42 @@
+@typeparam TModel
+
+@if (Items != null)
+{
+    if (Items.Count > 0)
+    {
+        var index = 0;
+        @foreach (var item in Items)
+        {
+            @ChildContent(new ItemContext(item, null))
+            
+            if (index == Items.Count - 3)
+            {
+                <AutoloadNext Intersected="@PagingContext.NextAsync" />
+            }
+            index++;
+        }
+    }
+    else
+    {
+        <Alert Title="No data." Message="@NoDataMessage" Mode="@AlertMode.Warning" CssClass="mt-3" />
+    }
+}
+
+<Loading Context="@LoadingContext">
+    <LoadingContent>
+        <PlaceholderContainer IsActive="true" Context="ctx">
+            @for (int i = 0; i < (PlaceholderCount ?? (Items?.Count > 0 ? 2 : 5)); i++)
+            {
+                @ChildContent(new ItemContext(MockData.Get<TModel>(), ctx))
+            }
+        </PlaceholderContainer>
+    </LoadingContent>
+</Loading>
+
+@if (Items != null)
+{
+    if (Items.Count > 0)
+    {
+        <Paging Context="@PagingContext" ShowAsNext="true" CssClass="mt-3" />
+    }
+}

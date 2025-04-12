@@ -76,7 +76,7 @@ public class PagingContext(Func<Task<PagingLoadStatus>> loadPageAsync, LoadingCo
 
     public async Task<PagingLoadStatus> LoadAsync(int index)
     {
-        if (IsLoading || !HasNextPage)
+        if (IsLoading)
             return PagingLoadStatus.HasNextPage;
 
         using (loading.Start())

@@ -151,6 +151,8 @@ public partial class Overview<T>(
 
     protected async void OnSortChanged()
     {
+        Items = null;
+        StateHasChanged();
         await PagingContext.LoadAsync(0);
         StateHasChanged();
     }

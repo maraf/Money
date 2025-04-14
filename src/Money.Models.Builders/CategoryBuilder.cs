@@ -118,6 +118,7 @@ namespace Money.Models.Builders
 
                 return await sql
                     .OrderBy(c => c.Name)
+                    .ThenBy(c => c.Id)
                     .Select(e => e.ToModel(query.IncludeIsDeletedFlag))
                     .ToListAsync();
             }

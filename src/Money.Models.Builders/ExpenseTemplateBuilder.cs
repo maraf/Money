@@ -113,7 +113,8 @@ namespace Money.Models.Builders
                     .WhereUserKey(query)
                     .Where(e => e.IsDeleted == false)
                     .OrderBy(e => e.Description)
-                    .ThenBy(e => e.CategoryId);
+                    .ThenBy(e => e.CategoryId)
+                    .ThenBy(e => e.Id);
 
                 List<ExpenseTemplateModel> models = await sql
                     .Select(e => e.ToModel(query.Version))

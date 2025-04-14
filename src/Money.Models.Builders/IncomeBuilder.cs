@@ -153,22 +153,23 @@ namespace Money.Models.Builders
             if (sortDescriptor == null)
                 sortDescriptor = new SortDescriptor<IncomeOverviewSortType>(IncomeOverviewSortType.ByWhen);
 
+            IOrderedQueryable<IncomeEntity> orderedSql = null;
             switch (sortDescriptor.Type)
             {
                 case IncomeOverviewSortType.ByAmount:
-                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.Amount);
+                    orderedSql = sql.OrderBy(sortDescriptor.Direction, o => o.Amount);
                     break;
                 case IncomeOverviewSortType.ByDescription:
-                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.Description);
+                    orderedSql = sql.OrderBy(sortDescriptor.Direction, o => o.Description);
                     break;
                 case IncomeOverviewSortType.ByWhen:
-                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.When);
+                    orderedSql = sql.OrderBy(sortDescriptor.Direction, o => o.When);
                     break;
                 default:
                     throw Ensure.Exception.NotSupported(sortDescriptor.Type.ToString());
             }
 
-            return sql;
+            return orderedSql.ThenBy(c => c.Id);
         }
 
         private IQueryable<IncomeEntity> ApplyPaging(IQueryable<IncomeEntity> sql, IPageableQuery query)

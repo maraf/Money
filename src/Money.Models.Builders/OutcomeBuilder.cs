@@ -216,7 +216,7 @@ namespace Money.Models.Builders
                 result.Add(resultItem);
             }
 
-            return result.OrderBy(m => m.Name).ToList();
+            return result.OrderBy(m => m.Name).ThenBy(m => m.Key.AsGuidKey().Guid).ToList();
         }
 
         public async Task<List<CategoryWithAmountModel>> HandleAsync(ListMonthCategoryWithOutcome query)
@@ -494,25 +494,26 @@ namespace Money.Models.Builders
             if (sortDescriptor == null)
                 sortDescriptor = new SortDescriptor<OutcomeOverviewSortType>(OutcomeOverviewSortType.ByWhen);
 
+            IOrderedQueryable<OutcomeEntity> orderedSql = null;
             switch (sortDescriptor.Type)
             {
                 case OutcomeOverviewSortType.ByAmount:
-                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.Amount);
+                    orderedSql = sql.OrderBy(sortDescriptor.Direction, o => o.Amount);
                     break;
                 case OutcomeOverviewSortType.ByCategory:
-                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.Categories.FirstOrDefault().Category.Name);
+                    orderedSql = sql.OrderBy(sortDescriptor.Direction, o => o.Categories.FirstOrDefault().Category.Name);
                     break;
                 case OutcomeOverviewSortType.ByDescription:
-                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.Description);
+                    orderedSql = sql.OrderBy(sortDescriptor.Direction, o => o.Description);
                     break;
                 case OutcomeOverviewSortType.ByWhen:
-                    sql = sql.OrderBy(sortDescriptor.Direction, o => o.When);
+                    orderedSql = sql.OrderBy(sortDescriptor.Direction, o => o.When);
                     break;
                 default:
                     throw Ensure.Exception.NotSupported(sortDescriptor.Type.ToString());
             }
 
-            return sql;
+            return orderedSql.ThenBy(e => e.Id);
         }
 
         public async Task<List<MonthWithAmountModel>> HandleAsync(ListMonthOutcomesForCategory query)

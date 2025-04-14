@@ -141,6 +141,7 @@ namespace Money.Models.Builders
                     .WhereUserKey(query.UserKey)
                     .Where(r => r.TargetCurrency == query.TargetCurrency)
                     .OrderByDescending(r => r.ValidFrom)
+                    .ThenBy(r => r.Id)
                     .Select(r => new ExchangeRateModel(r.SourceCurrency, r.Rate, r.ValidFrom))
                     .ToListAsync();
             }

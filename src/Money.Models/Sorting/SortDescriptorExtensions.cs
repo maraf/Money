@@ -48,7 +48,7 @@ namespace Money.Models.Sorting
             });
         }
 
-        public static IQueryable<TModel> OrderBy<TModel, TProperty>(this IQueryable<TModel> models, SortDirection sortDirection, Expression<Func<TModel, TProperty>> selector)
+        public static IOrderedQueryable<TModel> OrderBy<TModel, TProperty>(this IQueryable<TModel> models, SortDirection sortDirection, Expression<Func<TModel, TProperty>> selector)
             where TProperty : IComparable<TProperty>
         {
             Ensure.NotNull(models, "models");

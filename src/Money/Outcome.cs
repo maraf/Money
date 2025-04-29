@@ -20,6 +20,7 @@ namespace Money
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<ExpenseExpectedWhenChanged>,
         IEventHandler<OutcomeDeleted>
     {
         public bool IsDeleted { get; private set; }
@@ -38,6 +39,11 @@ namespace Money
         /// Gets a date when the outcome occured.
         /// </summary>
         public DateTime When { get; private set; }
+
+        /// <summary>
+        /// Gets a date when the outcome was expected to occur.
+        /// </summary>
+        public DateTime ExpectedWhen { get; private set; }
 
         /// <summary>
         /// Gets a collection of assigned categories.
@@ -147,6 +153,19 @@ namespace Money
         Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload)
         {
             return UpdateState(() => When = payload.When);
+        }
+
+        public void ChangeExpectedWhen(DateTime when)
+        {
+            EnsureNotDeleted();
+
+            if (ExpectedWhen != when)
+                Publish(new ExpenseExpectedWhenChanged(when));
+        }
+
+        Task IEventHandler<ExpenseExpectedWhenChanged>.HandleAsync(ExpenseExpectedWhenChanged payload)
+        {
+            return UpdateState(() => ExpectedWhen = payload.When);
         }
 
         public void Delete()

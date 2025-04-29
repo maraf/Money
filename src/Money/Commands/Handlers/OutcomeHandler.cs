@@ -16,6 +16,7 @@ namespace Money.Commands.Handlers
         ICommandHandler<Envelope<ChangeOutcomeAmount>>,
         ICommandHandler<Envelope<ChangeOutcomeDescription>>,
         ICommandHandler<Envelope<ChangeOutcomeWhen>>,
+        ICommandHandler<Envelope<ChangeExpenseExpectedWhen>>,
         ICommandHandler<Envelope<DeleteOutcome>>
     {
         public OutcomeHandler(IFactory<IRepository<Outcome, IKey>> repositoryFactory)
@@ -34,6 +35,7 @@ namespace Money.Commands.Handlers
         public Task HandleAsync(Envelope<ChangeOutcomeAmount> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.OutcomeKey, envelope, model => model.ChangeAmount(envelope.Body.Amount));
         public Task HandleAsync(Envelope<ChangeOutcomeDescription> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.OutcomeKey, envelope, model => model.ChangeDescription(envelope.Body.Description));
         public Task HandleAsync(Envelope<ChangeOutcomeWhen> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.OutcomeKey, envelope, model => model.ChangeWhen(envelope.Body.When));
+        public Task HandleAsync(Envelope<ChangeExpenseExpectedWhen> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.ExpenseKey, envelope, model => model.ChangeExpectedWhen(envelope.Body.When));
         public Task HandleAsync(Envelope<DeleteOutcome> envelope) => WithCommand(envelope.Body.Key).Execute(envelope.Body.OutcomeKey, envelope, model => model.Delete());
     }
 }

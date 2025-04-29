@@ -22,6 +22,7 @@ namespace Money.Models.Builders
         IEventHandler<OutcomeAmountChanged>,
         IEventHandler<OutcomeDescriptionChanged>,
         IEventHandler<OutcomeWhenChanged>,
+        IEventHandler<ExpenseExpectedWhenChanged>,
         IEventHandler<OutcomeDeleted>,
         IQueryHandler<ListMonthWithOutcome, List<MonthModel>>,
         IQueryHandler<ListMonthWithExpenseOrIncome, List<MonthModel>>,
@@ -370,16 +371,15 @@ namespace Money.Models.Builders
         {
             using (ReadModelContext db = dbFactory.Create())
             {
-                db.Outcomes.Add(new OutcomeEntity(
-                    new OutcomeModel(
-                        payload.AggregateKey,
-                        payload.Amount,
-                        payload.When,
-                        payload.Description,
-                        Enumerable.Empty<IKey>(),
-                        payload.IsFixed
-                    )
-                ).SetUserKey(payload.UserKey));
+                db.Outcomes.Add(new OutcomeEntity()
+                {
+                    Id = payload.AggregateKey.AsGuidKey().Guid,
+                    Amount = payload.Amount.Value,
+                    Currency = payload.Amount.Currency,
+                    When = payload.When,
+                    Description = payload.Description,
+                    IsFixed = payload.IsFixed
+                }.SetUserKey(payload.UserKey));
 
                 await db.SaveChangesAsync();
 
@@ -448,6 +448,19 @@ namespace Money.Models.Builders
                 if (entity != null)
                 {
                     entity.When = payload.When;
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task HandleAsync(ExpenseExpectedWhenChanged payload)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                OutcomeEntity entity = await db.Outcomes.FindAsync(payload.AggregateKey.AsGuidKey().Guid);
+                if (entity != null)
+                {
+                    entity.ExpectedWhen = payload.When;
                     await db.SaveChangesAsync();
                 }
             }

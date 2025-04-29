@@ -16,6 +16,7 @@ namespace Money.Models
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public DateTime When { get; set; }
+        public DateTime? ExpectedWhen { get; set; }
         public IList<OutcomeCategoryEntity> Categories { get; set; }
         public bool IsFixed { get; set; }
 
@@ -25,26 +26,6 @@ namespace Money.Models
         public OutcomeEntity()
         { }
 
-        public OutcomeEntity(OutcomeModel model)
-        {
-            Id = model.Key.AsGuidKey().Guid;
-            Description = model.Description;
-            Amount = model.Amount.Value;
-            Currency = model.Amount.Currency;
-            When = model.When;
-            IsFixed = model.IsFixed;
-            Categories = new List<OutcomeCategoryEntity>();
-
-            foreach (IKey categoryKey in model.CategoryKeys)
-            {
-                Categories.Add(new OutcomeCategoryEntity()
-                {
-                    OutcomeId = Id,
-                    CategoryId = categoryKey.AsGuidKey().Guid
-                });
-            }
-        }
-
         private GuidKey GetCategoryKey()
             => GuidKey.Create(Categories.First().CategoryId, KeyFactory.Empty(typeof(Category)).Type);
 
@@ -53,19 +34,6 @@ namespace Money.Models
 
         private GuidKey GetKey()
             => GuidKey.Create(Id, KeyFactory.Empty(typeof(Outcome)).Type);
-
-        public OutcomeModel ToModel()
-        {
-            string categoryKeyType = KeyFactory.Empty(typeof(Category)).Type;
-            return new OutcomeModel(
-                GetKey(),
-                GetAmount(),
-                When,
-                Description,
-                Categories.Select(c => GuidKey.Create(c.CategoryId, categoryKeyType)).ToList(),
-                IsFixed
-            );
-        }
 
         public OutcomeOverviewModel ToOverviewModel(int version)
         {

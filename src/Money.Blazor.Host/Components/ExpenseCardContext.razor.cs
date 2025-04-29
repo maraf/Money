@@ -20,7 +20,7 @@ public partial class ExpenseCardContext(ICommandDispatcher Commands) : ExpenseCa
     [Parameter]
     public bool IsEditEnabled { get; set; } = true;
 
-    #region OutcomeCard.IContext
+    #region ExpenseCard.IContext
 
     bool ExpenseCard.IContext.HasEdit => IsEditEnabled;
 

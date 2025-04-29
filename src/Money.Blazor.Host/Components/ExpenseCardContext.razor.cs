@@ -36,6 +36,9 @@ public partial class ExpenseCardContext(ICommandDispatcher Commands) : ExpenseCa
     void ExpenseCard.IContext.EditWhen(IExpenseOverviewModel model)
         => OnActionClick(model, WhenEditModal);
 
+    void ExpenseCard.IContext.EditExpectedWhen(IExpenseOverviewModel model)
+        => OnActionClick(model, ExpectedWhenEditModal);
+
     void ExpenseCard.IContext.Delete(IExpenseOverviewModel model)
         => OnDeleteClick(model);
 
@@ -45,6 +48,7 @@ public partial class ExpenseCardContext(ICommandDispatcher Commands) : ExpenseCa
     protected ModalDialog AmountEditModal { get; set; }
     protected ModalDialog DescriptionEditModal { get; set; }
     protected ModalDialog WhenEditModal { get; set; }
+    protected ModalDialog ExpectedWhenEditModal { get; set; }
 
     protected IExpenseOverviewModel SelectedItem { get; set; }
     protected string DeleteMessage { get; set; }

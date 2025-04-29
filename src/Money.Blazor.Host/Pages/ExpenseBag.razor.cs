@@ -84,6 +84,9 @@ public partial class ExpenseBag(
     void ExpenseCard.IContext.EditWhen(IExpenseOverviewModel model)
     { }
 
+    void ExpenseCard.IContext.EditExpectedWhen(IExpenseOverviewModel model)
+    { }
+
     async void ExpenseCard.IContext.Delete(IExpenseOverviewModel model)
     {
         Log.Debug($"Deleting '{model.Key}'.");

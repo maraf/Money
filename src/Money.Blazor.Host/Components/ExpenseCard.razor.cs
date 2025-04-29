@@ -22,6 +22,7 @@ public partial class ExpenseCard(Navigator Navigator)
         void EditAmount(IExpenseOverviewModel model);
         void EditDescription(IExpenseOverviewModel model);
         void EditWhen(IExpenseOverviewModel model);
+        void EditExpectedWhen(IExpenseOverviewModel model);
         void Delete(IExpenseOverviewModel model);
     }
 
@@ -58,6 +59,9 @@ public partial class ExpenseCard(Navigator Navigator)
 
     protected void OnEditWhen() 
         => Context.EditWhen(Model);
+
+    protected void OnEditExpectedWhen() 
+        => Context.EditExpectedWhen(Model);
 
     protected void OnDelete() 
         => Context.Delete(Model);

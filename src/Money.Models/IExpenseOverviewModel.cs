@@ -8,6 +8,7 @@ public interface IExpenseOverviewModel
     IKey Key { get; }
     Price Amount { get; }
     DateTime When { get; }
+    DateTime? ExpectedWhen { get; }
     IKey CategoryKey { get; }
     string Description { get; }
     bool IsFixed { get; }

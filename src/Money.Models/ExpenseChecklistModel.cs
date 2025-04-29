@@ -36,6 +36,8 @@ namespace Money.Models
         /// </summary>
         public DateTime When { get; set; }
 
+        DateTime? IExpenseOverviewModel.ExpectedWhen => null;
+
         /// <summary>
         /// Gets expense category.
         /// </summary>

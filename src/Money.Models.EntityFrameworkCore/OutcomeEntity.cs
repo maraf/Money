@@ -61,6 +61,18 @@ namespace Money.Models
                     IsFixed
                 );
             }
+            else if (version == 3)
+            {
+                return new OutcomeOverviewModel(
+                    outcomeKey,
+                    amount,
+                    When,
+                    ExpectedWhen,
+                    Description,
+                    categoryKey,
+                    IsFixed
+                );
+            }
             else
             {
                 throw Ensure.Exception.InvalidOperation($"Invalid version '{version}' of expense overview model.");

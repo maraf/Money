@@ -21,6 +21,7 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(0, Version = 1)]
         [CompositeProperty(0, Version = 2)]
+        [CompositeProperty(0, Version = 3)]
         public IKey CategoryKey { get; private set; }
 
         /// <summary>
@@ -28,6 +29,7 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(1, Version = 1)]
         [CompositeProperty(1, Version = 2)]
+        [CompositeProperty(1, Version = 3)]
         public MonthModel Month { get; private set; }
 
         /// <summary>
@@ -35,6 +37,7 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(2, Version = 1)]
         [CompositeProperty(2, Version = 2)]
+        [CompositeProperty(2, Version = 3)]
         public SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; private set; }
 
         /// <summary>
@@ -43,10 +46,12 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(3, Version = 1)]
         [CompositeProperty(3, Version = 2)]
+        [CompositeProperty(3, Version = 3)]
         public int? PageIndex { get; private set; }
 
         [CompositeVersion]
         [CompositeProperty(4, Version = 2)]
+        [CompositeProperty(4, Version = 3)]
         public int Version { get; private set; }
 
         /// <summary>
@@ -62,6 +67,7 @@ namespace Money.Models.Queries
         { }
 
         [CompositeConstructor(Version = 2)]
+        [CompositeConstructor(Version = 3)]
         public ListMonthOutcomeFromCategory(IKey categoryKey, MonthModel month, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null, int version = 2)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
@@ -83,6 +89,18 @@ namespace Money.Models.Queries
         public static ListMonthOutcomeFromCategory Version2(IKey categoryKey, MonthModel month, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null)
         {
             return new ListMonthOutcomeFromCategory(categoryKey, month, sortDescriptor, pageIndex, 2);
+        }
+
+        /// <summary>
+        /// Creates a new instance which returns object in version 3.
+        /// </summary>
+        /// <param name="categoryKey">A key of the category.</param>
+        /// <param name="month">A month to find outcomes from.</param>
+        /// <param name="sortDescriptor">A sorting descriptor.</param>
+        /// <param name="pageIndex">A page index to load. If <c>null</c>, load all results.</param>
+        public static ListMonthOutcomeFromCategory Version3(IKey categoryKey, MonthModel month, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null)
+        {
+            return new ListMonthOutcomeFromCategory(categoryKey, month, sortDescriptor, pageIndex, 3);
         }
     }
 }

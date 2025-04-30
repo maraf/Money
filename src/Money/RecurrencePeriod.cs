@@ -10,5 +10,7 @@ namespace Money;
 public enum RecurrencePeriod
 {
     Monthly = 1,
-    Single = 2
+    Single = 2,
+    Yearly = 3,
+    XMonths = 4
 }

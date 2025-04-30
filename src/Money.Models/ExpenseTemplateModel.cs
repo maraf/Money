@@ -64,16 +64,24 @@ namespace Money.Models
         [CompositeProperty(6, Version = 3)]
         public RecurrencePeriod? Period { get; set; }
 
+        [CompositeProperty(7, Version = 4)]
+        public int? EveryXPeriods { get; set; }
+
+        [CompositeProperty(8, Version = 4)]
+        public int? MonthInPeriod { get; set; }
+
         /// <summary>
         /// Gets day in period of recurrence of the template for <see cref="RecurrencePeriod.Monthly"/>.
         /// </summary>
         [CompositeProperty(7, Version = 3)]
+        [CompositeProperty(9, Version = 4)]
         public int? DayInPeriod { get; set; }
 
         /// <summary>
         /// Gets due date of the template for <see cref="RecurrencePeriod.Single"/>.
         /// </summary>
         [CompositeProperty(8, Version = 3)]
+        [CompositeProperty(10, Version = 4)]
         public DateTime? DueDate { get; set; }
 
         /// <summary>
@@ -129,11 +137,21 @@ namespace Money.Models
             Version = 3;
         }
 
+        [CompositeConstructor(Version = 4)]
+        public ExpenseTemplateModel(IKey key, Price amount, string description, IKey categoryKey, bool isFixed, RecurrencePeriod? period, int? everyXPeriods, int? monthInPeriod, int? dayInPeriod, DateTime? dueDate)
+            : this(key, amount, description, categoryKey, isFixed, period, dayInPeriod, dueDate)
+        {
+            EveryXPeriods = everyXPeriods;
+            MonthInPeriod = monthInPeriod;
+            Version = 4;
+        }
+
         public ExpenseTemplateModel Clone() => Version switch
         {
             1 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey),
             2 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed),
             3 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed, Period, DayInPeriod, DueDate),
+            4 => new ExpenseTemplateModel(Key, Amount, Description, CategoryKey, IsFixed, Period, EveryXPeriods, MonthInPeriod, DayInPeriod, DueDate),
             _ => throw new NotSupportedException($"Version '{Version}' is not supported when cloning ExpenseTemplateModel")
         };
     }

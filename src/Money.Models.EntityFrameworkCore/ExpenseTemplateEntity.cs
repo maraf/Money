@@ -21,6 +21,8 @@ namespace Money.Models
         public Guid? CategoryId { get; set; }
         public bool IsFixed { get; set; }
         public RecurrencePeriod? Period { get; set; }
+        public int? EveryXPeriods { get; set; }
+        public int? MonthInPeriod { get; set; }
         public int? DayInPeriod { get; set; }
         public DateTime? DueDate { get; set; }
 
@@ -56,6 +58,7 @@ namespace Money.Models
             1 => new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey()),
             2 => new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey(), IsFixed),
             3 => new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey(), IsFixed, Period, DayInPeriod, DueDate),
+            4 => new ExpenseTemplateModel(GetKey(), GetAmount(), Description, GetCategoryKey(), IsFixed, Period, EveryXPeriods, MonthInPeriod, DayInPeriod, DueDate),
             _ => throw new NotSupportedException($"Version '{version}' is not supported when mapping ExpenseTemplateEntity to ExpenseTemplateModel")
         };
 

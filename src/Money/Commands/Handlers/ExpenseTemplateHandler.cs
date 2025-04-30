@@ -20,6 +20,8 @@ namespace Money.Commands.Handlers
         ICommandHandler<Envelope<ChangeExpenseTemplateCategory>>,
         ICommandHandler<Envelope<ChangeExpenseTemplateFixed>>,
         ICommandHandler<Envelope<SetExpenseTemplateMonthlyRecurrence>>,
+        ICommandHandler<Envelope<SetExpenseTemplateXMonthsRecurrence>>,
+        ICommandHandler<Envelope<SetExpenseTemplateYearlyRecurrence>>,
         ICommandHandler<Envelope<SetExpenseTemplateSingleRecurrence>>,
         ICommandHandler<Envelope<ClearExpenseTemplateRecurrence>>,
         ICommandHandler<Envelope<DeleteExpenseTemplate>>
@@ -40,19 +42,14 @@ namespace Money.Commands.Handlers
         });
 
         public Task HandleAsync(Envelope<DeleteExpenseTemplate> envelope) => HandleAsync(envelope, (model, command) => model.Delete());
-
         public Task HandleAsync(Envelope<ChangeExpenseTemplateAmount> envelope) => HandleAsync(envelope, (model, command) => model.ChangeAmount(command.Amount));
-
         public Task HandleAsync(Envelope<ChangeExpenseTemplateDescription> envelope) => HandleAsync(envelope, (model, command) => model.ChangeDescription(command.Description));
-
         public Task HandleAsync(Envelope<ChangeExpenseTemplateCategory> envelope) => HandleAsync(envelope, (model, command) => model.ChangeCategory(command.CategoryKey));
-
         public Task HandleAsync(Envelope<ChangeExpenseTemplateFixed> envelope) => HandleAsync(envelope, (model, command) => model.ChangeFixed(command.IsFixed));
-
         public Task HandleAsync(Envelope<SetExpenseTemplateMonthlyRecurrence> envelope) => HandleAsync(envelope, (model, command) => model.SetMonthlyRecurrence(command.DayInPeriod));
-
+        public Task HandleAsync(Envelope<SetExpenseTemplateXMonthsRecurrence> envelope) => HandleAsync(envelope, (model, command) => model.SetXMonthsRecurrence(command.EveryXPeriods, command.DayInPeriod));
+        public Task HandleAsync(Envelope<SetExpenseTemplateYearlyRecurrence> envelope) => HandleAsync(envelope, (model, command) => model.SetYearlyRecurrence(command.MonthInPeriod, command.DayInPeriod));
         public Task HandleAsync(Envelope<SetExpenseTemplateSingleRecurrence> envelope) => HandleAsync(envelope, (model, command) => model.SetSingleRecurrence(command.DueDate));
-
         public Task HandleAsync(Envelope<ClearExpenseTemplateRecurrence> envelope) => HandleAsync(envelope, (model, command) => model.ClearRecurrence());
     }
 }

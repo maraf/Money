@@ -166,13 +166,25 @@ namespace Money
         public void SetMonthlyRecurrence(int dayInPeriod)
         {
             EnsureNotDeleted();
-            Publish(new ExpenseTemplateRecurrenceChanged(RecurrencePeriod.Monthly, dayInPeriod: dayInPeriod));
+            Publish(new ExpenseTemplateRecurrenceChanged(RecurrencePeriod.Monthly, dayInPeriod: dayInPeriod, dueDate: null));
+        }
+
+        public void SetXMonthsRecurrence(int everyXPeriods, int dayInPeriod)
+        {
+            EnsureNotDeleted();
+            Publish(new ExpenseTemplateRecurrenceChanged(RecurrencePeriod.XMonths, everyXPeriods: everyXPeriods, dayInPeriod: dayInPeriod));
+        }
+
+        public void SetYearlyRecurrence(int monthInPeriod, int dayInPeriod)
+        {
+            EnsureNotDeleted();
+            Publish(new ExpenseTemplateRecurrenceChanged(RecurrencePeriod.Yearly, monthInPeriod: monthInPeriod, dayInPeriod: dayInPeriod));
         }
 
         public void SetSingleRecurrence(DateTime dueDate)
         {
             EnsureNotDeleted();
-            Publish(new ExpenseTemplateRecurrenceChanged(RecurrencePeriod.Single, dueDate: dueDate));
+            Publish(new ExpenseTemplateRecurrenceChanged(RecurrencePeriod.Single, dayInPeriod: null, dueDate: dueDate));
         }
 
         Task IEventHandler<ExpenseTemplateRecurrenceChanged>.HandleAsync(ExpenseTemplateRecurrenceChanged payload) => UpdateState(() =>

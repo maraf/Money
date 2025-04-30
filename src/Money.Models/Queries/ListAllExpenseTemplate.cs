@@ -18,6 +18,7 @@ namespace Money.Models.Queries
         [CompositeVersion]
         [CompositeProperty(1, Version = 2)]
         [CompositeProperty(1, Version = 3)]
+        [CompositeProperty(1, Version = 4)]
         public int Version { get; private set; }
 
         /// <summary>
@@ -32,6 +33,7 @@ namespace Money.Models.Queries
 
         [CompositeConstructor(Version = 2)]
         [CompositeConstructor(Version = 3)]
+        [CompositeConstructor(Version = 4)]
         public ListAllExpenseTemplate(int version) 
             => Version = version;
 
@@ -46,5 +48,11 @@ namespace Money.Models.Queries
         /// </summary>
         public static ListAllExpenseTemplate Version3(SortDescriptor<ExpenseTemplateSortType> sortDescriptor = null) 
             => new ListAllExpenseTemplate(3) { SortDescriptor = sortDescriptor };
+
+        /// <summary>
+        /// Creates a new instance which returns objects in version 3.
+        /// </summary>
+        public static ListAllExpenseTemplate Version4(SortDescriptor<ExpenseTemplateSortType> sortDescriptor = null) 
+            => new ListAllExpenseTemplate(4) { SortDescriptor = sortDescriptor };
     }
 }

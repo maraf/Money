@@ -94,6 +94,8 @@ namespace Money.Models.Builders
         public Task HandleAsync(ExpenseTemplateRecurrenceChanged payload) => UpdateAsync(payload, e =>
         {
             e.Period = payload.Period;
+            e.EveryXPeriods = payload.EveryXPeriods;
+            e.MonthInPeriod = payload.MonthInPeriod;
             e.DayInPeriod = payload.DayInPeriod;
             e.DueDate = payload.DueDate;
         });
@@ -101,6 +103,8 @@ namespace Money.Models.Builders
         public Task HandleAsync(ExpenseTemplateRecurrenceCleared payload) => UpdateAsync(payload, e =>
         {
             e.Period = null;
+            e.EveryXPeriods = null;
+            e.MonthInPeriod = null;
             e.DayInPeriod = null;
             e.DueDate = null;
         });

@@ -20,6 +20,7 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(0, Version = 1)]
         [CompositeProperty(0, Version = 2)]
+        [CompositeProperty(0, Version = 3)]
         public string Text { get; private set; }
 
         /// <summary>
@@ -27,6 +28,7 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(1, Version = 1)]
         [CompositeProperty(1, Version = 2)]
+        [CompositeProperty(1, Version = 3)]
         public SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; private set; }
 
         /// <summary>
@@ -34,10 +36,12 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(2, Version = 1)]
         [CompositeProperty(2, Version = 2)]
+        [CompositeProperty(2, Version = 3)]
         public int PageIndex { get; private set; }
 
         [CompositeVersion]
         [CompositeProperty(3, Version = 2)]
+        [CompositeProperty(3, Version = 3)]
         public int Version { get; private set; }
 
         int? IPageableQuery.PageIndex => PageIndex;
@@ -54,6 +58,7 @@ namespace Money.Models.Queries
         { }
 
         [CompositeConstructor(Version = 2)]
+        [CompositeConstructor(Version = 3)]
         public SearchOutcomes(string text, SortDescriptor<OutcomeOverviewSortType> sortDescriptor, int pageIndex, int version = 2)
         {
             Ensure.NotNullOrEmpty(text, "text");
@@ -69,6 +74,11 @@ namespace Money.Models.Queries
         public static SearchOutcomes Version2(string text, SortDescriptor<OutcomeOverviewSortType> sortDescriptor, int pageIndex)
         {
             return new SearchOutcomes(text, sortDescriptor, pageIndex, 2);
+        }
+
+        public static SearchOutcomes Version3(string text, SortDescriptor<OutcomeOverviewSortType> sortDescriptor, int pageIndex)
+        {
+            return new SearchOutcomes(text, sortDescriptor, pageIndex, 3);
         }
     }
 }

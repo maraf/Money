@@ -21,6 +21,7 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(0, Version = 1)]
         [CompositeProperty(0, Version = 2)]
+        [CompositeProperty(0, Version = 3)]
         public IKey CategoryKey { get; private set; }
 
         /// <summary>
@@ -28,6 +29,7 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(1, Version = 1)]
         [CompositeProperty(1, Version = 2)]
+        [CompositeProperty(1, Version = 3)]
         public YearModel Year { get; private set; }
 
         /// <summary>
@@ -35,6 +37,7 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(2, Version = 1)]
         [CompositeProperty(2, Version = 2)]
+        [CompositeProperty(2, Version = 3)]
         public SortDescriptor<OutcomeOverviewSortType> SortDescriptor { get; private set; }
 
         /// <summary>
@@ -43,10 +46,12 @@ namespace Money.Models.Queries
         /// </summary>
         [CompositeProperty(3, Version = 1)]
         [CompositeProperty(3, Version = 2)]
+        [CompositeProperty(3, Version = 3)]
         public int? PageIndex { get; private set; }
 
         [CompositeVersion]
         [CompositeProperty(4, Version = 2)]
+        [CompositeProperty(4, Version = 3)]
         public int Version { get; private set; }
 
         /// <summary>
@@ -60,6 +65,7 @@ namespace Money.Models.Queries
         { }
 
         [CompositeConstructor(Version = 2)]
+        [CompositeConstructor(Version = 3)]
         public ListYearOutcomeFromCategory(IKey categoryKey, YearModel year, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null, int version = 2)
         {
             Ensure.NotNull(categoryKey, "categoryKey");
@@ -75,6 +81,11 @@ namespace Money.Models.Queries
         public static ListYearOutcomeFromCategory Version2(IKey categoryKey, YearModel year, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null)
         {
             return new ListYearOutcomeFromCategory(categoryKey, year, sortDescriptor, pageIndex, 2);
+        }
+
+        public static ListYearOutcomeFromCategory Version3(IKey categoryKey, YearModel year, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null, int? pageIndex = null)
+        {
+            return new ListYearOutcomeFromCategory(categoryKey, year, sortDescriptor, pageIndex, 3);
         }
     }
 }

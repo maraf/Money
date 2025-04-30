@@ -6,7 +6,9 @@
                 <DateValue Value="Model.When" />
                 @if (Model.ExpectedWhen != null)
                 {
-                    <em>*</em>
+                    <DateValue Value="Model.ExpectedWhen.Value" Context="Value">
+                        <em title="Expected on @Value">*</em>
+                    </DateValue>
                 }
             </Placeholder>
         </div>

@@ -1,11 +1,21 @@
 ﻿@inject IQueryDispatcher Queries
 
-@Value.ToString(Format)
+@if (ChildContent != null)
+{
+    @ChildContent(Value.ToString(Format))
+}
+else
+{
+    @Value.ToString(Format)
+}
 
 @code
 {
     [Parameter]
     public DateTime Value { get; set; }
+
+    [Parameter]
+    public RenderFragment<string> ChildContent { get; set; }
 
     protected string Format { get; set; }
 

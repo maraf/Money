@@ -53,7 +53,7 @@ public partial class OverviewYear(
         => CategoryGuid != null ? GuidKey.Create(CategoryGuid.Value, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
 
     protected override IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
-        => ListYearOutcomeFromCategory.Version2(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);
+        => ListYearOutcomeFromCategory.Version3(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);
 
     protected override bool IsContained(DateTime when)
         => SelectedPeriod == when;

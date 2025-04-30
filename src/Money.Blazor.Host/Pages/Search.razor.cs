@@ -118,7 +118,7 @@ public partial class Search(
 
             if (!String.IsNullOrEmpty(FormText))
             {
-                var models = await Queries.QueryAsync(SearchOutcomes.Version2(FormText, Sort, PagingContext.CurrentPageIndex));
+                var models = await Queries.QueryAsync(SearchOutcomes.Version3(FormText, Sort, PagingContext.CurrentPageIndex));
                 if (models.Count == 0)
                 {
                     Log.Debug("Empty result");

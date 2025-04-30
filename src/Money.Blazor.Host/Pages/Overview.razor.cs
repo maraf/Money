@@ -34,6 +34,7 @@ public partial class Overview<T>(
     IEventHandler<OutcomeAmountChanged>,
     IEventHandler<OutcomeDescriptionChanged>,
     IEventHandler<OutcomeWhenChanged>,
+    IEventHandler<ExpenseExpectedWhenChanged>,
     IEventHandler<PulledToRefresh>,
     IEventHandler<SwipedLeft>,
     IEventHandler<SwipedRight>
@@ -173,6 +174,7 @@ public partial class Overview<T>(
             .Add<OutcomeAmountChanged>(this)
             .Add<OutcomeDescriptionChanged>(this)
             .Add<OutcomeWhenChanged>(this)
+            .Add<ExpenseExpectedWhenChanged>(this)
             .Add<PulledToRefresh>(this)
             .Add<SwipedLeft>(this)
             .Add<SwipedRight>(this);
@@ -186,6 +188,7 @@ public partial class Overview<T>(
             .Remove<OutcomeAmountChanged>(this)
             .Remove<OutcomeDescriptionChanged>(this)
             .Remove<OutcomeWhenChanged>(this)
+            .Remove<ExpenseExpectedWhenChanged>(this)
             .Remove<PulledToRefresh>(this)
             .Remove<SwipedLeft>(this)
             .Remove<SwipedRight>(this);
@@ -318,6 +321,12 @@ public partial class Overview<T>(
             }
         }
 
+        return Task.CompletedTask;
+    }
+
+    Task IEventHandler<ExpenseExpectedWhenChanged>.HandleAsync(ExpenseExpectedWhenChanged payload)
+    {
+        UpdateModel(payload, model => model.ExpectedWhen = payload.When);
         return Task.CompletedTask;
     }
 

@@ -30,6 +30,7 @@ public partial class Search(
     IEventHandler<OutcomeAmountChanged>,
     IEventHandler<OutcomeDescriptionChanged>,
     IEventHandler<OutcomeWhenChanged>,
+    IEventHandler<ExpenseExpectedWhenChanged>,
     IEventHandler<PulledToRefresh>
 {
     [Parameter]
@@ -154,6 +155,7 @@ public partial class Search(
             .Add<OutcomeAmountChanged>(this)
             .Add<OutcomeDescriptionChanged>(this)
             .Add<OutcomeWhenChanged>(this)
+            .Add<ExpenseExpectedWhenChanged>(this)
             .Add<PulledToRefresh>(this);
     }
 
@@ -165,6 +167,7 @@ public partial class Search(
             .Remove<OutcomeAmountChanged>(this)
             .Remove<OutcomeDescriptionChanged>(this)
             .Remove<OutcomeWhenChanged>(this)
+            .Remove<ExpenseExpectedWhenChanged>(this)
             .Remove<PulledToRefresh>(this);
     }
 
@@ -209,6 +212,12 @@ public partial class Search(
             return ReloadDataAsync();
         else
             return UpdateModel(payload, model => model.When = payload.When);
+    }
+
+    Task IEventHandler<ExpenseExpectedWhenChanged>.HandleAsync(ExpenseExpectedWhenChanged payload)
+    {
+        UpdateModel(payload, model => model.ExpectedWhen = payload.When);
+        return Task.CompletedTask;
     }
 
     async Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)

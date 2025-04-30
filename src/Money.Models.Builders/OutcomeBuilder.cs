@@ -722,9 +722,21 @@ namespace Money.Models.Builders
                         .Where(e => e.Description == template.Description);
 
                     if (template.Period == RecurrencePeriod.Monthly)
-                        sql = sql.Where(e => e.When.Month == query.Month.Month && e.When.Year == query.Month.Year);
+                    {
+                        sql = sql.Where(e => 
+                            (e.ExpectedWhen != null && e.ExpectedWhen.Value.Month == query.Month.Month && e.ExpectedWhen.Value.Year == query.Month.Year) 
+                            ||
+                            (e.ExpectedWhen == null && e.When.Month == query.Month.Month && e.When.Year == query.Month.Year)
+                        );
+                    }
                     else if (template.Period == RecurrencePeriod.Single)
-                        sql = sql.Where(e => e.When.Month == query.Month.Month && e.When.Year == query.Month.Year);
+                    {
+                        sql = sql.Where(e => 
+                            (e.ExpectedWhen != null && e.ExpectedWhen.Value.Month == query.Month.Month && e.ExpectedWhen.Value.Year == query.Month.Year) 
+                            ||
+                            (e.ExpectedWhen == null && e.When.Month == query.Month.Month && e.When.Year == query.Month.Year)
+                        );
+                    }
 
                     var expense = await sql.FirstOrDefaultAsync();
 

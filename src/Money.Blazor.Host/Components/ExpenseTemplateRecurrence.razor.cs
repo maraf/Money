@@ -22,6 +22,8 @@ public partial class ExpenseTemplateRecurrence(ICommandDispatcher Commands)
     protected RecurrencePeriod? originalPeriod;
     protected int? originalDayInPeriod;
     protected DateTime? originalDueDate;
+    protected int? originalMonthInPeriod;
+    protected int? originalEveryXPeriods;
 
     protected List<string> ErrorMessages { get; } = new List<string>();
     protected List<CategoryModel> Categories { get; private set; }
@@ -35,6 +37,12 @@ public partial class ExpenseTemplateRecurrence(ICommandDispatcher Commands)
 
     [Parameter]
     public int? DayInPeriod { get; set; }
+
+    [Parameter]
+    public int? EveryXPeriods { get; set; }
+
+    [Parameter]
+    public int? MonthInPeriod { get; set; }
 
     [Parameter]
     public DateTime? DueDate { get; set; }
@@ -54,6 +62,12 @@ public partial class ExpenseTemplateRecurrence(ICommandDispatcher Commands)
         
         if (DayInPeriod == null)
             DayInPeriod = 1;
+        
+        if (MonthInPeriod == null)
+            MonthInPeriod = 1;
+        
+        if (EveryXPeriods == null)
+            EveryXPeriods = 2;
     }
 
     private void SetOriginal()
@@ -61,6 +75,8 @@ public partial class ExpenseTemplateRecurrence(ICommandDispatcher Commands)
         originalPeriod = Period;
         originalDayInPeriod = DayInPeriod;
         originalDueDate = DueDate;
+        originalMonthInPeriod = MonthInPeriod;
+        originalEveryXPeriods = EveryXPeriods;
     }
 
     protected void OnSaveClick()
@@ -78,9 +94,29 @@ public partial class ExpenseTemplateRecurrence(ICommandDispatcher Commands)
         ErrorMessages.Clear();
         
         if (Period == RecurrencePeriod.Monthly && DayInPeriod <= 0)
-            ErrorMessages.Add("Day in month must be great than 0");
+        {
+            ErrorMessages.Add("Day in month must be greater than 0");
+        }
+        else if (Period == RecurrencePeriod.XMonths)
+        {
+            if (DayInPeriod <= 0)
+                ErrorMessages.Add("Day in month must be greater than 0");
+            
+            if (EveryXPeriods <= 0)
+                ErrorMessages.Add("Every X periods must be great than 0");
+        }
+        else if (Period == RecurrencePeriod.Yearly)
+        {
+            if (DayInPeriod <= 0)
+                ErrorMessages.Add("Day in month must be greater than 0");
+            
+            if (MonthInPeriod <= 0)
+                ErrorMessages.Add("Month in year must be greater than 0");
+        }
         else if(Period == RecurrencePeriod.Single && DueDateBinding == DateTime.MinValue)
+        {
             ErrorMessages.Add("Due date must be set");
+        }
 
         return ErrorMessages.Count == 0;
     }
@@ -91,6 +127,10 @@ public partial class ExpenseTemplateRecurrence(ICommandDispatcher Commands)
             await Commands.HandleAsync(new ClearExpenseTemplateRecurrence(ExpenseTemplateKey));
         else if (Period == RecurrencePeriod.Monthly)
             await Commands.HandleAsync(new SetExpenseTemplateMonthlyRecurrence(ExpenseTemplateKey, DayInPeriod.Value));
+        else if (Period == RecurrencePeriod.XMonths)
+            await Commands.HandleAsync(new SetExpenseTemplateXMonthsRecurrence(ExpenseTemplateKey, EveryXPeriods.Value, DayInPeriod.Value));
+        else if (Period == RecurrencePeriod.Yearly)
+            await Commands.HandleAsync(new SetExpenseTemplateYearlyRecurrence(ExpenseTemplateKey, MonthInPeriod.Value, DayInPeriod.Value));
         else if (Period == RecurrencePeriod.Single)
             await Commands.HandleAsync(new SetExpenseTemplateSingleRecurrence(ExpenseTemplateKey, DueDateBinding));
         else

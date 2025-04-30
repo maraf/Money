@@ -156,7 +156,7 @@ public partial class OutcomeCreate(
     {
         Categories = await Queries.QueryAsync(new ListAllCategory());
         Currencies = await Queries.QueryAsync(new ListAllCurrency());
-        Templates = await Queries.QueryAsync(ListAllExpenseTemplate.Version3());
+        Templates = await Queries.QueryAsync(ListAllExpenseTemplate.Version4());
 
         if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
             PrerequisitesConfirm.Show();

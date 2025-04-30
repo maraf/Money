@@ -93,10 +93,27 @@ public partial class ExpenseTemplates(
         _ => $"{day}th"
     };
 
+    protected string MonthInYear(int month) => month switch
+    {
+        1 => "January",
+        2 => "February",
+        3 => "March",
+        4 => "April",
+        5 => "May",
+        6 => "June",
+        7 => "July",
+        8 => "August",
+        9 => "September",
+        10 => "October",
+        11 => "November",
+        12 => "December",
+        _ => "---"
+    };
+
     private async Task ReloadAsync()
     {
         AllModels.Clear();
-        AllModels.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version3(SortDescriptor)));
+        AllModels.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version4(SortDescriptor)));
         OnSearch();
         StateHasChanged();
     }
@@ -118,6 +135,7 @@ public partial class ExpenseTemplates(
 
     protected Task OnEventAsync()
     {
+        Log.Debug($"OnEventAsync");
         _ = ReloadAsync();
         return Task.CompletedTask;
     }

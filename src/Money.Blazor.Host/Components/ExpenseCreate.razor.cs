@@ -148,7 +148,7 @@ public partial class ExpenseCreate(
 
         Categories = await Queries.QueryAsync(new ListAllCategory());
         Currencies = await Queries.QueryAsync(new ListAllCurrency());
-        Templates = await Queries.QueryAsync(ListAllExpenseTemplate.Version3());
+        Templates = await Queries.QueryAsync(ListAllExpenseTemplate.Version4());
         StateHasChanged();
     }
 

@@ -3,18 +3,16 @@
 <Modal @ref="Modal" Title="Change a recurrence of the expense template">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <ul class="nav nav-pills nav-fill">
-            <li class="nav-item">
-                <button class="btn nav-link @(Period == null ? "active" : "")" @onclick="(() => Period = null)">No recurrence</button>
-            </li>
-            <li class="nav-item">
-                <button class="btn nav-link @(Period == RecurrencePeriod.Monthly ? "active" : "")" @onclick="(() => Period = RecurrencePeriod.Monthly)">Monthly</button>
-            </li>
-            <li class="nav-item">
-                <button class="btn nav-link @(Period == RecurrencePeriod.Single ? "active" : "")" @onclick="(() => Period = RecurrencePeriod.Single)">Once with due date</button>
-            </li>
-        </ul>
-        <div class="mt-3 mx-1">
+        <div class="mb-3">
+            <InputSelect TValue="RecurrencePeriod?" @bind-Value="Period" class="form-select">
+                <option value="">No recurrence</option>
+                <option value="@RecurrencePeriod.Monthly">Once a month</option>
+                <option value="@RecurrencePeriod.XMonths">Once every X months</option>
+                <option value="@RecurrencePeriod.Yearly">Once a year</option>
+                <option value="@RecurrencePeriod.Single">Once on due date</option>
+            </InputSelect>
+        </div>
+        <div class="mx-1">
             @if (Period == null)
             {
                 <p>
@@ -26,6 +24,28 @@
                 <div class="mb-3">
                     <label class="form-label" for="recurrence-monthly-day">Day in month:</label>
                     <input id="recurrence-monthly-day" type="text" @bind="DayInPeriod" class="form-control" />
+                </div>
+            }
+            else if (Period == RecurrencePeriod.XMonths)
+            {
+                <div class="mb-3">
+                    <label class="form-label" for="recurrence-xmonths-x">Every X months:</label>
+                    <input id="recurrence-xmonths-x" type="text" @bind="EveryXPeriods" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="recurrence-xmonths-day">Day in month:</label>
+                    <input id="recurrence-xmonths-day" type="text" @bind="DayInPeriod" class="form-control" />
+                </div>
+            }
+            else if (Period == RecurrencePeriod.Yearly)
+            {
+                <div class="mb-3">
+                    <label class="form-label" for="recurrence-yearly-month">Month in year:</label>
+                    <input id="recurrence-yearly-month" type="text" @bind="MonthInPeriod" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="recurrence-yearly-day">Day in month:</label>
+                    <input id="recurrence-yearly-day" type="text" @bind="DayInPeriod" class="form-control" />
                 </div>
             }
             else if (Period == RecurrencePeriod.Single)

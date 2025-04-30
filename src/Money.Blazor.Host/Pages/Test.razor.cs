@@ -59,7 +59,7 @@ public partial class Test(
 
     private async Task LoadAsync()
     {
-        ExpenseTemplates = await Queries.QueryAsync(ListAllExpenseTemplate.Version3());
+        ExpenseTemplates = await Queries.QueryAsync(ListAllExpenseTemplate.Version4());
     }
 
     protected async Task CreateAsync()

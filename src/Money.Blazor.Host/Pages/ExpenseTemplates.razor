@@ -8,7 +8,7 @@
 <ExpenseTemplateDescription @ref="ChangeDescriptionModal" ExpenseTemplateKey="@Selected?.Key" Description="@Selected?.Description" />
 <ExpenseTemplateAmount @ref="ChangeAmountModal" ExpenseTemplateKey="@Selected?.Key" Amount="@Selected?.Amount" />
 <ExpenseTemplateCategory @ref="ChangeCategoryModal" ExpenseTemplateKey="@Selected?.Key" CategoryKey="@Selected?.CategoryKey" />
-<ExpenseTemplateRecurrence @ref="ChangeRecurrenceModal" ExpenseTemplateKey="@Selected?.Key" Period="@Selected?.Period" DayInPeriod="@Selected?.DayInPeriod" DueDate="@Selected?.DueDate" />
+<ExpenseTemplateRecurrence @ref="ChangeRecurrenceModal" ExpenseTemplateKey="@Selected?.Key" Period="@Selected?.Period" EveryXPeriods="@Selected.EveryXPeriods" MonthInPeriod="@Selected?.MonthInPeriod" DayInPeriod="@Selected?.DayInPeriod" DueDate="@Selected?.DueDate" />
 
 <div class="row mb-4">
     <div class="col">
@@ -58,11 +58,19 @@
                                     <p>
                                         @if (model.Period == RecurrencePeriod.Monthly)
                                         {
-                                            <em>Monthly on @DayInMonth(model.DayInPeriod.Value)</em>
+                                            <em>Once a month on @DayInMonth(model.DayInPeriod.Value)</em>
+                                        } 
+                                        else if (model.Period == RecurrencePeriod.XMonths)
+                                        {
+                                            <em>Every @model.EveryXPeriods months on @DayInMonth(model.DayInPeriod.Value)</em>
+                                        } 
+                                        else if (model.Period == RecurrencePeriod.Yearly)
+                                        {
+                                            <em>Once a year on @MonthInYear(model.MonthInPeriod.Value) @DayInMonth(model.DayInPeriod.Value)</em>
                                         } 
                                         else if (model.Period == RecurrencePeriod.Single)
                                         {
-                                            <em>Due on <DateValue Value="model.DueDate.Value" /></em>
+                                            <em>Once due on <DateValue Value="model.DueDate.Value" /></em>
                                         }
                                     </p>
                                 }

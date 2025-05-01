@@ -4,7 +4,7 @@
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
         <div>
-            <InputSelect TValue="RecurrencePeriod?" @bind-Value="Period" class="form-select">
+            <InputSelect TValue="RecurrencePeriod?" @bind-Value="Period" class="form-select" data-autofocus>
                 <option value="">No recurrence</option>
                 <option value="@RecurrencePeriod.Monthly">Once a month</option>
                 <option value="@RecurrencePeriod.XMonths">Once every X months</option>

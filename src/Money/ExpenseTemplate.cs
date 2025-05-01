@@ -91,7 +91,7 @@ namespace Money
             CategoryKey = payload.CategoryKey;
             IsFixed = payload.IsFixed;
 
-            if (payload.Version >= 3)
+            if (payload.CompositeVersion >= 3)
                 CreatedAt = payload.CreatedAt;
         });
 
@@ -111,7 +111,7 @@ namespace Money
         {
             IsDeleted = true;
 
-            if (payload.Version >= 2)
+            if (payload.CompositeVersion >= 2)
                 DeletedAt = payload.DeletedAt;
         });
 

@@ -49,7 +49,7 @@ namespace Money.Models
 
             IsFixed = payload.IsFixed;
 
-            if (payload.Version >= 3)
+            if (payload.CompositeVersion >= 3)
                 CreatedAt = payload.CreatedAt;
         }
 

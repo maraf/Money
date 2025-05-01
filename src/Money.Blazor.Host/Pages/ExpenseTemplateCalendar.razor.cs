@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Components;
+using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Queries;
 using Money.Services;
 using Neptuo;
+using Neptuo.Events;
+using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
 using System;
@@ -13,7 +16,10 @@ using System.Threading.Tasks;
 
 namespace Money.Pages;
 
-public partial class ExpenseTemplateCalendar(IQueryDispatcher Queries, Navigator Navigator)
+public partial class ExpenseTemplateCalendar(IQueryDispatcher Queries, Navigator Navigator, IEventHandlerCollection EventHandlers) : 
+    System.IDisposable,
+    IEventHandler<SwipedLeft>,
+    IEventHandler<SwipedRight>
 {
     [Parameter]
     public Guid ExpenseTemplateGuid { get; set; }
@@ -30,9 +36,20 @@ public partial class ExpenseTemplateCalendar(IQueryDispatcher Queries, Navigator
 
     protected override async Task OnInitializedAsync()
     {
+        EventHandlers
+            .Add<SwipedLeft>(this)
+            .Add<SwipedRight>(this);
+
         await base.OnInitializedAsync();
 
         SelectedDisplayType = await Queries.QueryAsync(new GetExpenseTemplateCalendarDisplayProperty());
+    }
+
+    public void Dispose()
+    {
+        EventHandlers
+            .Remove<SwipedLeft>(this)
+            .Remove<SwipedRight>(this);
     }
 
     protected async override Task OnParametersSetAsync()
@@ -70,4 +87,16 @@ public partial class ExpenseTemplateCalendar(IQueryDispatcher Queries, Navigator
         AppDateTime.Today.AddYears(-6),
         AppDateTime.Today.AddYears(-7),
     ]);
+
+    Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
+    {
+        Navigator.OpenExpenseTemplateCalendar(ExpenseTemplateKey, SelectedPeriod - 1);
+        return Task.CompletedTask;
+    }
+
+    Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
+    {
+        Navigator.OpenExpenseTemplateCalendar(ExpenseTemplateKey, SelectedPeriod + 1);
+        return Task.CompletedTask;
+    }
 }

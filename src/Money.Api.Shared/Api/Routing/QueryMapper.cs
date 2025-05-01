@@ -30,6 +30,7 @@ namespace Money.Api.Routing
             Add<ListMonthWithExpenseOrIncome>("months-with-expense-or-income");
 
             Add<ListAllExpenseTemplate>("expense-templates");
+            Add<ListYearExpenseTemplateCalendar>("year-expense-template-calendar");
 
             Add<GetTotalMonthIncome>("month-income-total");
             Add<GetTotalYearIncome>("year-income-total");

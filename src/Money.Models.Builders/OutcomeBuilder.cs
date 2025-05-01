@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Money.Models.Builders
@@ -41,7 +42,8 @@ namespace Money.Models.Builders
         IQueryHandler<ListYearOutcomesForCategory, List<YearWithAmountModel>>,
         IQueryHandler<ListMonthBalance, List<MonthBalanceModel>>,
         IQueryHandler<ListMonthExpenseChecklist, List<ExpenseChecklistModel>>,
-        IQueryHandler<GetMonthExpectedExpenseTotal, Price>
+        IQueryHandler<GetMonthExpectedExpenseTotal, Price>,
+        IQueryHandler<ListYearExpenseTemplateCalendar, List<ExpenseTemplateCalendarMonthModel>>
     {
         const int PageSize = 10;
 
@@ -704,6 +706,9 @@ namespace Money.Models.Builders
             return result;
         }
 
+        private static IQueryable<OutcomeEntity> WhereMatchTemplate(IQueryable<OutcomeEntity> sql, UserQuery query, ExpenseTemplateEntity template)
+            => sql.WhereUserKey(query.UserKey).Where(e => e.Description == template.Description);
+
         public async Task<List<ExpenseChecklistModel>> HandleAsync(ListMonthExpenseChecklist query)
         {
             var result = new List<ExpenseChecklistModel>();
@@ -724,9 +729,6 @@ namespace Money.Models.Builders
                     .Where(e => e.Period != null)
                     .Where(e => e.Period != RecurrencePeriod.Single || (e.DueDate.Value.Year == query.Month.Year && e.DueDate.Value.Month == query.Month.Month))
                     .ToListAsync();
-
-                static IQueryable<OutcomeEntity> WhereMatchTemplate(IQueryable<OutcomeEntity> sql, ListMonthExpenseChecklist query, ExpenseTemplateEntity template)
-                    => sql.WhereUserKey(query.UserKey).Where(e => e.Description == template.Description);
 
                 foreach (var template in templates)
                 {
@@ -790,6 +792,51 @@ namespace Money.Models.Builders
 
                     result.Add(model);
                 }
+            }
+
+            return result;
+        }
+
+        async Task<List<ExpenseTemplateCalendarMonthModel>> IQueryHandler<ListYearExpenseTemplateCalendar, List<ExpenseTemplateCalendarMonthModel>>.HandleAsync(ListYearExpenseTemplateCalendar query)
+        {
+            using ReadModelContext db = dbFactory.Create();
+
+            var template = await db.ExpenseTemplates.WhereUserKey(query.UserKey)
+                .Where(e => e.Id == query.ExpenseTemplateKey.AsGuidKey().Guid)
+                .FirstOrDefaultAsync();
+
+            if (template == null)
+                throw Ensure.Exception.InvalidOperation($"Missing expense template with key '{query.ExpenseTemplateKey}'.");
+
+            var expenses = await WhereMatchTemplate(db.Outcomes, query, template)
+                .Where(e => e.When.Year == query.Year.Year)
+                .ToListAsync();
+
+            var expensesByMonth = expenses
+                .GroupBy(e => e.When.Month)
+                .ToDictionary(m => m.Key, m => m);
+
+            var result = new List<ExpenseTemplateCalendarMonthModel>(12);
+            for (int i = 1; i < 13; i ++)
+            {
+                var expenseCount = 0;
+                var expenseTotal = priceConverter.ZeroDefault(query.UserKey);
+                if (expensesByMonth.TryGetValue(i, out var monthExpenses))
+                {
+                    foreach (var expense in monthExpenses)
+                    {
+                        expenseTotal += priceConverter.ToDefault(query.UserKey, expense);
+                        expenseCount++;
+                    }
+                }
+
+                result.Add(new ExpenseTemplateCalendarMonthModel(
+                    query.Year.Year,
+                    i,
+                    query.ExpenseTemplateKey,
+                    expenseTotal,
+                    expenseCount
+                ));
             }
 
             return result;

@@ -801,7 +801,8 @@ namespace Money.Models.Builders
         {
             using ReadModelContext db = dbFactory.Create();
 
-            var template = await db.ExpenseTemplates.WhereUserKey(query.UserKey)
+            var template = await db.ExpenseTemplates
+                .WhereUserKey(query.UserKey)
                 .Where(e => e.Id == query.ExpenseTemplateKey.AsGuidKey().Guid)
                 .FirstOrDefaultAsync();
 

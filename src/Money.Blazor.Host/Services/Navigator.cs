@@ -133,6 +133,12 @@ namespace Money.Services
         public void OpenExpenseTemplates()
             => manager.NavigateTo(UrlExpenseTemplates());
 
+        public void OpenExpenseTemplateCalendar(IKey expenseTemplateKey)
+            => manager.NavigateTo(UrlExpenseTemplateCalendar(expenseTemplateKey));
+
+        public void OpenExpenseTemplateCalendar(IKey expenseTemplateKey, YearModel year)
+            => manager.NavigateTo(UrlExpenseTemplateCalendar(expenseTemplateKey, year));
+
         public void OpenAbout()
             => manager.NavigateTo(UrlAbout());
 

@@ -104,6 +104,10 @@
                                             <Icon Identifier="search" />
                                             Find expenses
                                         </a>
+                                        <a class="dropdown-item" href="@Navigator.UrlExpenseTemplateCalendar(model.Key)">
+                                            <Icon Identifier="calendar-check" />
+                                            Calendar
+                                        </a>
                                         <hr class="dropdown-divider" />
                                         <a class="dropdown-item" @onclick="@(() => { ToDeleteKey = model.Key; DeleteMessage = $"Do you really want to delete expense template {(model.Amount != null ? CurrencyFormatter.Format(model.Amount) : null)} '{model.Description}'?"; DeleteConfirm.Show(); StateHasChanged(); })">
                                             <Icon Identifier="trash-alt" />

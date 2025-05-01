@@ -1,0 +1,41 @@
+@page "/templates/{ExpenseTemplateGuid:guid}/calendar/{Year:int}"
+@attribute [Authorize]
+
+<Money.Components.Title Icon="calendar-check" Main="@($"Expense Template Calendar in {SelectedPeriod.Year}")"
+    Sub="Insights into expesens from template" />
+<ExceptionPanel />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlExpenseTemplateCalendar(ExpenseTemplateKey, year))" />
+    </div>
+    <EnumSelector Icon="eye" Text="Display" TType="ExpenseTemplateCalendarDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged" />
+</div>
+
+@if (Models == null)
+{
+    <Loading Context="@Loading" />
+}
+else
+{
+    <div class="row g-2">
+        @foreach (var model in Models)
+        {
+            var flexCssClass="d-flex align-items-center justify-content-center";
+            <div class="col-4 col-md-3 col-lg-2 col-xl-1">
+                <div class="text-center mb-1">
+                    @model.ToMonthString()
+                </div>
+                <div class="ratio ratio-16x9 alert @(model.ExpenseCount > 0 ? "alert-success" : "alert-secondary") @flexCssClass">
+                    @(SelectedDisplayType switch
+                    {
+                        ExpenseTemplateCalendarDisplayType.Count => @<span class="@flexCssClass fs-5">@model.ExpenseCount</span>,
+                        ExpenseTemplateCalendarDisplayType.Total => @<PriceView TagName="small" Value="model.ExpenseTotal" CssClass="@flexCssClass" />,
+                        ExpenseTemplateCalendarDisplayType.Check when model.ExpenseCount > 0 => @<Icon Identifier="check" class="@($"{flexCssClass} fs-3")" />,
+                        _ => @<span></span>
+                    })
+                </div>
+            </div>
+        }
+    </div>
+}

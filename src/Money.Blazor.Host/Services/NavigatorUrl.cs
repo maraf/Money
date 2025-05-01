@@ -82,6 +82,12 @@ namespace Money.Services
         public string UrlExpenseTemplates()
             => "/templates";
 
+        public string UrlExpenseTemplateCalendar(IKey expenseTemplateKey)
+            => $"/templates/{expenseTemplateKey.AsGuidKey().Guid}/calendar/{AppDateTime.Today.Year}";
+
+        public string UrlExpenseTemplateCalendar(IKey expenseTemplateKey, YearModel year)
+            => $"/templates/{expenseTemplateKey.AsGuidKey().Guid}/calendar/{year.Year}";
+
         public string UrlAbout()
             => "/about";
 

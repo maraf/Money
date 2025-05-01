@@ -47,3 +47,5 @@
         <button class="btn btn-primary" @onclick="@OnSaveClick">Create</button>
     </Buttons>
 </Modal>
+
+<Confirm @ref="PrerequisitesConfirm" Message="To create an expense, you need to first create a currency and category." OnConfirmed="OnPrerequisitesConfirmed" />

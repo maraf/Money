@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Money.Components;
 
-public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICommandDispatcher Commands, IQueryDispatcher Queries)
+public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICommandDispatcher Commands, IQueryDispatcher Queries, Navigator Navigator)
 {
     public const string EmptyCurrency = "---";
 
@@ -101,4 +101,12 @@ public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICom
 
     public override void Show()
         => Show(KeyFactory.Empty(typeof(Category)));
+
+    protected void OnPrerequisitesConfirmed()
+    {
+        if (Currencies == null || Currencies.Count == 0)
+            Navigator.OpenCurrencies();
+        else if (Categories == null || Categories.Count == 0)
+            Navigator.OpenCategories();
+    }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
+using Money.Queries;
 using Money.Services;
 using Neptuo;
 using Neptuo.Models.Keys;
@@ -26,6 +27,13 @@ public partial class ExpenseTemplateCalendar(IQueryDispatcher Queries, Navigator
     protected List<YearModel> PeriodGuesses { get; set; }
     protected List<ExpenseTemplateCalendarMonthModel> Models { get; set; }
     protected LoadingContext Loading { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        SelectedDisplayType = await Queries.QueryAsync(new GetExpenseTemplateCalendarDisplayProperty());
+    }
 
     protected async override Task OnParametersSetAsync()
     {

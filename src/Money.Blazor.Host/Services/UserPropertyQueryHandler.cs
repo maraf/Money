@@ -54,6 +54,10 @@ namespace Money.Services
             {
                 return await GetSortDescriptorAsync<ExpenseTemplateSortType>(dispatcher, "ExpenseTemplateSort", "ByDescription-Ascending");
             }
+            else if (query is GetExpenseTemplateCalendarDisplayProperty) 
+            {
+                return await GetEnumAsync<ExpenseTemplateCalendarDisplayType>(dispatcher, "ExpenseTemplateCalendarDisplay", "Check");
+            }
             else if (query is GetExpenseCreateDialogTypeProperty) 
             {
                 return await GetEnumAsync<ExpenseCreateDialogType>(dispatcher, GetExpenseCreateDialogTypeProperty.PropertyKey, "Standard");

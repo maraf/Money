@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using Money.Commands;
+﻿using Money.Commands;
 using Money.Components;
-using Money.Components.Bootstrap;
 using Money.Components.Settings;
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Queries;
-using Neptuo;
 using Neptuo.Commands;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -17,9 +14,7 @@ using Neptuo.Queries;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Money.Pages.Users;
@@ -63,6 +58,9 @@ public partial class Settings(
     protected EnumPropertyViewModel<ExpenseCreateDialogType> ExpenseDialogCreate { get; set; }
     protected PropertyDialog ExpenseDialogCreateEditor { get; set; }
 
+    protected EnumPropertyViewModel<ExpenseTemplateCalendarDisplayType> ExpenseTemplateCalendarDisplay { get; set; }
+    protected PropertyDialog ExpenseTemplateCalendarDisplayEditor { get; set; }
+
     protected EnumPropertyViewModel<ThemeType> Theme { get; set; }
     protected PropertyDialog ThemeEditor { get; set; }
 
@@ -84,6 +82,7 @@ public partial class Settings(
         SearchSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("SearchSort", "Search sort", () => SearchSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
         BalanceDisplay = AddProperty<EnumPropertyViewModel<BalanceDisplayType>>("BalanceDisplay", "Balance display", () => BalanceDisplayEditor.Show(), icon: "eye", defaultValue: "Total");
         ExpenseTemplateSort = AddProperty<SortPropertyViewModel<ExpenseTemplateSortType>>("ExpenseTemplateSort", "ExpenseTemplate sort", () => ExpenseTemplateSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByDescription-Ascending");
+        ExpenseTemplateCalendarDisplay = AddProperty<EnumPropertyViewModel<ExpenseTemplateCalendarDisplayType>>("ExpenseTemplateCalendarDisplay", "Expense template calendar display", () => ExpenseTemplateCalendarDisplayEditor.Show(), icon: "eye", defaultValue: "Check");
         ExpenseDialogCreate = AddProperty<EnumPropertyViewModel<ExpenseCreateDialogType>>("ExpenseCreateDialog", "Expense create dialog type", () => ExpenseDialogCreateEditor.Show(), icon: "minus-circle", defaultValue: "Standard");
         Theme = AddProperty<EnumPropertyViewModel<ThemeType>>(GetThemeTypeProperty.PropertyKey, "Color theme", () => ThemeEditor.Show(), icon: "palette", defaultValue: "Light");
 

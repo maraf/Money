@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Money.Queries;
 
 /// <summary>
-/// A query for getting a display type for balances.
+/// A query for getting a display type for summary.
 /// </summary>
 public class GetSummaryDisplayProperty : IQuery<SummaryDisplayType>
 { }

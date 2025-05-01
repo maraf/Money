@@ -86,6 +86,10 @@
     <SortDescriptorEditor T="ExpenseTemplateSortType" @bind-Property="ExpenseTemplateSort.Property" @bind-Direction="ExpenseTemplateSort.Direction" />
 </PropertyDialog>
 
+<PropertyDialog @ref="ExpenseTemplateCalendarDisplayEditor" Model="@ExpenseTemplateCalendarDisplay" Title="Set expense template display">
+    <EnumEditor T="ExpenseTemplateCalendarDisplayType" @bind-Property="ExpenseTemplateCalendarDisplay.Property" />
+</PropertyDialog>
+
 <PropertyDialog @ref="ExpenseDialogCreateEditor" Model="@ExpenseDialogCreate" Title="Set expense create dialog type">
     <EnumEditor T="ExpenseCreateDialogType" @bind-Property="ExpenseDialogCreate.Property" />
 </PropertyDialog>

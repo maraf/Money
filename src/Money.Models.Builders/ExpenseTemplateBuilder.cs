@@ -87,7 +87,7 @@ namespace Money.Models.Builders
         public Task HandleAsync(ExpenseTemplateDeleted payload) => UpdateAsync(payload, (db, e) => 
         {
             e.IsDeleted = true;
-            if (payload.Version >= 2)
+            if (payload.CompositeVersion >= 2)
                 e.DeletedAt = payload.DeletedAt;
         });
 

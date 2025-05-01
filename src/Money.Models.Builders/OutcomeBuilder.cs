@@ -809,11 +809,15 @@ namespace Money.Models.Builders
                 throw Ensure.Exception.InvalidOperation($"Missing expense template with key '{query.ExpenseTemplateKey}'.");
 
             var expenses = await WhereMatchTemplate(db.Outcomes, query, template)
-                .Where(e => e.When.Year == query.Year.Year)
+                .Where(e =>
+                    (e.ExpectedWhen != null && e.ExpectedWhen.Value.Year == query.Year.Year)
+                    ||
+                    (e.ExpectedWhen == null && e.When.Year == query.Year.Year)
+                )
                 .ToListAsync();
 
             var expensesByMonth = expenses
-                .GroupBy(e => e.When.Month)
+                .GroupBy(e => e.ExpectedWhen != null ? e.ExpectedWhen.Value.Month : e.When.Month)
                 .ToDictionary(m => m.Key, m => m);
 
             var result = new List<ExpenseTemplateCalendarMonthModel>(12);

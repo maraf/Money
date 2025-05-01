@@ -30,7 +30,7 @@
                 Items="@Models" 
                 LoadingContext="@Loading" 
                 PagingContext="@PagingContext" 
-                NoDataMessage="@(string.IsNullOrEmpty(Query) ? "Type your query to start..." : "No matching expense found.")" 
+                NoDataMessage="@(string.IsNullOrEmpty(Query) ? "Type your query to start, use double quotes for exact match..." : "No matching expense found.")" 
                 Context="item"
             >
                 <ExpenseCard Model="@item.Model" CssClass="@item.Placeholder?.CssClass" />

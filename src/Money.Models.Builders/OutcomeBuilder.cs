@@ -485,8 +485,18 @@ namespace Money.Models.Builders
             {
                 var sql = db.Outcomes
                     .Include(o => o.Categories)
-                    .WhereUserKey(query.UserKey)
-                    .Where(o => EF.Functions.Like(o.Description, $"%{query.Text}%"));
+                    .WhereUserKey(query.UserKey);
+
+                var text = query.Text;
+                if (text.StartsWith("\"") && text.EndsWith("\""))
+                {
+                    text = text.Substring(1, text.Length - 2);
+                    sql = sql.Where(o => o.Description == text);
+                }
+                else
+                {
+                    sql = sql.Where(o => EF.Functions.Like(o.Description, $"%{text}%"));
+                }
 
                 sql = ApplySorting(sql, query);
                 sql = ApplyPaging(sql, query);

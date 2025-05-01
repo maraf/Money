@@ -85,15 +85,16 @@ public partial class ExpenseTemplates(
         .Remove<ExpenseTemplateRecurrenceCleared>(this)
         .Remove<ExpenseTemplateDeleted>(this);
 
-    protected string DayInMonth(int day) => day switch
+    protected string DayInMonth(int? day) => day switch
     {
         1 => "1st",
         2 => "2nd",
         3 => "3rd",
+        null => "---",
         _ => $"{day}th"
     };
 
-    protected string MonthInYear(int month) => month switch
+    protected string MonthInYear(int? month) => month switch
     {
         1 => "January",
         2 => "February",

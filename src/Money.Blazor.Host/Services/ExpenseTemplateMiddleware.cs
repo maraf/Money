@@ -151,7 +151,7 @@ namespace Money.Services
         {
             log.Debug($"Got ExpenseTemplateCreated with key '{payload.AggregateKey}'");
 
-            models.Add(new ExpenseTemplateModel(payload.AggregateKey, payload.Amount, payload.Description, payload.CategoryKey, payload.IsFixed, null, null, null));
+            models.Add(new ExpenseTemplateModel(payload.AggregateKey, payload.Amount, payload.Description, payload.CategoryKey, payload.IsFixed, null, null, null, null, null));
             models.Sort((a, b) => StringComparer.InvariantCultureIgnoreCase.Compare(a.Description, b.Description));
             await localStorage.SaveAsync(models);
         }
@@ -162,7 +162,7 @@ namespace Money.Services
             if (model != null)
             {
                 handler(model);
-                log.Debug($"Updated model with key '{model.Key}'");
+                log.Debug($"Updated model with key '{model.Key}', Period='{model.Period}', EveryXPeriods='{model.EveryXPeriods}', MonthInPeriod='{model.MonthInPeriod}', DayInPeriod='{model.DayInPeriod}', DueDate='{model.DueDate}'");
             }
 
             await localStorage.SaveAsync(models);
@@ -181,6 +181,8 @@ namespace Money.Services
             => UpdateAsync(payload.AggregateKey, model => 
             {
                 model.Period = payload.Period;
+                model.EveryXPeriods = payload.EveryXPeriods;
+                model.MonthInPeriod = payload.MonthInPeriod;
                 model.DayInPeriod = payload.DayInPeriod;
                 model.DueDate = payload.DueDate;
             });
@@ -189,6 +191,8 @@ namespace Money.Services
             => UpdateAsync(payload.AggregateKey, model => 
             {
                 model.Period = null;
+                model.EveryXPeriods = null;
+                model.MonthInPeriod = null;
                 model.DayInPeriod = null;
                 model.DueDate = null;
             });

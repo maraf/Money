@@ -595,7 +595,7 @@ namespace Money.Models.Builders
             {
                 Dictionary<MonthModel, Price> expenses = await GetMonthBalanceExpensesAsync(db, query);
                 Dictionary<MonthModel, Price> incomes = await GetMonthBalanceIncomesAsync(db, query);
-                
+
                 // TODO: Do it for every month?
                 Dictionary<MonthModel, Price> expectedExpenses = new();
                 if (query.IncludeExpectedExpenses)
@@ -628,7 +628,7 @@ namespace Money.Models.Builders
                         result.Add(new MonthBalanceModel(query.Year.Year, i, expense, income));
                     }
                 }
-                
+
                 return result;
             }
         }
@@ -687,7 +687,7 @@ namespace Money.Models.Builders
             {
                 if (!expected.ExpenseKey.IsEmpty || expected.Amount == null)
                     continue;
-                
+
                 result += priceConverter.ToDefault(query.UserKey, new PriceFixed(expected.Amount, expected.When));
             }
 
@@ -700,56 +700,88 @@ namespace Money.Models.Builders
 
             using (ReadModelContext db = dbFactory.Create())
             {
+                // Get templates within existence range with recurrence
                 var templates = await db.ExpenseTemplates
                     .WhereUserKey(query.UserKey)
-                    .Where(e => e.CreatedAt == null 
-                        || e.CreatedAt.Value.Year < query.Month.Year 
+                    .Where(e => e.CreatedAt == null
+                        || e.CreatedAt.Value.Year < query.Month.Year
                         || (e.CreatedAt.Value.Year == query.Month.Year && e.CreatedAt.Value.Month <= query.Month.Month)
                     )
-                    .Where(e => e.DeletedAt == null 
-                        || e.DeletedAt.Value.Year > query.Month.Year 
+                    .Where(e => e.DeletedAt == null
+                        || e.DeletedAt.Value.Year > query.Month.Year
                         || (e.DeletedAt.Value.Year == query.Month.Year && e.DeletedAt.Value.Month >= query.Month.Month)
                     )
                     .Where(e => e.Period != null)
                     .Where(e => e.Period != RecurrencePeriod.Single || (e.DueDate.Value.Year == query.Month.Year && e.DueDate.Value.Month == query.Month.Month))
                     .ToListAsync();
 
+                static IQueryable<OutcomeEntity> WhereMatchTemplate(IQueryable<OutcomeEntity> sql, ListMonthExpenseChecklist query, ExpenseTemplateEntity template)
+                    => sql.WhereUserKey(query.UserKey).Where(e => e.Description == template.Description);
+
                 foreach (var template in templates)
                 {
-                    var sql = db.Outcomes
-                        .Include(o => o.Categories)
-                        .WhereUserKey(query.UserKey)
-                        .Where(e => e.Description == template.Description);
+                    OutcomeEntity expense = null;
 
-                    if (template.Period == RecurrencePeriod.Monthly)
+                    // Include every X months only when next occurence should be this month.
+                    // If we don't have previous occurence, we don't show the template.
+                    if (template.Period == RecurrencePeriod.XMonths)
                     {
-                        sql = sql.Where(e => 
-                            (e.ExpectedWhen != null && e.ExpectedWhen.Value.Month == query.Month.Month && e.ExpectedWhen.Value.Year == query.Month.Year) 
-                            ||
-                            (e.ExpectedWhen == null && e.When.Month == query.Month.Month && e.When.Year == query.Month.Year)
-                        );
+                        var previousOccurence = await WhereMatchTemplate(db.Outcomes, query, template)
+                            .Include(o => o.Categories)
+                            .OrderByDescending(e => e.When)
+                            .FirstOrDefaultAsync();
+
+                        if (previousOccurence == null)
+                            continue;
+
+                        var previousOccurenceDate = previousOccurence.ExpectedWhen ?? previousOccurence.When;
+                        if (previousOccurenceDate.Year == query.Month.Year && previousOccurenceDate.Month == query.Month.Month)
+                        {
+                            expense = previousOccurence;
+                        }
+                        else
+                        {
+                            var nextOccurenceDate = previousOccurenceDate.AddDays(1 - previousOccurenceDate.Day);
+                            while (nextOccurenceDate < query.Month)
+                                nextOccurenceDate = nextOccurenceDate.AddMonths(template.EveryXPeriods.Value);
+
+                            if (nextOccurenceDate.Year != query.Month.Year || nextOccurenceDate.Month != query.Month.Month)
+                                continue;
+                        }
                     }
-                    else if (template.Period == RecurrencePeriod.Single)
+
+                    if (expense == null)
                     {
-                        sql = sql.Where(e => 
-                            (e.ExpectedWhen != null && e.ExpectedWhen.Value.Month == query.Month.Month && e.ExpectedWhen.Value.Year == query.Month.Year) 
-                            ||
-                            (e.ExpectedWhen == null && e.When.Month == query.Month.Month && e.When.Year == query.Month.Year)
-                        );
+                        var sql = WhereMatchTemplate(db.Outcomes, query, template)
+                            .Include(o => o.Categories)
+                            .Where(e =>
+                                (e.ExpectedWhen != null && e.ExpectedWhen.Value.Month == query.Month.Month && e.ExpectedWhen.Value.Year == query.Month.Year)
+                                ||
+                                (e.ExpectedWhen == null && e.When.Month == query.Month.Month && e.When.Year == query.Month.Year)
+                            );
+
+                        expense = await sql.FirstOrDefaultAsync();
                     }
 
-                    var expense = await sql.FirstOrDefaultAsync();
+                    // Include yearly template only when the month is the same as the template month.
+                    if (expense == null && template.Period == RecurrencePeriod.Yearly && template.MonthInPeriod != query.Month.Month)
+                        continue;
 
-                    var model = expense != null 
+                    var model = expense != null
                         ? expense.ToExpenseChecklistModel(template.GetKey())
-                        : template.ToExpenseChecklistModel(template.Period == RecurrencePeriod.Monthly
-                            ? new DateTime(query.Month.Year, query.Month.Month, template.DayInPeriod.Value)
-                            : template.DueDate.Value);
+                        : template.ToExpenseChecklistModel(template.Period switch
+                        {
+                            RecurrencePeriod.Monthly => new DateTime(query.Month.Year, query.Month.Month, template.DayInPeriod.Value),
+                            RecurrencePeriod.Yearly => new DateTime(query.Month.Year, template.MonthInPeriod.Value, template.DayInPeriod.Value),
+                            RecurrencePeriod.XMonths => new DateTime(query.Month.Year, query.Month.Month, template.DayInPeriod.Value),
+                            RecurrencePeriod.Single => template.DueDate.Value,
+                            _ => throw Ensure.Exception.NotSupported($"The value '{template.Period}' is not supported.")
+                        });
 
                     result.Add(model);
                 }
             }
-            
+
             return result;
         }
     }

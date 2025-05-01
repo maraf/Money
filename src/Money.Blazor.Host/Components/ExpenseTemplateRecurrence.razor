@@ -3,7 +3,7 @@
 <Modal @ref="Modal" Title="Change a recurrence of the expense template">
     <ChildContent>
         <Validation ErrorMessages="@ErrorMessages" />
-        <div class="mb-3">
+        <div>
             <InputSelect TValue="RecurrencePeriod?" @bind-Value="Period" class="form-select">
                 <option value="">No recurrence</option>
                 <option value="@RecurrencePeriod.Monthly">Once a month</option>
@@ -11,51 +11,76 @@
                 <option value="@RecurrencePeriod.Yearly">Once a year</option>
                 <option value="@RecurrencePeriod.Single">Once on due date</option>
             </InputSelect>
+            <div class="mx-1">
+                @if (Period == RecurrencePeriod.XMonths)
+                {
+                    <div class="form-text">
+                        If the expense is expected once every X months.
+                        It won't appear in 'Monthly expected expenses' until the expense occurs at least once.
+                    </div>
+                }
+                else if (Period == RecurrencePeriod.Monthly)
+                {
+                    <div class="form-text">
+                        If the expense is expected once a month.
+                    </div>
+                }
+                else if (Period == RecurrencePeriod.Yearly)
+                {
+                    <div class="form-text">
+                        If the expense is expected once a year.
+                        If it occurs in a different month than expected, use the 'Expected when' date to adjust it to be visible in 'Monthly expected expenses'.
+                    </div>
+                }
+                else if (Period == RecurrencePeriod.Single)
+                {
+                    <div class="form-text">
+                        If the expense is expected only once.
+                    </div>
+                }
+            </div
         </div>
-        <div class="mx-1">
-            @if (Period == null)
-            {
-                <p>
-                    No settings needed
-                </p>
-            }
-            else if (Period == RecurrencePeriod.Monthly)
-            {
-                <div class="mb-3">
-                    <label class="form-label" for="recurrence-monthly-day">Day in month:</label>
-                    <input id="recurrence-monthly-day" type="text" @bind="DayInPeriod" class="form-control" />
-                </div>
-            }
-            else if (Period == RecurrencePeriod.XMonths)
-            {
-                <div class="mb-3">
-                    <label class="form-label" for="recurrence-xmonths-x">Every X months:</label>
-                    <input id="recurrence-xmonths-x" type="text" @bind="EveryXPeriods" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="recurrence-xmonths-day">Day in month:</label>
-                    <input id="recurrence-xmonths-day" type="text" @bind="DayInPeriod" class="form-control" />
-                </div>
-            }
-            else if (Period == RecurrencePeriod.Yearly)
-            {
-                <div class="mb-3">
-                    <label class="form-label" for="recurrence-yearly-month">Month in year:</label>
-                    <input id="recurrence-yearly-month" type="text" @bind="MonthInPeriod" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="recurrence-yearly-day">Day in month:</label>
-                    <input id="recurrence-yearly-day" type="text" @bind="DayInPeriod" class="form-control" />
-                </div>
-            }
-            else if (Period == RecurrencePeriod.Single)
-            {
-                <div class="mb-3">
-                    <label class="form-label" for="recurrence-single-when">Due date:</label>
-                    <DateBox Id="recurrence-single-when" @bind-Value="DueDateBinding" />
-                </div>
-            }
-        </div>
+        @if (Period != null)
+        {
+            <div class="mt-3 mx-1">
+                @if (Period == RecurrencePeriod.Monthly)
+                {
+                    <div class="mb-3">
+                        <label class="form-label" for="recurrence-monthly-day">Day in month:</label>
+                        <input id="recurrence-monthly-day" type="text" @bind="DayInPeriod" class="form-control" />
+                    </div>
+                }
+                else if (Period == RecurrencePeriod.XMonths)
+                {
+                    <div class="mb-3">
+                        <label class="form-label" for="recurrence-xmonths-x">Every X months:</label>
+                        <input id="recurrence-xmonths-x" type="text" @bind="EveryXPeriods" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="recurrence-xmonths-day">Day in month:</label>
+                        <input id="recurrence-xmonths-day" type="text" @bind="DayInPeriod" class="form-control" />
+                    </div>
+                }
+                else if (Period == RecurrencePeriod.Yearly)
+                {
+                    <div class="mb-3">
+                        <label class="form-label" for="recurrence-yearly-month">Month in year:</label>
+                        <input id="recurrence-yearly-month" type="text" @bind="MonthInPeriod" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="recurrence-yearly-day">Day in month:</label>
+                        <input id="recurrence-yearly-day" type="text" @bind="DayInPeriod" class="form-control" />
+                    </div>
+                }
+                else if (Period == RecurrencePeriod.Single)
+                {
+                    <div class="mb-3">
+                        <label class="form-label" for="recurrence-single-when">Due date:</label>
+                        <DateBox Id="recurrence-single-when" @bind-Value="DueDateBinding" />
+                    </div>
+                }
+            </div>
+        }
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>

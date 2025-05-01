@@ -7,7 +7,7 @@ namespace Money.Components;
 public partial class AutoLoadListView<TModel>
 {
     [Parameter]
-    public List<TModel> Items { get; set; }
+    public IReadOnlyCollection<TModel> Items { get; set; }
 
     [Parameter]
     public int? PlaceholderCount { get; set; }

@@ -23,6 +23,15 @@ internal class MockData
         0
     );
 
+    public static readonly YearModel YearModel = new YearModel(
+        2020
+    );
+
+    public static readonly MonthModel MonthModel = new MonthModel(
+        2020,
+        4
+    );
+
     public static T Get<T>()
     {
         if (typeof(T) == typeof(OutcomeOverviewModel))
@@ -30,6 +39,12 @@ internal class MockData
 
         if (typeof(T) == typeof(ExpenseTemplateCalendarMonthModel))
             return (T)(object)ExpenseTemplateCalendarMonthModel;
+
+        if (typeof(T) == typeof(YearModel))
+            return (T)(object)YearModel;
+
+        if (typeof(T) == typeof(MonthModel))
+            return (T)(object)MonthModel;
 
         throw Ensure.Exception.NotSupported($"The type '{typeof(T).FullName}' is not supported.");
     }

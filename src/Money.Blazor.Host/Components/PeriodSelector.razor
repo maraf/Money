@@ -17,33 +17,31 @@
 }
 
 <Modal @ref="SelectorModal" Title="Select a period" TitleIcon="calendar" BodyCssClass="p-0">
-    <Loading Context="@Loading">
-        <LoadingContent>
-            <div class="p-3">
-                <i>Loading...</i>
-            </div>
-        </LoadingContent>
-        <ChildContent>
-            @if (Periods != null)
-            {
-                if (Periods.Count > 0)
-                {
-                    <div class="list-group list-group-flush">
-                        @foreach (var item in Periods)
+    <div class="list-group list-group-flush">
+        <AutoLoadListView
+            Items="@Periods"
+            TModel="T"
+            LoadingContext="@Loading"
+            Context="item"
+            PlaceholderCount="@(typeof(T) == typeof(MonthModel) ? 8 : Previous?.Count ?? 6)"
+            NoDataTitle="No data."
+        >
+            <Placeholder WordMaxCount="2" WordMinLength="4" WordMaxLength="10">
+                <PlaceholderContent>
+                    <a class="list-group-item">
+                        @if (typeof(T) == typeof(MonthModel))
                         {
-                            <a @onclick="@(() => SelectorModal.Hide())" href="@LinkFactory(item)" class="list-group-item @(item.Equals(Selected) ? "active" : null)">
-                                @item.ToString()
-                            </a>
+                            <span class="placeholder col-3"></span>
                         }
-                    </div>
-                }
-                else
-                {
-                    <div class="p-3">
-                        <Alert Title="No data." Mode="@AlertMode.Warning" />
-                    </div>
-                }
-            }
-        </ChildContent>
-    </Loading>
+                        <span class="placeholder col-2"></span>
+                    </a>
+                </PlaceholderContent>
+                <ChildContent>
+                    <a @onclick="@(() => SelectorModal.Hide())" href="@LinkFactory(item.Model)" class="list-group-item @(item.Model.Equals(Selected) ? "active" : null)">
+                        @item.Model.ToString()
+                    </a>
+                </ChildContent>
+            </Placeholder>
+        </AutoLoadListView>
+    </div>
 </Modal>

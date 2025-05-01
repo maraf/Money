@@ -33,6 +33,9 @@ partial class Placeholder(ILog<Placeholder> Log)
     [Parameter]
     public int? TotalMaxLength { get; set; }
 
+    [Parameter]
+    public string CssClass { get; set; }
+
     protected List<int> WordLengths { get; set; }
 
     protected bool IsActive => Container?.IsActive ?? false;

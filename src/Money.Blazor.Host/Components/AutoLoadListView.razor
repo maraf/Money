@@ -9,7 +9,7 @@
         {
             @ChildContent(new ItemContext(item, null))
             
-            if (index == Items.Count - 3)
+            if (index == Items.Count - 3 && PagingContext != null)
             {
                 <AutoloadNext Intersected="@PagingContext.NextAsync" />
             }
@@ -33,7 +33,7 @@
     </LoadingContent>
 </Loading>
 
-@if (Items != null)
+@if (Items != null && PagingContext != null)
 {
     if (Items.Count > 0)
     {

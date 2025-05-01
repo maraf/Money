@@ -15,10 +15,21 @@ internal class MockData
         false
     );
 
+    public static readonly ExpenseTemplateCalendarMonthModel ExpenseTemplateCalendarMonthModel = new ExpenseTemplateCalendarMonthModel(
+        1,
+        1,
+        KeyFactory.Create(typeof(ExpenseTemplate)), 
+        new Price(1, "USD"), 
+        0
+    );
+
     public static T Get<T>()
     {
         if (typeof(T) == typeof(OutcomeOverviewModel))
             return (T)(object)ExpenseOverviewModel;
+
+        if (typeof(T) == typeof(ExpenseTemplateCalendarMonthModel))
+            return (T)(object)ExpenseTemplateCalendarMonthModel;
 
         throw Ensure.Exception.NotSupported($"The type '{typeof(T).FullName}' is not supported.");
     }

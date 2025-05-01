@@ -53,7 +53,10 @@ public partial class ExpenseTemplateCalendar(IQueryDispatcher Queries, Navigator
     protected async Task LoadAsync()
     {
         using (Loading.Start())
+        {
+            Models = null;
             Models = await Queries.QueryAsync(new ListYearExpenseTemplateCalendar(SelectedPeriod, ExpenseTemplateKey));
+        }
     }
 
     protected Task<IReadOnlyCollection<YearModel>> GetYearsAsync() => Task.FromResult<IReadOnlyCollection<YearModel>>([

@@ -192,7 +192,8 @@ window.Money = {
                 "Find expenses for expense template using context menu",
                 "Expense templates can be sorted and filtered",
                 "Category can have icon and color",
-                "Go to settings to adapt the app to your needs"
+                "Go to settings to adapt the app to your needs",
+                "Use Calendar view to see how expense template is used over time",
             ];
 
             const updateTip = () => {

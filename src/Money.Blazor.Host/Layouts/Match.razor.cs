@@ -42,8 +42,8 @@ public partial class Match(NavigationManager NavigationManager) : IDisposable
 
         string currentUrl = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         if (Mode == MatchMode.StartsWith)
-            return currentUrl.StartsWith(Url);
+            return currentUrl.StartsWith(Url, StringComparison.OrdinalIgnoreCase);
 
-        return Url == currentUrl;
+        return string.Equals(Url, currentUrl, StringComparison.OrdinalIgnoreCase);
     }
 }

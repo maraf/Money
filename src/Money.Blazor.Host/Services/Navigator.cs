@@ -176,6 +176,12 @@ namespace Money.Services
         public void OpenRegister()
             => manager.NavigateTo(UrlAccountRegister());
 
+        public string GetHistoryEntryState()
+            => manager.HistoryEntryState;
+
+        public void ReplaceHistoryState(string state)
+            => manager.NavigateTo(manager.Uri, new NavigationOptions { ReplaceHistoryEntry = true, HistoryEntryState = state });
+
         public Dictionary<string, StringValues> GetQueryString()
         {
             if (queryString == null)

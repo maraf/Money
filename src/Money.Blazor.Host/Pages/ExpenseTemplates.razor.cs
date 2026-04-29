@@ -72,6 +72,8 @@ public partial class ExpenseTemplates(
         CurrencyFormatter = await CurrencyFormatterFactory.CreateAsync();
         SortDescriptor = await Queries.QueryAsync(new GetExpenseTemplateSortProperty());
 
+        SearchQuery = Navigator.GetHistoryEntryState();
+
         using (Loading.Start())
             await ReloadAsync();
     }
@@ -115,7 +117,7 @@ public partial class ExpenseTemplates(
     {
         AllModels.Clear();
         AllModels.AddRange(await Queries.QueryAsync(ListAllExpenseTemplate.Version4(SortDescriptor)));
-        OnSearch();
+        ApplyFilter();
         StateHasChanged();
     }
 
@@ -141,19 +143,27 @@ public partial class ExpenseTemplates(
         return Task.CompletedTask;
     }
 
-    protected void OnSearch()
+    protected async Task OnSearch()
     {
         Log.Debug($"OnSearch '{SearchQuery}'");
 
+        ApplyFilter();
+
+        Navigator.ReplaceHistoryState(SearchQuery);
+        await Task.Yield();
+    }
+
+    private void ApplyFilter()
+    {
         Models.Clear();
         if (String.IsNullOrEmpty(SearchQuery))
         {
             Models.AddRange(AllModels);
-            return;
         }
-
-        string searchQuery = SearchQuery.ToLower().Trim();
-        Models.AddRange(AllModels.Where(m => m.Description.Contains(SearchQuery, StringComparison.CurrentCultureIgnoreCase)));
+        else
+        {
+            Models.AddRange(AllModels.Where(m => m.Description != null && m.Description.Contains(SearchQuery, StringComparison.CurrentCultureIgnoreCase)));
+        }
     }
 
     public Task HandleAsync(ExpenseTemplateCreated payload) => OnEventAsync();

@@ -1,4 +1,4 @@
-#:sdk Aspire.AppHost.Sdk@13.2.3
+#:sdk Aspire.AppHost.Sdk@13.2.4
 #:project .\Money.Api\Money.Api.csproj
 #:project .\Money.Blazor.Host\Money.Blazor.Host.csproj
 

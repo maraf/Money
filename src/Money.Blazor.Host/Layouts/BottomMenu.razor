@@ -2,14 +2,14 @@
 {
     <nav class="fixed-bottom d-block d-sm-none bottom-bar">
         <div class="container">
-            <div class="row my-2 gx-3 items-@Items.Count">
+            <div class="row my-2 gx-1 items-@Items.Count">
                 @foreach (var item in Items)
                 {
                     <div @key="item" class="col d-grid">
                         @if (item.Url != null)
                         {
                             <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
-                                <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
+                                <a href="@item.Url" class="btn border-0 @(IsActive ? "text-primary" : "")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                                     <Icon Identifier="@item.Icon" />
                                     <span class="text">
                                         @item.Text
@@ -19,7 +19,7 @@
                         }
                         else if (item.Text == "Main menu")
                         {
-                            <button @onclick="OnToggleMainMenu" class="btn bg-light-subtle">
+                            <button @onclick="OnToggleMainMenu" class="btn border-0">
                                 <Icon Identifier="@item.Icon" />
                                 <span class="text">
                                     @item.Text
@@ -28,7 +28,7 @@
                         }
                         else
                         {
-                            <button @onclick="@item.OnClick" class="btn bg-light-subtle">
+                            <button @onclick="@item.OnClick" class="btn border-0">
                                 <Icon Identifier="@item.Icon" />
                                 <span class="text">
                                     @item.Text
@@ -84,7 +84,7 @@
                 @if (item.Url != null)
                 {
                     <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
-                        <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle") w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
+                        <a href="@item.Url" class="btn border-0 @(IsActive ? "text-primary" : "") w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                             <Icon Identifier="@item.Icon" />
                             <span class="small text d-block text-truncate">
                                 @item.Text
@@ -94,7 +94,7 @@
                 }
                 else
                 {
-                    <button @onclick="@item.OnClick" class="btn bg-light-subtle @(isLogout ? "text-danger" : string.Empty) w-100">
+                    <button @onclick="@item.OnClick" class="btn border-0 @(isLogout ? "text-danger" : string.Empty) w-100">
                         <Icon Identifier="@item.Icon" />
                         <span class="small text d-block">
                             @item.Text

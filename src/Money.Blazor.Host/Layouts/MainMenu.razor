@@ -31,7 +31,7 @@
                 </li>
                 @foreach (var item in ViewsItems)
                 {
-                    <MainMenuLink CssClass="d-none d-md-inline-block" href="@item.Url" PageType="@item.PageType">
+                    <MainMenuLink CssClass="d-none d-md-inline-block" href="@item.Url" PageType="@item.PageType" HrefMatch="@item.UrlMatch">
                         <Icon Identifier="@item.Icon" />
                         <span class="d-none d-md-inline">@item.Text</span>
                     </MainMenuLink>
@@ -62,7 +62,7 @@
                 </li>
                 @foreach (var item in MoreItems)
                 {
-                    <MainMenuLink CssClass="d-none d-xl-inline" Href="@item.Url">
+                    <MainMenuLink CssClass="d-none d-xl-inline" Href="@item.Url" HrefMatch="@item.UrlMatch">
                         <Icon Identifier="@item.Icon" />
                         <span class="d-none d-lg-inline">
                             @item.Text

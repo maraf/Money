@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Money.Layouts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace Money.Models
         Type PageType = null,
         Action OnClick = null,
         bool IsBlurMenuAfterClick = false,
-        bool IsRequired = false
+        bool IsRequired = false,
+        MatchMode UrlMatch = MatchMode.Exact
     ) : IActionMenuItemModel, IAvailableMenuItemModel;
 }

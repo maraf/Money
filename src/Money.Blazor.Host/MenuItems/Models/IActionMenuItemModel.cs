@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Money.Layouts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace Money.Models
         Type PageType { get; }
         Action OnClick { get; }
         bool IsBlurMenuAfterClick { get; }
+        MatchMode UrlMatch { get; }
     }
 }

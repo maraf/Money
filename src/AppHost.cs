@@ -1,6 +1,6 @@
 #:sdk Aspire.AppHost.Sdk@13.2.4
-#:project .\Money.Api\Money.Api.csproj
-#:project .\Money.Blazor.Host\Money.Blazor.Host.csproj
+#:project ./Money.Api/Money.Api.csproj
+#:project ./Money.Blazor.Host/Money.Blazor.Host.csproj
 
 var builder = DistributedApplication.CreateBuilder(new DistributedApplicationOptions 
 {

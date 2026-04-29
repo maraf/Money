@@ -8,7 +8,7 @@
                     <div @key="item" class="col d-grid">
                         @if (item.Url != null)
                         {
-                            <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
+                            <Match Url="@item.Url" PageType="@item.PageType" Mode="@item.UrlMatch" Context="IsActive">
                                 <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle")" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                                     <Icon Identifier="@item.Icon" />
                                     <span class="text">
@@ -83,7 +83,7 @@
             @<div class="col-3">
                 @if (item.Url != null)
                 {
-                    <Match Url="@item.Url" PageType="@item.PageType" Context="IsActive">
+                    <Match Url="@item.Url" PageType="@item.PageType" Mode="@item.UrlMatch" Context="IsActive">
                         <a href="@item.Url" class="btn @(IsActive ? "btn-primary" : "bg-light-subtle") w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                             <Icon Identifier="@item.Icon" />
                             <span class="small text d-block text-truncate">

@@ -46,7 +46,9 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries)
         {
             DecimalDigits = await Queries.QueryAsync(new GetPriceDecimalDigitsProperty());
             Currencies = await Queries.QueryAsync(new ListAllCurrency());
-            Currency = defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
+            defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
+            if (Value == null)
+                Currency = defaultCurrency;
             StateHasChanged();
         }
     }

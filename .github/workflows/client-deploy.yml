@@ -1,0 +1,51 @@
+name: Client Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to deploy, e.g. blazor-v1.20.0.0'
+        required: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download release artifact
+        run: |
+          mkdir dist
+          gh release download "${{ inputs.tag }}" --pattern 'money-client-*.zip' --dir .
+          zip_count=$(ls -1 money-client-*.zip 2>/dev/null | wc -l)
+          if [ "$zip_count" -ne 1 ]; then
+            echo "Error: Expected exactly one client zip artifact, found $zip_count"
+            exit 1
+          fi
+          unzip money-client-*.zip -d dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

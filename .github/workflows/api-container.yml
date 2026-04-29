@@ -1,0 +1,44 @@
+name: API Container
+
+on:
+  push:
+    tags:
+      - 'api-*'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          version="${GITHUB_REF_NAME#api-}"
+          version="${version#v}"
+          echo "value=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_GHCR_LOGIN_TOKEN }}
+
+      - name: Publish container
+        run: >
+          dotnet publish src/Money.Api/Money.Api.csproj
+          --configuration Release
+          --os linux
+          --arch x64
+          -p:PublishProfile=DefaultContainer
+          -p:VersionPrefix=${{ steps.version.outputs.value }}

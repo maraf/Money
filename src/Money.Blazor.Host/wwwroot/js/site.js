@@ -25,13 +25,19 @@ window.Bootstrap = {
             $container.data("modal").show();
         },
         Hide: function (container) {
-            $(container).data("modal").hide();
+            var modal = $(container).data("modal");
+            if (modal) {
+                modal.hide();
+            }
         },
         IsOpen: function (container) {
             return $(container).hasClass("show");
         },
         Dispose: function (container) {
-            $(container).data("modal").dispose();
+            var modal = $(container).data("modal");
+            if (modal) {
+                modal.dispose();
+            }
         }
     },
     Offcanvas: {
@@ -48,13 +54,22 @@ window.Bootstrap = {
             }
         },
         Show: function (container) {
-            bootstrap.Offcanvas.getInstance(container).show()
+            var offcanvas = bootstrap.Offcanvas.getInstance(container);
+            if (offcanvas) {
+                offcanvas.show();
+            }
         },
         Hide: function (container) {
-            bootstrap.Offcanvas.getInstance(container).hide();
+            var offcanvas = bootstrap.Offcanvas.getInstance(container);
+            if (offcanvas) {
+                offcanvas.hide();
+            }
         },
         Dispose: function (container) {
-            bootstrap.Offcanvas.getInstance(container).dispose();
+            var offcanvas = bootstrap.Offcanvas.getInstance(container);
+            if (offcanvas) {
+                offcanvas.dispose();
+            }
         }
     },
     Theme: {

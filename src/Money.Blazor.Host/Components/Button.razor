@@ -1,0 +1,49 @@
+@{
+    var isSaving = Form?.IsSaving == true;
+    var cssClass = "btn";
+    if (IsPrimary)
+    {
+        cssClass += " btn-primary";
+    }
+    if (isSaving && IsPrimary)
+    {
+        cssClass += " btn-loading";
+    }
+}
+
+<button type="@(IsPrimary ? "submit" : "button")" class="@cssClass" disabled="@(isSaving && IsPrimary)" @onclick="OnClickAsync" @onclick:preventDefault="@(IsPrimary && OnClick.HasDelegate)">
+    @if (isSaving && IsPrimary)
+    {
+        <span class="btn-loading-text">@ChildContent</span>
+        <span class="btn-loading-overlay">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </span>
+    }
+    else
+    {
+        @ChildContent
+    }
+</button>
+
+@code
+{
+    [CascadingParameter]
+    public Form Form { get; set; }
+
+    [Parameter]
+    public bool IsPrimary { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private async Task OnClickAsync()
+    {
+        if (OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync();
+        }
+    }
+}

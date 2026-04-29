@@ -1,6 +1,6 @@
 ﻿<AuthenticatedView OnChanged="OnAuthenticationChanged">
     <div class="input-group">
-        <input type="text" class="form-control" id="@Id" value="@Amount.ToString("F" + DecimalDigits)" @onchange="OnValueChanged" data-autofocus="@AutoFocus" data-select="@AutoSelect" autocomplete="off" />
+        <input type="text" class="form-control" id="@Id" value="@(AllowEmpty && Value == null ? "" : Amount.ToString("F" + DecimalDigits))" @onchange="OnValueChanged" data-autofocus="@AutoFocus" data-select="@AutoSelect" autocomplete="off" />
         @if (Currencies != null)
         {
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">

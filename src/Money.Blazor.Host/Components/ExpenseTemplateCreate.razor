@@ -5,7 +5,7 @@
         <Validation ErrorMessages="@ErrorMessages" />
         <div class="mb-3">
             <label class="form-label" for="expense-amount">Amount:</label>
-            <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" @bind-Value="@Amount" />
+            <AmountBox Id="expense-amount" AutoFocus="true" AutoSelect="true" AllowEmpty="true" @bind-Value="@Amount" />
         </div>
         <div class="mb-3">
             <label class="form-label" for="expense-description">Description:</label>

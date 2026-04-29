@@ -35,7 +35,6 @@ namespace Money.Commands
         public ChangeExpenseTemplateAmount(IKey expenseTemplateKey, Price amount)
         {
             Ensure.Condition.NotEmptyKey(expenseTemplateKey);
-            Ensure.NotNull(amount, "amount");
             ExpenseTemplateKey = expenseTemplateKey;
             Amount = amount;
         }

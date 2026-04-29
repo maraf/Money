@@ -28,6 +28,9 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries)
     public bool AutoSelect { get; set; }
 
     [Parameter]
+    public bool AllowEmpty { get; set; }
+
+    [Parameter]
     public Price Value { get; set; }
 
     [Parameter]

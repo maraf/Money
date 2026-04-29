@@ -678,4 +678,19 @@ h4 {
 .swipe-right {
   right: -35px;
 }
+
+.btn-loading {
+  position: relative;
+}
+
+.btn-loading > .btn-loading-text {
+  visibility: hidden;
+}
+
+.btn-loading > .btn-loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 /*# sourceMappingURL=D:\Development\Maraf\Money\src\Money.Blazor.Host\wwwroot\css\site.css.map */

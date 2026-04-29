@@ -32,6 +32,7 @@ public partial class ExpenseCreate(
 ) : System.IDisposable, IExpenseCreateNavigator
 {
     protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
+    protected Form CreateForm { get; set; }
 
     [Parameter][CascadingParameter]
     public Navigator.ComponentContainer ComponentContainer { get; set; }

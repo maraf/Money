@@ -41,9 +41,9 @@ public partial class Match(NavigationManager NavigationManager) : IDisposable
             return PageType == RouteData.PageType;
 
         string currentUrl = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-        if ((Mode == MatchMode.Exact && Url == currentUrl) || currentUrl.StartsWith(Url))
-            return true;
+        if (Mode == MatchMode.StartsWith)
+            return currentUrl.StartsWith(Url);
 
-        return false;
+        return Url == currentUrl;
     }
 }

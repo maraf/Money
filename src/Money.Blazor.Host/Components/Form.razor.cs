@@ -11,9 +11,6 @@ public partial class Form
     [Parameter]
     public EventCallback OnSubmit { get; set; }
 
-    [Parameter]
-    public bool IsForm { get; set; } = true;
-
     public bool IsSaving { get; private set; }
 
     public Task SubmitAsync() => OnFormSubmitAsync();

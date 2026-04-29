@@ -1,18 +1,7 @@
-@if (IsForm)
-{
-    <form @onsubmit="OnFormSubmitAsync" @onsubmit:preventDefault="true">
-        <CascadingValue Value="this" IsFixed="true">
-            <fieldset disabled="@IsSaving">
-                @ChildContent
-            </fieldset>
-        </CascadingValue>
-    </form>
-}
-else
-{
+<form @onsubmit="OnFormSubmitAsync" @onsubmit:preventDefault="true">
     <CascadingValue Value="this" IsFixed="true">
         <fieldset disabled="@IsSaving">
             @ChildContent
         </fieldset>
     </CascadingValue>
-}
+</form>

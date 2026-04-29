@@ -679,18 +679,26 @@ h4 {
   right: -35px;
 }
 
+/* ------ FORM LOADING ------------------------------------------------------------------------- */
 .btn-loading {
   position: relative;
 }
-
 .btn-loading > .btn-loading-text {
   visibility: hidden;
 }
-
-.btn-loading > .btn-loading-spinner {
+.btn-loading > .btn-loading-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
-/*# sourceMappingURL=D:\Development\Maraf\Money\src\Money.Blazor.Host\wwwroot\css\site.css.map */

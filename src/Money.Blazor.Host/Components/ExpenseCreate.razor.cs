@@ -32,7 +32,7 @@ public partial class ExpenseCreate(
 ) : System.IDisposable, IExpenseCreateNavigator
 {
     protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
-    protected Form CreateForm { get; set; }
+
 
     [Parameter][CascadingParameter]
     public Navigator.ComponentContainer ComponentContainer { get; set; }
@@ -267,6 +267,26 @@ public partial class ExpenseCreate(
     {
         Selected = selected;
         FocusAfterRender = focusAfterRender;
+    }
+
+    protected Task OnFormSubmitAsync()
+    {
+        switch (Selected)
+        {
+            case SelectedField.Description:
+                SetSelectedField(SelectedField.Amount);
+                return Task.CompletedTask;
+            case SelectedField.Amount:
+                SetSelectedField(SelectedField.Category);
+                return Task.CompletedTask;
+            case SelectedField.Category:
+                SetSelectedField(SelectedField.When);
+                return Task.CompletedTask;
+            case SelectedField.When:
+                return CreateAsync();
+            default:
+                return Task.CompletedTask;
+        }
     }
 
     protected async Task CreateAsync()

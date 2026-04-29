@@ -1,6 +1,5 @@
 @{
-    var form = FormParameter ?? FormCascading;
-    var isSaving = form?.IsSaving == true;
+    var isSaving = Form?.IsSaving == true;
     var cssClass = "btn";
     if (IsPrimary)
     {
@@ -12,11 +11,13 @@
     }
 }
 
-<button type="@(IsPrimary ? "submit" : "button")" class="@cssClass" @onclick="OnClickAsync">
+<button type="@(IsPrimary ? "submit" : "button")" class="@cssClass" disabled="@(isSaving && IsPrimary)" @onclick="OnClickAsync" @onclick:preventDefault="@(IsPrimary && OnClick.HasDelegate)">
     @if (isSaving && IsPrimary)
     {
         <span class="btn-loading-text">@ChildContent</span>
-        <span class="btn-loading-spinner spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="btn-loading-overlay">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </span>
     }
     else
     {
@@ -27,10 +28,7 @@
 @code
 {
     [CascadingParameter]
-    public Form FormCascading { get; set; }
-
-    [Parameter]
-    public Form FormParameter { get; set; }
+    public Form Form { get; set; }
 
     [Parameter]
     public bool IsPrimary { get; set; }

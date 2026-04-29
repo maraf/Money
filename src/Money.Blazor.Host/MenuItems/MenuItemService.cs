@@ -1,4 +1,5 @@
-﻿using Money.Models;
+﻿using Money.Layouts;
+using Money.Models;
 using Money.Models.Queries;
 using Money.Pages;
 using Money.Services;
@@ -67,7 +68,8 @@ namespace Money
                     Identifier = "search",
                     Icon = "search",
                     Text = "Search",
-                    Url = navigator.UrlSearch()
+                    Url = navigator.UrlSearch(),
+                    UrlMatch = MatchMode.StartsWith
                 },
                 new MenuItemModel()
                 {
@@ -111,7 +113,8 @@ namespace Money
                     new(
                         Text: "Trends",
                         Icon: "chart-line",
-                        Url: navigator.UrlTrends()
+                        Url: navigator.UrlTrends(),
+                        UrlMatch: MatchMode.StartsWith
                     ),
                     new(
                         Text: "Balances",
@@ -122,7 +125,8 @@ namespace Money
                     new(
                         Text: "Search",
                         Icon: "search",
-                        Url: navigator.UrlSearch()
+                        Url: navigator.UrlSearch(),
+                        UrlMatch: MatchMode.StartsWith
                     )
                 ],
                 [

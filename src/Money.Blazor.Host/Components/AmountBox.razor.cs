@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Pages;
 using Money.Queries;
+using Neptuo.Events;
+using Neptuo.Events.Handlers;
 using Neptuo.Logging;
 using Neptuo.Queries;
 using System;
@@ -16,7 +19,11 @@ using System.Threading.Tasks;
 
 namespace Money.Components;
 
-public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries)
+public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IEventHandlerCollection EventHandlers) :
+    IDisposable,
+    IEventHandler<CurrencyCreated>,
+    IEventHandler<CurrencyDeleted>,
+    IEventHandler<CurrencyDefaultChanged>
 {
     [Parameter]
     public string Id { get; set; }
@@ -39,6 +46,24 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries)
     protected List<CurrencyModel> Currencies { get; private set; }
 
     private string defaultCurrency = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        EventHandlers
+            .Add<CurrencyCreated>(this)
+            .Add<CurrencyDeleted>(this)
+            .Add<CurrencyDefaultChanged>(this);
+    }
+
+    public void Dispose()
+    {
+        EventHandlers
+            .Remove<CurrencyCreated>(this)
+            .Remove<CurrencyDeleted>(this)
+            .Remove<CurrencyDefaultChanged>(this);
+    }
 
     protected async void OnAuthenticationChanged(bool isAuthenticated)
     {
@@ -90,5 +115,61 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries)
             Currency = currency.UniqueCode;
             ValueChanged?.Invoke(Value = new Price(Amount, Currency));
         }
+    }
+
+    Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
+    {
+        Currencies ??= new List<CurrencyModel>();
+        Currencies.Add(new CurrencyModel(payload.UniqueCode, payload.Symbol, false));
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload)
+    {
+        if (Currencies != null)
+        {
+            var model = Currencies.FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
+            if (model != null)
+                Currencies.Remove(model);
+
+            if (Currency == payload.UniqueCode)
+            {
+                if (defaultCurrency != null && Currencies.Any(c => c.UniqueCode == defaultCurrency))
+                {
+                    Currency = defaultCurrency;
+                    Value = new Price(Amount, Currency);
+                }
+                else if (Currencies.Count > 0)
+                {
+                    Currency = Currencies[0].UniqueCode;
+                    Value = new Price(Amount, Currency);
+                }
+                else
+                {
+                    Currency = null;
+                    Value = null;
+                }
+
+                ValueChanged?.Invoke(Value);
+            }
+
+            StateHasChanged();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
+    {
+        defaultCurrency = payload.UniqueCode;
+
+        if (Value == null)
+        {
+            Currency = defaultCurrency;
+            StateHasChanged();
+        }
+
+        return Task.CompletedTask;
     }
 }

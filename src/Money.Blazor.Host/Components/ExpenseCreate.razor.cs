@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.VisualBasic;
 using Money.Commands;
+using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
 using Money.Models.Sorting;
@@ -8,6 +9,8 @@ using Money.Pages;
 using Money.Services;
 using Neptuo;
 using Neptuo.Commands;
+using Neptuo.Events;
+using Neptuo.Events.Handlers;
 using Neptuo.Logging;
 using Neptuo.Models.Keys;
 using Neptuo.Queries;
@@ -28,8 +31,11 @@ public partial class ExpenseCreate(
     Interop Interop,
     Navigator Navigator,
     ICommandDispatcher Commands,
-    IQueryDispatcher Queries
-) : System.IDisposable, IExpenseCreateNavigator
+    IQueryDispatcher Queries,
+    IEventHandlerCollection EventHandlers
+) : System.IDisposable, IExpenseCreateNavigator,
+    IEventHandler<CurrencyCreated>,
+    IEventHandler<CurrencyDeleted>
 {
     protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
 
@@ -64,6 +70,10 @@ public partial class ExpenseCreate(
             Log.Debug("Attach to component container");
             ComponentContainer.ExpenseCreate = this;
         }
+
+        EventHandlers
+            .Add<CurrencyCreated>(this)
+            .Add<CurrencyDeleted>(this);
     }
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
@@ -105,6 +115,10 @@ public partial class ExpenseCreate(
         Log.Debug("Dispose");
         if (ComponentContainer != null && ComponentContainer.ExpenseCreate == this)
             ComponentContainer.ExpenseCreate = null;
+
+        EventHandlers
+            .Remove<CurrencyCreated>(this)
+            .Remove<CurrencyDeleted>(this);
     }
 
     private async void ShowInternal(Func<bool> setParameters = null)
@@ -361,5 +375,27 @@ public partial class ExpenseCreate(
             Navigator.OpenCurrencies();
         else if (Categories == null || Categories.Count == 0)
             Navigator.OpenCategories();
+    }
+
+    Task IEventHandler<CurrencyCreated>.HandleAsync(CurrencyCreated payload)
+    {
+        Currencies ??= new List<CurrencyModel>();
+        Currencies.Add(new CurrencyModel(payload.UniqueCode, payload.Symbol, false));
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    Task IEventHandler<CurrencyDeleted>.HandleAsync(CurrencyDeleted payload)
+    {
+        if (Currencies != null)
+        {
+            var model = Currencies.FirstOrDefault(c => c.UniqueCode == payload.UniqueCode);
+            if (model != null)
+                Currencies.Remove(model);
+
+            StateHasChanged();
+        }
+
+        return Task.CompletedTask;
     }
 }

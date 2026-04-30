@@ -22,13 +22,13 @@ namespace Money.Pages;
 public class SummaryMonth(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
-    ILog<Summary<MonthModel>> Log,
-    Navigator Navigator
+    ILog<Summary<MonthModel>> log,
+    Navigator navigator
 ) : Summary<MonthModel>(
     EventHandlers,
     Queries,
-    Log,
-    Navigator,
+    log,
+    navigator,
     "Per-month summary of expenses in categories"
 )
 {

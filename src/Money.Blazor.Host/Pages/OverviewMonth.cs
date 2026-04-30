@@ -27,14 +27,14 @@ public partial class OverviewMonth(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
     Interop Interop,
-    Navigator Navigator,
-    ILog<Overview<MonthModel>> Log
+    Navigator navigator,
+    ILog<Overview<MonthModel>> log
 ) : Overview<MonthModel>(
     EventHandlers,
     Queries,
     Interop,
-    Navigator,
-    Log,
+    navigator,
+    log,
     "List of each single expense in selected month"
 )
 {

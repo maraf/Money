@@ -21,13 +21,13 @@ namespace Money.Pages;
 public class SummaryYear(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
-    ILog<Summary<YearModel>> Log,
-    Navigator Navigator
+    ILog<Summary<YearModel>> log,
+    Navigator navigator
 ) : Summary<YearModel>(
     EventHandlers,
     Queries,
-    Log,
-    Navigator,
+    log,
+    navigator,
     "Per-year summary of expenses in categories"
 )
 {

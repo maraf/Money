@@ -24,14 +24,14 @@ public partial class OverviewYear(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
     Interop Interop,
-    Navigator Navigator,
-    ILog<Overview<YearModel>> Log
+    Navigator navigator,
+    ILog<Overview<YearModel>> log
 ) : Overview<YearModel>(
     EventHandlers,
     Queries,
     Interop,
-    Navigator,
-    Log,
+    navigator,
+    log,
     "List of each single expense in selected year"
 )
 {

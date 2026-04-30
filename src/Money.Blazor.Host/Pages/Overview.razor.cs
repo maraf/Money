@@ -39,6 +39,8 @@ public partial class Overview<T>(
     IEventHandler<SwipedLeft>,
     IEventHandler<SwipedRight>
 {
+    protected Navigator Navigator { get; } = Navigator;
+    protected ILog<Overview<T>> Log { get; } = Log;
     protected string Title { get; set; }
     protected string SubTitle { get; set; } = subTitle;
 

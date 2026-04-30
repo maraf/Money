@@ -139,8 +139,7 @@ public partial class ExpenseTemplates(
     protected Task OnEventAsync()
     {
         Log.Debug($"OnEventAsync");
-        _ = ReloadAsync();
-        return Task.CompletedTask;
+        return InvokeAsync(ReloadAsync);
     }
 
     protected async Task OnSearch()

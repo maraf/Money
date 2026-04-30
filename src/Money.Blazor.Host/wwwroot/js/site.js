@@ -171,6 +171,8 @@ window.GridNavigation = {
             const index = buttons.indexOf(document.activeElement);
             if (index < 0) return;
 
+            e.preventDefault();
+
             // Determine number of columns by counting buttons sharing the same top offset as the first button
             const firstTop = buttons[0].getBoundingClientRect().top;
             let cols = 0;
@@ -192,7 +194,6 @@ window.GridNavigation = {
             }
 
             if (next >= 0 && next < buttons.length) {
-                e.preventDefault();
                 buttons[next].focus();
             }
         });

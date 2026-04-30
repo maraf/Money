@@ -34,6 +34,7 @@ public partial class ExpenseCreate(
     protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
 
     protected ElementReference CategoryGridRef;
+    private bool categoryGridNavInitialized;
 
     [Parameter][CascadingParameter]
     public Navigator.ComponentContainer ComponentContainer { get; set; }
@@ -90,8 +91,11 @@ public partial class ExpenseCreate(
             FocusAfterRender = false;
         }
 
-        if (Selected == SelectedField.Category)
+        if (!categoryGridNavInitialized && Selected == SelectedField.Category && Categories != null)
+        {
+            categoryGridNavInitialized = true;
             await Interop.SetupGridNavigationAsync(CategoryGridRef);
+        }
     }
 
     protected bool FocusAfterRender;
@@ -340,6 +344,7 @@ public partial class ExpenseCreate(
 
     private void ClearValues(bool clearWhenToMinValue = false)
     {
+        categoryGridNavInitialized = false;
         SuggestedTemplates.Clear();
         Description = null;
         Amount = null;

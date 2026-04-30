@@ -156,6 +156,49 @@ window.AutoloadNext = {
     }
 };
 
+window.GridNavigation = {
+    Setup: function (container) {
+        if (!container || container._gridNavInitialized) return;
+        container._gridNavInitialized = true;
+
+        container.addEventListener("keydown", function (e) {
+            const key = e.key;
+            if (key !== "ArrowUp" && key !== "ArrowDown" && key !== "ArrowLeft" && key !== "ArrowRight") return;
+
+            const buttons = Array.from(container.querySelectorAll("button"));
+            if (buttons.length === 0) return;
+
+            const index = buttons.indexOf(document.activeElement);
+            if (index < 0) return;
+
+            // Determine number of columns by counting buttons sharing the same top offset as the first button
+            const firstTop = buttons[0].getBoundingClientRect().top;
+            let cols = 0;
+            for (let i = 0; i < buttons.length; i++) {
+                if (Math.abs(buttons[i].getBoundingClientRect().top - firstTop) < 2) {
+                    cols++;
+                } else {
+                    break;
+                }
+            }
+            if (cols < 1) cols = 1;
+
+            let next = -1;
+            switch (key) {
+                case "ArrowRight": next = index + 1; break;
+                case "ArrowLeft": next = index - 1; break;
+                case "ArrowDown": next = index + cols; break;
+                case "ArrowUp": next = index - cols; break;
+            }
+
+            if (next >= 0 && next < buttons.length) {
+                e.preventDefault();
+                buttons[next].focus();
+            }
+        });
+    }
+};
+
 window.Money = {
     ApplicationStarted: function () {
         isLoaded = true;

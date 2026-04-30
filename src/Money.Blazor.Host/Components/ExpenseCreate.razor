@@ -107,7 +107,7 @@
                     <Validation ErrorMessages="@Errors.Category" />
                     if (Categories != null)
                     {
-                        <div class="row g-2">
+                        <div class="row g-2" @ref="CategoryGridRef">
                             @foreach (var category in Categories)
                             {
                                 var buttonId = $"expense-wiz-category-{category.Key.AsGuidKey().Guid.ToString()}";

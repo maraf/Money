@@ -33,6 +33,7 @@ public partial class ExpenseCreate(
 {
     protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
 
+    protected ElementReference CategoryGridRef;
 
     [Parameter][CascadingParameter]
     public Navigator.ComponentContainer ComponentContainer { get; set; }
@@ -84,6 +85,9 @@ public partial class ExpenseCreate(
 
             FocusAfterRender = false;
         }
+
+        if (Selected == SelectedField.Category)
+            await Interop.SetupGridNavigationAsync(CategoryGridRef);
     }
 
     protected bool FocusAfterRender;

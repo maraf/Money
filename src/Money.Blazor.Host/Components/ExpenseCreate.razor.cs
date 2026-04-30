@@ -42,6 +42,8 @@ public partial class ExpenseCreate(
     protected ElementReference CategoryGridRef;
     private bool categoryGridNavInitialized;
 
+    protected Form FormRef { get; set; }
+
     [Parameter][CascadingParameter]
     public Navigator.ComponentContainer ComponentContainer { get; set; }
 
@@ -314,6 +316,8 @@ public partial class ExpenseCreate(
                 return Task.CompletedTask;
         }
     }
+
+    protected Task OnCreateClickAsync() => FormRef.RunAsync(CreateAsync);
 
     protected async Task CreateAsync()
     {

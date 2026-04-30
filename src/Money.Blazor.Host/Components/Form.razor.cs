@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Threading.Tasks;
 
 namespace Money.Components;
@@ -15,8 +16,10 @@ public partial class Form
 
     public Task SubmitAsync() => OnFormSubmitAsync();
 
-    protected async Task OnFormSubmitAsync()
+    public async Task RunAsync(Func<Task> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
+
         if (IsSaving)
             return;
 
@@ -25,7 +28,7 @@ public partial class Form
 
         try
         {
-            await OnSubmit.InvokeAsync();
+            await action();
         }
         finally
         {
@@ -33,4 +36,6 @@ public partial class Form
             StateHasChanged();
         }
     }
+
+    protected Task OnFormSubmitAsync() => RunAsync(() => OnSubmit.InvokeAsync());
 }

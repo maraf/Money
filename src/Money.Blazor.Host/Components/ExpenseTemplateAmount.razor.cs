@@ -52,7 +52,7 @@ public partial class ExpenseTemplateAmount(ICommandDispatcher Commands, IQueryDi
         if (IsNoAmountNorCurrency)
             Amount = null;
         else
-            Amount = new Price(0, defaultCurrency);
+            Amount = !string.IsNullOrEmpty(defaultCurrency) ? new Price(0, defaultCurrency) : null;
     }
 
     protected void OnSaveClick()

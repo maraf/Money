@@ -42,8 +42,6 @@ public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICom
     [Parameter]
     public bool IsFixed { get; set; }
 
-    protected Price Price { get; set; }
-
     protected bool IsNoAmountNorCurrency { get; set; }
 
     protected void OnNoAmountNorCurrencyChanged()
@@ -51,7 +49,7 @@ public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICom
         if (IsNoAmountNorCurrency)
             Amount = null;
         else
-            Amount = new Price(0, defaultCurrency);
+            Amount = !string.IsNullOrEmpty(defaultCurrency) ? new Price(0, defaultCurrency) : null;
     }
 
     protected void OnSaveClick()

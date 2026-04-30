@@ -58,14 +58,14 @@
         <ChildContent>
             @if (MainMenu != null)
             {
-                <div class="row g-3">
+                <div class="row g-0">
                     @foreach (var item in MainMenu.Views)
                         @MainMenuItem(item)
                     @foreach (var item in MainMenu.More.Where(i => i.Text != "About"))
                         @MainMenuItem(item)
                 </div>
                 <hr />
-                <div class="row g-3">
+                <div class="row g-0">
                     @foreach (var item in MainMenu.User)
                         @MainMenuItem(item)
                 </div>
@@ -84,7 +84,7 @@
                 @if (item.Url != null)
                 {
                     <Match Url="@item.Url" PageType="@item.PageType" Mode="@item.UrlMatch" Context="IsActive">
-                        <a href="@item.Url" class="btn border-0 @(IsActive ? "text-primary" : "") w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
+                        <a href="@item.Url" class="btn border-0 @(IsActive ? "text-primary" : "") py-3 w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                             <Icon Identifier="@item.Icon" />
                             <span class="small text d-block text-truncate">
                                 @item.Text
@@ -94,7 +94,7 @@
                 }
                 else
                 {
-                    <button @onclick="@item.OnClick" class="btn border-0 @(isLogout ? "text-danger" : string.Empty) w-100">
+                    <button @onclick="@item.OnClick" class="btn border-0 @(isLogout ? "text-danger" : string.Empty) py-3 w-100">
                         <Icon Identifier="@item.Icon" />
                         <span class="small text d-block">
                             @item.Text

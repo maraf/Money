@@ -25,7 +25,7 @@
         else
         {
             <div class="cards">
-                <ExpenseCardContext IsEditEnabled="false">
+                <ExpenseCardContext>
                     @foreach (var model in Models.OrderBy(m => m.When))
                     {
                         var isCreated = !model.ExpenseKey.IsEmpty;

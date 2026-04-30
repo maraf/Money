@@ -11,7 +11,7 @@
     }
 }
 
-<button type="@(IsPrimary ? "submit" : "button")" class="@cssClass" disabled="@(isSaving && IsPrimary)" @onclick="OnClickAsync" @onclick:preventDefault="@(IsPrimary && OnClick.HasDelegate)">
+<button type="@(Type ?? (IsPrimary ? "submit" : "button"))" class="@cssClass" disabled="@(isSaving && IsPrimary)" @onclick="OnClickAsync" @onclick:preventDefault="@(IsPrimary && OnClick.HasDelegate)">
     @if (isSaving && IsPrimary)
     {
         <span class="btn-loading-text">@ChildContent</span>
@@ -32,6 +32,9 @@
 
     [Parameter]
     public bool IsPrimary { get; set; }
+
+    [Parameter]
+    public string Type { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }

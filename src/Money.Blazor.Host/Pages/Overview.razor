@@ -62,6 +62,7 @@
         <ExpenseCardContext>
             <AutoLoadListView
                 Items="@Items"
+                PlaceholderCount="@(IsFuturePeriod() ? 1 : null)"
                 LoadingContext="@Loading"
                 PagingContext="@PagingContext"
                 NoDataTitle="No data."

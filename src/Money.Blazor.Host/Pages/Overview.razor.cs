@@ -251,6 +251,9 @@ public partial class Overview<T>(
         });
     }
 
+    protected virtual bool IsFuturePeriod()
+        => false;
+
     protected virtual bool IsContained(DateTime when)
         => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(IsContained)}'.");
 

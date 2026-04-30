@@ -55,6 +55,9 @@ public partial class OverviewYear(
     protected override IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
         => ListYearOutcomeFromCategory.Version3(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);
 
+    protected override bool IsFuturePeriod()
+        => SelectedPeriod > DateTime.Now;
+
     protected override bool IsContained(DateTime when)
         => SelectedPeriod == when;
 

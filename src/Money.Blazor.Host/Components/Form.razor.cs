@@ -18,6 +18,8 @@ public partial class Form
 
     public async Task RunAsync(Func<Task> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
+
         if (IsSaving)
             return;
 
@@ -35,22 +37,5 @@ public partial class Form
         }
     }
 
-    protected async Task OnFormSubmitAsync()
-    {
-        if (IsSaving)
-            return;
-
-        IsSaving = true;
-        StateHasChanged();
-
-        try
-        {
-            await OnSubmit.InvokeAsync();
-        }
-        finally
-        {
-            IsSaving = false;
-            StateHasChanged();
-        }
-    }
+    protected Task OnFormSubmitAsync() => RunAsync(() => OnSubmit.InvokeAsync());
 }

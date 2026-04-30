@@ -157,9 +157,9 @@ namespace Money.Services
 
         public static bool AddExpenseTemplateAmount(ICollection<string> messages, Price amount)
         {
-            if (amount != null && ((amount.Value == 0 && amount.Currency != null) || (amount.Value != 0 && amount.Currency == null)))
+            if (amount != null && amount.Value != 0 && amount.Currency == null)
             {
-                messages.Add("Amount and currency must be provided both or none");
+                messages.Add("Currency must be provided when amount is set");
                 return true;
             }
 

@@ -1,9 +1,9 @@
 ﻿<AuthenticatedView OnChanged="OnAuthenticationChanged">
     <div class="input-group">
-        <input type="text" class="form-control" id="@Id" value="@(AllowEmpty && Value == null ? "" : Amount.ToString("F" + DecimalDigits))" @onchange="OnValueChanged" data-autofocus="@AutoFocus" data-select="@AutoSelect" autocomplete="off" />
+        <input type="text" class="form-control" id="@Id" value="@(AllowEmpty && (Value == null || Value.Value == 0) ? "" : Amount.ToString("F" + DecimalDigits))" @onchange="OnValueChanged" data-autofocus="@AutoFocus" data-select="@AutoSelect" autocomplete="off" readonly="@IsReadOnly" />
         @if (Currencies != null)
         {
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" disabled="@IsReadOnly">
                 @Currencies.FirstOrDefault(c => c.UniqueCode == Currency)?.Symbol
             </button>
             <div class="dropdown-menu dropdown-menu-end z-1030">

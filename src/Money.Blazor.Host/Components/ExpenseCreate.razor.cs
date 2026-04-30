@@ -33,6 +33,8 @@ public partial class ExpenseCreate(
 {
     protected IKey EmptyCategoryKey { get; } = KeyFactory.Empty(typeof(Category));
 
+    protected ElementReference CategoryGridRef;
+    private bool categoryGridNavInitialized;
 
     [Parameter][CascadingParameter]
     public Navigator.ComponentContainer ComponentContainer { get; set; }
@@ -74,7 +76,11 @@ public partial class ExpenseCreate(
             {
                 SelectedField.Description => "expense-wiz-description",
                 SelectedField.Amount => "expense-wiz-amount",
-                SelectedField.Category => !CategoryKey.IsEmpty ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" : null,
+                SelectedField.Category => !CategoryKey.IsEmpty 
+                    ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" 
+                    : Categories?.Count > 0 
+                        ? $"expense-wiz-category-{Categories[0].Key.AsGuidKey().Guid.ToString()}" 
+                        : null,
                 SelectedField.When => "expense-wiz-when",
                 _ => null,
             };
@@ -83,6 +89,12 @@ public partial class ExpenseCreate(
                 await Interop.FocusElementByIdAsync(elementId);
 
             FocusAfterRender = false;
+        }
+
+        if (!categoryGridNavInitialized && Selected == SelectedField.Category && Categories != null)
+        {
+            categoryGridNavInitialized = true;
+            await Interop.SetupGridNavigationAsync(CategoryGridRef);
         }
     }
 
@@ -332,6 +344,7 @@ public partial class ExpenseCreate(
 
     private void ClearValues(bool clearWhenToMinValue = false)
     {
+        categoryGridNavInitialized = false;
         SuggestedTemplates.Clear();
         Description = null;
         Amount = null;

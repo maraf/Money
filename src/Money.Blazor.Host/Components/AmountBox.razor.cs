@@ -133,6 +133,27 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IE
             if (model != null)
                 Currencies.Remove(model);
 
+            if (Currency == payload.UniqueCode)
+            {
+                if (defaultCurrency != null && Currencies.Any(c => c.UniqueCode == defaultCurrency))
+                {
+                    Currency = defaultCurrency;
+                    Value = new Price(Amount, Currency);
+                }
+                else if (Currencies.Count > 0)
+                {
+                    Currency = Currencies[0].UniqueCode;
+                    Value = new Price(Amount, Currency);
+                }
+                else
+                {
+                    Currency = null;
+                    Value = null;
+                }
+
+                ValueChanged?.Invoke(Value);
+            }
+
             StateHasChanged();
         }
 

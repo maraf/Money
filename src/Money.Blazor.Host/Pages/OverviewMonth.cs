@@ -27,14 +27,14 @@ public partial class OverviewMonth(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
     Interop Interop,
-    Navigator Navigator,
-    ILog<Overview<MonthModel>> Log
+    Navigator navigator,
+    ILog<Overview<MonthModel>> log
 ) : Overview<MonthModel>(
     EventHandlers,
     Queries,
     Interop,
-    Navigator,
-    Log,
+    navigator,
+    log,
     "List of each single expense in selected month"
 )
 {
@@ -61,6 +61,9 @@ public partial class OverviewMonth(
 
     protected override IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
         => ListMonthOutcomeFromCategory.Version3(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);
+
+    protected override bool IsFuturePeriod()
+        => SelectedPeriod > DateTime.Now;
 
     protected override bool IsContained(DateTime when)
         => SelectedPeriod == when;

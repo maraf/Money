@@ -25,7 +25,7 @@
         else
         {
             <div class="cards">
-                <ExpenseCardContext IsEditEnabled="false">
+                <ExpenseCardContext>
                     @foreach (var model in Models.OrderBy(m => m.When))
                     {
                         var isCreated = !model.ExpenseKey.IsEmpty;
@@ -43,8 +43,8 @@
                             <div class="col-auto pe-1">
                                 <Icon Prefix="far" Identifier="@(isCreated ? "check-square" : "square")" class="@iconCssClass" />
                             </div>
-                            <div class="col" style="@(isCreated ? "opacity:0.5" : "")">
-                                <ExpenseCard Model="@model" AmountCssClass="@(isCreated ? "text-decoration-line-through" : "")" />
+                            <div class="col">
+                                <ExpenseCard Model="@model" CssClass="@(isCreated ? "checklist-completed" : "")" AmountCssClass="@(isCreated ? "text-decoration-line-through" : "")" />
                             </div>
                         </div>
                     }

@@ -39,6 +39,8 @@ public partial class Summary<T>(
     IEventHandler<IncomeCreated>,
     IEventHandler<IncomeDeleted>
 {
+    protected ILog<Summary<T>> Log { get; } = Log;
+    protected Navigator Navigator { get; } = Navigator;
     protected string SubTitle { get; set; } = subTitle;
 
     protected bool IsPeriodReloadRequired { get; set; }

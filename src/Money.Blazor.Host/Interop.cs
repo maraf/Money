@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Neptuo;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,9 @@ namespace Money
 
         public async Task FocusElementByIdAsync(string id)
             => await jsRuntime.InvokeVoidAsync("Money.FocusElementById", id);
+
+        public async Task SetupGridNavigationAsync(ElementReference element)
+            => await jsRuntime.InvokeVoidAsync("GridNavigation.Setup", element);
 
         public async Task ApplyThemeAsync(string theme)
             => await jsRuntime.InvokeVoidAsync("Bootstrap.Theme.Apply", theme);

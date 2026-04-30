@@ -24,14 +24,14 @@ public partial class OverviewYear(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
     Interop Interop,
-    Navigator Navigator,
-    ILog<Overview<YearModel>> Log
+    Navigator navigator,
+    ILog<Overview<YearModel>> log
 ) : Overview<YearModel>(
     EventHandlers,
     Queries,
     Interop,
-    Navigator,
-    Log,
+    navigator,
+    log,
     "List of each single expense in selected year"
 )
 {
@@ -54,6 +54,9 @@ public partial class OverviewYear(
 
     protected override IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
         => ListYearOutcomeFromCategory.Version3(CategoryKey, SelectedPeriod, SortDescriptor, pageIndex);
+
+    protected override bool IsFuturePeriod()
+        => SelectedPeriod > DateTime.Now;
 
     protected override bool IsContained(DateTime when)
         => SelectedPeriod == when;

@@ -75,7 +75,11 @@ public partial class ExpenseCreate(
             {
                 SelectedField.Description => "expense-wiz-description",
                 SelectedField.Amount => "expense-wiz-amount",
-                SelectedField.Category => !CategoryKey.IsEmpty ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" : null,
+                SelectedField.Category => !CategoryKey.IsEmpty 
+                    ? $"expense-wiz-category-{CategoryKey.AsGuidKey().Guid.ToString()}" 
+                    : Categories?.Count > 0 
+                        ? $"expense-wiz-category-{Categories[0].Key.AsGuidKey().Guid.ToString()}" 
+                        : null,
                 SelectedField.When => "expense-wiz-when",
                 _ => null,
             };

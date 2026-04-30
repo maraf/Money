@@ -22,7 +22,8 @@ namespace Money.Components;
 public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IEventHandlerCollection EventHandlers) :
     IDisposable,
     IEventHandler<CurrencyCreated>,
-    IEventHandler<CurrencyDeleted>
+    IEventHandler<CurrencyDeleted>,
+    IEventHandler<CurrencyDefaultChanged>
 {
     [Parameter]
     public string Id { get; set; }
@@ -52,14 +53,16 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IE
 
         EventHandlers
             .Add<CurrencyCreated>(this)
-            .Add<CurrencyDeleted>(this);
+            .Add<CurrencyDeleted>(this)
+            .Add<CurrencyDefaultChanged>(this);
     }
 
     public void Dispose()
     {
         EventHandlers
             .Remove<CurrencyCreated>(this)
-            .Remove<CurrencyDeleted>(this);
+            .Remove<CurrencyDeleted>(this)
+            .Remove<CurrencyDefaultChanged>(this);
     }
 
     protected async void OnAuthenticationChanged(bool isAuthenticated)
@@ -130,6 +133,19 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IE
             if (model != null)
                 Currencies.Remove(model);
 
+            StateHasChanged();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    Task IEventHandler<CurrencyDefaultChanged>.HandleAsync(CurrencyDefaultChanged payload)
+    {
+        defaultCurrency = payload.UniqueCode;
+
+        if (Value == null)
+        {
+            Currency = defaultCurrency;
             StateHasChanged();
         }
 

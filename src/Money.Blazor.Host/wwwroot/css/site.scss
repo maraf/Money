@@ -421,6 +421,10 @@ h4 {
     }
 }
 
+.checklist-completed > *:not(.controls) {
+    opacity: 0.5;
+}
+
 @media (max-width: 767px) {
     .modal .btn-primary {
         flex: 1 1 auto !important; // flex-fill

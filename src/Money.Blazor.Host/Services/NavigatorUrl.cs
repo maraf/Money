@@ -73,6 +73,18 @@ namespace Money.Services
             return url;
         }
 
+        public string UrlSearchIncomes(string query = null, SortDescriptor<IncomeOverviewSortType> sortDescriptor = null)
+        {
+            string url = "/search/incomes";
+            if (!String.IsNullOrEmpty(query))
+                url = QueryHelpers.AddQueryString(url, "q", query);
+
+            if (sortDescriptor != null)
+                url = QueryHelpers.AddQueryString(url, "sort", sortDescriptor.ToUrlString());
+
+            return url;
+        }
+
         public string UrlCategories()
             => "/categories";
 

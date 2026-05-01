@@ -42,6 +42,10 @@ namespace Money.Services
             {
                 return await GetSortDescriptorAsync<OutcomeOverviewSortType>(dispatcher, "SearchSort", "ByWhen-Descending");
             }
+            else if (query is GetSearchIncomesSortProperty) 
+            {
+                return await GetSortDescriptorAsync<IncomeOverviewSortType>(dispatcher, "SearchIncomesSort", "ByWhen-Descending");
+            }
             else if (query is GetBalanceDisplayProperty) 
             {
                 return await GetEnumAsync<BalanceDisplayType>(dispatcher, "BalanceDisplay", "Total");

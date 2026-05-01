@@ -1,0 +1,40 @@
+﻿@page "/search/incomes"
+@attribute [Authorize]
+
+<Money.Components.Title Icon="search" Main="Search" Sub="Search for incomes" />
+<ExceptionPanel />
+
+<div class="container-narrow">
+    <form @onsubmit="@(() => { Navigator.OpenSearchIncomes(FormText, DefaultSort.Equals(FormSort) ? null : FormSort); StateHasChanged(); })">
+        <div class="row g-2 mb-3">
+            <div class="col">
+                <input @ref="SearchBox" class="form-control" placeholder="Search..." @bind="@FormText" />
+            </div>
+            <div class="col-auto">
+                <SortButton TType="@IncomeOverviewSortType" @bind-Current="@FormSort" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary d-block">
+                    <Icon Identifier="search" />
+                    <span class="d-none d-md-inline">
+                        Search
+                    </span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="cards">
+        <IncomeCardContext>
+            <AutoLoadListView 
+                Items="@Models" 
+                LoadingContext="@Loading" 
+                PagingContext="@PagingContext" 
+                NoDataMessage="@(string.IsNullOrEmpty(Query) ? "Type your query to start, use double quotes for exact match..." : "No matching income found.")" 
+                Context="item"
+            >
+                <IncomeCard Model="@item.Model" CssClass="@item.Placeholder?.CssClass" />
+            </AutoLoadListView>
+        </IncomeCardContext>
+    </div>
+</div>

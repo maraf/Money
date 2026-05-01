@@ -11,7 +11,7 @@ namespace Money.Services
     {
         #region Expense
 
-        public static bool IsOutcomeAmount(decimal amount) => amount > 0;
+        public static bool IsOutcomeAmount(decimal amount) => amount >= 0;
         public static bool IsOutcomeDescription(string description) => !String.IsNullOrEmpty(description);
         public static bool IsOutcomeCurrency(string currency) => !String.IsNullOrEmpty(currency);
         public static bool IsOutcomeCategoryKey(IKey categoryKey) => categoryKey != null && !categoryKey.IsEmpty;
@@ -20,7 +20,7 @@ namespace Money.Services
         {
             if (!IsOutcomeAmount(amount))
             {
-                messages.Add("Amount must be greater than zero.");
+                messages.Add("Amount must not be negative.");
                 return true;
             }
 

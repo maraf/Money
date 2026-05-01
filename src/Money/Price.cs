@@ -31,6 +31,8 @@ namespace Money
         public Price(decimal value, string currency)
         {
             Ensure.NotNullOrEmpty(currency, "currency");
+            if (value < 0)
+                throw new ArgumentOutOfRangeException(nameof(value), "Price value must not be negative.");
             Value = value;
             Currency = currency;
         }

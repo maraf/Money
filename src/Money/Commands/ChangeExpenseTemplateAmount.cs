@@ -24,6 +24,7 @@ namespace Money.Commands
 
         /// <summary>
         /// Gets a new expense template amount value.
+        /// A <c>null</c> value clears the template amount (no amount, nor currency).
         /// </summary>
         public Price Amount { get; private set; }
 
@@ -31,11 +32,10 @@ namespace Money.Commands
         /// Changes an <paramref name="amount"/> of the expense template with <paramref name="key"/>.
         /// </summary>
         /// <param name="expenseTemplateKey">A key of the expense template to modify.</param>
-        /// <param name="amount">A new expense template amount value.</param>
+        /// <param name="amount">A new expense template amount value, or <c>null</c> to clear the amount.</param>
         public ChangeExpenseTemplateAmount(IKey expenseTemplateKey, Price amount)
         {
             Ensure.Condition.NotEmptyKey(expenseTemplateKey);
-            Ensure.NotNull(amount, "amount");
             ExpenseTemplateKey = expenseTemplateKey;
             Amount = amount;
         }

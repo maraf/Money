@@ -50,17 +50,36 @@ namespace Money.Services
 
         public string Format(Price price, FormatZero zero = FormatZero.Zero, bool applyUserDigits = true, bool applyPlusForPositiveNumbers = false)
         {
-            if (price == null || price.Value == 0)
+            if (price == null)
             {
                 return zero switch
                 {
                     FormatZero.Empty => String.Empty,
                     FormatZero.Placehoder => "---",
+                    _ => "---"
+                };
+            }
+
+            if (price.Value == 0)
+            {
+                return zero switch
+                {
+                    FormatZero.Empty => String.Empty,
+                    FormatZero.Placehoder => FormatPlaceholderWithCurrency(price),
                     _ => FormatInternal(price)
                 };
             }
 
             return FormatInternal(price, applyUserDigits, applyPlusForPositiveNumbers);
+        }
+
+        private string FormatPlaceholderWithCurrency(Price price)
+        {
+            CurrencyModel currency = models.FirstOrDefault(c => c.UniqueCode == price.Currency);
+            if (currency == null)
+                return "---";
+
+            return $"--- {currency.Symbol}";
         }
 
         private string FormatInternal(Price price, bool applyUserDigits = true, bool applyPlusForPositiveNumbers = false) 

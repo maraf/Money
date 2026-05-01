@@ -35,6 +35,12 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IE
     public bool AutoSelect { get; set; }
 
     [Parameter]
+    public bool AllowEmpty { get; set; }
+
+    [Parameter]
+    public bool IsReadOnly { get; set; }
+
+    [Parameter]
     public Price Value { get; set; }
 
     [Parameter]
@@ -98,11 +104,20 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IE
     protected void OnValueChanged(ChangeEventArgs e)
     {
         string rawValue = e.Value?.ToString();
-        Price priceValue = null;
+        Price priceValue;
         if (Decimal.TryParse(rawValue, out var value))
         {
             Amount = value;
             priceValue = new Price(value, Currency);
+        }
+        else if (AllowEmpty)
+        {
+            Amount = 0;
+            priceValue = new Price(0, Currency);
+        }
+        else
+        {
+            priceValue = null;
         }
 
         ValueChanged?.Invoke(Value = priceValue);
@@ -113,6 +128,7 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IE
         if (Currency != currency.UniqueCode)
         {
             Currency = currency.UniqueCode;
+
             ValueChanged?.Invoke(Value = new Price(Amount, Currency));
         }
     }

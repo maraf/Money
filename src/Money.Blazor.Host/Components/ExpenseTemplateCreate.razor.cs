@@ -21,6 +21,8 @@ public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICom
 {
     public const string EmptyCurrency = "---";
 
+    private string defaultCurrency;
+
     protected List<string> ErrorMessages { get; } = new List<string>();
 
     protected List<CategoryModel> Categories { get; private set; }
@@ -40,7 +42,15 @@ public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICom
     [Parameter]
     public bool IsFixed { get; set; }
 
-    protected Price Price { get; set; }
+    protected bool IsNoAmountNorCurrency { get; set; }
+
+    protected void OnNoAmountNorCurrencyChanged()
+    {
+        if (IsNoAmountNorCurrency)
+            Amount = null;
+        else
+            Amount = !string.IsNullOrEmpty(defaultCurrency) ? new Price(0, defaultCurrency) : null;
+    }
 
     protected void OnSaveClick()
     {
@@ -71,6 +81,7 @@ public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICom
         CategoryKey = null;
         Description = null;
         IsFixed = false;
+        IsNoAmountNorCurrency = false;
         StateHasChanged();
     }
 
@@ -81,6 +92,7 @@ public partial class ExpenseTemplateCreate(ILog<ExpenseTemplateCreate> Log, ICom
 
         Categories = await Queries.QueryAsync(new ListAllCategory());
         Currencies = await Queries.QueryAsync(new ListAllCurrency());
+        defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
 
         if (Currencies == null || Currencies.Count == 0 || Categories == null || Categories.Count == 0)
             PrerequisitesConfirm.Show();

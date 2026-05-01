@@ -35,6 +35,7 @@ namespace Money.Commands
         {
             Ensure.Condition.NotEmptyKey(outcomeKey);
             Ensure.NotNull(amount, "amount");
+            Ensure.PositiveOrZero(amount.Value, "amount.Value");
             OutcomeKey = outcomeKey;
             Amount = amount;
         }

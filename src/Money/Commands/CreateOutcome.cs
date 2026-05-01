@@ -59,6 +59,7 @@ namespace Money.Commands
         public CreateOutcome(Price amount, string description, DateTime when, IKey categoryKey)
         {
             Ensure.NotNull(amount, "amount");
+            Ensure.PositiveOrZero(amount.Value, "amount.Value");
             Ensure.NotNull(description, "description");
             Ensure.NotNull(when, "when");
             Ensure.Condition.NotEmptyKey(categoryKey);

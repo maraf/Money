@@ -5,6 +5,15 @@
 <ExceptionPanel />
 
 <div class="container-narrow">
+    <ul class="nav nav-pills mb-3">
+        <li>
+            <a class="nav-link" href="@Navigator.UrlSearch(Query)">Expenses</a>
+        </li>
+        <li>
+            <a class="nav-link active" href="@Navigator.UrlSearchIncomes(Query)">Incomes</a>
+        </li>
+    </ul>
+
     <form @onsubmit="@(() => { Navigator.OpenSearchIncomes(FormText, DefaultSort.Equals(FormSort) ? null : FormSort); StateHasChanged(); })">
         <div class="row g-2 mb-3">
             <div class="col">

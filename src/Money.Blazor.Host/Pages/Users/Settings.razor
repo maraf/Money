@@ -74,6 +74,10 @@
     <SortDescriptorEditor T="OutcomeOverviewSortType" @bind-Property="SearchSort.Property" @bind-Direction="SearchSort.Direction" />
 </PropertyDialog>
 
+<PropertyDialog @ref="SearchIncomesSortEditor" Model="@SearchIncomesSort" Title="Set search incomes sort">
+    <SortDescriptorEditor T="IncomeOverviewSortType" @bind-Property="SearchIncomesSort.Property" @bind-Direction="SearchIncomesSort.Direction" />
+</PropertyDialog>
+
 <PropertyDialog @ref="BalanceDisplayEditor" Model="@BalanceDisplay" Title="Set balance display">
     <EnumEditor T="BalanceDisplayType" @bind-Property="BalanceDisplay.Property" />
 </PropertyDialog>

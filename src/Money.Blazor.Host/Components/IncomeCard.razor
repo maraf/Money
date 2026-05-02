@@ -1,0 +1,47 @@
+﻿@if (Model != null)
+{
+    <div @key="Model" class="row align-items-center py-3 @CssClass">
+        <div class="col-4 col-md-2 mb-2 mb-md-0">
+            <DateValue Value="Model.When" />
+        </div>
+        <div class="col-8 col-md-3 text-md-end mb-2 mb-md-0 text-end">
+            <PriceView TagName="h3" CssClass="m-0" Value="Model.Amount" />
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col mb-2 mb-md-0">
+            @Model.Description
+        </div>
+        @if (Context.HasEdit && !Model.Key.IsEmpty)
+        {
+            <div class="col-12 col-sm-auto controls text-end">
+                <div class="sort dropdown">
+                    <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" @onclick="@OnEditAmount">
+                            <Icon Identifier="dollar-sign" />
+                            Amount
+                        </a>
+                        <a class="dropdown-item" @onclick="@OnEditDescription">
+                            <Icon Identifier="comment" />
+                            Description
+                        </a>
+                        <a class="dropdown-item" @onclick="@OnEditWhen">
+                            <Icon Identifier="calendar" />
+                            When
+                        </a>
+                        <hr class="dropdown-divider" />
+                        <a class="dropdown-item" href="@Navigator.UrlSearchIncomes(Model.Description)">
+                            <Icon Identifier="search" />
+                            Find similar
+                        </a>
+                        <hr class="dropdown-divider" />
+                        <a class="dropdown-item" @onclick="@OnDelete">
+                            <Icon Identifier="trash-alt" />
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

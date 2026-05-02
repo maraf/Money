@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 namespace Money.Pages;
 
 public partial class OverviewMonthIncome(
-    ICommandDispatcher Commands,
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
     Interop Interop,
@@ -45,17 +44,12 @@ public partial class OverviewMonthIncome(
     protected MonthModel SelectedPeriod { get; set; }
 
     protected List<IncomeOverviewModel> Items { get; set; }
-    protected IncomeOverviewModel SelectedItem { get; set; }
 
     protected IncomeCreate CreateModal { get; set; }
 
     protected LoadingContext Loading { get; } = new LoadingContext();
     protected SortDescriptor<IncomeOverviewSortType> SortDescriptor { get; set; } = new(IncomeOverviewSortType.ByWhen, SortDirection.Descending);
     protected PagingContext PagingContext { get; set; }
-
-    protected IncomeOverviewModel Selected { get; set; }
-    protected string DeleteMessage { get; set; }
-    protected Confirm DeleteConfirm { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,34 +95,6 @@ public partial class OverviewMonthIncome(
     protected async void OnSortChanged()
     {
         await PagingContext.LoadAsync(0);
-        StateHasChanged();
-    }
-
-    protected void OnActionClick(IncomeOverviewModel model, ModalDialog modal)
-    {
-        SelectedItem = model;
-        modal.Show();
-        StateHasChanged();
-    }
-
-    protected void OnDeleteClick(IncomeOverviewModel model)
-    {
-        Selected = model;
-        DeleteMessage = $"Do you really want to delete income '{model.Description}'?";
-        DeleteConfirm.Show();
-        StateHasChanged();
-    }
-
-    protected void Edit(IncomeOverviewModel model, ModalDialog modal)
-    {
-        Selected = model;
-        modal.Show();
-        StateHasChanged();
-    }
-
-    protected async void OnDeleteConfirmed()
-    {
-        await Commands.HandleAsync(new DeleteIncome(Selected.Key));
         StateHasChanged();
     }
 

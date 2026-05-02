@@ -1,26 +1,26 @@
-﻿@page "/search"
+﻿@page "/search/incomes"
 @attribute [Authorize]
 
-<Money.Components.Title Icon="search" Main="Search" Sub="Search for expenses" />
+<Money.Components.Title Icon="search" Main="Search" Sub="Search for incomes" />
 <ExceptionPanel />
 
 <div class="container-narrow">
     <ul class="nav nav-pills mb-3">
         <li>
-            <a class="nav-link active" href="@Navigator.UrlSearch(Query)">Expenses</a>
+            <a class="nav-link" href="@Navigator.UrlSearch(Query)">Expenses</a>
         </li>
         <li>
-            <a class="nav-link" href="@Navigator.UrlSearchIncomes(Query)">Incomes</a>
+            <a class="nav-link active" href="@Navigator.UrlSearchIncomes(Query)">Incomes</a>
         </li>
     </ul>
 
-    <form @onsubmit="@(() => { Navigator.OpenSearch(FormText, DefaultSort.Equals(FormSort) ? null : FormSort); StateHasChanged(); })">
+    <form @onsubmit="@(() => { Navigator.OpenSearchIncomes(FormText, DefaultSort.Equals(FormSort) ? null : FormSort); StateHasChanged(); })">
         <div class="row g-2 mb-3">
             <div class="col">
                 <input @ref="SearchBox" class="form-control" placeholder="Search..." @bind="@FormText" />
             </div>
             <div class="col-auto">
-                <SortButton TType="@OutcomeOverviewSortType" @bind-Current="@FormSort" />
+                <SortButton TType="@IncomeOverviewSortType" @bind-Current="@FormSort" />
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary d-block">
@@ -34,16 +34,16 @@
     </form>
 
     <div class="cards">
-        <ExpenseCardContext>
+        <IncomeCardContext>
             <AutoLoadListView 
                 Items="@Models" 
                 LoadingContext="@Loading" 
                 PagingContext="@PagingContext" 
-                NoDataMessage="@(string.IsNullOrEmpty(Query) ? "Type your query to start, use double quotes for exact match..." : "No matching expense found.")" 
+                NoDataMessage="@(string.IsNullOrEmpty(Query) ? "Type your query to start, use double quotes for exact match..." : "No matching income found.")" 
                 Context="item"
             >
-                <ExpenseCard Model="@item.Model" CssClass="@item.Placeholder?.CssClass" />
+                <IncomeCard Model="@item.Model" CssClass="@item.Placeholder?.CssClass" />
             </AutoLoadListView>
-        </ExpenseCardContext>
+        </IncomeCardContext>
     </div>
 </div>

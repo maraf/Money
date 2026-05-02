@@ -46,6 +46,9 @@ public partial class Settings(
     protected SortPropertyViewModel<OutcomeOverviewSortType> SearchSort { get; set; }
     protected PropertyDialog SearchSortEditor { get; set; }
 
+    protected SortPropertyViewModel<IncomeOverviewSortType> SearchIncomesSort { get; set; }
+    protected PropertyDialog SearchIncomesSortEditor { get; set; }
+
     protected EnumPropertyViewModel<BalanceDisplayType> BalanceDisplay { get; set; }
     protected PropertyDialog BalanceDisplayEditor { get; set; }
 
@@ -80,6 +83,7 @@ public partial class Settings(
         SummaryDisplay = AddProperty<EnumPropertyViewModel<SummaryDisplayType>>("SummaryDisplay", "Summary display", () => SummaryDisplayEditor.Show(), icon: "eye", defaultValue: "Total");
         ExpenseOverviewSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("ExpenseOverviewSort", "Expense overview sort", () => ExpenseOverviewSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
         SearchSort = AddProperty<SortPropertyViewModel<OutcomeOverviewSortType>>("SearchSort", "Search sort", () => SearchSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
+        SearchIncomesSort = AddProperty<SortPropertyViewModel<IncomeOverviewSortType>>("SearchIncomesSort", "Search incomes sort", () => SearchIncomesSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByWhen-Descending");
         BalanceDisplay = AddProperty<EnumPropertyViewModel<BalanceDisplayType>>("BalanceDisplay", "Balance display", () => BalanceDisplayEditor.Show(), icon: "eye", defaultValue: "Total");
         ExpenseTemplateSort = AddProperty<SortPropertyViewModel<ExpenseTemplateSortType>>("ExpenseTemplateSort", "ExpenseTemplate sort", () => ExpenseTemplateSortEditor.Show(), icon: "sort-alpha-down", defaultValue: "ByDescription-Ascending");
         ExpenseTemplateCalendarDisplay = AddProperty<EnumPropertyViewModel<ExpenseTemplateCalendarDisplayType>>("ExpenseTemplateCalendarDisplay", "Expense template calendar display", () => ExpenseTemplateCalendarDisplayEditor.Show(), icon: "eye", defaultValue: "Check");

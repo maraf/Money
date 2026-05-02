@@ -23,7 +23,8 @@ namespace Money.Models.Builders
         IEventHandler<IncomeDeleted>,
         IQueryHandler<GetTotalMonthIncome, Price>,
         IQueryHandler<GetTotalYearIncome, Price>,
-        IQueryHandler<ListMonthIncome, List<IncomeOverviewModel>>
+        IQueryHandler<ListMonthIncome, List<IncomeOverviewModel>>,
+        IQueryHandler<SearchIncomes, List<IncomeOverviewModel>>
     {
         const int PageSize = 10;
 
@@ -140,8 +141,39 @@ namespace Money.Models.Builders
                 sql = ApplyPaging(sql, query);
 
                 List<IncomeOverviewModel> models = await sql
-                    .Select(i => i.ToOverviewModel(query))
+                    .Select(i => i.ToOverviewModel())
                     .ToListAsync();
+
+                return models;
+            }
+        }
+
+        public async Task<List<IncomeOverviewModel>> HandleAsync(SearchIncomes query)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                var sql = db.Incomes
+                    .WhereUserKey(query.UserKey);
+
+                var text = query.Text;
+                if (text.Length >= 2 && text.StartsWith("\"") && text.EndsWith("\""))
+                {
+                    text = text.Substring(1, text.Length - 2);
+                    sql = sql.Where(i => i.Description == text);
+                }
+                else
+                {
+                    sql = sql.Where(i => EF.Functions.Like(i.Description, $"%{text}%"));
+                }
+
+                sql = ApplySorting(sql, query);
+                sql = ApplyPaging(sql, query);
+
+                List<IncomeEntity> entities = await sql.ToListAsync();
+
+                List<IncomeOverviewModel> models = entities
+                    .Select(e => e.ToOverviewModel())
+                    .ToList();
 
                 return models;
             }

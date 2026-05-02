@@ -156,7 +156,7 @@ namespace Money.Models.Builders
                     .WhereUserKey(query.UserKey);
 
                 var text = query.Text;
-                if (text.StartsWith("\"") && text.EndsWith("\""))
+                if (text.Length >= 2 && text.StartsWith("\"") && text.EndsWith("\""))
                 {
                     text = text.Substring(1, text.Length - 2);
                     sql = sql.Where(i => i.Description == text);

@@ -379,6 +379,7 @@ namespace Money.Models.Builders
                     Amount = payload.Amount.Value,
                     Currency = payload.Amount.Currency,
                     When = payload.When,
+                    ExpectedWhen = payload.ExpectedWhen,
                     Description = payload.Description,
                     IsFixed = payload.IsFixed
                 }.SetUserKey(payload.UserKey));

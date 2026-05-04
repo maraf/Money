@@ -75,6 +75,20 @@ namespace Money
             Publish(new OutcomeCreated(amount, description, when, categoryKey, isFixed));
         }
 
+        /// <summary>
+        /// Creates new instance.
+        /// </summary>
+        /// <param name="amount">An amount of the outcome.</param>
+        /// <param name="description">A description of the outcome.</param>
+        /// <param name="when">A date when the outcome occured.</param>
+        /// <param name="categoryKey">A category where the outcome is created.</param>
+        /// <param name="isFixed">Whether ths expense is fixed.</param>
+        /// <param name="expectedWhen">A date when the expense was expected to occur.</param>
+        public Outcome(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed, DateTime? expectedWhen)
+        {
+            Publish(new OutcomeCreated(amount, description, when, categoryKey, isFixed, expectedWhen));
+        }
+
         public Outcome(IKey key, IEnumerable<IEvent> events)
             : base(key, events)
         { }
@@ -93,6 +107,9 @@ namespace Money
                 Description = payload.Description;
                 When = payload.When;
                 CategoryKeys.Add(payload.CategoryKey);
+
+                if (payload.ExpectedWhen != null)
+                    ExpectedWhen = payload.ExpectedWhen.Value;
             });
         }
 

@@ -29,6 +29,8 @@ namespace Money.Commands.Handlers
                 return new Outcome(envelope.Body.Amount, envelope.Body.Description, envelope.Body.When, envelope.Body.CategoryKey);
             else if (envelope.Body.Version == 2)
                 return new Outcome(envelope.Body.Amount, envelope.Body.Description, envelope.Body.When, envelope.Body.CategoryKey, envelope.Body.IsFixed);
+            else if (envelope.Body.Version == 3)
+                return new Outcome(envelope.Body.Amount, envelope.Body.Description, envelope.Body.When, envelope.Body.CategoryKey, envelope.Body.IsFixed, envelope.Body.ExpectedWhen);
             else
                 throw Ensure.Exception.InvalidOperation($"Not support version '{envelope.Body.Version}' of '{nameof(CreateOutcome)}' command.");
         });

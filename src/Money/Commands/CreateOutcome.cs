@@ -86,5 +86,29 @@ namespace Money.Commands
             IsFixed = isFixed;
             Version = 2;
         }
+
+        /// <summary>
+        /// Gets a date when the expense was expected to occur.
+        /// </summary>
+        [CompositeProperty(6, Version = 3)]
+        public DateTime? ExpectedWhen { get; set; }
+
+        /// <summary>
+        /// Creates an expense.
+        /// </summary>
+        /// <param name="amount">An amount of the outcome.</param>
+        /// <param name="description">A description of the outcome.</param>
+        /// <param name="when">A date and time when the outcome occured.</param>
+        /// <param name="categoryKey">A category where it belongs</param>
+        /// <param name="isFixed">Whether is it a fixed expense.</param>
+        /// <param name="expectedWhen">A date when the expense was expected to occur.</param>
+        [CompositeConstructor(Version = 3)]
+        public CreateOutcome(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed, DateTime? expectedWhen)
+            : this(amount, description, when, categoryKey)
+        {
+            IsFixed = isFixed;
+            ExpectedWhen = expectedWhen;
+            Version = 3;
+        }
     }
 }

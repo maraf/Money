@@ -34,7 +34,7 @@
                             if (isCreated)
                                 return;
 
-                            Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed);
+                            Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed, model.When);
                         };
                         var rowCssClass = $"row align-items-center {(!isCreated ? "cursor-pointer" : "")}";
                         var iconCssClass = $"h1 {(isCreated ? "text-success" : "")} m-0";

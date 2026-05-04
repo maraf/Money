@@ -61,6 +61,7 @@ public partial class ExpenseCreate(
     protected List<ExpenseTemplateModel> SuggestedTemplates { get; set; } = new();
     protected IKey CategoryKey { get; set; } = KeyFactory.Empty(typeof(Category));
     protected DateTime When { get; set; }
+    protected DateTime? ExpectedWhen { get; set; }
     protected bool IsFixed { get; set; }
 
     protected override void OnInitialized()
@@ -167,6 +168,16 @@ public partial class ExpenseCreate(
         CategoryKey = categoryKey;
         When = when;
         IsFixed = isFixed;
+        return false;
+    });
+
+    public void Show(Price amount, string description, IKey categoryKey, bool isFixed, DateTime? expectedWhen) => ShowInternal(() =>
+    {
+        Amount = amount;
+        Description = description;
+        CategoryKey = categoryKey;
+        IsFixed = isFixed;
+        ExpectedWhen = expectedWhen;
         return false;
     });
 
@@ -336,6 +347,9 @@ public partial class ExpenseCreate(
 
     private Task ExecuteAsync()
     {
+        if (ExpectedWhen != null)
+            return Commands.HandleAsync(new CreateOutcome(Amount, Description, When, CategoryKey, IsFixed, ExpectedWhen));
+
         return Commands.HandleAsync(new CreateOutcome(Amount, Description, When, CategoryKey, IsFixed));
     }
 
@@ -368,6 +382,7 @@ public partial class ExpenseCreate(
         Amount = null;
         CategoryKey = EmptyCategoryKey;
         When = clearWhenToMinValue ? DateTime.MinValue : AppDateTime.Today;
+        ExpectedWhen = null;
         IsFixed = false;
 
         Log.Debug($"Cleared values: Amount: '{Amount}', Category: '{CategoryKey}', When: '{When}', Description: '{Description}'.");

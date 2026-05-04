@@ -46,7 +46,7 @@
                         @<CategoryTag Key="@CategoryKey" CssClass="d-inline-block text-truncate" />
                     )
                     @FieldTab(SelectedField.When, When != DateTime.MinValue, "calendar", "When",
-                        @<DateValue Value="When" />
+                        @<span><DateValue Value="When" />@if (ExpectedWhen != null) { <em>*</em> }</span>
                     )
                 </div>
             </div>

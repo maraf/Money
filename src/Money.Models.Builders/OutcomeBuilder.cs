@@ -783,9 +783,9 @@ namespace Money.Models.Builders
                         ? expense.ToExpenseChecklistModel(template.GetKey())
                         : template.ToExpenseChecklistModel(template.Period switch
                         {
-                            RecurrencePeriod.Monthly => new DateTime(query.Month.Year, query.Month.Month, template.DayInPeriod.Value),
-                            RecurrencePeriod.Yearly => new DateTime(query.Month.Year, template.MonthInPeriod.Value, template.DayInPeriod.Value),
-                            RecurrencePeriod.XMonths => new DateTime(query.Month.Year, query.Month.Month, template.DayInPeriod.Value),
+                            RecurrencePeriod.Monthly => new DateTime(query.Month.Year, query.Month.Month, Math.Min(template.DayInPeriod.Value, DateTime.DaysInMonth(query.Month.Year, query.Month.Month))),
+                            RecurrencePeriod.Yearly => new DateTime(query.Month.Year, template.MonthInPeriod.Value, Math.Min(template.DayInPeriod.Value, DateTime.DaysInMonth(query.Month.Year, template.MonthInPeriod.Value))),
+                            RecurrencePeriod.XMonths => new DateTime(query.Month.Year, query.Month.Month, Math.Min(template.DayInPeriod.Value, DateTime.DaysInMonth(query.Month.Year, query.Month.Month))),
                             RecurrencePeriod.Single => template.DueDate.Value,
                             _ => throw Ensure.Exception.NotSupported($"The value '{template.Period}' is not supported.")
                         });

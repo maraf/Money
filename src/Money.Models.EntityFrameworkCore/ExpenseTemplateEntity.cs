@@ -67,6 +67,7 @@ namespace Money.Models
             KeyFactory.Empty(typeof(Outcome)),
             GetAmount(),
             when,
+            null,
             GetCategoryKey(),
             Description,
             IsFixed

@@ -729,6 +729,16 @@ h4 {
   font-weight: 600;
 }
 
+.calendar-picker-nav-center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.5rem;
+}
+
 .calendar-picker-grid {
   display: grid;
   gap: 0.25rem;
@@ -764,4 +774,5 @@ h4 {
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 0;
+  aspect-ratio: auto;
 }

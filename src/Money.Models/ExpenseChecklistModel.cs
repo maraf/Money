@@ -36,7 +36,12 @@ namespace Money.Models
         /// </summary>
         public DateTime When { get; set; }
 
-        DateTime? IExpenseOverviewModel.ExpectedWhen => null;
+        /// <summary>
+        /// Gets the expected date for the expense, if different from the actual date.
+        /// </summary>
+        public DateTime? ExpectedWhen { get; set; }
+
+        DateTime? IExpenseOverviewModel.ExpectedWhen => ExpectedWhen;
 
         /// <summary>
         /// Gets expense category.
@@ -53,7 +58,7 @@ namespace Money.Models
         /// </summary>
         public bool IsFixed { get; set; }
 
-        public ExpenseChecklistModel(IKey expenseTemplateKey, IKey expenseKey, Price amount, DateTime when, IKey categoryKey, string description, bool isFixed)
+        public ExpenseChecklistModel(IKey expenseTemplateKey, IKey expenseKey, Price amount, DateTime when, DateTime? expectedWhen, IKey categoryKey, string description, bool isFixed)
         {
             Ensure.Condition.NotEmptyKey(expenseTemplateKey);
             Ensure.NotNull(expenseKey, "expenseKey");
@@ -62,6 +67,7 @@ namespace Money.Models
             ExpenseKey = expenseKey;
             Amount = amount;
             When = when;
+            ExpectedWhen = expectedWhen;
             CategoryKey = categoryKey;
             Description = description;
             IsFixed = isFixed;

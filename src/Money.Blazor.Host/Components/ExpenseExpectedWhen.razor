@@ -6,7 +6,7 @@
             For features like 'Expected expenses', this date allows to adjust 
             when the expense was expected vs when it actually happened.
         </div>
-        <CalendarPicker Id="expense-when" @bind-Value="When" />
+        <CalendarPicker Id="expense-when" @bind-Value="When" OnDayClick="OnSaveClick" />
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>

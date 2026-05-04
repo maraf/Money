@@ -166,18 +166,6 @@ window.GridNavigation = {
             container.addEventListener("keydown", function (e) {
                 const key = e.key;
 
-                if (key === "Enter") {
-                    const modal = container.closest(".modal");
-                    if (modal) {
-                        const primaryBtn = modal.querySelector(".modal-footer .btn-primary");
-                        if (primaryBtn) {
-                            e.preventDefault();
-                            primaryBtn.click();
-                            return;
-                        }
-                    }
-                }
-
                 if (key !== "ArrowUp" && key !== "ArrowDown" && key !== "ArrowLeft" && key !== "ArrowRight") return;
 
                 const buttons = Array.from(container.querySelectorAll("button"));

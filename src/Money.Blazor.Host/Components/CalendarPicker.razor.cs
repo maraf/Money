@@ -17,6 +17,9 @@ public partial class CalendarPicker(Interop Interop)
     public Action<DateTime> ValueChanged { get; set; }
 
     [Parameter]
+    public EventCallback OnDayClick { get; set; }
+
+    [Parameter]
     public bool AutoFocus { get; set; }
 
     protected CalendarPickerPart CurrentPart { get; set; } = CalendarPickerPart.Day;
@@ -93,19 +96,20 @@ public partial class CalendarPicker(Interop Interop)
         needsGridNavSetup = true;
     }
 
-    protected void OnDaySelected(int day)
+    protected async Task OnDaySelected(int day)
     {
         var newValue = new DateTime(CurrentYear, CurrentMonth, day, 0, 0, 0, DateTimeKind.Utc);
         Value = newValue;
         ValueChanged?.Invoke(newValue);
+        await OnDayClick.InvokeAsync();
     }
 
-    protected void OnTodaySelected()
+    protected async Task OnTodaySelected()
     {
         var today = AppDateTime.Today;
         CurrentYear = today.Year;
         CurrentMonth = today.Month;
-        OnDaySelected(today.Day);
+        await OnDaySelected(today.Day);
     }
 
     protected void PrevMonth()

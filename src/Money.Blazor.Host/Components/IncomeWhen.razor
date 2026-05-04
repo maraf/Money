@@ -2,10 +2,7 @@
 
 <Modal @ref="Modal" Title="Change when the income occured">
     <ChildContent>
-        <div class="mb-3">
-            <label class="form-label" for="income-when">When:</label>
-            <CalendarPicker Id="income-when" @bind-Value="When" />
-        </div>
+        <CalendarPicker Id="income-when" @bind-Value="When" />
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>

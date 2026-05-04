@@ -777,6 +777,11 @@ h4 {
 
 .month-view-cell {
     text-align: center;
+    aspect-ratio: 1 / 1;
+}
+
+.month-view-cell > .btn {
+    height: 100%;
 }
 
 .month-view-day-name {

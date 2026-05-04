@@ -4,6 +4,7 @@ using Money.Events;
 using Money.Models;
 using Money.Models.Loading;
 using Money.Models.Queries;
+using SearchIncomesQuery = Money.Models.Queries.SearchIncomes;
 using Money.Models.Sorting;
 using Money.Queries;
 using Money.Services;
@@ -118,7 +119,7 @@ public partial class SearchIncomes(
 
             if (!String.IsNullOrEmpty(FormText))
             {
-                var models = await Queries.QueryAsync(Money.Models.Queries.SearchIncomes.Version1(FormText, Sort, PagingContext.CurrentPageIndex));
+                var models = await Queries.QueryAsync(SearchIncomesQuery.Version1(FormText, Sort, PagingContext.CurrentPageIndex));
                 if (models.Count == 0)
                 {
                     Log.Debug("Empty result");

@@ -171,11 +171,12 @@ public partial class ExpenseCreate(
         return false;
     });
 
-    public void Show(Price amount, string description, IKey categoryKey, bool isFixed, DateTime? expectedWhen) => ShowInternal(() =>
+    public void Show(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed, DateTime? expectedWhen) => ShowInternal(() =>
     {
         Amount = amount;
         Description = description;
         CategoryKey = categoryKey;
+        When = when;
         IsFixed = isFixed;
         ExpectedWhen = expectedWhen;
         return false;

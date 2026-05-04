@@ -34,7 +34,10 @@
                             if (isCreated)
                                 return;
 
-                            Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, model.IsFixed, model.When);
+                            var today = AppDateTime.Today;
+                            var isCurrentMonth = SelectedPeriod.Year == today.Year && SelectedPeriod.Month == today.Month;
+                            DateTime? expectedWhen = isCurrentMonth ? null : model.When;
+                            Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, today, model.IsFixed, expectedWhen);
                         };
                         var rowCssClass = $"row align-items-center {(!isCreated ? "cursor-pointer" : "")}";
                         var iconCssClass = $"h1 {(isCreated ? "text-success" : "")} m-0";

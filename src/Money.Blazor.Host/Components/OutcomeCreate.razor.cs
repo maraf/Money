@@ -199,9 +199,10 @@ public partial class OutcomeCreate(
         Show(amount, description, categoryKey, isFixed);
     }
 
-    public void Show(Price amount, string description, IKey categoryKey, bool isFixed, DateTime? expectedWhen)
+    public void Show(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed, DateTime? expectedWhen)
     {
         ExpectedWhen = expectedWhen;
+        When = when;
 
         Show(amount, description, categoryKey, isFixed);
     }

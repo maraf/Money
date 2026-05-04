@@ -104,9 +104,8 @@ namespace Money.Commands
         /// <param name="expectedWhen">A date when the expense was expected to occur.</param>
         [CompositeConstructor(Version = 3)]
         public CreateOutcome(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed, DateTime? expectedWhen)
-            : this(amount, description, when, categoryKey)
+            : this(amount, description, when, categoryKey, isFixed)
         {
-            IsFixed = isFixed;
             ExpectedWhen = expectedWhen;
             Version = 3;
         }

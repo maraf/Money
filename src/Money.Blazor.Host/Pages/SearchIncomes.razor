@@ -39,6 +39,7 @@
                 Items="@Models" 
                 LoadingContext="@Loading" 
                 PagingContext="@PagingContext" 
+                PlaceholderCount="2"
                 NoDataMessage="@(string.IsNullOrEmpty(Query) ? "Type your query to start, use double quotes for exact match..." : "No matching income found.")" 
                 Context="item"
             >

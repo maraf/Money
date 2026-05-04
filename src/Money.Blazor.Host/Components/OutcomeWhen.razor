@@ -2,10 +2,7 @@
 
 <Modal @ref="Modal" Title="Change when the expense occured">
     <ChildContent>
-        <div class="mb-3">
-            <label class="form-label" for="expense-when">When:</label>
-            <DateBox Id="expense-when" @bind-Value="When" AutoFocus="true" />
-        </div>
+        <CalendarPicker @bind-Value="When" OnDayClick="OnSaveClick" />
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>

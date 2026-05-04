@@ -94,7 +94,6 @@ public partial class ExpenseCreate(
                     : Categories?.Count > 0 
                         ? $"expense-wiz-category-{Categories[0].Key.AsGuidKey().Guid.ToString()}" 
                         : null,
-                SelectedField.When => "expense-wiz-when",
                 _ => null,
             };
 

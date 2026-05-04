@@ -6,6 +6,13 @@ namespace Money;
 
 internal class MockData
 {
+    public static readonly IncomeOverviewModel IncomeOverviewModel = new IncomeOverviewModel(
+        KeyFactory.Create(typeof(Income)), 
+        new Price(1, "USD"), 
+        AppDateTime.Today, 
+        string.Empty
+    );
+
     public static readonly OutcomeOverviewModel ExpenseOverviewModel = new OutcomeOverviewModel(
         KeyFactory.Create(typeof(Outcome)), 
         new Price(1, "USD"), 
@@ -34,6 +41,9 @@ internal class MockData
 
     public static T Get<T>()
     {
+        if (typeof(T) == typeof(IncomeOverviewModel))
+            return (T)(object)IncomeOverviewModel;
+
         if (typeof(T) == typeof(OutcomeOverviewModel))
             return (T)(object)ExpenseOverviewModel;
 

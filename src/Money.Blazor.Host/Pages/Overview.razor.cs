@@ -261,6 +261,9 @@ public partial class Overview<T>(
 
     Task IEventHandler<OutcomeCreated>.HandleAsync(OutcomeCreated payload)
     {
+        if (!CategoryKey.IsEmpty && !CategoryKey.Equals(payload.CategoryKey))
+            return Task.CompletedTask;
+
         if (IsContained(payload.When))
         {
             if (PagingContext.HasNextPage)

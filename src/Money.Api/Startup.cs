@@ -149,16 +149,6 @@ namespace Money
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseStatusCodePages();
-                app.UseErrorHandler();
-            }
-
             app.UseRouting();
 
             app.UseCors(p =>
@@ -174,6 +164,16 @@ namespace Money
                 p.SetPreflightMaxAge(TimeSpan.FromMinutes(10));
                 p.WithExposedHeaders(VersionHeader.Name, RenewalTokenHeader.Name);
             });
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseStatusCodePages();
+                app.UseErrorHandler();
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();

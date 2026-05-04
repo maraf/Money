@@ -8,18 +8,7 @@
 </Title>
 <ExceptionPanel />
 
-@code
-{
-    IncomeAmount ChangeAmountModal;
-    IncomeDescription ChangeDescriptionModal;
-    IncomeWhen ChangeWhenModal;
-}
-
 <IncomeCreate @ref="CreateModal" />
-<IncomeAmount @ref="ChangeAmountModal" IncomeKey="@Selected?.Key" Amount="@Selected?.Amount" />
-<IncomeDescription @ref="ChangeDescriptionModal" IncomeKey="@Selected?.Key" Description="@Selected?.Description" />
-<IncomeWhen @ref="ChangeWhenModal" IncomeKey="@Selected?.Key" When="@(Selected?.When ?? AppDateTime.Today)" />
-<Confirm @ref="DeleteConfirm" Message="@DeleteMessage" OnConfirmed="@OnDeleteConfirmed" />
 
 <div class="container-narrow">
     <Loading Context="@Loading" IsOverlay="true">
@@ -46,47 +35,12 @@
             if (Items.Count > 0)
             {
                 <div class="cards">
-                    <CascadingValue Value="@this">
+                    <IncomeCardContext>
                         @foreach (var item in Items)
                         {
-                            <div class="row align-items-center border-bottom py-3">
-                                <div class="col-4 col-md-2 mb-2 mb-md-0">
-                                    <DateValue Value="item.When" />
-                                </div>
-                                <div class="col-8 col-md-3 text-md-end mb-2 mb-md-0 text-end">
-                                    <PriceView TagName="h3" CssClass="m-0" Value="item.Amount" />
-                                </div>
-                                <div class="col-md-1"></div>
-                                <div class="col mb-2 mb-md-0">
-                                    @item.Description
-                                </div>
-                                <div class="col-12 col-sm-auto controls text-end">
-                                    <div class="sort dropdown">
-                                        <IconButton Icon="ellipsis-v" data-bs-toggle="dropdown" />
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" @onclick="@(() => Edit(item, ChangeAmountModal))">
-                                                <Icon Identifier="dollar-sign" />
-                                                Amount
-                                            </a>
-                                            <a class="dropdown-item" @onclick="@(() => Edit(item, ChangeDescriptionModal))">
-                                                <Icon Identifier="comment" />
-                                                Description
-                                            </a>
-                                            <a class="dropdown-item" @onclick="@(() => Edit(item, ChangeWhenModal))">
-                                                <Icon Identifier="calendar" />
-                                                When
-                                            </a>
-                                            <hr class="dropdown-divider" />
-                                            <a class="dropdown-item" @onclick="@(() => OnDeleteClick(item))">
-                                                <Icon Identifier="trash-alt" />
-                                                Delete
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <IncomeCard Model="@item" />
                         }
-                    </CascadingValue>
+                    </IncomeCardContext>
                 </div>
 
                 <Paging Context="@PagingContext" />

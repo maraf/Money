@@ -1,0 +1,75 @@
+@if (CurrentPart == CalendarPickerPart.Year)
+{
+    <div class="calendar-picker">
+        <div class="calendar-picker-nav">
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="(() => CurrentYear -= 12)">
+                <Icon Identifier="angle-left" />
+            </button>
+            <span class="calendar-picker-title">@(CurrentYear - 5) – @(CurrentYear + 6)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="(() => CurrentYear += 12)">
+                <Icon Identifier="angle-right" />
+            </button>
+        </div>
+        <div @ref="GridRef" class="calendar-picker-grid calendar-picker-grid-4">
+            @for (int i = CurrentYear - 5; i <= CurrentYear + 6; i++)
+            {
+                var year = i;
+                var isSelected = IsSelectedYear(year);
+                <button type="button" class="btn btn-sm @(isSelected ? "btn-primary" : "btn-outline-primary")" data-autofocus="@(isSelected ? "true" : null)" @onclick="@(() => OnYearSelected(year))">
+                    @year
+                </button>
+            }
+        </div>
+    </div>
+}
+else if (CurrentPart == CalendarPickerPart.Month)
+{
+    <div class="calendar-picker">
+        <div class="calendar-picker-nav">
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="(() => CurrentYear--)">
+                <Icon Identifier="angle-left" />
+            </button>
+            <span class="calendar-picker-title cursor-pointer" @onclick="(() => CurrentPart = CalendarPickerPart.Year)">@CurrentYear</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="(() => CurrentYear++)">
+                <Icon Identifier="angle-right" />
+            </button>
+        </div>
+        <div @ref="GridRef" class="calendar-picker-grid calendar-picker-grid-4">
+            @for (int i = 0; i < MonthNames.Length - 1; i++)
+            {
+                var month = i + 1;
+                var monthName = MonthNames[i];
+                var isSelected = IsSelectedMonth(month);
+                <button type="button" class="btn btn-sm @(isSelected ? "btn-primary" : "btn-outline-primary")" data-autofocus="@(isSelected ? "true" : null)" @onclick="@(() => OnMonthSelected(month))">
+                    @monthName
+                </button>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="calendar-picker">
+        <div class="calendar-picker-nav">
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="PrevMonth">
+                <Icon Identifier="angle-left" />
+            </button>
+            <span class="calendar-picker-title cursor-pointer" @onclick="(() => CurrentPart = CalendarPickerPart.Month)">
+                @MonthNames[CurrentMonth - 1] @CurrentYear
+            </span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="NextMonth">
+                <Icon Identifier="angle-right" />
+            </button>
+        </div>
+        <MonthView @ref="MonthViewRef" Year="@CurrentYear" Month="@CurrentMonth" Context="day">
+            <button type="button" class="btn btn-sm w-100 @DayCssClass(day)" data-autofocus="@(IsSelectedDay(day) ? "true" : null)" @onclick="@(() => OnDaySelected(day))">
+                @day
+            </button>
+        </MonthView>
+        <div class="calendar-picker-footer">
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="OnTodaySelected">
+                <Icon Identifier="calendar-day" /> Today
+            </button>
+        </div>
+    </div>
+}

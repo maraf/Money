@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Globalization;
+using System.Linq;
 
 namespace Money.Components;
 
@@ -15,7 +16,15 @@ public partial class MonthView<TItem>
     [Parameter]
     public RenderFragment<int> ChildContent { get; set; }
 
-    protected string[] DayNames => DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames;
+    protected string[] DayNames
+    {
+        get
+        {
+            var names = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames;
+            // Rotate so Monday is first
+            return names.Skip(1).Concat(names.Take(1)).ToArray();
+        }
+    }
 
     protected int DaysInMonth => DateTime.DaysInMonth(Year, Month);
 
@@ -24,7 +33,8 @@ public partial class MonthView<TItem>
         get
         {
             var firstDay = new DateTime(Year, Month, 1).DayOfWeek;
-            return (int)firstDay;
+            // Monday=0, Tuesday=1, ..., Sunday=6
+            return ((int)firstDay + 6) % 7;
         }
     }
 }

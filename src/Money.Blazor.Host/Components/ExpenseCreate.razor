@@ -132,7 +132,7 @@
                 else if (Selected == SelectedField.When)
                 {
                     <Validation ErrorMessages="@Errors.When" />
-                    <CalendarPicker Id="expense-wiz-when" @bind-Value="When" />
+                    <CalendarPicker Id="expense-wiz-when" @bind-Value="When" OnDayClick="OnCreateClickAsync" />
                 }
             </div>
         </ChildContent>

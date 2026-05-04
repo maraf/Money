@@ -31,7 +31,7 @@ namespace Money.Commands
         public string Description { get; private set; }
 
         /// <summary>
-        /// Gets a date and time when the outcome occured.
+        /// Gets a date and time when the outcome occurred.
         /// </summary>
         [CompositeProperty(3)]
         public DateTime When { get; private set; }
@@ -53,8 +53,8 @@ namespace Money.Commands
         /// </summary>
         /// <param name="amount">An amount of the outcome.</param>
         /// <param name="description">A description of the outcome.</param>
-        /// <param name="when">A date and time when the outcome occured.</param>
-        /// <param name="categoryKey">A category where it belongs</param>
+        /// <param name="when">A date and time when the outcome occurred.</param>
+        /// <param name="categoryKey">A category where it belongs.</param>
         [CompositeConstructor]
         public CreateOutcome(Price amount, string description, DateTime when, IKey categoryKey)
         {
@@ -76,8 +76,8 @@ namespace Money.Commands
         /// </summary>
         /// <param name="amount">An amount of the outcome.</param>
         /// <param name="description">A description of the outcome.</param>
-        /// <param name="when">A date and time when the outcome occured.</param>
-        /// <param name="categoryKey">A category where it belongs</param>
+        /// <param name="when">A date and time when the outcome occurred.</param>
+        /// <param name="categoryKey">A category where it belongs.</param>
         /// <param name="isFixed">Whether is it a fixed expense.</param>
         [CompositeConstructor(Version = 2)]
         public CreateOutcome(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed)
@@ -98,8 +98,8 @@ namespace Money.Commands
         /// </summary>
         /// <param name="amount">An amount of the outcome.</param>
         /// <param name="description">A description of the outcome.</param>
-        /// <param name="when">A date and time when the outcome occured.</param>
-        /// <param name="categoryKey">A category where it belongs</param>
+        /// <param name="when">A date and time when the outcome occurred.</param>
+        /// <param name="categoryKey">A category where it belongs.</param>
         /// <param name="isFixed">Whether is it a fixed expense.</param>
         /// <param name="expectedWhen">A date when the expense was expected to occur.</param>
         [CompositeConstructor(Version = 3)]

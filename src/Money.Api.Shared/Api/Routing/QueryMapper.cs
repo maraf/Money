@@ -50,6 +50,7 @@ namespace Money.Api.Routing
             Add<GetMonthExpectedExpenseTotal>("month-expected-expense-total");
 
             Add<SearchOutcomes>("search-outcomes");
+            Add<SearchIncomes>("search-incomes");
 
             Add<GetProfile>("user-profile");
             Add<ListUserProperty>("user-properties");

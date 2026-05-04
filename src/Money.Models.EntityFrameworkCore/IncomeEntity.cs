@@ -35,7 +35,7 @@ namespace Money.Models
             When = payload.When;
         }
 
-        public IncomeOverviewModel ToOverviewModel(ListMonthIncome query) => new IncomeOverviewModel(
+        public IncomeOverviewModel ToOverviewModel() => new IncomeOverviewModel(
             GuidKey.Create(Id, KeyFactory.Empty(typeof(Income)).Type), 
             new Price(Amount, Currency), 
             When, 

@@ -124,6 +124,9 @@ namespace Money.Services
         public void OpenSearch(string searchText = null, SortDescriptor<OutcomeOverviewSortType> sortDescriptor = null)
             => manager.NavigateTo(UrlSearch(searchText, sortDescriptor));
 
+        public void OpenSearchIncomes(string searchText = null, SortDescriptor<IncomeOverviewSortType> sortDescriptor = null)
+            => manager.NavigateTo(UrlSearchIncomes(searchText, sortDescriptor));
+
         public void OpenCategories()
             => manager.NavigateTo(UrlCategories());
 

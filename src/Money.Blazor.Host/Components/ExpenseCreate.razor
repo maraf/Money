@@ -132,6 +132,18 @@
                 else if (Selected == SelectedField.When)
                 {
                     <Validation ErrorMessages="@Errors.When" />
+                    @if (ExpectedWhen != null)
+                    {
+                        <div class="alert alert-info d-flex align-items-center justify-content-between py-2 mb-2">
+                            <span>
+                                <Icon Identifier="calendar" class="me-1" />
+                                Expected: <strong>@ExpectedWhen.Value.ToString("d")</strong>
+                            </span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="(() => ExpectedWhen = null)">
+                                <Icon Identifier="trash-alt" />
+                            </button>
+                        </div>
+                    }
                     <CalendarPicker @bind-Value="When" OnDayClick="OnCreateClickAsync" />
                 }
             </div>

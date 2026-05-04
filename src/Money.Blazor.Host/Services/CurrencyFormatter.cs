@@ -14,7 +14,6 @@ namespace Money.Services
         private readonly List<CurrencyModel> models;
         private readonly int decimalDigits;
         private Dictionary<string, CultureInfo> currencies;
-        private Dictionary<string, CultureInfo> modified = new Dictionary<string, CultureInfo>();
 
         public CurrencyFormatter(List<CurrencyModel> models, int decimalDigits)
         {
@@ -94,19 +93,25 @@ namespace Money.Services
             if (!currencies.TryGetValue(price.Currency, out var culture))
                 culture = CultureInfo.CurrentCulture;
 
-            CultureInfo modifiedCulture = null;
-            if (applyUserDigits && !modified.TryGetValue(price.Currency, out modifiedCulture))
-            {
-                modified[price.Currency] = modifiedCulture = (CultureInfo)culture.Clone();
-                modifiedCulture.NumberFormat.CurrencyDecimalDigits = decimalDigits;
-                modifiedCulture.NumberFormat.CurrencySymbol = currency.Symbol;
-            }
+            int effectiveDigits = applyUserDigits ? GetEffectiveDecimalDigits(price.Value) : culture.NumberFormat.CurrencyDecimalDigits;
 
-            string value = price.Value.ToString("C", modifiedCulture ?? culture);
+            var modifiedCulture = (CultureInfo)culture.Clone();
+            modifiedCulture.NumberFormat.CurrencyDecimalDigits = effectiveDigits;
+            modifiedCulture.NumberFormat.CurrencySymbol = currency.Symbol;
+
+            string value = price.Value.ToString("C", modifiedCulture);
             if (applyPlusForPositiveNumbers && price.Value > 0)
                 value = $"+{value}";
 
             return value;
+        }
+
+        private int GetEffectiveDecimalDigits(decimal value)
+        {
+            if (value != Math.Truncate(value))
+                return Math.Max(decimalDigits, 2);
+
+            return decimalDigits;
         }
 
         public enum FormatZero

@@ -2,7 +2,7 @@
 
 <Modal @ref="Modal" Title="Change when the expense occured">
     <ChildContent>
-        <CalendarPicker Id="expense-when" @bind-Value="When" OnDayClick="OnSaveClick" />
+        <CalendarPicker @bind-Value="When" OnDayClick="OnSaveClick" />
     </ChildContent>
     <Buttons>
         <button class="btn btn-primary" @onclick="@OnSaveClick">Save</button>

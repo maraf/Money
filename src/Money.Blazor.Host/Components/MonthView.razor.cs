@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Money.Components;
 
-public partial class MonthView<TItem>
+public partial class MonthView
 {
     [Parameter]
     public int Year { get; set; }

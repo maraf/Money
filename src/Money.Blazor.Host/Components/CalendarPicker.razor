@@ -61,7 +61,7 @@ else
                 <Icon Identifier="angle-right" />
             </button>
         </div>
-        <MonthView @ref="MonthViewRef" TItem="int" Year="@CurrentYear" Month="@CurrentMonth" Context="day">
+        <MonthView @ref="MonthViewRef" Year="@CurrentYear" Month="@CurrentMonth" Context="day">
             <button type="button" class="btn btn-sm w-100 @DayCssClass(day)" data-autofocus="@(IsSelectedDay(day) ? "true" : null)" @onclick="@(() => OnDaySelected(day))">
                 @day
             </button>

@@ -8,9 +8,6 @@ namespace Money.Components;
 public partial class CalendarPicker(Interop Interop)
 {
     [Parameter]
-    public string Id { get; set; }
-
-    [Parameter]
     public DateTime Value { get; set; }
 
     [Parameter]
@@ -19,15 +16,12 @@ public partial class CalendarPicker(Interop Interop)
     [Parameter]
     public EventCallback OnDayClick { get; set; }
 
-    [Parameter]
-    public bool AutoFocus { get; set; }
-
     protected CalendarPickerPart CurrentPart { get; set; } = CalendarPickerPart.Day;
     protected int CurrentYear { get; set; }
     protected int CurrentMonth { get; set; }
 
     protected ElementReference GridRef { get; set; }
-    protected MonthView<int> MonthViewRef { get; set; }
+    protected MonthView MonthViewRef { get; set; }
     private bool needsGridNavSetup;
 
     protected string[] MonthNames => DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames;

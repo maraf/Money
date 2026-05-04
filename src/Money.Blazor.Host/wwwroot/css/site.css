@@ -709,7 +709,7 @@ h4 {
 
 /* CalendarPicker */
 .calendar-picker {
-  max-width: 320px;
+  width: 100%;
 }
 
 .calendar-picker-nav {
@@ -760,5 +760,4 @@ h4 {
   font-weight: 600;
   padding: 0.25rem 0;
 }
-
 /*# sourceMappingURL=/Users/marekfisera/.copilot/copilot-worktrees/Money/maraf-issue-613-replace-datebox-with-calendarpicker-5f1342/src/Money.Blazor.Host/wwwroot/css/site.css.map */

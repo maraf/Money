@@ -49,6 +49,7 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IE
     protected decimal Amount { get; set; }
     protected string Currency { get; set; }
     protected int DecimalDigits { get; set; }
+    protected int InputDecimalDigits => Amount != Math.Truncate(Amount) ? Math.Max(DecimalDigits, 2) : DecimalDigits;
     protected List<CurrencyModel> Currencies { get; private set; }
 
     private string defaultCurrency = null;

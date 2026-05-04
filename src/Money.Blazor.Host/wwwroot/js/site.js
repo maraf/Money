@@ -158,45 +158,54 @@ window.AutoloadNext = {
 
 window.GridNavigation = {
     Setup: function (container) {
-        if (!container || container._gridNavInitialized) return;
-        container._gridNavInitialized = true;
+        if (!container) return;
 
-        container.addEventListener("keydown", function (e) {
-            const key = e.key;
-            if (key !== "ArrowUp" && key !== "ArrowDown" && key !== "ArrowLeft" && key !== "ArrowRight") return;
+        if (!container._gridNavInitialized) {
+            container._gridNavInitialized = true;
 
-            const buttons = Array.from(container.querySelectorAll("button"));
-            if (buttons.length === 0) return;
+            container.addEventListener("keydown", function (e) {
+                const key = e.key;
+                if (key !== "ArrowUp" && key !== "ArrowDown" && key !== "ArrowLeft" && key !== "ArrowRight") return;
 
-            const index = buttons.indexOf(document.activeElement);
-            if (index < 0) return;
+                const buttons = Array.from(container.querySelectorAll("button"));
+                if (buttons.length === 0) return;
 
-            e.preventDefault();
+                const index = buttons.indexOf(document.activeElement);
+                if (index < 0) return;
 
-            // Determine number of columns by counting buttons sharing the same top offset as the first button
-            const firstTop = buttons[0].getBoundingClientRect().top;
-            let cols = 0;
-            for (let i = 0; i < buttons.length; i++) {
-                if (Math.abs(buttons[i].getBoundingClientRect().top - firstTop) < 2) {
-                    cols++;
-                } else {
-                    break;
+                e.preventDefault();
+
+                // Determine number of columns by counting buttons sharing the same top offset as the first button
+                const firstTop = buttons[0].getBoundingClientRect().top;
+                let cols = 0;
+                for (let i = 0; i < buttons.length; i++) {
+                    if (Math.abs(buttons[i].getBoundingClientRect().top - firstTop) < 2) {
+                        cols++;
+                    } else {
+                        break;
+                    }
                 }
-            }
-            if (cols < 1) cols = 1;
+                if (cols < 1) cols = 1;
 
-            let next = -1;
-            switch (key) {
-                case "ArrowRight": next = index + 1; break;
-                case "ArrowLeft": next = index - 1; break;
-                case "ArrowDown": next = index + cols; break;
-                case "ArrowUp": next = index - cols; break;
-            }
+                let next = -1;
+                switch (key) {
+                    case "ArrowRight": next = index + 1; break;
+                    case "ArrowLeft": next = index - 1; break;
+                    case "ArrowDown": next = index + cols; break;
+                    case "ArrowUp": next = index - cols; break;
+                }
 
-            if (next >= 0 && next < buttons.length) {
-                buttons[next].focus();
-            }
-        });
+                if (next >= 0 && next < buttons.length) {
+                    buttons[next].focus();
+                }
+            });
+        }
+
+        // Focus the selected button (data-autofocus="True")
+        const autofocus = container.querySelector('[data-autofocus="True"]');
+        if (autofocus) {
+            autofocus.focus();
+        }
     }
 };
 

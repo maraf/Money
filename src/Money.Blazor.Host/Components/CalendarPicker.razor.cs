@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Money.Components;
 
-public partial class CalendarPicker
+public partial class CalendarPicker(Interop Interop)
 {
     [Parameter]
     public string Id { get; set; }
@@ -22,6 +23,10 @@ public partial class CalendarPicker
     protected int CurrentYear { get; set; }
     protected int CurrentMonth { get; set; }
 
+    protected ElementReference GridRef { get; set; }
+    protected MonthView<int> MonthViewRef { get; set; }
+    private bool needsGridNavSetup;
+
     protected string[] MonthNames => DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames;
 
     protected override void OnParametersSet()
@@ -38,11 +43,28 @@ public partial class CalendarPicker
             CurrentYear = AppDateTime.Today.Year;
             CurrentMonth = AppDateTime.Today.Month;
         }
+
+        needsGridNavSetup = true;
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (needsGridNavSetup)
+        {
+            needsGridNavSetup = false;
+            var gridElement = CurrentPart == CalendarPickerPart.Day && MonthViewRef != null
+                ? MonthViewRef.BodyRef
+                : GridRef;
+            await Interop.SetupGridNavigationAsync(gridElement);
+        }
+    }
+
+    protected bool IsSelectedDay(int day)
+        => Value.Year == CurrentYear && Value.Month == CurrentMonth && Value.Day == day;
 
     protected string DayCssClass(int day)
     {
-        if (Value.Year == CurrentYear && Value.Month == CurrentMonth && Value.Day == day)
+        if (IsSelectedDay(day))
             return "btn-primary";
 
         var today = AppDateTime.Today;
@@ -52,16 +74,22 @@ public partial class CalendarPicker
         return "btn-outline-primary";
     }
 
+    protected bool IsSelectedYear(int year) => Value.Year == year;
+
+    protected bool IsSelectedMonth(int month) => Value.Year == CurrentYear && Value.Month == month;
+
     protected void OnYearSelected(int year)
     {
         CurrentYear = year;
         CurrentPart = CalendarPickerPart.Month;
+        needsGridNavSetup = true;
     }
 
     protected void OnMonthSelected(int month)
     {
         CurrentMonth = month;
         CurrentPart = CalendarPickerPart.Day;
+        needsGridNavSetup = true;
     }
 
     protected void OnDaySelected(int day)
@@ -88,6 +116,7 @@ public partial class CalendarPicker
             CurrentYear--;
             CurrentMonth = 12;
         }
+        needsGridNavSetup = true;
     }
 
     protected void NextMonth()
@@ -99,6 +128,7 @@ public partial class CalendarPicker
             CurrentYear++;
             CurrentMonth = 1;
         }
+        needsGridNavSetup = true;
     }
 }
 

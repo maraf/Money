@@ -7,7 +7,7 @@
             <div class="month-view-cell month-view-day-name">@dayName</div>
         }
     </div>
-    <div class="month-view-body">
+    <div @ref="BodyRef" class="month-view-body">
         @for (int i = 0; i < LeadingEmptyCells; i++)
         {
             <div class="month-view-cell"></div>

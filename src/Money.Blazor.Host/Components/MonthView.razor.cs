@@ -16,6 +16,8 @@ public partial class MonthView<TItem>
     [Parameter]
     public RenderFragment<int> ChildContent { get; set; }
 
+    public ElementReference BodyRef { get; set; }
+
     protected string[] DayNames
     {
         get

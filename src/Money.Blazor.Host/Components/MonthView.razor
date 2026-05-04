@@ -1,0 +1,22 @@
+@typeparam TItem
+
+<div class="month-view">
+    <div class="month-view-header">
+        @foreach (var dayName in DayNames)
+        {
+            <div class="month-view-cell month-view-day-name">@dayName</div>
+        }
+    </div>
+    <div class="month-view-body">
+        @for (int i = 0; i < LeadingEmptyCells; i++)
+        {
+            <div class="month-view-cell"></div>
+        }
+        @for (int d = 1; d <= DaysInMonth; d++)
+        {
+            <div class="month-view-cell">
+                @ChildContent(d)
+            </div>
+        }
+    </div>
+</div>

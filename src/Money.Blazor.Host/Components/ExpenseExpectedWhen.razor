@@ -4,7 +4,7 @@
     <ChildContent>
         <div class="mb-3">
             <label class="form-label" for="expense-when">Expected When:</label>
-            <DateBox Id="expense-when" @bind-Value="When" AutoFocus="true" />
+            <CalendarPicker Id="expense-when" @bind-Value="When" />
             <div class="form-text">
                 For features like 'Expected expenses', this date allows to adjust 
                 when the expense was expected vs when it actually happened.

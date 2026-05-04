@@ -706,3 +706,51 @@ h4 {
       -ms-flex-pack: center;
           justify-content: center;
 }
+
+/* CalendarPicker */
+.calendar-picker {
+  max-width: 320px;
+}
+
+.calendar-picker-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-picker-title {
+  font-weight: 600;
+}
+
+.calendar-picker-grid {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.calendar-picker-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.calendar-picker-footer {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* MonthView */
+.month-view-header,
+.month-view-body {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.month-view-cell {
+  text-align: center;
+}
+
+.month-view-day-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0;
+}

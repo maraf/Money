@@ -209,11 +209,16 @@ window.GridNavigation = {
             container._gridNavCols = cols;
         }
 
-        // Focus the selected button (data-autofocus="True")
-        const autofocus = container.querySelector('[data-autofocus="True"]');
-        if (autofocus) {
-            autofocus.focus();
-        }
+        // Focus the selected button (data-autofocus)
+        requestAnimationFrame(function () {
+            const autofocus = container.querySelector('[data-autofocus]');
+            if (autofocus) {
+                autofocus.focus();
+            } else {
+                const first = container.querySelector('button');
+                if (first) first.focus();
+            }
+        });
     }
 };
 

@@ -15,7 +15,7 @@
             {
                 var year = i;
                 var isSelected = IsSelectedYear(year);
-                <button type="button" class="btn btn-sm @(isSelected ? "btn-primary" : "btn-outline-primary")" data-autofocus="@isSelected" @onclick="@(() => OnYearSelected(year))">
+                <button type="button" class="btn btn-sm @(isSelected ? "btn-primary" : "btn-outline-primary")" data-autofocus="@(isSelected ? "true" : null)" @onclick="@(() => OnYearSelected(year))">
                     @year
                 </button>
             }
@@ -40,7 +40,7 @@ else if (CurrentPart == CalendarPickerPart.Month)
                 var month = i + 1;
                 var monthName = MonthNames[i];
                 var isSelected = IsSelectedMonth(month);
-                <button type="button" class="btn btn-sm @(isSelected ? "btn-primary" : "btn-outline-primary")" data-autofocus="@isSelected" @onclick="@(() => OnMonthSelected(month))">
+                <button type="button" class="btn btn-sm @(isSelected ? "btn-primary" : "btn-outline-primary")" data-autofocus="@(isSelected ? "true" : null)" @onclick="@(() => OnMonthSelected(month))">
                     @monthName
                 </button>
             }
@@ -62,7 +62,7 @@ else
             </button>
         </div>
         <MonthView @ref="MonthViewRef" TItem="int" Year="@CurrentYear" Month="@CurrentMonth" Context="day">
-            <button type="button" class="btn btn-sm w-100 @DayCssClass(day)" data-autofocus="@IsSelectedDay(day)" @onclick="@(() => OnDaySelected(day))">
+            <button type="button" class="btn btn-sm w-100 @DayCssClass(day)" data-autofocus="@(IsSelectedDay(day) ? "true" : null)" @onclick="@(() => OnDaySelected(day))">
                 @day
             </button>
         </MonthView>

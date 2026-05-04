@@ -38,6 +38,14 @@ public partial class ExpenseExpectedWhen(ICommandDispatcher Commands)
         }
     }
 
+    protected void OnClearClick()
+    {
+        When = DateTime.MinValue;
+        Execute();
+        OnParametersSet();
+        Modal.Hide();
+    }
+
     private async void Execute()
         => await Commands.HandleAsync(new ChangeExpenseExpectedWhen(ExpenseKey, When));
 }

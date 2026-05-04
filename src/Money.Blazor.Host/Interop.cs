@@ -40,6 +40,9 @@ namespace Money
         public async Task SetupGridNavigationAsync(ElementReference element)
             => await jsRuntime.InvokeVoidAsync("GridNavigation.Setup", element);
 
+        public async Task SetupGridNavigationAsync(ElementReference element, int cols)
+            => await jsRuntime.InvokeVoidAsync("GridNavigation.Setup", element, cols);
+
         public async Task ApplyThemeAsync(string theme)
             => await jsRuntime.InvokeVoidAsync("Bootstrap.Theme.Apply", theme);
     }

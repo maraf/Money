@@ -52,10 +52,11 @@ public partial class CalendarPicker(Interop Interop)
         if (needsGridNavSetup)
         {
             needsGridNavSetup = false;
-            var gridElement = CurrentPart == CalendarPickerPart.Day && MonthViewRef != null
-                ? MonthViewRef.BodyRef
-                : GridRef;
-            await Interop.SetupGridNavigationAsync(gridElement);
+
+            if (CurrentPart == CalendarPickerPart.Day && MonthViewRef != null)
+                await Interop.SetupGridNavigationAsync(MonthViewRef.BodyRef, 7);
+            else
+                await Interop.SetupGridNavigationAsync(GridRef, 4);
         }
     }
 

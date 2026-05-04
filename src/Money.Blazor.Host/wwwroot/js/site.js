@@ -157,7 +157,7 @@ window.AutoloadNext = {
 };
 
 window.GridNavigation = {
-    Setup: function (container) {
+    Setup: function (container, cols) {
         if (!container) return;
 
         if (!container._gridNavInitialized) {
@@ -175,30 +175,38 @@ window.GridNavigation = {
 
                 e.preventDefault();
 
-                // Determine number of columns by counting buttons sharing the same top offset as the first button
-                const firstTop = buttons[0].getBoundingClientRect().top;
-                let cols = 0;
-                for (let i = 0; i < buttons.length; i++) {
-                    if (Math.abs(buttons[i].getBoundingClientRect().top - firstTop) < 2) {
-                        cols++;
-                    } else {
-                        break;
+                // Use explicit column count if provided, otherwise detect from layout
+                let gridCols = container._gridNavCols;
+                if (!gridCols || gridCols < 1) {
+                    const firstTop = buttons[0].getBoundingClientRect().top;
+                    gridCols = 0;
+                    for (let i = 0; i < buttons.length; i++) {
+                        if (Math.abs(buttons[i].getBoundingClientRect().top - firstTop) < 2) {
+                            gridCols++;
+                        } else {
+                            break;
+                        }
                     }
+                    if (gridCols < 1) gridCols = 1;
                 }
-                if (cols < 1) cols = 1;
 
                 let next = -1;
                 switch (key) {
                     case "ArrowRight": next = index + 1; break;
                     case "ArrowLeft": next = index - 1; break;
-                    case "ArrowDown": next = index + cols; break;
-                    case "ArrowUp": next = index - cols; break;
+                    case "ArrowDown": next = index + gridCols; break;
+                    case "ArrowUp": next = index - gridCols; break;
                 }
 
                 if (next >= 0 && next < buttons.length) {
                     buttons[next].focus();
                 }
             });
+        }
+
+        // Store explicit column count for use in keydown handler
+        if (cols && cols > 0) {
+            container._gridNavCols = cols;
         }
 
         // Focus the selected button (data-autofocus="True")

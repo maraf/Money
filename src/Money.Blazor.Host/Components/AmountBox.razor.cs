@@ -2,7 +2,7 @@
 using Money.Events;
 using Money.Models;
 using Money.Models.Queries;
-using Money.Pages;
+using Money.Services;
 using Money.Queries;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
@@ -49,7 +49,7 @@ public partial class AmountBox(ILog<AmountBox> Log, IQueryDispatcher Queries, IE
     protected decimal Amount { get; set; }
     protected string Currency { get; set; }
     protected int DecimalDigits { get; set; }
-    protected int InputDecimalDigits => Amount != Math.Truncate(Amount) ? Math.Max(DecimalDigits, 2) : DecimalDigits;
+    protected int InputDecimalDigits => DecimalDigitsHelper.GetEffectiveDecimalDigits(Amount, DecimalDigits);
     protected List<CurrencyModel> Currencies { get; private set; }
 
     private string defaultCurrency = null;

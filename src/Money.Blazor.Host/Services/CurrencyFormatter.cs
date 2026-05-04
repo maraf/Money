@@ -14,6 +14,7 @@ namespace Money.Services
         private readonly List<CurrencyModel> models;
         private readonly int decimalDigits;
         private Dictionary<string, CultureInfo> currencies;
+        private readonly Dictionary<(string currencyCode, int effectiveDigits), CultureInfo> clonedCultureCache = new();
 
         public CurrencyFormatter(List<CurrencyModel> models, int decimalDigits)
         {
@@ -93,11 +94,9 @@ namespace Money.Services
             if (!currencies.TryGetValue(price.Currency, out var culture))
                 culture = CultureInfo.CurrentCulture;
 
-            int effectiveDigits = applyUserDigits ? GetEffectiveDecimalDigits(price.Value) : culture.NumberFormat.CurrencyDecimalDigits;
+            int effectiveDigits = applyUserDigits ? DecimalDigitsHelper.GetEffectiveDecimalDigits(price.Value, decimalDigits) : culture.NumberFormat.CurrencyDecimalDigits;
 
-            var modifiedCulture = (CultureInfo)culture.Clone();
-            modifiedCulture.NumberFormat.CurrencyDecimalDigits = effectiveDigits;
-            modifiedCulture.NumberFormat.CurrencySymbol = currency.Symbol;
+            var modifiedCulture = GetOrCreateModifiedCulture(culture, currency, effectiveDigits);
 
             string value = price.Value.ToString("C", modifiedCulture);
             if (applyPlusForPositiveNumbers && price.Value > 0)
@@ -106,12 +105,18 @@ namespace Money.Services
             return value;
         }
 
-        private int GetEffectiveDecimalDigits(decimal value)
+        private CultureInfo GetOrCreateModifiedCulture(CultureInfo baseCulture, CurrencyModel currency, int effectiveDigits)
         {
-            if (value != Math.Truncate(value))
-                return Math.Max(decimalDigits, 2);
+            var key = (currency.UniqueCode, effectiveDigits);
+            if (!clonedCultureCache.TryGetValue(key, out var cached))
+            {
+                cached = (CultureInfo)baseCulture.Clone();
+                cached.NumberFormat.CurrencyDecimalDigits = effectiveDigits;
+                cached.NumberFormat.CurrencySymbol = currency.Symbol;
+                clonedCultureCache[key] = cached;
+            }
 
-            return decimalDigits;
+            return cached;
         }
 
         public enum FormatZero

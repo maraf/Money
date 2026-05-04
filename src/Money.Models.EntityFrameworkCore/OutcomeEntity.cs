@@ -84,10 +84,10 @@ namespace Money.Models
             GetKey(),
             GetAmount(),
             When,
-            ExpectedWhen,
             GetCategoryKey(),
             Description,
-            IsFixed
+            IsFixed,
+            ExpectedWhen
         );
     }
 }

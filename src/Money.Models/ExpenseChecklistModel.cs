@@ -49,33 +49,33 @@ namespace Money.Models
         public DateTime When { get; set; }
 
         /// <summary>
-        /// Gets the expected date for the expense, if different from the actual date.
-        /// </summary>
-        [CompositeProperty(5, Version = 2)]
-        public DateTime? ExpectedWhen { get; set; }
-
-        DateTime? IExpenseOverviewModel.ExpectedWhen => ExpectedWhen;
-
-        /// <summary>
         /// Gets expense category.
         /// </summary>
         [CompositeProperty(5)]
-        [CompositeProperty(6, Version = 2)]
+        [CompositeProperty(5, Version = 2)]
         public IKey CategoryKey { get; private set; }
 
         /// <summary>
         /// Gets a description.
         /// </summary>
         [CompositeProperty(6)]
-        [CompositeProperty(7, Version = 2)]
+        [CompositeProperty(6, Version = 2)]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets whether the expense is fixed.
         /// </summary>
         [CompositeProperty(7)]
-        [CompositeProperty(8, Version = 2)]
+        [CompositeProperty(7, Version = 2)]
         public bool IsFixed { get; set; }
+
+        /// <summary>
+        /// Gets the expected date for the expense, if different from the actual date.
+        /// </summary>
+        [CompositeProperty(8, Version = 2)]
+        public DateTime? ExpectedWhen { get; set; }
+
+        DateTime? IExpenseOverviewModel.ExpectedWhen => ExpectedWhen;
 
         [CompositeConstructor]
         public ExpenseChecklistModel(IKey expenseTemplateKey, IKey expenseKey, Price amount, DateTime when, IKey categoryKey, string description, bool isFixed)
@@ -94,7 +94,7 @@ namespace Money.Models
         }
 
         [CompositeConstructor(Version = 2)]
-        public ExpenseChecklistModel(IKey expenseTemplateKey, IKey expenseKey, Price amount, DateTime when, DateTime? expectedWhen, IKey categoryKey, string description, bool isFixed)
+        public ExpenseChecklistModel(IKey expenseTemplateKey, IKey expenseKey, Price amount, DateTime when, IKey categoryKey, string description, bool isFixed, DateTime? expectedWhen)
             : this(expenseTemplateKey, expenseKey, amount, when, categoryKey, description, isFixed)
         {
             ExpectedWhen = expectedWhen;

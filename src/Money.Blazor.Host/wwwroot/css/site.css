@@ -713,9 +713,15 @@ h4 {
 }
 
 .calendar-picker-nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   margin-bottom: 0.5rem;
 }
 
@@ -754,3 +760,5 @@ h4 {
   font-weight: 600;
   padding: 0.25rem 0;
 }
+
+/*# sourceMappingURL=/Users/marekfisera/.copilot/copilot-worktrees/Money/maraf-issue-613-replace-datebox-with-calendarpicker-5f1342/src/Money.Blazor.Host/wwwroot/css/site.css.map */

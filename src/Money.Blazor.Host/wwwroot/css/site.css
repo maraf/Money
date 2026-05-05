@@ -770,7 +770,7 @@ h4 {
   height: 100%;
 }
 
-.month-view-day-name {
+.month-view-cell.month-view-day-name {
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 0;

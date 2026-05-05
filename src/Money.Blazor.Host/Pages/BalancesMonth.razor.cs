@@ -32,7 +32,7 @@ public partial class BalancesMonth(
     protected LoadingContext Loading { get; set; } = new();
     protected YearModel SelectedPeriod { get; set; }
     protected BalanceDisplayType SelectedDisplayType { get; set; }
-    protected bool IncludeExpectedExpenses { get; set; } = true;
+    protected bool IncludeExpectedExpenses { get; set; }
     protected List<YearModel> PeriodGuesses { get; set; }
     protected List<MonthBalanceModel> Models { get; set; }
     protected decimal MaxAmount { get; set; }

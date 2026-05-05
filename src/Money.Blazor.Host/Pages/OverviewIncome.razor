@@ -17,30 +17,32 @@
                 <Loading Context="@Loading" IsOverlay="true" />
             </span>
         </div>
-        <ul class="nav nav-pills">
-            <li>
-                <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
-            </li>
-            <li>
-                <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
-            </li>
-            @{
-                var checklistUrl = ChecklistUrl();
-            }
-            @if (checklistUrl != null)
-            {
+        <div class="d-flex align-items-center">
+            <ul class="nav nav-pills">
                 <li>
-                    <a class="nav-link" href="@checklistUrl">Checklist</a>
+                    <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
                 </li>
+                <li>
+                    <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
+                </li>
+                @{
+                    var checklistUrl = ChecklistUrl();
+                }
+                @if (checklistUrl != null)
+                {
+                    <li>
+                        <a class="nav-link" href="@checklistUrl">Checklist</a>
+                    </li>
+                }
+            </ul>
+            @if (Items?.Count > 0)
+            {
+                <span class="ps-2">
+                    <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+                </span>
             }
-        </ul>
+        </div>
     </div>
-
-    @if (Items?.Count > 0)
-    {
-        <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
-    }
-    <div class="clear"></div>
 
     @if (Items != null)
     {

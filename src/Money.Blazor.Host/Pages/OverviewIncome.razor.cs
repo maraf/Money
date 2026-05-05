@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Money.Commands;
 using Money.Components;
 using Money.Events;
 using Money.Models;
@@ -7,7 +6,7 @@ using Money.Models.Loading;
 using Money.Models.Queries;
 using Money.Models.Sorting;
 using Money.Services;
-using Neptuo.Commands;
+using Neptuo;
 using Neptuo.Events;
 using Neptuo.Events.Handlers;
 using Neptuo.Models.Keys;
@@ -19,13 +18,14 @@ using System.Threading.Tasks;
 
 namespace Money.Pages;
 
-public partial class OverviewMonthIncome(
+public partial class OverviewIncome<T>(
     IEventHandlerCollection EventHandlers,
     IQueryDispatcher Queries,
     Interop Interop,
-    Navigator Navigator
-) : 
-    IDisposable,
+    Navigator Navigator,
+    string subTitle = null
+) :
+    System.IDisposable,
     IEventHandler<IncomeCreated>,
     IEventHandler<IncomeAmountChanged>,
     IEventHandler<IncomeDescriptionChanged>,
@@ -35,14 +35,10 @@ public partial class OverviewMonthIncome(
     IEventHandler<SwipedLeft>,
     IEventHandler<SwipedRight>
 {
-    [Parameter]
-    public int Year { get; set; }
+    protected Navigator Navigator { get; } = Navigator;
+    protected string SubTitle { get; set; } = subTitle;
 
-    [Parameter]
-    public int Month { get; set; }
-
-    protected MonthModel SelectedPeriod { get; set; }
-
+    protected T SelectedPeriod { get; set; }
     protected List<IncomeOverviewModel> Items { get; set; }
 
     protected IncomeCreate CreateModal { get; set; }
@@ -55,19 +51,49 @@ public partial class OverviewMonthIncome(
     {
         await base.OnInitializedAsync();
 
-        SelectedPeriod = new MonthModel(Year, Month);
+        SelectedPeriod = CreateSelectedItemFromParameters();
         PagingContext = new PagingContext(LoadDataAsync, Loading);
 
         BindEvents();
+    }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        ClearPreviousParameters();
+        return base.SetParametersAsync(parameters);
     }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        SelectedPeriod = new MonthModel(Year, Month);
+        SelectedPeriod = CreateSelectedItemFromParameters();
         Reload();
     }
+
+    protected virtual void ClearPreviousParameters()
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(ClearPreviousParameters)}'.");
+
+    protected virtual T CreateSelectedItemFromParameters()
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedItemFromParameters)}'.");
+
+    protected virtual IQuery<List<IncomeOverviewModel>> CreateItemsQuery(int pageIndex)
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateItemsQuery)}'.");
+
+    protected virtual string ListExpenseUrl()
+        => null;
+
+    protected virtual string ChecklistUrl()
+        => null;
+
+    protected virtual bool IsContained(DateTime when)
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(IsContained)}'.");
+
+    protected virtual void OpenNextPeriod()
+    { }
+
+    protected virtual void OpenPrevPeriod()
+    { }
 
     protected async void Reload()
     {
@@ -79,7 +105,7 @@ public partial class OverviewMonthIncome(
     {
         await Interop.ScrollToTopAsync();
 
-        List<IncomeOverviewModel> models = await Queries.QueryAsync(new ListMonthIncome(SelectedPeriod, SortDescriptor, PagingContext.CurrentPageIndex));
+        List<IncomeOverviewModel> models = await Queries.QueryAsync(CreateItemsQuery(PagingContext.CurrentPageIndex));
         if (models.Count == 0)
         {
             if (PagingContext.CurrentPageIndex == 0)
@@ -144,7 +170,7 @@ public partial class OverviewMonthIncome(
 
     Task IEventHandler<IncomeCreated>.HandleAsync(IncomeCreated payload)
     {
-        if (SelectedPeriod == payload.When)
+        if (IsContained(payload.When))
             Reload();
 
         return Task.CompletedTask;
@@ -174,16 +200,15 @@ public partial class OverviewMonthIncome(
 
     Task IEventHandler<SwipedLeft>.HandleAsync(SwipedLeft payload)
     {
-        Navigator.OpenOverviewIncomes(SelectedPeriod - 1);
+        OpenPrevPeriod();
         return Task.CompletedTask;
     }
 
     Task IEventHandler<SwipedRight>.HandleAsync(SwipedRight payload)
     {
-        Navigator.OpenOverviewIncomes(SelectedPeriod + 1);
+        OpenNextPeriod();
         return Task.CompletedTask;
     }
 
     #endregion
 }
-

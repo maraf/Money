@@ -74,6 +74,9 @@ public class SummaryYear(
     protected override void OpenOverview(YearModel item, IKey categorykey)
         => Navigator.OpenOverview(item, categorykey);
 
+    protected override void OpenOverviewIncomes(YearModel item)
+        => Navigator.OpenOverviewIncomes(item);
+
     protected override void OpenPrevPeriod()
         => Navigator.OpenSummary(SelectedPeriod - 1);
 

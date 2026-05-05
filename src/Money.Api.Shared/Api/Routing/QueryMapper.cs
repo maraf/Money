@@ -35,6 +35,7 @@ namespace Money.Api.Routing
             Add<GetTotalMonthIncome>("month-income-total");
             Add<GetTotalYearIncome>("year-income-total");
             Add<ListMonthIncome>("month-incomes");
+            Add<ListYearIncome>("year-incomes");
 
             Add<GetTotalYearOutcome>("year-outcome-total");
             Add<ListYearCategoryWithOutcome>("year-categories-with-outcome");

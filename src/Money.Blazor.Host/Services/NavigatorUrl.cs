@@ -27,6 +27,9 @@ namespace Money.Services
         public string UrlOverviewIncomes(MonthModel month)
             => $"/{month.Year}/{month.Month}/overview/incomes";
 
+        public string UrlOverviewIncomes(YearModel year)
+            => $"/{year.Year}/overview/incomes";
+
         public string UrlChecklist(MonthModel month)
             => $"/{month.Year}/{month.Month}/checklist";
 

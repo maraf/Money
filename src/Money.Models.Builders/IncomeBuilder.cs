@@ -24,6 +24,7 @@ namespace Money.Models.Builders
         IQueryHandler<GetTotalMonthIncome, Price>,
         IQueryHandler<GetTotalYearIncome, Price>,
         IQueryHandler<ListMonthIncome, List<IncomeOverviewModel>>,
+        IQueryHandler<ListYearIncome, List<IncomeOverviewModel>>,
         IQueryHandler<SearchIncomes, List<IncomeOverviewModel>>
     {
         const int PageSize = 10;
@@ -136,6 +137,25 @@ namespace Money.Models.Builders
                 var sql = db.Incomes
                     .WhereUserKey(query)
                     .Where(i => i.When.Month == query.Month.Month && i.When.Year == query.Month.Year);
+
+                sql = ApplySorting(sql, query);
+                sql = ApplyPaging(sql, query);
+
+                List<IncomeOverviewModel> models = await sql
+                    .Select(i => i.ToOverviewModel())
+                    .ToListAsync();
+
+                return models;
+            }
+        }
+
+        public async Task<List<IncomeOverviewModel>> HandleAsync(ListYearIncome query)
+        {
+            using (ReadModelContext db = dbFactory.Create())
+            {
+                var sql = db.Incomes
+                    .WhereUserKey(query)
+                    .Where(i => i.When.Year == query.Year.Year);
 
                 sql = ApplySorting(sql, query);
                 sql = ApplyPaging(sql, query);

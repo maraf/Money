@@ -69,6 +69,14 @@ public partial class OverviewYear(
         return Navigator.UrlTrends(SelectedPeriod, CategoryKey);
     }
 
+    protected override string ListIncomeUrl()
+    {
+        if (CategoryKey.IsEmpty)
+            return Navigator.UrlOverviewIncomes(SelectedPeriod);
+
+        return null;
+    }
+
     protected override (string title, string url)? TrendsTitleUrl()
     {
         if (CategoryKey.IsEmpty)

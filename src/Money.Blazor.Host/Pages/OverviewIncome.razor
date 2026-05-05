@@ -17,25 +17,24 @@
                 <Loading Context="@Loading" IsOverlay="true" />
             </span>
         </div>
-    </div>
-
-    <ul class="nav nav-pills float-start">
-        <li>
-            <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
-        </li>
-        <li>
-            <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
-        </li>
-        @{
-            var checklistUrl = ChecklistUrl();
-        }
-        @if (checklistUrl != null)
-        {
+        <ul class="nav nav-pills">
             <li>
-                <a class="nav-link" href="@checklistUrl">Checklist</a>
+                <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
             </li>
-        }
-    </ul>
+            <li>
+                <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
+            </li>
+            @{
+                var checklistUrl = ChecklistUrl();
+            }
+            @if (checklistUrl != null)
+            {
+                <li>
+                    <a class="nav-link" href="@checklistUrl">Checklist</a>
+                </li>
+            }
+        </ul>
+    </div>
 
     @if (Items?.Count > 0)
     {

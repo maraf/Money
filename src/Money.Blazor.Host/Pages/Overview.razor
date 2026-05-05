@@ -20,6 +20,12 @@
 <ExceptionPanel />
 
 <div class="container-narrow">
+    @{
+        var incomeUrl = ListIncomeUrl();
+        var checklistUrl = ChecklistUrl();
+        var trendsUrl = TrendsSelectedPeriodUrl();
+    }
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetPeriodsAsync" LinkFactory="UrlOverview" />
@@ -27,39 +33,33 @@
                 <Loading Context="@Loading" />
             </span>
         </div>
+        @if (incomeUrl != null || trendsUrl != null)
+        {
+            <ul class="nav nav-pills">
+                @if (incomeUrl != null)
+                {
+                    <li>
+                        <a class="nav-link" href="@incomeUrl">Incomes</a>
+                    </li>
+                }
+                <li>
+                    <a class="nav-link active" href="@Navigator.UrlCurrent()">Expenses</a>
+                </li>
+                @if (checklistUrl != null)
+                {
+                    <li>
+                        <a class="nav-link" href="@checklistUrl">Checklist</a>
+                    </li>
+                }
+                @if (trendsUrl != null)
+                {
+                    <li>
+                        <a class="nav-link" href="@trendsUrl">Trends</a>
+                    </li>
+                }
+            </ul>
+        }
     </div>
-
-    @{
-        var incomeUrl = ListIncomeUrl();
-        var checklistUrl = ChecklistUrl();
-        var trendsUrl = TrendsSelectedPeriodUrl();
-    }
-    @if (incomeUrl != null || trendsUrl != null)
-    {
-        <ul class="nav nav-pills float-start">
-            @if (incomeUrl != null)
-            {
-                <li>
-                    <a class="nav-link" href="@incomeUrl">Incomes</a>
-                </li>
-            }
-            <li>
-                <a class="nav-link active" href="@Navigator.UrlCurrent()">Expenses</a>
-            </li>
-            @if (checklistUrl != null)
-            {
-                <li>
-                    <a class="nav-link" href="@checklistUrl">Checklist</a>
-                </li>
-            }
-            @if (trendsUrl != null)
-            {
-                <li>
-                    <a class="nav-link" href="@trendsUrl">Trends</a>
-                </li>
-            }
-        </ul>
-    }
 
     @if (Items?.Count > 0)
     {

@@ -1,16 +1,7 @@
 ﻿@attribute [Authorize]
 @page "/{Year:int}/trends/{CategoryGuid:guid}"
 
-<Title Icon="chart-line" Main="@($"{CategoryName} trends in {Year}")" Sub="See how the category expenses change in time">
-    <ButtonContent>
-        <button class="btn btn-secondary" @onclick="(() => Navigator.OpenOverview(SelectedPeriod, CategoryKey))">
-            <Icon Prefix="fas" Identifier="list-ul" />
-            <span class="d-none d-lg-inline">
-                Year overview
-            </span>
-        </button>
-    </ButtonContent>
-</Title>
+<Title Icon="chart-line" Main="@($"{CategoryName} trends in {Year}")" Sub="See how the category expenses change in time" />
 
 @if (Models == null)
 {
@@ -22,6 +13,14 @@ else
         <div>
             <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlTrends(year, CategoryKey))" />
         </div>
+        <ul class="nav nav-pills">
+            <li>
+                <a class="nav-link" href="@Navigator.UrlOverview(SelectedPeriod, CategoryKey)">Overview</a>
+            </li>
+            <li>
+                <a class="nav-link active" href="@Navigator.UrlTrends(SelectedPeriod, CategoryKey)">Trends</a>
+            </li>
+        </ul>
     </div>
 
     <div class="row no-gutters" style="min-height: calc(100vh - 312px)">

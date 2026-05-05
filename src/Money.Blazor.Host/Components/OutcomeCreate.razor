@@ -64,6 +64,18 @@
         <div class="mb-3">
             <label class="form-label" for="@(IdPrefix + "expense-when")">When:</label>
             <DateBox Id="@(IdPrefix + "expense-when")" @bind-Value="When" />
+            @if (ExpectedWhen != null)
+            {
+                <div class="alert alert-info d-flex align-items-center justify-content-between py-2 mt-2">
+                    <span>
+                        <Icon Identifier="calendar" class="me-1" />
+                        Expected: <strong>@ExpectedWhen.Value.ToString("d")</strong>
+                    </span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="(() => ExpectedWhen = null)">
+                        <Icon Identifier="trash-alt" />
+                    </button>
+                </div>
+            }
         </div>
         <div class="mb-3">
             <label class="form-label">Category:</label>

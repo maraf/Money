@@ -3,7 +3,7 @@ using System;
 namespace Money.Events;
 
 /// <summary>
-/// An event raised when an expected date when the outcome occured has changed.
+/// An event raised when an expected date when the outcome occurred has changed.
 /// </summary>
 public class ExpenseExpectedWhenChanged(DateTime when) : UserEvent
 {

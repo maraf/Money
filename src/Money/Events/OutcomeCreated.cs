@@ -64,5 +64,20 @@ namespace Money.Events
             IsFixed = isFixed;
             CompositeVersion = 2;
         }
+
+        /// <summary>
+        /// Gets a date when the expense was expected to occur.
+        /// </summary>
+        [CompositeProperty(6, Version = 3)]
+        public DateTime? ExpectedWhen { get; set; }
+
+        [CompositeConstructor(Version = 3)]
+        internal OutcomeCreated(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed, DateTime? expectedWhen)
+            : this(amount, description, when, categoryKey)
+        {
+            IsFixed = isFixed;
+            ExpectedWhen = expectedWhen;
+            CompositeVersion = 3;
+        }
     }
 }

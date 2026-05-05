@@ -69,7 +69,8 @@ namespace Money.Models
             when,
             GetCategoryKey(),
             Description,
-            IsFixed
+            IsFixed,
+            null
         );
 
         public GuidKey GetKey()

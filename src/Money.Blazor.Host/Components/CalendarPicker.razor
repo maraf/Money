@@ -54,8 +54,13 @@ else
             <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="PrevMonth">
                 <Icon Identifier="angle-left" />
             </button>
-            <span class="calendar-picker-title cursor-pointer" @onclick="(() => CurrentPart = CalendarPickerPart.Month)">
-                @MonthNames[CurrentMonth - 1] @CurrentYear
+            <span class="calendar-picker-nav-center">
+                <span class="calendar-picker-title cursor-pointer" @onclick="(() => CurrentPart = CalendarPickerPart.Month)">
+                    @MonthNames[CurrentMonth - 1] @CurrentYear
+                </span>
+                <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="OnTodaySelected" title="Today">
+                    <Icon Identifier="calendar-day" />
+                </button>
             </span>
             <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="NextMonth">
                 <Icon Identifier="angle-right" />
@@ -66,10 +71,5 @@ else
                 @day
             </button>
         </MonthView>
-        <div class="calendar-picker-footer">
-            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="OnTodaySelected">
-                <Icon Identifier="calendar-day" /> Today
-            </button>
-        </div>
     </div>
 }

@@ -36,14 +36,14 @@ namespace Money
         public string Description { get; private set; }
 
         /// <summary>
-        /// Gets a date when the outcome occured.
+        /// Gets a date when the outcome occurred.
         /// </summary>
         public DateTime When { get; private set; }
 
         /// <summary>
         /// Gets a date when the outcome was expected to occur.
         /// </summary>
-        public DateTime ExpectedWhen { get; private set; }
+        public DateTime? ExpectedWhen { get; private set; }
 
         /// <summary>
         /// Gets a collection of assigned categories.
@@ -55,7 +55,7 @@ namespace Money
         /// </summary>
         /// <param name="amount">An amount of the outcome.</param>
         /// <param name="description">A description of the outcome.</param>
-        /// <param name="when">A date when the outcome occured.</param>
+        /// <param name="when">A date when the outcome occurred.</param>
         /// <param name="categoryKey">A category where the outcome is created.</param>
         public Outcome(Price amount, string description, DateTime when, IKey categoryKey)
         {
@@ -67,12 +67,26 @@ namespace Money
         /// </summary>
         /// <param name="amount">An amount of the outcome.</param>
         /// <param name="description">A description of the outcome.</param>
-        /// <param name="when">A date when the outcome occured.</param>
+        /// <param name="when">A date when the outcome occurred.</param>
         /// <param name="categoryKey">A category where the outcome is created.</param>
-        /// <param name="isFixed">Whether ths expense is fixed.</param>
+        /// <param name="isFixed">Whether this expense is fixed.</param>
         public Outcome(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed)
         {
             Publish(new OutcomeCreated(amount, description, when, categoryKey, isFixed));
+        }
+
+        /// <summary>
+        /// Creates new instance.
+        /// </summary>
+        /// <param name="amount">An amount of the outcome.</param>
+        /// <param name="description">A description of the outcome.</param>
+        /// <param name="when">A date when the outcome occurred.</param>
+        /// <param name="categoryKey">A category where the outcome is created.</param>
+        /// <param name="isFixed">Whether this expense is fixed.</param>
+        /// <param name="expectedWhen">A date when the expense was expected to occur.</param>
+        public Outcome(Price amount, string description, DateTime when, IKey categoryKey, bool isFixed, DateTime? expectedWhen)
+        {
+            Publish(new OutcomeCreated(amount, description, when, categoryKey, isFixed, expectedWhen));
         }
 
         public Outcome(IKey key, IEnumerable<IEvent> events)
@@ -93,6 +107,8 @@ namespace Money
                 Description = payload.Description;
                 When = payload.When;
                 CategoryKeys.Add(payload.CategoryKey);
+
+                ExpectedWhen = payload.ExpectedWhen;
             });
         }
 

@@ -59,6 +59,8 @@ public partial class OutcomeCreate(
     [Parameter]
     public Price Amount { get; set; }
 
+    protected DateTime? ExpectedWhen { get; set; }
+
     protected bool AreTemplatesOpened { get; set; }
 
     protected override void OnInitialized()
@@ -142,12 +144,16 @@ public partial class OutcomeCreate(
 
     private async void Execute()
     {
-        await Commands.HandleAsync(new CreateOutcome(Amount, Description, When, CategoryKey, IsFixed));
+        if (ExpectedWhen != null)
+            await Commands.HandleAsync(new CreateOutcome(Amount, Description, When, CategoryKey, IsFixed, ExpectedWhen));
+        else
+            await Commands.HandleAsync(new CreateOutcome(Amount, Description, When, CategoryKey, IsFixed));
 
         Amount = null;
         CategoryKey = null;
         Description = null;
         When = AppDateTime.Today;
+        ExpectedWhen = null;
         IsFixed = false;
         StateHasChanged();
     }
@@ -188,6 +194,14 @@ public partial class OutcomeCreate(
     
     public void Show(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed)
     {
+        When = when;
+
+        Show(amount, description, categoryKey, isFixed);
+    }
+
+    public void Show(Price amount, string description, IKey categoryKey, DateTime when, bool isFixed, DateTime? expectedWhen)
+    {
+        ExpectedWhen = expectedWhen;
         When = when;
 
         Show(amount, description, categoryKey, isFixed);

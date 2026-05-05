@@ -86,7 +86,8 @@ namespace Money.Models
             When,
             GetCategoryKey(),
             Description,
-            IsFixed
+            IsFixed,
+            ExpectedWhen
         );
     }
 }

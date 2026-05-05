@@ -24,6 +24,7 @@ public partial class ExpenseChecklistMonth(
     IEventHandler<OutcomeAmountChanged>,
     IEventHandler<OutcomeDescriptionChanged>,
     IEventHandler<OutcomeWhenChanged>,
+    IEventHandler<ExpenseExpectedWhenChanged>,
     IEventHandler<PulledToRefresh>,
     IEventHandler<SwipedLeft>,
     IEventHandler<SwipedRight>
@@ -93,6 +94,7 @@ public partial class ExpenseChecklistMonth(
             .Add<OutcomeAmountChanged>(this)
             .Add<OutcomeDescriptionChanged>(this)
             .Add<OutcomeWhenChanged>(this)
+            .Add<ExpenseExpectedWhenChanged>(this)
             .Add<PulledToRefresh>(this)
             .Add<SwipedLeft>(this)
             .Add<SwipedRight>(this);
@@ -106,6 +108,7 @@ public partial class ExpenseChecklistMonth(
             .Remove<OutcomeAmountChanged>(this)
             .Remove<OutcomeDescriptionChanged>(this)
             .Remove<OutcomeWhenChanged>(this)
+            .Remove<ExpenseExpectedWhenChanged>(this)
             .Remove<PulledToRefresh>(this)
             .Remove<SwipedLeft>(this)
             .Remove<SwipedRight>(this);
@@ -116,6 +119,7 @@ public partial class ExpenseChecklistMonth(
     Task IEventHandler<OutcomeAmountChanged>.HandleAsync(OutcomeAmountChanged payload) => ReloadDataAsync();
     Task IEventHandler<OutcomeDescriptionChanged>.HandleAsync(OutcomeDescriptionChanged payload) => ReloadDataAsync();
     Task IEventHandler<OutcomeWhenChanged>.HandleAsync(OutcomeWhenChanged payload) => ReloadDataAsync();
+    Task IEventHandler<ExpenseExpectedWhenChanged>.HandleAsync(ExpenseExpectedWhenChanged payload) => ReloadDataAsync();
     Task IEventHandler<PulledToRefresh>.HandleAsync(PulledToRefresh payload)
     {
         payload.IsHandled = true;

@@ -1,7 +1,6 @@
-﻿@attribute [Authorize]
-@page "/{Year:int}/overview/incomes"
+﻿@typeparam T
 
-<Title Icon="calendar" Main="@($"Incomes in {SelectedPeriod}")" Sub="List of each single income in selected year">
+<Title Icon="calendar" Main="@($"Incomes in {SelectedPeriod}")" Sub="@SubTitle">
     <ButtonContent>
         <IncomeCreateButton OnClick="CreateModal.Show" />
     </ButtonContent>
@@ -14,11 +13,20 @@
     <Loading Context="@Loading" IsOverlay="true">
         <ul class="nav nav-pills float-start">
             <li>
-                <a class="nav-link active" href="@Navigator.UrlOverviewIncomes(SelectedPeriod)">Incomes</a>
+                <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
             </li>
             <li>
-                <a class="nav-link" href="@Navigator.UrlOverview(SelectedPeriod)">Expenses</a>
+                <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
             </li>
+            @{
+                var checklistUrl = ChecklistUrl();
+            }
+            @if (checklistUrl != null)
+            {
+                <li>
+                    <a class="nav-link" href="@checklistUrl">Checklist</a>
+                </li>
+            }
         </ul>
 
         @if (Items?.Count > 0)

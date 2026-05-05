@@ -18,6 +18,12 @@
 }
 else
 {
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlTrends(year, CategoryKey))" />
+        </div>
+    </div>
+
     <div class="row no-gutters" style="min-height: calc(100vh - 312px)">
         @foreach (var model in Models)
         {

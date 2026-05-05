@@ -21,6 +21,7 @@ public partial class TrendsMonth(IQueryDispatcher Queries, Navigator Navigator)
     public Guid CategoryGuid { get; set; }
 
     protected YearModel SelectedPeriod { get; set; }
+    protected IReadOnlyCollection<YearModel> PeriodGuesses { get; set; }
     protected IKey CategoryKey { get; set; }
     protected string CategoryName { get; set; }
     protected Color CategoryColor { get; set; }
@@ -32,12 +33,16 @@ public partial class TrendsMonth(IQueryDispatcher Queries, Navigator Navigator)
         await base.OnInitializedAsync();
 
         SelectedPeriod = new YearModel(Year);
+        PeriodGuesses = new YearModel[] { SelectedPeriod - 1, SelectedPeriod - 2 };
         CategoryKey = GuidKey.Create(CategoryGuid, KeyFactory.Empty(typeof(Category)).Type);
         CategoryName = await Queries.QueryAsync(new GetCategoryName(CategoryKey));
         CategoryColor = await Queries.QueryAsync(new GetCategoryColor(CategoryKey));
 
         await LoadAsync();
     }
+
+    protected async Task<IReadOnlyCollection<YearModel>> GetYearsAsync()
+        => await Queries.QueryAsync(new ListYearWithExpenseOrIncome());
 
     private async Task LoadAsync()
     {

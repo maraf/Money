@@ -9,11 +9,11 @@
 }
 else
 {
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center mb-3">
         <div>
             <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlTrends(year, CategoryKey))" />
         </div>
-        <ul class="nav nav-pills">
+        <ul class="nav nav-pills ps-3">
             <li>
                 <a class="nav-link" href="@Navigator.UrlOverview(SelectedPeriod, CategoryKey)">Overview</a>
             </li>

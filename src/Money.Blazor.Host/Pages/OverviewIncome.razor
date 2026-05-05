@@ -10,38 +10,36 @@
 <IncomeCreate @ref="CreateModal" />
 
 <div class="container-narrow">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center mb-3">
         <div>
             <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetPeriodsAsync" LinkFactory="UrlOverviewIncomes" />
             <span class="ps-2">
                 <Loading Context="@Loading" IsOverlay="true" />
             </span>
         </div>
-        <div class="d-flex align-items-center">
-            <ul class="nav nav-pills">
-                <li>
-                    <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
-                </li>
-                <li>
-                    <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
-                </li>
-                @{
-                    var checklistUrl = ChecklistUrl();
-                }
-                @if (checklistUrl != null)
-                {
-                    <li>
-                        <a class="nav-link" href="@checklistUrl">Checklist</a>
-                    </li>
-                }
-            </ul>
-            @if (Items?.Count > 0)
-            {
-                <span class="ps-2">
-                    <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
-                </span>
+        <ul class="nav nav-pills ps-3">
+            <li>
+                <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
+            </li>
+            <li>
+                <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
+            </li>
+            @{
+                var checklistUrl = ChecklistUrl();
             }
-        </div>
+            @if (checklistUrl != null)
+            {
+                <li>
+                    <a class="nav-link" href="@checklistUrl">Checklist</a>
+                </li>
+            }
+        </ul>
+        @if (Items?.Count > 0)
+        {
+            <span class="ms-auto">
+                <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+            </span>
+        }
     </div>
 
     @if (Items != null)

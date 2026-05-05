@@ -5,14 +5,14 @@
 <ExceptionPanel />
 
 <div class="container-narrow">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center mb-3">
         <div>
             <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetMonthsAsync" LinkFactory="@(month => Navigator.UrlChecklist(month))" />
             <span class="ps-2">
                 <Loading Context="@Loading" />
             </span>
         </div>
-        <ul class="nav nav-pills">
+        <ul class="nav nav-pills ps-3">
             <li>
                 <a class="nav-link" href="@Navigator.UrlOverviewIncomes(SelectedPeriod)">Incomes</a>
             </li>

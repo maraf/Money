@@ -84,7 +84,7 @@
                 @if (item.Url != null)
                 {
                     <Match Url="@item.Url" PageType="@item.PageType" Mode="@item.UrlMatch" Context="IsActive">
-                        <a href="@item.Url" class="btn border-0 @(IsActive ? "text-primary" : "") py-3 w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
+                        <a href="@item.Url" class="btn border-0 @(IsActive ? "text-primary" : "") px-0 py-3 w-100" @onclick="(() => OnLinkClick(item.IsBlurMenuAfterClick))">
                             <Icon Identifier="@item.Icon" />
                             <span class="small text d-block text-truncate">
                                 @item.Text
@@ -94,7 +94,7 @@
                 }
                 else
                 {
-                    <button @onclick="@item.OnClick" class="btn border-0 @(isLogout ? "text-danger" : string.Empty) py-3 w-100">
+                    <button @onclick="@item.OnClick" class="btn border-0 @(isLogout ? "text-danger" : string.Empty) px-0 py-3 w-100">
                         <Icon Identifier="@item.Icon" />
                         <span class="small text d-block">
                             @item.Text

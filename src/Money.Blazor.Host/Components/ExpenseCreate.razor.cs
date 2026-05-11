@@ -300,6 +300,9 @@ public partial class ExpenseCreate(
 
         SuggestedTemplates.Clear();
         Validate(ErrorMessages.Create());
+
+        if (Amount == null)
+            SetSelectedField(SelectedField.Amount);
     }
 
     protected void SetSelectedField(SelectedField selected, bool focusAfterRender = true)

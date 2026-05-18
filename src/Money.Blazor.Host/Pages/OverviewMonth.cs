@@ -56,6 +56,15 @@ public partial class OverviewMonth(
     protected override MonthModel CreateSelectedItemFromParameters()
         => new MonthModel(Year.Value, Month.Value);
 
+    protected override IReadOnlyCollection<MonthModel> CreatePeriodGuesses()
+        => new MonthModel[] { SelectedPeriod - 1, SelectedPeriod - 2 };
+
+    protected override IQuery<List<MonthModel>> CreatePeriodsQuery()
+        => new ListMonthWithExpenseOrIncome();
+
+    protected override string UrlOverview(MonthModel period)
+        => CategoryKey.IsEmpty ? Navigator.UrlOverview(period) : Navigator.UrlOverview(period, CategoryKey);
+
     protected override IKey CreateSelectedCategoryFromParameters()
         => CategoryGuid != null ? GuidKey.Create(CategoryGuid.Value, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
 

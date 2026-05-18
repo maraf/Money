@@ -10,8 +10,14 @@
 <IncomeCreate @ref="CreateModal" />
 
 <div class="container-narrow">
-    <Loading Context="@Loading" IsOverlay="true">
-        <ul class="nav nav-pills float-start">
+    <div class="d-flex align-items-center mb-3">
+        <div>
+            <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetPeriodsAsync" LinkFactory="UrlOverviewIncomes" />
+            <span class="ps-2">
+                <Loading Context="@Loading" IsOverlay="true" />
+            </span>
+        </div>
+        <ul class="nav nav-pills ps-3">
             <li>
                 <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
             </li>
@@ -28,32 +34,32 @@
                 </li>
             }
         </ul>
-
         @if (Items?.Count > 0)
         {
-            <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+            <span class="ms-auto">
+                <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+            </span>
         }
-        <div class="clear"></div>
+    </div>
 
-        @if (Items != null)
+    @if (Items != null)
+    {
+        if (Items.Count > 0)
         {
-            if (Items.Count > 0)
-            {
-                <div class="cards">
-                    <IncomeCardContext>
-                        @foreach (var item in Items)
-                        {
-                            <IncomeCard Model="@item" />
-                        }
-                    </IncomeCardContext>
-                </div>
+            <div class="cards">
+                <IncomeCardContext>
+                    @foreach (var item in Items)
+                    {
+                        <IncomeCard Model="@item" />
+                    }
+                </IncomeCardContext>
+            </div>
 
-                <Paging Context="@PagingContext" />
-            }
-            else
-            {
-                <Alert Title="No data." Message="Let's add some incomes." Mode="@AlertMode.Warning" CssClass="mt-3" />
-            }
+            <Paging Context="@PagingContext" />
         }
-    </Loading>
+        else
+        {
+            <Alert Title="No data." Message="Let's add some incomes." Mode="@AlertMode.Warning" CssClass="mt-3" />
+        }
+    }
 </div>

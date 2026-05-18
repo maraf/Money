@@ -36,6 +36,15 @@ public partial class OverviewYearIncome(
     protected override YearModel CreateSelectedItemFromParameters()
         => new YearModel(Year.Value);
 
+    protected override IReadOnlyCollection<YearModel> CreatePeriodGuesses()
+        => new YearModel[] { SelectedPeriod - 1, SelectedPeriod - 2 };
+
+    protected override IQuery<List<YearModel>> CreatePeriodsQuery()
+        => new ListYearWithExpenseOrIncome();
+
+    protected override string UrlOverviewIncomes(YearModel period)
+        => Navigator.UrlOverviewIncomes(period);
+
     protected override IQuery<List<IncomeOverviewModel>> CreateItemsQuery(int pageIndex)
         => new ListYearIncome(SelectedPeriod, SortDescriptor, pageIndex);
 

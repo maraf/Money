@@ -36,6 +36,7 @@ public partial class ExpenseChecklistMonth(
     public int Month { get; set; }
 
     protected MonthModel SelectedPeriod { get; set; }
+    protected IReadOnlyCollection<MonthModel> PeriodGuesses { get; set; }
     protected List<ExpenseChecklistModel> Models { get; set; } = new();
     protected LoadingContext Loading { get; set; } = new();
 
@@ -62,8 +63,14 @@ public partial class ExpenseChecklistMonth(
     private void EnsureSelectedPeriod()
     {
         if (SelectedPeriod == null)
+        {
             SelectedPeriod = new MonthModel(Year, Month);
+            PeriodGuesses = new MonthModel[] { SelectedPeriod - 1, SelectedPeriod - 2 };
+        }
     }
+
+    protected async Task<IReadOnlyCollection<MonthModel>> GetMonthsAsync()
+        => await Queries.QueryAsync(new ListMonthWithExpenseOrIncome());
 
     private async Task LoadDataAsync()
     {

@@ -49,6 +49,15 @@ public partial class OverviewYear(
     protected override YearModel CreateSelectedItemFromParameters()
         => new YearModel(Year.Value);
 
+    protected override IReadOnlyCollection<YearModel> CreatePeriodGuesses()
+        => new YearModel[] { SelectedPeriod - 1, SelectedPeriod - 2 };
+
+    protected override IQuery<List<YearModel>> CreatePeriodsQuery()
+        => new ListYearWithExpenseOrIncome();
+
+    protected override string UrlOverview(YearModel period)
+        => CategoryKey.IsEmpty ? Navigator.UrlOverview(period) : Navigator.UrlOverview(period, CategoryKey);
+
     protected override IKey CreateSelectedCategoryFromParameters()
         => CategoryGuid != null ? GuidKey.Create(CategoryGuid.Value, KeyFactory.Empty(typeof(Category)).Type) : KeyFactory.Empty(typeof(Category));
 

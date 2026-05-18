@@ -40,6 +40,15 @@ public partial class OverviewMonthIncome(
     protected override MonthModel CreateSelectedItemFromParameters()
         => new MonthModel(Year.Value, Month.Value);
 
+    protected override IReadOnlyCollection<MonthModel> CreatePeriodGuesses()
+        => new MonthModel[] { SelectedPeriod - 1, SelectedPeriod - 2 };
+
+    protected override IQuery<List<MonthModel>> CreatePeriodsQuery()
+        => new ListMonthWithExpenseOrIncome();
+
+    protected override string UrlOverviewIncomes(MonthModel period)
+        => Navigator.UrlOverviewIncomes(period);
+
     protected override IQuery<List<IncomeOverviewModel>> CreateItemsQuery(int pageIndex)
         => new ListMonthIncome(SelectedPeriod, SortDescriptor, pageIndex);
 

@@ -39,6 +39,7 @@ public partial class OverviewIncome<T>(
     protected string SubTitle { get; set; } = subTitle;
 
     protected T SelectedPeriod { get; set; }
+    protected IReadOnlyCollection<T> PeriodGuesses { get; set; }
     protected List<IncomeOverviewModel> Items { get; set; }
 
     protected IncomeCreate CreateModal { get; set; }
@@ -68,6 +69,7 @@ public partial class OverviewIncome<T>(
         base.OnParametersSet();
 
         SelectedPeriod = CreateSelectedItemFromParameters();
+        PeriodGuesses = CreatePeriodGuesses();
         Reload();
     }
 
@@ -79,6 +81,18 @@ public partial class OverviewIncome<T>(
 
     protected virtual IQuery<List<IncomeOverviewModel>> CreateItemsQuery(int pageIndex)
         => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateItemsQuery)}'.");
+
+    protected virtual IReadOnlyCollection<T> CreatePeriodGuesses()
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreatePeriodGuesses)}'.");
+
+    protected virtual IQuery<List<T>> CreatePeriodsQuery()
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreatePeriodsQuery)}'.");
+
+    protected async Task<IReadOnlyCollection<T>> GetPeriodsAsync()
+        => await Queries.QueryAsync(CreatePeriodsQuery());
+
+    protected virtual string UrlOverviewIncomes(T period)
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(UrlOverviewIncomes)}'.");
 
     protected virtual string ListExpenseUrl()
         => null;

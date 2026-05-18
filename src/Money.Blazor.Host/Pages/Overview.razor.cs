@@ -45,6 +45,7 @@ public partial class Overview<T>(
     protected string SubTitle { get; set; } = subTitle;
 
     protected T SelectedPeriod { get; set; }
+    protected IReadOnlyCollection<T> PeriodGuesses { get; set; }
     protected IKey CategoryKey { get; set; }
     protected string CategoryName { get; set; }
     protected List<OutcomeOverviewModel> Items { get; set; }
@@ -73,6 +74,7 @@ public partial class Overview<T>(
     {
         CategoryKey = CreateSelectedCategoryFromParameters();
         SelectedPeriod = CreateSelectedItemFromParameters();
+        PeriodGuesses = CreatePeriodGuesses();
 
         if (!CategoryKey.IsEmpty)
         {
@@ -95,6 +97,9 @@ public partial class Overview<T>(
 
     protected virtual T CreateSelectedItemFromParameters()
         => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateSelectedItemFromParameters)}'.");
+
+    protected virtual IReadOnlyCollection<T> CreatePeriodGuesses()
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreatePeriodGuesses)}'.");
 
     protected virtual string ListIncomeUrl()
         => null;
@@ -151,6 +156,15 @@ public partial class Overview<T>(
 
     protected virtual IQuery<List<OutcomeOverviewModel>> CreateItemsQuery(int pageIndex)
         => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreateItemsQuery)}'.");
+
+    protected virtual IQuery<List<T>> CreatePeriodsQuery()
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(CreatePeriodsQuery)}'.");
+
+    protected async Task<IReadOnlyCollection<T>> GetPeriodsAsync()
+        => await Queries.QueryAsync(CreatePeriodsQuery());
+
+    protected virtual string UrlOverview(T period)
+        => throw Ensure.Exception.NotImplemented($"Missing override for method '{nameof(UrlOverview)}'.");
 
     protected async void OnSortChanged()
     {

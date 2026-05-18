@@ -201,7 +201,7 @@ h4 {
 
 .offcanvas-bottom-menu {
   --bs-offcanvas-height: auto;
-  bottom: 54px;
+  bottom: 53px;
 }
 
 .center {
@@ -776,4 +776,4 @@ h4 {
   padding: 0.25rem 0;
   aspect-ratio: auto;
 }
-/*# sourceMappingURL=/Users/marekfisera/.copilot/copilot-worktrees/Money/maraf-issue-607-create-expense-from-a-last-month-checkli-3792b2/src/Money.Blazor.Host/wwwroot/css/site.css.map */
+/*# sourceMappingURL=/home/runner/work/Money/Money/src/Money.Blazor.Host/wwwroot/css/site.css.map */

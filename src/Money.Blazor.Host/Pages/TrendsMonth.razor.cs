@@ -14,6 +14,10 @@ namespace Money.Pages;
 
 public partial class TrendsMonth(IQueryDispatcher Queries, Navigator Navigator)
 {
+    private static readonly List<MonthWithAmountModel> MockModels = Enumerable.Range(1, 12)
+        .Select(m => new MonthWithAmountModel(2020, m, Price.Zero("USD")))
+        .ToList();
+
     [Parameter]
     public int Year { get; set; }
 

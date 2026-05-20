@@ -3,62 +3,79 @@
 
 <Title Icon="chart-line" Main="@($"{CategoryName} trends from {StartYear} to {StartYear.Year + ModelsCount - 1}")" Sub="See how the category expenses change in time" />
 
-@if (Models == null)
-{
-    <Loading />
-}
-else
-{
-    <div class="row no-gutters" style="min-height: calc(100vh - 332px)">
-        @foreach (var model in Models)
+<PlaceholderContainer IsActive="@(Models == null)" Context="placeholderContext">
+    <div class="row no-gutters @placeholderContext.CssClass" style="min-height: calc(100vh - 332px)">
+        @foreach (var model in (Models ?? MockModels))
         {
-            var size = MaxAmount == 0 ? 0 : model.TotalAmount.Value / MaxAmount * 100;
+            var size = Models != null ? (MaxAmount == 0 ? 0 : model.TotalAmount.Value / MaxAmount * 100) : Random.Shared.Next(20, 80);
 
-            <div class="col-12 col-lg-1 @(model > AppDateTime.Today ? "text-muted" : String.Empty)">
+            <div class="col-12 col-lg-1 @(Models != null && model > AppDateTime.Today ? "text-muted" : String.Empty)">
                 <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
-                    <div class="w-100" style="height: @size%; background: @CategoryColor.ToHashCode()"></div>
+                    <Placeholder>
+                        <ChildContent>
+                            <div class="w-100" style="height: @size%; background: @CategoryColor.ToHashCode()"></div>
+                        </ChildContent>
+                        <PlaceholderContent Context="_">
+                            <div class="w-100 placeholder" style="height: @size%; background: #e9ecef"></div>
+                        </PlaceholderContent>
+                    </Placeholder>
                 </div>
                 <div class="p-1">
                     <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                        <span>
-                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                                @model
-                            </a>
-                            <a href="@Navigator.UrlTrends(model, CategoryKey)" class="ms-3">
-                                <Icon Identifier="chart-line" class="d-inline d-lg-none" />
-                                <span class="d-none d-lg-inline">
-                                    Months
-                                </span>
-                            </a>
-                        </span>
-                        <PriceView TagName="small" Value="model.TotalAmount" />
+                        <Placeholder WordMinCount="2" WordMaxCount="3" WordMinLength="3" WordMaxLength="5">
+                            <span>
+                                <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                    @model
+                                </a>
+                                <a href="@Navigator.UrlTrends(model, CategoryKey)" class="ms-3">
+                                    <Icon Identifier="chart-line" class="d-inline d-lg-none" />
+                                    <span class="d-none d-lg-inline">
+                                        Months
+                                    </span>
+                                </a>
+                            </span>
+                        </Placeholder>
+                        <Placeholder WordMinLength="2" WordMaxLength="4">
+                            <PriceView TagName="small" Value="model.TotalAmount" />
+                        </Placeholder>
                     </div>
                     <div class="d-none d-lg-block text-center mt-1">
                         <div class="d-none d-lg-block text-center mt-1">
-                            <PriceView TagName="small" Value="model.TotalAmount" />
+                            <Placeholder WordMinLength="2" WordMaxLength="4">
+                                <PriceView TagName="small" Value="model.TotalAmount" />
+                            </Placeholder>
                         </div>
                         <div class="text-center mt-1">
-                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                                <span class="d-none d-lg-inline">
-                                    @model
-                                </span>
-                                <span class="d-inline d-lg-none">
-                                    @model.ToShortString()
-                                </span>
-                            </a>
-                            <a href="@Navigator.UrlTrends(model, CategoryKey)" class="btn btn-sm d-block btn-link">
-                                <Icon Identifier="chart-line" class="d-inline d-lg-none" />
-                                <span class="d-none d-lg-inline">
-                                    Months
-                                </span>
-                            </a>
+                            <Placeholder WordMinLength="3" WordMaxLength="4">
+                                <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                    <span class="d-none d-lg-inline">
+                                        @model
+                                    </span>
+                                    <span class="d-inline d-lg-none">
+                                        @model.ToShortString()
+                                    </span>
+                                </a>
+                                <a href="@Navigator.UrlTrends(model, CategoryKey)" class="btn btn-sm d-block btn-link">
+                                    <Icon Identifier="chart-line" class="d-inline d-lg-none" />
+                                    <span class="d-none d-lg-inline">
+                                        Months
+                                    </span>
+                                </a>
+                            </Placeholder>
                         </div>
                     </div>
                 </div>
                 <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
-                    <div style="width: @size%; background: @CategoryColor.ToHashCode(); height: 10px;"></div>
+                    <Placeholder>
+                        <ChildContent>
+                            <div style="width: @size%; background: @CategoryColor.ToHashCode(); height: 10px;"></div>
+                        </ChildContent>
+                        <PlaceholderContent Context="_">
+                            <div class="placeholder" style="width: @size%; background: #e9ecef; height: 10px;"></div>
+                        </PlaceholderContent>
+                    </Placeholder>
                 </div>
             </div>
         }
     </div>
-}
+</PlaceholderContainer>

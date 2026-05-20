@@ -16,6 +16,10 @@ public partial class TrendsYear(IQueryDispatcher Queries, Navigator Navigator)
 {
     public const int ModelsCount = 10;
 
+    private static readonly List<YearWithAmountModel> MockModels = Enumerable.Range(2015, ModelsCount)
+        .Select(y => new YearWithAmountModel(y, Price.Zero("USD")))
+        .ToList();
+
     [Parameter]
     public Guid CategoryGuid { get; set; }
 

@@ -3,28 +3,29 @@
 
 <Title Icon="chart-line" Main="Select a category" Sub="To open year trends" />
 
-@if (Categories == null)
-{
-    <Loading />
-}
-else
-{
-    <div class="row g-2">
-        @foreach (var category in Categories)
+<PlaceholderContainer IsActive="@(Categories == null)" Context="placeholderContext">
+    <div class="row g-2 @placeholderContext.CssClass">
+        @foreach (var category in (Categories ?? MockCategories))
         {
             <div class="col-4 col-md-2">
                 <a href="@Navigator.UrlTrends(category.Key)" class="btn w-100 h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
                     <div>
-                        <h2>@category.Icon</h2>
+                        <h2>
+                            <Placeholder WordMinLength="1" WordMaxLength="2">@category.Icon</Placeholder>
+                        </h2>
                     </div>
                     <div class="text-truncate">
-                        <strong>@category.Name</strong>
+                        <strong>
+                            <Placeholder WordMinLength="3" WordMaxLength="6">@category.Name</Placeholder>
+                        </strong>
                     </div>
                     <div class="text-truncate">
-                        <span>@EnsureHtmlWhitespace(category.Description)</span>
+                        <Placeholder WordMinLength="4" WordMaxLength="8">
+                            <span>@EnsureHtmlWhitespace(category.Description)</span>
+                        </Placeholder>
                     </div>
                 </a>
             </div>
         }
     </div>
-}
+</PlaceholderContainer>

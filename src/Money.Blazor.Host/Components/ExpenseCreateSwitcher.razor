@@ -1,8 +1,8 @@
 @if (Selected == ExpenseCreateDialogType.Standard)
 {
-    <OutcomeCreate />
+    <OutcomeCreate @ref="OutcomeCreateRef" />
 }
 else if (Selected == ExpenseCreateDialogType.Wizard)
 {
-    <ExpenseCreate />
+    <ExpenseCreate @ref="ExpenseCreateRef" />
 }

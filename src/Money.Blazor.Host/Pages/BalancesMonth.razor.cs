@@ -79,6 +79,7 @@ public partial class BalancesMonth(
             TotalIncomes = null;
             TotalExpenses = null;
             TotalExpectedExpenses = null;
+            Models = null;
 
             string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
             var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: IncludeExpectedExpenses));

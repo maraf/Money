@@ -63,104 +63,108 @@
     </EnumSelector>
 </div>
 
-<Loading Context="@Loading">
-    <LoadingContent>
-        <div class="row no-gutters placeholder-glow" style="min-height: calc(100vh - 402px)">
-            @for (int i = 0; i < 12; i++)
-            {
-                var month = i + 1;
-                var monthName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[i];
-                var incomeHeight = Random.Shared.Next(20, 90);
-                var expenseHeight = Random.Shared.Next(20, 70);
-
-                <div class="col-12 col-lg-1">
-                    <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
-                        <div class="w-50 placeholder" style="height: @(incomeHeight)%"></div>
-                        <div class="w-50 h-100 d-flex flex-column justify-content-end">
-                            <div class="w-100 placeholder" style="height: @(expenseHeight)%"></div>
-                        </div>
-                    </div>
-                    <div class="p-1">
-                        <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                            <span>@monthName</span>
-                            <div>
-                                <small class="placeholder">$0.00</small>
-                                <small class="placeholder ms-1">$0.00</small>
-                            </div>
-                        </div>
-                        <div class="d-none d-lg-block text-center mt-1">
-                            <small class="d-block placeholder">$0.00</small>
-                            <small class="d-block placeholder">$0.00</small>
-                            <div class="text-center mt-1">
-                                @monthName
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
-                        <div class="bg-secondary" style="width: @(incomeHeight)%; height: 10px; opacity: .5;"></div>
-                        <div class="mt-1 d-flex">
-                            <div class="bg-secondary" style="width: @(expenseHeight)%; height: 10px; opacity: .5;"></div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </LoadingContent>
-    <ChildContent>
+<PlaceholderContainer IsActive="@Loading.IsLoading" Context="ctx">
+    <div class="row no-gutters @ctx.CssClass" style="min-height: calc(100vh - 402px)">
         @if (Models != null)
         {
-            <div class="row no-gutters" style="min-height: calc(100vh - 402px)">
-                @foreach (var model in Models)
-                {
-                    var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;
-                    var expectedExpenseSize = MaxAmount == 0 ? 0 : (model.ExpectedExpenseSummary?.Value ?? 0) / MaxAmount * 100;
-                    var incomeSize = MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100;
+            @foreach (var model in Models)
+            {
+                var expenseSize = (MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                var expectedExpenseSize = (MaxAmount == 0 ? 0 : (model.ExpectedExpenseSummary?.Value ?? 0) / MaxAmount * 100).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                var incomeSize = (MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-                    <div class="col-12 col-lg-1 @(model > AppDateTime.Today ? "text-muted" : String.Empty)">
-                        <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
-                            <div class="w-50 bg-success" style="height: @incomeSize%"></div>
-                            <div class="w-50 h-100 d-flex flex-column justify-content-end">
-                                <div class="w-100 bg-danger" style="height: @expectedExpenseSize%; opacity: .5;"></div>
-                                <div class="w-100 bg-danger" style="height: @expenseSize%;"></div>
-                            </div>
-                        </div>
-                        <div class="p-1">
-                            <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                                <a href="@Navigator.UrlOverview(model)">
-                                    @model.ToMonthString()
-                                </a>
-                                @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary, model.ExpectedExpenseSummary)
-                            </div>
-                            <div class="d-none d-lg-block text-center mt-1">
-                                @RenderBalanceValue(
-                                    model.IncomeSummary, 
-                                    model.ExpenseSummary, 
-                                    model.ExpectedExpenseSummary, 
-                                    "d-none d-lg-block text-center mt-1", 
-                                    "d-block"
-                                )
-                                <div class="text-center mt-1">
-                                    <a href="@Navigator.UrlOverview(model)">
-                                        <span class="d-none d-lg-inline">
-                                            @model.ToMonthString()
-                                        </span>
-                                        <span class="d-inline d-lg-none">
-                                            @model.Month.ToString("D2")
-                                        </span>
-                                    </a>
+                <div class="col-12 col-lg-1 @(model > AppDateTime.Today ? "text-muted" : String.Empty)">
+                    <Placeholder>
+                        <PlaceholderContent>
+                            @{
+                                var placeholderIncomeHeight = Random.Shared.Next(20, 90);
+                                var placeholderExpenseHeight = Random.Shared.Next(20, 70);
+                            }
+                            <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
+                                <div class="w-50 placeholder" style="height: @(placeholderIncomeHeight)%"></div>
+                                <div class="w-50 h-100 d-flex flex-column justify-content-end">
+                                    <div class="w-100 placeholder" style="height: @(placeholderExpenseHeight)%"></div>
                                 </div>
                             </div>
+                        </PlaceholderContent>
+                        <ChildContent>
+                            <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
+                                <div class="w-50 bg-success" style="height: @incomeSize%"></div>
+                                <div class="w-50 h-100 d-flex flex-column justify-content-end">
+                                    <div class="w-100 bg-danger" style="height: @expectedExpenseSize%; opacity: .5;"></div>
+                                    <div class="w-100 bg-danger" style="height: @expenseSize%;"></div>
+                                </div>
+                            </div>
+                        </ChildContent>
+                    </Placeholder>
+                    <div class="p-1">
+                        <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
+                            <span>@model.ToMonthString()</span>
+                            <Placeholder>
+                                <PlaceholderContent>
+                                    <div>
+                                        <small class="placeholder">$0.00</small>
+                                        <small class="placeholder ms-1">$0.00</small>
+                                    </div>
+                                </PlaceholderContent>
+                                <ChildContent>
+                                    @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary, model.ExpectedExpenseSummary)
+                                </ChildContent>
+                            </Placeholder>
                         </div>
-                        <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
-                            <div class="bg-success" style="width: @incomeSize%; height: 10px"></div>
-                            <div class="mt-1 d-flex">
-                                <div class="bg-danger" style="width: @expenseSize%; height: 10px"></div>
-                                <div class="bg-danger" style="width: @expectedExpenseSize%; height: 10px; opacity: .5;"></div>
+                        <div class="d-none d-lg-block text-center mt-1">
+                            <Placeholder>
+                                <PlaceholderContent>
+                                    <small class="d-block placeholder">$0.00</small>
+                                    <small class="d-block placeholder">$0.00</small>
+                                </PlaceholderContent>
+                                <ChildContent>
+                                    @RenderBalanceValue(
+                                        model.IncomeSummary, 
+                                        model.ExpenseSummary, 
+                                        model.ExpectedExpenseSummary, 
+                                        "d-none d-lg-block text-center mt-1", 
+                                        "d-block"
+                                    )
+                                </ChildContent>
+                            </Placeholder>
+                            <div class="text-center mt-1">
+                                <a href="@Navigator.UrlOverview(model)">
+                                    <span class="d-none d-lg-inline">
+                                        @model.ToMonthString()
+                                    </span>
+                                    <span class="d-inline d-lg-none">
+                                        @model.Month.ToString("D2")
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </div>
-                }
-            </div>
+                    <Placeholder>
+                        <PlaceholderContent>
+                            @{
+                                var placeholderMobileIncomeWidth = Random.Shared.Next(20, 90);
+                                var placeholderMobileExpenseWidth = Random.Shared.Next(20, 70);
+                            }
+                            <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
+                                <div class="bg-secondary" style="width: @(placeholderMobileIncomeWidth)%; height: 10px; opacity: .5;"></div>
+                                <div class="mt-1 d-flex">
+                                    <div class="bg-secondary" style="width: @(placeholderMobileExpenseWidth)%; height: 10px; opacity: .5;"></div>
+                                </div>
+                            </div>
+                        </PlaceholderContent>
+                        <ChildContent>
+                            <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
+                                <div class="bg-success" style="width: @incomeSize%; height: 10px"></div>
+                                <div class="mt-1 d-flex">
+                                    <div class="bg-danger" style="width: @expenseSize%; height: 10px"></div>
+                                    <div class="bg-danger" style="width: @expectedExpenseSize%; height: 10px; opacity: .5;"></div>
+                                </div>
+                            </div>
+                        </ChildContent>
+                    </Placeholder>
+                </div>
+            }
         }
-    </ChildContent>
-</Loading>
+    </div>
+</PlaceholderContainer>

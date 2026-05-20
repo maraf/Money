@@ -46,14 +46,14 @@
             @<div class="card-body">
                 <div class="d-flex">
                     <div class="icon fs-3">
-                        @icon
+                        <Placeholder WordMinLength="1" WordMaxLength="2">@icon</Placeholder>
                     </div>
                     <h3 class="align-self-center flex-grow-1 m-0 fs-6" title="@title">
-                        @description
+                        <Placeholder WordMinLength="4" WordMaxLength="9">@description</Placeholder>
                     </h3>
 
                     <div class="align-self-center">
-                        @amount
+                        <Placeholder WordMinLength="5" WordMaxLength="8">@amount</Placeholder>
                     </div>
                 </div>
                 @if (barWidth != null)
@@ -105,38 +105,26 @@
             <Loading Context="@CategoriesLoading">
                 <LoadingContent>
                     <PlaceholderContainer IsActive="true" Context="ctx">
+                        @{
+                            var mock = MockData.Get<CategoryWithAmountModel>();
+                        }
                         <div class="card bar-graph bar-graph-summary">
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="icon fs-3">📈</div>
-                                    <h3 class="align-self-center flex-grow-1 m-0 fs-6">
-                                        <span class="placeholder col-3"></span>
-                                    </h3>
-                                    <div class="align-self-center">
-                                        <span class="placeholder col-4"></span>
-                                    </div>
-                                </div>
-                            </div>
+                            @BarItem(
+                                icon: "📈",
+                                description: "Summary",
+                                amount: @<Placeholder WordMinLength="5" WordMaxLength="8" />
+                            )
                         </div>
                         @for (int i = 0; i < 5; i++)
                         {
                             <div class="card bar-graph">
-                                <div class="card-body">
-                                    <div class="d-flex">
-                                        <div class="icon fs-3">
-                                            <span class="placeholder col-1"></span>
-                                        </div>
-                                        <h3 class="align-self-center flex-grow-1 m-0 fs-6">
-                                            <Placeholder WordMinLength="4" WordMaxLength="9" />
-                                        </h3>
-                                        <div class="align-self-center">
-                                            <Placeholder WordMinLength="5" WordMaxLength="8" />
-                                        </div>
-                                    </div>
-                                    <div class="bar-cover">
-                                        <div class="bar placeholder" style="width: @(Random.Shared.Next(20, 80))%;"></div>
-                                    </div>
-                                </div>
+                                @BarItem(
+                                    icon: mock.Icon,
+                                    description: mock.Name,
+                                    barWidth: Random.Shared.Next(20, 80).ToString(),
+                                    barColor: mock.Color.ToHashCode(),
+                                    amount: @<Placeholder WordMinLength="5" WordMaxLength="8" />
+                                )
                             </div>
                         }
                     </PlaceholderContainer>

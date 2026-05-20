@@ -30,6 +30,15 @@ internal class MockData
         0
     );
 
+    public static readonly CategoryWithAmountModel CategoryWithAmountModel = new CategoryWithAmountModel(
+        KeyFactory.Create(typeof(Category)),
+        string.Empty,
+        null,
+        Color.FromArgb(255, 0, 0, 0),
+        "⬜",
+        new Price(1, "USD")
+    );
+
     public static readonly YearModel YearModel = new YearModel(
         2020
     );
@@ -49,6 +58,9 @@ internal class MockData
 
         if (typeof(T) == typeof(ExpenseTemplateCalendarMonthModel))
             return (T)(object)ExpenseTemplateCalendarMonthModel;
+
+        if (typeof(T) == typeof(CategoryWithAmountModel))
+            return (T)(object)CategoryWithAmountModel;
 
         if (typeof(T) == typeof(YearModel))
             return (T)(object)YearModel;

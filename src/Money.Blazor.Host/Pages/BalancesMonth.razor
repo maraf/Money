@@ -34,9 +34,6 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
-        <span class="ps-2">
-            <Loading Context="@Loading" />
-        </span>
     </div>
     @if (TotalIncomes != null && TotalExpenses != null)
     {
@@ -65,30 +62,39 @@
             <div class="row no-gutters @ctx.CssClass" style="min-height: calc(100vh - 402px)">
                 @for (int i = 0; i < 12; i++)
                 {
+                    var month = i + 1;
+                    var monthName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[i];
                     var incomeHeight = Random.Shared.Next(20, 90);
                     var expenseHeight = Random.Shared.Next(20, 70);
 
                     <div class="col-12 col-lg-1">
                         <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
-                            <div class="w-50 placeholder bg-success" style="height: @(incomeHeight)%"></div>
+                            <div class="w-50 placeholder" style="height: @(incomeHeight)%"></div>
                             <div class="w-50 h-100 d-flex flex-column justify-content-end">
-                                <div class="w-100 placeholder bg-danger" style="height: @(expenseHeight)%"></div>
+                                <div class="w-100 placeholder" style="height: @(expenseHeight)%"></div>
                             </div>
                         </div>
                         <div class="p-1">
                             <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                                <span class="placeholder col-3"></span>
+                                <span>@monthName</span>
                                 <span class="placeholder col-2"></span>
                             </div>
                             <div class="d-none d-lg-block text-center mt-1">
                                 <span class="placeholder col-4 d-block mx-auto"></span>
-                                <span class="placeholder col-3 d-block mx-auto mt-1"></span>
+                                <div class="text-center mt-1">
+                                    <span class="d-none d-lg-inline">
+                                        @monthName
+                                    </span>
+                                    <span class="d-inline d-lg-none">
+                                        @month.ToString("D2")
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
-                            <div class="placeholder bg-success" style="width: @(incomeHeight)%; height: 10px"></div>
+                            <div class="placeholder" style="width: @(incomeHeight)%; height: 10px"></div>
                             <div class="mt-1 d-flex">
-                                <div class="placeholder bg-danger" style="width: @(expenseHeight)%; height: 10px"></div>
+                                <div class="placeholder" style="width: @(expenseHeight)%; height: 10px"></div>
                             </div>
                         </div>
                     </div>

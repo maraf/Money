@@ -22,19 +22,17 @@
                 </div>
                 <div class="p-1">
                     <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                        <Placeholder WordMinCount="2" WordMaxCount="3" WordMinLength="3" WordMaxLength="5">
-                            <span>
-                                <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                                    @model
-                                </a>
-                                <a href="@Navigator.UrlTrends(model, CategoryKey)" class="ms-3">
-                                    <Icon Identifier="chart-line" class="d-inline d-lg-none" />
-                                    <span class="d-none d-lg-inline">
-                                        Months
-                                    </span>
-                                </a>
-                            </span>
-                        </Placeholder>
+                        <span>
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                @model
+                            </a>
+                            <a href="@Navigator.UrlTrends(model, CategoryKey)" class="ms-3">
+                                <Icon Identifier="chart-line" class="d-inline d-lg-none" />
+                                <span class="d-none d-lg-inline">
+                                    Months
+                                </span>
+                            </a>
+                        </span>
                         <Placeholder WordMinLength="2" WordMaxLength="4">
                             <PriceView TagName="small" Value="model.TotalAmount" />
                         </Placeholder>
@@ -46,22 +44,20 @@
                             </Placeholder>
                         </div>
                         <div class="text-center mt-1">
-                            <Placeholder WordMinLength="3" WordMaxLength="4">
-                                <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                                    <span class="d-none d-lg-inline">
-                                        @model
-                                    </span>
-                                    <span class="d-inline d-lg-none">
-                                        @model.ToShortString()
-                                    </span>
-                                </a>
-                                <a href="@Navigator.UrlTrends(model, CategoryKey)" class="btn btn-sm d-block btn-link">
-                                    <Icon Identifier="chart-line" class="d-inline d-lg-none" />
-                                    <span class="d-none d-lg-inline">
-                                        Months
-                                    </span>
-                                </a>
-                            </Placeholder>
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                <span class="d-none d-lg-inline">
+                                    @model
+                                </span>
+                                <span class="d-inline d-lg-none">
+                                    @model.ToShortString()
+                                </span>
+                            </a>
+                            <a href="@Navigator.UrlTrends(model, CategoryKey)" class="btn btn-sm d-block btn-link">
+                                <Icon Identifier="chart-line" class="d-inline d-lg-none" />
+                                <span class="d-none d-lg-inline">
+                                    Months
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </div>

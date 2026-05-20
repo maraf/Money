@@ -31,11 +31,9 @@
                 </div>
                 <div class="p-1">
                     <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                        <Placeholder WordMinLength="3" WordMaxLength="5">
-                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                                @model.ToMonthString()
-                            </a>
-                        </Placeholder>
+                        <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                            @model.ToMonthString()
+                        </a>
                         <Placeholder WordMinLength="2" WordMaxLength="4">
                             <PriceView TagName="small" Value="model.TotalAmount" />
                         </Placeholder>
@@ -47,16 +45,14 @@
                             </Placeholder>
                         </div>
                         <div class="text-center mt-1">
-                            <Placeholder WordMinLength="3" WordMaxLength="5">
-                                <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                                    <span class="d-none d-lg-inline">
-                                        @model.ToMonthString()
-                                    </span>
-                                    <span class="d-inline d-lg-none">
-                                        @model.Month.ToString("D2")
-                                    </span>
-                                </a>
-                            </Placeholder>
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                <span class="d-none d-lg-inline">
+                                    @model.ToMonthString()
+                                </span>
+                                <span class="d-inline d-lg-none">
+                                    @model.Month.ToString("D2")
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </div>

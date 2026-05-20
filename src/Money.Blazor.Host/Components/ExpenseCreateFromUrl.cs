@@ -16,6 +16,7 @@ namespace Money.Components;
 
 public class ExpenseCreateFromUrl(
     Navigator Navigator,
+    Navigator.ComponentContainer ComponentContainer,
     NavigationManager NavigationManager,
     IQueryDispatcher Queries,
     ILog<ExpenseCreateFromUrl> Log
@@ -127,6 +128,19 @@ public class ExpenseCreateFromUrl(
 
             // Remove query parameters from URL before opening dialog
             RemoveExpenseQueryParameters();
+
+            // Wait for the ExpenseCreate component to be registered (it may not be ready yet due to async initialization)
+            for (int i = 0; i < 10 && ComponentContainer.ExpenseCreate == null; i++)
+            {
+                Log.Debug($"Waiting for ExpenseCreate component to be registered (attempt {i + 1})");
+                await Task.Delay(200);
+            }
+
+            if (ComponentContainer.ExpenseCreate == null)
+            {
+                Log.Debug("ExpenseCreate component not available, cannot open dialog from URL");
+                return;
+            }
 
             // Open the dialog
             Log.Debug($"Opening expense create from URL: amount={amount}, description='{description}', category={categoryKey}, when={when}, fixed={isFixed}");

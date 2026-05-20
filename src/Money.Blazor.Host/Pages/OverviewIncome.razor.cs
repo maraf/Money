@@ -97,6 +97,8 @@ public partial class OverviewIncome<T>(
 
     protected async void Reload()
     {
+        Items = null;
+        StateHasChanged();
         await PagingContext.LoadAsync(0);
         StateHasChanged();
     }
@@ -120,6 +122,8 @@ public partial class OverviewIncome<T>(
 
     protected async void OnSortChanged()
     {
+        Items = null;
+        StateHasChanged();
         await PagingContext.LoadAsync(0);
         StateHasChanged();
     }

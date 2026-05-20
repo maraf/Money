@@ -116,7 +116,11 @@ public partial class OverviewIncome<T>(
             return PagingLoadStatus.EmptyPage;
         }
 
-        Items = models;
+        if (Items == null || PagingContext.CurrentPageIndex == 0)
+            Items = models;
+        else
+            Items.AddRange(models);
+
         return Items.Count == 10 ? PagingLoadStatus.HasNextPage : PagingLoadStatus.LastPage;
     }
 
@@ -164,6 +168,9 @@ public partial class OverviewIncome<T>(
 
     protected Task OnEventAsync(IKey aggregateKey, Action<IncomeOverviewModel> handler)
     {
+        if (Items == null)
+            return Task.CompletedTask;
+
         var item = Items.FirstOrDefault(i => i.Key.Equals(aggregateKey));
         if (item != null)
             handler(item);

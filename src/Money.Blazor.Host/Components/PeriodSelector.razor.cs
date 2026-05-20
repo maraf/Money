@@ -36,6 +36,7 @@ public partial class PeriodSelector<T>
 
     protected async Task OpenSelectorAsync()
     {
+        Periods = null;
         SelectorModal.Show();
         await LoadAsync();
     }

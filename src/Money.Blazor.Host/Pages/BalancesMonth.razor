@@ -5,15 +5,16 @@
 {
     RenderFragment RenderBalanceValue(Price incomes, Price expenses, Price expectedExpenses, string containerCssClass = null, string totalValueCssClass = null)
     {
+        var spacing = string.IsNullOrEmpty(totalValueCssClass) ? "ms-1" : "";
         return
         @<div class="@containerCssClass">
             @if (SelectedDisplayType == BalanceDisplayType.Total)
             {
                 <PriceView TagName="small" CssClass="@($"text-success {totalValueCssClass}")" Value="@incomes" />
-                <PriceView TagName="small" CssClass="@($"text-danger ms-1 {totalValueCssClass}")" Value="expenses" />
+                <PriceView TagName="small" CssClass="@($"text-danger {spacing} {totalValueCssClass}")" Value="expenses" />
                 @if (expectedExpenses != null)
                 {
-                    <PriceView TagName="small" CssClass="@($"text-danger ms-1 {totalValueCssClass}")" CssStyle="opacity: .5" Value="expectedExpenses" />
+                    <PriceView TagName="small" CssClass="@($"text-danger {spacing} {totalValueCssClass}")" CssStyle="opacity: .5" Value="expectedExpenses" />
                 }
             }
             else
@@ -34,9 +35,6 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <PeriodSelector Selected="SelectedPeriod" Previous="PeriodGuesses" ExactGetter="GetYearsAsync" LinkFactory="@(year => Navigator.UrlBalances(year))" />
-        <span class="ps-2">
-            <Loading Context="@Loading" />
-        </span>
     </div>
     @if (TotalIncomes != null && TotalExpenses != null)
     {
@@ -49,6 +47,12 @@
                 : "mx-1 text-center"
         )
     }
+    else if (Loading.IsLoading)
+    {
+        <span class="placeholder-glow mx-1">
+            <span class="placeholder" style="width: 6rem"></span>
+        </span>
+    }
     <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged">
         <AfterContent>
             <hr class="dropdown-divider" />
@@ -59,62 +63,104 @@
     </EnumSelector>
 </div>
 
-@if (Models == null)
-{
-    <Loading />
-}
-else
-{
-    <div class="row no-gutters" style="min-height: calc(100vh - 402px)">
-        @foreach (var model in Models)
-        {
-            var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;
-            var expectedExpenseSize = MaxAmount == 0 ? 0 : (model.ExpectedExpenseSummary?.Value ?? 0) / MaxAmount * 100;
-            var incomeSize = MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100;
+<Loading Context="@Loading">
+    <LoadingContent>
+        <div class="row no-gutters placeholder-glow" style="min-height: calc(100vh - 402px)">
+            @for (int i = 0; i < 12; i++)
+            {
+                var month = i + 1;
+                var monthName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[i];
+                var incomeHeight = Random.Shared.Next(20, 90);
+                var expenseHeight = Random.Shared.Next(20, 70);
 
-            <div class="col-12 col-lg-1 @(model > AppDateTime.Today ? "text-muted" : String.Empty)">
-                <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
-                    <div class="w-50 bg-success" style="height: @incomeSize%"></div>
-                    <div class="w-50 h-100 d-flex flex-column justify-content-end">
-                        <div class="w-100 bg-danger" style="height: @expectedExpenseSize%; opacity: .5;"></div>
-                        <div class="w-100 bg-danger" style="height: @expenseSize%;"></div>
+                <div class="col-12 col-lg-1">
+                    <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
+                        <div class="w-50 placeholder" style="height: @(incomeHeight)%"></div>
+                        <div class="w-50 h-100 d-flex flex-column justify-content-end">
+                            <div class="w-100 placeholder" style="height: @(expenseHeight)%"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="p-1">
-                    <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                        <a href="@Navigator.UrlOverview(model)">
-                            @model.ToMonthString()
-                        </a>
-                        @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary, model.ExpectedExpenseSummary)
+                    <div class="p-1">
+                        <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
+                            <span>@monthName</span>
+                            <div>
+                                <small class="placeholder">$0.00</small>
+                                <small class="placeholder ms-1">$0.00</small>
+                            </div>
+                        </div>
+                        <div class="d-none d-lg-block text-center mt-1">
+                            <small class="d-block placeholder">$0.00</small>
+                            <small class="d-block placeholder">$0.00</small>
+                            <div class="text-center mt-1">
+                                @monthName
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-none d-lg-block text-center mt-1">
-                        @RenderBalanceValue(
-                            model.IncomeSummary, 
-                            model.ExpenseSummary, 
-                            model.ExpectedExpenseSummary, 
-                            "d-none d-lg-block text-center mt-1", 
-                            "d-block"
-                        )
-                        <div class="text-center mt-1">
-                            <a href="@Navigator.UrlOverview(model)">
-                                <span class="d-none d-lg-inline">
-                                    @model.ToMonthString()
-                                </span>
-                                <span class="d-inline d-lg-none">
-                                    @model.Month.ToString("D2")
-                                </span>
-                            </a>
+                    <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
+                        <div class="bg-secondary" style="width: @(incomeHeight)%; height: 10px; opacity: .5;"></div>
+                        <div class="mt-1 d-flex">
+                            <div class="bg-secondary" style="width: @(expenseHeight)%; height: 10px; opacity: .5;"></div>
                         </div>
                     </div>
                 </div>
-                <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
-                    <div class="bg-success" style="width: @incomeSize%; height: 10px"></div>
-                    <div class="mt-1 d-flex">
-                        <div class="bg-danger" style="width: @expenseSize%; height: 10px"></div>
-                        <div class="bg-danger" style="width: @expectedExpenseSize%; height: 10px; opacity: .5;"></div>
+            }
+        </div>
+    </LoadingContent>
+    <ChildContent>
+        @if (Models != null)
+        {
+            <div class="row no-gutters" style="min-height: calc(100vh - 402px)">
+                @foreach (var model in Models)
+                {
+                    var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;
+                    var expectedExpenseSize = MaxAmount == 0 ? 0 : (model.ExpectedExpenseSummary?.Value ?? 0) / MaxAmount * 100;
+                    var incomeSize = MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100;
+
+                    <div class="col-12 col-lg-1 @(model > AppDateTime.Today ? "text-muted" : String.Empty)">
+                        <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
+                            <div class="w-50 bg-success" style="height: @incomeSize%"></div>
+                            <div class="w-50 h-100 d-flex flex-column justify-content-end">
+                                <div class="w-100 bg-danger" style="height: @expectedExpenseSize%; opacity: .5;"></div>
+                                <div class="w-100 bg-danger" style="height: @expenseSize%;"></div>
+                            </div>
+                        </div>
+                        <div class="p-1">
+                            <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
+                                <a href="@Navigator.UrlOverview(model)">
+                                    @model.ToMonthString()
+                                </a>
+                                @RenderBalanceValue(model.IncomeSummary, model.ExpenseSummary, model.ExpectedExpenseSummary)
+                            </div>
+                            <div class="d-none d-lg-block text-center mt-1">
+                                @RenderBalanceValue(
+                                    model.IncomeSummary, 
+                                    model.ExpenseSummary, 
+                                    model.ExpectedExpenseSummary, 
+                                    "d-none d-lg-block text-center mt-1", 
+                                    "d-block"
+                                )
+                                <div class="text-center mt-1">
+                                    <a href="@Navigator.UrlOverview(model)">
+                                        <span class="d-none d-lg-inline">
+                                            @model.ToMonthString()
+                                        </span>
+                                        <span class="d-inline d-lg-none">
+                                            @model.Month.ToString("D2")
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
+                            <div class="bg-success" style="width: @incomeSize%; height: 10px"></div>
+                            <div class="mt-1 d-flex">
+                                <div class="bg-danger" style="width: @expenseSize%; height: 10px"></div>
+                                <div class="bg-danger" style="width: @expectedExpenseSize%; height: 10px; opacity: .5;"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         }
-    </div>
-}
+    </ChildContent>
+</Loading>

@@ -1,0 +1,114 @@
+@page "/user/notifications"
+@attribute [Authorize]
+
+<UserHead />
+
+<div class="container mt-4">
+    <h4>
+        <Icon Identifier="bell" class="me-2" />
+        Notifications
+    </h4>
+
+    @if (IsLoading)
+    {
+        <div class="text-center my-4">
+            <span class="spinner-border spinner-border-sm"></span>
+            Loading...
+        </div>
+    }
+    else if (!IsSupported)
+    {
+        <div class="alert alert-warning mt-3">
+            <Icon Identifier="exclamation-triangle" class="me-1" />
+            Push notifications are not supported in this browser.
+        </div>
+    }
+    else
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="notificationsEnabled" checked="@IsEnabled" @onchange="OnGlobalToggleChanged" />
+                    <label class="form-check-label" for="notificationsEnabled">
+                        <strong>Enable notifications</strong>
+                    </label>
+                </div>
+
+                @if (IsEnabled)
+                {
+                    <hr />
+
+                    <h5 class="mt-3">
+                        <Icon Identifier="redo" class="me-1" />
+                        Scheduled expenses
+                    </h5>
+
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="expenseTemplatesEnabled" checked="@ExpenseTemplatesEnabled" @onchange="OnExpenseTemplateToggleChanged" />
+                        <label class="form-check-label" for="expenseTemplatesEnabled">
+                            Notify when expenses are due today
+                        </label>
+                    </div>
+
+                    @if (ExpenseTemplatesEnabled)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-auto">
+                                <label class="form-label">Preferred time</label>
+                                <select class="form-select" value="@PreferredHour" @onchange="OnPreferredHourChanged">
+                                    @for (int h = 0; h < 24; h++)
+                                    {
+                                        <option value="@h">@($"{h:D2}:00")</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <label class="form-label">Timezone</label>
+                                <input type="text" class="form-control" value="@TimeZone" readonly />
+                            </div>
+                        </div>
+                    }
+
+                    <hr />
+
+                    <h5 class="mt-3">
+                        <Icon Identifier="mobile-alt" class="me-1" />
+                        This browser
+                    </h5>
+
+                    @if (Permission == "denied")
+                    {
+                        <div class="alert alert-danger">
+                            <Icon Identifier="ban" class="me-1" />
+                            Notifications are blocked by your browser. Please enable them in your browser settings.
+                        </div>
+                    }
+                    else if (HasSubscription)
+                    {
+                        <div class="d-flex align-items-center">
+                            <span class="text-success me-2">
+                                <Icon Identifier="check-circle" />
+                                Subscribed
+                            </span>
+                            <button class="btn btn-outline-danger btn-sm" @onclick="OnUnsubscribe">
+                                Unsubscribe
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" @onclick="OnSubscribe">
+                            <Icon Identifier="bell" class="me-1" />
+                            Enable on this browser
+                        </button>
+                    }
+
+                    @if (StatusMessage != null)
+                    {
+                        <div class="alert alert-info mt-2">@StatusMessage</div>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>

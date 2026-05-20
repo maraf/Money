@@ -14,6 +14,10 @@ namespace Money
         private readonly SchemaOptions schema;
 
         public DbSet<UserPropertyValue> UserProperties { get; set; }
+        public DbSet<PushSubscription> PushSubscriptions { get; set; }
+        public DbSet<UserNotificationSettings> UserNotificationSettings { get; set; }
+        public DbSet<UserNotificationExpenseTemplateSettings> UserNotificationExpenseTemplateSettings { get; set; }
+        public DbSet<ExpenseTemplateNotificationDispatch> ExpenseTemplateNotificationDispatches { get; set; }
 
         public AccountContext(DbContextOptions<AccountContext> options, SchemaOptions<AccountContext> schema)
             : base(options)
@@ -41,6 +45,44 @@ namespace Money
             modelBuilder.Entity<UserPropertyValue>()
                 .Property(p => p.Value)
                 .HasMaxLength(1024);
+
+            modelBuilder.Entity<PushSubscription>()
+                .HasIndex(p => p.Endpoint)
+                .IsUnique();
+
+            modelBuilder.Entity<PushSubscription>()
+                .HasOne(p => p.User)
+                .WithMany()
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserNotificationSettings>()
+                .HasKey(s => s.UserId);
+
+            modelBuilder.Entity<UserNotificationSettings>()
+                .HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserNotificationExpenseTemplateSettings>()
+                .HasKey(s => s.UserId);
+
+            modelBuilder.Entity<UserNotificationExpenseTemplateSettings>()
+                .HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ExpenseTemplateNotificationDispatch>()
+                .HasIndex(d => new { d.UserId, d.ExpenseTemplateId, d.Date })
+                .IsUnique();
+
+            modelBuilder.Entity<ExpenseTemplateNotificationDispatch>()
+                .HasOne(d => d.User)
+                .WithMany()
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             if (!String.IsNullOrEmpty(schema.Name))
             {

@@ -62,6 +62,7 @@ namespace Money.UI.Blazor
                 .AddTransient<IApiHubState>(provider => provider.GetRequiredService<ApiHubService>())
                 .AddSingleton<ApiVersionChecker>()
                 .AddTransient<Interop>()
+                .AddTransient<PushNotificationInterop>()
                 .AddSingleton<PwaInstallInterop>()
                 .AddTransient<NetworkStateInterop>()
                 .AddSingleton<NetworkState>()

@@ -69,9 +69,9 @@
         {
             @foreach (var model in Models)
             {
-                var expenseSize = MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100;
-                var expectedExpenseSize = MaxAmount == 0 ? 0 : (model.ExpectedExpenseSummary?.Value ?? 0) / MaxAmount * 100;
-                var incomeSize = MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100;
+                var expenseSize = (MaxAmount == 0 ? 0 : model.ExpenseSummary.Value / MaxAmount * 100).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                var expectedExpenseSize = (MaxAmount == 0 ? 0 : (model.ExpectedExpenseSummary?.Value ?? 0) / MaxAmount * 100).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                var incomeSize = (MaxAmount == 0 ? 0 : model.IncomeSummary.Value / MaxAmount * 100).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                 <div class="col-12 col-lg-1 @(model > AppDateTime.Today ? "text-muted" : String.Empty)">
                     <Placeholder>

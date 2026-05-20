@@ -46,6 +46,14 @@
                 : "mx-1 text-center"
         )
     }
+    else if (Loading.IsLoading)
+    {
+        <span class="placeholder-glow mx-1">
+            <span class="placeholder col-1"></span>
+            <span class="placeholder col-1 ms-1"></span>
+            <span class="placeholder col-1 ms-1"></span>
+        </span>
+    }
     <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged">
         <AfterContent>
             <hr class="dropdown-divider" />

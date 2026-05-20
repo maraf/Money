@@ -39,6 +39,16 @@ internal class MockData
         4
     );
 
+    public static readonly ExpenseChecklistModel ExpenseChecklistModel = new ExpenseChecklistModel(
+        KeyFactory.Create(typeof(ExpenseTemplate)),
+        KeyFactory.Empty(typeof(Outcome)),
+        new Price(1, "USD"),
+        AppDateTime.Today,
+        KeyFactory.Create(typeof(Category)),
+        string.Empty,
+        false
+    );
+
     public static T Get<T>()
     {
         if (typeof(T) == typeof(IncomeOverviewModel))
@@ -55,6 +65,9 @@ internal class MockData
 
         if (typeof(T) == typeof(MonthModel))
             return (T)(object)MonthModel;
+
+        if (typeof(T) == typeof(ExpenseChecklistModel))
+            return (T)(object)ExpenseChecklistModel;
 
         throw Ensure.Exception.NotSupported($"The type '{typeof(T).FullName}' is not supported.");
     }

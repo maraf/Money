@@ -28,10 +28,14 @@ public partial class ExpenseCreateSwitcher(
 {
     protected ExpenseCreateDialogType Selected { get; set; }
 
-    [CascadingParameter]
-    public Navigator.ComponentContainer ComponentContainer { get; set; }
+    protected OutcomeCreate OutcomeCreateRef { get; set; }
+    protected ExpenseCreate ExpenseCreateRef { get; set; }
 
-    private bool isInitialized;
+    private IExpenseCreateNavigator ActiveDialog => Selected == ExpenseCreateDialogType.Wizard
+        ? ExpenseCreateRef
+        : OutcomeCreateRef;
+
+    private bool pendingUrlCheck;
 
     protected async override Task OnInitializedAsync()
     {
@@ -40,15 +44,17 @@ public partial class ExpenseCreateSwitcher(
 
         EventHandlers.Add<UserPropertyChanged>(this);
         Navigator.LocationChanged += OnLocationChanged;
+
+        pendingUrlCheck = true;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        if (!isInitialized)
+        if (pendingUrlCheck && ActiveDialog != null)
         {
-            isInitialized = true;
+            pendingUrlCheck = false;
             await TryOpenFromUrlAsync();
         }
     }
@@ -156,7 +162,7 @@ public partial class ExpenseCreateSwitcher(
 
         // Open the dialog
         Log.Debug($"Opening expense create from URL: amount={amount}, description='{description}', category={categoryKey}, when={when}, fixed={isFixed}");
-        ComponentContainer?.ExpenseCreate?.Show(amount, description, categoryKey, when, isFixed);
+        ActiveDialog?.Show(amount, description, categoryKey, when, isFixed);
     }
 
     private void RemoveExpenseQueryParameters()

@@ -35,7 +35,12 @@ public class ExpenseCreateFromUrl(
         await base.OnAfterRenderAsync(firstRender);
 
         if (firstRender)
+        {
+            // Wait for ExpenseCreateSwitcher to finish async initialization
+            // (it queries user preference to determine Standard vs Wizard mode)
+            await Task.Delay(1000);
             await TryOpenFromUrlAsync();
+        }
     }
 
     public void Dispose()

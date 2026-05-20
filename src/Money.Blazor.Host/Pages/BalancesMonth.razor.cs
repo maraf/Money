@@ -79,7 +79,7 @@ public partial class BalancesMonth(
             string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
             var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: IncludeExpectedExpenses));
 
-            MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + m.ExpectedExpenseSummary?.Value ?? 0)) : 0;
+            MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + (m.ExpectedExpenseSummary?.Value ?? 0))) : 0;
             Models = [];
             TotalExpenses = Price.Zero(defaultCurrency);
             TotalIncomes = Price.Zero(defaultCurrency);

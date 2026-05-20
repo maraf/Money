@@ -55,6 +55,7 @@ public partial class Summary<T>(
     protected string DefaultCurrency { get; private set; }
     protected SummaryDisplayType SelectedDisplayType { get; set; }
     protected List<CategoryWithAmountModel> Categories { get; private set; }
+    protected int PlaceholderCount { get; private set; } = 4;
     protected SortDescriptor<SummarySortType> SortDescriptor { get; set; }
 
     protected IncomeCreate IncomeCreate { get; set; }
@@ -107,6 +108,9 @@ public partial class Summary<T>(
     {
         if (SelectedPeriod != null)
         {
+            if (Categories?.Count > 0)
+                PlaceholderCount = Categories.Count;
+
             Categories = null;
             IncomeTotal = null;
             ExistingExpenseTotal = null;

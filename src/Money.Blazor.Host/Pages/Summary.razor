@@ -59,7 +59,7 @@
                 @if (barWidth != null)
                 {
                     <div class="bar-cover">
-                        <div class="bar" style="width: @barWidth%; background-color: @barColor;"></div>
+                        <div class="bar @(barColor == null ? "placeholder" : null)" style="width: @barWidth%; @(barColor != null ? $"background-color: {barColor};" : null)"></div>
                     </div>
                 }
             </div>
@@ -176,7 +176,7 @@
                             amount: @<span />
                         )
                     </div>
-                    @for (int i = 0; i < 5; i++)
+                    @for (int i = 0; i < PlaceholderCount; i++)
                     {
                         var mock = MockData.Get<CategoryWithAmountModel>();
                         <div class="card bar-graph">
@@ -184,7 +184,6 @@
                                 icon: mock.Icon,
                                 description: mock.Name,
                                 barWidth: Random.Shared.Next(20, 80).ToString(),
-                                barColor: mock.Color.ToHashCode(),
                                 amount: @<span />
                             )
                         </div>

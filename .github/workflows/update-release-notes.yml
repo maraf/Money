@@ -1,0 +1,97 @@
+name: Update Release Notes
+
+on:
+  workflow_dispatch:
+    inputs:
+      milestone:
+        description: 'Milestone title (e.g., api-v1.9.0)'
+        required: true
+        type: string
+      release_tag:
+        description: 'Release tag (e.g., api-v1.9.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: read
+
+jobs:
+  update-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine release type
+        id: type
+        run: |
+          tag="${{ inputs.release_tag }}"
+          if [[ "$tag" == api-* ]]; then
+            echo "value=api" >> "$GITHUB_OUTPUT"
+          elif [[ "$tag" == blazor-* ]]; then
+            echo "value=blazor" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Tag must start with 'api-' or 'blazor-'"
+            exit 1
+          fi
+
+      - name: Find milestone
+        id: milestone
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MILESTONE_TITLE: ${{ inputs.milestone }}
+        run: |
+          for state in open closed; do
+            number=$(gh api "repos/${{ github.repository }}/milestones?state=${state}&per_page=100" \
+              --paginate | jq -r --arg title "$MILESTONE_TITLE" '.[] | select(.title == $title) | .number')
+            if [[ -n "$number" ]]; then
+              echo "number=$number" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
+          echo "::error::Milestone '${MILESTONE_TITLE}' not found"
+          exit 1
+
+      - name: Generate release body
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TYPE: ${{ steps.type.outputs.value }}
+          MILESTONE_NUMBER: ${{ steps.milestone.outputs.number }}
+          TAG: ${{ inputs.release_tag }}
+          REPO: ${{ github.repository }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          if [[ "$RELEASE_TYPE" == "api" ]]; then
+            printf 'https://money.neptuo.com\nhttps://api.money.neptuo.com\n' > body.md
+          else
+            printf 'https://money.neptuo.com\nhttps://app.money.neptuo.com\n' > body.md
+          fi
+
+          printf '\n## Release notes - [complete milestone](https://github.com/%s/milestone/%s?closed=1)\n' \
+            "$REPO" "$MILESTONE_NUMBER" >> body.md
+
+          gh api "repos/${REPO}/issues?milestone=${MILESTONE_NUMBER}&state=closed&per_page=100" \
+            --paginate | jq -r '.[] | select(.pull_request == null) | "- #\(.number) - \(.title)"' >> body.md
+
+          if [[ "$RELEASE_TYPE" == "api" ]]; then
+            version="${TAG#api-v}"
+
+            printf '\n## Docker containers\n' >> body.md
+
+            package_id=$(gh api "/users/${OWNER}/packages/container/money-api/versions" \
+              --paginate | jq -r --arg v "${version}-linux-x64" \
+              '[.[] | select(.metadata.container.tags[] == $v)][0].id // empty' 2>/dev/null || true)
+
+            if [[ -n "$package_id" ]]; then
+              printf -- '- [maraf/money-api:%s-linux-x64](https://github.com/users/%s/packages/container/money-api/%s?tag=%s-linux-x64)\n' \
+                "$version" "$OWNER" "$package_id" "$version" >> body.md
+            else
+              printf -- '- maraf/money-api:%s-linux-x64\n' "$version" >> body.md
+            fi
+          fi
+
+      - name: Update release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit "${{ inputs.release_tag }}" \
+            --repo "${{ github.repository }}" \
+            --notes-file body.md

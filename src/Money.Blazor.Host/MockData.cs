@@ -30,6 +30,13 @@ internal class MockData
         0
     );
 
+    public static readonly MonthBalanceModel MonthBalanceModel = new MonthBalanceModel(
+        2020,
+        1,
+        new Price(1, "USD"),
+        new Price(1, "USD")
+    );
+
     public static readonly YearModel YearModel = new YearModel(
         2020
     );
@@ -49,6 +56,9 @@ internal class MockData
 
         if (typeof(T) == typeof(ExpenseTemplateCalendarMonthModel))
             return (T)(object)ExpenseTemplateCalendarMonthModel;
+
+        if (typeof(T) == typeof(MonthBalanceModel))
+            return (T)(object)MonthBalanceModel;
 
         if (typeof(T) == typeof(YearModel))
             return (T)(object)YearModel;

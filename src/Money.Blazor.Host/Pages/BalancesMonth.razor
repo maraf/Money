@@ -49,9 +49,7 @@
     else if (Loading.IsLoading)
     {
         <span class="placeholder-glow mx-1">
-            <span class="placeholder col-1"></span>
-            <span class="placeholder col-1 ms-1"></span>
-            <span class="placeholder col-1 ms-1"></span>
+            <span class="placeholder" style="width: 6rem"></span>
         </span>
     }
     <EnumSelector Icon="eye" Text="Display" TType="BalanceDisplayType" @bind-Current="@SelectedDisplayType" Changed="StateHasChanged">

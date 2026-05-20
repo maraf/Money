@@ -10,50 +10,43 @@
 <IncomeCreate @ref="CreateModal" />
 
 <div class="container-narrow">
-    <Loading Context="@Loading" IsOverlay="true">
-        <ul class="nav nav-pills float-start">
-            <li>
-                <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
-            </li>
-            <li>
-                <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
-            </li>
-            @{
-                var checklistUrl = ChecklistUrl();
-            }
-            @if (checklistUrl != null)
-            {
-                <li>
-                    <a class="nav-link" href="@checklistUrl">Checklist</a>
-                </li>
-            }
-        </ul>
-
-        @if (Items?.Count > 0)
-        {
-            <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+    <ul class="nav nav-pills float-start">
+        <li>
+            <a class="nav-link active" href="@Navigator.UrlCurrent()">Incomes</a>
+        </li>
+        <li>
+            <a class="nav-link" href="@ListExpenseUrl()">Expenses</a>
+        </li>
+        @{
+            var checklistUrl = ChecklistUrl();
         }
-        <div class="clear"></div>
-
-        @if (Items != null)
+        @if (checklistUrl != null)
         {
-            if (Items.Count > 0)
-            {
-                <div class="cards">
-                    <IncomeCardContext>
-                        @foreach (var item in Items)
-                        {
-                            <IncomeCard Model="@item" />
-                        }
-                    </IncomeCardContext>
-                </div>
-
-                <Paging Context="@PagingContext" />
-            }
-            else
-            {
-                <Alert Title="No data." Message="Let's add some incomes." Mode="@AlertMode.Warning" CssClass="mt-3" />
-            }
+            <li>
+                <a class="nav-link" href="@checklistUrl">Checklist</a>
+            </li>
         }
-    </Loading>
+    </ul>
+
+    @if (Items?.Count > 0)
+    {
+        <SortButton TType="@IncomeOverviewSortType" @bind-Current="@SortDescriptor" Changed="@OnSortChanged" />
+    }
+    <div class="clear"></div>
+
+    <div class="cards">
+        <IncomeCardContext>
+            <AutoLoadListView
+                Items="@Items"
+                PlaceholderCount="2"
+                LoadingContext="@Loading"
+                PagingContext="@PagingContext"
+                NoDataTitle="No data."
+                NoDataMessage="Let's add some incomes."
+                Context="item"
+            >
+                <IncomeCard Model="@item.Model" CssClass="@item.Placeholder?.CssClass" />
+            </AutoLoadListView>
+        </IncomeCardContext>
+    </div>
 </div>

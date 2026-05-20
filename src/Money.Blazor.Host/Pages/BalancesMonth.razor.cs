@@ -79,30 +79,39 @@ public partial class BalancesMonth(
             TotalIncomes = null;
             TotalExpenses = null;
             TotalExpectedExpenses = null;
-            Models = null;
+
+            InitModels(null);
 
             string defaultCurrency = await Queries.QueryAsync(new FindCurrencyDefault());
             var models = await Queries.QueryAsync(new ListMonthBalance(SelectedPeriod, includeExpectedExpenses: IncludeExpectedExpenses));
 
             MaxAmount = models.Count > 0 ? models.Max(m => Math.Max(m.IncomeSummary.Value, m.ExpenseSummary.Value + (m.ExpectedExpenseSummary?.Value ?? 0))) : 0;
-            Models = [];
-            TotalExpenses = Price.Zero(defaultCurrency);
-            TotalIncomes = Price.Zero(defaultCurrency);
-            TotalExpectedExpenses = Price.Zero(defaultCurrency);
-            for (int i = 0; i < 12; i++)
-            {
-                int month = i + 1;
-                var model = models.FirstOrDefault(m => m.Month == month);
-                if (model == null)
-                    model = new MonthBalanceModel(Year, month, Price.Zero(defaultCurrency), Price.Zero(defaultCurrency));
+            InitModels(defaultCurrency, models);
+        }
+    }
 
+    private void InitModels(string defaultCurrency, IReadOnlyList<MonthBalanceModel> source = null)
+    {
+        Models = [];
+        TotalExpenses = defaultCurrency != null ? Price.Zero(defaultCurrency) : null;
+        TotalIncomes = defaultCurrency != null ? Price.Zero(defaultCurrency) : null;
+        TotalExpectedExpenses = defaultCurrency != null ? Price.Zero(defaultCurrency) : null;
+        for (int i = 0; i < 12; i++)
+        {
+            int month = i + 1;
+            var model = source?.FirstOrDefault(m => m.Month == month);
+            if (model == null)
+                model = new MonthBalanceModel(Year, month, Price.Zero(defaultCurrency ?? "USD"), Price.Zero(defaultCurrency ?? "USD"));
+
+            if (defaultCurrency != null)
+            {
                 TotalExpenses += model.ExpenseSummary;
                 if (model.ExpectedExpenseSummary != null)
                     TotalExpectedExpenses += model.ExpectedExpenseSummary;
-
                 TotalIncomes += model.IncomeSummary;
-                Models.Add(model);
             }
+
+            Models.Add(model);
         }
     }
 

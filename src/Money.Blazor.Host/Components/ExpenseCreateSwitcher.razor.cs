@@ -81,88 +81,101 @@ public partial class ExpenseCreateSwitcher(
         }
     }
 
-    private async void OnLocationChanged(string url)
+    private void OnLocationChanged(string url)
     {
-        await TryOpenFromUrlAsync();
+        _ = TryOpenFromUrlAsync();
     }
 
     private async Task TryOpenFromUrlAsync()
     {
-        var amountStr = Navigator.FindQueryParameter("expense-amount");
-        if (string.IsNullOrEmpty(amountStr))
-            return;
-
-        Log.Debug($"Found expense-amount query parameter: '{amountStr}'");
-
-        if (!decimal.TryParse(amountStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var amountValue))
+        try
         {
-            Log.Debug($"Failed to parse expense-amount: '{amountStr}'");
-            return;
-        }
+            var amountStr = Navigator.FindQueryParameter("expense-amount");
+            if (string.IsNullOrEmpty(amountStr))
+                return;
 
-        var description = Navigator.FindQueryParameter("expense-description") ?? string.Empty;
-        var categoryParam = Navigator.FindQueryParameter("expense-category");
-        var currencyParam = Navigator.FindQueryParameter("expense-currency");
-        var whenParam = Navigator.FindQueryParameter("expense-when");
-        var fixedParam = Navigator.FindQueryParameter("expense-fixed");
+            Log.Debug($"Found expense-amount query parameter: '{amountStr}'");
 
-        // Resolve currency
-        string currency = null;
-        if (!string.IsNullOrEmpty(currencyParam))
-        {
-            currency = currencyParam;
-        }
-        else
-        {
-            var currencies = await Queries.QueryAsync(new ListAllCurrency());
-            currency = currencies?.FirstOrDefault()?.UniqueCode;
-            if (currency == null)
+            if (!decimal.TryParse(amountStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var amountValue))
             {
-                Log.Debug("No currencies available, cannot open expense create from URL");
+                Log.Debug($"Failed to parse expense-amount: '{amountStr}'");
                 return;
             }
-        }
 
-        var amount = new Price(amountValue, currency);
+            var description = Navigator.FindQueryParameter("expense-description") ?? string.Empty;
+            var categoryParam = Navigator.FindQueryParameter("expense-category");
+            var currencyParam = Navigator.FindQueryParameter("expense-currency");
+            var whenParam = Navigator.FindQueryParameter("expense-when");
+            var fixedParam = Navigator.FindQueryParameter("expense-fixed");
 
-        // Resolve category
-        IKey categoryKey = KeyFactory.Empty(typeof(Category));
-        if (!string.IsNullOrEmpty(categoryParam))
-        {
-            if (Guid.TryParse(categoryParam, out var categoryGuid))
+            // Resolve currency
+            string currency = null;
+            if (!string.IsNullOrEmpty(currencyParam))
             {
-                categoryKey = GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type);
+                currency = currencyParam;
             }
             else
             {
-                var categories = await Queries.QueryAsync(new ListAllCategory());
-                var match = categories?.FirstOrDefault(c => string.Equals(c.Name, categoryParam, StringComparison.OrdinalIgnoreCase));
-                if (match != null)
-                    categoryKey = match.Key;
+                currency = await Queries.QueryAsync(new FindCurrencyDefault());
+                if (currency == null)
+                {
+                    Log.Debug("No default currency available, cannot open expense create from URL");
+                    return;
+                }
+            }
+
+            var amount = new Price(amountValue, currency);
+
+            // Resolve category
+            IKey categoryKey = KeyFactory.Empty(typeof(Category));
+            if (!string.IsNullOrEmpty(categoryParam))
+            {
+                if (Guid.TryParse(categoryParam, out var categoryGuid))
+                {
+                    categoryKey = GuidKey.Create(categoryGuid, KeyFactory.Empty(typeof(Category)).Type);
+                }
                 else
-                    Log.Debug($"Category not found by name: '{categoryParam}'");
+                {
+                    var categories = await Queries.QueryAsync(new ListAllCategory());
+                    var match = categories?.FirstOrDefault(c => string.Equals(c.Name, categoryParam, StringComparison.OrdinalIgnoreCase));
+                    if (match != null)
+                        categoryKey = match.Key;
+                    else
+                        Log.Debug($"Category not found by name: '{categoryParam}'");
+                }
             }
-        }
 
-        // Parse when
-        DateTime when = AppDateTime.Today;
-        if (!string.IsNullOrEmpty(whenParam))
+            // Parse when
+            DateTime when = AppDateTime.Today;
+            if (!string.IsNullOrEmpty(whenParam))
+            {
+                if (DateTime.TryParseExact(whenParam, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var parsedWhen))
+                    when = parsedWhen;
+                else
+                    Log.Debug($"Failed to parse expense-when: '{whenParam}'");
+            }
+
+            // Parse fixed
+            bool isFixed = string.Equals(fixedParam, "true", StringComparison.OrdinalIgnoreCase);
+
+            // Ensure dialog is available before removing URL params
+            if (ActiveDialog == null)
+            {
+                pendingUrlCheck = true;
+                return;
+            }
+
+            // Remove query parameters from URL
+            RemoveExpenseQueryParameters();
+
+            // Open the dialog
+            Log.Debug($"Opening expense create from URL: amount={amount}, description='{description}', category={categoryKey}, when={when}, fixed={isFixed}");
+            ActiveDialog.Show(amount, description, categoryKey, when, isFixed);
+        }
+        catch (Exception ex)
         {
-            if (DateTime.TryParseExact(whenParam, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var parsedWhen))
-                when = parsedWhen;
-            else
-                Log.Debug($"Failed to parse expense-when: '{whenParam}'");
+            Log.Error(ex);
         }
-
-        // Parse fixed
-        bool isFixed = string.Equals(fixedParam, "true", StringComparison.OrdinalIgnoreCase);
-
-        // Remove query parameters from URL
-        RemoveExpenseQueryParameters();
-
-        // Open the dialog
-        Log.Debug($"Opening expense create from URL: amount={amount}, description='{description}', category={categoryKey}, when={when}, fixed={isFixed}");
-        ActiveDialog?.Show(amount, description, categoryKey, when, isFixed);
     }
 
     private void RemoveExpenseQueryParameters()
@@ -189,9 +202,13 @@ public partial class ExpenseCreateSwitcher(
             }
         }
 
+        // Preserve fragment
+        if (!string.IsNullOrEmpty(uri.Fragment))
+            newUrl += uri.Fragment;
+
         // Make relative for NavigateTo
         var baseUri = NavigationManager.BaseUri;
-        if (newUrl.StartsWith(baseUri))
+        if (newUrl.StartsWith(baseUri, StringComparison.OrdinalIgnoreCase))
             newUrl = newUrl.Substring(baseUri.Length - 1); // keep leading /
 
         NavigationManager.NavigateTo(newUrl, new NavigationOptions { ReplaceHistoryEntry = true });

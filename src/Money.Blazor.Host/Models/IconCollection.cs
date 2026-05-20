@@ -112,7 +112,6 @@ namespace Money.Models
             Add("🛀");
             Add("🎨");
             Add("🖌");
-            Add("🔨");
             Add("🧷");
             Add("💎");
             Add("💍");
@@ -125,6 +124,28 @@ namespace Money.Models
             Add("💊");
             Add("⚕");
             Add("🏥");
+            Add("✈️");
+            Add("☕️");
+            Add("🍺");
+            Add("👕");
+            Add("🎓");
+            Add("📚");
+            Add("🎬");
+            Add("💻");
+            Add("📦");
+            Add("🏋️");
+            Add("💇");
+            Add("🐾");
+            Add("👶");
+            Add("🎁");
+            Add("🔌");
+            Add("💧");
+            Add("🌐");
+            Add("🧹");
+            Add("🪴");
+            Add("🛍️");
+            Add("🎟️");
+            Add("🚕");
         }
     }
 }

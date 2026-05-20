@@ -14,9 +14,11 @@
 
 <PlaceholderContainer IsActive="@(Models == null)" Context="placeholderContext">
     <div class="row no-gutters @placeholderContext.CssClass" style="min-height: calc(100vh - 312px)">
-        @foreach (var model in (Models ?? MockModels))
+        @{ var items = Models ?? MockModels; }
+        @for (int i = 0; i < items.Count; i++)
         {
-            var size = Models != null ? (MaxAmount > 0 ? model.TotalAmount.Value / MaxAmount * 100 : 0) : Random.Shared.Next(20, 80);
+            var model = items[i];
+            var size = Models != null ? (MaxAmount > 0 ? model.TotalAmount.Value / MaxAmount * 100 : 0) : (decimal)PlaceholderBarSizes[i];
 
             <div class="col-12 col-lg-1 @(Models != null && model > AppDateTime.Today ? "text-muted" : String.Empty)">
                 <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
@@ -31,9 +33,16 @@
                 </div>
                 <div class="p-1">
                     <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                        <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                            @model.ToMonthString()
-                        </a>
+                        @if (placeholderContext.IsActive)
+                        {
+                            <span>@model.ToMonthString()</span>
+                        }
+                        else
+                        {
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                @model.ToMonthString()
+                            </a>
+                        }
                         <Placeholder WordMinLength="2" WordMaxLength="4">
                             <PriceView TagName="small" Value="model.TotalAmount" />
                         </Placeholder>
@@ -45,14 +54,26 @@
                             </Placeholder>
                         </div>
                         <div class="text-center mt-1">
-                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                            @if (placeholderContext.IsActive)
+                            {
                                 <span class="d-none d-lg-inline">
                                     @model.ToMonthString()
                                 </span>
                                 <span class="d-inline d-lg-none">
                                     @model.Month.ToString("D2")
                                 </span>
-                            </a>
+                            }
+                            else
+                            {
+                                <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                                    <span class="d-none d-lg-inline">
+                                        @model.ToMonthString()
+                                    </span>
+                                    <span class="d-inline d-lg-none">
+                                        @model.Month.ToString("D2")
+                                    </span>
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>

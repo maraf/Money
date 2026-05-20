@@ -16,8 +16,10 @@ public partial class TrendsYear(IQueryDispatcher Queries, Navigator Navigator)
 {
     public const int ModelsCount = 10;
 
-    private static readonly List<YearWithAmountModel> MockModels = Enumerable.Range(2015, ModelsCount)
-        .Select(y => new YearWithAmountModel(y, Price.Zero("USD")))
+    private static readonly int[] PlaceholderBarSizes = [55, 70, 35, 82, 45, 60, 78, 30, 65, 50];
+
+    private List<YearWithAmountModel> MockModels => Enumerable.Range(0, ModelsCount)
+        .Select(i => new YearWithAmountModel(AppDateTime.Today.Year - 8 + i, Price.Zero("USD")))
         .ToList();
 
     [Parameter]

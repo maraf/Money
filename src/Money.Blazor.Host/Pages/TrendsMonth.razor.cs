@@ -14,6 +14,12 @@ namespace Money.Pages;
 
 public partial class TrendsMonth(IQueryDispatcher Queries, Navigator Navigator)
 {
+    private static readonly int[] PlaceholderBarSizes = [65, 40, 78, 25, 55, 90, 35, 70, 45, 82, 30, 60];
+
+    private List<MonthWithAmountModel> MockModels => Enumerable.Range(1, 12)
+        .Select(m => new MonthWithAmountModel(Year, m, Price.Zero("USD")))
+        .ToList();
+
     [Parameter]
     public int Year { get; set; }
 

@@ -12,34 +12,42 @@
     </ButtonContent>
 </Title>
 
-@if (Models == null)
-{
-    <Loading />
-}
-else
-{
-    <div class="row no-gutters" style="min-height: calc(100vh - 312px)">
-        @foreach (var model in Models)
+<PlaceholderContainer IsActive="@(Models == null)" Context="placeholderContext">
+    <div class="row no-gutters @placeholderContext.CssClass" style="min-height: calc(100vh - 312px)">
+        @{ var items = Models ?? MockModels; }
+        @for (int i = 0; i < items.Count; i++)
         {
-            var size = model.TotalAmount.Value / MaxAmount * 100;
+            var model = items[i];
+            var size = Models != null ? (MaxAmount > 0 ? model.TotalAmount.Value / MaxAmount * 100 : 0) : (decimal)PlaceholderBarSizes[i];
 
-            <div class="col-12 col-lg-1 @(model > AppDateTime.Today ? "text-muted" : String.Empty)">
+            <div class="col-12 col-lg-1 @(Models != null && model > AppDateTime.Today ? "text-muted" : String.Empty)">
                 <div class="d-none d-lg-flex p-1 p-lg-3 h-100 w-100 vertical-bar">
-                    <div class="w-100" style="height: @size%; background: @CategoryColor.ToHashCode()"></div>
+                    <Placeholder>
+                        <ChildContent>
+                            <div class="w-100" style="height: @size%; background: @CategoryColor.ToHashCode()"></div>
+                        </ChildContent>
+                        <PlaceholderContent Context="_">
+                            <div class="w-100 placeholder" style="height: @size%; background: #e9ecef"></div>
+                        </PlaceholderContent>
+                    </Placeholder>
                 </div>
                 <div class="p-1">
                     <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
-                        <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                        <a href="@Navigator.UrlOverview(model, CategoryKey)" class="@(placeholderContext.IsActive ? "pe-none text-body" : "")" tabindex="@(placeholderContext.IsActive ? "-1" : null)">
                             @model.ToMonthString()
                         </a>
-                        <PriceView TagName="small" Value="model.TotalAmount" />
+                        <Placeholder WordMinLength="2" WordMaxLength="4">
+                            <PriceView TagName="small" Value="model.TotalAmount" />
+                        </Placeholder>
                     </div>
                     <div class="d-none d-lg-block text-center mt-1">
                         <div class="d-none d-lg-block text-center mt-1">
-                            <PriceView TagName="small" Value="model.TotalAmount" />
+                            <Placeholder WordMinLength="2" WordMaxLength="4">
+                                <PriceView TagName="small" Value="model.TotalAmount" />
+                            </Placeholder>
                         </div>
                         <div class="text-center mt-1">
-                            <a href="@Navigator.UrlOverview(model, CategoryKey)">
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)" class="@(placeholderContext.IsActive ? "pe-none text-body" : "")" tabindex="@(placeholderContext.IsActive ? "-1" : null)">
                                 <span class="d-none d-lg-inline">
                                     @model.ToMonthString()
                                 </span>
@@ -51,9 +59,16 @@ else
                     </div>
                 </div>
                 <div class="d-block d-lg-none p-1 p-lg-3 mb-2">
-                    <div style="width: @size%; background: @CategoryColor.ToHashCode(); height: 10px;"></div>
+                    <Placeholder>
+                        <ChildContent>
+                            <div style="width: @size%; background: @CategoryColor.ToHashCode(); height: 10px;"></div>
+                        </ChildContent>
+                        <PlaceholderContent Context="_">
+                            <div class="placeholder d-block" style="width: @size%; background: #e9ecef; height: 10px; min-height: 10px;"></div>
+                        </PlaceholderContent>
+                    </Placeholder>
                 </div>
             </div>
         }
     </div>
-}
+</PlaceholderContainer>

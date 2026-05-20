@@ -17,42 +17,45 @@
         </li>
     </ul>
 
-    <Loading Context="@Loading">
-        @if (Models.Count == 0)
-        {
-            <Alert Title="No data." Message="Let's add some recurring expense templates." Mode="@AlertMode.Warning" />
-        }
-        else
-        {
-            <div class="cards">
-                <ExpenseCardContext>
-                    @foreach (var model in Models.OrderBy(m => m.When))
+    <div class="cards">
+        <ExpenseCardContext>
+            <AutoLoadListView
+                Items="@Models"
+                PlaceholderCount="@PlaceholderCount"
+                LoadingContext="@Loading"
+                NoDataTitle="No data."
+                NoDataMessage="Let's add some recurring expense templates."
+                Context="item"
+            >
+                @{
+                    var model = item.Model;
+                    var isCreated = !model.ExpenseKey.IsEmpty;
+                    var isPlaceholder = item.Placeholder != null;
+                    Action clickHandler = isPlaceholder ? () => { } : () => 
                     {
-                        var isCreated = !model.ExpenseKey.IsEmpty;
-                        var clickHandler = () => 
-                        {
-                            if (isCreated)
-                                return;
+                        if (isCreated)
+                            return;
 
-                            var today = AppDateTime.Today;
-                            var isCurrentMonth = SelectedPeriod.Year == today.Year && SelectedPeriod.Month == today.Month;
-                            DateTime? expectedWhen = isCurrentMonth ? null : model.When;
-                            Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, today, model.IsFixed, expectedWhen);
-                        };
-                        var rowCssClass = $"row align-items-center {(!isCreated ? "cursor-pointer" : "")}";
-                        var iconCssClass = $"h1 {(isCreated ? "text-success" : "")} m-0";
+                        var today = AppDateTime.Today;
+                        var isCurrentMonth = SelectedPeriod.Year == today.Year && SelectedPeriod.Month == today.Month;
+                        DateTime? expectedWhen = isCurrentMonth ? null : model.When;
+                        Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, today, model.IsFixed, expectedWhen);
+                    };
+                    var rowCssClass = $"row align-items-center {(!isCreated && !isPlaceholder ? "cursor-pointer" : "")}";
+                    var iconCssClass = $"h1 {(isCreated ? "text-success" : "")} m-0";
+                }
 
-                        <div class="@rowCssClass" @onclick="clickHandler">
-                            <div class="col-auto pe-1">
-                                <Icon Prefix="far" Identifier="@(isCreated ? "check-square" : "square")" class="@iconCssClass" />
-                            </div>
-                            <div class="col">
-                                <ExpenseCard Model="@model" CssClass="@(isCreated ? "checklist-completed" : "")" AmountCssClass="@(isCreated ? "text-decoration-line-through" : "")" />
-                            </div>
-                        </div>
-                    }
-                </ExpenseCardContext>
-            </div>
-        }
-    </Loading>
+                <div class="@rowCssClass" @onclick="clickHandler">
+                    <div class="col-auto pe-1">
+                        <Placeholder>
+                            <Icon Prefix="far" Identifier="@(isCreated ? "check-square" : "square")" class="@iconCssClass" />
+                        </Placeholder>
+                    </div>
+                    <div class="col">
+                        <ExpenseCard Model="@model" CssClass="@(item.Placeholder != null ? item.Placeholder.CssClass : (isCreated ? "checklist-completed" : ""))" AmountCssClass="@(isCreated ? "text-decoration-line-through" : "")" />
+                    </div>
+                </div>
+            </AutoLoadListView>
+        </ExpenseCardContext>
+    </div>
 </div>

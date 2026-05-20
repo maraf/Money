@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Money.Events;
@@ -36,7 +37,8 @@ public partial class ExpenseChecklistMonth(
     public int Month { get; set; }
 
     protected MonthModel SelectedPeriod { get; set; }
-    protected List<ExpenseChecklistModel> Models { get; set; } = new();
+    protected IReadOnlyCollection<ExpenseChecklistModel> Models { get; set; }
+    protected int? PlaceholderCount { get; set; }
     protected LoadingContext Loading { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
@@ -67,11 +69,14 @@ public partial class ExpenseChecklistMonth(
 
     private async Task LoadDataAsync()
     {
+        PlaceholderCount = Models?.Count > 0 ? Models.Count : null;
+        Models = null;
+        StateHasChanged();
+
         using (Loading.Start())
         {
             var data = await Queries.QueryAsync(new ListMonthExpenseChecklist(SelectedPeriod));
-            Models.Clear();
-            Models.AddRange(data);
+            Models = data.OrderBy(m => m.When).ToList();
         }
     }
 

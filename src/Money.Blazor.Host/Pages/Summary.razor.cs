@@ -107,6 +107,11 @@ public partial class Summary<T>(
     {
         if (SelectedPeriod != null)
         {
+            Categories = null;
+            IncomeTotal = null;
+            ExistingExpenseTotal = null;
+            ExpectedExpenseTotal = null;
+
             using (CategoriesLoading.Start())
             {
                 try

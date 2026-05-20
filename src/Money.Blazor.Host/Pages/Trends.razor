@@ -8,46 +8,23 @@
         @foreach (var category in (Categories ?? MockCategories))
         {
             <div class="col-4 col-md-2">
-                @if (placeholderContext.IsActive)
-                {
-                    <div class="btn w-100 h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
-                        <div>
-                            <h2>
-                                <Placeholder WordMinLength="1" WordMaxLength="2">@category.Icon</Placeholder>
-                            </h2>
-                        </div>
-                        <div class="text-truncate">
-                            <strong>
-                                <Placeholder WordMinLength="3" WordMaxLength="6">@category.Name</Placeholder>
-                            </strong>
-                        </div>
-                        <div class="text-truncate">
-                            <Placeholder WordMinLength="4" WordMaxLength="8">
-                                <span>@EnsureHtmlWhitespace(category.Description)</span>
-                            </Placeholder>
-                        </div>
+                <a href="@Navigator.UrlTrends(category.Key)" class="btn w-100 h-100 @(placeholderContext.IsActive ? "pe-none" : "") @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();" tabindex="@(placeholderContext.IsActive ? "-1" : null)">
+                    <div>
+                        <h2>
+                            <Placeholder WordMinLength="1" WordMaxLength="2">@category.Icon</Placeholder>
+                        </h2>
                     </div>
-                }
-                else
-                {
-                    <a href="@Navigator.UrlTrends(category.Key)" class="btn w-100 h-100 @category.Color.SelectAccent("back-dark", "back-light")" style="background-color: @category.Color.ToHashCode();">
-                        <div>
-                            <h2>
-                                <Placeholder WordMinLength="1" WordMaxLength="2">@category.Icon</Placeholder>
-                            </h2>
-                        </div>
-                        <div class="text-truncate">
-                            <strong>
-                                <Placeholder WordMinLength="3" WordMaxLength="6">@category.Name</Placeholder>
-                            </strong>
-                        </div>
-                        <div class="text-truncate">
-                            <Placeholder WordMinLength="4" WordMaxLength="8">
-                                <span>@EnsureHtmlWhitespace(category.Description)</span>
-                            </Placeholder>
-                        </div>
-                    </a>
-                }
+                    <div class="text-truncate">
+                        <strong>
+                            <Placeholder WordMinLength="3" WordMaxLength="6">@category.Name</Placeholder>
+                        </strong>
+                    </div>
+                    <div class="text-truncate">
+                        <Placeholder WordMinLength="4" WordMaxLength="8">
+                            <span>@EnsureHtmlWhitespace(category.Description)</span>
+                        </Placeholder>
+                    </div>
+                </a>
             </div>
         }
     </div>

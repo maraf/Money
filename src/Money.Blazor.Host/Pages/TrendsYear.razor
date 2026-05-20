@@ -25,15 +25,11 @@
                 <div class="p-1">
                     <div class="d-flex justify-content-between align-items-center d-lg-none text-start">
                         <span>
-                            @if (placeholderContext.IsActive)
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)" class="@(placeholderContext.IsActive ? "pe-none text-body" : "")" tabindex="@(placeholderContext.IsActive ? "-1" : null)">
+                                @model
+                            </a>
+                            @if (!placeholderContext.IsActive)
                             {
-                                <span>@model</span>
-                            }
-                            else
-                            {
-                                <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                                    @model
-                                </a>
                                 <a href="@Navigator.UrlTrends(model, CategoryKey)" class="ms-3">
                                     <Icon Identifier="chart-line" class="d-inline d-lg-none" />
                                     <span class="d-none d-lg-inline">
@@ -53,25 +49,16 @@
                             </Placeholder>
                         </div>
                         <div class="text-center mt-1">
-                            @if (placeholderContext.IsActive)
-                            {
+                            <a href="@Navigator.UrlOverview(model, CategoryKey)" class="@(placeholderContext.IsActive ? "pe-none text-body" : "")" tabindex="@(placeholderContext.IsActive ? "-1" : null)">
                                 <span class="d-none d-lg-inline">
                                     @model
                                 </span>
                                 <span class="d-inline d-lg-none">
                                     @model.ToShortString()
                                 </span>
-                            }
-                            else
+                            </a>
+                            @if (!placeholderContext.IsActive)
                             {
-                                <a href="@Navigator.UrlOverview(model, CategoryKey)">
-                                    <span class="d-none d-lg-inline">
-                                        @model
-                                    </span>
-                                    <span class="d-inline d-lg-none">
-                                        @model.ToShortString()
-                                    </span>
-                                </a>
                                 <a href="@Navigator.UrlTrends(model, CategoryKey)" class="btn btn-sm d-block btn-link">
                                     <Icon Identifier="chart-line" class="d-inline d-lg-none" />
                                     <span class="d-none d-lg-inline">

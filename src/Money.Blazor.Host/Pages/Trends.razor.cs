@@ -17,7 +17,7 @@ namespace Money.Pages;
 public partial class Trends(IQueryDispatcher Queries, Navigator Navigator)
 {
     private static readonly List<CategoryModel> MockCategories = Enumerable.Range(0, 6)
-        .Select(_ => new CategoryModel(KeyFactory.Empty(typeof(Category)), string.Empty, string.Empty, Color.FromArgb(255, 233, 236, 239), string.Empty))
+        .Select(_ => new CategoryModel(KeyFactory.Create(typeof(Category)), string.Empty, string.Empty, Color.FromArgb(255, 233, 236, 239), string.Empty))
         .ToList();
 
     protected List<CategoryModel> Categories { get; set; }

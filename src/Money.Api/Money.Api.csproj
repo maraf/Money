@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="WebPush" />
 	<PackageReference Include="OpenTelemetry.Extensions.Hosting" />
 	<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
 	<PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" />

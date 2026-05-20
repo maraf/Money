@@ -472,3 +472,50 @@ Blazor.start({
         window.localStorage.getItem("allowedLogScopePrefixes") ?? ""
     )
 });
+window.Money = window.Money || {};
+Money.Notifications = {
+    isSupported: function() {
+        return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+    },
+    getPermission: function() {
+        return Notification.permission;
+    },
+    getTimeZone: function() {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    },
+    getSubscription: async function() {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (!subscription) return null;
+        const key = subscription.getKey('p256dh');
+        const auth = subscription.getKey('auth');
+        return {
+            endpoint: subscription.endpoint,
+            p256dh: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
+            auth: auth ? btoa(String.fromCharCode.apply(null, new Uint8Array(auth))) : null
+        };
+    },
+    subscribe: async function(publicKey) {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: publicKey
+        });
+        const key = subscription.getKey('p256dh');
+        const auth = subscription.getKey('auth');
+        return {
+            endpoint: subscription.endpoint,
+            p256dh: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
+            auth: auth ? btoa(String.fromCharCode.apply(null, new Uint8Array(auth))) : null
+        };
+    },
+    unsubscribe: async function() {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) {
+            await subscription.unsubscribe();
+            return subscription.endpoint;
+        }
+        return null;
+    }
+};

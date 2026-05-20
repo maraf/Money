@@ -115,6 +115,9 @@ namespace Money.Services
         public string UrlUserSettings()
             => "/user/settings";
 
+        public string UrlUserNotifications()
+            => "/user/notifications";
+
         public string UrlAccountLogin()
             => "/account/login";
 

@@ -168,6 +168,11 @@ namespace Money
                         Url: navigator.UrlUserSettings()
                     ),
                     new(
+                        Text: "Notifications",
+                        Icon: "bell",
+                        Url: navigator.UrlUserNotifications()
+                    ),
+                    new(
                         Text: "Logout",
                         Icon: "sign-out-alt",
                         OnClick: async () => await apiClient.LogoutAsync()

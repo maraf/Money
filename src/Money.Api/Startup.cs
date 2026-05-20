@@ -143,6 +143,13 @@ namespace Money
             }
 
             var allowedUserPropertyKeys = Configuration.GetSection("UserProperties").Get<string[]>() ?? new string[0];
+
+            services
+                .Configure<NotificationOptions>(Configuration.GetSection("Notifications"))
+                .AddSingleton(TimeProvider.System)
+                .AddTransient<PushNotificationSender>()
+                .AddHostedService<ExpenseTemplateNotificationBackgroundService>();
+
             Bootstrap.BootstrapTask bootstrapTask = new Bootstrap.BootstrapTask(services, connectionStrings, allowedUserPropertyKeys, ApplyBasePath);
             bootstrapTask.Initialize();
         }

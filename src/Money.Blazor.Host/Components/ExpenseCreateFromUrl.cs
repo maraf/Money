@@ -14,12 +14,12 @@ using System.Threading.Tasks;
 
 namespace Money.Components;
 
-public partial class ExpenseCreateFromUrl(
+public class ExpenseCreateFromUrl(
     Navigator Navigator,
     NavigationManager NavigationManager,
     IQueryDispatcher Queries,
     ILog<ExpenseCreateFromUrl> Log
-) : System.IDisposable
+) : ComponentBase, System.IDisposable
 {
     private bool isProcessing;
 

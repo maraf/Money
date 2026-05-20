@@ -125,7 +125,7 @@ namespace Money.Models
             Add("⚕");
             Add("🏥");
             Add("✈️");
-            Add("☕");
+            Add("☕️");
             Add("🍺");
             Add("👕");
             Add("🎓");

@@ -30,7 +30,8 @@
                 @{
                     var model = item.Model;
                     var isCreated = !model.ExpenseKey.IsEmpty;
-                    var clickHandler = () => 
+                    var isPlaceholder = item.Placeholder != null;
+                    Action clickHandler = isPlaceholder ? () => { } : () => 
                     {
                         if (isCreated)
                             return;
@@ -40,7 +41,7 @@
                         DateTime? expectedWhen = isCurrentMonth ? null : model.When;
                         Navigator.OpenExpenseCreate(model.Amount, model.Description, model.CategoryKey, today, model.IsFixed, expectedWhen);
                     };
-                    var rowCssClass = $"row align-items-center {(!isCreated ? "cursor-pointer" : "")}";
+                    var rowCssClass = $"row align-items-center {(!isCreated && !isPlaceholder ? "cursor-pointer" : "")}";
                     var iconCssClass = $"h1 {(isCreated ? "text-success" : "")} m-0";
                 }
 

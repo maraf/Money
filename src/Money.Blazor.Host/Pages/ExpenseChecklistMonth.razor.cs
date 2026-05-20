@@ -69,7 +69,7 @@ public partial class ExpenseChecklistMonth(
 
     private async Task LoadDataAsync()
     {
-        PlaceholderCount = Models?.Count;
+        PlaceholderCount = Models?.Count > 0 ? Models.Count : null;
         Models = null;
         StateHasChanged();
 

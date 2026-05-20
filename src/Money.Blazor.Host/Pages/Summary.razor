@@ -102,100 +102,95 @@
     else
     {
         <div class="graph">
-            <Loading Context="@CategoriesLoading">
-                <LoadingContent>
-                    <PlaceholderContainer IsActive="true" Context="ctx">
-                        @{
-                            var mock = MockData.Get<CategoryWithAmountModel>();
-                        }
-                        <div class="card bar-graph bar-graph-summary">
-                            @BarItem(
-                                icon: "📈",
-                                description: "Summary",
-                                amount: @<Placeholder WordMinLength="5" WordMaxLength="8" />
-                            )
-                        </div>
-                        @for (int i = 0; i < 5; i++)
-                        {
-                            <div class="card bar-graph">
-                                @BarItem(
-                                    icon: mock.Icon,
-                                    description: mock.Name,
-                                    barWidth: Random.Shared.Next(20, 80).ToString(),
-                                    barColor: mock.Color.ToHashCode(),
-                                    amount: @<Placeholder WordMinLength="5" WordMaxLength="8" />
-                                )
-                            </div>
-                        }
-                    </PlaceholderContainer>
-                </LoadingContent>
-                <ChildContent>
-                    @if (Categories != null)
+            <PlaceholderContainer IsActive="@CategoriesLoading.IsLoading" Context="ctx">
+                @if (Categories != null)
+                {
+                    @if (ExistingExpenseTotal != null || IncomeTotal != null || ExpectedExpenseTotal != null)
                     {
-                        @if (ExistingExpenseTotal != null || IncomeTotal != null || ExpectedExpenseTotal != null)
-                        {
-                            <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
-                                @if (SelectedDisplayType == SummaryDisplayType.Balance)
-                                {
-                                    <div class="card-body">
-                                        @TotalItem(TotalType.Income, "Incomes", IncomeTotal)
-                                        @TotalItem(TotalType.Expense, "Existing expenses", ExistingExpenseTotal)
-                                        @TotalItem(TotalType.Expense, "Expected expenses", ExpectedExpenseTotal)
-                                        @TotalItem(TotalType.Balance, "Balance", GetBalanceTotal())
-                                    </div>
-                                }
-                                else
-                                {
-                                    @BarItem(
-                                        icon: "📈",
-                                        description: "Summary",
-                                        amount: @<span class="fw-bold">
-                                            @if (SelectedDisplayType == SummaryDisplayType.Total)
-                                            {
-                                                @if (IncomeTotal != null)
-                                                {
-                                                    <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))" @onclick:stopPropagation="true">
-                                                        <PriceView Value="IncomeTotal" />
-                                                    </span>
-                                                }
-
-                                                <PriceView TagName="span" CssClass="text-danger" Value="ExistingExpenseTotal" Zero="CurrencyFormatter.FormatZero.Zero" />
-                                            }
-                                            else
-                                            {
-                                                var diff = GetBalanceTotal();
-                                                <PriceView TagName="span" CssClass="@(diff.Value > 0 ? "text-success" : "text-danger")" Value="diff" ApplyPlusForPositiveNumbers="true" />
-                                            }
-                                        </span>
-                                    )
-                                }
-                            </div>
-                        }
-
-                        @foreach (var category in Categories)
-                        {
-                            <div class="card bar-graph cursor-pointer" @onclick="() => OpenOverview(SelectedPeriod, category.Key)">
+                        <div class="card bar-graph bar-graph-summary" @onclick="@(() => OpenOverview(SelectedPeriod))">
+                            @if (SelectedDisplayType == SummaryDisplayType.Balance)
+                            {
+                                <div class="card-body">
+                                    @TotalItem(TotalType.Income, "Incomes", IncomeTotal)
+                                    @TotalItem(TotalType.Expense, "Existing expenses", ExistingExpenseTotal)
+                                    @TotalItem(TotalType.Expense, "Expected expenses", ExpectedExpenseTotal)
+                                    @TotalItem(TotalType.Balance, "Balance", GetBalanceTotal())
+                                </div>
+                            }
+                            else
+                            {
                                 @BarItem(
-                                    icon: category.Icon,
-                                    description: category.Name,
-                                    title: category.Description,
-                                    barWidth: GetPercentualValue(category),
-                                    barColor: category.Color.ToHashCode(),
-                                    amount: @<span>
-                                        @if (category.Version == 2 && category.FixedAmount.Value > 0)
+                                    icon: "📈",
+                                    description: "Summary",
+                                    amount: @<span class="fw-bold">
+                                        @if (SelectedDisplayType == SummaryDisplayType.Total)
                                         {
-                                            <span class="text-muted" style="opacity: .5;">
-                                                <PriceView Value="category.FixedAmount" /> +
-                                            </span>
+                                            @if (IncomeTotal != null)
+                                            {
+                                                <span class="text-success me-2" @onclick="@(() => OpenOverviewIncomes(SelectedPeriod))" @onclick:stopPropagation="true">
+                                                    <PriceView Value="IncomeTotal" />
+                                                </span>
+                                            }
+
+                                            <PriceView TagName="span" CssClass="text-danger" Value="ExistingExpenseTotal" Zero="CurrencyFormatter.FormatZero.Zero" />
                                         }
-                                        <PriceView Value="@(category.Version == 1 ? category.TotalAmount : category.Amount)" Zero="CurrencyFormatter.FormatZero.Zero" />
+                                        else
+                                        {
+                                            var diff = GetBalanceTotal();
+                                            <PriceView TagName="span" CssClass="@(diff.Value > 0 ? "text-success" : "text-danger")" Value="diff" ApplyPlusForPositiveNumbers="true" />
+                                        }
                                     </span>
                                 )
-                            </div>
-                        }
+                            }
+                        </div>
                     }
-                </ChildContent>
-            </Loading>
+
+                    @foreach (var category in Categories)
+                    {
+                        <div class="card bar-graph cursor-pointer" @onclick="() => OpenOverview(SelectedPeriod, category.Key)">
+                            @BarItem(
+                                icon: category.Icon,
+                                description: category.Name,
+                                title: category.Description,
+                                barWidth: GetPercentualValue(category),
+                                barColor: category.Color.ToHashCode(),
+                                amount: @<span>
+                                    @if (category.Version == 2 && category.FixedAmount.Value > 0)
+                                    {
+                                        <span class="text-muted" style="opacity: .5;">
+                                            <PriceView Value="category.FixedAmount" /> +
+                                        </span>
+                                    }
+                                    <PriceView Value="@(category.Version == 1 ? category.TotalAmount : category.Amount)" Zero="CurrencyFormatter.FormatZero.Zero" />
+                                </span>
+                            )
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="card bar-graph bar-graph-summary">
+                        @BarItem(
+                            icon: "📈",
+                            description: "Summary",
+                            amount: @<span />
+                        )
+                    </div>
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        var mock = MockData.Get<CategoryWithAmountModel>();
+                        <div class="card bar-graph">
+                            @BarItem(
+                                icon: mock.Icon,
+                                description: mock.Name,
+                                barWidth: Random.Shared.Next(20, 80).ToString(),
+                                barColor: mock.Color.ToHashCode(),
+                                amount: @<span />
+                            )
+                        </div>
+                    }
+                }
+            </PlaceholderContainer>
         </div>
     }
 </div>

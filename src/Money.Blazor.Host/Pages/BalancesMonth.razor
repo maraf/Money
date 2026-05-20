@@ -5,15 +5,16 @@
 {
     RenderFragment RenderBalanceValue(Price incomes, Price expenses, Price expectedExpenses, string containerCssClass = null, string totalValueCssClass = null)
     {
+        var spacing = string.IsNullOrEmpty(totalValueCssClass) ? "ms-1" : "";
         return
         @<div class="@containerCssClass">
             @if (SelectedDisplayType == BalanceDisplayType.Total)
             {
                 <PriceView TagName="small" CssClass="@($"text-success {totalValueCssClass}")" Value="@incomes" />
-                <PriceView TagName="small" CssClass="@($"text-danger {totalValueCssClass}")" Value="expenses" />
+                <PriceView TagName="small" CssClass="@($"text-danger {spacing} {totalValueCssClass}")" Value="expenses" />
                 @if (expectedExpenses != null)
                 {
-                    <PriceView TagName="small" CssClass="@($"text-danger {totalValueCssClass}")" CssStyle="opacity: .5" Value="expectedExpenses" />
+                    <PriceView TagName="small" CssClass="@($"text-danger {spacing} {totalValueCssClass}")" CssStyle="opacity: .5" Value="expectedExpenses" />
                 }
             }
             else
